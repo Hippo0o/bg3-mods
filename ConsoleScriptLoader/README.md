@@ -1,4 +1,7 @@
-# Load Scripts at from Console
+Useful for loading Lua code in Multiplayer while not having to share the same mods.
+
+
+# Load scripts from SE Console
 
 from `Data/Mods/` folder:
 
