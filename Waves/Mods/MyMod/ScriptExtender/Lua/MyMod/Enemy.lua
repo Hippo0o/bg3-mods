@@ -295,7 +295,7 @@ function Object:Clear(keepCorpse)
             UE.Remove(guid)
         end
 
-        return Osi.IsDead(guid) == 1
+        return Osi.IsDead(guid) == 1 or Osi.IsSummon(guid) == 0
     end, {
         interval = 300,
         immediate = true,
@@ -419,14 +419,6 @@ end
 function Enemy.KillSpawned()
     for guid, enemy in pairs(PersistentVars.SpawnedEnemies) do
         Object.Init(enemy):Clear(true)
-    end
-end
-
-function Enemy.SpawnNamed(name, x, y, z)
-    local enemy = Enemy.GetByName(name)
-    if enemy then
-        enemy:Spawn(x, y, z)
-        return enemy
     end
 end
 

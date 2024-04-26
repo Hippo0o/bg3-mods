@@ -153,20 +153,9 @@ end
 -- also works for items
 function M.Entity.Remove(guid)
     Osi.SetOnStage(guid, 0)
-    Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0)
+    Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0) -- no blood
     Osi.RequestDelete(guid)
     Osi.Die(guid, 2, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
-    -- Osi.DisappearOutOfSightTo(character, Osi.GetHostCharacter(), "", 1, "")
-    -- no blood
-
-    -- taken from AEE
-    -- pcall(function()
-    --     Osi.MakeNPC(character)
-    --     Osi.SetHasDialog(character, 0)
-    --     Osi.PROC_RemoveAllPolymorphs(character)
-    --     Osi.PROC_RemoveAllDialogEntriesForSpeaker(character)
-    --     Osi.SetImmortal(character, 0)
-    -- end)
 end
 
 -------------------------------------------------------------------------------------------------
