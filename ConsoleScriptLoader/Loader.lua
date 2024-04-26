@@ -3,19 +3,30 @@ local GustavDevUUID = "28ac9ce2-2aba-8cda-b3b5-6e922f71b6b8"
 local function newRequire(path, env)
     local modPath = path:gsub("/[^/]+%.lua$", "")
     local register = {}
-    return function(module)
+
+    return function(module, p)
+        local mod = nil
+        if p then -- for compatibility with Ext.Require
+            mod = module
+            module = p
+        end
+
         if not string.match(module, ".lua$") then
             module = module .. ".lua"
         end
 
-        if register[module] then
-            return register[module]
+        local filePath = table.concat({ modPath, module }, "/")
+        if p then
+            filePath = module
         end
 
-        -- local result = Ext.Utils.LoadString(Ext.IO.LoadFile(table.concat({ modPath, module }, "/"), "data"))()
-        local result = Ext.Utils.Include(nil, table.concat({ modPath, module }, "/"), env)
+        if register[filePath] then
+            return register[filePath]
+        end
 
-        register[module] = result
+        local result = Ext.Utils.Include(mod, filePath, env)
+
+        register[filePath] = result
 
         return result
     end
