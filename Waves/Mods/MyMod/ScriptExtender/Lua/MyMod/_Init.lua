@@ -163,13 +163,17 @@ do -- story bypass skips most/all dialogues, combat and interactions that aren't
                 return
             end
 
+            if Osi.IsAlly(Player.Host(), actor) == 1 then
+                return
+            end
+
             if paidActor then
                 L.Info("To disable story bypass, use !MM DisableStoryBypass")
             end
 
             Osi.DialogRequestStopForDialog(dialog, actor)
 
-            if not paidActor and UE.IsNonPlayer(actor, true) then
+            if not paidActor and UE.IsNonPlayer(actor) then
                 L.Debug("DialogActorJoined", dialog, actor, instanceID, speakerIndex)
                 Osi.DialogRemoveActorFromDialog(instanceID, actor)
                 L.Info("Removing", actor)
@@ -187,7 +191,7 @@ do -- story bypass skips most/all dialogues, combat and interactions that aren't
         3,
         "before",
         ifBypassStory(function(character, item, sucess)
-            if UE.IsNonPlayer(character) then
+            if UE.IsNonPlayer(character, true) then
                 return
             end
             if Osi.IsLocked(item) == 1 then
@@ -210,7 +214,7 @@ do -- story bypass skips most/all dialogues, combat and interactions that aren't
         "after",
         ifBypassStory(function(object, combatGuid)
             Schedule(function()
-                if not Enemy.IsValid(object) and UE.IsNonPlayer(object, true) then
+                if not Enemy.IsValid(object) and UE.IsNonPlayer(object) then
                     L.Info("Removing", object)
                     Osi.LeaveCombat(object)
                     UE.Remove(object)
@@ -237,6 +241,7 @@ do
 
     local start = 0
     function Commands.Debug(new_start, amount)
+
         -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
         -- Enemy.TestEnemies(enemies, false)
 
@@ -254,13 +259,13 @@ do
         --
         -- start = new_start + j
 
-        local templates = {}
-        for i, v in Enemy.Iter() do
-            table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-        end
-        local enemies = Enemy.GenerateEnemyList(templates)
-
-        Enemy.TestEnemies(enemies)
+        -- local templates = {}
+        -- for i, v in Enemy.Iter() do
+        --     table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+        -- end
+        -- local enemies = Enemy.GenerateEnemyList(templates)
+        --
+        -- Enemy.TestEnemies(enemies)
 
         -- Osi.TeleportToPosition(Player.Host(), 0, 0, 0, "", 1, 1, 1, 1, 0)
         -- Osi.MakePlayer("S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12", Player.Host())

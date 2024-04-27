@@ -188,6 +188,21 @@ function Action.SpawnLoot()
     end)
 end
 
+function Action.EmptyArea()
+    if not C.BypassStory then
+        return
+    end
+
+    local toRemove = UT.Filter(UE.GetNearby(Player.Host(), 100, true), function(v)
+        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
+    end)
+
+    -- TODO maybe only use Osi.SetOnStage
+    for _, v in pairs(toRemove) do
+        UE.Remove(v.Guid)
+    end
+end
+
 function Action.StartCombat()
     if Current().CombatId ~= nil then
         L.Error("Combat already started.")
@@ -196,6 +211,8 @@ function Action.StartCombat()
 
     -- remove corpses from previous combat
     Enemy.Cleanup()
+    -- remove all non-player characters
+    Action.EmptyArea()
 
     Current().Map:PingSpawns()
 
@@ -349,7 +366,7 @@ end
 -------------------------------------------------------------------------------------------------
 
 ---@return table
-function Scenario.Get(id)
+function Scenario.Get()
     return data
 end
 
@@ -615,7 +632,7 @@ Ext.Osiris.RegisterListener(
     1,
     "before",
     ifScenario(function(uuid)
-        if UE.IsNonPlayer(uuid, true) then
+        if UE.IsNonPlayer(uuid) then
             return
         end
 

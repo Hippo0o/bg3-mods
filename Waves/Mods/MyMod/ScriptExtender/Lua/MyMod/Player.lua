@@ -41,11 +41,35 @@ function Player.Notify(message, instant)
     end)
 end
 
+local readyChecks = {}
+---@param message string
+---@param callback fun(result: boolean)
+function Player.AskConfirmation(message, callback)
+    local msgId = tostring(callback):gsub("function: 0x", "")
+    Osi.ReadyCheckSpecific(msgId, message, 1, nil, nil, nil, nil)
+    readyChecks[msgId] = callback
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
+
+Ext.Osiris.RegisterListener("ReadyCheckPassed", 1, "after", function(id)
+    L.Debug("ReadyCheckPassed", id)
+    if readyChecks[id] then
+        readyChecks[id](true)
+        readyChecks[id] = nil
+    end
+end)
+Ext.Osiris.RegisterListener("ReadyCheckFailed", 1, "after", function(id)
+    L.Debug("ReadyCheckFailed", id)
+    if readyChecks[id] then
+        readyChecks[id](false)
+        readyChecks[id] = nil
+    end
+end)
 
 -- Ext.Osiris.RegisterListener("UsingSpell", 5, "before", function(caster, spell, spellType, spellElement, storyActionID)
 --     L.Info("UsingSpell:", caster, spell, spellType, spellElement, storyActionID)
