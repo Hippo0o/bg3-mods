@@ -12,6 +12,7 @@ local M = {
         "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
         "S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
     },
+    NullGuid = "00000000-0000-0000-0000-000000000000",
 }
 
 return M

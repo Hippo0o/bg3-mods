@@ -290,12 +290,12 @@ function Object:Clear(keepCorpse)
 
     RetryFor(function()
         if keepCorpse then
-            Osi.Die(guid, 0, "NULL_00000000-0000-0000-0000-000000000000", 0, 0)
+            Osi.Die(guid, 0, C.NullGuid, 0, 0)
         else
             UE.Remove(guid)
         end
 
-        return Osi.IsDead(guid) == 1 or Osi.IsSummon(guid) == 0
+        return Osi.IsDead(guid) == 1 or not self:Entity():IsAlive()
     end, {
         interval = 300,
         immediate = true,

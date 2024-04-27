@@ -155,7 +155,8 @@ function M.Entity.Remove(guid)
     Osi.SetOnStage(guid, 0)
     Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0) -- no blood
     Osi.RequestDelete(guid)
-    Osi.Die(guid, 2, "NULL_00000000-0000-0000-0000-000000000000", 0, 1)
+    Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
+    Osi.UnloadItem(guid)
 end
 
 -------------------------------------------------------------------------------------------------

@@ -40,3 +40,13 @@ function Player.Notify(message, instant)
         end, true)
     end)
 end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+Ext.Osiris.RegisterListener("UsingSpell", 5, "before", function(caster, spell, spellType, spellElement, storyActionID)
+    L.Info("UsingSpell:", caster, spell, spellType, spellElement, storyActionID)
+end)
