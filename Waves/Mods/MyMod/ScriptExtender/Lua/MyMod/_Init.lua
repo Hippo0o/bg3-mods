@@ -342,7 +342,7 @@ do
         end)
     end
 
-    function Commands.Maps()
+    function Commands.Maps(id)
         local region = Osi.GetRegion(Player.Host())
         L.Info("Region: " .. region)
 
@@ -356,13 +356,19 @@ do
 
         for i, v in pairs(maps) do
             L.Info(i, v.Name)
+            if id and i == tonumber(id) then
+                L.Dump(v)
+            end
         end
     end
 
-    function Commands.Scenarios()
+    function Commands.Scenarios(id)
         L.Info("ID", "Name")
         for i, v in pairs(Scenario.Get()) do
             L.Info(i, v.Name)
+            if id and i == tonumber(id) then
+                L.Dump(v)
+            end
         end
     end
 
@@ -392,7 +398,6 @@ do
 
     function Commands.Stop()
         Scenario.Stop()
-        Player.Notify("Scenario stopped.")
     end
 
     function Commands.State()
