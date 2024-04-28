@@ -135,7 +135,7 @@ function Action.CalculateLoot()
             local fail = 0
             local bonusCategory = nil
             local rarity = nil
-            -- avoid 0 rolls e.g. epic armor doesnt exist
+            -- avoid 0 rolls e.g. legendary objects dont exist
             while #items == 0 and fail < 3 do
                 fail = fail + 1
 
