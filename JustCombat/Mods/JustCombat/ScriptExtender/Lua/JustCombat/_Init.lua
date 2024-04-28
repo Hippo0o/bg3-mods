@@ -2,7 +2,7 @@
 
 ---@type Mod
 local Mod = Require("Shared/Mod")
-Mod.ModPrefix = "MyMod"
+Mod.ModPrefix = "JustCombat"
 Mod.ModUUID = "e1fb0ff5-dd5e-471d-b2c4-c19c288fa5e7"
 
 ---@type Utils
@@ -32,7 +32,7 @@ UT.Merge(C, {
         "Common",
         "Uncommon",
         "Rare",
-        "Epic",
+        "VeryRare",
         "Legendary",
     },
     EnemyTier = {
@@ -76,11 +76,11 @@ Enemy = {}
 Map = {}
 Item = {}
 
-Require("MyMod/Player")
-Require("MyMod/Scenario")
-Require("MyMod/Enemy")
-Require("MyMod/Map")
-Require("MyMod/Item")
+Require("JustCombat/Player")
+Require("JustCombat/Scenario")
+Require("JustCombat/Enemy")
+Require("JustCombat/Map")
+Require("JustCombat/Item")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -168,7 +168,7 @@ do -- story bypass skips most/all dialogues, combat and interactions that aren't
             end
 
             if paidActor then
-                L.Info("To disable story bypass, use !MM DisableStoryBypass")
+                L.Info("To disable story bypass, use !JC DisableStoryBypass")
             end
 
             Osi.DialogRequestStopForDialog(dialog, actor)
@@ -196,13 +196,13 @@ do -- story bypass skips most/all dialogues, combat and interactions that aren't
             end
             if Osi.IsLocked(item) == 1 then
                 L.Debug("Auto unlocking", item)
-                L.Info("To disable story bypass, use !MM DisableStoryBypass")
+                L.Info("To disable story bypass, use !JC DisableStoryBypass")
                 Player.Notify("Auto unlocking", true)
                 Osi.Unlock(item, character)
             end
             if Osi.IsTrapArmed(item) == 1 then
                 L.Debug("Auto disarming", item)
-                L.Info("To disable story bypass, use !MM DisableStoryBypass")
+                L.Info("To disable story bypass, use !JC DisableStoryBypass")
                 Player.Notify("Auto disarming", true)
                 Osi.SetTrapArmed(item, 0)
             end
@@ -237,53 +237,52 @@ end
 
 do
     local Commands = {}
-    Api = Commands -- Mods.MyMod.Api
+    Api = Commands -- Mods.JustCombat.Api
 
-    local start = 0
-    function Commands.Debug(new_start, amount)
+    -- local start = 0
+    -- function Commands.Dev(new_start, amount)
+    -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
+    -- Enemy.TestEnemies(enemies, false)
 
-        -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
-        -- Enemy.TestEnemies(enemies, false)
+    -- new_start = tonumber(new_start) or start
+    -- amount = tonumber(amount) or 100
+    --
+    -- local j = 1
+    -- local templates = {}
+    -- for i, v in Enemy.Iter() do
+    --     if i >= new_start and (i - new_start) <= amount then
+    --         table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+    --         j = j + 1
+    --     end
+    -- end
+    --
+    -- start = new_start + j
 
-        -- new_start = tonumber(new_start) or start
-        -- amount = tonumber(amount) or 100
-        --
-        -- local j = 1
-        -- local templates = {}
-        -- for i, v in Enemy.Iter() do
-        --     if i >= new_start and (i - new_start) <= amount then
-        --         table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-        --         j = j + 1
-        --     end
-        -- end
-        --
-        -- start = new_start + j
+    -- local templates = {}
+    -- for i, v in Enemy.Iter() do
+    --     table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+    -- end
+    -- local enemies = Enemy.GenerateEnemyList(templates)
+    --
+    -- Enemy.TestEnemies(enemies)
 
-        -- local templates = {}
-        -- for i, v in Enemy.Iter() do
-        --     table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-        -- end
-        -- local enemies = Enemy.GenerateEnemyList(templates)
-        --
-        -- Enemy.TestEnemies(enemies)
+    -- Osi.TeleportToPosition(Player.Host(), 0, 0, 0, "", 1, 1, 1, 1, 0)
+    -- Osi.MakePlayer("S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12", Player.Host())
+    -- Osi.MakePlayer("S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c", Player.Host())
 
-        -- Osi.TeleportToPosition(Player.Host(), 0, 0, 0, "", 1, 1, 1, 1, 0)
-        -- Osi.MakePlayer("S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12", Player.Host())
-        -- Osi.MakePlayer("S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c", Player.Host())
-
-        -- local list = {}
-        -- for i, v in Enemy.iter() do
-        --     local key = v.TemplateId .. v.Stats .. v.Equipment .. v.Tier .. v.CharacterVisualResourceID .. v.Icon
-        --     L.Dump(key, list[key])
-        --     list[key] = v
-        -- end
-        -- Ext.IO.SaveFile(
-        --     "enemies.json",
-        --     Ext.DumpExport(UT.Map(list, function(v)
-        --         return v
-        --     end))
-        -- )
-    end
+    -- local list = {}
+    -- for i, v in Enemy.iter() do
+    --     local key = v.TemplateId .. v.Stats .. v.Equipment .. v.Tier .. v.CharacterVisualResourceID .. v.Icon
+    --     L.Dump(key, list[key])
+    --     list[key] = v
+    -- end
+    -- Ext.IO.SaveFile(
+    --     "enemies.json",
+    --     Ext.DumpExport(UT.Map(list, function(v)
+    --         return v
+    --     end))
+    -- )
+    -- end
 
     function Commands.Spawn(guid)
         local x, y, z = Player.Pos()
@@ -405,14 +404,6 @@ do
         Scenario.Stop()
     end
 
-    function Commands.State()
-        L.Dump(S)
-    end
-
-    function Commands.DumpPV()
-        L.Dump(PersistentVars)
-    end
-
     function Commands.Dump(file)
         for i, v in pairs(S.SpawnedEnemies) do
             if v:IsSpawned() then
@@ -465,7 +456,7 @@ do
         Commands.StoryBypass(0)
     end
 
-    Ext.RegisterConsoleCommand("MM", function(_, fn, ...)
+    Ext.RegisterConsoleCommand("JC", function(_, fn, ...)
         if fn == nil or Commands[fn] == nil then
             L.Dump(UT.Keys(Commands))
             return

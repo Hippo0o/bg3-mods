@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global
 
-local data = Require("MyMod/Templates/Scenarios.lua")
+local data = Require("JustCombat/Templates/Scenarios.lua")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --

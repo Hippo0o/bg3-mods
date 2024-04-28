@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global
 
-local enemyTemplates = Require("MyMod/Templates/Enemies.lua")
+local enemyTemplates = Require("JustCombat/Templates/Enemies.lua")
 
 L.Debug("Enemies loaded", #enemyTemplates)
 
