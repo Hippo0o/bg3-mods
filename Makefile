@@ -1,20 +1,24 @@
-.PHONY: clrf-to-lf lf-to-clrf fix-permissions sync-files
+.PHONY: clrf-to-lf lf-to-clrf fix-permissions sync-files copy
 
 UID=1000
+MOD_SUBDIR=$(MOD_DIR)/Mods/JustCombat
 
 clrf-to-lf:
-	fd -t file . $(MOD_DIR) -x sed -i 's/\r$$//'
+	fd -t file . $(MOD_SUBDIR) -x sed -i 's/\r$$//'
 
 lf-to-clrf:
-	fd -t file . $(MOD_DIR) -x sed -i 's/$$/\r/'
+	fd -t file . $(MOD_SUBDIR) -x sed -i 's/$$/\r/'
 
 fix-permissions:
-	fd -t file . $(MOD_DIR) -x chmod 644
-	fd -t directory . $(MOD_DIR) -x chmod 755
-	chown -R $(UID) $(MOD_DIR)
+	fd -t file . $(MOD_SUBDIR) -x chmod 644
+	fd -t directory . $(MOD_SUBDIR) -x chmod 755
+	chown -R $(UID) $(MOD_SUBDIR)
 
 sync-files:
-	while sleep 0.1; do fd . $(MOD_DIR) | entr -d rsync --verbose -avc --delete "$(MOD_DIR)/." "$(DEST_DIR)/." ; done
+	while sleep 0.1; do fd . $(MOD_SUBDIR) | entr -d rsync --verbose -avc --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/." ; done
+
+copy:
+	rsync --verbose -avc --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/JustCombat/."
 
 mounts: # dont forgor to pacman -S cifs-utils
 	mount -t cifs -o rw,username=user,uid=$(UID),file_mode=0777,dir_mode=0777 "//$(WIN_IP)/SE" $(MOUNT_DIR)/SE
