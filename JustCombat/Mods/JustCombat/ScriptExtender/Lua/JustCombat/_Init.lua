@@ -27,7 +27,7 @@ UT.Merge(C, {
     CombatWorkaround = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
-    BypassStoryAlways = false, -- always skip dialogues, combat and interactions that aren't related to a scenario
+    BypassStoryAlways = false, -- always skip dialogues, combat and interactions even if no scenario is active
     ItemsIncludeClothes = false, -- include clothes in item lists
     ItemRarity = {
         "Common",
