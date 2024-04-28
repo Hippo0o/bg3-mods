@@ -63,6 +63,10 @@ function Object:GetId()
     return self.Name .. "_" .. self.TemplateId
 end
 
+function Object:GetTranslatedName()
+    return Osi.ResolveTranslatedString(self:Entity().DisplayName.NameKey.Handle.Handle)
+end
+
 function Object:IsSpawned()
     return self.GUID ~= nil
 end
@@ -218,7 +222,7 @@ function Object:CreateAt(x, y, z)
     self.GUID = Osi.CreateAt(self:GetId(), x, y, z, 1, 1, "")
 
     if not self:IsSpawned() then
-        L.Error("Failed to create real: ", self:GetId())
+        L.Error("Failed to create: ", self:GetId())
         return false
     end
 
@@ -228,7 +232,7 @@ function Object:CreateAt(x, y, z)
 
     PersistentVars.SpawnedEnemies[self.GUID] = self
 
-    L.Debug("Enemy registered: ", self:GetId(), guid)
+    L.Debug("Enemy created: ", self:GetTranslatedName(), self:GetId(), self.GUID)
 
     return true
 end
@@ -286,6 +290,7 @@ end
 function Object:Clear(keepCorpse)
     local guid = self.GUID
     local id = self:GetId()
+    local entity = self:Entity()
     self.GUID = nil
 
     RetryFor(function()
@@ -295,7 +300,7 @@ function Object:Clear(keepCorpse)
             UE.Remove(guid)
         end
 
-        return Osi.IsDead(guid) == 1 or not self:Entity():IsAlive()
+        return Osi.IsDead(guid) == 1 or not entity:IsAlive()
     end, {
         interval = 300,
         immediate = true,
@@ -360,10 +365,23 @@ function Enemy.GetByIndex(index)
     return Object.New(enemy)
 end
 
+---@param tier string
+---@return Enemy[]
+function Enemy.GetByTier(tier)
+    local list = {}
+    for _, enemy in Enemy.Iter() do
+        if enemy.Tier == tier then
+            table.insert(list, enemy)
+        end
+    end
+
+    return list
+end
+
 ---@return Enemy[]
 function Enemy.GetByTemplateId(templateId)
     local list = {}
-    for _, enemy in Enemy.Iter(filter) do
+    for _, enemy in Enemy.Iter() do
         if enemy.TemplateId == templateId then
             table.insert(list, enemy)
         end
@@ -466,7 +484,7 @@ function Enemy.CalcTier(enemy)
         return "trash"
     end
 
-    local pwr = (vit / 2) + sum + prof + ac + level
+    local pwr = (vit / 2) + sum + prof + ac + level * 2
 
     local category
     if pwr > 150 then
@@ -512,6 +530,7 @@ function Enemy.GenerateEnemyList(templates)
 
     local function check(template)
         if not isValidFilename(template.FileName) then
+            L.Debug(template.FileName)
             return
         end
 
@@ -524,6 +543,7 @@ function Enemy.GenerateEnemyList(templates)
         end
 
         if template.CombatComponent.Archetype == "base" then
+            L.Debug(template.CombatComponent.Archetype)
             return
         end
 
@@ -553,9 +573,11 @@ function Enemy.GenerateEnemyList(templates)
         }
 
         if US.Contains(template.Name, patterns, true) then
+            L.Debug(template.Name)
             return false
         end
         if US.Contains(template.Name, startswith, true) then
+            L.Debug(template.Name)
             return false
         end
 
@@ -579,6 +601,8 @@ function Enemy.GenerateEnemyList(templates)
                 LevelOverride = templateData.LevelOverride,
             }
             table.insert(enemies, Object.New(data))
+        else
+            L.Debug("Enemy template skipped: ", templateId)
         end
     end
 
@@ -598,6 +622,10 @@ function Enemy.TestEnemies(enemies, keepAlive)
         end
 
         i = i + 1
+        if i > #enemies then
+            return true
+        end
+
         L.Debug("Checking template: ", i, #enemies)
         local enemy = enemies[i]
 
@@ -622,6 +650,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
                     local tier, info = Enemy.CalcTier(enemy)
                     enemy.Tier = tier
                     enemy.Info = info
+                    L.Dump(tier, info)
                     if tier ~= "trash" then
                         table.insert(
                             dump,
@@ -640,8 +669,6 @@ function Enemy.TestEnemies(enemies, keepAlive)
             L.Error(err)
             error(err)
         end)
-
-        return i >= #enemies
     end, {
         interval = 1,
         retries = -1,

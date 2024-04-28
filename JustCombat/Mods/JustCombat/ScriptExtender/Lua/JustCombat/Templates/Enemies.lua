@@ -7,10 +7,10 @@ return {
 		Equipment = "EQP_Dagger",
 		Icon = "ee9ba200-9d3d-890a-ae00-e62bb9e80974-EQP_Dagger_(Icon_Kobold)",
 		Info = {
-			AC = 12,
+			AC = 13,
 			Level = 6,
-			Pwr = 30.0,
-			Stats = -4,
+			Pwr = 36.0,
+			Stats = -3,
 			Vit = 22,
 		},
 		IsBoss = false,
@@ -30,7 +30,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 9,
-			Pwr = 85.0,
+			Pwr = 92.0,
 			Stats = 15,
 			Vit = 76,
 		},
@@ -40,7 +40,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Githyanki_Gishra_Melee",
 		TemplateId = "f283cbf7-2a7d-45d9-8051-2efe0f621e27",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -51,7 +51,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 8,
-			Pwr = 57.0,
+			Pwr = 63.0,
 			Stats = 6,
 			Vit = 48,
 		},
@@ -72,7 +72,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 4,
-			Pwr = 63.5,
+			Pwr = 65.5,
 			Stats = 3,
 			Vit = 75,
 		},
@@ -82,7 +82,7 @@ return {
 		SpellSet = "",
 		Stats = "HookHorror",
 		TemplateId = "bfe9ad10-c5f7-4a08-a2af-acefb296ffcc",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -93,7 +93,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -103,7 +103,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Dwarf_Melee_Attacker",
 		TemplateId = "ff4900e5-ace9-4582-b1ca-dc144919f27d",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
@@ -114,7 +114,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -124,7 +124,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Human_Ranger",
 		TemplateId = "ec34598b-0a16-4b50-b271-c6682893837f",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -135,7 +135,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 7,
-			Pwr = 67.5,
+			Pwr = 72.5,
 			Stats = 9,
 			Vit = 67,
 		},
@@ -156,7 +156,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 5,
-			Pwr = 35.5,
+			Pwr = 38.5,
 			Stats = 0,
 			Vit = 29,
 		},
@@ -177,7 +177,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 29.5,
+			Pwr = 28.5,
 			Stats = 2,
 			Vit = 21,
 		},
@@ -198,7 +198,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 16.0,
+			Pwr = 15.0,
 			Stats = -6,
 			Vit = 8,
 		},
@@ -219,7 +219,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 9,
-			Pwr = 92.0,
+			Pwr = 99.0,
 			Stats = 6,
 			Vit = 114,
 		},
@@ -240,7 +240,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 54.0,
+			Pwr = 59.0,
 			Stats = 4,
 			Vit = 48,
 		},
@@ -261,7 +261,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 19.0,
+			Pwr = 18.0,
 			Stats = -4,
 			Vit = 12,
 		},
@@ -283,7 +283,7 @@ return {
 			AC = 8,
 			Level = 1,
 			Pwr = 4.0,
-			Stats = -12,
+			Stats = -11,
 			Vit = 6,
 		},
 		IsBoss = false,
@@ -303,7 +303,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 10,
-			Pwr = 46.0,
+			Pwr = 54.0,
 			Stats = 10,
 			Vit = 8,
 		},
@@ -324,7 +324,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 5,
-			Pwr = 43.0,
+			Pwr = 46.0,
 			Stats = 7,
 			Vit = 26,
 		},
@@ -334,7 +334,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_Raphael_Imp",
 		TemplateId = "a4982d64-e544-4470-82d1-5e8d1bfe29f1",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
@@ -345,7 +345,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 21.5,
+			Pwr = 20.5,
 			Stats = -1,
 			Vit = 9,
 		},
@@ -366,7 +366,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 54.0,
+			Pwr = 59.0,
 			Stats = 4,
 			Vit = 48,
 		},
@@ -387,7 +387,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 29.5,
+			Pwr = 28.5,
 			Stats = 2,
 			Vit = 21,
 		},
@@ -408,7 +408,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 100.5,
+			Pwr = 109.5,
 			Stats = 7,
 			Vit = 117,
 		},
@@ -429,7 +429,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 16.0,
+			Pwr = 15.0,
 			Stats = -6,
 			Vit = 8,
 		},
@@ -450,7 +450,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 19.0,
+			Pwr = 18.0,
 			Stats = -4,
 			Vit = 12,
 		},
@@ -471,7 +471,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 8,
-			Pwr = 62.0,
+			Pwr = 68.0,
 			Stats = 9,
 			Vit = 52,
 		},
@@ -481,7 +481,7 @@ return {
 		SpellSet = "CommonNPCActions_NoThrow",
 		Stats = "Doppelganger",
 		TemplateId = "5d9bb3fb-0202-4a1a-9611-ff063fc15850",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -492,7 +492,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 11,
-			Pwr = 90.0,
+			Pwr = 99.0,
 			Stats = 16,
 			Vit = 84,
 		},
@@ -502,7 +502,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_OskarsBeloved_Spirit",
 		TemplateId = "4a97e5a0-57cf-4aa7-a25e-ebcc7d6c240b",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -513,7 +513,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 11.5,
+			Pwr = 10.5,
 			Stats = -8,
 			Vit = 5,
 		},
@@ -534,7 +534,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 12,
-			Pwr = 93.0,
+			Pwr = 103.0,
 			Stats = 16,
 			Vit = 82,
 		},
@@ -555,7 +555,7 @@ return {
 		Info = {
 			AC = 6,
 			Level = 6,
-			Pwr = 15.0,
+			Pwr = 19.0,
 			Stats = -8,
 			Vit = 18,
 		},
@@ -576,7 +576,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 28.0,
+			Pwr = 29.0,
 			Stats = 1,
 			Vit = 18,
 		},
@@ -597,7 +597,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 59.5,
+			Pwr = 62.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -618,7 +618,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 88.0,
+			Pwr = 94.0,
 			Stats = 21,
 			Vit = 76,
 		},
@@ -628,7 +628,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Dwarf_Cultist_Bhaal_DeathsHead",
 		TemplateId = "abad7c37-9380-407d-967c-aa7211cdad80",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "f76e60e1-2957-470b-8a25-efdf32475ce0",
@@ -639,7 +639,7 @@ return {
 		Info = {
 			AC = 6,
 			Level = 6,
-			Pwr = 15.0,
+			Pwr = 19.0,
 			Stats = -8,
 			Vit = 18,
 		},
@@ -658,9 +658,9 @@ return {
 		Equipment = "",
 		Icon = "4acf176c-efe5-da2d-f0e9-0047fbbd75b5-_(Icon_Wolf)",
 		Info = {
-			AC = 23,
+			AC = 21,
 			Level = 11,
-			Pwr = 87.5,
+			Pwr = 94.5,
 			Stats = 2,
 			Vit = 91,
 		},
@@ -670,7 +670,7 @@ return {
 		SpellSet = "RangerCompanion_ExceptionalTraining",
 		Stats = "LOW_BasiliskGate_Companion_Wolf_11",
 		TemplateId = "929fdbf4-c05d-4cda-855f-18c47249434f",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -681,7 +681,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 8,
-			Pwr = 67.5,
+			Pwr = 73.5,
 			Stats = 12,
 			Vit = 55,
 		},
@@ -702,7 +702,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -712,7 +712,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Human_Ranger",
 		TemplateId = "c1b42b1f-26ed-496f-bc19-8a264181f84d",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "45a231e4-e94f-4b0e-a941-2daf1adf44b5",
@@ -744,7 +744,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 21.5,
+			Pwr = 20.5,
 			Stats = -1,
 			Vit = 9,
 		},
@@ -758,27 +758,6 @@ return {
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "mage_smart",
-		CharacterVisualResourceID = "5240998a-bfb6-db4a-71dd-688ed4f68b25",
-		Equipment = "EQP_Staff_Robe",
-		Icon = "5240998a-bfb6-db4a-71dd-688ed4f68b25-EQP_Staff_Robe_(Icon_Elf_Female)",
-		Info = {
-			AC = 12,
-			Level = 6,
-			Pwr = 57.0,
-			Stats = 12,
-			Vit = 44,
-		},
-		IsBoss = false,
-		LevelOverride = 6,
-		Name = "S_GLO_Desire_HangedPhysics",
-		SpellSet = "CommonNPCActions",
-		Stats = "GLO_CounsellorFlorrick",
-		TemplateId = "e7b4bc5b-3ca5-4579-8a54-2de1075cf5a3",
-		Tier = "high",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "act3_LOW_ghost_nurse",
 		CharacterVisualResourceID = "39c15103-3656-ad91-f87c-aced280fa89e",
 		Equipment = "",
@@ -786,7 +765,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 8,
-			Pwr = 52.5,
+			Pwr = 58.5,
 			Stats = 6,
 			Vit = 39,
 		},
@@ -807,7 +786,7 @@ return {
 		Info = {
 			AC = 20,
 			Level = 12,
-			Pwr = 175.0,
+			Pwr = 185.0,
 			Stats = 18,
 			Vit = 238,
 		},
@@ -828,7 +807,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 47.0,
+			Pwr = 50.0,
 			Stats = 6,
 			Vit = 32,
 		},
@@ -849,7 +828,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 38.0,
+			Pwr = 39.0,
 			Stats = 5,
 			Vit = 28,
 		},
@@ -870,7 +849,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 28.0,
+			Pwr = 29.0,
 			Stats = 1,
 			Vit = 18,
 		},
@@ -882,27 +861,6 @@ return {
 		TemplateId = "460c48a7-cea5-44d5-9e01-b27c0c751a24",
 		Tier = "mid",
 	},
-	-- {
-	-- 	AiHint = "00000000-0000-0000-0000-000000000000",
-	-- 	Archetype = "melee_large",
-	-- 	CharacterVisualResourceID = "f3f880f9-ea48-f6b7-3131-50cfe2c86a9f",
-	-- 	Equipment = "",
-	-- 	Icon = "f3f880f9-ea48-f6b7-3131-50cfe2c86a9f-_(Icon_TollCollector)",
-	-- 	Info = {
-	-- 		AC = 14,
-	-- 		Level = 4,
-	-- 		Pwr = 34.0,
-	-- 		Stats = 9,
-	-- 		Vit = 6,
-	-- 	},
-	-- 	IsBoss = false,
-	-- 	LevelOverride = 4,
-	-- 	Name = "TollCollector",
-	-- 	SpellSet = "CommonBeastActions",
-	-- 	Stats = "TollCollector",
-	-- 	TemplateId = "c2b6d034-a4d0-40aa-bc2b-5dc328bd9427",
-	-- 	Tier = "mid",
-	-- },
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "melee",
@@ -912,7 +870,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 96.0,
+			Pwr = 105.0,
 			Stats = 7,
 			Vit = 108,
 		},
@@ -933,7 +891,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 11,
-			Pwr = 148.0,
+			Pwr = 157.0,
 			Stats = 12,
 			Vit = 206,
 		},
@@ -943,7 +901,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Steel_Watcher_Biped",
 		TemplateId = "70417e3e-9278-4f96-a1d8-5bd90bf5d07a",
-		Tier = "epic",
+		Tier = "legendary",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -954,7 +912,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 86.0,
+			Pwr = 95.0,
 			Stats = 6,
 			Vit = 90,
 		},
@@ -964,7 +922,7 @@ return {
 		SpellSet = "CommonMyrmidonActions_Fly",
 		Stats = "Fire_Myrmidon_Wildshape",
 		TemplateId = "9c5e77bc-0e65-4c11-865a-46d892cc06fe",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -975,7 +933,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 11,
-			Pwr = 90.0,
+			Pwr = 99.0,
 			Stats = 16,
 			Vit = 84,
 		},
@@ -985,7 +943,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_OskarsBeloved_Spirit",
 		TemplateId = "b2fe9ed6-c6b4-43fe-af6a-e463c5ae33cd",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -996,7 +954,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 8,
-			Pwr = 57.0,
+			Pwr = 63.0,
 			Stats = 6,
 			Vit = 48,
 		},
@@ -1010,27 +968,6 @@ return {
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "zombie",
-		CharacterVisualResourceID = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3",
-		Equipment = "",
-		Icon = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3-_(Icon_Zombie)",
-		Info = {
-			AC = 8,
-			Level = 3,
-			Pwr = 14.5,
-			Stats = -5,
-			Vit = 9,
-		},
-		IsBoss = false,
-		LevelOverride = 3,
-		Name = "Undead_Zombie_Melee_FungalInfestation",
-		SpellSet = "AnimateDeadZombie",
-		Stats = "Zombie_FungalInfestation",
-		TemplateId = "c7a75636-a101-4920-a603-58efb6558bcb",
-		Tier = "low",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "melee_smart",
 		CharacterVisualResourceID = "ba67e77a-0ed8-aac2-97f2-994b99bbfa04",
 		Equipment = "EQP_LOW_DeathsHeadOfBhaal",
@@ -1038,7 +975,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 88.0,
+			Pwr = 94.0,
 			Stats = 21,
 			Vit = 76,
 		},
@@ -1048,7 +985,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Human_Cultist_Bhaal_DeathsHead",
 		TemplateId = "ad407cc1-3322-4e57-b6da-c4a80be48b9e",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "45a231e4-e94f-4b0e-a941-2daf1adf44b5",
@@ -1059,7 +996,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 9,
-			Pwr = 90.5,
+			Pwr = 97.5,
 			Stats = 17,
 			Vit = 85,
 		},
@@ -1080,7 +1017,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 41.0,
+			Pwr = 42.0,
 			Stats = -1,
 			Vit = 46,
 		},
@@ -1101,7 +1038,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 4,
-			Pwr = 41.0,
+			Pwr = 43.0,
 			Stats = 3,
 			Vit = 38,
 		},
@@ -1122,7 +1059,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 21.5,
+			Pwr = 20.5,
 			Stats = -1,
 			Vit = 9,
 		},
@@ -1143,7 +1080,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 59.5,
+			Pwr = 62.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -1164,8 +1101,8 @@ return {
 		Info = {
 			AC = 22,
 			Level = 10,
-			Pwr = 126.5,
-			Stats = 16,
+			Pwr = 137.5,
+			Stats = 19,
 			Vit = 145,
 		},
 		IsBoss = true,
@@ -1185,7 +1122,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 39.5,
+			Pwr = 42.5,
 			Stats = 0,
 			Vit = 29,
 		},
@@ -1206,7 +1143,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 88.0,
+			Pwr = 94.0,
 			Stats = 21,
 			Vit = 76,
 		},
@@ -1216,7 +1153,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Tiefling_Cultist_Bhaal_DeathsHead",
 		TemplateId = "d14a087c-8cd8-4934-8eea-71ade4cf7cb6",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -1227,7 +1164,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 47.0,
+			Pwr = 54.0,
 			Stats = 9,
 			Vit = 10,
 		},
@@ -1248,7 +1185,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 5,
-			Pwr = 34.0,
+			Pwr = 37.0,
 			Stats = -1,
 			Vit = 24,
 		},
@@ -1269,7 +1206,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 5,
-			Pwr = 55.5,
+			Pwr = 58.5,
 			Stats = 8,
 			Vit = 41,
 		},
@@ -1290,7 +1227,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 54.0,
+			Pwr = 59.0,
 			Stats = 4,
 			Vit = 48,
 		},
@@ -1311,7 +1248,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 4,
-			Pwr = 77.5,
+			Pwr = 79.5,
 			Stats = 11,
 			Vit = 85,
 		},
@@ -1332,7 +1269,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 10,
-			Pwr = 46.0,
+			Pwr = 54.0,
 			Stats = 10,
 			Vit = 8,
 		},
@@ -1353,7 +1290,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -1374,7 +1311,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 106.5,
+			Pwr = 115.5,
 			Stats = 8,
 			Vit = 127,
 		},
@@ -1416,7 +1353,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -1426,7 +1363,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Human_Melee_Attacker",
 		TemplateId = "254d5482-1788-4f2c-8e07-e5357eb44719",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -1437,7 +1374,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 12,
-			Pwr = 93.0,
+			Pwr = 103.0,
 			Stats = 16,
 			Vit = 82,
 		},
@@ -1458,7 +1395,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 12,
-			Pwr = 228.5,
+			Pwr = 238.5,
 			Stats = 10,
 			Vit = 369,
 		},
@@ -1479,7 +1416,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 9,
-			Pwr = 98.0,
+			Pwr = 105.0,
 			Stats = 3,
 			Vit = 126,
 		},
@@ -1500,7 +1437,7 @@ return {
 		Info = {
 			AC = 10,
 			Level = 1,
-			Pwr = 24.0,
+			Pwr = 23.0,
 			Stats = 5,
 			Vit = 8,
 		},
@@ -1521,7 +1458,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 10,
-			Pwr = 71.0,
+			Pwr = 79.0,
 			Stats = 6,
 			Vit = 62,
 		},
@@ -1542,7 +1479,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 87.5,
+			Pwr = 96.5,
 			Stats = 6,
 			Vit = 93,
 		},
@@ -1552,7 +1489,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Mummy_CreateUndead",
 		TemplateId = "f424693b-13f4-4cce-987b-7d75748c87e0",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -1563,7 +1500,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 3,
-			Pwr = 33.5,
+			Pwr = 34.5,
 			Stats = 2,
 			Vit = 19,
 		},
@@ -1584,7 +1521,7 @@ return {
 		Info = {
 			AC = 21,
 			Level = 10,
-			Pwr = 130.0,
+			Pwr = 138.0,
 			Stats = 25,
 			Vit = 136,
 		},
@@ -1605,7 +1542,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 23.0,
+			Pwr = 24.0,
 			Stats = -1,
 			Vit = 12,
 		},
@@ -1626,7 +1563,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 8,
-			Pwr = 47.5,
+			Pwr = 53.5,
 			Stats = 9,
 			Vit = 15,
 		},
@@ -1647,7 +1584,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 6,
-			Pwr = 58.0,
+			Pwr = 62.0,
 			Stats = 8,
 			Vit = 42,
 		},
@@ -1668,7 +1605,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 10,
-			Pwr = 99.0,
+			Pwr = 107.0,
 			Stats = 15,
 			Vit = 100,
 		},
@@ -1689,7 +1626,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 94.5,
+			Pwr = 103.5,
 			Stats = 13,
 			Vit = 93,
 		},
@@ -1710,7 +1647,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 7,
-			Pwr = 67.5,
+			Pwr = 72.5,
 			Stats = 9,
 			Vit = 67,
 		},
@@ -1731,7 +1668,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 11,
-			Pwr = 148.0,
+			Pwr = 157.0,
 			Stats = 12,
 			Vit = 206,
 		},
@@ -1741,7 +1678,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Steel_Watcher_Biped_Hellfire",
 		TemplateId = "ec2820db-afd7-4428-90bd-a0838949cc69",
-		Tier = "epic",
+		Tier = "legendary",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -1752,7 +1689,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 12,
-			Pwr = 228.5,
+			Pwr = 238.5,
 			Stats = 10,
 			Vit = 369,
 		},
@@ -1773,7 +1710,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 29.0,
+			Pwr = 30.0,
 			Stats = -1,
 			Vit = 22,
 		},
@@ -1794,7 +1731,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 16.0,
+			Pwr = 15.0,
 			Stats = -6,
 			Vit = 8,
 		},
@@ -1815,7 +1752,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 8,
-			Pwr = 52.0,
+			Pwr = 58.0,
 			Stats = 4,
 			Vit = 48,
 		},
@@ -1836,7 +1773,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 5,
-			Pwr = 66.5,
+			Pwr = 69.5,
 			Stats = 14,
 			Vit = 53,
 		},
@@ -1857,7 +1794,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 6,
-			Pwr = 52.0,
+			Pwr = 56.0,
 			Stats = 4,
 			Vit = 42,
 		},
@@ -1878,7 +1815,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 9,
-			Pwr = 80.0,
+			Pwr = 87.0,
 			Stats = 5,
 			Vit = 90,
 		},
@@ -1899,7 +1836,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 4,
-			Pwr = 77.5,
+			Pwr = 79.5,
 			Stats = 11,
 			Vit = 85,
 		},
@@ -1920,7 +1857,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 22.5,
+			Pwr = 21.5,
 			Stats = -1,
 			Vit = 11,
 		},
@@ -1941,8 +1878,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 50.5,
-			Stats = 1,
+			Pwr = 53.5,
+			Stats = 2,
 			Vit = 59,
 		},
 		IsBoss = false,
@@ -1962,7 +1899,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 5,
-			Pwr = 34.0,
+			Pwr = 37.0,
 			Stats = -1,
 			Vit = 24,
 		},
@@ -1983,7 +1920,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 8,
-			Pwr = 75.5,
+			Pwr = 81.5,
 			Stats = 12,
 			Vit = 71,
 		},
@@ -2004,7 +1941,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 5,
-			Pwr = 34.0,
+			Pwr = 37.0,
 			Stats = -1,
 			Vit = 24,
 		},
@@ -2025,7 +1962,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 85.5,
+			Pwr = 92.5,
 			Stats = 10,
 			Vit = 85,
 		},
@@ -2035,7 +1972,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "LOW_CountingHouse_Melee_Human",
 		TemplateId = "9e054949-8251-438e-bbf5-7371815b5bea",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -2046,7 +1983,7 @@ return {
 		Info = {
 			AC = 21,
 			Level = 10,
-			Pwr = 130.0,
+			Pwr = 138.0,
 			Stats = 25,
 			Vit = 136,
 		},
@@ -2058,27 +1995,6 @@ return {
 		TemplateId = "af547ac0-c5fb-481d-9d67-8da3799aef5a",
 		Tier = "epic",
 	},
-	-- {
-	-- 	AiHint = "00000000-0000-0000-0000-000000000000",
-	-- 	Archetype = "beast",
-	-- 	CharacterVisualResourceID = "1c18d7d6-9153-8791-96e2-fbb01fc0ac25",
-	-- 	Equipment = "",
-	-- 	Icon = "1c18d7d6-9153-8791-96e2-fbb01fc0ac25-_(Icon_DarkVine_Tentacle_Giant)",
-	-- 	Info = {
-	-- 		AC = 14,
-	-- 		Level = 7,
-	-- 		Pwr = 54.0,
-	-- 		Stats = 4,
-	-- 		Vit = 48,
-	-- 	},
-	-- 	IsBoss = false,
-	-- 	LevelOverride = 7,
-	-- 	Name = "DarkVine_Tentacle_Giant",
-	-- 	SpellSet = "",
-	-- 	Stats = "ShadowVine_Giant",
-	-- 	TemplateId = "3e575c11-5300-4c9a-a54c-752220f0c88a",
-	-- 	Tier = "high",
-	-- },
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "koboldinventor_drunk",
@@ -2086,10 +2002,10 @@ return {
 		Equipment = "EQP_Dagger",
 		Icon = "00c4641c-574f-3514-226d-ff47b2eb422e-EQP_Dagger_(Icon_Kobold)",
 		Info = {
-			AC = 12,
+			AC = 13,
 			Level = 1,
-			Pwr = 22.5,
-			Stats = -3,
+			Pwr = 23.5,
+			Stats = -2,
 			Vit = 17,
 		},
 		IsBoss = false,
@@ -2098,27 +2014,6 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Kobold_Inventor",
 		TemplateId = "596e6013-a425-4556-98f2-df11074d634e",
-		Tier = "low",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "beast",
-		CharacterVisualResourceID = "76e4d0ae-fcd7-091e-b81f-1431850db64a",
-		Equipment = "EQP_Unarmed",
-		Icon = "76e4d0ae-fcd7-091e-b81f-1431850db64a-EQP_Unarmed_(Icon_IntDev)",
-		Info = {
-			AC = 12,
-			Level = 1,
-			Pwr = 22.5,
-			Stats = -2,
-			Vit = 15,
-		},
-		IsBoss = false,
-		LevelOverride = 1,
-		Name = "TUT_Intellect_Devourer_Companion_Lobotomized",
-		SpellSet = "CommonBeastActions",
-		Stats = "TUT_IntellectDevourer_Companion_Lobotomized",
-		TemplateId = "b7319cbd-c628-4d49-9251-b02b9fbe04df",
 		Tier = "low",
 	},
 	{
@@ -2151,7 +2046,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -2172,7 +2067,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 48.0,
+			Pwr = 53.0,
 			Stats = 3,
 			Vit = 38,
 		},
@@ -2186,27 +2081,6 @@ return {
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "zombie",
-		CharacterVisualResourceID = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3",
-		Equipment = "",
-		Icon = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3-_(Icon_Zombie)",
-		Info = {
-			AC = 8,
-			Level = 2,
-			Pwr = 14.0,
-			Stats = -5,
-			Vit = 10,
-		},
-		IsBoss = false,
-		LevelOverride = 2,
-		Name = "Undead_Zombie_Melee_AnimateDead_Swarm",
-		SpellSet = "AnimateDeadZombie",
-		Stats = "AnimateDead_Zombie__Horde",
-		TemplateId = "82d6ff04-db9d-4b02-82aa-fd4db21f5b7d",
-		Tier = "low",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "melee",
 		CharacterVisualResourceID = "9cc2f71c-5876-f7fd-404f-5a8fa95c0cd7",
 		Equipment = "LOW_HouseOfHope_Cambion",
@@ -2214,7 +2088,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -2233,10 +2107,10 @@ return {
 		Equipment = "SCL_Voss",
 		Icon = "d76cfcf0-606d-7449-802c-bb9abfbeb7d3-SCL_Voss_(Icon_Githyanki_Male)",
 		Info = {
-			AC = 13,
+			AC = 14,
 			Level = 12,
-			Pwr = 115.5,
-			Stats = 17,
+			Pwr = 128.5,
+			Stats = 19,
 			Vit = 135,
 		},
 		IsBoss = false,
@@ -2256,7 +2130,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -2266,7 +2140,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Human_Ranger",
 		TemplateId = "4b5f8dbe-04c4-4d0c-a8ac-a1366ca3d49e",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -2277,8 +2151,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 41.5,
-			Stats = 8,
+			Pwr = 44.5,
+			Stats = 9,
 			Vit = 27,
 		},
 		IsBoss = false,
@@ -2298,7 +2172,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 3,
-			Pwr = 37.5,
+			Pwr = 38.5,
 			Stats = 3,
 			Vit = 27,
 		},
@@ -2319,7 +2193,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 19.0,
+			Pwr = 18.0,
 			Stats = -4,
 			Vit = 12,
 		},
@@ -2340,7 +2214,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 4,
-			Pwr = 77.5,
+			Pwr = 79.5,
 			Stats = 11,
 			Vit = 85,
 		},
@@ -2361,7 +2235,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 48.0,
+			Pwr = 53.0,
 			Stats = 3,
 			Vit = 38,
 		},
@@ -2382,7 +2256,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 103.0,
+			Pwr = 112.0,
 			Stats = 6,
 			Vit = 124,
 		},
@@ -2403,7 +2277,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 5,
-			Pwr = 37.5,
+			Pwr = 40.5,
 			Stats = 2,
 			Vit = 29,
 		},
@@ -2424,7 +2298,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 8,
-			Pwr = 47.5,
+			Pwr = 53.5,
 			Stats = 9,
 			Vit = 15,
 		},
@@ -2445,8 +2319,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 50.5,
-			Stats = 1,
+			Pwr = 53.5,
+			Stats = 2,
 			Vit = 59,
 		},
 		IsBoss = false,
@@ -2458,27 +2332,6 @@ return {
 		Tier = "high",
 	},
 	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "zombie",
-		CharacterVisualResourceID = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3",
-		Equipment = "",
-		Icon = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3-_(Icon_Zombie)",
-		Info = {
-			AC = 8,
-			Level = 2,
-			Pwr = 14.0,
-			Stats = -5,
-			Vit = 10,
-		},
-		IsBoss = false,
-		LevelOverride = 2,
-		Name = "Undead_Zombie_Melee_AnimateDead_Swarm_CircletOfMyrkul",
-		SpellSet = "AnimateDeadZombie",
-		Stats = "AnimateDead_Zombie__Horde",
-		TemplateId = "b7f1c55b-5e2e-4272-aa73-7deba553d1c1",
-		Tier = "low",
-	},
-	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
 		Archetype = "ranged",
 		CharacterVisualResourceID = "139ef6c4-40ee-7058-1f3c-ac4e32c77249",
@@ -2487,7 +2340,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 66.5,
+			Pwr = 72.5,
 			Stats = 9,
 			Vit = 57,
 		},
@@ -2506,9 +2359,9 @@ return {
 		Equipment = "",
 		Icon = "247814fd-c877-0cbe-ce15-3d7d86686022-_(Icon_Mephit_Mud)",
 		Info = {
-			AC = 11,
+			AC = 14,
 			Level = 4,
-			Pwr = 24.0,
+			Pwr = 29.0,
 			Stats = -2,
 			Vit = 14,
 		},
@@ -2518,7 +2371,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_GreaseWizard_Mephit",
 		TemplateId = "53af9627-5afb-4985-a584-3fa532b3078e",
-		Tier = "low",
+		Tier = "mid",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -2529,7 +2382,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 12,
-			Pwr = 84.0,
+			Pwr = 94.0,
 			Stats = 5,
 			Vit = 96,
 		},
@@ -2539,28 +2392,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_PlagueShip_Imp",
 		TemplateId = "1a0809fd-0d49-4761-b2e4-4197b3c60ed7",
-		Tier = "ultra",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "beast",
-		CharacterVisualResourceID = "aeba4b9f-675a-7a97-88a6-a2c575e3d344",
-		Equipment = "",
-		Icon = "aeba4b9f-675a-7a97-88a6-a2c575e3d344-_(Icon_Ghoul_Flying)",
-		Info = {
-			AC = 15,
-			Level = 6,
-			Pwr = 46.0,
-			Stats = 5,
-			Vit = 30,
-		},
-		IsBoss = false,
-		LevelOverride = 6,
-		Name = "Undead_Ghoul_Flying_AnimateDead",
-		SpellSet = "AnimateDeadZombie",
-		Stats = "AnimateDead_Ghoul_Flying",
-		TemplateId = "1d7bd5b7-1879-452d-980f-34a5ba58a389",
-		Tier = "high",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -2571,7 +2403,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 47.0,
+			Pwr = 54.0,
 			Stats = 9,
 			Vit = 10,
 		},
@@ -2613,7 +2445,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 1,
-			Pwr = 173.0,
+			Pwr = 174.0,
 			Stats = 12,
 			Vit = 276,
 		},
@@ -2634,7 +2466,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 87.0,
+			Pwr = 96.0,
 			Stats = 7,
 			Vit = 90,
 		},
@@ -2644,7 +2476,7 @@ return {
 		SpellSet = "CommonMyrmidonActions_Fly",
 		Stats = "Air_Myrmidon_Wildshape",
 		TemplateId = "3feb7490-c75e-446a-b8af-d459a164a0a6",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -2655,7 +2487,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 8,
-			Pwr = 52.0,
+			Pwr = 58.0,
 			Stats = 4,
 			Vit = 48,
 		},
@@ -2676,7 +2508,7 @@ return {
 		Info = {
 			AC = 10,
 			Level = 1,
-			Pwr = 21.5,
+			Pwr = 20.5,
 			Stats = -1,
 			Vit = 15,
 		},
@@ -2697,7 +2529,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 4,
-			Pwr = 41.0,
+			Pwr = 43.0,
 			Stats = 3,
 			Vit = 38,
 		},
@@ -2739,7 +2571,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 59.5,
+			Pwr = 62.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -2760,7 +2592,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 28.5,
+			Pwr = 27.5,
 			Stats = -6,
 			Vit = 35,
 		},
@@ -2781,7 +2613,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 23.0,
+			Pwr = 24.0,
 			Stats = -1,
 			Vit = 12,
 		},
@@ -2802,7 +2634,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 10,
-			Pwr = 46.0,
+			Pwr = 54.0,
 			Stats = 10,
 			Vit = 8,
 		},
@@ -2823,7 +2655,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 8,
-			Pwr = 75.5,
+			Pwr = 81.5,
 			Stats = 12,
 			Vit = 71,
 		},
@@ -2844,7 +2676,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 5,
-			Pwr = 66.5,
+			Pwr = 69.5,
 			Stats = 14,
 			Vit = 53,
 		},
@@ -2865,7 +2697,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 5,
-			Pwr = 42.0,
+			Pwr = 45.0,
 			Stats = 3,
 			Vit = 34,
 		},
@@ -2886,7 +2718,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 38.0,
+			Pwr = 39.0,
 			Stats = 5,
 			Vit = 28,
 		},
@@ -2900,27 +2732,6 @@ return {
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "melee_stupid",
-		CharacterVisualResourceID = "59212099-57b0-9a23-41e8-e15d6ab66c5f",
-		Equipment = "",
-		Icon = "59212099-57b0-9a23-41e8-e15d6ab66c5f-_(Icon_Ghoul)",
-		Info = {
-			AC = 17,
-			Level = 6,
-			Pwr = 50.5,
-			Stats = 5,
-			Vit = 35,
-		},
-		IsBoss = false,
-		LevelOverride = 6,
-		Name = "Undead_Ghoul_AnimateDead",
-		SpellSet = "AnimateDeadZombie",
-		Stats = "AnimateDead_Ghoul",
-		TemplateId = "405e65e2-a6c9-4418-9de6-b06978d033b7",
-		Tier = "high",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "melee",
 		CharacterVisualResourceID = "0f0e8104-94ae-0413-e8a7-4c6d38e42d0e",
 		Equipment = "EQP_LOW_ReaperOfBhaal",
@@ -2928,7 +2739,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 59.5,
+			Pwr = 62.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -2949,7 +2760,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 59.5,
+			Pwr = 62.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -2970,7 +2781,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 6,
-			Pwr = 71.5,
+			Pwr = 75.5,
 			Stats = 1,
 			Vit = 95,
 		},
@@ -2983,27 +2794,6 @@ return {
 		Tier = "ultra",
 	},
 	{
-		AiHint = "f5614548-32cc-4e2e-b108-32e5d532471e",
-		Archetype = "melee_large",
-		CharacterVisualResourceID = "2b022bc4-448f-00c6-fc6d-18a4298f920c",
-		Equipment = "",
-		Icon = "2b022bc4-448f-00c6-fc6d-18a4298f920c-_(Icon_Badger)",
-		Info = {
-			AC = 10,
-			Level = 1,
-			Pwr = 19.5,
-			Stats = -2,
-			Vit = 13,
-		},
-		IsBoss = false,
-		LevelOverride = 1,
-		Name = "Badger_NPC_Wildshape_Moon",
-		SpellSet = "CommonBeastActions",
-		Stats = "Badger_Giant_Wildshape",
-		TemplateId = "3d2b5ed8-0ca2-4e70-a340-214f418a19b5",
-		Tier = "low",
-	},
-	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
 		Archetype = "ranged",
 		CharacterVisualResourceID = "0920593a-1091-dda9-7b5b-7ee3cb87c266",
@@ -3012,7 +2802,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 7,
-			Pwr = 30.0,
+			Pwr = 35.0,
 			Stats = -2,
 			Vit = 18,
 		},
@@ -3033,7 +2823,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 9,
-			Pwr = 81.0,
+			Pwr = 88.0,
 			Stats = 2,
 			Vit = 102,
 		},
@@ -3054,7 +2844,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 3,
-			Pwr = 56.5,
+			Pwr = 57.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -3075,7 +2865,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 9,
-			Pwr = 109.5,
+			Pwr = 116.5,
 			Stats = 14,
 			Vit = 127,
 		},
@@ -3096,7 +2886,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 3,
-			Pwr = 38.0,
+			Pwr = 39.0,
 			Stats = 2,
 			Vit = 24,
 		},
@@ -3117,7 +2907,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 9,
-			Pwr = 72.0,
+			Pwr = 79.0,
 			Stats = 14,
 			Vit = 56,
 		},
@@ -3138,7 +2928,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 11,
-			Pwr = 106.0,
+			Pwr = 115.0,
 			Stats = 16,
 			Vit = 112,
 		},
@@ -3159,7 +2949,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 26.5,
+			Pwr = 27.5,
 			Stats = -1,
 			Vit = 19,
 		},
@@ -3180,7 +2970,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 11,
-			Pwr = 148.0,
+			Pwr = 157.0,
 			Stats = 12,
 			Vit = 206,
 		},
@@ -3190,7 +2980,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Steel_Watcher_Biped_Hellfire",
 		TemplateId = "9337b42e-e302-4cd2-887d-7093d992e83b",
-		Tier = "epic",
+		Tier = "legendary",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -3201,7 +2991,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 8,
-			Pwr = 76.5,
+			Pwr = 82.5,
 			Stats = 10,
 			Vit = 73,
 		},
@@ -3222,7 +3012,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 46.0,
+			Pwr = 51.0,
 			Stats = 3,
 			Vit = 34,
 		},
@@ -3236,27 +3026,6 @@ return {
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "apostle",
-		CharacterVisualResourceID = "6a7ff3a3-e87a-1e36-986f-0513f5ec085a",
-		Equipment = "EQP_Apostle",
-		Icon = "6a7ff3a3-e87a-1e36-986f-0513f5ec085a-EQP_Apostle_(Icon_ApostleOfMyrkul)",
-		Info = {
-			AC = 19,
-			Level = 10,
-			Pwr = 168.0,
-			Stats = 23,
-			Vit = 220,
-		},
-		IsBoss = false,
-		LevelOverride = 10,
-		Name = "ApostleOfMyrkul",
-		SpellSet = "",
-		Stats = "ApostleOfMyrkul",
-		TemplateId = "760f2d17-de55-4f38-83c1-279399b22096",
-		Tier = "legendary",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "melee",
 		CharacterVisualResourceID = "ffd76d71-f411-683e-bc4b-b924ee418505",
 		Equipment = "",
@@ -3264,7 +3033,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 92.5,
+			Pwr = 101.5,
 			Stats = 6,
 			Vit = 103,
 		},
@@ -3285,8 +3054,8 @@ return {
 		Info = {
 			AC = 14,
 			Level = 4,
-			Pwr = 66.5,
-			Stats = 11,
+			Pwr = 69.5,
+			Stats = 12,
 			Vit = 67,
 		},
 		IsBoss = false,
@@ -3306,7 +3075,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 5,
-			Pwr = 55.5,
+			Pwr = 58.5,
 			Stats = 8,
 			Vit = 41,
 		},
@@ -3327,7 +3096,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 8,
-			Pwr = 47.5,
+			Pwr = 53.5,
 			Stats = 9,
 			Vit = 15,
 		},
@@ -3348,7 +3117,7 @@ return {
 		Info = {
 			AC = 19,
 			Level = 17,
-			Pwr = 268.0,
+			Pwr = 283.0,
 			Stats = 24,
 			Vit = 400,
 		},
@@ -3369,7 +3138,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 22.5,
+			Pwr = 21.5,
 			Stats = -1,
 			Vit = 11,
 		},
@@ -3390,7 +3159,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 10,
-			Pwr = 42.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 7,
 		},
@@ -3400,7 +3169,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Human_Caster",
 		TemplateId = "91392ba7-4a09-40f2-80c3-5410a165adaa",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -3411,7 +3180,7 @@ return {
 		Info = {
 			AC = 21,
 			Level = 10,
-			Pwr = 143.0,
+			Pwr = 151.0,
 			Stats = 25,
 			Vit = 162,
 		},
@@ -3421,7 +3190,7 @@ return {
 		SpellSet = "CommonSummonFlyActions",
 		Stats = "LOW_Stormshore_Tabernacle_Curse_Deva",
 		TemplateId = "c1095e3a-96f6-400b-95c2-fa6316d06a83",
-		Tier = "epic",
+		Tier = "legendary",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -3432,7 +3201,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 95.0,
+			Pwr = 104.0,
 			Stats = 6,
 			Vit = 108,
 		},
@@ -3453,7 +3222,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 10,
-			Pwr = 46.0,
+			Pwr = 54.0,
 			Stats = 10,
 			Vit = 8,
 		},
@@ -3474,7 +3243,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 10,
-			Pwr = 71.0,
+			Pwr = 79.0,
 			Stats = 6,
 			Vit = 62,
 		},
@@ -3509,27 +3278,6 @@ return {
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "melee_stupid",
-		CharacterVisualResourceID = "59212099-57b0-9a23-41e8-e15d6ab66c5f",
-		Equipment = "",
-		Icon = "59212099-57b0-9a23-41e8-e15d6ab66c5f-_(Icon_Ghoul)",
-		Info = {
-			AC = 17,
-			Level = 6,
-			Pwr = 43.0,
-			Stats = 5,
-			Vit = 20,
-		},
-		IsBoss = false,
-		LevelOverride = 6,
-		Name = "Undead_Ghoul_WakeTheDead",
-		SpellSet = "AnimateDeadZombie",
-		Stats = "WakeTheDead_Ghoul",
-		TemplateId = "d4111267-1310-4663-a9f6-281a9f58221f",
-		Tier = "mid",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "mage",
 		CharacterVisualResourceID = "d5780f97-c381-0c01-24dc-8359ad722ff0",
 		Equipment = "_Custom_Equipment",
@@ -3537,7 +3285,7 @@ return {
 		Info = {
 			AC = 10,
 			Level = 7,
-			Pwr = 37.0,
+			Pwr = 42.0,
 			Stats = -2,
 			Vit = 34,
 		},
@@ -3558,7 +3306,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 8,
-			Pwr = 71.5,
+			Pwr = 77.5,
 			Stats = 4,
 			Vit = 85,
 		},
@@ -3579,7 +3327,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 22.5,
+			Pwr = 21.5,
 			Stats = -1,
 			Vit = 11,
 		},
@@ -3600,7 +3348,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 29.5,
+			Pwr = 28.5,
 			Stats = 2,
 			Vit = 21,
 		},
@@ -3621,7 +3369,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 106.5,
+			Pwr = 115.5,
 			Stats = 8,
 			Vit = 127,
 		},
@@ -3642,7 +3390,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 46.0,
+			Pwr = 51.0,
 			Stats = 3,
 			Vit = 34,
 		},
@@ -3663,7 +3411,7 @@ return {
 		Info = {
 			AC = 19,
 			Level = 17,
-			Pwr = 268.0,
+			Pwr = 283.0,
 			Stats = 24,
 			Vit = 400,
 		},
@@ -3684,7 +3432,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 10,
-			Pwr = 71.0,
+			Pwr = 79.0,
 			Stats = 6,
 			Vit = 62,
 		},
@@ -3705,7 +3453,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 38.0,
+			Pwr = 39.0,
 			Stats = 5,
 			Vit = 28,
 		},
@@ -3724,10 +3472,10 @@ return {
 		Equipment = "EQP_Dagger",
 		Icon = "ee9ba200-9d3d-890a-ae00-e62bb9e80974-EQP_Dagger_(Icon_Kobold)",
 		Info = {
-			AC = 12,
+			AC = 13,
 			Level = 5,
-			Pwr = 24.0,
-			Stats = -4,
+			Pwr = 29.0,
+			Stats = -3,
 			Vit = 12,
 		},
 		IsBoss = false,
@@ -3736,28 +3484,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Kobold_Melee",
 		TemplateId = "45e31b7d-32ec-4f3d-8067-79061aeec77b",
-		Tier = "low",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "zombie",
-		CharacterVisualResourceID = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3",
-		Equipment = "",
-		Icon = "006f5ddc-0d74-46ee-1b2b-5fb8029650e3-_(Icon_Zombie)",
-		Info = {
-			AC = 8,
-			Level = 3,
-			Pwr = 21.0,
-			Stats = -5,
-			Vit = 22,
-		},
-		IsBoss = false,
-		LevelOverride = 3,
-		Name = "Undead_Zombie_Melee_AnimateDead",
-		SpellSet = "AnimateDeadZombie",
-		Stats = "AnimateDead_Zombie",
-		TemplateId = "c2a2c269-ede8-4887-99f1-e0c044cc0c75",
-		Tier = "low",
+		Tier = "mid",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -3768,7 +3495,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -3789,7 +3516,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 54.0,
+			Pwr = 59.0,
 			Stats = 4,
 			Vit = 48,
 		},
@@ -3808,10 +3535,10 @@ return {
 		Equipment = "EQP_Dagger",
 		Icon = "56f87258-6053-6818-d4f5-64cf701eded3-EQP_Dagger_(Icon_Kobold)",
 		Info = {
-			AC = 12,
+			AC = 13,
 			Level = 6,
-			Pwr = 27.5,
-			Stats = -5,
+			Pwr = 33.5,
+			Stats = -4,
 			Vit = 19,
 		},
 		IsBoss = false,
@@ -3831,7 +3558,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 5,
-			Pwr = 43.0,
+			Pwr = 46.0,
 			Stats = 7,
 			Vit = 26,
 		},
@@ -3841,7 +3568,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_Raphael_Imp",
 		TemplateId = "57c030d7-e5a9-445e-ad74-9ed6573d538e",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -3852,7 +3579,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 5,
-			Pwr = 55.5,
+			Pwr = 58.5,
 			Stats = 7,
 			Vit = 45,
 		},
@@ -3873,7 +3600,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 10,
-			Pwr = 133.0,
+			Pwr = 141.0,
 			Stats = 18,
 			Vit = 162,
 		},
@@ -3894,7 +3621,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 8,
-			Pwr = 75.5,
+			Pwr = 81.5,
 			Stats = 12,
 			Vit = 71,
 		},
@@ -3915,7 +3642,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 11,
-			Pwr = 64.0,
+			Pwr = 73.0,
 			Stats = 6,
 			Vit = 58,
 		},
@@ -3925,7 +3652,7 @@ return {
 		SpellSet = "Werewolf",
 		Stats = "Werewolf",
 		TemplateId = "e117f546-d817-42cb-a6b7-b9eecd3598e4",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -3936,7 +3663,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 59.5,
+			Pwr = 62.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -3957,7 +3684,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 88.0,
+			Pwr = 94.0,
 			Stats = 21,
 			Vit = 76,
 		},
@@ -3967,7 +3694,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Human_Cultist_Bhaal_DeathsHead",
 		TemplateId = "303c90c2-035b-4b54-925e-c18b4aeec5b7",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -3978,7 +3705,7 @@ return {
 		Info = {
 			AC = 9,
 			Level = 5,
-			Pwr = 33.0,
+			Pwr = 36.0,
 			Stats = 1,
 			Vit = 26,
 		},
@@ -3999,7 +3726,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 10,
-			Pwr = 187.0,
+			Pwr = 195.0,
 			Stats = 3,
 			Vit = 300,
 		},
@@ -4020,8 +3747,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 50.5,
-			Stats = 1,
+			Pwr = 53.5,
+			Stats = 2,
 			Vit = 59,
 		},
 		IsBoss = false,
@@ -4041,7 +3768,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 6,
-			Pwr = 49.0,
+			Pwr = 53.0,
 			Stats = -2,
 			Vit = 56,
 		},
@@ -4060,9 +3787,9 @@ return {
 		Equipment = "EQP_Kuotoa_Spear",
 		Icon = "9ca4ff8a-ce5e-249b-5cf4-84edb2a60d0d-EQP_Kuotoa_Spear_(Icon_Kuotoa)",
 		Info = {
-			AC = 9,
+			AC = 11,
 			Level = 2,
-			Pwr = 24.0,
+			Pwr = 26.0,
 			Stats = 0,
 			Vit = 18,
 		},
@@ -4072,7 +3799,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Kuotoa",
 		TemplateId = "fb2bbd97-c390-4dac-b6b8-815937f865fc",
-		Tier = "low",
+		Tier = "mid",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -4081,9 +3808,9 @@ return {
 		Equipment = "EQP_Deva",
 		Icon = "79b8882f-a4d0-4eec-071b-77a957cd07d6-EQP_Deva_(Icon_Deva)",
 		Info = {
-			AC = 19,
+			AC = 21,
 			Level = 10,
-			Pwr = 128.0,
+			Pwr = 138.0,
 			Stats = 25,
 			Vit = 136,
 		},
@@ -4102,9 +3829,9 @@ return {
 		Equipment = "",
 		Icon = "e2f30fd7-f6dc-baa0-7161-39d2211ce84f-_(Icon_Nightmare_Nurse)",
 		Info = {
-			AC = 10,
+			AC = 12,
 			Level = 8,
-			Pwr = 50.0,
+			Pwr = 58.0,
 			Stats = 3,
 			Vit = 48,
 		},
@@ -4125,7 +3852,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 3,
-			Pwr = 69.5,
+			Pwr = 70.5,
 			Stats = 4,
 			Vit = 91,
 		},
@@ -4144,9 +3871,9 @@ return {
 		Equipment = "EQP_LOW_DeathsHeadOfBhaal",
 		Icon = "d6cd3324-db25-5f6b-cce4-13e90c893178-EQP_LOW_DeathsHeadOfBhaal_(Icon_Tiefling_Female)",
 		Info = {
-			AC = 14,
+			AC = 16,
 			Level = 8,
-			Pwr = 86.0,
+			Pwr = 94.0,
 			Stats = 21,
 			Vit = 76,
 		},
@@ -4156,7 +3883,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Tiefling_Cultist_Bhaal_DeathsHead",
 		TemplateId = "a599b77d-40b0-4628-b293-9d684fd3e646",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -4165,9 +3892,9 @@ return {
 		Equipment = "",
 		Icon = "5584afca-d188-a226-5006-67a22dd275a0-_(Icon_Mindflayer)",
 		Info = {
-			AC = 13,
+			AC = 15,
 			Level = 8,
-			Pwr = 65.5,
+			Pwr = 73.5,
 			Stats = 12,
 			Vit = 55,
 		},
@@ -4186,9 +3913,9 @@ return {
 		Equipment = "EQP_LOW_DeathsHeadOfBhaal",
 		Icon = "708b3125-7eea-01ff-6dd4-26f19783921f-EQP_LOW_DeathsHeadOfBhaal_(Icon_Dwarf_Female)",
 		Info = {
-			AC = 14,
+			AC = 16,
 			Level = 8,
-			Pwr = 86.0,
+			Pwr = 94.0,
 			Stats = 21,
 			Vit = 76,
 		},
@@ -4198,7 +3925,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Dwarf_Cultist_Bhaal_DeathsHead",
 		TemplateId = "4a486b6b-6334-4988-b875-b648dd570230",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -4207,9 +3934,9 @@ return {
 		Equipment = "EQP_LOW_Sarevok",
 		Icon = "32e5b697-624d-5270-5634-433bfd15b9ec-EQP_LOW_Sarevok_(Icon_Sarevok)",
 		Info = {
-			AC = 18,
+			AC = 20,
 			Level = 16,
-			Pwr = 194.0,
+			Pwr = 210.0,
 			Stats = 22,
 			Vit = 262,
 		},
@@ -4228,9 +3955,9 @@ return {
 		Equipment = "",
 		Icon = "8c68e73a-4929-afcc-913a-168254536506-_(Icon_Githyanki_Male)",
 		Info = {
-			AC = 15,
+			AC = 17,
 			Level = 9,
-			Pwr = 79.0,
+			Pwr = 88.0,
 			Stats = 15,
 			Vit = 68,
 		},
@@ -4251,8 +3978,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 50.5,
-			Stats = 1,
+			Pwr = 53.5,
+			Stats = 2,
 			Vit = 59,
 		},
 		IsBoss = false,
@@ -4270,9 +3997,9 @@ return {
 		Equipment = "EQP_Spear",
 		Icon = "ddbdbf81-8f3e-9600-1585-3fb8682c606d-EQP_Spear_(Icon_Human_Male)",
 		Info = {
-			AC = 13,
+			AC = 15,
 			Level = 9,
-			Pwr = 70.0,
+			Pwr = 79.0,
 			Stats = 14,
 			Vit = 56,
 		},
@@ -4291,9 +4018,9 @@ return {
 		Equipment = "EQP_Goblin_Scimitar",
 		Icon = "1a91394e-7002-55fb-2d0a-82d0cb274745-EQP_Goblin_Scimitar_(Icon_Goblin_Female)",
 		Info = {
-			AC = 11,
+			AC = 13,
 			Level = 1,
-			Pwr = 20.5,
+			Pwr = 21.5,
 			Stats = -1,
 			Vit = 11,
 		},
@@ -4312,9 +4039,9 @@ return {
 		Equipment = "EQP_Goblin_Shortbow",
 		Icon = "91639a79-b18a-3be7-d80b-04f849fcc1b1-EQP_Goblin_Shortbow_(Icon_Goblin_Male)",
 		Info = {
-			AC = 11,
+			AC = 13,
 			Level = 1,
-			Pwr = 19.5,
+			Pwr = 20.5,
 			Stats = -1,
 			Vit = 9,
 		},
@@ -4335,7 +4062,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 29.0,
+			Pwr = 28.0,
 			Stats = -1,
 			Vit = 24,
 		},
@@ -4354,10 +4081,10 @@ return {
 		Equipment = "",
 		Icon = "032132d4-4bbb-bfa4-9205-e99a59661a9b-_(Icon_Animated_Armor)",
 		Info = {
-			AC = 16,
+			AC = 18,
 			Level = 4,
-			Pwr = 29.5,
-			Stats = -11,
+			Pwr = 34.5,
+			Stats = -10,
 			Vit = 33,
 		},
 		IsBoss = false,
@@ -4375,9 +4102,9 @@ return {
 		Equipment = "EQP_Longsword_HalfPlate_Gith",
 		Icon = "24c94e47-503d-577f-9f08-17119ddb9831-EQP_Longsword_HalfPlate_Gith_(Icon_Githyanki_Male)",
 		Info = {
-			AC = 14,
+			AC = 16,
 			Level = 9,
-			Pwr = 88.5,
+			Pwr = 97.5,
 			Stats = 17,
 			Vit = 85,
 		},
@@ -4387,7 +4114,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Githyanki_Gish_Strong",
 		TemplateId = "73813152-927c-42c3-b3d9-b19ff041dc13",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -4398,7 +4125,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 23.0,
+			Pwr = 24.0,
 			Stats = -1,
 			Vit = 12,
 		},
@@ -4419,7 +4146,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 5,
-			Pwr = 42.0,
+			Pwr = 45.0,
 			Stats = 3,
 			Vit = 34,
 		},
@@ -4432,36 +4159,15 @@ return {
 		Tier = "mid",
 	},
 	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "beast",
-		CharacterVisualResourceID = "5036f823-6494-0ed6-fe1d-33d9f7f422bb",
-		Equipment = "",
-		Icon = "5036f823-6494-0ed6-fe1d-33d9f7f422bb-_(Icon_Rat)",
-		Info = {
-			AC = 11,
-			Level = 1,
-			Pwr = 11.0,
-			Stats = -7,
-			Vit = 4,
-		},
-		IsBoss = false,
-		LevelOverride = 1,
-		Name = "RAT_Vampire",
-		SpellSet = "CommonBeastActions",
-		Stats = "Rat_Vampire",
-		TemplateId = "08f40fd3-a177-42f0-b9b8-c6221aa6214d",
-		Tier = "low",
-	},
-	{
 		AiHint = "45a231e4-e94f-4b0e-a941-2daf1adf44b5",
 		Archetype = "mage",
 		CharacterVisualResourceID = "007c8d3b-6e7b-8674-c4b0-17e6e93e64a2",
 		Equipment = "EQP_Staff_Robe",
 		Icon = "007c8d3b-6e7b-8674-c4b0-17e6e93e64a2-EQP_Staff_Robe_(Icon_Human_Female)",
 		Info = {
-			AC = 12,
+			AC = 14,
 			Level = 10,
-			Pwr = 40.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 7,
 		},
@@ -4471,7 +4177,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Human_Caster",
 		TemplateId = "1a80541e-f990-4a07-ba08-008b9992f7be",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -4482,7 +4188,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 11,
-			Pwr = 148.0,
+			Pwr = 157.0,
 			Stats = 12,
 			Vit = 206,
 		},
@@ -4492,7 +4198,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Steel_Watcher_Biped",
 		TemplateId = "27385ea6-d768-47ce-91b8-8d957c0aabd9",
-		Tier = "epic",
+		Tier = "legendary",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -4501,9 +4207,9 @@ return {
 		Equipment = "EQP_LOW_ReaperOfBhaal",
 		Icon = "77043260-0600-3141-52c9-05839b43a64c-EQP_LOW_ReaperOfBhaal_(Icon_Dwarf_Male)",
 		Info = {
-			AC = 13,
+			AC = 15,
 			Level = 5,
-			Pwr = 57.5,
+			Pwr = 62.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -4522,9 +4228,9 @@ return {
 		Equipment = "EQP_LOW_ReaperOfBhaal",
 		Icon = "0f0e8104-94ae-0413-e8a7-4c6d38e42d0e-EQP_LOW_ReaperOfBhaal_(Icon_Human_Female)",
 		Info = {
-			AC = 13,
+			AC = 15,
 			Level = 3,
-			Pwr = 54.5,
+			Pwr = 57.5,
 			Stats = 12,
 			Vit = 45,
 		},
@@ -4543,9 +4249,9 @@ return {
 		Equipment = "EQP_Staff_Robe",
 		Icon = "04e02621-cca8-b689-b15e-8484cc99f4d6-EQP_Staff_Robe_(Icon_Elminster)",
 		Info = {
-			AC = 12,
+			AC = 14,
 			Level = 20,
-			Pwr = 159.5,
+			Pwr = 179.5,
 			Stats = 27,
 			Vit = 185,
 		},
@@ -4564,9 +4270,9 @@ return {
 		Equipment = "",
 		Icon = "785f27dd-1c2a-07c7-ac2f-6a679d4e850e-_(Icon_Mindflayer_Emperor)",
 		Info = {
-			AC = 13,
+			AC = 15,
 			Level = 8,
-			Pwr = 73.5,
+			Pwr = 81.5,
 			Stats = 12,
 			Vit = 71,
 		},
@@ -4585,9 +4291,9 @@ return {
 		Equipment = "EQP_Goblin_Scimitar_Shield",
 		Icon = "19a16569-dcbb-3fe1-bf5f-029567082c54-EQP_Goblin_Scimitar_Shield_(Icon_Goblin_Male)",
 		Info = {
-			AC = 14,
+			AC = 16,
 			Level = 3,
-			Pwr = 36.0,
+			Pwr = 39.0,
 			Stats = 2,
 			Vit = 24,
 		},
@@ -4606,9 +4312,9 @@ return {
 		Equipment = "SHA_Justiciar_Dagger_Shar",
 		Icon = "645fa47c-d8d4-41ae-00a9-51a839c94f17-SHA_Justiciar_Dagger_Shar_(Icon_DarkJusticiar)",
 		Info = {
-			AC = 12,
+			AC = 14,
 			Level = 7,
-			Pwr = 45.0,
+			Pwr = 52.0,
 			Stats = 5,
 			Vit = 32,
 		},
@@ -4618,7 +4324,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "DarkJusticiar_Caster",
 		TemplateId = "70c3189a-ec6a-420a-86b9-865c1fe4d73d",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -4627,9 +4333,9 @@ return {
 		Equipment = "EQP_Air_Myrmidon_ConjureElemental",
 		Icon = "1b711321-3eb1-f72c-58a4-de30e64c5393-EQP_Air_Myrmidon_ConjureElemental_(Icon_Myrmidon_Air)",
 		Info = {
-			AC = 16,
+			AC = 18,
 			Level = 11,
-			Pwr = 98.5,
+			Pwr = 109.5,
 			Stats = 7,
 			Vit = 117,
 		},
@@ -4650,7 +4356,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 16.0,
+			Pwr = 15.0,
 			Stats = -6,
 			Vit = 8,
 		},
@@ -4669,9 +4375,9 @@ return {
 		Equipment = "EQP_LOW_CountingHouseGuard_Ranged",
 		Icon = "67fb31a5-dcd6-d719-61a9-2a1e527617f1-EQP_LOW_CountingHouseGuard_Ranged_(Icon_Human_Male)",
 		Info = {
-			AC = 17,
+			AC = 19,
 			Level = 9,
-			Pwr = 77.0,
+			Pwr = 86.0,
 			Stats = 7,
 			Vit = 76,
 		},
@@ -4684,37 +4390,16 @@ return {
 		Tier = "ultra",
 	},
 	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "mage_smart",
-		CharacterVisualResourceID = "18fd25a6-6c91-7ab4-f3b3-1bbdcf6d6f83",
-		Equipment = "EQP_Staff_Robe",
-		Icon = "18fd25a6-6c91-7ab4-f3b3-1bbdcf6d6f83-EQP_Staff_Robe_(Icon_Elf_Female)",
-		Info = {
-			AC = 10,
-			Level = 6,
-			Pwr = 55.0,
-			Stats = 12,
-			Vit = 44,
-		},
-		IsBoss = false,
-		LevelOverride = 6,
-		Name = "S_GLO_Desire_Bruised",
-		SpellSet = "CommonNPCActions",
-		Stats = "GLO_CounsellorFlorrick",
-		TemplateId = "37f1bf91-106a-49f3-8c9f-16476109e885",
-		Tier = "high",
-	},
-	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
 		Archetype = "cloaker_phantasm",
 		CharacterVisualResourceID = "b0a159ff-a0a3-b156-432c-b97ad85ff0c2",
 		Equipment = "",
 		Icon = "b0a159ff-a0a3-b156-432c-b97ad85ff0c2-_(Icon_Cloaker)",
 		Info = {
-			AC = 14,
+			AC = 15,
 			Level = 8,
-			Pwr = 68.0,
-			Stats = 13,
+			Pwr = 77.0,
+			Stats = 15,
 			Vit = 56,
 		},
 		IsBoss = false,
@@ -4732,9 +4417,9 @@ return {
 		Equipment = "EQP_LOW_CountingHouseGuard_Ranged",
 		Icon = "d54a86f3-73d6-b75a-6296-d773600c64f4-EQP_LOW_CountingHouseGuard_Ranged_(Icon_Human_Female)",
 		Info = {
-			AC = 17,
+			AC = 19,
 			Level = 9,
-			Pwr = 77.0,
+			Pwr = 86.0,
 			Stats = 7,
 			Vit = 76,
 		},
@@ -4753,9 +4438,9 @@ return {
 		Equipment = "EQP_Staff",
 		Icon = "dd209d59-6035-0ba2-3f3b-a844d10765c1-EQP_Staff_(Icon_Bugbear_Male)",
 		Info = {
-			AC = 9,
+			AC = 11,
 			Level = 5,
-			Pwr = 49.5,
+			Pwr = 54.5,
 			Stats = 8,
 			Vit = 45,
 		},
@@ -4774,9 +4459,9 @@ return {
 		Equipment = "",
 		Icon = "aeba4b9f-675a-7a97-88a6-a2c575e3d344-_(Icon_Ghoul_Flying)",
 		Info = {
-			AC = 11,
+			AC = 13,
 			Level = 3,
-			Pwr = 36.0,
+			Pwr = 39.0,
 			Stats = 2,
 			Vit = 32,
 		},
@@ -4797,7 +4482,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 29.5,
+			Pwr = 28.5,
 			Stats = 2,
 			Vit = 21,
 		},
@@ -4816,10 +4501,10 @@ return {
 		Equipment = "MOO_Ketheric",
 		Icon = "d4456846-e6c5-c890-f126-2d18432c6934-MOO_Ketheric_(Icon_Ketheric)",
 		Info = {
-			AC = 20,
+			AC = 22,
 			Level = 10,
-			Pwr = 124.5,
-			Stats = 16,
+			Pwr = 137.5,
+			Stats = 19,
 			Vit = 145,
 		},
 		IsBoss = true,
@@ -4837,9 +4522,9 @@ return {
 		Equipment = "EQP_Cultist_Daggers",
 		Icon = "2f015e6e-4cb1-7a56-ce0e-ac686c8bdad6-EQP_Cultist_Daggers_(Icon_Human_Female)",
 		Info = {
-			AC = 10,
+			AC = 12,
 			Level = 3,
-			Pwr = 36.0,
+			Pwr = 39.0,
 			Stats = 5,
 			Vit = 28,
 		},
@@ -4860,7 +4545,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 54.0,
+			Pwr = 59.0,
 			Stats = 4,
 			Vit = 48,
 		},
@@ -4879,9 +4564,9 @@ return {
 		Equipment = "",
 		Icon = "021c3422-9fa1-cf69-c239-b05c4d200b52-_(Icon_Ghoul_Ghast)",
 		Info = {
-			AC = 11,
+			AC = 13,
 			Level = 6,
-			Pwr = 53.5,
+			Pwr = 59.5,
 			Stats = 5,
 			Vit = 53,
 		},
@@ -4895,27 +4580,6 @@ return {
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
-		Archetype = "beast",
-		CharacterVisualResourceID = "76e4d0ae-fcd7-091e-b81f-1431850db64a",
-		Equipment = "EQP_Unarmed",
-		Icon = "76e4d0ae-fcd7-091e-b81f-1431850db64a-EQP_Unarmed_(Icon_IntDev)",
-		Info = {
-			AC = 12,
-			Level = 1,
-			Pwr = 29.5,
-			Stats = 2,
-			Vit = 21,
-		},
-		IsBoss = false,
-		LevelOverride = 1,
-		Name = "TUT_Intellect_Devourer_Companion",
-		SpellSet = "CommonBeastActions",
-		Stats = "TUT_IntellectDevourer_Companion",
-		TemplateId = "6208a86b-d052-4fc2-ae41-9813eeebbc31",
-		Tier = "mid",
-	},
-	{
-		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "ogre_melee",
 		CharacterVisualResourceID = "5a84632d-3211-82b5-5a5f-354b0592116c",
 		Equipment = "EQP_Ogre_Club",
@@ -4923,8 +4587,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 50.5,
-			Stats = 1,
+			Pwr = 53.5,
+			Stats = 2,
 			Vit = 59,
 		},
 		IsBoss = false,
@@ -4942,9 +4606,9 @@ return {
 		Equipment = "EQP_Goblin_Axe",
 		Icon = "90dc73a3-5072-c4b1-2bab-a6610289d8b7-EQP_Goblin_Axe_(Icon_Goblin_Male)",
 		Info = {
-			AC = 9,
+			AC = 11,
 			Level = 2,
-			Pwr = 22.0,
+			Pwr = 24.0,
 			Stats = -1,
 			Vit = 16,
 		},
@@ -4965,7 +4629,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 16.0,
+			Pwr = 15.0,
 			Stats = -6,
 			Vit = 8,
 		},
@@ -4986,7 +4650,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 7,
-			Pwr = 33.5,
+			Pwr = 38.5,
 			Stats = 0,
 			Vit = 21,
 		},
@@ -5007,7 +4671,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 12,
-			Pwr = 121.5,
+			Pwr = 131.5,
 			Stats = 15,
 			Vit = 143,
 		},
@@ -5026,9 +4690,9 @@ return {
 		Equipment = "EQP_Spear_B_Plate_HelmetLeather_HandCrossbow",
 		Icon = "f92b84c6-81f4-e422-bd20-29574d3119c1-EQP_Spear_B_Plate_HelmetLeather_HandCrossbow_(Icon_Human_Female)",
 		Info = {
-			AC = 16,
+			AC = 18,
 			Level = 11,
-			Pwr = 92.5,
+			Pwr = 103.5,
 			Stats = 13,
 			Vit = 93,
 		},
@@ -5047,9 +4711,9 @@ return {
 		Equipment = "EQP_Staff_Robe",
 		Icon = "20560be9-3113-dce3-c164-2e77044b3f18-EQP_Staff_Robe_(Icon_Elf_Female)",
 		Info = {
-			AC = 10,
+			AC = 12,
 			Level = 6,
-			Pwr = 55.0,
+			Pwr = 61.0,
 			Stats = 12,
 			Vit = 44,
 		},
@@ -5089,9 +4753,9 @@ return {
 		Equipment = "",
 		Icon = "7d339e75-087e-eb90-0d7e-7d3e8e2adc73-_(Icon_Vampire_Human_Male)",
 		Info = {
-			AC = 16,
+			AC = 18,
 			Level = 1,
-			Pwr = 72.0,
+			Pwr = 73.0,
 			Stats = 10,
 			Vit = 82,
 		},
@@ -5110,9 +4774,9 @@ return {
 		Equipment = "",
 		Icon = "b52e9a11-99b4-3602-8739-c46d2ff2a42e-_(Icon_Undead_Hound)",
 		Info = {
-			AC = 14,
+			AC = 16,
 			Level = 5,
-			Pwr = 43.5,
+			Pwr = 48.5,
 			Stats = -4,
 			Vit = 47,
 		},
@@ -5122,7 +4786,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Skeleton_Hound",
 		TemplateId = "1d7a1689-9707-4358-bc2b-075e8520cef8",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -5131,9 +4795,9 @@ return {
 		Equipment = "",
 		Icon = "51b295f5-8ac7-ac65-8975-9ced4678212b-_(Icon_Dog)",
 		Info = {
-			AC = 20,
+			AC = 18,
 			Level = 5,
-			Pwr = 68.0,
+			Pwr = 69.0,
 			Stats = 5,
 			Vit = 66,
 		},
@@ -5154,7 +4818,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -5164,7 +4828,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Dwarf_Ranger",
 		TemplateId = "ca14c991-1191-401a-8a11-adbde2c12083",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
@@ -5175,7 +4839,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 66.5,
+			Pwr = 72.5,
 			Stats = 9,
 			Vit = 57,
 		},
@@ -5196,7 +4860,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 7,
-			Pwr = 50.0,
+			Pwr = 55.0,
 			Stats = 3,
 			Vit = 38,
 		},
@@ -5217,7 +4881,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 47.0,
+			Pwr = 54.0,
 			Stats = 9,
 			Vit = 10,
 		},
@@ -5227,7 +4891,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_DevilsFee_Imp_Ally",
 		TemplateId = "8d460b53-df74-4504-b4da-d31be7330cb9",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -5238,7 +4902,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 8,
-			Pwr = 75.5,
+			Pwr = 81.5,
 			Stats = 12,
 			Vit = 71,
 		},
@@ -5259,7 +4923,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 23.0,
+			Pwr = 24.0,
 			Stats = -1,
 			Vit = 12,
 		},
@@ -5280,7 +4944,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 5,
-			Pwr = 66.5,
+			Pwr = 69.5,
 			Stats = 14,
 			Vit = 53,
 		},
@@ -5322,7 +4986,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 104.5,
+			Pwr = 113.5,
 			Stats = 6,
 			Vit = 127,
 		},
@@ -5343,7 +5007,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 22.5,
+			Pwr = 21.5,
 			Stats = -1,
 			Vit = 11,
 		},
@@ -5364,7 +5028,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 21.5,
+			Pwr = 20.5,
 			Stats = -1,
 			Vit = 9,
 		},
@@ -5385,7 +5049,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -5395,7 +5059,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Dwarf_Melee_Attacker",
 		TemplateId = "c91eb69c-00e1-40a6-a71f-1450596ac35d",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -5406,7 +5070,7 @@ return {
 		Info = {
 			AC = 10,
 			Level = 7,
-			Pwr = 64.0,
+			Pwr = 69.0,
 			Stats = 5,
 			Vit = 74,
 		},
@@ -5416,7 +5080,7 @@ return {
 		SpellSet = "CommonNPCActions_NoThrow",
 		Stats = "LOW_HouseOfGrief_Cultist_Caster",
 		TemplateId = "afd7e198-b871-4825-8250-1cbb84f08791",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
@@ -5448,7 +5112,7 @@ return {
 		Info = {
 			AC = 8,
 			Level = 3,
-			Pwr = 32.0,
+			Pwr = 33.0,
 			Stats = -9,
 			Vit = 52,
 		},
@@ -5490,7 +5154,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 38.0,
+			Pwr = 39.0,
 			Stats = 5,
 			Vit = 28,
 		},
@@ -5511,7 +5175,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 8,
-			Pwr = 75.5,
+			Pwr = 81.5,
 			Stats = 12,
 			Vit = 71,
 		},
@@ -5532,7 +5196,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 5,
-			Pwr = 55.5,
+			Pwr = 58.5,
 			Stats = 7,
 			Vit = 45,
 		},
@@ -5553,7 +5217,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 102.5,
+			Pwr = 111.5,
 			Stats = 6,
 			Vit = 123,
 		},
@@ -5574,7 +5238,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 3,
-			Pwr = 31.5,
+			Pwr = 32.5,
 			Stats = -3,
 			Vit = 19,
 		},
@@ -5595,7 +5259,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 5,
-			Pwr = 37.5,
+			Pwr = 40.5,
 			Stats = 2,
 			Vit = 29,
 		},
@@ -5616,7 +5280,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 1,
-			Pwr = 22.5,
+			Pwr = 21.5,
 			Stats = -1,
 			Vit = 11,
 		},
@@ -5637,7 +5301,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -5656,9 +5320,9 @@ return {
 		Equipment = "",
 		Icon = "7c3766d2-a094-1076-e0dd-add7b8ca144a-_(Icon_Wolf)",
 		Info = {
-			AC = 23,
+			AC = 21,
 			Level = 11,
-			Pwr = 87.5,
+			Pwr = 94.5,
 			Stats = 2,
 			Vit = 91,
 		},
@@ -5668,7 +5332,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Companion_Wolf_11",
 		TemplateId = "4a9caf4d-ea3f-4d94-88c6-2bfc8c8ca923",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -5679,7 +5343,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -5700,7 +5364,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -5710,7 +5374,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Human_Melee_Attacker",
 		TemplateId = "696525ec-6f0f-41f5-a568-41fc946618b1",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "45a231e4-e94f-4b0e-a941-2daf1adf44b5",
@@ -5721,7 +5385,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 10,
-			Pwr = 42.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 7,
 		},
@@ -5731,7 +5395,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Dwarf_Caster",
 		TemplateId = "ae247710-a2dc-4302-8bd0-e6ef2ba498c6",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -5742,7 +5406,7 @@ return {
 		Info = {
 			AC = 24,
 			Level = 11,
-			Pwr = 157.0,
+			Pwr = 166.0,
 			Stats = 16,
 			Vit = 200,
 		},
@@ -5763,7 +5427,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 6,
-			Pwr = 42.5,
+			Pwr = 46.5,
 			Stats = 1,
 			Vit = 33,
 		},
@@ -5773,7 +5437,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Shadow_Mastiff",
 		TemplateId = "94696b69-bd4b-4ddb-885a-51790025f758",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "3cae4ff5-e9c0-485b-b695-f8830961a781",
@@ -5784,7 +5448,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 44.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 13,
 		},
@@ -5794,7 +5458,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Dwarf_Ranger",
 		TemplateId = "24d398bb-52ec-4eb6-ba52-5a3c22c2eed1",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -5805,8 +5469,8 @@ return {
 		Info = {
 			AC = 17,
 			Level = 12,
-			Pwr = 119.5,
-			Stats = 17,
+			Pwr = 131.5,
+			Stats = 19,
 			Vit = 135,
 		},
 		IsBoss = false,
@@ -5826,7 +5490,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 8,
-			Pwr = 47.5,
+			Pwr = 53.5,
 			Stats = 9,
 			Vit = 15,
 		},
@@ -5839,27 +5503,6 @@ return {
 		Tier = "high",
 	},
 	{
-		AiHint = "f5614548-32cc-4e2e-b108-32e5d532471e",
-		Archetype = "melee_large",
-		CharacterVisualResourceID = "2b022bc4-448f-00c6-fc6d-18a4298f920c",
-		Equipment = "",
-		Icon = "2b022bc4-448f-00c6-fc6d-18a4298f920c-_(Icon_Badger)",
-		Info = {
-			AC = 10,
-			Level = 1,
-			Pwr = 19.5,
-			Stats = -2,
-			Vit = 13,
-		},
-		IsBoss = false,
-		LevelOverride = 1,
-		Name = "Badger_NPC_Wildshape",
-		SpellSet = "CommonBeastActions",
-		Stats = "Badger_Giant_Wildshape",
-		TemplateId = "2b705d6d-b15e-41fe-b044-c1c1fa313eea",
-		Tier = "low",
-	},
-	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
 		Archetype = "beast",
 		CharacterVisualResourceID = "572e59c7-b9f6-2145-9db9-4a16a373a749",
@@ -5868,7 +5511,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 7,
-			Pwr = 29.0,
+			Pwr = 34.0,
 			Stats = -6,
 			Vit = 20,
 		},
@@ -5889,7 +5532,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 38.0,
+			Pwr = 39.0,
 			Stats = 5,
 			Vit = 28,
 		},
@@ -5910,7 +5553,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 8,
-			Pwr = 57.0,
+			Pwr = 63.0,
 			Stats = 6,
 			Vit = 48,
 		},
@@ -5931,7 +5574,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 1,
-			Pwr = 74.0,
+			Pwr = 73.0,
 			Stats = 10,
 			Vit = 82,
 		},
@@ -5952,7 +5595,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 5,
-			Pwr = 47.0,
+			Pwr = 50.0,
 			Stats = 6,
 			Vit = 32,
 		},
@@ -5973,7 +5616,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 6,
-			Pwr = 59.0,
+			Pwr = 63.0,
 			Stats = 8,
 			Vit = 46,
 		},
@@ -5994,7 +5637,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 97.0,
+			Pwr = 106.0,
 			Stats = 8,
 			Vit = 108,
 		},
@@ -6036,7 +5679,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 10,
-			Pwr = 71.0,
+			Pwr = 79.0,
 			Stats = 6,
 			Vit = 62,
 		},
@@ -6057,7 +5700,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 7,
-			Pwr = 67.5,
+			Pwr = 72.5,
 			Stats = 9,
 			Vit = 67,
 		},
@@ -6078,7 +5721,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 6,
-			Pwr = 49.0,
+			Pwr = 53.0,
 			Stats = 2,
 			Vit = 44,
 		},
@@ -6097,10 +5740,10 @@ return {
 		Equipment = "",
 		Icon = "8b5150e6-7195-5189-3b70-3125ee38eec0-_(Icon_Spider_Normal)",
 		Info = {
-			AC = 17,
+			AC = 18,
 			Level = 5,
-			Pwr = 43.5,
-			Stats = 1,
+			Pwr = 48.5,
+			Stats = 2,
 			Vit = 31,
 		},
 		IsBoss = false,
@@ -6109,7 +5752,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Spider_Sword",
 		TemplateId = "109c03cb-68d6-4f4f-ae9b-9fda250c5656",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -6120,7 +5763,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 6,
-			Pwr = 57.0,
+			Pwr = 61.0,
 			Stats = 12,
 			Vit = 44,
 		},
@@ -6139,10 +5782,10 @@ return {
 		Equipment = "",
 		Icon = "b42e62f3-3c4d-609a-5c49-df71dde645e7-_(Icon_Cloaker)",
 		Info = {
-			AC = 14,
+			AC = 15,
 			Level = 8,
-			Pwr = 92.5,
-			Stats = 13,
+			Pwr = 101.5,
+			Stats = 15,
 			Vit = 105,
 		},
 		IsBoss = false,
@@ -6162,7 +5805,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 3,
-			Pwr = 37.5,
+			Pwr = 38.5,
 			Stats = 3,
 			Vit = 27,
 		},
@@ -6183,7 +5826,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 1,
-			Pwr = 11.5,
+			Pwr = 10.5,
 			Stats = -8,
 			Vit = 5,
 		},
@@ -6204,7 +5847,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 29.0,
+			Pwr = 30.0,
 			Stats = -1,
 			Vit = 22,
 		},
@@ -6225,7 +5868,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 1,
-			Pwr = 74.0,
+			Pwr = 73.0,
 			Stats = 10,
 			Vit = 82,
 		},
@@ -6246,7 +5889,7 @@ return {
 		Info = {
 			AC = 19,
 			Level = 17,
-			Pwr = 266.0,
+			Pwr = 281.0,
 			Stats = 22,
 			Vit = 400,
 		},
@@ -6265,9 +5908,9 @@ return {
 		Equipment = "",
 		Icon = "51b295f5-8ac7-ac65-8975-9ced4678212b-_(Icon_Dog)",
 		Info = {
-			AC = 20,
+			AC = 18,
 			Level = 5,
-			Pwr = 68.0,
+			Pwr = 69.0,
 			Stats = 5,
 			Vit = 66,
 		},
@@ -6288,7 +5931,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 94.5,
+			Pwr = 103.5,
 			Stats = 13,
 			Vit = 93,
 		},
@@ -6309,7 +5952,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 4,
-			Pwr = 77.5,
+			Pwr = 79.5,
 			Stats = 11,
 			Vit = 85,
 		},
@@ -6330,7 +5973,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 79.5,
+			Pwr = 86.5,
 			Stats = 7,
 			Vit = 79,
 		},
@@ -6351,7 +5994,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 9,
-			Pwr = 85.0,
+			Pwr = 92.0,
 			Stats = 15,
 			Vit = 76,
 		},
@@ -6361,7 +6004,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "Githyanki_Gishra_Melee",
 		TemplateId = "d5eb4699-64b8-4d07-b045-0b47c73a1751",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -6372,7 +6015,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 6,
-			Pwr = 42.5,
+			Pwr = 46.5,
 			Stats = 1,
 			Vit = 33,
 		},
@@ -6382,7 +6025,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Shadow_Mastiff",
 		TemplateId = "e72703ea-c0dc-44a1-aab8-d7b7269f7458",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -6393,7 +6036,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -6496,10 +6139,10 @@ return {
 		Equipment = "EQP_Dagger",
 		Icon = "56f87258-6053-6818-d4f5-64cf701eded3-EQP_Dagger_(Icon_Kobold)",
 		Info = {
-			AC = 12,
+			AC = 13,
 			Level = 1,
-			Pwr = 16.5,
-			Stats = -5,
+			Pwr = 17.5,
+			Stats = -4,
 			Vit = 9,
 		},
 		IsBoss = false,
@@ -6540,7 +6183,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 47.0,
+			Pwr = 54.0,
 			Stats = 9,
 			Vit = 10,
 		},
@@ -6559,10 +6202,10 @@ return {
 		Equipment = "EQP_Dagger",
 		Icon = "00c4641c-574f-3514-226d-ff47b2eb422e-EQP_Dagger_(Icon_Kobold)",
 		Info = {
-			AC = 12,
+			AC = 13,
 			Level = 6,
-			Pwr = 33.5,
-			Stats = -3,
+			Pwr = 39.5,
+			Stats = -2,
 			Vit = 27,
 		},
 		IsBoss = false,
@@ -6582,7 +6225,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 8,
-			Pwr = 45.0,
+			Pwr = 51.0,
 			Stats = -2,
 			Vit = 40,
 		},
@@ -6592,7 +6235,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_OskarsBeloved_Poltergeist",
 		TemplateId = "f5643770-a043-428d-bfc9-02bdbc69e53f",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -6603,7 +6246,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 23.0,
+			Pwr = 24.0,
 			Stats = -1,
 			Vit = 12,
 		},
@@ -6624,7 +6267,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 7,
-			Pwr = 107.0,
+			Pwr = 112.0,
 			Stats = 6,
 			Vit = 150,
 		},
@@ -6645,7 +6288,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 7,
-			Pwr = 50.0,
+			Pwr = 55.0,
 			Stats = 3,
 			Vit = 38,
 		},
@@ -6666,7 +6309,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 4,
-			Pwr = 113.0,
+			Pwr = 115.0,
 			Stats = 3,
 			Vit = 182,
 		},
@@ -6687,7 +6330,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 3,
-			Pwr = 51.0,
+			Pwr = 52.0,
 			Stats = 3,
 			Vit = 58,
 		},
@@ -6708,7 +6351,7 @@ return {
 		Info = {
 			AC = 10,
 			Level = 7,
-			Pwr = 64.0,
+			Pwr = 69.0,
 			Stats = 5,
 			Vit = 74,
 		},
@@ -6718,7 +6361,7 @@ return {
 		SpellSet = "CommonNPCActions_NoThrow",
 		Stats = "LOW_HouseOfGrief_Cultist_Caster",
 		TemplateId = "174a37a6-a376-4217-9c89-216d1b6c4848",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -6729,7 +6372,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 102.5,
+			Pwr = 111.5,
 			Stats = 6,
 			Vit = 123,
 		},
@@ -6750,7 +6393,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 94.5,
+			Pwr = 103.5,
 			Stats = 13,
 			Vit = 93,
 		},
@@ -6769,10 +6412,10 @@ return {
 		Equipment = "EQP_Dagger",
 		Icon = "ee9ba200-9d3d-890a-ae00-e62bb9e80974-EQP_Dagger_(Icon_Kobold)",
 		Info = {
-			AC = 12,
+			AC = 13,
 			Level = 1,
-			Pwr = 19.0,
-			Stats = -4,
+			Pwr = 20.0,
+			Stats = -3,
 			Vit = 12,
 		},
 		IsBoss = false,
@@ -6792,7 +6435,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 8,
-			Pwr = 75.5,
+			Pwr = 81.5,
 			Stats = 12,
 			Vit = 71,
 		},
@@ -6813,7 +6456,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 5,
-			Pwr = 37.5,
+			Pwr = 40.5,
 			Stats = 2,
 			Vit = 29,
 		},
@@ -6834,7 +6477,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 4,
-			Pwr = 77.5,
+			Pwr = 79.5,
 			Stats = 11,
 			Vit = 85,
 		},
@@ -6855,8 +6498,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 50.5,
-			Stats = 1,
+			Pwr = 53.5,
+			Stats = 2,
 			Vit = 59,
 		},
 		IsBoss = false,
@@ -6876,7 +6519,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 12,
-			Pwr = 93.0,
+			Pwr = 103.0,
 			Stats = 16,
 			Vit = 82,
 		},
@@ -6895,9 +6538,9 @@ return {
 		Equipment = "",
 		Icon = "247814fd-c877-0cbe-ce15-3d7d86686022-_(Icon_Mephit_Mud)",
 		Info = {
-			AC = 11,
+			AC = 14,
 			Level = 4,
-			Pwr = 24.0,
+			Pwr = 29.0,
 			Stats = -2,
 			Vit = 14,
 		},
@@ -6907,7 +6550,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "LOW_GreaseWizard_Mephit",
 		TemplateId = "b03f4282-ad07-4f6a-8ee5-a56ea3558a14",
-		Tier = "low",
+		Tier = "mid",
 	},
 	{
 		AiHint = "45a231e4-e94f-4b0e-a941-2daf1adf44b5",
@@ -6918,7 +6561,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 10,
-			Pwr = 42.5,
+			Pwr = 50.5,
 			Stats = 9,
 			Vit = 7,
 		},
@@ -6928,7 +6571,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "FlamingFist_Dwarf_Caster",
 		TemplateId = "47909493-0907-4d7e-9e02-88d8c035d0cc",
-		Tier = "mid",
+		Tier = "high",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -6939,7 +6582,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 8,
-			Pwr = 76.5,
+			Pwr = 82.5,
 			Stats = 10,
 			Vit = 73,
 		},
@@ -6960,7 +6603,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 5,
-			Pwr = 55.5,
+			Pwr = 58.5,
 			Stats = 7,
 			Vit = 45,
 		},
@@ -6981,7 +6624,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 104.5,
+			Pwr = 113.5,
 			Stats = 6,
 			Vit = 127,
 		},
@@ -7002,7 +6645,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 5,
-			Pwr = 99.0,
+			Pwr = 102.0,
 			Stats = 16,
 			Vit = 112,
 		},
@@ -7044,8 +6687,8 @@ return {
 		Info = {
 			AC = 12,
 			Level = 4,
-			Pwr = 50.5,
-			Stats = 1,
+			Pwr = 53.5,
+			Stats = 2,
 			Vit = 59,
 		},
 		IsBoss = false,
@@ -7063,9 +6706,9 @@ return {
 		Equipment = "",
 		Icon = "0bf6a9b7-a037-9c46-4098-3b083090e534-_(Icon_Wolf)",
 		Info = {
-			AC = 19,
+			AC = 17,
 			Level = 11,
-			Pwr = 51.5,
+			Pwr = 58.5,
 			Stats = 0,
 			Vit = 31,
 		},
@@ -7086,7 +6729,7 @@ return {
 		Info = {
 			AC = 10,
 			Level = 3,
-			Pwr = 35.0,
+			Pwr = 36.0,
 			Stats = 3,
 			Vit = 30,
 		},
@@ -7107,7 +6750,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 88.0,
+			Pwr = 97.0,
 			Stats = 8,
 			Vit = 90,
 		},
@@ -7117,7 +6760,7 @@ return {
 		SpellSet = "CommonMyrmidonActions_Fly",
 		Stats = "Water_Myrmidon_Wildshape",
 		TemplateId = "6c9ea298-14dd-4485-ac3c-fdf818f6b110",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -7128,7 +6771,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 5,
-			Pwr = 87.0,
+			Pwr = 90.0,
 			Stats = 3,
 			Vit = 122,
 		},
@@ -7149,7 +6792,7 @@ return {
 		Info = {
 			AC = 13,
 			Level = 5,
-			Pwr = 41.0,
+			Pwr = 44.0,
 			Stats = 0,
 			Vit = 36,
 		},
@@ -7191,7 +6834,7 @@ return {
 		Info = {
 			AC = 11,
 			Level = 3,
-			Pwr = 18.0,
+			Pwr = 19.0,
 			Stats = -4,
 			Vit = 8,
 		},
@@ -7212,7 +6855,7 @@ return {
 		Info = {
 			AC = 12,
 			Level = 6,
-			Pwr = 71.5,
+			Pwr = 75.5,
 			Stats = 1,
 			Vit = 95,
 		},
@@ -7233,7 +6876,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 97.0,
+			Pwr = 104.0,
 			Stats = 17,
 			Vit = 96,
 		},
@@ -7254,8 +6897,8 @@ return {
 		Info = {
 			AC = 22,
 			Level = 10,
-			Pwr = 126.5,
-			Stats = 16,
+			Pwr = 137.5,
+			Stats = 19,
 			Vit = 145,
 		},
 		IsBoss = true,
@@ -7275,7 +6918,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 11,
-			Pwr = 94.5,
+			Pwr = 103.5,
 			Stats = 13,
 			Vit = 93,
 		},
@@ -7296,7 +6939,7 @@ return {
 		Info = {
 			AC = 10,
 			Level = 1,
-			Pwr = 18.5,
+			Pwr = 17.5,
 			Stats = -3,
 			Vit = 13,
 		},
@@ -7317,7 +6960,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 11,
-			Pwr = 148.0,
+			Pwr = 157.0,
 			Stats = 12,
 			Vit = 206,
 		},
@@ -7327,7 +6970,7 @@ return {
 		SpellSet = "CommonBeastActions",
 		Stats = "Steel_Watcher_Biped_Hellfire",
 		TemplateId = "80cb7cbd-41fc-4921-847b-d62f2517ddd9",
-		Tier = "epic",
+		Tier = "legendary",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -7338,7 +6981,7 @@ return {
 		Info = {
 			AC = 18,
 			Level = 9,
-			Pwr = 85.5,
+			Pwr = 92.5,
 			Stats = 10,
 			Vit = 85,
 		},
@@ -7348,7 +6991,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "LOW_CountingHouse_Melee_Human",
 		TemplateId = "35e4b51e-5225-44f3-9b80-a9380efbf2a2",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "f5614548-32cc-4e2e-b108-32e5d532471e",
@@ -7359,7 +7002,7 @@ return {
 		Info = {
 			AC = 15,
 			Level = 3,
-			Pwr = 29.0,
+			Pwr = 30.0,
 			Stats = -4,
 			Vit = 22,
 		},
@@ -7380,7 +7023,7 @@ return {
 		Info = {
 			AC = 17,
 			Level = 10,
-			Pwr = 106.5,
+			Pwr = 114.5,
 			Stats = 21,
 			Vit = 105,
 		},
@@ -7401,7 +7044,7 @@ return {
 		Info = {
 			AC = 7,
 			Level = 1,
-			Pwr = 9.0,
+			Pwr = 8.0,
 			Stats = -6,
 			Vit = 6,
 		},
@@ -7422,7 +7065,7 @@ return {
 		Info = {
 			AC = 16,
 			Level = 8,
-			Pwr = 88.0,
+			Pwr = 94.0,
 			Stats = 21,
 			Vit = 76,
 		},
@@ -7432,7 +7075,7 @@ return {
 		SpellSet = "CommonNPCActions",
 		Stats = "LOW_Cultist_Bhaal_DeathsHead_Disguise",
 		TemplateId = "a3df2622-d2fc-4423-9c30-6185ad6e704d",
-		Tier = "ultra",
+		Tier = "epic",
 	},
 	{
 		AiHint = "00000000-0000-0000-0000-000000000000",
@@ -7443,7 +7086,7 @@ return {
 		Info = {
 			AC = 14,
 			Level = 5,
-			Pwr = 68.0,
+			Pwr = 71.0,
 			Stats = 10,
 			Vit = 68,
 		},

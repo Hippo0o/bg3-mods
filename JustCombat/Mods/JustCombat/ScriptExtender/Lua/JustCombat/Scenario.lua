@@ -238,9 +238,10 @@ function Action.SpawnRound()
                 return s.Map:SpawnIn(e, -1)
             end, {
                 immediate = true,
-                retries = 3,
+                retries = #Current().Map.Spawns,
                 interval = 500,
                 success = function()
+                    Player.Notify("Enemy " .. e:GetTranslatedName() .. " spawned.")
                     if C.ForceEnterCombat or Player.InCombat() then
                         Scenario.CombatSpawned(e)
                     end
