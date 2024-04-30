@@ -126,9 +126,14 @@ External.Validators.Scenario = tt({
 External.Templates = {}
 
 function External.Templates.GetMaps()
+    local exists = External.File.Exists("Maps")
+    if not exists then
+        return nil
+    end
+
     local data = External.File.Import("Maps")
     if data == nil then
-        return nil
+        return {}
     end
 
     for k, map in pairs(data) do
@@ -143,9 +148,14 @@ function External.Templates.GetMaps()
 end
 
 function External.Templates.GetScenarios()
+    local exists = External.File.Exists("Scenarios")
+    if not exists then
+        return nil
+    end
+
     local data = External.File.Import("Scenarios")
     if data == nil then
-        return nil
+        return {}
     end
 
     for k, scenario in pairs(data) do
@@ -160,9 +170,14 @@ function External.Templates.GetScenarios()
 end
 
 function External.Templates.GetEnemies()
+    local exists = External.File.Exists("Enemies")
+    if not exists then
+        return nil
+    end
+
     local data = External.File.Import("Enemies")
     if data == nil then
-        return nil
+        return {}
     end
 
     for k, enemy in pairs(data) do

@@ -462,7 +462,7 @@ do
         if m then
             L.Info(#m, "Maps loaded.")
         else
-            Maps.ExportTemplates()
+            Map.ExportTemplates()
         end
 
         local s = External.Templates.GetScenarios()
