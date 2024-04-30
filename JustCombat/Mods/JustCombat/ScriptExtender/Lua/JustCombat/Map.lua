@@ -1,10 +1,11 @@
 ---@diagnostic disable: undefined-global
 
-local maps = Require("JustCombat/Templates/Maps.lua")
+local mapTemplates = Require("JustCombat/Templates/Maps.lua")
+External.File.ExportIfNeeded("Maps", mapTemplates)
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                            Structures                                       --
+--                                          Structures                                         --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
@@ -57,10 +58,8 @@ function Object:SpawnIn(enemy, spawn)
         return false
     end
 
-    Schedule(function()
-        Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
-        -- Osi.SetAmbushing(enemy.GUID, 1) -- makes tactical cam outline disappear
-    end)
+    Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+    -- Osi.SetAmbushing(enemy.GUID, 1) -- makes tactical cam outline disappear
 
     return true
 end
@@ -87,24 +86,28 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@param region string
----@return Map[]
-function Map.Get(region)
+---@param region string|nil
+---@return table
+function Map.GetTemplates(region)
     local r = {}
 
-    for _, m in ipairs(maps) do
-        if m.Region == region then
-            table.insert(r, Object.New(m))
+    for _, m in ipairs(External.Templates.GetMaps() or mapTemplates) do
+        if region == nil or m.Region == region then
+            table.insert(r, m)
         end
     end
 
     return r
 end
 
----@return Map
-function Map.GetByIndex(index)
-    local map = maps[index]
-    return Object.New(map)
+function Map.ExportTemplates()
+    External.File.Export("Maps", mapTemplates)
+end
+
+---@param region string|nil
+---@return Map[]
+function Map.Get(region)
+    return UT.Map(Map.GetTemplates(region), Object.New)
 end
 
 ---@param map Map

@@ -1,10 +1,11 @@
 ---@diagnostic disable: undefined-global
 
-local data = Require("JustCombat/Templates/Scenarios.lua")
+local scenarioTemplates = Require("JustCombat/Templates/Scenarios.lua")
+External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                            Structures                                       --
+--                                          Structures                                         --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
@@ -189,7 +190,7 @@ function Action.SpawnLoot()
 end
 
 function Action.EmptyArea()
-    if not C.BypassStory then
+    if not Config.BypassStory then
         return
     end
 
@@ -241,8 +242,8 @@ function Action.SpawnRound()
                 retries = #Current().Map.Spawns,
                 interval = 500,
                 success = function()
-                    Player.Notify("Enemy " .. e:GetTranslatedName() .. " spawned.")
-                    if C.ForceEnterCombat or Player.InCombat() then
+                    Player.Notify("Enemy " .. e:GetTranslatedName() .. " spawned.", true, e:GetId())
+                    if Config.ForceEnterCombat or Player.InCombat() then
                         Scenario.CombatSpawned(e)
                     end
                 end,
@@ -274,7 +275,7 @@ function Action.ResumeCombat()
 
     local amount = #s.SpawnedEnemies
     if amount > 0 then
-        if C.ForceEnterCombat then
+        if Config.ForceEnterCombat then
             Scenario.CombatSpawned()
         end
         return
@@ -293,6 +294,10 @@ end
 function Action.MapEntered()
     local x, y, z = Player.Pos()
     RetryFor(function(_, tries)
+        if S == nil then -- scenario stopped
+            self:Clear()
+            return
+        end
         if tries % 10 == 0 then
             Player.Notify("Move to start scenario", true)
         end
@@ -367,8 +372,12 @@ end
 -------------------------------------------------------------------------------------------------
 
 ---@return table
-function Scenario.Get()
-    return data
+function Scenario.GetTemplates()
+    return External.Templates.GetScenarios() or scenarioTemplates
+end
+
+function Scenario.ExportTemplates()
+    External.File.Export("Scenarios", scenarioTemplates)
 end
 
 ---@param state Scenario
@@ -482,7 +491,7 @@ function Scenario.CombatSpawned(specific)
                 return false
             end
 
-            enemy:Combat(C.ForceEnterCombat)
+            enemy:Combat(Config.ForceEnterCombat)
             Osi.EnterCombat(enemy.GUID, target)
 
             return Osi.IsInCombat(enemy.GUID) == 1
@@ -526,7 +535,7 @@ Ext.Osiris.RegisterListener(
 
         Scenario.CombatSpawned()
 
-        if C.CombatWorkaround then
+        if Config.ForceCombatRestart then
             if round > 1 then
                 for _, e in pairs(s.SpawnedEnemies) do
                     -- should always be spawned
@@ -676,14 +685,21 @@ Ext.Osiris.RegisterListener(
             return
         end
 
+        local spawnedKilled = false
         for i, e in ipairs(s.SpawnedEnemies) do
             if U.UUID.Equals(e.GUID, uuid) then
                 table.insert(s.KilledEnemies, e)
                 table.remove(s.SpawnedEnemies, i)
 
-                Player.Notify("Enemy killed.")
+                Player.Notify("Enemy " .. e:GetTranslatedName() .. " killed.", true)
+                spawnedKilled = true
                 break
             end
+        end
+
+        if not spawnedKilled then
+            L.Debug("Non-spawned enemy killed.", uuid)
+            return
         end
 
         Action.CheckEnded()

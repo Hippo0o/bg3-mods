@@ -1,12 +1,13 @@
 ---@diagnostic disable: undefined-global
 
 local enemyTemplates = Require("JustCombat/Templates/Enemies.lua")
+External.File.ExportIfNeeded("Enemies", enemyTemplates)
 
 L.Debug("Enemies loaded", #enemyTemplates)
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                            Structures                                       --
+--                                          Structures                                         --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
@@ -64,7 +65,13 @@ function Object:GetId()
 end
 
 function Object:GetTranslatedName()
-    return Osi.ResolveTranslatedString(self:Entity().DisplayName.NameKey.Handle.Handle)
+    local handle
+    if self:IsSpawned() then
+        handle = Osi.GetDisplayName(self.GUID)
+    else
+        handle = self:GetTemplate().DisplayName.Handle.Handle
+    end
+    return Osi.ResolveTranslatedString(handle)
 end
 
 function Object:IsSpawned()
@@ -76,8 +83,12 @@ function Object:Entity()
     return Ext.Entity.Get(self.GUID)
 end
 
+function Object:GetTemplate()
+    return Ext.Template.GetTemplate(self.TemplateId)
+end
+
 function Object:ModifyTemplate()
-    local template = Ext.Template.GetTemplate(self.TemplateId)
+    local template = self:GetTemplate()
 
     -- only overwrite if different, and save the original value for restoration
     local overwrites = {}
@@ -173,7 +184,9 @@ function Object:Modify(keepFaction)
         Osi.SetFaction(self.GUID, C.NeutralFaction)
     end
 
-    Schedule(function()
+    WaitFor(function()
+        return self:Entity():IsAlive()
+    end, function()
         local entity = self:Entity()
         local expMod = self.IsBoss and 10 or 3
         entity.ServerExperienceGaveOut.Experience = entity.BaseHp.Vitality
@@ -359,12 +372,6 @@ function Enemy.Random(filter)
     return Object.New(enemy)
 end
 
----@return Enemy
-function Enemy.GetByIndex(index)
-    local enemy = enemyTemplates[index]
-    return Object.New(enemy)
-end
-
 ---@param tier string
 ---@return Enemy[]
 function Enemy.GetByTier(tier)
@@ -393,20 +400,25 @@ end
 ---@field filter fun(data: Enemy):boolean data is the enemy source data
 ---@return fun():number,Enemy
 function Enemy.Iter(filter)
+    local templates = External.Templates.GetEnemies() or enemyTemplates
     local i = 0
     local j = 0
     return function()
         i = i + 1
         j = j + 1
         if filter then
-            while enemyTemplates[j] and not filter(enemyTemplates[j]) do
+            while templates[j] and not filter(templates[j]) do
                 j = j + 1
             end
         end
-        if enemyTemplates[j] then
-            return i, Object.New(enemyTemplates[j])
+        if templates[j] then
+            return i, Object.New(templates[j])
         end
     end
+end
+
+function Enemy.ExportTemplates()
+    External.File.Export("Enemies", enemyTemplates)
 end
 
 ---@param object string GUID

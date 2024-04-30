@@ -11,6 +11,11 @@ function Player.Host()
     return Osi.GetHostCharacter()
 end
 
+---@return string region
+function Player.Region()
+    return Osi.GetRegion(Player.Host())
+end
+
 ---@return number x, number y, number z
 function Player.Pos()
     return Osi.GetPosition(Player.Host())
@@ -24,8 +29,8 @@ function Player.InCombat()
 end
 
 local buffering = false
-function Player.Notify(message, instant)
-    L.Info("Notify:", message)
+function Player.Notify(message, instant, ...)
+    L.Info("Notify:", message, ...)
 
     WaitFor(function()
         return not buffering or instant
@@ -37,7 +42,7 @@ function Player.Notify(message, instant)
         buffering = true
         Defer(1000, function()
             buffering = false
-        end, true)
+        end)
     end)
 end
 

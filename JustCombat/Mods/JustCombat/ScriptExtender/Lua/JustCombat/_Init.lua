@@ -24,11 +24,6 @@ UT.Merge(C, {
     ModUUID = Mod.ModUUID,
     EnemyFaction = "64321d50-d516-b1b2-cfac-2eb773de1ff6",
     NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral
-    CombatWorkaround = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
-    ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
-    BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
-    BypassStoryAlways = false, -- always skip dialogues, combat and interactions even if no scenario is active
-    ItemsIncludeClothes = false, -- include clothes in item lists
     ItemRarity = {
         "Common",
         "Uncommon",
@@ -50,12 +45,6 @@ Mod.PersistentVarsTemplate = {
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = S,
-    Config = {
-        BypassStory = C.BypassStory,
-        BypassStoryAlways = C.BypassStoryAlways,
-        CombatWorkaround = C.CombatWorkaround,
-        ForceEnterCombat = C.ForceEnterCombat,
-    },
 }
 
 -------------------------------------------------------------------------------------------------
@@ -75,6 +64,20 @@ Defer = Async.Defer
 
 ---@type Libs
 Libs = Require("Shared/Libs")
+
+Config = {
+    ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
+    ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
+    BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
+    BypassStoryAlways = false, -- always skip dialogues, combat and interactions even if no scenario is active
+    LootItemsIncludeClothes = false, -- include clothes in item lists
+    Debug = false,
+}
+External = {}
+Require("JustCombat/External")
+
+External.LoadConfig()
+External.File.ExportIfNeeded("Config", Config)
 
 Player = {}
 Scenario = {}
@@ -98,10 +101,6 @@ Require("JustCombat/Item")
 local GameState = Require("Shared/GameState")
 GameState.RegisterSavingAction(function()
     PersistentVars.Scenario = S
-    PersistentVars.Config.BypassStory = C.BypassStory
-    PersistentVars.Config.BypassStoryAlways = C.BypassStoryAlways
-    PersistentVars.Config.CombatWorkaround = C.CombatWorkaround
-    PersistentVars.Config.ForceEnterCombat = C.ForceEnterCombat
 
     for obj, _ in pairs(PersistentVars.SpawnedEnemies) do
         if not Ext.Entity.Get(obj):IsAlive() then
@@ -125,15 +124,12 @@ GameState.RegisterLoadingAction(function(state)
         return
     end
 
+    External.LoadConfig()
+
     S = PersistentVars.Scenario
     if S ~= nil then
         Scenario.RestoreFromState(S)
     end
-
-    C.BypassStory = PersistentVars.Config.BypassStory
-    C.BypassStoryAlways = PersistentVars.Config.BypassStoryAlways
-    C.CombatWorkaround = PersistentVars.Config.CombatWorkaround
-    C.ForceEnterCombat = PersistentVars.Config.ForceEnterCombat
 end)
 
 GameState.RegisterUnloadingAction(function()
@@ -143,7 +139,7 @@ end)
 do -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
     local function ifBypassStory(func)
         return function(...)
-            if C.BypassStory and (C.BypassStoryAlways or S ~= nil) then
+            if Config.BypassStory and (Config.BypassStoryAlways or S ~= nil) then
                 func(...)
             end
         end
@@ -247,22 +243,23 @@ do
 
     local start = 0
     function Commands.Dev(new_start, amount)
-        new_start = tonumber(new_start) or start
-        amount = tonumber(amount) or 100
-
-        local j = 0
-        local templates = {}
-        for i, v in Enemy.Iter() do
-            if i > new_start and (i - new_start) <= amount then
-                table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-                j = j + 1
-            end
-        end
-        start = new_start + j
-
-        local enemies = Enemy.GenerateEnemyList(templates)
-
-        Enemy.TestEnemies(enemies)
+        L.Info(":)")
+        -- new_start = tonumber(new_start) or start
+        -- amount = tonumber(amount) or 100
+        --
+        -- local j = 0
+        -- local templates = {}
+        -- for i, v in Enemy.Iter() do
+        --     if i > new_start and (i - new_start) <= amount then
+        --         table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+        --         j = j + 1
+        --     end
+        -- end
+        -- start = new_start + j
+        --
+        -- local enemies = Enemy.GenerateEnemyList(templates)
+        --
+        -- Enemy.TestEnemies(enemies)
         -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
         -- Enemy.TestEnemies(enemies, false)
         -- local templates = {}
@@ -313,7 +310,7 @@ do
     end
 
     function Commands.ToMap(id)
-        local region = Osi.GetRegion(Player.Host())
+        local region = Player.Region()
         L.Info("Region", region)
 
         local maps = Map.Get(region)
@@ -349,17 +346,17 @@ do
                 return
             end
 
-            Map.GetByIndex(tonumber(mapId)):PingSpawns()
+            Map.Get()[tonumber(mapId)]:PingSpawns()
         end, {
             retries = tonumber(repeats) or 1,
         })
     end
 
     function Commands.Maps(id)
-        local region = Osi.GetRegion(Player.Host())
+        local region = Player.Region()
         L.Info("Region: " .. region)
 
-        local maps = Map.Get(region)
+        local maps = Map.GetTemplates(region)
         if maps == nil then
             L.Error("No maps found.")
             return
@@ -377,7 +374,7 @@ do
 
     function Commands.Scenarios(id)
         L.Info("ID", "Name", "!JC Scenarios [id]")
-        for i, v in pairs(Scenario.Get()) do
+        for i, v in pairs(Scenario.GetTemplates()) do
             L.Info(i, v.Name)
             if id and i == tonumber(id) then
                 L.Dump(v)
@@ -398,8 +395,8 @@ do
             return
         end
 
-        local map = Map.Get(Osi.GetRegion(Player.Host()))[tonumber(mapId)]
-        local template = Scenario.Get()[tonumber(scenarioId)]
+        local map = Map.Get(Player.Region())[tonumber(mapId)]
+        local template = Scenario.GetTemplates()[tonumber(scenarioId)]
         if map == nil then
             L.Error("Map not found.")
             return
@@ -433,7 +430,7 @@ do
 
     function Commands.Pos()
         local x, y, z = Player.Pos()
-        L.Debug("Region", Osi.GetRegion(Player.Host()))
+        L.Debug("Region", Player.Region())
         L.Debug("Position", table.concat({ x, y, z }, ", "))
     end
 
@@ -454,18 +451,37 @@ do
         end
     end
 
-    function Commands.CombatWorkaround(flag)
-        C.CombatWorkaround = ("true" == flag or tonumber(flag) == 1) and true or false
-        L.Info("Combat workaround is", C.CombatWorkaround and "enabled" or "disabled")
-    end
-    function Commands.StoryBypassAlways(flag)
-        C.BypassStoryAlways = ("true" == flag or tonumber(flag) == 1) and true or false
-        L.Info("Story bypass everywhere is", C.BypassStoryAlways and "enabled" or "disabled")
+    function Commands.Reload()
+        if External.LoadConfig() then
+            L.Info("Config reloaded.")
+        end
+
+        local m = External.Templates.GetMaps()
+        if m then
+            L.Info(#m, "Maps loaded.")
+        else
+            Maps.ExportTemplates()
+        end
+
+        local s = External.Templates.GetScenarios()
+        if s then
+            L.Info(#s, "Scenarios loaded.")
+        else
+            Scenario.ExportTemplates()
+        end
+
+        local e = External.Templates.GetEnemies()
+        if e then
+            L.Info(#e, "Enemies loaded.")
+        else
+            Enemy.ExportTemplates()
+        end
     end
 
     function Commands.StoryBypass(flag)
-        C.BypassStory = ("true" == flag or tonumber(flag) == 1) and true or false
-        L.Info("Story bypass is", C.BypassStory and "enabled" or "disabled")
+        Config.BypassStory = ("true" == flag or tonumber(flag) == 1) and true or false
+        L.Info("Story bypass is", Config.BypassStory and "enabled" or "disabled")
+        External.SaveConfig()
     end
     function Commands.EnableStoryBypass()
         Commands.StoryBypass(1)
