@@ -365,9 +365,10 @@ do
         L.Info("ID", "Name", "!JC Maps [id]")
 
         for i, v in pairs(maps) do
-            L.Info(i, v.Name)
             if id and i == tonumber(id) then
-                L.Dump(v)
+                L.Info(i, v.Name, Ext.DumpExport(v))
+            else
+                L.Info(i, v.Name)
             end
         end
     end
@@ -375,9 +376,10 @@ do
     function Commands.Scenarios(id)
         L.Info("ID", "Name", "!JC Scenarios [id]")
         for i, v in pairs(Scenario.GetTemplates()) do
-            L.Info(i, v.Name)
             if id and i == tonumber(id) then
-                L.Dump(v)
+                L.Info(i, v.Name, Ext.DumpExport(v))
+            else
+                L.Info(i, v.Name)
             end
         end
     end
