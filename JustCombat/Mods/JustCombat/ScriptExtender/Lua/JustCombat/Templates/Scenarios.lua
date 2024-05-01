@@ -188,4 +188,41 @@ return {
 
         Loot = defaultLoot,
     },
+    {
+        Name = "Githyanki",
+        -- "Githyanki_Female_Gish",
+        -- "Githyanki_Male_Gish",
+        -- "Githyanki_Female_Gish_Strong",
+        -- "Githyanki_Male_Gish_Strong",
+        -- "Githyanki_Female_Raider_Strong",
+        -- "Githyanki_Male_Raider_Strong",
+        -- "Githyanki_Female_Warrior_Strong",
+        -- "Githyanki_Male_Warrior_Strong",
+        -- "Githyanki_Female_GateMaster",
+        -- "GLO_GithKnight_LaezelCampConfrontation",
+        -- "GLO_GithKnight_Act3",
+        -- "LOW_Githyanki_Male_GithyankiProdigy_MentalImage",
+        -- "CRE_GithyankiInquisitor_VlaakithsMindSword",
+        Timeline = {
+            {
+                "Githyanki_Female_Raider",
+                "Githyanki_Male_Raider",
+            },
+            {
+
+                "Githyanki_Female_Gishra_Melee",
+                "Githyanki_Male_Gishra_Melee",
+                "Githyanki_Male_Gishra_Caster",
+            },
+            {},
+            {
+                "Githyanki_Female_Warrior",
+                "Githyanki_Male_Warrior",
+            },
+            {
+                "TWN_VlaakithAttack_VlaakithForm",
+            },
+        },
+        Loot = defaultLoot,
+    },
 }

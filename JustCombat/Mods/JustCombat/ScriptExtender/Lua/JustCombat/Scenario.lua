@@ -218,7 +218,7 @@ function Action.StartCombat()
 
     Current().Map:PingSpawns()
 
-    Player.Notify("Combat is Starting.")
+    Player.Notify("Combat is Starting.", true)
     -- Osi.ForceTurnBasedMode(Player.Host(), 1)
     Action.StartRound()
 end
