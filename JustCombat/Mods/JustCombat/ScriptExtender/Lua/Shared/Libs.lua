@@ -127,8 +127,11 @@ function M.TypedTable(typeDefs, repeatable)
             end
 
             if type(validator) == "function" then
-                local ok, res = pcall(validator, value)
-                return ok and res and true or false, res
+                local ok, res, err = pcall(validator, value)
+                if not ok then
+                    return false, res
+                end
+                return res and true or false, err
             end
 
             -- basically enum or reference to another TypedTable
@@ -139,12 +142,13 @@ function M.TypedTable(typeDefs, repeatable)
                     end
                     return Object.Init(validator):Validate(value)
                 end
+
                 for _, enum in pairs(validator) do
                     if Utils.Equals(enum, value, true) then
                         return true, value
                     end
                 end
-                return false, "value not in enum"
+                return false, "value not in list of valid values"
             end
 
             return false

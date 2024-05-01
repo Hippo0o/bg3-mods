@@ -194,12 +194,13 @@ function Action.EmptyArea()
         return
     end
 
-    local toRemove = UT.Filter(UE.GetNearby(Player.Host(), 100, true), function(v)
+    local toRemove = UT.Filter(UE.GetNearby(Player.Host(), 30, true), function(v)
         return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
     end)
 
     -- TODO maybe only use Osi.SetOnStage
     for _, v in pairs(toRemove) do
+        L.Debug("Removing entity.", v.Guid)
         UE.Remove(v.Guid)
     end
 end
@@ -441,18 +442,27 @@ function Scenario.Start(template, map)
     scenario.LootArmor = template.Loot.Armor
     scenario.LootWeapons = template.Loot.Weapons
 
-    for round, tiers in pairs(template.Timeline) do
-        local enemyCount = #tiers
+    for round, definition in pairs(template.Timeline) do
+        local enemyCount = #definition
         for i = 1, enemyCount do
-            local e = Enemy.Random(function(e)
-                return e.Tier == tiers[i]
-            end)
-            assert(e ~= nil, "Enemy configuration is wrong.")
+            local e
+            if UT.Contains(C.EnemyTier, definition[i]) then
+                e = Enemy.Random(function(e)
+                    return e.Tier == definition[i]
+                end)
+            else
+                e = Enemy.Find(definition[i])
+            end
+
+            if e == nil then
+                L.Error("Starting scenario failed.", "Enemy configuration is wrong.")
+                return
+            end
             scenario:AddEnemy(round, e)
         end
     end
 
-    Player.Notify("Scenario started.")
+    Player.Notify("Scenario " .. template.Name .. " started.")
     S = scenario
     Player.Notify("Leave camp to join the battle.")
 

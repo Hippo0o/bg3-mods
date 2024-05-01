@@ -85,11 +85,18 @@ External.Validators.Map = tt({
     Spawns = tt(posType, true),
 })
 
+local function validateTimelineEntry(value)
+    if Enemy.Find(value) ~= nil then
+        return true
+    end
+
+    return false, "value needs to be [" .. table.concat(C.EnemyTier, " ") .. "], a name or templateId"
+end
 External.Validators.Scenario = tt({
     Name = { "string" },
     Timeline = tt({
         tt({
-            { "nil", C.EnemyTier },
+            { "nil", C.EnemyTier, validateTimelineEntry },
         }, true),
     }, true),
     Loot = tt({

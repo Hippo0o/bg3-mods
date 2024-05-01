@@ -372,6 +372,15 @@ function Enemy.Random(filter)
     return Object.New(enemy)
 end
 
+---@return Enemy|nil
+function Enemy.Find(search)
+    for _, enemy in Enemy.Iter() do
+        if US.Contains(search, { enemy.TemplateId, enemy.Name, enemy:GetId() }) then
+            return enemy
+        end
+    end
+end
+
 ---@param tier string
 ---@return Enemy[]
 function Enemy.GetByTier(tier)
