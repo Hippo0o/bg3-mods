@@ -126,6 +126,10 @@ function Item.Objects(rarity, forCombat)
         local stat = Ext.Stats.Get(name)
         local cat = stat.ObjectCategory
 
+        if name:match("^DLC_") then
+            return false
+        end
+
         if forCombat then
             if
                 not (
@@ -141,9 +145,9 @@ function Item.Objects(rarity, forCombat)
         else
             if
                 not (
-                    cat:match("Food")
-                    or cat:match("Drink")
-                    or cat:match("Ingredient")
+                    cat:match("^Food")
+                    or cat:match("^Drink")
+                    or cat:match("^Ingredient")
                     -- alchemy items
                     -- or name:match("^OBJ_Crystal_")
                     or name:match("^CONS_Mushrooms_")
@@ -174,22 +178,14 @@ end
 function Item.Armor(rarity)
     local items = UT.Filter(armor, function(name)
         local stat = Ext.Stats.Get(name)
-        local cat = stat.ObjectCategory
-        local type = stat.ArmorType
+        local slot = stat.Slot
 
-        if name:match("^_") then
+        if name:match("^_") or name:match("^DLC_") then
             return false
         end
         if
             not Config.LootItemsIncludeClothes
-            and (
-                cat:match("Clothing")
-                or cat:match("Shoes")
-                or type:match("Cloth")
-                or name:match("^ARM_Camp")
-                or name:match("^DLC_")
-                or name:match("^ARM_Underwear")
-            )
+            and (slot:match("VanityBody") or slot:match("VanityBoots") or slot:match("Underwear"))
         then
             return false
         end
@@ -219,7 +215,7 @@ function Item.Weapons(rarity)
     local items = UT.Filter(weapons, function(name)
         local stat = Ext.Stats.Get(name)
 
-        if name:match("^_") then
+        if name:match("^_") or name:match("^DLC_") then
             return false
         end
 

@@ -329,8 +329,8 @@ do
         map:Teleport(Player.Host())
     end
 
-    function Commands.Kill()
-        Enemy.KillSpawned()
+    function Commands.Kill(guid)
+        Enemy.KillSpawned(guid)
     end
 
     function Commands.Clear()

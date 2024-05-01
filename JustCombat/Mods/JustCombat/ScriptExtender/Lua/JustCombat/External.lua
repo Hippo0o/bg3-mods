@@ -50,7 +50,7 @@ end
 External.Validators = {}
 
 External.Validators.Config = tt({
-    ForceCombatRestart = { "nil", "boolean" },
+    -- ForceCombatRestart = { "nil", "boolean" },
     ForceEnterCombat = { "nil", "boolean" },
     BypassStory = { "nil", "boolean" },
     BypassStoryAlways = { "nil", "boolean" },

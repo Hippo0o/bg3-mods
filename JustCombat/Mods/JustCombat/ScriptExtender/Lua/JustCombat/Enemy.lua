@@ -173,7 +173,7 @@ function Object:ModifyTemplate()
 end
 
 function Object:Modify(keepFaction)
-    if not self:IsSpawned() then
+    if not self:IsSpawned() or Osi.IsDead(self.GUID) == 1 then
         return
     end
 
@@ -304,7 +304,6 @@ function Object:Clear(keepCorpse)
     local guid = self.GUID
     local id = self:GetId()
     local entity = self:Entity()
-    self.GUID = nil
 
     RetryFor(function()
         if keepCorpse then
@@ -455,9 +454,16 @@ function Enemy.Cleanup()
     end
 end
 
-function Enemy.KillSpawned()
+function Enemy.KillSpawned(object)
     for guid, enemy in pairs(PersistentVars.SpawnedEnemies) do
-        Object.Init(enemy):Clear(true)
+        enemy = Object.Init(enemy)
+        if
+            object == nil
+            or U.UUID.Equals(enemy.GUID, object)
+            or US.Contains(object, { enemy.TemplateId, enemy.Name, enemy:GetId() })
+        then
+            enemy:Clear(true)
+        end
     end
 end
 
