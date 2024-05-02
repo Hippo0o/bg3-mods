@@ -25,13 +25,29 @@ local Object = Libs.Object({
 
 ---@return Map
 function Object.New(data)
-    -- TODO validate
     return Object.Init(data)
 end
 
 ---@param character string GUID
-function Object:Teleport(character)
-    Osi.TeleportToPosition(character, self.Enter[1], self.Enter[2], self.Enter[3], "", 1, 1, 1)
+function Object:Teleport(character, withOffset)
+    local x, y, z = table.unpack(self.Enter)
+
+    pcall(function()
+        local offset = tonumber(Config.RandomizeSpawnOffset)
+        if offset > 0 and withOffset then
+            x = x + U.Random() * U.Random(-offset, offset)
+            z = z + U.Random() * U.Random(-offset, offset)
+        end
+
+        x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 1)
+    end)
+    if not x or not y or not z then
+        x = self.Enter[1]
+        y = self.Enter[2]
+        z = self.Enter[3]
+    end
+
+    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
 end
 
 ---@param enemy Enemy
@@ -50,11 +66,20 @@ function Object:SpawnIn(enemy, spawn)
         return false
     end
 
+    local x, y, z = table.unpack(pos)
+
+    pcall(function()
+        local offset = tonumber(Config.RandomizeSpawnOffset)
+        if offset > 0 then
+            x = x + U.Random() * U.Random(-offset, offset)
+            z = z + U.Random() * U.Random(-offset, offset)
+        end
+    end)
+
     -- spawned is combat ready
-    local success = enemy:Spawn(pos[1], pos[2], pos[3])
+    local success = enemy:Spawn(x, y, z)
 
     if not success then
-        L.Error("Failed to spawn enemy.", enemy.GUID)
         return false
     end
 

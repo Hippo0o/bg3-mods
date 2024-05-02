@@ -70,10 +70,7 @@ function Object:Spawn(x, y, z)
         return false
     end
 
-    local target = Osi.GetClosestAlivePlayer(Player.Host())
-    local radius = 3
-    local avoidDangerousSurfaces = 1
-    x, y, z = Osi.FindValidPosition(x, y, z, radius, target, avoidDangerousSurfaces)
+    x, y, z = Osi.FindValidPosition(x, y, z, 10, "", 1)
 
     self.GUID = Osi.CreateAt(self.RootTemplate, x, y, z, 1, 1, "")
 
@@ -184,7 +181,7 @@ function Item.Armor(rarity)
             return false
         end
         if
-            not Config.LootItemsIncludeClothes
+            not Config.LootIncludesCampSlot
             and (slot:match("VanityBody") or slot:match("VanityBoots") or slot:match("Underwear"))
         then
             return false

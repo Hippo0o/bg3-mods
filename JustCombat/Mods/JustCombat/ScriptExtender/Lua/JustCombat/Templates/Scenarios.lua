@@ -3,24 +3,24 @@ local low, medium, high, ultra, epic, legendary =
 
 local defaultLoot = {
     Objects = {
-        Common = 50,
+        Common = 60,
         Uncommon = 30,
         Rare = 20,
-        VeryRare = 10,
+        VeryRare = 5,
         -- Legendary = 0,
     },
     Armor = {
-        Common = 50,
+        Common = 60,
         Uncommon = 30,
         Rare = 20,
-        VeryRare = 10,
+        VeryRare = 5,
         Legendary = 0,
     },
     Weapons = {
-        Common = 50,
+        Common = 60,
         Uncommon = 30,
         Rare = 20,
-        VeryRare = 10,
+        VeryRare = 5,
         Legendary = 0,
     },
 }

@@ -235,7 +235,6 @@ function Object:CreateAt(x, y, z)
     self.GUID = Osi.CreateAt(self:GetId(), x, y, z, 1, 1, "")
 
     if not self:IsSpawned() then
-        L.Error("Failed to create: ", self:GetId())
         return false
     end
 
@@ -260,12 +259,9 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
-    local target = ""
-    local radius = 100
-    local avoidDangerousSurfaces = 0
-    local x2, y2, z2 = Osi.FindValidPosition(x, y, z, radius, target, avoidDangerousSurfaces)
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 0)
 
-    local success = self:CreateAt(x2 or x, y2 or y, z2 or z)
+    local success = self:CreateAt(x, y, z)
 
     if success then
         if not neutral then
@@ -274,6 +270,8 @@ function Object:Spawn(x, y, z, neutral)
 
         return true
     end
+
+    L.Error("Failed to spawn: ", self:GetId(), x, y, z)
 
     return false
 end
@@ -469,6 +467,10 @@ end
 
 function Enemy.SpawnTemplate(templateId, x, y, z)
     local e = Object.New({ Name = "Custom", TemplateId = templateId })
+    if e:GetTemplate() == nil then
+        L.Error("Template not found: ", templateId)
+        return
+    end
     e:Spawn(x, y, z)
     return e
 end
