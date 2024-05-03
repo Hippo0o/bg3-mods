@@ -157,7 +157,7 @@ function Object:ModifyTemplate()
 
     -- restore template
     -- maybe not needed but template overwrites seem to be global
-    Require("Shared/GameState").RegisterUnloadingAction(function()
+    GameState.RegisterUnloadingAction(function()
         L.Debug("Restoring template:", self.TemplateId)
         local template = Ext.Template.GetTemplate(self.TemplateId)
         for i, v in pairs(overwrites) do
@@ -439,10 +439,7 @@ function Enemy.IsValid(object)
             or (UT.Find(PersistentVars.SpawnedEnemies, function(v)
                 return U.UUID.Equals(v.GUID, object)
             end) ~= nil)
-            or UT.Contains({
-                C.EnemyFaction,
-                C.NeutralFaction,
-            }, U.UUID.GetGUID(Osi.GetFaction(object)))
+            or U.UUID.Equals(C.EnemyFaction, Osi.GetFaction(object))
         )
 end
 

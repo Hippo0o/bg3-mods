@@ -55,6 +55,9 @@ Mod.PersistentVarsTemplate = {
 
 -- lazy ass globals
 
+---@type GameState
+GameState = Require("Shared/GameState")
+
 ---@type Async
 Async = Require("Shared/Async")
 WaitFor = Async.WaitFor
@@ -85,12 +88,14 @@ Scenario = {}
 Enemy = {}
 Map = {}
 Item = {}
+GameMode = {}
 
 Require("JustCombat/Player")
 Require("JustCombat/Scenario")
 Require("JustCombat/Enemy")
 Require("JustCombat/Map")
 Require("JustCombat/Item")
+Require("JustCombat/GameMode")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -98,8 +103,6 @@ Require("JustCombat/Item")
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@type GameState
-local GameState = Require("Shared/GameState")
 GameState.RegisterSavingAction(function()
     PersistentVars.Scenario = S
 
@@ -138,98 +141,6 @@ GameState.RegisterUnloadingAction(function()
 end)
 
 do -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
-    local function ifBypassStory(func)
-        return function(...)
-            if Config.BypassStory and (Config.BypassStoryAlways or S ~= nil) then
-                func(...)
-            end
-        end
-    end
-    Ext.Osiris.RegisterListener(
-        "DialogActorJoined",
-        4,
-        "after",
-        ifBypassStory(function(dialog, instanceID, actor, speakerIndex)
-            local paidActor = US.Contains(actor, "_Daisy_")
-
-            if Enemy.IsValid(actor) or UE.IsPlayable(actor) then
-                return
-            end
-
-            if
-                -- prevent wither softlock
-                dialog:match("^CHA_Crypt_SkeletonRisingCinematic")
-                or actor:match("^CHA_Crypt_SkeletonRisingCinematic")
-                or dialog:match("Jergal")
-                or actor:match("Jergal")
-            then
-                return
-            end
-
-            if Osi.IsAlly(Player.Host(), actor) == 1 then
-                return
-            end
-
-            if paidActor then
-                L.Info("To disable story bypass, use !JC DisableStoryBypass")
-            end
-
-            Osi.DialogRequestStopForDialog(dialog, actor)
-
-            if not paidActor and UE.IsNonPlayer(actor) then
-                L.Debug("DialogActorJoined", dialog, actor, instanceID, speakerIndex)
-                Osi.DialogRemoveActorFromDialog(instanceID, actor)
-                L.Debug("Removing", actor)
-                UE.Remove(actor)
-                Player.Notify(
-                    "Skipped interaction with "
-                        .. Osi.ResolveTranslatedString(Ext.Entity.Get(actor).DisplayName.NameKey.Handle.Handle),
-                    true
-                )
-            end
-        end)
-    )
-    Ext.Osiris.RegisterListener(
-        "UseFinished",
-        3,
-        "before",
-        ifBypassStory(function(character, item, sucess)
-            if UE.IsNonPlayer(character, true) then
-                return
-            end
-            if Osi.IsLocked(item) == 1 then
-                L.Debug("Auto unlocking", item)
-                L.Info("To disable story bypass, use !JC DisableStoryBypass")
-                Player.Notify("Auto unlocking", true)
-                Osi.Unlock(item, character)
-            end
-            if Osi.IsTrapArmed(item) == 1 then
-                L.Debug("Auto disarming", item)
-                L.Info("To disable story bypass, use !JC DisableStoryBypass")
-                Player.Notify("Auto disarming", true)
-                Osi.SetTrapArmed(item, 0)
-            end
-        end)
-    )
-    Ext.Osiris.RegisterListener(
-        "EnteredCombat",
-        2,
-        "after",
-        ifBypassStory(function(object, combatGuid)
-            Schedule(function()
-                if not Enemy.IsValid(object) and UE.IsNonPlayer(object) then
-                    L.Debug("Removing", object)
-                    Osi.LeaveCombat(object)
-                    UE.Remove(object)
-                    Player.Notify(
-                        "Skipped combat with "
-                            .. Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle),
-                        true
-                    )
-                end
-            end)
-        end)
-    )
 end
 
 -------------------------------------------------------------------------------------------------
@@ -245,6 +156,8 @@ do
     local start = 0
     function Commands.Dev(new_start, amount)
         L.Info(":)")
+
+        GameMode.AskUnlockAll()
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100
         --

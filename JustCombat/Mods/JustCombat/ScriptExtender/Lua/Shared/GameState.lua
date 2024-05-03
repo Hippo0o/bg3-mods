@@ -8,37 +8,46 @@ local M = {}
 
 local savingActions = {}
 ---@param func fun()
-function M.RegisterSavingAction(func)
-    table.insert(savingActions, func)
+function M.RegisterSavingAction(func, once)
+    table.insert(savingActions, { func, once })
 end
 
 local loadingActions = {}
 ---@param func fun()
-function M.RegisterLoadingAction(func)
-    table.insert(loadingActions, func)
+function M.RegisterLoadingAction(func, once)
+    table.insert(loadingActions, { func, once })
 end
 
 local unloadingActions = {}
 ---@param func fun()
-function M.RegisterUnloadingAction(func)
-    table.insert(unloadingActions, func)
+function M.RegisterUnloadingAction(func, once)
+    table.insert(unloadingActions, { func, once })
 end
 
 function M.OnSavingActions(e)
-    for _, action in ipairs(savingActions) do
-        action(e)
+    for i, action in ipairs(savingActions) do
+        action[1](e)
+        if action[2] then
+            table.remove(savingActions, i)
+        end
     end
 end
 
 function M.OnLoadedActions(e)
-    for _, action in ipairs(loadingActions) do
-        action(e)
+    for i, action in ipairs(loadingActions) do
+        action[1](e)
+        if action[2] then
+            table.remove(loadingActions, i)
+        end
     end
 end
 
 function M.OnUnloadActions(e)
-    for _, action in ipairs(unloadingActions) do
-        action(e)
+    for i, action in ipairs(unloadingActions) do
+        action[1](e)
+        if action[2] then
+            table.remove(unloadingActions, i)
+        end
     end
 end
 
