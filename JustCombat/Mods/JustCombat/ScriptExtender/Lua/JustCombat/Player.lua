@@ -81,36 +81,11 @@ function Player.TeleportToAct(act)
 end
 
 function Player.TeleportToRegion(region)
-    if teleporting then
-        return false
-    end
-
-    if teleporting == false then
-        teleporting = nil
-        return true
-    end
-
-    Osi.PROC_DEBUG_TeleportToRegion(region)
-    teleporting = true
-
-    local didUnload = false
-    local handler = GameState.RegisterUnloadingAction(function()
-        didUnload = true
-    end, true)
-
-    Defer(1000, function()
-        handler:Unregister()
-
-        if didUnload then
-            GameState.RegisterLoadingAction(function()
-                teleporting = false
-            end, false)
-        else
-            teleporting = false
+    for act, regions in pairs(C.Regions) do
+        if UT.Contains(regions, region) then
+            return Player.TeleportToAct(act)
         end
-    end)
-
-    return false
+    end
 end
 
 local readyChecks = {}
