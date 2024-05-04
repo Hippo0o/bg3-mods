@@ -3,52 +3,98 @@
 ---@type Utils
 local Utils = Require("Shared/Utils")
 
+---@type Libs
+local Libs = Require("Shared/Libs")
+
 ---@class GameState
 local M = {}
 
-local savingActions = {}
+local actions = {}
+
+---@class StateAction : LibsObject
+---@field Id string
+---@field Mode number
+---@field Once boolean
+---@field Func fun()
+---@field Exec fun(self:StateAction, e:table)
+---@field Unregister fun(self:StateAction)
+---@field New fun(mode:number, func:fun(), once:boolean):StateAction
+local StateAction = Libs.Object({
+    Id = nil,
+    Mode = nil,
+    Once = false,
+    Func = function() end,
+    Exec = function(self, e)
+        xpcall(function()
+            self:Func(e)
+        end, function(err)
+            Utils.Log.Error(err)
+        end)
+
+        if self.Once then
+            self:Unregister()
+        end
+    end,
+    Unregister = function(self)
+        for i, a in pairs(actions) do
+            if a.Id == self.Id then
+                table.remove(actions, i)
+            end
+        end
+    end,
+})
+
+function StateAction.New(mode, func, once)
+    local a = StateAction.Init({
+        Id = tostring(func):gsub("function: ", ""),
+        Mode = mode,
+        Func = func,
+        Once = once,
+    })
+
+    table.insert(actions, a)
+    return a
+end
+
 ---@param func fun()
+---@param once boolean
+---@return StateAction
 function M.RegisterSavingAction(func, once)
-    table.insert(savingActions, { func, once })
+    return StateAction.New(1, func, once)
 end
 
-local loadingActions = {}
 ---@param func fun()
+---@param once boolean
+---@return StateAction
 function M.RegisterLoadingAction(func, once)
-    table.insert(loadingActions, { func, once })
+    return StateAction.New(2, func, once)
 end
 
-local unloadingActions = {}
 ---@param func fun()
+---@param once boolean
+---@return StateAction
 function M.RegisterUnloadingAction(func, once)
-    table.insert(unloadingActions, { func, once })
+    return StateAction.New(3, func, once)
+end
+
+local function runAction(mode, e)
+    for i, action in ipairs(actions) do
+        if action.Mode == mode then
+            action:Exec(e)
+        end
+    end
 end
 
 function M.OnSavingActions(e)
-    for i, action in ipairs(savingActions) do
-        action[1](e)
-        if action[2] then
-            table.remove(savingActions, i)
-        end
-    end
+    runAction(1, e)
 end
 
 function M.OnLoadedActions(e)
-    for i, action in ipairs(loadingActions) do
-        action[1](e)
-        if action[2] then
-            table.remove(loadingActions, i)
-        end
-    end
+    runAction(2, e)
 end
 
 function M.OnUnloadActions(e)
-    for i, action in ipairs(unloadingActions) do
-        action[1](e)
-        if action[2] then
-            table.remove(unloadingActions, i)
-        end
-    end
+    runAction(3, e)
 end
 
 Ext.Events.GameStateChanged:Subscribe(function(e)

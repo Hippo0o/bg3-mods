@@ -511,6 +511,36 @@ end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+M.Events = {}
+
+---@class EventListener
+---@field SubscriberId number
+---@field Params table name, arity, typeName, callback
+---@field Unregister fun():boolean
+---@param name string Osi.Events
+---@param arity number callback arguments
+---@param typeName string before, beforeDelete, after or afterDelete
+---@param callback fun(...)
+---@return EventListener
+function M.Events.RegisterListener(name, arity, typeName, callback)
+    local id = Ext.Osiris.RegisterListener(name, arity, typeName, callback)
+
+    return {
+        SubscriberId = id,
+        Params = { name, arity, typeName, callback },
+        Unregister = function(self)
+            Utils.Log.Error("Unregistering is not working yet.", self.SubscriberId)
+            -- return Ext.Osiris.UnregisterListener(self.SubscriberId)
+        end,
+    }
+end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
 --                                           Logging                                           --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
