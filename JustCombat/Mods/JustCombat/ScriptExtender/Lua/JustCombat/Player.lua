@@ -81,8 +81,8 @@ function Player.TeleportToAct(act)
 end
 
 function Player.TeleportToRegion(region)
-    for act, regions in pairs(C.Regions) do
-        if UT.Contains(regions, region) then
+    for act, reg in pairs(C.Regions) do
+        if reg == region then
             return Player.TeleportToAct(act)
         end
     end
@@ -106,19 +106,17 @@ end
 U.Events.RegisterListener("ReadyCheckPassed", 1, "after", function(id)
     L.Debug("ReadyCheckPassed", id)
     if readyChecks[id] then
-        readyChecks[id](true)
+        local func = readyChecks[id]
         readyChecks[id] = nil
+        func(true)
     end
 end)
 
 U.Events.RegisterListener("ReadyCheckFailed", 1, "after", function(id)
     L.Debug("ReadyCheckFailed", id)
     if readyChecks[id] then
-        readyChecks[id](false)
+        local func = readyChecks[id]
         readyChecks[id] = nil
+        func(false)
     end
 end)
-
--- U.Events.RegisterListener("UsingSpell", 5, "before", function(caster, spell, spellType, spellElement, storyActionID)
---     L.Info("UsingSpell:", caster, spell, spellType, spellElement, storyActionID)
--- end)

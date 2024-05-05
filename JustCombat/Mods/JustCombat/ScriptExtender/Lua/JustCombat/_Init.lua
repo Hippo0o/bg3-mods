@@ -153,19 +153,20 @@ do
     local start = 0
     function Commands.Dev(new_start, amount)
         L.Info(":)")
+        -- Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
 
-        -- Osi.SetEditionForCustomBook("JustCombat", 0)
-        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
+        -- local parts = US.Split(dump, "\n")
+        -- for _, part in ipairs(parts) do
+        --     Osi.AddEntryToCustomBook("JustCombat", part .. "\n")
+        -- end
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "JustCombat")
 
-        -- if start == 0 then
-        --     start = 1
-        --     Require("Shared/EventDebug").Attach()
-        -- end
-        GameMode.AskUnlockAll()
+        if start == 0 then
+            start = 1
+            Require("Shared/EventDebug").Attach()
+        end
+        -- GameMode.AskUnlockAll()
 
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100

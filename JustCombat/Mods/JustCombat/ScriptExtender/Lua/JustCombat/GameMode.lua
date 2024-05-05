@@ -16,11 +16,42 @@ function GameMode.AskTutSkip()
             Osi.PROC_GLO_Jergal_MoveToCamp()
             Defer(1000, function()
                 Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
+                GameMode.AskRecruitStarters()
             end)
         end)
     end)
 end
 
+function GameMode.AskRecruitStarters()
+    Player.AskConfirmation("Recruit Origin characters?", function(confirmed)
+        if not confirmed then
+            return
+        end
+
+        local function fixGale()
+            Osi.SetFlag(
+                "ORI_Gale_Event_DisruptedWaypoint_eb1df53c-f315-fc93-9d83-af3d3aa7411d",
+                "NULL_00000000-0000-0000-0000-000000000000"
+            )
+            Osi.Use(Player.Host(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
+            -- Osi.SetFlag("Gale_Recruitment_HasMet_0657f240-7a46-e767-044c-ff8e1349744e", Player.Host())
+            -- Osi.QuestAdd(GetHostCharacter(), "ORI_COM_Gale")
+            -- Osi.SetFlag("ORI_Gale_State_HasRecruited_7548c517-72a8-b9c5-c9e9-49d8d9d71172", Player.Host())
+        end
+
+        local f = Osi.GetFaction(Player.Host())
+
+        for _, o in pairs(C.OriginCharactersStarter) do
+            Osi.PROC_ORI_SetupCamp(o, 1)
+            Osi.SetFaction(o, f)
+            Osi.RegisterAsCompanion(o, Player.Host())
+        end
+
+        fixGale()
+    end)
+end
+
+-- TODO
 function GameMode.AskUnlockAll()
     Player.AskConfirmation("Unlock all?", function(confirmed)
         if not confirmed then
@@ -30,55 +61,50 @@ function GameMode.AskUnlockAll()
         WaitFor(function()
             return Player.TeleportToAct("Act1")
         end, function()
-            Defer(1000, function()
-                local function unlockTadpole(object)
-                    Osi.SetTag(object, "089d4ca5-2cf0-4f54-84d9-1fdea055c93f")
-                    Osi.SetTag(object, "efedb058-d4f5-4ab8-8add-bd5e32cdd9cd")
-                    Osi.SetTag(object, "c15c2234-9b19-453e-99cc-00b7358b9fce")
-                    Osi.SetTadpoleTreeState(object, 2)
-                    Osi.AddTadpole(object, 1)
-                    Osi.AddTadpolePower(object, "TAD_IllithidPersuasion", 1)
-                    Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", object)
-                end
+            local function unlockTadpole(object)
+                Osi.SetTag(object, "089d4ca5-2cf0-4f54-84d9-1fdea055c93f")
+                Osi.SetTag(object, "efedb058-d4f5-4ab8-8add-bd5e32cdd9cd")
+                Osi.SetTag(object, "c15c2234-9b19-453e-99cc-00b7358b9fce")
+                Osi.SetTadpoleTreeState(object, 2)
+                Osi.AddTadpole(object, 1)
+                Osi.AddTadpolePower(object, "TAD_IllithidPersuasion", 1)
+                Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", object)
+            end
 
-                Osi.TemplateAddTo("4a82e6f2-839f-434e-addf-b07dd1578194", Player.Host(), 1, 1) -- Astral Tadpole
+            Osi.TemplateAddTo("4a82e6f2-839f-434e-addf-b07dd1578194", Player.Host(), 1, 1) -- Astral Tadpole
 
-                for _, p in pairs(UE.GetPlayers()) do
-                    unlockTadpole(p)
-                end
+            for _, p in pairs(UE.GetPlayers()) do
+                unlockTadpole(p)
+            end
 
-                -- local function fixMinthara()
-                --     Osi.PROC_RemoveAllDialogEntriesForSpeaker(
-                --         "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b"
-                --     )
-                --     Osi.DB_Dialogs(
-                --         "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
-                --         "Minthara_InParty_13d72d55-0d47-c280-9e9c-da076d8876d8"
-                --     )
-                -- end
-                --
-                -- local function fixHalsin()
-                --     Osi.PROC_RemoveAllPolymorphs("S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323")
-                --     Osi.PROC_RemoveAllDialogEntriesForSpeaker("S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323")
-                --     Osi.DB_Dialogs(
-                --         "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
-                --         "Halsin_InParty_890c2586-6b71-ca01-5bd6-19d533181c71"
-                --     )
-                -- end
-                --
-                -- local f = Osi.GetFaction(Player.Host())
-                -- for _, o in pairs(C.OriginCharacters) do
-                --     Osi.PROC_ORI_SetupCamp(o, 1) -- TODO fix halsin and mithara
-                --     Osi.SetFaction(o, f)
-                --     Osi.RegisterAsCompanion(o, Player.Host())
-                --     Osi.ChangeApprovalRating(o, Player.Host(), 0, 50)
-                --
-                --     unlockTadpole(o)
-                -- end
-                -- fixHalsin()
-                -- fixMinthara()
+            local function fixMinthara()
+                Osi.PROC_RemoveAllDialogEntriesForSpeaker("S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b")
+                Osi.DB_Dialogs(
+                    "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
+                    "Minthara_InParty_13d72d55-0d47-c280-9e9c-da076d8876d8"
+                )
+            end
 
-            end)
+            local function fixHalsin()
+                -- TODO not working
+                Osi.PROC_RemoveAllPolymorphs("S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323")
+                -- Osi.PROC_RemoveAllDialogEntriesForSpeaker("S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323")
+                -- Osi.DB_Dialogs(
+                --     "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
+                --     "Halsin_InParty_890c2586-6b71-ca01-5bd6-19d533181c71"
+                -- )
+            end
+
+            local f = Osi.GetFaction(Player.Host())
+
+            for _, o in pairs(C.OriginCharacters) do
+                Osi.PROC_ORI_SetupCamp(o, 1)
+                Osi.SetFaction(o, f)
+                Osi.RegisterAsCompanion(o, Player.Host())
+                unlockTadpole(o)
+            end
+            fixHalsin()
+            fixMinthara()
         end)
     end)
 end
@@ -192,7 +218,12 @@ U.Events.RegisterListener(
             Osi.PROC_GLO_Jergal_MoveToCamp()
         end
 
-        if dialog:match("CAMP_") or dialog:match("Tadpole") or dialog:match("InParty_") then
+        if
+            dialog:match("CAMP_")
+            or dialog:match("Tadpole")
+            or dialog:match("Recruitment")
+            or dialog:match("InParty")
+        then
             return
         end
 
