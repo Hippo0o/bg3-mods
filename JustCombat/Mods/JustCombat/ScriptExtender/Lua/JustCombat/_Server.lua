@@ -1,51 +1,5 @@
 ---@diagnostic disable: undefined-global
-
----@type Mod
-local Mod = Require("Shared/Mod")
-Mod.ModPrefix = "JustCombat"
-Mod.ModUUID = "e1fb0ff5-dd5e-471d-b2c4-c19c288fa5e7"
-
----@type Utils
-local Utils = Require("Shared/Utils")
-
-U = Utils
-UT = Utils.Table
-UE = Utils.Entity
-US = Utils.String
-L = Utils.Log
-
----@type Scenario|nil
-S = nil
-
----@type Constants
-C = Require("Shared/Constants")
-
-UT.Merge(C, {
-    ModUUID = Mod.ModUUID,
-    EnemyFaction = "64321d50-d516-b1b2-cfac-2eb773de1ff6",
-    NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral
-    ItemRarity = {
-        "Common",
-        "Uncommon",
-        "Rare",
-        "VeryRare",
-        "Legendary",
-    },
-    EnemyTier = {
-        "low",
-        "mid",
-        "high",
-        "ultra",
-        "epic",
-        "legendary",
-    },
-})
-
-Mod.PersistentVarsTemplate = {
-    SpawnedEnemies = {},
-    SpawnedItems = {},
-    Scenario = S,
-}
+Require("JustCombat/Shared")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -67,6 +21,9 @@ Defer = Async.Defer
 
 ---@type Libs
 Libs = Require("Shared/Libs")
+
+---@type Net
+Net = Require("Shared/Net")
 
 Config = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
@@ -103,7 +60,7 @@ Require("JustCombat/GameMode")
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-GameState.RegisterSavingAction(function()
+GameState.OnSaving(function()
     PersistentVars.Scenario = S
 
     for obj, _ in pairs(PersistentVars.SpawnedEnemies) do
@@ -123,7 +80,7 @@ GameState.RegisterSavingAction(function()
     end
 end)
 
-GameState.RegisterLoadingAction(function(state)
+GameState.OnLoading(function(state)
     if state.FromState == "Save" then
         return
     end
@@ -136,8 +93,21 @@ GameState.RegisterLoadingAction(function(state)
     end
 end)
 
-GameState.RegisterUnloadingAction(function()
-    S = nil
+GameState.OnUnloading(function()
+    if PersistentVars then
+        PersistentVars.Scenario = S
+    end
+end)
+
+Net.On("GibList", function(listener, data)
+    local list = {}
+    if data.Payload.id == "scenarios" then
+        list = UT.Map(Scenario.GetTemplates(), function(v)
+            return v.Name
+        end)
+    end
+
+    listener:Respond(list, data.UserID)
 end)
 
 -------------------------------------------------------------------------------------------------
@@ -153,6 +123,8 @@ do
     local start = 0
     function Commands.Dev(new_start, amount)
         L.Info(":)")
+
+        Net.Send("OpenUI", {})
         -- Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
 
         -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
@@ -162,10 +134,10 @@ do
         -- end
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "JustCombat")
 
-        if start == 0 then
-            start = 1
-            Require("Shared/EventDebug").Attach()
-        end
+        -- if start == 0 then
+        --     start = 1
+        --     Require("Shared/EventDebug").Attach()
+        -- end
         -- GameMode.AskUnlockAll()
 
         -- new_start = tonumber(new_start) or start

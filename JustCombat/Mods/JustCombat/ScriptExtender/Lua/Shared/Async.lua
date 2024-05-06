@@ -190,17 +190,17 @@ local lowPrio = Queue.New(loop)
 ---@type GameState
 local GameState = Require("Shared/GameState")
 -- TODO save loop state in SavingAction or run all tasks from prio queue at once
-GameState.RegisterUnloadingAction(function()
+GameState.OnUnloading(function()
     if loop:IsRunning() then
         loop:Stop()
     end
 end)
-GameState.RegisterSavingAction(function()
+GameState.OnSaving(function()
     if loop:IsRunning() then
         loop:Stop()
     end
 end)
-GameState.RegisterLoadingAction(function()
+GameState.OnLoading(function()
     if not loop:IsRunning() then
         loop:Start()
     end

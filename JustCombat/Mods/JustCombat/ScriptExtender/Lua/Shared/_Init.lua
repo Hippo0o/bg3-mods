@@ -26,6 +26,7 @@ local Utils = Require("Shared/Utils")
 Require("Shared/Libs")
 Require("Shared/GameState")
 Require("Shared/Async")
+Require("Shared/Net")
 Require("Shared/EventDebug")
 
 Ext.Events.SessionLoaded:Subscribe(function()

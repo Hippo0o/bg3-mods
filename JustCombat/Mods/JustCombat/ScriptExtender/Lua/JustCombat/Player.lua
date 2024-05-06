@@ -61,7 +61,7 @@ function Player.TeleportToAct(act)
     teleporting = true
 
     local didUnload = false
-    local handler = GameState.RegisterUnloadingAction(function()
+    local handler = GameState.OnUnloading(function()
         didUnload = true
     end, true)
 
@@ -69,7 +69,7 @@ function Player.TeleportToAct(act)
         handler:Unregister()
 
         if didUnload then
-            GameState.RegisterLoadingAction(function()
+            GameState.OnLoading(function()
                 teleporting = false
             end, false)
         else
@@ -103,7 +103,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Events.RegisterListener("ReadyCheckPassed", 1, "after", function(id)
+U.Events.On("ReadyCheckPassed", 1, "after", function(id)
     L.Debug("ReadyCheckPassed", id)
     if readyChecks[id] then
         local func = readyChecks[id]
@@ -112,7 +112,7 @@ U.Events.RegisterListener("ReadyCheckPassed", 1, "after", function(id)
     end
 end)
 
-U.Events.RegisterListener("ReadyCheckFailed", 1, "after", function(id)
+U.Events.On("ReadyCheckFailed", 1, "after", function(id)
     L.Debug("ReadyCheckFailed", id)
     if readyChecks[id] then
         local func = readyChecks[id]
