@@ -6,7 +6,7 @@ local Utils = Require("Shared/Utils")
 
 Ext.IMGUI.EnableDemo(true)
 
-Net.On("OpenUI", function(_, data)
+Net.On("OpenUI", function()
     ---@type ExtuiWindow
     local w = Ext.IMGUI.NewWindow("New Window")
 
@@ -20,8 +20,8 @@ Net.On("OpenUI", function(_, data)
 
         listGroup = w:AddGroup("Deez")
         local radios = {}
-        Net.On("GibList", function(_, data)
-            for i, item in ipairs(data.Payload) do
+        Net.Request("GibList", function(_, event)
+            for i, item in ipairs(event.Payload) do
                 local radio = listGroup:AddRadioButton(item, i == 1)
 
                 radio.OnChange = function()
@@ -33,7 +33,7 @@ Net.On("OpenUI", function(_, data)
 
                 table.insert(radios, radio)
             end
-        end):Send({ id = "scenarios" })
+        end, { id = "scenarios" })
     end
 
     L.Dump(w)
