@@ -10,6 +10,21 @@ M.Debug = true
 M.PersistentVarsTemplate = {}
 
 function M.PreparePersistentVars()
+    -- maybe later
+    -- Ext.Vars.RegisterModVariable(M.ModUUID, "PersistentVars", {
+    --     Server = true,
+    --     Client = true,
+    --     SyncToClient = true,
+    -- })
+    -- Ext.Vars.SyncModVariables(M.ModUUID)
+    --
+    -- local vars = Ext.Vars.GetModVariables(M.ModUUID)
+    --
+    -- if not vars["PersistentVars"] then
+    --     vars["PersistentVars"] = {}
+    -- end
+    -- PersistentVars = vars["PersistentVars"]
+
     if not PersistentVars then
         PersistentVars = {}
     end

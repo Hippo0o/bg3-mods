@@ -99,15 +99,67 @@ GameState.OnUnloading(function()
     end
 end)
 
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                         Net Events                                          --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
 Net.On("GibList", function(event)
     local list = {}
-    if event.Payload.id == "scenarios" then
-        list = UT.Map(Scenario.GetTemplates(), function(v)
-            return v.Name
+    L.Dump("GibList", event.Payload)
+    if event.Payload == "Scenarios" then
+        list = UT.Map(Scenario.GetTemplates(), function(v, k)
+            return { Id = k, Name = v.Name }
+        end)
+    end
+    if event.Payload == "Maps" then
+        list = UT.Map(Map.GetTemplates(), function(v, k)
+            return { Id = k, Name = v.Name }
         end)
     end
 
     Net.Respond(event, list)
+end)
+
+Net.On("Start", function(event)
+    local scenarioId = tonumber(event.Payload.Scenario)
+    local mapId = tonumber(event.Payload.Map)
+
+    local template = Scenario.GetTemplates()[scenarioId]
+    local map = Map.Get(Player.Region())[mapId]
+
+    if template == nil then
+        Net.Respond(event, { false, "Scenario not found." })
+        return
+    end
+    if map == nil then
+        Net.Respond(event, { false, "Map not found." })
+        return
+    end
+
+    Scenario.Start(template, map, event.UserId)
+    Net.Respond(event, { true })
+end)
+
+Net.On("Stop", function(event)
+    Scenario.Stop()
+    Net.Respond(event, { true })
+end)
+
+Net.On("Teleport", function(event)
+    local map = Map.Get(Player.Region())[tonumber(event.Payload.Map)]
+    if map == nil then
+        Net.Respond(event, { false, "Map not found." })
+        return
+    end
+
+    map:Teleport(Player.Host(event.UserId))
+    Net.Respond(event, { true })
+end)
+
+Net.On("State", function(event)
+    Net.Respond(event, PersistentVars)
 end)
 
 -------------------------------------------------------------------------------------------------
@@ -119,6 +171,16 @@ end)
 do
     local Commands = {}
     Api = Commands -- Mods.JustCombat.Api
+
+    Net.On("Api", function(event)
+        local fn = event.Payload.Command
+        if fn == nil or Commands[fn] == nil then
+            Net.Respond(event, { "Available Commands: ", UT.Keys(Commands) })
+            return
+        end
+
+        Net.Respond(event, Commands[fn](table.unpack(event.Payload.Args or {})))
+    end)
 
     local start = 0
     function Commands.Dev(new_start, amount)

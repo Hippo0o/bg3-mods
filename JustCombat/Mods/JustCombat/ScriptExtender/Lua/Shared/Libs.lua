@@ -118,11 +118,12 @@ function M.TypedTable(typeDefs, repeatable)
             typeDef = { typeDef }
         end
 
-        function test(validator)
+        local function test(validator)
             if type(validator) == "string" then
                 if matchType[validator] and matchType[validator]() then
                     return true, type(value)
                 end
+
                 return false, validator .. " expected, got " .. type(value)
             end
 
@@ -131,6 +132,7 @@ function M.TypedTable(typeDefs, repeatable)
                 if not ok then
                     return false, res
                 end
+
                 return res and true or false, err
             end
 
@@ -140,6 +142,7 @@ function M.TypedTable(typeDefs, repeatable)
                     if type(value) ~= "table" then
                         return false, "table expected, got " .. type(value)
                     end
+
                     return Object.Init(validator):Validate(value)
                 end
 
@@ -148,6 +151,7 @@ function M.TypedTable(typeDefs, repeatable)
                         return true, value
                     end
                 end
+
                 return false, "value not in list of valid values"
             end
 
