@@ -20,7 +20,7 @@ Net.On("OpenUI", function()
 
         listGroup = w:AddGroup("Deez")
         local radios = {}
-        Net.Request("GibList", function(_, event)
+        Net.Request("GibList", function(event)
             for i, item in ipairs(event.Payload) do
                 local radio = listGroup:AddRadioButton(item, i == 1)
 

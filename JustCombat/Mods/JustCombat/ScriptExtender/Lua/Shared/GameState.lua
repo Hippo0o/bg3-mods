@@ -26,7 +26,7 @@ local StateAction = Libs.Object({
     Func = function() end,
     Exec = function(self, e)
         xpcall(function()
-            self:Func(e)
+            self.Func(e)
         end, function(err)
             Utils.Log.Error(err)
         end)
@@ -45,36 +45,42 @@ local StateAction = Libs.Object({
 })
 
 function StateAction.New(mode, callback, once)
-    local a = StateAction.Init({
-        Id = tostring(callback):gsub("function: ", ""),
+    local o = StateAction.Init({
         Mode = mode,
         Func = callback,
         Once = once,
     })
 
-    table.insert(actions, a)
-    return a
+    o.Id = tostring(o)
+
+    table.insert(actions, o)
+
+    return o
 end
+
+local modeSave = 1
+local modeLoad = 2
+local modeUnload = 3
 
 ---@param callback fun()
 ---@param once boolean
 ---@return StateAction
 function M.OnSaving(callback, once)
-    return StateAction.New(1, callback, once)
+    return StateAction.New(modeSave, callback, once)
 end
 
 ---@param callback fun()
 ---@param once boolean
 ---@return StateAction
 function M.OnLoading(callback, once)
-    return StateAction.New(2, callback, once)
+    return StateAction.New(modeLoad, callback, once)
 end
 
 ---@param callback fun()
 ---@param once boolean
 ---@return StateAction
 function M.OnUnloading(callback, once)
-    return StateAction.New(3, callback, once)
+    return StateAction.New(modeUnload, callback, once)
 end
 
 local function runAction(mode, e)
@@ -85,34 +91,22 @@ local function runAction(mode, e)
     end
 end
 
-function M.OnSavingActions(e)
-    runAction(1, e)
-end
-
-function M.OnLoadedActions(e)
-    runAction(2, e)
-end
-
-function M.OnUnloadActions(e)
-    runAction(3, e)
-end
-
 Ext.Events.GameStateChanged:Subscribe(function(e)
     if e.FromState == "Sync" and e.ToState == "Running" then
         Utils.Log.Info("Game Loaded.")
-        M.OnLoadedActions(e)
+        runAction(modeLoad, e)
     elseif e.FromState == "Running" and e.ToState == "Save" then
         Utils.Log.Info("Saving started.")
-        M.OnSavingActions(e)
+        runAction(modeSave, e)
     elseif e.FromState == "Save" and e.ToState == "Running" then
         Utils.Log.Info("Saving finished.")
-        M.OnLoadedActions(e)
+        runAction(modeLoad, e)
     elseif e.FromState == "Running" and e.ToState == "UnloadLevel" then
         Utils.Log.Info("Level unloading.")
-        M.OnUnloadActions(e)
+        runAction(modeUnload, e)
     elseif e.FromState == "UnloadSession" and e.ToState == "LoadSession" then
         Utils.Log.Info("Loading another save.")
-        M.OnUnloadActions(e)
+        runAction(modeUnload, e)
     end
 end)
 

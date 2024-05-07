@@ -8,7 +8,7 @@ local Libs = Require("Shared/Libs")
 ---@class Net
 local M = {}
 
----@class NetEvent: LibsObject
+---@class NetEvent : LibsObject
 ---@field Action string
 ---@field Payload table
 ---@field UserId string|nil
@@ -26,19 +26,34 @@ end
 
 local listeners = {}
 
----@class NetListener: LibsObject
+---@class NetListener : LibsObject
 ---@field Action string
----@field Func fun(self: NetListener, event: NetEvent): void
 ---@field Once boolean
+---@field Func fun(event: NetEvent): void
 ---@field Unregister fun(self: NetListener)
----@field New fun(action: string, callback: fun(self: NetListene, event: NetEvent): void, once: boolean): NetListener
+---@field New fun(action: string, callback: fun(event: NetEvent): void, once: boolean): NetListener
 local NetListener = Libs.Object({
     Id = nil,
     Action = nil,
-    Func = nil,
     Once = false,
+    Func = function() end,
+    Exec = function(self, e)
+        xpcall(function()
+            self.Func(m)
+        end, function(err)
+            Utils.Log.Error(err)
+        end)
+
+        if self.Once then
+            self:Unregister()
+        end
+    end,
     Unregister = function(self)
-        listeners[self.Id] = nil
+        for i, l in pairs(listeners) do
+            if l.Id == self.Id then
+                table.remove(listeners, i)
+            end
+        end
     end,
 })
 
@@ -48,9 +63,10 @@ function NetListener.New(action, callback, once)
         Func = callback,
         Once = once and true or false,
     })
+
     o.Id = tostring(o)
 
-    listeners[o.Id] = o
+    table.insert(listeners, o)
 
     return o
 end
@@ -72,15 +88,7 @@ Ext.Events.NetEvent:Subscribe(function(msg)
 
     for _, listener in pairs(listeners) do
         if listener.Action == m.Action then
-            xpcall(function()
-                listener:Func(m)
-            end, function(err)
-                Utils.Log.Error("NetListener error", err)
-            end)
-
-            if listener.Once then
-                listener:Unregister()
-            end
+            listener:Exec(m)
         end
     end
 end)
@@ -110,7 +118,7 @@ function M.Send(action, payload, userId, responseAction)
 end
 
 ---@param action string
----@param callback fun(self: NetListener, event: NetEvent): void
+---@param callback fun(event: NetEvent): void
 ---@param once boolean|nil
 ---@return NetListener
 function M.On(action, callback, once)
@@ -118,7 +126,7 @@ function M.On(action, callback, once)
 end
 
 ---@param action string
----@param callback fun(self: NetListener, event: NetEvent): void
+---@param callback fun(event: NetEvent): void
 ---@param params table
 function M.Request(action, callback, params)
     local responseAction = action .. tostring(callback):gsub("function: ", "")
