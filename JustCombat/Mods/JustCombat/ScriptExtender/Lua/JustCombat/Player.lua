@@ -13,7 +13,7 @@ function Player.Host(userId)
 
     if userId then
         local player = UT.Find(UE.GetPlayers(), function(guid)
-            if Ext.Entity.Get(guid).ServerCharacter.UserID == U.PeerToUserId(userId) then
+            if Ext.Entity.Get(guid).ServerCharacter.UserID == userId then
                 return guid
             end
         end)

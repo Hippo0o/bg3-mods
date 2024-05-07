@@ -11,13 +11,17 @@ local M = {}
 ---@class NetEvent : LibsObject
 ---@field Action string
 ---@field Payload any
----@field UserId number|nil
+---@field PeerId number|nil
 ---@field ResponseAction string|nil
+---@field UserId fun(self: NetEvent): number
 local NetEvent = Libs.Object({
     Action = nil,
     Payload = nil,
-    UserId = nil,
+    PeerId = nil,
     ResponseAction = nil,
+    UserId = function(self)
+        return Utils.PeerToUserId(self.PeerId)
+    end,
 })
 
 function NetEvent:__tostring()
@@ -85,7 +89,7 @@ Ext.Events.NetMessage:Subscribe(function(msg)
     local m = NetEvent.Init({
         Action = event.Action,
         Payload = event.Payload,
-        UserId = msg.UserID,
+        PeerId = msg.UserID,
         ResponseAction = event.ResponseAction,
     })
 
@@ -98,21 +102,21 @@ end)
 
 ---@param action string
 ---@param payload any
----@param userId number|nil
+---@param peerId number|nil
 ---@param responseAction string|nil
-function M.Send(action, payload, userId, responseAction)
+function M.Send(action, payload, peerId, responseAction)
     local event = NetEvent.Init({
         Action = action,
         Payload = payload,
-        UserId = userId,
+        PeerId = peerId,
         ResponseAction = responseAction or action,
     })
 
     if Ext.IsServer() then
-        if event.UserId == nil then
+        if event.PeerId == nil then
             Ext.Net.BroadcastMessage(Constants.NetChannel, tostring(event))
         else
-            Ext.Net.PostMessageToUser(event.UserId, Constants.NetChannel, tostring(event))
+            Ext.Net.PostMessageToUser(event.PeerId, Constants.NetChannel, tostring(event))
         end
         return
     end
@@ -141,7 +145,7 @@ end
 ---@param event NetEvent
 ---@param payload any
 function M.Respond(event, payload)
-    M.Send(event.ResponseAction, payload, event.UserId)
+    M.Send(event.ResponseAction, payload, event.PeerId)
 end
 
 return M
