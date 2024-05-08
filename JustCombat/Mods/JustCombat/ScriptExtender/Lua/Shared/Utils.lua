@@ -517,15 +517,15 @@ end
 
 M.Osiris = {}
 
----@class OsirisEventListenerWrap
+---@class OsirisEventListener
 ---@field SubscriberId number
 ---@field Params table name, arity, typeName, callback
----@field Unregister fun():boolean
+---@field Unregister fun(self: OsirisEventListener): boolean
 ---@param name string Osi.Events
 ---@param arity number callback arguments
 ---@param typeName string before, beforeDelete, after or afterDelete
 ---@param callback fun(...)
----@return OsirisEventListenerWrap
+---@return OsirisEventListener
 function M.Osiris.On(name, arity, typeName, callback)
     local id = Ext.Osiris.RegisterListener(name, arity, typeName, callback)
 
