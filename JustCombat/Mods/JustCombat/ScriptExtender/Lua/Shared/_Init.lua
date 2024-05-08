@@ -24,6 +24,7 @@ Require("Shared/Constants")
 ---@type Utils
 local Utils = Require("Shared/Utils")
 Require("Shared/Libs")
+Require("Shared/Event")
 Require("Shared/GameState")
 Require("Shared/Async")
 Require("Shared/Net")

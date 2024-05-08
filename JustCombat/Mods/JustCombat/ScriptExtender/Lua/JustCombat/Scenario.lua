@@ -546,7 +546,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Events.On(
+U.Osiris.On(
     "CombatRoundStarted",
     2,
     "before",
@@ -599,7 +599,7 @@ U.Events.On(
     end)
 )
 
-U.Events.On(
+U.Osiris.On(
     "EnteredCombat",
     2,
     "after",
@@ -634,7 +634,7 @@ U.Events.On(
     end)
 )
 
-U.Events.On(
+U.Osiris.On(
     "CombatStarted",
     1,
     "before",
@@ -658,7 +658,7 @@ U.Events.On(
     end)
 )
 
-U.Events.On(
+U.Osiris.On(
     "CombatEnded",
     1,
     "after",
@@ -677,7 +677,7 @@ U.Events.On(
     end)
 )
 
-U.Events.On(
+U.Osiris.On(
     "TeleportedFromCamp",
     1,
     "before",
@@ -691,7 +691,7 @@ U.Events.On(
     end)
 )
 
-U.Events.On(
+U.Osiris.On(
     "TeleportedFromCamp",
     1,
     "after",
@@ -702,7 +702,7 @@ U.Events.On(
     end)
 )
 
-U.Events.On(
+U.Osiris.On(
     "TeleportedToCamp",
     1,
     "after",
@@ -714,7 +714,7 @@ U.Events.On(
     end)
 )
 
-U.Events.On(
+U.Osiris.On(
     "Died",
     1,
     "before",

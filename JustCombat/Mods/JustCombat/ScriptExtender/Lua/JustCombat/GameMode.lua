@@ -126,7 +126,7 @@ local function ifBypassStory(func)
     end
 end
 
-U.Events.On(
+U.Osiris.On(
     "AutomatedDialogStarted",
     2,
     "after",
@@ -202,7 +202,7 @@ local function cancelDialog(dialog, instanceID)
     handlers[instanceID](dialog, instanceID)
 end
 
-U.Events.On(
+U.Osiris.On(
     "DialogActorJoined",
     4,
     "after",
@@ -236,7 +236,7 @@ U.Events.On(
         cancelDialog(dialog, instanceID)
     end)
 )
-U.Events.On(
+U.Osiris.On(
     "UseFinished",
     3,
     "before",
@@ -258,7 +258,7 @@ U.Events.On(
         end
     end)
 )
-U.Events.On(
+U.Osiris.On(
     "EnteredCombat",
     2,
     "after",

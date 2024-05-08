@@ -118,7 +118,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Events.On("ReadyCheckPassed", 1, "after", function(id)
+U.Osiris.On("ReadyCheckPassed", 1, "after", function(id)
     L.Debug("ReadyCheckPassed", id)
     if readyChecks[id] then
         local func = readyChecks[id]
@@ -127,7 +127,7 @@ U.Events.On("ReadyCheckPassed", 1, "after", function(id)
     end
 end)
 
-U.Events.On("ReadyCheckFailed", 1, "after", function(id)
+U.Osiris.On("ReadyCheckFailed", 1, "after", function(id)
     L.Debug("ReadyCheckFailed", id)
     if readyChecks[id] then
         local func = readyChecks[id]

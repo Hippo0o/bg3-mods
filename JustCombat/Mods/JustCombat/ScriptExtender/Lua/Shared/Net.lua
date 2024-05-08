@@ -20,7 +20,7 @@ local NetEvent = Libs.Object({
     PeerId = nil,
     ResponseAction = nil,
     UserId = function(self)
-        return Utils.PeerToUserId(self.PeerId)
+        return (self.PeerId & 0xffff0000) | 0x0001
     end,
 })
 
@@ -30,52 +30,8 @@ function NetEvent:__tostring()
     end, true))
 end
 
-local listeners = {}
-
----@class NetListener : LibsObject
----@field Action string
----@field Once boolean
----@field Func fun(event: NetEvent): void
----@field Exec fun(self: NetListener, event: NetEvent)
----@field Unregister fun(self: NetListener)
----@field New fun(action: string, callback: fun(event: NetEvent): void, once: boolean): NetListener
-local NetListener = Libs.Object({
-    Id = nil,
-    Action = nil,
-    Once = false,
-    Func = function() end,
-    Exec = function(self, event)
-        xpcall(function()
-            self.Func(event)
-        end, function(err)
-            Utils.Log.Error(err)
-        end)
-
-        if self.Once then
-            self:Unregister()
-        end
-    end,
-    Unregister = function(self)
-        for i, l in pairs(listeners) do
-            if l.Id == self.Id then
-                table.remove(listeners, i)
-            end
-        end
-    end,
-})
-
-function NetListener.New(action, callback, once)
-    local o = NetListener.Init({
-        Action = action,
-        Func = callback,
-        Once = once and true or false,
-    })
-
-    o.Id = tostring(o)
-
-    table.insert(listeners, o)
-
-    return o
+local function netEventName(action)
+    return "NetEvent_" .. action
 end
 
 Ext.Events.NetMessage:Subscribe(function(msg)
@@ -93,18 +49,14 @@ Ext.Events.NetMessage:Subscribe(function(msg)
         ResponseAction = event.ResponseAction,
     })
 
-    for _, listener in ipairs(listeners) do
-        if listener.Action == m.Action then
-            listener:Exec(m)
-        end
-    end
+    Event.Trigger(netEventName(m.Action), m)
 end)
 
 ---@param action string
 ---@param payload any
----@param peerId number|nil
 ---@param responseAction string|nil
-function M.Send(action, payload, peerId, responseAction)
+---@param peerId number|nil
+function M.Send(action, payload, responseAction, peerId)
     local event = NetEvent.Init({
         Action = action,
         Payload = payload,
@@ -129,7 +81,7 @@ end
 ---@param once boolean|nil
 ---@return NetListener
 function M.On(action, callback, once)
-    return NetListener.New(action, callback, once)
+    return Event.On(netEventName(action), callback, once)
 end
 
 ---@param action string
@@ -139,13 +91,13 @@ function M.Request(action, callback, payload)
     local responseAction = action .. tostring(callback):gsub("function: ", "")
     local listener = M.On(responseAction, callback, true)
 
-    M.Send(action, payload, nil, responseAction)
+    M.Send(action, payload, responseAction)
 end
 
 ---@param event NetEvent
 ---@param payload any
 function M.Respond(event, payload)
-    M.Send(event.ResponseAction, payload, event.PeerId)
+    M.Send(event.ResponseAction, payload, nil, event.PeerId)
 end
 
 return M

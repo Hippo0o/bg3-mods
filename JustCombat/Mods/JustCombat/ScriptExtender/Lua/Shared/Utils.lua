@@ -81,12 +81,6 @@ function M.Random(...)
     return Ext.Math.Round(rand)
 end
 
----@param peerId number
----@return number
-function M.PeerToUserId(peerId)
-    return (peerId & 0xffff0000) | 0x0001
-end
-
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Entity                                            --
@@ -517,13 +511,13 @@ end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                           Events                                            --
+--                                           Osiris                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-M.Events = {}
+M.Osiris = {}
 
----@class EventListener
+---@class OsirisEventListenerWrap
 ---@field SubscriberId number
 ---@field Params table name, arity, typeName, callback
 ---@field Unregister fun():boolean
@@ -531,15 +525,14 @@ M.Events = {}
 ---@param arity number callback arguments
 ---@param typeName string before, beforeDelete, after or afterDelete
 ---@param callback fun(...)
----@return EventListener
-function M.Events.On(name, arity, typeName, callback)
+---@return OsirisEventListenerWrap
+function M.Osiris.On(name, arity, typeName, callback)
     local id = Ext.Osiris.RegisterListener(name, arity, typeName, callback)
 
     return {
         SubscriberId = id,
         Params = { name, arity, typeName, callback },
         Unregister = function(self)
-            Utils.Log.Error("Unregistering is not working yet.", self.SubscriberId)
             return Ext.Osiris.UnregisterListener(self.SubscriberId)
         end,
     }
