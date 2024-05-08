@@ -55,7 +55,7 @@ function EventListener.New(event, callback, once)
         Once = once,
         Event = event,
     })
-    o.Id = tostring(o):gsub("table: ", event .. "_")
+    o.Id = Utils.RandomId(event .. "_")
 
     if not listeners[event] then
         listeners[event] = {}
@@ -72,8 +72,11 @@ end
 
 function M.Trigger(event, ...)
     if listeners[event] then
+        Utils.Log.Debug("Event", event, #listeners[event])
         for _, l in pairs(listeners[event]) do
             l:Exec(...)
         end
     end
 end
+
+return M

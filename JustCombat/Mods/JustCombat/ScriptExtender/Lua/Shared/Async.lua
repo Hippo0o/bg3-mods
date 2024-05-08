@@ -6,6 +6,9 @@ local Libs = Require("Shared/Libs")
 ---@type Utils
 local Utils = Require("Shared/Utils")
 
+---@class Async
+local M = {}
+
 ---@class Loop : LibsObject
 ---@field Queues Queue[]
 ---@field Handle number|nil
@@ -104,7 +107,7 @@ local Queue = Libs.Object({
     Loop = nil,
     Tasks = {},
     Enqueue = function(self, item) ---@param self Queue
-        local idx = tostring(item)
+        local idx = Utils.RandomId("Queue_")
         table.insert(self.Tasks, { idx = idx, item = item })
 
         self.Loop.Tasks:Inc()
@@ -190,24 +193,21 @@ local lowPrio = Queue.New(loop)
 ---@type GameState
 local GameState = Require("Shared/GameState")
 -- TODO save loop state in SavingAction or run all tasks from prio queue at once
-GameState.OnUnloading(function()
+GameState.OnUnload(function()
     if loop:IsRunning() then
         loop:Stop()
     end
 end)
-GameState.OnSaving(function()
+GameState.OnSave(function()
     if loop:IsRunning() then
         loop:Stop()
     end
 end)
-GameState.OnLoading(function()
+GameState.OnLoad(function()
     if not loop:IsRunning() then
         loop:Start()
     end
 end)
-
----@class Async
-local M = {}
 
 ---@param ms number
 ---@param func fun(self: Runner, time: GameTime)

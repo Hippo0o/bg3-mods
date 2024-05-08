@@ -74,7 +74,7 @@ function Player.TeleportToAct(act)
     teleporting = true
 
     local didUnload = false
-    local handler = GameState.OnUnloading(function()
+    local handler = GameState.OnUnload(function()
         didUnload = true
     end, true)
 
@@ -82,7 +82,7 @@ function Player.TeleportToAct(act)
         handler:Unregister()
 
         if didUnload then
-            GameState.OnLoading(function()
+            GameState.OnLoad(function()
                 teleporting = false
             end, false)
         else
@@ -105,7 +105,7 @@ local readyChecks = {}
 ---@param message string
 ---@param callback fun(result: boolean)
 function Player.AskConfirmation(message, callback)
-    local msgId = tostring(callback):gsub("function: ", "jc_")
+    local msgId = U.RandomId("AskConfirmation_")
     Osi.ReadyCheckSpecific(msgId, message, 1, Player.Host(), "", "", "")
     readyChecks[msgId] = callback
 end

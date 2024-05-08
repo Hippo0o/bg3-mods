@@ -1,7 +1,6 @@
 ---@type Mod
-local Mod = Require("Shared/Mod")
+Mod = Require("Shared/Mod")
 Mod.ModPrefix = "JustCombat"
-Mod.ModUUID = "e1fb0ff5-dd5e-471d-b2c4-c19c288fa5e7"
 
 ---@type Utils
 local Utils = Require("Shared/Utils")
@@ -45,3 +44,23 @@ Mod.PersistentVarsTemplate = {
     SpawnedItems = {},
     Scenario = S,
 }
+
+---@type GameState
+GameState = Require("Shared/GameState")
+
+---@type Async
+Async = Require("Shared/Async")
+WaitFor = Async.WaitFor
+RetryFor = Async.RetryFor
+Schedule = Async.Schedule
+Defer = Async.Defer
+
+---@type Libs
+Libs = Require("Shared/Libs")
+
+---@type Net
+Net = Require("Shared/Net")
+
+---@type Event
+Event = Require("Shared/Event")
+

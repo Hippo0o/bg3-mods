@@ -1,9 +1,17 @@
 ---@type Constants
 local Constants = Require("Shared/Constants")
+
 ---@type Utils
 local Utils = Require("Shared/Utils")
+
+---@type Event
+local Event = Require("Shared/Event")
+
 ---@type Libs
 local Libs = Require("Shared/Libs")
+
+---@class Net
+local M = {}
 
 ---@class NetEvent : LibsObject
 ---@field Action string
@@ -27,10 +35,6 @@ function NetEvent:__tostring()
     end, true))
 end
 
-local function netEventName(action)
-    return "NetEvent_" .. action
-end
-
 Ext.Events.NetMessage:Subscribe(function(msg)
     if Constants.NetChannel ~= msg.Channel then
         return
@@ -46,11 +50,14 @@ Ext.Events.NetMessage:Subscribe(function(msg)
         ResponseAction = event.ResponseAction,
     })
 
-    Event.Trigger(netEventName(m.Action), m)
+    Event.Trigger(M.CreateEventName(m.Action), m)
 end)
 
----@class Net
-local M = {}
+---@param action string
+---@return string @NetEvent_{action}
+function M.CreateEventName(action)
+    return "NetEvent_" .. action
+end
 
 ---@param action string
 ---@param payload any
@@ -81,14 +88,14 @@ end
 ---@param once boolean|nil
 ---@return EventListener
 function M.On(action, callback, once)
-    return Event.On(netEventName(action), callback, once)
+    return Event.On(M.CreateEventName(action), callback, once)
 end
 
 ---@param action string
 ---@param callback fun(responseEvent: NetEvent): void
 ---@param payload any
 function M.Request(action, callback, payload)
-    local responseAction = action .. tostring(callback):gsub("function: ", "")
+    local responseAction = action .. Utils.RandomId("_Response_")
     local listener = M.On(responseAction, callback, true)
 
     M.Send(action, payload, responseAction)
