@@ -15,8 +15,8 @@ local listeners = {}
 ---@field Id string
 ---@field Event string
 ---@field Once boolean
----@field Func fun(event: table)
----@field Exec fun(self: EventListener, event: table)
+---@field Func fun(...: any)
+---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
 ---@field New fun(event: string, callback: fun(event: table), once: boolean): EventListener
 local EventListener = Libs.Object({
@@ -24,9 +24,11 @@ local EventListener = Libs.Object({
     Once = false,
     Event = nil,
     Func = function() end,
-    Exec = function(self, e)
+    Exec = function(self, ...)
+        local args = { ... }
+
         xpcall(function()
-            self.Func(e)
+            self.Func(table.unpack(args))
         end, function(err)
             Utils.Log.Error(err)
         end)
@@ -72,7 +74,7 @@ end
 
 function M.Trigger(event, ...)
     if listeners[event] then
-        Utils.Log.Debug("Event", event, #listeners[event])
+        Utils.Log.Debug("Handle/Event", #listeners[event], event)
         for _, l in pairs(listeners[event]) do
             l:Exec(...)
         end

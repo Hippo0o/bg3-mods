@@ -1,7 +1,7 @@
 ---@class GUILayout
 ---@field Root ExtuiTable
 ---@field Rows table<number, ExtuiTableRow>
----@field Layout table<number, table<number, ExtuiTableCell>>
+---@field Cells table<number, table<number, ExtuiTableCell>>
 ---@param root ImguiHandle
 ---@param cols number
 ---@param rows number
@@ -12,22 +12,22 @@ function GUI.Layout(root, cols, rows, onCreated)
 
     local t = root:AddTable(U.RandomId(), cols)
 
-    local layout = {}
+    local cells = {}
     local lrows = {}
     for i = 1, rows do
         local row = t:AddRow()
         table.insert(lrows, row)
 
-        layout[i] = {}
+        cells[i] = {}
         for j = 1, cols do
-            layout[i][j] = row:AddCell()
+            cells[i][j] = row:AddCell()
         end
     end
 
     local o = {
         Root = t,
         Rows = lrows,
-        Layout = layout,
+        Cells = cells,
     }
 
     if onCreated then
@@ -61,7 +61,7 @@ end
 ---@field Reset fun()
 ---@param root ImguiHandle
 ---@param event string
----@param onTriggered fun(textBox: GUIEventTextbox, result: any): table|string the text to displaybox
+---@param onTriggered fun(textBox: GUIEventTextbox, ...: any): table|string the text to displaybox
 ---@return GUIEventTextbox
 function GUI.EventTextbox(root, event, onTriggered)
     local box = {}
@@ -75,7 +75,7 @@ function GUI.EventTextbox(root, event, onTriggered)
         local text = { ... }
 
         if onTriggered then
-            text = onTriggered(box, text)
+            text = onTriggered(box, ...)
         end
 
         if type(text) == "table" then
@@ -105,6 +105,7 @@ end
 
 ---@class GUISelection
 ---@field Selected number
+---@field Value any
 ---@field Root ExtuiGroup
 ---@field RadioButtons table<number, ExtuiRadioButton>
 ---@field Reset fun()
@@ -114,6 +115,7 @@ end
 function GUI.Selection(root)
     local selection = {}
     selection.Selected = 1
+    selection.Value = nil
 
     local id = U.RandomId()
 
@@ -132,8 +134,14 @@ function GUI.Selection(root)
     function selection.AddItem(label, value)
         local id = U.RandomId()
 
-        local radio = selection.Root:AddRadioButton(id, value == selection.Selected)
+        local i = #selection.RadioButtons + 1
+
+        local radio = selection.Root:AddRadioButton(id, i == selection.Selected)
         radio.Label = label
+
+        if i == selection.Selected then
+            selection.Value = value
+        end
 
         radio.OnChange = function()
             for _, r in pairs(selection.RadioButtons) do
@@ -141,7 +149,8 @@ function GUI.Selection(root)
             end
 
             radio.Active = true
-            selection.Selected = value
+            selection.Selected = i
+            selection.Value = value
         end
 
         table.insert(selection.RadioButtons, radio)

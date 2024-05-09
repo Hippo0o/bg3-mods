@@ -171,6 +171,10 @@ local function cancelDialog(dialog, instanceID)
             return UE.IsPlayable(actor)
         end)
 
+        if #hasPlayable == 0 then
+            return
+        end
+
         L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
 
         if #hasRemovable > 0 then
