@@ -84,7 +84,7 @@ function M.Send(action, payload, responseAction, peerId)
 end
 
 ---@param action string
----@param callback fun(event: NetEvent): void
+---@param callback fun(event: NetEvent)
 ---@param once boolean|nil
 ---@return EventListener
 function M.On(action, callback, once)
@@ -92,7 +92,7 @@ function M.On(action, callback, once)
 end
 
 ---@param action string
----@param callback fun(responseEvent: NetEvent): void
+---@param callback fun(responseEvent: NetEvent)
 ---@param payload any
 function M.Request(action, callback, payload)
     local responseAction = action .. Utils.RandomId("_Response_")

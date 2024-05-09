@@ -10,6 +10,7 @@ local Utils = Require("Shared/Utils")
 local M = {}
 
 ---@class Loop : LibsObject
+---@field Startable boolean
 ---@field Queues Queue[]
 ---@field Handle number|nil
 ---@field Tasks { Count: number, Inc: fun(self: Loop.Tasks), Dec: fun(self: Loop.Tasks) }
@@ -19,6 +20,7 @@ local M = {}
 ---@field Stop fun(self: Loop)
 ---@field Tick fun(self: Loop, time: GameTime)
 local Loop = Libs.Object({
+    Startable = false,
     Queues = {},
     Tasks = {
         Count = 0,
@@ -46,6 +48,9 @@ local Loop = Libs.Object({
     end,
     Start = function(self) ---@param self Loop
         assert(self.Handle == nil, "Loop already running.")
+        if not self.Startable then
+            return
+        end
         local ticks = 0
         self.Handle = Ext.Events.Tick:Subscribe(function(e)
             if self:IsEmpty() then
@@ -203,7 +208,14 @@ GameState.OnSave(function()
         loop:Stop()
     end
 end)
+GameState.OnUnloadSession(function()
+    loop.Startable = false
+end)
+GameState.OnLoadSession(function()
+    loop.Startable = false
+end)
 GameState.OnLoad(function()
+    loop.Startable = true
     if not loop:IsRunning() then
         loop:Start()
     end

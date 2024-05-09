@@ -47,7 +47,7 @@ function Object:Teleport(character, withOffset)
         z = self.Enter[3]
     end
 
-    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
+    Osi.TeleportToPosition(character, x, y, z, "JC_MapTeleport", 1, 1, 1)
 end
 
 ---@param enemy Enemy
@@ -139,4 +139,36 @@ end
 ---@return Map
 function Map.Restore(map)
     return Object.Init(map)
+end
+
+---@param map Map
+---@param character string GUID
+---@param withOffset boolean
+---@return boolean
+function Map.TeleportTo(map, character, withOffset)
+    if map.Region == Osi.GetRegion(Player.Host()) then
+        Object.Init(map):Teleport(character, withOffset)
+        return true
+    end
+
+    if not U.UUID.Equals(character, Player.Host()) then
+        return false
+    end
+
+    local _, act = UT.Find(C.Regions, function(region, act)
+        return region == map.Region
+    end)
+
+    if act == nil then
+        L.Error("Region not found.", map.Region)
+        return false
+    end
+
+    WaitFor(function()
+        return Player.TeleportToAct(act)
+    end, function()
+        Map.TeleportTo(map, character, withOffset)
+    end)
+
+    return true
 end
