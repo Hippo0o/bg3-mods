@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 ---@type Utils
 local Utils = Require("Shared/Utils")
 
@@ -18,7 +16,7 @@ local listeners = {}
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
----@field New fun(event: string, callback: fun(event: table), once: boolean): EventListener
+---@field New fun(event: string, callback: fun(event: table), once: boolean|nil): EventListener
 local EventListener = Libs.Object({
     Id = nil,
     Once = false,
@@ -41,7 +39,7 @@ local EventListener = Libs.Object({
         local eventListeners = listeners[self.Event]
         for i = #eventListeners, 1, -1 do
             if eventListeners[i].Id == self.Id then
-                Utils.Log.Debug("Unregister", self.Event, self.Id)
+                Utils.Log.Debug("Event/Unregister", self.Event, self.Id)
                 table.remove(eventListeners, i)
             end
         end
@@ -55,7 +53,7 @@ local EventListener = Libs.Object({
 function EventListener.New(event, callback, once)
     local o = EventListener.Init({
         Func = callback,
-        Once = once,
+        Once = once and true or false,
         Event = event,
     })
     o.Id = Utils.RandomId(event .. "_")
@@ -69,17 +67,26 @@ function EventListener.New(event, callback, once)
     return o
 end
 
+---@param event string
+---@param callback fun(...: any)
+---@param once boolean|nil
 function M.On(event, callback, once)
     return EventListener.New(event, callback, once)
 end
 
 function M.Trigger(event, ...)
+    Utils.Log.Debug("Event/Trigger", listeners[event] and #listeners[event] or 0, event)
     if listeners[event] then
-        Utils.Log.Debug("Event", #listeners[event], event)
-        for _, l in pairs(listeners[event]) do
+        for _, l in ipairs(Utils.Table.Values(listeners[event])) do
             l:Exec(...)
         end
     end
+end
+
+---@param event string
+---@return EventListener[]
+function M.Listeners(event)
+    return listeners[event] or {}
 end
 
 return M

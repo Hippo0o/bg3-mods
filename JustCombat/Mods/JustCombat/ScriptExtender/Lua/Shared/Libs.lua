@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 ---@type Utils
 local Utils = Require("Shared/Utils")
 
@@ -33,7 +31,7 @@ function M.Object(props)
         local obj = {}
         setmetatable(obj, Object)
 
-        local keys = values and Utils.Table.Combine(propKeys, Utils.Table.Keys(values)) or propKeys
+        local keys = values and Utils.Table.Combine(Utils.Table.Values(propKeys), Utils.Table.Keys(values)) or propKeys
         for _, key in pairs(keys) do
             obj[key] = values and values[key] or Utils.Table.DeepClone(props[key])
         end

@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 local scenarioTemplates = Require("JustCombat/Templates/Scenarios.lua")
 External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 
@@ -304,6 +302,10 @@ function Action.StartRound()
 end
 
 function Action.MapEntered()
+    if S:HasStarted() then
+        return
+    end
+
     local x, y, z = Player.Pos()
     RetryFor(function(self, tries)
         if S == nil then -- scenario stopped
@@ -500,11 +502,7 @@ end
 
 function Scenario.Teleport(uuid)
     local s = Current()
-
-    if Map.TeleportTo(s.Map, uuid, true) then
-        s.OnMap = true
-        Event.Trigger("ScenarioTeleport", uuid)
-    end
+    Map.TeleportTo(s.Map, uuid, true)
 end
 
 ---@param specific Enemy
@@ -697,7 +695,8 @@ U.Osiris.On(
 Event.On(
     "ScenarioTeleport",
     ifScenario(function(target)
-        if S.OnMap and U.UUID.Equals(target, Player.Host()) then
+        if not S.OnMap and U.UUID.Equals(target, Player.Host()) then
+            S.OnMap = true
             Defer(2000, Action.MapEntered)
         end
     end)

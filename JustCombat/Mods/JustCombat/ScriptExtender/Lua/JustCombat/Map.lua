@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 local mapTemplates = Require("JustCombat/Templates/Maps.lua")
 External.File.ExportIfNeeded("Maps", mapTemplates)
 
@@ -148,6 +146,11 @@ end
 function Map.TeleportTo(map, character, withOffset)
     if map.Region == Osi.GetRegion(Player.Host()) then
         Object.Init(map):Teleport(character, withOffset)
+
+        if S and U.Equals(map, S.Map) then
+            Event.Trigger("ScenarioTeleport", character)
+        end
+
         return true
     end
 
@@ -164,11 +167,17 @@ function Map.TeleportTo(map, character, withOffset)
         return false
     end
 
-    WaitFor(function()
-        return Player.TeleportToAct(act)
-    end, function()
-        Map.TeleportTo(map, character, withOffset)
-    end)
+    local teleporting = Player.TeleportToAct(act)
 
-    return true
+    if teleporting == 0 then
+        Player.Notify("Teleporting to different ACT")
+
+        WaitFor(function()
+            return Player.TeleportToAct(act) == 2
+        end, function()
+            Map.TeleportTo(map, character, withOffset)
+        end)
+    end
+
+    return false
 end

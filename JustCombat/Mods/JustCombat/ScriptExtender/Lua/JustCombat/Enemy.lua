@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 local enemyTemplates = Require("JustCombat/Templates/Enemies.lua")
 External.File.ExportIfNeeded("Enemies", enemyTemplates)
 

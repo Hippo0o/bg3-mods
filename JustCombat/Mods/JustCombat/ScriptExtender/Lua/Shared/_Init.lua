@@ -10,7 +10,7 @@ if not Require then
             return register[module]
         end
 
-        local result = Ext.Require(module)
+        local result = Ext.Utils.Include(ModuleUUID, module, _G)
         register[module] = result
 
         return result

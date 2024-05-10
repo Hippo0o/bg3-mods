@@ -50,12 +50,12 @@ Ext.Events.NetMessage:Subscribe(function(msg)
         ResponseAction = event.ResponseAction,
     })
 
-    Event.Trigger(M.CreateEventName(m.Action), m)
+    Event.Trigger(M.EventName(m.Action), m)
 end)
 
 ---@param action string
 ---@return string @NetEvent_{action}
-function M.CreateEventName(action)
+function M.EventName(action)
     return "NetEvent_" .. action
 end
 
@@ -88,7 +88,7 @@ end
 ---@param once boolean|nil
 ---@return EventListener
 function M.On(action, callback, once)
-    return Event.On(M.CreateEventName(action), callback, once)
+    return Event.On(M.EventName(action), callback, once)
 end
 
 ---@param action string

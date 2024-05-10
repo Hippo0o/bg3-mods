@@ -117,6 +117,17 @@ function GameMode.AskBeginCombat()
     end)
 end
 
+U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
+    if
+        US.Contains(dialog, {
+            "GLO_Jergal_AD_AttackFromDialog_851c058a-3223-3930-05aa-8558a0e36b04",
+            "GLO_Jergal_AD_AttackedByPlayer_7686b4ed-307e-6843-e9b8-2c4343bd071c",
+        }, false, true)
+    then
+        Net.Send("OpenGUI", {})
+    end
+end)
+
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
     return function(...)
@@ -125,17 +136,6 @@ local function ifBypassStory(func)
         end
     end
 end
-
-U.Osiris.On(
-    "AutomatedDialogStarted",
-    2,
-    "after",
-    ifBypassStory(function(dialog, instanceID)
-        if dialog == "GLO_Jergal_AD_AttackFromDialog_851c058a-3223-3930-05aa-8558a0e36b04" then
-            Net.Send("OpenUI", {})
-        end
-    end)
-)
 
 local actors = {}
 local handlers = {}

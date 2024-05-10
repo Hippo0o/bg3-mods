@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                            Public                                           --
@@ -60,14 +58,16 @@ function Player.Notify(message, instant, ...)
 end
 
 local teleporting = nil
+---@param act string
+---@return number 0: Started, 1: Teleporting, 2: Teleported
 function Player.TeleportToAct(act)
     if teleporting then
-        return false
+        return 1
     end
 
     if teleporting == false then
         teleporting = nil
-        return true
+        return 2
     end
 
     Osi.PROC_DEBUG_TeleportToAct(act)
@@ -97,7 +97,7 @@ function Player.TeleportToAct(act)
         end
     end)
 
-    return false
+    return 0
 end
 
 function Player.TeleportToRegion(region)
