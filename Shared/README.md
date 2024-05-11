@@ -1,10 +1,10 @@
 # The H(ippo0o) Lib(rary)
 
-## What is it?
+# What is it?
 
 Hlib is a library that contains a lot of useful functions that can be used as a base for SE heavy projects.
 
-## How to use it?
+# How to use it?
 
 Copy the Hlib folder to your `ScriptExtender/Lua/` folder and require it in your script.
 In your `BootstrapClient.lua` or `BootstrapServer.lua` add the following lines at the top of the file:
@@ -14,7 +14,7 @@ Ext.Require('Hlib/_Init.lua')
 Ext.Require('...') -- your entry point
 ```
 
-## What's in it?
+# What's in it?
 
 ### Require
 
@@ -227,7 +227,7 @@ myObject:MyFunction() -- 1
 local myObject2 = MyClass.Init({ MyVar = 3 })
 ```
 
-## Example Setup
+# Example Setup
 `BootstrapServer.lua`
 ```lua
 Ext.Require('Hlib/_Init.lua')
