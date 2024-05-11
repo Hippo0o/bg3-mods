@@ -432,6 +432,7 @@ end
 ---@param s string
 ---@param patterns string[]|string
 ---@param ignoreCase boolean|nil
+---@param escape boolean|nil
 ---@return boolean
 function M.String.Contains(s, patterns, ignoreCase, escape)
     if type(patterns) == "string" then

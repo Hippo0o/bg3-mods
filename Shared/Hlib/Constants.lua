@@ -1,6 +1,5 @@
 ---@class Constants
 local M = {
-    NetChannel = nil,
     OriginCharactersStarter = {
         "S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c",
         "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604",

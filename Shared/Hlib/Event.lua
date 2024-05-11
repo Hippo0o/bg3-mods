@@ -17,7 +17,7 @@ local listeners = {}
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
 ---@field New fun(event: string, callback: fun(event: table), once: boolean|nil): EventListener
-local EventListener = Libs.Object({
+local EventListener = Libs.Class({
     Id = nil,
     Once = false,
     Event = nil,

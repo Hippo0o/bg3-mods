@@ -17,7 +17,6 @@ S = nil
 C = Require("Hlib/Constants")
 
 UT.Merge(C, {
-    NetChannel = "JC_NET",
     ModUUID = Mod.ModUUID,
     EnemyFaction = "64321d50-d516-b1b2-cfac-2eb773de1ff6",
     NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral

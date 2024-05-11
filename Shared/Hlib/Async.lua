@@ -17,7 +17,7 @@ local M = {}
 ---@field Start fun(self: Loop)
 ---@field Stop fun(self: Loop)
 ---@field Tick fun(self: Loop, time: GameTime)
-local Loop = Libs.Object({
+local Loop = Libs.Class({
     Startable = true,
     Queues = {},
     Tasks = {
@@ -107,7 +107,7 @@ local Loop = Libs.Object({
 ---@field Dequeue fun(self: Queue, idx: number)
 ---@field Iter fun(self: Queue): fun(): number, Runner
 ---@field New fun(loop: Loop): Queue
-local Queue = Libs.Object({
+local Queue = Libs.Class({
     Loop = nil,
     Tasks = {},
     Enqueue = function(self, item) ---@param self Queue
@@ -160,7 +160,7 @@ end
 ---@field Exec fun(self: Runner, time: GameTime)
 ---@field ClearCond fun(self: Runner, time: GameTime): boolean
 ---@field Clear fun(self: Runner)
-local Runner = Libs.Object({
+local Runner = Libs.Class({
     Cleared = false,
     ExecCond = function(_, _)
         return true

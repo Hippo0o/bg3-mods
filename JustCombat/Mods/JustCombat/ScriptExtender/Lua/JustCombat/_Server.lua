@@ -98,7 +98,7 @@ end)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Net.On("LoadSelections", function(event)
+Net.On("Selection", function(event)
     Net.Respond(event, {
         Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }
@@ -106,6 +106,14 @@ Net.On("LoadSelections", function(event)
         Maps = UT.Map(Map.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }
         end),
+    })
+end)
+
+Net.On("Templates", function(event)
+    Net.Respond(event, {
+        Scenarios = Scenario.GetTemplates(),
+        Maps = Map.GetTemplates(), 
+        Enemies = Enemy.GetTemplates(),
     })
 end)
 

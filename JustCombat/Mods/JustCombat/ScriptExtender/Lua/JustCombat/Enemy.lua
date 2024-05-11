@@ -25,7 +25,7 @@ L.Debug("Enemies loaded", #enemyTemplates)
 ---@field Archetype string
 ---@field CharacterVisualResourceID string
 ---@field Icon string
-local Object = Libs.Object({
+local Object = Libs.Class({
     Name = "Empty",
     TemplateId = nil,
     Tier = nil,
@@ -401,10 +401,14 @@ function Enemy.GetByTemplateId(templateId)
     return list
 end
 
+function Enemy.GetTemplates()
+    return External.Templates.GetEnemies() or enemyTemplates
+end
+
 ---@field filter fun(data: Enemy):boolean data is the enemy source data
 ---@return fun():number,Enemy
 function Enemy.Iter(filter)
-    local templates = External.Templates.GetEnemies() or enemyTemplates
+    local templates = Enemy.GetTemplates()
     local i = 0
     local j = 0
     return function()

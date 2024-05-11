@@ -26,7 +26,7 @@ L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 ---@field RootTemplate string
 ---@field Rarity string
 ---@field GUID string|nil
-local Object = Libs.Object({
+local Object = Libs.Class({
     Name = nil,
     Type = nil,
     RootTemplate = "",

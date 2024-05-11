@@ -5,31 +5,31 @@ local Utils = Require("Hlib/Utils")
 local M = {}
 
 ---@param props table|nil
----@return LibsObject
-function M.Object(props)
+---@return LibsClass
+function M.Class(props)
     if not props then
         props = {}
     end
 
     if type(props) ~= "table" then
-        assert(type(props) == "table", "Libs.Object - table expected, got " .. type(props))
+        assert(type(props) == "table", "Libs.Class - table expected, got " .. type(props))
     end
 
     local propKeys = Utils.Table.Keys(props)
 
-    ---@class LibsObject
+    ---@class LibsClass
     ---@field New fun(): self
     ---@field Init fun(values: table|nil): table
-    local Object = {}
-    Object.__index = Object
+    local Class = {}
+    Class.__index = Class
 
-    function Object.Init(values)
+    function Class.Init(values)
         if values ~= nil then
-            assert(type(values) == "table", "Object.Init(values) - table expected, got " .. type(values))
+            assert(type(values) == "table", "Class.Init(values) - table expected, got " .. type(values))
         end
 
         local obj = {}
-        setmetatable(obj, Object)
+        setmetatable(obj, Class)
 
         local keys = values and Utils.Table.Combine(Utils.Table.Values(propKeys), Utils.Table.Keys(values)) or propKeys
         for _, key in pairs(keys) do
@@ -39,11 +39,11 @@ function M.Object(props)
         return obj
     end
 
-    function Object.New()
-        return Object.Init()
+    function Class.New()
+        return Class.Init()
     end
 
-    return Object
+    return Class
 end
 
 ---@param typeDefs table<number, table<string, string|function|table|LibsTypedTable>>|LibsTypedTable
@@ -63,10 +63,10 @@ function M.TypedTable(typeDefs, repeatable)
         error("Libs.TypedTable - repeatable table must have exactly one type definition")
     end
 
-    ---@class LibsTypedTable : LibsObject
+    ---@class LibsTypedTable : LibsClass
     ---@field Validate fun(table: table): boolean
     ---@field TypeCheck fun(key: string, value: any): boolean
-    local Object = Libs.Object({
+    local TT = Libs.Class({
         _IsTypedTable = true,
         _TypeDefs = {},
         _Repeatable = false,
@@ -75,7 +75,7 @@ function M.TypedTable(typeDefs, repeatable)
     ---@param key string
     ---@param value any
     ---@return boolean, string
-    function Object:TypeCheck(key, value)
+    function TT:TypeCheck(key, value)
         assert(
             type(key) == "string" or type(key) == "number",
             "Libs.TypedTable:TypeCheck(key, ...) - string or number expected, got " .. type(key)
@@ -141,7 +141,7 @@ function M.TypedTable(typeDefs, repeatable)
                         return false, "table expected, got " .. type(value)
                     end
 
-                    return Object.Init(validator):Validate(value)
+                    return TT.Init(validator):Validate(value)
                 end
 
                 for _, enum in pairs(validator) do
@@ -167,7 +167,7 @@ function M.TypedTable(typeDefs, repeatable)
         return false, result
     end
 
-    function Object:Validate(tableToValidate)
+    function TT:Validate(tableToValidate)
         if type(tableToValidate) ~= "table" then
             return false, { "table expected, got " .. type(tableToValidate) }
         end
@@ -202,11 +202,11 @@ function M.TypedTable(typeDefs, repeatable)
     end
 
     ---@return string[]|number[]
-    function Object:GetFields()
+    function TT:GetFields()
         return Utils.Table.Keys(self._TypeDefs)
     end
 
-    return Object.Init({
+    return TT.Init({
         _TypeDefs = typeDefs,
         _Repeatable = repeatable and true or false,
     })

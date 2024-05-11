@@ -15,7 +15,7 @@ External.File.ExportIfNeeded("Maps", mapTemplates)
 ---@field Region string
 ---@field Enter Pos
 ---@field Spawns Pos[]
-local Object = Libs.Object({
+local Object = Libs.Class({
     Region = nil,
     Enter = nil,
     Spawns = nil,
