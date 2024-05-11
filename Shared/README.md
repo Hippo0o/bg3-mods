@@ -188,10 +188,11 @@ The `GameState` module handles events when saving and loading game states.
 ```lua
 ---@type GameState
 local GameState = Require("Hlib/GameState")
-GameState.OnSave(function()
 
+GameState.OnSave(function()
     print("Game is saving!")
 end)
+
 GameState.OnLoad(function()
     print("Game is loading!")
 end)
@@ -221,6 +222,7 @@ local MyClass = Libs.Class({
         print(self.MyVar)
     end
 })
+
 local myObject = MyClass.New()
 myObject:MyFunction() -- 0
 myObject.MyVar = 1
