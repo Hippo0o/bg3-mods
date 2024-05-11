@@ -138,7 +138,7 @@ Event.On("MyEvent", function(arg1, arg2)
 end)
 
 -- emit an event
-Event.Emit("MyEvent", "Hello", "World!")
+Event.Trigger("MyEvent", "Hello", "World!")
 ```
 
 ### Net
@@ -173,6 +173,7 @@ end, { Entity = "..." })
 ```lua
 ---@type Event
 local Event = Require("Hlib/Event")
+
 Event.On(Net.EventName("MyEvent"), function(event) ---@type NetEvent
     print("Received MyEvent: " .. event.Payload.MyData)
 end)
@@ -183,11 +184,12 @@ Event.Trigger(Net.EventName("MyEvent"), { MyData = "Hello World!" })
 
 ### GameState
 
-The `GameState` module triggers events when saving and loading game states.
+The `GameState` module handles events when saving and loading game states.
 ```lua
 ---@type GameState
 local GameState = Require("Hlib/GameState")
 GameState.OnSave(function()
+
     print("Game is saving!")
 end)
 GameState.OnLoad(function()
@@ -198,6 +200,7 @@ end)
 ```lua
 ---@type Event
 local Event = Require("Hlib/Event")
+
 Event.On(GameState.EventSave, function()
     print("Game is saving!")
 end)
