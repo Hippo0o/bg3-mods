@@ -1,13 +1,4 @@
--- Purpose: lazily call Osi functions from the client
-Net.On("RCE", function(event)
-    local code = event.Payload
-
-    local res = UT.Pack(pcall(Ext.Utils.LoadString(code)))
-
-    Net.Respond(event, res)
-end)
-
-Net.On("Selection", function(event)
+Net.On("GetSelection", function(event)
     Net.Respond(event, {
         Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }
@@ -18,7 +9,7 @@ Net.On("Selection", function(event)
     })
 end)
 
-Net.On("Templates", function(event)
+Net.On("GetTemplates", function(event)
     Net.Respond(event, {
         Scenarios = Scenario.GetTemplates(),
         Maps = Map.GetTemplates(),
@@ -26,7 +17,7 @@ Net.On("Templates", function(event)
     })
 end)
 
-Net.On("Items", function(event)
+Net.On("GetItems", function(event)
     local rarity = event.Payload and event.Payload.Rarity
     Net.Respond(event, {
         Objects = Item.Objects(rarity, false),
@@ -101,6 +92,27 @@ Net.On("PingSpawns", function(event)
     Net.Respond(event, { true })
 end)
 
-Net.On("State", function(event)
+Net.On("GetState", function(event)
     Net.Respond(event, PersistentVars)
+end)
+
+Net.On("Config", function(event)
+    local config = event.Payload
+    if config then
+        if config.Default then
+            config = DefaultConfig
+        end
+
+        External.ApplyConfig(config)
+
+        if config.Persist then
+            External.SaveConfig()
+        end
+
+        if config.Reset then
+            External.LoadConfig()
+        end
+    end
+
+    Net.Respond(event, Config)
 end)

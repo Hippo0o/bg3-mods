@@ -6,7 +6,7 @@ Require("JustCombat/Shared")
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Config = {
+DefaultConfig = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
@@ -15,6 +15,8 @@ Config = {
     Debug = false,
     RandomizeSpawnOffset = 3,
 }
+Config = UT.DeepClone(DefaultConfig)
+
 External = {}
 Require("JustCombat/External")
 

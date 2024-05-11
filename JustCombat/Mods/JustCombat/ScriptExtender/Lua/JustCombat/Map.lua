@@ -11,7 +11,7 @@ External.File.ExportIfNeeded("Maps", mapTemplates)
 ---@field x number
 ---@field y number
 ---@field z number
----@class Map : LibsObject
+---@class Map : LibsClass
 ---@field Region string
 ---@field Enter Pos
 ---@field Spawns Pos[]

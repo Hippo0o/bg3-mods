@@ -1,13 +1,16 @@
 Control = {}
 
-function Control.Main(root)
+---@param tab ExtuiTabBar
+function Control.Main(tab)
+    local root = tab:AddTabItem("Main")
+
     WindowEvent("Start", function(scenarioName, mapName)
         Net.Request("Start", function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
             end
-            Net.Send("State")
+            Net.Send("GetState")
         end, {
             Scenario = scenarioName,
             Map = mapName,
@@ -16,7 +19,7 @@ function Control.Main(root)
 
     WindowEvent("Stop", function()
         Net.Request("Stop", function()
-            Net.Send("State")
+            Net.Send("GetState")
         end)
     end)
 
@@ -78,6 +81,9 @@ function Control.Main(root)
         ---@type ExtuiInputText
         local textBox = scrollable[1][1]:AddText("")
 
+        WindowEvent("Start", function()
+            textBox.Label = ""
+        end)
         Components.Computed(textBox, function(_, event)
             return textBox.Label .. event.Payload[1] .. "\n"
         end, Net.EventName("PlayerNotify"), "Label")
@@ -93,7 +99,7 @@ function Control.StartPanel(root)
         local scenarioSelection = Components.RadioList(listCols[1])
         local mapSelection = Components.RadioList(listCols[2])
 
-        WindowNet("Selection", function(event)
+        WindowNet("GetSelection", function(event)
             scenarioSelection.Reset()
             mapSelection.Reset()
 
@@ -106,7 +112,7 @@ function Control.StartPanel(root)
             end
         end)
 
-        Net.Send("Selection")
+        Net.Send("GetSelection")
 
         listCols[1]:AddButton("Start").OnClick = function(button)
             Event.Trigger("Start", scenarioSelection.Value, mapSelection.Value)

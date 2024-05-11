@@ -4,4 +4,8 @@ if Ext.IMGUI == nil then
     return
 end
 
+Event.On("ToggleDebug", function(bool)
+    Mod.Debug = bool
+end)
+
 Require("JustCombat/GUI/_Init")

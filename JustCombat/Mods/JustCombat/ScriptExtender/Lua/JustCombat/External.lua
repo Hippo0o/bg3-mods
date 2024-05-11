@@ -206,22 +206,34 @@ function External.LoadConfig()
         return
     end
 
-    local ok, error = External.Validators.Config:Validate(c)
+    External.ApplyConfig(c)
+
+    return true
+end
+
+function External.ApplyConfig(config)
+    local ok, error = External.Validators.Config:Validate(config)
     if not ok then
-        L.Error("Invalid config data.", Ext.DumpExport({ Data = c, Error = error }))
+        L.Error("Invalid config data.", Ext.DumpExport({ Data = config, Error = error }))
         return
     end
 
     for _, field in pairs(External.Validators.Config:GetFields()) do
-        if c[field] ~= nil then
+        if config[field] ~= nil then
             if field == "Debug" then
-                Mod.Debug = c[field]
+                Mod.Debug = config[field]
             end
-            Config[field] = c[field]
+            Config[field] = config[field]
         end
     end
 
-    return true
+    for key, value in pairs(Config) do
+        if key == "BypassStory" then
+            if value == false then
+                Config.BypassStoryAlways = false
+            end
+        end
+    end
 end
 
 function External.SaveConfig()

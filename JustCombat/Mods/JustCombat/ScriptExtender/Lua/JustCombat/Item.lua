@@ -20,7 +20,7 @@ L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Item : LibsObject
+---@class Item : LibsClass
 ---@field Name string
 ---@field Type string
 ---@field RootTemplate string

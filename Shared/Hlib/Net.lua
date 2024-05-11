@@ -13,7 +13,7 @@ local Libs = Require("Hlib/Libs")
 ---@class Net
 local M = {}
 
----@class NetEvent : LibsObject
+---@class NetEvent : LibsClass
 ---@field Action string
 ---@field Payload any
 ---@field PeerId number|nil
@@ -105,6 +105,30 @@ end
 ---@param payload any
 function M.Respond(event, payload)
     M.Send(event.ResponseAction, payload, nil, event.PeerId)
+end
+
+if Mod.EnableRCE then
+
+    M.On("RCE", function(event)
+        local code = event.Payload
+
+        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code)))
+
+        M.Respond(event, res)
+    end)
+
+    ---@param code string|table string or table with string.format arguments
+    ---@param callback fun(ok: boolean, ...)
+    ---@return EventListener
+    function M.RCE(code, callback)
+        if type(code) == "table" then
+            code = string.format(code[1], table.unpack(code, 2))
+        end
+        M.Request("RCE", function(event)
+            callback(table.unpack(event.Payload))
+        end, code)
+    end
+
 end
 
 return M
