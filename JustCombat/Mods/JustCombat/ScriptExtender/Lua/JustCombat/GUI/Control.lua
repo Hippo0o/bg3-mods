@@ -93,7 +93,7 @@ function Control.StartPanel(root)
         local scenarioSelection = Components.RadioList(listCols[1])
         local mapSelection = Components.RadioList(listCols[2])
 
-        WindowEvent(Net.EventName("Selection"), function(event)
+        WindowNet("Selection", function(event)
             scenarioSelection.Reset()
             mapSelection.Reset()
 

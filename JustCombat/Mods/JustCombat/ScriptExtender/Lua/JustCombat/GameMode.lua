@@ -114,7 +114,6 @@ function GameMode.AskBeginCombat()
 end
 
 U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
-    L.Dump("AutomatedDialogStarted", dialog, instanceID)
     if
         US.Contains(dialog, {
             "GLO_Jergal_AD_AttackFromDialog",
