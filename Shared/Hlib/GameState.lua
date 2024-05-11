@@ -1,8 +1,8 @@
 ---@type Utils
-local Utils = Require("Shared/Utils")
+local Utils = Require("Hlib/Utils")
 
 ---@type Event
-local Event = Require("Shared/Event")
+local Event = Require("Hlib/Event")
 
 ---@class GameState
 local M = {}

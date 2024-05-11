@@ -1,5 +1,5 @@
 ---@type Utils
-local Utils = Require("Shared/Utils")
+local Utils = Require("Hlib/Utils")
 
 local M = {}
 

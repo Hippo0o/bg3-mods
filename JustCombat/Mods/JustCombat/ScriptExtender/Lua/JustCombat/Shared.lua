@@ -1,9 +1,8 @@
 ---@type Mod
-Mod = Require("Shared/Mod")
-Mod.ModPrefix = "JustCombat"
+Mod = Require("Hlib/Mod")
 
 ---@type Utils
-local Utils = Require("Shared/Utils")
+local Utils = Require("Hlib/Utils")
 
 U = Utils
 UT = Utils.Table
@@ -15,7 +14,7 @@ L = Utils.Log
 S = nil
 
 ---@type Constants
-C = Require("Shared/Constants")
+C = Require("Hlib/Constants")
 
 UT.Merge(C, {
     NetChannel = "JC_NET",
@@ -46,21 +45,21 @@ Mod.PersistentVarsTemplate = {
 }
 
 ---@type GameState
-GameState = Require("Shared/GameState")
+GameState = Require("Hlib/GameState")
 
 ---@type Async
-Async = Require("Shared/Async")
+Async = Require("Hlib/Async")
 WaitFor = Async.WaitFor
 RetryFor = Async.RetryFor
 Schedule = Async.Schedule
 Defer = Async.Defer
 
 ---@type Libs
-Libs = Require("Shared/Libs")
+Libs = Require("Hlib/Libs")
 
 ---@type Net
-Net = Require("Shared/Net")
+Net = Require("Hlib/Net")
 
 ---@type Event
-Event = Require("Shared/Event")
+Event = Require("Hlib/Event")
 

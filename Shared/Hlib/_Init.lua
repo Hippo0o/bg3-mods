@@ -18,24 +18,19 @@ if not Require then
 end
 
 ---@type Mod
-local Mod = Require("Shared/Mod")
+local Mod = Require("Hlib/Mod")
 
-Require("Shared/Constants")
+Require("Hlib/Constants")
 ---@type Utils
-local Utils = Require("Shared/Utils")
--- Require("Shared/Libs")
--- Require("Shared/Event")
--- Require("Shared/GameState")
--- Require("Shared/Async")
--- Require("Shared/Net")
--- Require("Shared/OsirisEventDebug")
+local Utils = Require("Hlib/Utils")
+-- Require("Hlib/Libs")
+-- Require("Hlib/Event")
+-- Require("Hlib/GameState")
+-- Require("Hlib/Async")
+-- Require("Hlib/Net")
+-- Require("Hlib/OsirisEventDebug")
 
 Ext.Events.SessionLoaded:Subscribe(function()
-    local ModInfo = Ext.Mod.GetMod(Mod.ModUUID)["Info"]
-
-    Mod.ModTableKey = ModInfo.Name
-    Mod.ModVersion = { major = ModInfo.ModVersion[1], minor = ModInfo.ModVersion[2], revision = ModInfo.ModVersion[3] }
-
     Utils.Log.Info(
         Mod.ModTableKey
             .. " Version: "

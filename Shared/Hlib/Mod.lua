@@ -9,6 +9,14 @@ M.Debug = true
 
 M.PersistentVarsTemplate = {}
 
+if Ext.Mod.IsModLoaded(M.ModUUID) then
+    local ModInfo = Ext.Mod.GetMod(M.ModUUID)["Info"]
+
+    M.ModTableKey = ModInfo.Name
+    M.ModPrefix = ModInfo.Name
+    M.ModVersion = { major = ModInfo.ModVersion[1], minor = ModInfo.ModVersion[2], revision = ModInfo.ModVersion[3] }
+end
+
 function M.PreparePersistentVars()
     if not PersistentVars then
         PersistentVars = {}

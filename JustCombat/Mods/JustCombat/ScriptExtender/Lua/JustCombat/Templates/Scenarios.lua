@@ -7,21 +7,21 @@ local defaultLoot = {
         Uncommon = 30,
         Rare = 20,
         VeryRare = 5,
-        -- Legendary = 0,
+        Legendary = 0,
     },
     Armor = {
         Common = 60,
         Uncommon = 30,
         Rare = 20,
         VeryRare = 5,
-        Legendary = 0,
+        Legendary = 1,
     },
     Weapons = {
         Common = 60,
         Uncommon = 30,
         Rare = 20,
         VeryRare = 5,
-        Legendary = 0,
+        Legendary = 1,
     },
 }
 

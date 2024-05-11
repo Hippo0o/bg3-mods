@@ -45,7 +45,7 @@ define a standalone entry script for your mod e.g. ServerLoader.lua
 
 ```lua
 -- requires like in BootstrapServer.lua
-Require("Shared/_Init.lua")
+Require("Hlib/_Init.lua")
 Require("Server/_Init.lua")
 
 -- execute code that would usually run on SessionLoaded

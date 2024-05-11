@@ -191,6 +191,13 @@ function Components.Tree(root, tbl, label)
 
     local function addNode(node, data)
         for k, v in pairs(data) do
+            if type(k) == "number" then
+                k = "[" .. k .. "]"
+            end
+            if type(v) == "string" then
+                v = '"' .. v .. '"'
+            end
+
             if type(v) == "table" then
                 addNode(node:AddTree(k), v)
             else

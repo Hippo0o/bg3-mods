@@ -15,10 +15,10 @@ fix-permissions:
 	chown -R $(UID) $(MOD_SUBDIR)
 
 sync-files:
-	while sleep 0.1; do fd . $(MOD_SUBDIR) | entr -d rsync --verbose -avc --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/." ; done
+	while sleep 0.1; do fd . | entr -d rsync --verbose -avc --copy-links --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/." ; done
 
 copy:
-	rsync --verbose -avc --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/JustCombat/."
+	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/JustCombat/."
 
 copy-back:
 	cp $(MOUNT_DIR)/Temp/JustCombat.zip .

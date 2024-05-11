@@ -1,6 +1,9 @@
 Debug = {}
 
 function Debug.Main(root)
+    root:AddButton("Reload").OnClick = function()
+        Net.Send("State")
+    end
     local tree
     WindowEvent("StateChange", function()
         if tree then
@@ -10,4 +13,3 @@ function Debug.Main(root)
         tree = Components.Tree(root, State, "State")
     end)
 end
-

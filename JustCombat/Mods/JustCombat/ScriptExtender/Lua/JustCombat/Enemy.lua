@@ -697,7 +697,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
         interval = 1,
         retries = -1,
         success = function()
-            Ext.IO.SaveFile(Require("Shared/Mod").ModTableKey .. "/Enemies.json", Ext.Json.Stringify(dump))
+            Ext.IO.SaveFile(Require("Hlib/Mod").ModTableKey .. "/Enemies.json", Ext.Json.Stringify(dump))
         end,
         failed = function(err)
             L.Error(err)

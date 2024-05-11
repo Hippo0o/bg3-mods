@@ -145,11 +145,11 @@ function Action.CalculateLoot()
 
                 for _, r in ipairs(C.ItemRarity) do
                     if bonusCategory == "Object" and scenario.LootObjects[r] then
-                        bonus = add(bonus, r, 1 + scenario.LootObjects[r])
+                        bonus = add(bonus, r, scenario.LootObjects[r])
                     elseif bonusCategory == "Weapon" and scenario.LootWeapons[r] then
-                        bonus = add(bonus, r, 1 + scenario.LootWeapons[r])
+                        bonus = add(bonus, r, scenario.LootWeapons[r])
                     elseif bonusCategory == "Armor" and scenario.LootArmor[r] then
-                        bonus = add(bonus, r, 1 + scenario.LootArmor[r])
+                        bonus = add(bonus, r, scenario.LootArmor[r])
                     end
                 end
 
