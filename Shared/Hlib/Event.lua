@@ -51,7 +51,9 @@ local EventListener = Libs.Class({
 
         for i = #eventListeners, 1, -1 do
             if eventListeners[i]._Id == self._Id then
-                Utils.Log.Debug("Event/Unregister", self._Event, self._Id)
+                if Mod.Dev then
+                    Utils.Log.Debug("Event/Unregister", self._Event, self._Id)
+                end
                 table.remove(eventListeners, i)
             end
         end
@@ -90,7 +92,9 @@ end
 ---@param event string
 ---@param ... any
 function M.Trigger(event, ...)
-    Utils.Log.Debug("Event/Trigger", listeners[event] and #listeners[event] or 0, event)
+    if Mod.Dev then
+        Utils.Log.Debug("Event/Trigger", listeners[event] and #listeners[event] or 0, event)
+    end
 
     if listeners[event] then
         for _, l in ipairs(Utils.Table.Values(listeners[event])) do

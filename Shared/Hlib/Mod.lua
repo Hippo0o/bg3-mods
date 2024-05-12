@@ -6,6 +6,7 @@ M.ModPrefix = ""
 M.ModTableKey = ""
 M.ModVersion = { major = 0, minor = 0, revision = 0 }
 M.Debug = true
+M.Dev = false
 M.EnableRCE = false
 M.NetChannel = "Net_" .. M.ModUUID
 

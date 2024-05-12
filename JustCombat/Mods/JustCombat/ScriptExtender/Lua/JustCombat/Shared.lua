@@ -1,6 +1,7 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
 Mod.Debug = true
+Mod.Dev = true
 Mod.EnableRCE = false
 
 ---@type Utils
@@ -67,4 +68,3 @@ Event = Require("Hlib/Event")
 ---@type Localization
 Localization = Require("Hlib/Localization")
 __ = Localization.Localize
-
