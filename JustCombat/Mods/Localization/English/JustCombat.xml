@@ -1,70 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
 <contentList>
-    <content contentuid="h7c9e903bg29cbg4c56ga4fagda3086d8f812" version="1">Enable Deez bug</content>
-    
-    <content contentuid="h74e31d57g21b6g4480ga47dg02e6465f20c4" version="1">Rarity</content>
-    
-    <content contentuid="h639b85d7g36ceg4d08ga50ag8b6e4728a94c" version="1">Debug</content>
-    
-    <content contentuid="h1337c4cfg4662g4919ga200g4f7fc0226d5d" version="1">more continues battle between rounds at the cost of cheesy out of combat strats</content>
-    
-    <content contentuid="h70af8773g25fag4d22ga439gcb44061be966" version="1">Teleport</content>
-    
-    <content contentuid="h72489107g271dg4c45ga417gba2346359801" version="1">Reload</content>
-    
-    <content contentuid="h70af0aafg25fag45ffga439gc399c61be1bb" version="1">Scenarios</content>
-    
-    <content contentuid="h60c8931fg359dg4c64ga53fgba02c71d9820" version="1">Main</content>
-    
-    <content contentuid="h67cc0bdfg3299g45e8ga54fgf38ec76dd1ac" version="1">Start</content>
-    
-    <content contentuid="h7d31cd11g2864g4984g84e0g2fe226c20dc0" version="1">Persist Config</content>
-    
-    <content contentuid="h644ebf4fg311bg4ea1ga577gd8c7c755fae5" version="1">Pos</content>
-    
-    <content contentuid="h649a5b3fg31cfg40e6ga57ag9680c758b4a2" version="1">Start Menu</content>
-    
-    <content contentuid="h7c4be9b1g291eg4bceg84f7g8da826d5af8a" version="1">Default Config</content>
-    
-    <content contentuid="h88828f7agddd7g4da2gbbbbg1bc4999939e6" version="1">always skip dialogues, combat and interactions even if no scenario is active</content>
-    
-    <content contentuid="hd9d8ea71g8c8dg4bf2g8eaegbd942c8c9fb6" version="1">skip dialogues, combat and interactions that aren't related to a scenario</content>
-    
-    <content contentuid="h67c587dfg3290g4d28ga54fg6b4ec76d496c" version="1">State</content>
-    
-    <content contentuid="hcf8af865g9adfg4ad3g8fcbg9cb56de9be97" version="1">Always Bypass Story</content>
-    
-    <content contentuid="h63e99ef5g36bcg4cbag850dgaadc672f88fe" version="1">Force Enter Combat</content>
-    
-    <content contentuid="h64a2af1fg31f7g4fa4ga579g19c2c75b3be0" version="1">Ping Spawns</content>
-    
-    <content contentuid="h7ccbc6c9g299eg4939g84ffg8f5fa6ddad7d" version="1">Bypass Story</content>
-    
+    <content contentuid="he9e6563fgbcb3g4036gadadg5650cf8f7472" version="1">Scenario %s started.</content>
+
+    <content contentuid="he4c17888gb194g42ddg9d7fg24bbbf5d0699" version="1">Skipped combat with %s</content>
+
     <content contentuid="h0b2d3e28g5e78g46b7g9381ge0d1b1a3c2f3" version="1">some more info in the console and other debug features</content>
-    
-    <content contentuid="h763ba337g236eg4f66ga450g89004672ab22" version="1">Config</content>
-    
-    <content contentuid="h644b89efg311eg4dcbga577g8badc755a98f" version="1">Logs</content>
-    
-    <content contentuid="h67828f2fg32d7g4da7ga54bg1bc1c76939e3" version="1">Stop</content>
-    
-    <content contentuid="heddf22a2gb88ag477fgbdeegc1191fcce33b" version="1">Randomize Spawn Offset</content>
-    
-    <content contentuid="h6383254fg36d6g4701ga50bg0167c7292345" version="1">Reset</content>
-    
-    <content contentuid="h72c19c43g2794g4c91ga41fg2af7063d08d5" version="1">Templates</content>
-    
-    <content contentuid="h67da95ffg328fg4c0aga54eg9a6cc76cb84e" version="1">Items</content>
-    
-    <content contentuid="h60c88927g359dg4dc7ga53fgbba1471d9983" version="1">Maps</content>
-    
+
+    <content contentuid="h7c9e903bg29cbg4c56ga4fagda3086d8f812" version="1">Enable Debug</content>
+
+    <content contentuid="h6d4b823fg381eg4d76ga5e7g8b10c7c5a932" version="1">Round %d</content>
+
+    <content contentuid="h34e53324g61b0g4667g907dg6001725f4223" version="1">Leave camp to join the battle.</content>
+
+    <content contentuid="h7c4be9b1g291eg4bceg84f7g8da826d5af8a" version="1">Default Config</content>
+
+    <content contentuid="h7cfda27eg29a8g4f72gb4fcge914d6decb36" version="1">%d enemies left.</content>
+
+    <content contentuid="h7d06c1f4g2853g494ag94e3g5f2c76c17d0e" version="1">Scenario ended.</content>
+
+    <content contentuid="h7484917fg21d1g4c42ga47bg7a24c6595806" version="1">Running</content>
+
+    <content contentuid="hcf8af865g9adfg4ad3g8fcbg9cb56de9be97" version="1">Always Bypass Story</content>
+
+    <content contentuid="h7f9830f7g2acdg465aga4cagb03c46e8921e" version="1">Dropping loot.</content>
+
+    <content contentuid="he09bf31bgb5ceg4a64gad3ag8c028f18ae20" version="1">All enemies are dead.</content>
+
+    <content contentuid="h7f8632f1g2ad3g467ag84cbg501c26e9723e" version="1">Scenario stopped.</content>
+
+    <content contentuid="h72489107g271dg4c45ga417gba2346359801" version="1">Reload</content>
+
+    <content contentuid="h0f16ba3fg5a43g4ef6ga3c2g5890c1e07ab2" version="1">To disable story bypass, use !JC DisableStoryBypass</content>
+
+    <content contentuid="hd9d8ea71g8c8dg4bf2g8eaegbd942c8c9fb6" version="1">skip dialogues, combat and interactions that aren't related to a scenario</content>
+
+    <content contentuid="h6029bc98g357cg4e9cg9531ga8fab7138ad8" version="1">Enemy %s killed.</content>
+
+    <content contentuid="h62111499g3744g441cg8512g227aa7300058" version="1">Enemy %s spawned.</content>
+
     <content contentuid="h63a53547g36f0g4601ga509g6067472b4245" version="1">Reset Config</content>
-    
+
     <content contentuid="he7381a60gb26dg44f3g9d40gb2953f6290b7" version="1">randomize spawn position for more varied encounters (too high may cause issues)</content>
-    
+
+    <content contentuid="h67cc0bdfg3299g45e8ga54fgf38ec76dd1ac" version="1">Start</content>
+
     <content contentuid="h78a7d343g2df2g4861ga4b9g4e07069b6c25" version="1">Kill spawned</content>
-    
+
+    <content contentuid="h88828f7agddd7g4da2gbbbbg1bc4999939e6" version="1">always skip dialogues, combat and interactions even if no scenario is active</content>
+
+    <content contentuid="h72c19c43g2794g4c91ga41fg2af7063d08d5" version="1">Templates</content>
+
+    <content contentuid="h649a5b3fg31cfg40e6ga57ag9680c758b4a2" version="1">Start Menu</content>
+
+    <content contentuid="hd06e1b19g853bg44e4g8e35gd282ac17f0a0" version="1">Move to start scenario.</content>
+
+    <content contentuid="h64a2af1fg31f7g4fa4ga579g19c2c75b3be0" version="1">Ping Spawns</content>
+
+    <content contentuid="h67c587dfg3290g4d28ga54fg6b4ec76d496c" version="1">State</content>
+
+    <content contentuid="h67828f2fg32d7g4da7ga54bg1bc1c76939e3" version="1">Stop</content>
+
+    <content contentuid="h1337c4cfg4662g4919ga200g4f7fc0226d5d" version="1">more continues battle between rounds at the cost of cheesy out of combat strats</content>
+
+    <content contentuid="h63e99ef5g36bcg4cbag850dgaadc672f88fe" version="1">Force Enter Combat</content>
+
+    <content contentuid="h70af0aafg25fag45ffga439gc399c61be1bb" version="1">Scenarios</content>
+
+    <content contentuid="h6383254fg36d6g4701ga50bg0167c7292345" version="1">Reset</content>
+
+    <content contentuid="h644ebf4fg311bg4ea1ga577gd8c7c755fae5" version="1">Pos</content>
+
+    <content contentuid="h60c88927g359dg4dc7ga53fgbba1471d9983" version="1">Maps</content>
+
+    <content contentuid="h7d31cd11g2864g4984g84e0g2fe226c20dc0" version="1">Persist Config</content>
+
+    <content contentuid="h11533bf0g4406g46eag9226g008c300422ae" version="1">Combat is Starting.</content>
+
+    <content contentuid="heddf22a2gb88ag477fgbdeegc1191fcce33b" version="1">Randomize Spawn Offset</content>
+
+    <content contentuid="h74e31d57g21b6g4480ga47dg02e6465f20c4" version="1">Rarity</content>
+
+    <content contentuid="h7ccbc6c9g299eg4939g84ffg8f5fa6ddad7d" version="1">Bypass Story</content>
+
+    <content contentuid="h60c8931fg359dg4c64ga53fgba02c71d9820" version="1">Main</content>
+
+    <content contentuid="h644b89efg311eg4dcbga577g8badc755a98f" version="1">Logs</content>
+
+    <content contentuid="h7bade630g2ef8g4b36g9489ged5036abcf72" version="1">Combat started.</content>
+
+    <content contentuid="h67da95ffg328fg4c0aga54eg9a6cc76cb84e" version="1">Items</content>
+
     <content contentuid="h753cb597g2069g4e0cga460gf86a4642da48" version="1">Creation</content>
-    
+
+    <content contentuid="h70af8773g25fag4d22ga439gcb44061be966" version="1">Teleport</content>
+
+    <content contentuid="h763ba337g236eg4f66ga450g89004672ab22" version="1">Config</content>
+
+    <content contentuid="h639b85d7g36ceg4d08ga50ag8b6e4728a94c" version="1">Debug</content>
+
 </contentList>
-    
