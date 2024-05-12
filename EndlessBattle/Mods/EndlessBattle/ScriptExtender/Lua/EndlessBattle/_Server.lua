@@ -1,4 +1,4 @@
-Require("JustCombat/Shared")
+Require("EndlessBattle/Shared")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -18,7 +18,7 @@ DefaultConfig = {
 Config = UT.DeepClone(DefaultConfig)
 
 External = {}
-Require("JustCombat/External")
+Require("EndlessBattle/External")
 
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)
@@ -30,13 +30,13 @@ Map = {}
 Item = {}
 GameMode = {}
 
-Require("JustCombat/Player")
-Require("JustCombat/Scenario")
-Require("JustCombat/Enemy")
-Require("JustCombat/Map")
-Require("JustCombat/Item")
-Require("JustCombat/GameMode")
-Require("JustCombat/NetEvents")
+Require("EndlessBattle/Player")
+Require("EndlessBattle/Scenario")
+Require("EndlessBattle/Enemy")
+Require("EndlessBattle/Map")
+Require("EndlessBattle/Item")
+Require("EndlessBattle/GameMode")
+Require("EndlessBattle/NetEvents")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -103,7 +103,7 @@ end)
 
 do
     local Commands = {}
-    Api = Commands -- Mods.JustCombat.Api
+    Api = Commands -- Mods.EndlessBattle.Api
 
     -- Net.On("Api", function(event)
     --     local fn = event.Payload.Command
@@ -147,9 +147,9 @@ do
         -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
         -- local parts = US.Split(dump, "\n")
         -- for _, part in ipairs(parts) do
-        --     Osi.AddEntryToCustomBook("JustCombat", part .. "\n")
+        --     Osi.AddEntryToCustomBook("EndlessBattle", part .. "\n")
         -- end
-        -- Osi.OpenCustomBookUI(GetHostCharacter(), "JustCombat")
+        -- Osi.OpenCustomBookUI(GetHostCharacter(), "EndlessBattle")
 
         -- GameMode.AskUnlockAll()
 

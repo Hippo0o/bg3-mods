@@ -1,7 +1,7 @@
 .PHONY: clrf-to-lf lf-to-clrf fix-permissions sync-files copy
 
 UID=1000
-MOD_SUBDIR=$(MOD_DIR)/Mods/JustCombat
+MOD_SUBDIR=$(MOD_DIR)/Mods/EndlessBattle
 
 clrf-to-lf:
 	fd -t file . $(MOD_SUBDIR) -x sed -i 's/\r$$//'
@@ -18,12 +18,12 @@ sync-files:
 	while sleep 0.1; do fd . | entr -d rsync --verbose -avc --copy-links --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/." ; done
 
 copy:
-	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/JustCombat/."
+	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/EndlessBattle/."
 
 copy-back:
-	cp $(MOUNT_DIR)/Temp/JustCombat.zip .
-	unzip JustCombat.zip JustCombat.pak
-	mv JustCombat.pak Releases/JustCombat.pak
+	cp $(MOUNT_DIR)/Temp/EndlessBattle.zip .
+	unzip EndlessBattle.zip EndlessBattle.pak
+	mv EndlessBattle.pak Releases/EndlessBattle.pak
 
 mounts: # dont forgor to pacman -S cifs-utils
 	mount -t cifs -o rw,username=user,uid=$(UID),file_mode=0777,dir_mode=0777 "//$(WIN_IP)/SE" $(MOUNT_DIR)/SE

@@ -1,8 +1,10 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
-Mod.Debug = true
-Mod.Dev = true
+Mod.Debug = false
+Mod.Dev = false
 Mod.EnableRCE = false
+Mod.TableKey = "EndlessBattle"
+Mod.Prefix = "Endless Battle"
 
 ---@type Utils
 local Utils = Require("Hlib/Utils")
@@ -20,7 +22,7 @@ S = nil
 C = Require("Hlib/Constants")
 
 UT.Merge(C, {
-    ModUUID = Mod.ModUUID,
+    ModUUID = Mod.UUID,
     EnemyFaction = "64321d50-d516-b1b2-cfac-2eb773de1ff6",
     NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral
     ItemRarity = {

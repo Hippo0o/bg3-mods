@@ -9,13 +9,13 @@
           <attribute id="Author" type="LSString" value="Hippo0o" />
           <attribute id="CharacterCreationLevelName" type="FixedString" value="" />
           <attribute id="Description" type="LSString" value="Forego story and just combat" />
-          <attribute id="Folder" type="LSString" value="JustCombat" />
+          <attribute id="Folder" type="LSString" value="EndlessBattle" />
           <attribute id="GMTemplate" type="FixedString" value="" />
           <attribute id="LobbyLevelName" type="FixedString" value="" />
           <attribute id="MD5" type="LSString" value="" />
           <attribute id="MainMenuBackgroundVideo" type="FixedString" value="" />
           <attribute id="MenuLevelName" type="FixedString" value="" />
-          <attribute id="Name" type="FixedString" value="JustCombat" />
+          <attribute id="Name" type="FixedString" value="Endless Battle - Roguelike gamemode" />
           <attribute id="NumPlayers" type="uint8" value="4" />
           <attribute id="PhotoBooth" type="FixedString" value="" />
           <attribute id="StartupLevelName" type="FixedString" value="" />

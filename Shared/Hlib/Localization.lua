@@ -106,7 +106,7 @@ if Mod.Dev then
     end
 
     function M.CreateLocaFile()
-        local path = Mod.ModPrefix .. "/Localization/" .. Mod.ModTableKey .. ".xml"
+        local path = Mod.Prefix .. "/Localization/" .. Mod.TableKey .. ".xml"
 
         local loca = M.BuildLocaFile()
         Ext.IO.SaveFile(path, loca)
@@ -118,7 +118,7 @@ if Mod.Dev then
         local Net = Require("Hlib/Net")
         local Event = Require("Hlib/Event")
 
-        local filepath = Mod.ModPrefix .. "/Localization/" .. Mod.ModTableKey .. ".json"
+        local filepath = Mod.Prefix .. "/Localization/" .. Mod.TableKey .. ".json"
         M.Translations = Ext.Json.Parse(Ext.IO.LoadFile(filepath) or "{}")
 
         Net.On("DevTranslationAdded", function(event)

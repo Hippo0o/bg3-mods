@@ -32,13 +32,13 @@ local Utils = Require("Hlib/Utils")
 
 Ext.Events.SessionLoaded:Subscribe(function()
     Utils.Log.Info(
-        Mod.ModTableKey
+        Mod.TableKey
             .. " Version: "
-            .. Mod.ModVersion.major
+            .. Mod.Version.major
             .. "."
-            .. Mod.ModVersion.minor
+            .. Mod.Version.minor
             .. "."
-            .. Mod.ModVersion.revision
+            .. Mod.Version.revision
             .. " Loaded"
     )
 
