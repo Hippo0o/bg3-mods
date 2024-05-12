@@ -170,7 +170,7 @@ function Map.TeleportTo(map, character, withOffset)
     local teleporting = Player.TeleportToAct(act)
 
     if teleporting == 0 then
-        Player.Notify("Teleporting to different ACT")
+        Player.Notify(__("Teleporting to different ACT"))
 
         WaitFor(function()
             return Player.TeleportToAct(act) == 2

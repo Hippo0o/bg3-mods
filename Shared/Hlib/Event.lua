@@ -9,26 +9,27 @@ local M = {}
 
 local listeners = {}
 
+-- exposed
 ---@class EventListener : LibsClass
----@field private Id string
----@field private Event string
----@field private Func fun(...: any)
+---@field private _Id string
+---@field private _Event string
+---@field private _Func fun(...: any)
 ---@field UnregisterOnError boolean
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
 ---@field New fun(event: string, callback: fun(event: table), once: boolean|nil): EventListener
 local EventListener = Libs.Class({
-    Id = nil,
-    Event = nil,
+    _Id = nil,
+    _Event = nil,
+    _Func = function() end,
     Once = false,
     UnregisterOnError = false,
-    Func = function() end,
     Exec = function(self, ...)
         local args = { ... }
 
         xpcall(function()
-            self.Func(table.unpack(args))
+            self._Func(table.unpack(args))
         end, function(err)
             if self.UnregisterOnError then
                 if Mod.Debug then
@@ -46,29 +47,29 @@ local EventListener = Libs.Class({
         end
     end,
     Unregister = function(self)
-        local eventListeners = listeners[self.Event]
+        local eventListeners = listeners[self._Event]
 
         for i = #eventListeners, 1, -1 do
-            if eventListeners[i].Id == self.Id then
-                Utils.Log.Debug("Event/Unregister", self.Event, self.Id)
+            if eventListeners[i]._Id == self._Id then
+                Utils.Log.Debug("Event/Unregister", self._Event, self._Id)
                 table.remove(eventListeners, i)
             end
         end
 
         if #eventListeners == 0 then
-            listeners[self.Event] = nil
+            listeners[self._Event] = nil
         end
     end,
 })
 
 function EventListener.New(event, callback, once)
     local o = EventListener.Init({
-        Func = callback,
+        _Func = callback,
+        _Event = event,
         Once = once and true or false,
-        Event = event,
     })
 
-    o.Id = Utils.RandomId(event .. "_")
+    o._Id = Utils.RandomId(event .. "_")
 
     if not listeners[event] then
         listeners[event] = {}

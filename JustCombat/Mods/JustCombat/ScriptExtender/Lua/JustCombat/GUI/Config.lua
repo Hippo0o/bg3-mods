@@ -3,42 +3,43 @@ Config = {}
 ---@param tab ExtuiTabBar
 function Config.Main(tab)
     ---@type ExtuiTabItem
-    local root = tab:AddTabItem("Config")
+    local root = tab:AddTabItem(__("Config"))
 
     Net.Send("Config")
 
     ---@type ExtuiCheckbox
-    local c1 = root:AddCheckbox("Enable Debug")
+    local c1 = root:AddCheckbox(__("Enable Debug"))
     c1.Checked = Mod.Debug
+    root:AddText(__("some more info in the console and other debug features"))
     c1.OnChange = function(ckb)
         Event.Trigger("ToggleDebug", ckb.Checked)
         Event.Trigger("UpdateConfig", { Debug = ckb.Checked })
     end
 
     root:AddSeparator()
-    local c2 = root:AddCheckbox("Bypass Story")
-    root:AddText("skip dialogues, combat and interactions that aren't related to a scenario")
+    local c2 = root:AddCheckbox(__("Bypass Story"))
+    root:AddText(__("skip dialogues, combat and interactions that aren't related to a scenario"))
     c2.OnChange = function(ckb)
         Event.Trigger("UpdateConfig", { BypassStory = ckb.Checked })
     end
 
     root:AddSeparator()
-    local c3 = root:AddCheckbox("Always Bypass Story")
-    root:AddText("always skip dialogues, combat and interactions even if no scenario is active")
+    local c3 = root:AddCheckbox(__("Always Bypass Story"))
+    root:AddText(__("always skip dialogues, combat and interactions even if no scenario is active"))
     c3.OnChange = function(ckb)
         Event.Trigger("UpdateConfig", { BypassStoryAlways = ckb.Checked, BypassStory = ckb.Checked or c2.Checked })
     end
 
     root:AddSeparator()
-    local c4 = root:AddCheckbox("Force Enter Combat")
-    root:AddText("more continues battle between rounds at the cost of cheesy out of combat strats")
+    local c4 = root:AddCheckbox(__("Force Enter Combat"))
+    root:AddText(__("more continues battle between rounds at the cost of cheesy out of combat strats"))
     c4.OnChange = function(ckb)
         Event.Trigger("UpdateConfig", { ForceEnterCombat = ckb.Checked })
     end
 
     root:AddSeparator()
-    local c5 = root:AddSliderInt("Randomize Spawn Offset", 0, 0, 50)
-    root:AddText("randomize spawn position offset to for more varied encounters")
+    local c5 = root:AddSliderInt(__("Randomize Spawn Offset"), 0, 0, 50)
+    root:AddText(__("randomize spawn position for more varied encounters (too high may cause issues)"))
     c5.OnChange = Async.Debounce(500, function(sld)
         Event.Trigger("UpdateConfig", { RandomizeSpawnOffset = sld.Value[1] })
     end)
@@ -58,7 +59,7 @@ function Config.Main(tab)
         clearStatus()
     end
 
-    local btn = root:AddButton("Persist Config")
+    local btn = root:AddButton(__("Persist Config"))
     btn.OnClick = function()
         showStatus("Persisting config...")
 
@@ -72,7 +73,7 @@ function Config.Main(tab)
         })
     end
 
-    local btn = root:AddButton("Reset Config")
+    local btn = root:AddButton(__("Reset Config"))
     btn.SameLine = true
     btn.OnClick = function()
         showStatus("Resetting config...")
@@ -80,7 +81,7 @@ function Config.Main(tab)
         Net.Send("Config", { Reset = true })
     end
 
-    local btn = root:AddButton("Default Config")
+    local btn = root:AddButton(__("Default Config"))
     btn.SameLine = true
     btn.OnClick = function()
         showStatus("Default config...")

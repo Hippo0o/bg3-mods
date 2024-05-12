@@ -2,7 +2,7 @@ Control = {}
 
 ---@param tab ExtuiTabBar
 function Control.Main(tab)
-    local root = tab:AddTabItem("Main")
+    local root = tab:AddTabItem(__("Main"))
 
     WindowEvent("Start", function(scenarioName, mapName)
         Net.Request("Start", function(event)
@@ -64,16 +64,16 @@ function Control.Main(tab)
             if state and state.Scenario then
                 startLayout.Root.Visible = false
                 stopLayout.Root.Visible = true
-                header.Label = "Running"
+                header.Label = __("Running")
             else
                 startLayout.Root.Visible = true
                 stopLayout.Root.Visible = false
-                header.Label = "Start Menu"
+                header.Label = __("Start Menu")
             end
         end):Exec()
     end)
 
-    root:AddSeparatorText("Logs")
+    root:AddSeparatorText(__("Logs"))
     Components.Layout(root, 1, 1, function(layout)
         layout.Root.ScrollY = true
         local scrollable = layout.Cells
@@ -92,8 +92,8 @@ end
 
 function Control.StartPanel(root)
     return Components.Layout(root, 2, 1, function(startLayout)
-        startLayout.Cells[1][1]:AddText("Scenarios")
-        startLayout.Cells[1][2]:AddText("Maps")
+        startLayout.Cells[1][1]:AddText(__("Scenarios"))
+        startLayout.Cells[1][2]:AddText(__("Maps"))
         local listCols = startLayout.Cells[1]
 
         local scenarioSelection = Components.RadioList(listCols[1])
@@ -114,17 +114,17 @@ function Control.StartPanel(root)
 
         Net.Send("GetSelection")
 
-        listCols[1]:AddButton("Start").OnClick = function(button)
+        listCols[1]:AddButton(__("Start")).OnClick = function(button)
             Event.Trigger("Start", scenarioSelection.Value, mapSelection.Value)
         end
 
         Components.Conditional(listCols[2], function(cond)
-            local b1 = cond.Root:AddButton("Teleport")
+            local b1 = cond.Root:AddButton(__("Teleport"))
             b1.OnClick = function(button)
                 Event.Trigger("Teleport", { Map = mapSelection.Value })
             end
 
-            local b2 = cond.Root:AddButton("Ping Spawns")
+            local b2 = cond.Root:AddButton(__("Ping Spawns"))
             b2.OnClick = function(button)
                 Event.Trigger("PingSpawns", { Map = mapSelection.Value })
             end
@@ -156,15 +156,15 @@ function Control.RunningPanel(root)
             end
         end, "StateChange")
 
-        layout.Cells[1][2]:AddButton("Teleport").OnClick = function()
+        layout.Cells[1][2]:AddButton(__("Teleport")).OnClick = function()
             Event.Trigger("Teleport", { Map = State.Scenario.Map.Name })
         end
 
-        layout.Cells[1][2]:AddButton("Ping Spawns").OnClick = function()
+        layout.Cells[1][2]:AddButton(__("Ping Spawns")).OnClick = function()
             Event.Trigger("PingSpawns", { Map = State.Scenario.Map.Name })
         end
 
-        layout.Cells[1][1]:AddButton("Stop").OnClick = function()
+        layout.Cells[1][1]:AddButton(__("Stop")).OnClick = function()
             Event.Trigger("Stop")
         end
     end)

@@ -129,13 +129,18 @@ do
         end
     end
 
+    function Commands.Loca()
+        Localization.BuildLocaFile()
+    end
+
     local start = 0
     function Commands.Dev(new_start, amount)
         L.Info(":)")
 
-        for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
-            L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
-        end
+        -- for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
+        --     -- L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
+        --     L.Dump(Ext.Loca.GetTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
+        -- end
 
         -- Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
 

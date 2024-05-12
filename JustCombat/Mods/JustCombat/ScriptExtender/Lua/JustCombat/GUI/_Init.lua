@@ -65,7 +65,7 @@ local function openWindow()
 
     Net.Send("GetState")
 
-    local tabs = window:AddTabBar("Main")
+    local tabs = window:AddTabBar(__("Main"))
     Control.Main(tabs)
     Creation.Main(tabs)
     Config.Main(tabs)

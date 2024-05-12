@@ -113,23 +113,20 @@ if Ext.IsServer() then
     function M.Entity.IsHireling(character)
         local faction = Osi.GetFaction(character)
 
-        return faction:match("^Hireling") ~= nil
+        return faction and faction:match("^Hireling") ~= nil
     end
 
     ---@param character string GUID
     ---@return boolean
     function M.Entity.IsOrigin(character)
         local faction = Osi.GetFaction(character)
+        if faction and (faction:match("^Origin") ~= nil or faction:match("^Companion") ~= nil) then
+            return true
+        end
 
-        local UUIDChar = M.UUID.GetGUID(character)
-
-        return faction:match("^Origin") ~= nil
-            or faction:match("^Companion") ~= nil
-            or (
-                #M.Table.Filter(Constants.OriginCharacters, function(v)
-                    return M.UUID.Equals(v, UUIDChar)
-                end) > 0
-            )
+        return M.Table.Find(Constants.OriginCharacters, function(v)
+            return M.UUID.Equals(v, character)
+        end) ~= nil
     end
 
     ---@param character string GUID
@@ -548,6 +545,13 @@ function M.UUID.Equals(item1, item2)
     return false
 end
 
+-- expensive operation
+---@param uuid string
+---@return boolean
+function M.UUID.Exists(uuid)
+    return Ext.Template.GetTemplate(uuid) or Ext.Mod.IsModLoaded(uuid) or Ext.Entity.GetAllEntitiesWithUuid()[uuid]
+end
+
 ---@param strict boolean|nil prevent UUID collision - slow
 function M.UUID.Random(strict)
     -- version 4 UUID
@@ -561,9 +565,45 @@ function M.UUID.Random(strict)
         return uuid
     end
 
-    if Ext.Template.GetTemplate(uuid) or Ext.Mod.IsModLoaded(uuid) or Ext.Entity.GetAllEntitiesWithUuid()[uuid] then
+    if M.UUID.Exists(uuid) then
         return M.UUID.Random(true)
     end
+
+    return uuid
+end
+
+---@param str string
+---@param iteration number|nil
+---@return string @UUIDv4
+function M.UUID.FromString(str, iteration)
+    local function hashToUUID(hash)
+        local uuid = string.format(
+            "%08x-%04x-4%03x-%04x-%012x",
+            tonumber(hash:sub(1, 8), 16),
+            tonumber(hash:sub(9, 12), 16),
+            tonumber(hash:sub(13, 15), 16),
+            tonumber(hash:sub(16, 19), 16) & 0x3fff | 0x8000,
+            tonumber(hash:sub(20, 31), 16)
+        )
+        return uuid
+    end
+
+    local function simpleHash(input)
+        local hash = 0
+        local shift = 0
+        for i = 1, #input do
+            hash = (hash ~ ((string.byte(input, i) + i) << shift)) & 0xFFFFFFFF
+            shift = (shift + 6) % 25
+        end
+        return string.format("%08x%08x%08x%08x", hash, hash ~ 0x55555555, hash ~ 0x33333333, hash ~ 0x11111111)
+    end
+
+    local prefix = Mod.ModUUID
+    for i = 1, (iteration or 0) do
+        prefix = prefix .. Mod.ModUUID
+    end
+
+    local uuid = hashToUUID(simpleHash(prefix .. str))
 
     return uuid
 end

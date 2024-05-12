@@ -175,7 +175,7 @@ function Action.CalculateLoot()
 end
 
 function Action.SpawnLoot()
-    Player.Notify("Dropping loot.")
+    Player.Notify(__("Dropping loot."))
 
     local map = Current().Map
     local loot = Action.CalculateLoot()
@@ -227,7 +227,7 @@ function Action.StartCombat()
 
     Current().Map:PingSpawns()
 
-    Player.Notify("Combat is Starting.", true)
+    Player.Notify(__("Combat is Starting."), true)
     -- Osi.ForceTurnBasedMode(Player.Host(), 1)
     Action.StartRound()
 end
@@ -252,7 +252,7 @@ function Action.SpawnRound()
                 retries = #Current().Map.Spawns,
                 interval = 500,
                 success = function()
-                    Player.Notify("Enemy " .. e:GetTranslatedName() .. " spawned.", true, e:GetId())
+                    Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
                     if Config.ForceEnterCombat or Player.InCombat() then
                         Scenario.CombatSpawned(e)
                     end
@@ -296,7 +296,7 @@ end
 
 function Action.StartRound()
     Current().Round = Current().Round + 1
-    Player.Notify("Round " .. Current().Round)
+    Player.Notify(__("Round %d", Current().Round))
 
     Action.SpawnRound()
 end
@@ -313,7 +313,7 @@ function Action.MapEntered()
             return
         end
         if tries % 10 == 0 then
-            Player.Notify("Move to start scenario", true)
+            Player.Notify(__("Move to start scenario"), true)
         end
         local x2, y2, z2 = Player.Pos()
         return x ~= x2 or z ~= z2
@@ -325,7 +325,7 @@ function Action.MapEntered()
         end),
         failed = function()
             Scenario.Stop()
-            Player.Notify("Scenario canceled due to timeout.")
+            Player.Notify(__("Scenario canceled due to timeout."))
         end,
     })
 end
@@ -370,10 +370,10 @@ function Action.CheckEnded()
     local s = Current()
     if not s:HasMoreRounds() then
         if #s.SpawnedEnemies == 0 then
-            Player.Notify("All enemies are dead.")
+            Player.Notify(__("All enemies are dead."))
             Scenario.End()
         else
-            Player.Notify(#s.SpawnedEnemies .. " enemies left.", true)
+            Player.Notify(__("%d enemies left.", #s.SpawnedEnemies), true)
         end
     end
 end
@@ -399,7 +399,7 @@ function Scenario.RestoreFromState(state)
         S = Scenario.Restore(state)
         PersistentVars.Scenario = S
 
-        Player.Notify("Scenario restored.")
+        Player.Notify(__("Scenario restored."))
 
         if not S:HasStarted() and S.OnMap then
             Action.MapEntered()
@@ -409,7 +409,7 @@ function Scenario.RestoreFromState(state)
         Enemy.Cleanup()
         S = nil
         PersistentVars.Scenario = nil
-        Player.Notify("Failed to restore scenario.")
+        Player.Notify(__("Failed to restore scenario."))
     end)
 end
 
@@ -478,10 +478,10 @@ function Scenario.Start(template, map)
         end
     end
 
-    Player.Notify("Scenario " .. template.Name .. " started.")
+    Player.Notify(__("Scenario %s started.", template.Name))
     S = scenario
     PersistentVars.Scenario = S
-    Player.Notify("Leave camp to join the battle.")
+    Player.Notify(__("Leave camp to join the battle."))
 
     Enemy.Cleanup()
 end
@@ -490,14 +490,14 @@ function Scenario.End()
     Action.SpawnLoot()
     S = nil
     PersistentVars.Scenario = nil
-    Player.Notify("Scenario ended.")
+    Player.Notify(__("Scenario ended."))
 end
 
 function Scenario.Stop()
     Enemy.Cleanup()
     S = nil
     PersistentVars.Scenario = nil
-    Player.Notify("Scenario stopped.")
+    Player.Notify(__("Scenario stopped."))
 end
 
 function Scenario.Teleport(uuid)
@@ -655,7 +655,7 @@ U.Osiris.On(
 
         s.CombatId = combatGuid
         if s.Round == 1 then
-            Player.Notify("Combat started.")
+            Player.Notify(__("Combat started."))
         end
     end)
 )
@@ -709,7 +709,7 @@ U.Osiris.On(
     ifScenario(function(uuid)
         if S.OnMap and U.UUID.Equals(uuid, Player.Host()) then
             Scenario.Stop()
-            Player.Notify("Returned to camp.")
+            Player.Notify(__("Returned to camp."))
         end
     end)
 )
@@ -731,7 +731,7 @@ U.Osiris.On(
                 table.insert(s.KilledEnemies, e)
                 table.remove(s.SpawnedEnemies, i)
 
-                Player.Notify("Enemy " .. e:GetTranslatedName() .. " killed.", true)
+                Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()), true)
                 spawnedKilled = true
                 break
             end

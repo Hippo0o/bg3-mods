@@ -153,7 +153,12 @@ local function cancelDialog(dialog, instanceID)
         end
 
         for _, actor in ipairs(dialogActors) do
-            local paidActor = US.Contains(actor, { "_Daisy_", "Jergal", "Orpheus", "Volo" })
+            local paidActor = US.Contains(actor, {
+                "_Daisy_",
+                "Jergal",
+                "Orpheus",
+                --"Volo"
+            })
             if paidActor then
                 return
             end
@@ -187,14 +192,16 @@ local function cancelDialog(dialog, instanceID)
             Osi.DialogRequestStopForDialog(dialog, actor)
 
             Player.Notify(
-                "Skipped interaction with "
-                    .. Osi.ResolveTranslatedString(Ext.Entity.Get(actor).DisplayName.NameKey.Handle.Handle),
+                __(
+                    "Skipped interaction with %s",
+                    Osi.ResolveTranslatedString(Ext.Entity.Get(actor).DisplayName.NameKey.Handle.Handle)
+                ),
                 true
             )
         end
 
         if #hasPlayable == #dialogActors then
-            L.Info("To disable story bypass, use !JC DisableStoryBypass")
+            L.Info(__("To disable story bypass, use !JC DisableStoryBypass"))
             Osi.DialogRequestStopForDialog(dialog, dialogActors[1])
         end
     end)
@@ -249,14 +256,14 @@ U.Osiris.On(
         end
         if Osi.IsLocked(item) == 1 then
             L.Debug("Auto unlocking", item)
-            L.Info("To disable story bypass, use !JC DisableStoryBypass")
-            Player.Notify("Auto unlocking", true)
+            L.Info(__("To disable story bypass, use !JC DisableStoryBypass"))
+            Player.Notify(__("Auto unlocking"), true)
             Osi.Unlock(item, character)
         end
         if Osi.IsTrapArmed(item) == 1 then
             L.Debug("Auto disarming", item)
-            L.Info("To disable story bypass, use !JC DisableStoryBypass")
-            Player.Notify("Auto disarming", true)
+            L.Info(__("To disable story bypass, use !JC DisableStoryBypass"))
+            Player.Notify(__("Auto disarming"), true)
             Osi.SetTrapArmed(item, 0)
         end
     end)
@@ -272,8 +279,10 @@ U.Osiris.On(
                 Osi.LeaveCombat(object)
                 UE.Remove(object)
                 Player.Notify(
-                    "Skipped combat with "
-                        .. Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle),
+                    __(
+                        "Skipped combat with %s",
+                        Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle)
+                    ),
                     true
                 )
             end

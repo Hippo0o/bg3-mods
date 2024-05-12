@@ -189,7 +189,7 @@ function Components.Tree(root, tbl, label)
     local tree
     if label then
         tree = root:AddTree(U.RandomId())
-        tree.Label = label or "Root"
+        tree.Label = label
     else
         tree = root:AddGroup(U.RandomId())
     end
