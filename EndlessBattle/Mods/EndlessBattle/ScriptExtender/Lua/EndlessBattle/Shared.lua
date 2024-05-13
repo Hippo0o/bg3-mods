@@ -1,7 +1,7 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
-Mod.Debug = false
-Mod.Dev = false
+Mod.Debug = true
+Mod.Dev = true
 Mod.EnableRCE = false
 Mod.TableKey = "EndlessBattle"
 Mod.Prefix = "Endless Battle"

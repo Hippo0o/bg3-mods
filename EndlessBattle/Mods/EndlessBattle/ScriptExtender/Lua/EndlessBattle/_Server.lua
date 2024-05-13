@@ -64,10 +64,10 @@ GameState.OnSave(function()
     end
 end)
 
-GameState.OnLoadSession(function(state)
+GameState.OnSessionLoad(function()
     External.LoadConfig()
 
-    Async.Run(function() -- runs on OnLoad instead of OnLoadSession
+    Async.Run(function() -- runs on OnLoad instead of OnSessionLoad
         S = PersistentVars.Scenario
         if S ~= nil then
             Scenario.RestoreFromState(S)
@@ -91,27 +91,29 @@ GameState.OnUnload(function()
     end
 end)
 
--- Ext.Events.ResetCompleted:Subscribe(function()
---     Event.Trigger(GameState.EventLoad, { FromState = "Sync", ToState = "Running" })
--- end)
-
 do -- check for interaction to enable the mod
     local checkActive
-    local onLoad
-    checkActive = Event.On(Net.EventSend, function(event)
+    checkActive = Event.On(Net.EventOnSend, function(event)
         if event.Action == "OpenGUI" then
             PersistentVars.Active = true
-            onLoad:Unregister()
             checkActive:Unregister()
-        end
-    end)
-    local onLoad = GameState.OnLoad(function()
-        if PersistentVars.Active then
-            checkActive:Unregister()
-            onLoad:Unregister()
         end
     end)
 end
+
+local count = 0
+local reset = Async.Debounce(5000, function()
+    count = 0
+end)
+U.Osiris.On("StatusRemoved", 4, "after", function(object, status, causee, applyStoryActionID)
+    if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
+        count = count + 1
+        if count >= 3 then
+            Net.Send("OpenGUI")
+        end
+        reset()
+    end
+end)
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -170,6 +172,7 @@ do
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "EndlessBattle")
 
         -- GameMode.AskUnlockAll()
+        -- Require("Hlib/OsirisEventDebug").Attach()
 
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100

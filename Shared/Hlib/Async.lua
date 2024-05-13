@@ -46,6 +46,9 @@ local Loop = Libs.Class({
     end,
     Start = function(self) ---@param self Loop
         assert(self.Handle == nil, "Loop already running.")
+        if Mod.Dev then
+            Utils.Log.Debug("Loop/Start", self.Startable)
+        end
         if not self.Startable or self:IsEmpty() then
             return
         end
@@ -70,6 +73,9 @@ local Loop = Libs.Class({
         assert(self.Handle ~= nil, "Loop not running.")
         Ext.Events.Tick:Unsubscribe(self.Handle)
         self.Handle = nil
+        if Mod.Dev then
+            Utils.Log.Debug("Loop/Stop")
+        end
     end,
     Tick = function(self, time) ---@param self Loop
         for _, queue in ipairs(self.Queues) do
@@ -216,7 +222,7 @@ GameState.OnSave(function()
         loop:Stop()
     end
 end)
-GameState.OnLoadSession(function()
+GameState.OnSessionLoad(function()
     loop.Startable = false
 end)
 GameState.OnLoad(function()

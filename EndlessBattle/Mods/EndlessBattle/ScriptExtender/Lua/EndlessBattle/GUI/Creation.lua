@@ -2,6 +2,7 @@ Creation = {}
 
 ---@param tab ExtuiTabBar
 function Creation.Main(tab)
+    ---@type ExtuiTree
     local root = tab:AddTabItem(__("Creation"))
 
     local posLabel = root:AddText("")
