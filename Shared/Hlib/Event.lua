@@ -95,14 +95,14 @@ end
 ---@param event string
 ---@param ... any
 function M.Trigger(event, ...)
+    local eventListeners = M.Listeners(event)
+
     if Mod.Dev then
-        Utils.Log.Debug("Event/Trigger", listeners[event] and #listeners[event] or 0, event)
+        Utils.Log.Debug("Event/Trigger", #eventListeners, event)
     end
 
-    if listeners[event] then
-        for _, l in ipairs(Utils.Table.Values(listeners[event])) do
-            l:Exec(...)
-        end
+    for _, l in ipairs(Utils.Table.Values(eventListeners)) do
+        l:Exec(...)
     end
 end
 
@@ -110,6 +110,11 @@ end
 ---@return EventListener[]
 function M.Listeners(event)
     return listeners[event] or {}
+end
+
+---@return string[]
+function M.Events()
+    return Utils.Table.Keys(listeners)
 end
 
 return M
