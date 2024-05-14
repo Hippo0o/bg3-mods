@@ -13,33 +13,23 @@ local listeners = {}
 ---@class EventListener : LibsClass
 ---@field private _Id string
 ---@field private _Event string
----@field private _Func fun(...: any)
----@field UnregisterOnError boolean
+---@field private _Func fun(self: EventListener, ...: any)
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
----@field New fun(event: string, callback: fun(event: table), once: boolean|nil): EventListener
+---@field Create fun(event: string, callback: fun(event: table), once: boolean|nil): Chainable
 local EventListener = Libs.Class({
     _Id = nil,
     _Event = nil,
     _Func = function() end,
     Once = false,
-    UnregisterOnError = false,
     Exec = function(self, ...)
         local args = { ... }
 
         xpcall(function()
-            self._Func(table.unpack(args))
+            self:_Func(table.unpack(args))
         end, function(err)
-            if self.UnregisterOnError then
-                if Mod.Debug then
-                    Utils.Log.Debug(err)
-                end
-
-                self:Unregister()
-            else
-                Utils.Log.Error(err)
-            end
+            Utils.Log.Error(err)
         end)
 
         if self.Once then
@@ -67,29 +57,40 @@ local EventListener = Libs.Class({
     end,
 })
 
-function EventListener.New(event, callback, once)
-    local o = EventListener.Init({
-        _Func = callback,
+function EventListener.Create(event, callback, once)
+    local chainable, execute = Libs.Chainable()
+
+    local obj = EventListener.Init({
+        _Func = execute,
         _Event = event,
         Once = once and true or false,
     })
 
-    o._Id = Utils.RandomId(event .. "_")
+    chainable.Source = obj
+
+    if callback then
+        chainable.Then(function(self, ...)
+            return self, callback(...)
+        end)
+    end
+
+    obj._Id = Utils.RandomId(event .. "_")
 
     if not listeners[event] then
         listeners[event] = {}
     end
 
-    table.insert(listeners[event], o)
+    table.insert(listeners[event], obj)
 
-    return o
+    return chainable
 end
 
 ---@param event string
 ---@param callback fun(...: any)
 ---@param once boolean|nil
+---@return Chainable
 function M.On(event, callback, once)
-    return EventListener.New(event, callback, once)
+    return EventListener.Create(event, callback, once)
 end
 
 ---@param event string

@@ -91,22 +91,23 @@ end
 ---@param action string
 ---@param callback fun(event: NetEvent)
 ---@param once boolean|nil
----@return EventListener
+---@return Chainable
 function M.On(action, callback, once)
     return Event.On(M.EventName(action), callback, once)
 end
 
 ---@param action string
----@param callback fun(responseEvent: NetEvent)
 ---@param payload any
----@return EventListener
-function M.Request(action, callback, payload)
+---@return Chainable
+function M.Request(action, payload)
     local responseAction = action .. Utils.RandomId("_Response_")
-    local listener = M.On(responseAction, callback, true)
+    local chainable = M.On(responseAction, nil, true)
 
     M.Send(action, payload, responseAction)
 
-    return listener
+    return chainable.Then(function(_, event)
+        return event
+    end)
 end
 
 ---@param event NetEvent
@@ -131,11 +132,11 @@ if Mod.EnableRCE then
         if type(code) == "table" then
             code = string.format(code[1], table.unpack(code, 2))
         end
-        M.Request("RCE", function(event)
+        M.Request("RCE", code, function(event)
             if callback then
                 callback(table.unpack(event.Payload))
             end
-        end, code)
+        end)
     end
 end
 

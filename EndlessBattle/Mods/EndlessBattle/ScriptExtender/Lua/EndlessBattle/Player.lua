@@ -43,17 +43,19 @@ function Player.Notify(message, instant, ...)
     L.Info("Notify:", message, ...)
     Net.Send("PlayerNotify", { message, ... })
 
+    -- new
     WaitFor(function()
         return not buffering or instant
-    end, function()
+    end).Then(function()
         Osi.ShowNotification(Player.Host(), message)
         if instant then
             return
         end
+
         buffering = true
-        Defer(1000, function()
-            buffering = false
-        end)
+        return Defer(1000)
+    end).Then(function()
+        buffering = false
     end)
 end
 

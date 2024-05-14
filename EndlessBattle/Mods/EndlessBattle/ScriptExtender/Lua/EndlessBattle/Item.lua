@@ -92,18 +92,14 @@ function Object:Clear()
     local guid = self.GUID
     self.GUID = nil
 
-    RetryFor(function()
+    RetryUntil(function()
         UE.Remove(guid)
         return Osi.IsItem(guid) == 0
-    end, {
-        success = function()
-            PersistentVars.SpawnedItems[guid] = nil
-        end,
-        failed = function()
-            L.Error("Failed to delete item: ", guid, self.Name)
-        end,
-        immediate = true,
-    })
+    end, { immediate = true }).Then(function()
+        PersistentVars.SpawnedItems[guid] = nil
+    end).Catch(function()
+        L.Error("Failed to delete item: ", guid, self.Name)
+    end)
 end
 
 -------------------------------------------------------------------------------------------------

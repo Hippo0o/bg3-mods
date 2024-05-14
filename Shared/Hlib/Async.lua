@@ -186,12 +186,20 @@ local Runner = Libs.Class({
     end,
 })
 
+---@class ChainableRunner : Chainable
+---@field Source Runner
 ---@param queue Queue
----@param func fun()
----@return Runner
-function Runner.New(queue, func)
+---@param func fun()|nil
+---@return ChainableRunner
+function Runner.Create(queue, func)
     local obj = Runner.Init()
-    obj.Exec = func
+
+    local chainable, execute = Libs.Chainable(obj)
+    obj.Exec = execute
+
+    if func then
+        chainable.Then(func)
+    end
 
     local tid = queue:Enqueue(obj)
     obj.Clear = function()
@@ -199,7 +207,7 @@ function Runner.New(queue, func)
         obj.Cleared = true
     end
 
-    return obj
+    return chainable
 end
 
 ---@type Loop
@@ -234,41 +242,43 @@ end)
 
 ---@param ms number
 ---@param func fun(self: Runner, time: GameTime)
----@return Runner
+---@return ChainableRunner
 function M.Defer(ms, func)
     local seconds = ms / 1000
     local last = 0
 
-    local runner = Runner.New(prio, func)
+    local chainable = Runner.Create(prio, func)
 
-    runner.ExecCond = function(_, time)
+    chainable.Source.ExecCond = function(_, time)
         last = last + time.DeltaTime
         return last >= seconds
     end
 
-    return runner
+    return chainable
 end
 
----@param func fun()
----@return Runner
+---@param func fun(self: Runner, time: GameTime)
+---@return ChainableRunner
 function M.Run(func)
-    return Runner.New(prio, func)
+    return Runner.Create(prio, func)
 end
 
----@param func fun()
----@return Runner
+---@param func fun(self: Runner, time: GameTime)
+---@return ChainableRunner
 function M.Schedule(func)
-    return Runner.New(lowPrio, func)
+    return Runner.Create(lowPrio, func)
 end
 
 ---@param ms number
 ---@param func fun(self: Runner, time: GameTime)
----@return Runner
+---@return ChainableRunner
 function M.Interval(ms, func)
     local seconds = ms / 1000
     local last = 0
     local skip = false -- avoid consecutive executions
-    local runner = Runner.New(lowPrio, func)
+
+    local chainable = Runner.Create(lowPrio, func)
+    local runner = chainable.Source
 
     runner.ExecCond = function(_, time)
         last = last + time.DeltaTime
@@ -286,15 +296,16 @@ function M.Interval(ms, func)
         return false
     end
 
-    return runner
+    return chainable
 end
 
 ---@param cond fun(self: Runner, time: GameTime): boolean
 ---@param func fun(self: Runner, time: GameTime)
----@return Runner
+---@return ChainableRunner
 -- check for condition every ~100ms
 function M.WaitFor(cond, func)
-    local runner = Runner.New(prio, func)
+    local chainable = Runner.Create(prio, func)
+    local runner = chainable.Source
     local last = 0
 
     runner.ExecCond = function(self, time)
@@ -306,56 +317,60 @@ function M.WaitFor(cond, func)
         return cond(self, time)
     end
 
-    return runner
+    return chainable
 end
 
 ---@class RetryForOptions
 ---@field retries number|nil default: 3, -1 for infinite
----@field success fun(result: any)|nil
----@field failed fun(error)|nil error object
 ---@field interval number|nil default: 1000
----@field immediate boolean|nil default: false, GameTime is not available
+---@field immediate boolean|nil default: false
 ---@param cond fun(self, triesLeft: number, time: GameTime): boolean
 ---@param options RetryForOptions|nil
 ---@return Runner
 -- retries every (default: 1000 ms) until condition is met or tries(default: 3) are exhausted
-function M.RetryFor(cond, options)
+function M.RetryUntil(cond, options)
     options = options or {}
     local retries = options.retries or 3
-    local success = options.success
-    local failed = options.failed
     local interval = options.interval or 1000
     local immediate = options.immediate or false
 
-    local runner = M.Interval(interval, function(self, time)
+    local chainable, execute = Libs.Chainable()
+    chainable.Catch(function() end) -- ignore errors by default
+
+    local interval = M.Interval(interval, function(self, time)
         local ok, result = pcall(cond, self, retries, time)
         if ok and result then
             self:Clear()
-            if success then
-                success(result)
-            end
+            execute(result)
             return
         end
 
         if not ok then
-            L.Debug("RetryFor error:", result)
+            L.Debug("RetryUntil error:", result)
         end
 
         retries = retries - 1
 
         if retries == 0 then
             self:Clear()
-            if failed then
-                failed(result)
-            end
+            error(result)
         end
     end)
 
+    interval.Catch(function(self, err)
+        L.Debug("RetryUntil error:", err)
+        chainable.Throw(err)
+    end)
+
+    chainable.Source = interval.Source
+
     if immediate then
-        runner:Exec()
+        M.Run().Then(function(_, time)
+            chainable.Source:Exec(time)
+        end)
     end
 
-    return runner
+    return chainable
 end
 
 ---@param ms number
@@ -373,7 +388,7 @@ function M.Debounce(ms, func)
         local args = { ... }
         runner = M.Defer(ms, function()
             func(table.unpack(args))
-        end)
+        end).Source
     end
 end
 
