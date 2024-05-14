@@ -61,10 +61,10 @@ local EventListener = Libs.Class({
 ---@field After fun(func: fun(self: ChainableEvent, ...: any): any): ChainableEvent
 ---@return fun(event: string, callback: fun(event: table), once: boolean|nil): Chainable
 function EventListener.Create(event, callback, once)
-    local chainable, execute = Libs.Chainable()
+    local chainable, startChain = Libs.Chainable()
 
     local obj = EventListener.Init({
-        _Func = execute,
+        _Func = startChain,
         _Event = event,
         Once = once and true or false,
     })
