@@ -17,7 +17,6 @@ local listeners = {}
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
----@field Create fun(event: string, callback: fun(event: table), once: boolean|nil): Chainable
 local EventListener = Libs.Class({
     _Id = nil,
     _Event = nil,
@@ -27,7 +26,7 @@ local EventListener = Libs.Class({
         local args = { ... }
 
         xpcall(function()
-            self:_Func(table.unpack(args))
+            self._Func(table.unpack(args))
         end, function(err)
             Utils.Log.Error(err)
         end)
@@ -57,6 +56,10 @@ local EventListener = Libs.Class({
     end,
 })
 
+---@class ChainableEvent : Chainable
+---@field Source EventListener
+---@field After fun(func: fun(self: ChainableEvent, ...: any): any): ChainableEvent
+---@return fun(event: string, callback: fun(event: table), once: boolean|nil): Chainable
 function EventListener.Create(event, callback, once)
     local chainable, execute = Libs.Chainable()
 
@@ -69,8 +72,8 @@ function EventListener.Create(event, callback, once)
     chainable.Source = obj
 
     if callback then
-        chainable.Then(function(self, ...)
-            return self, callback(...)
+        chainable.After(function(_, ...)
+            return callback(...)
         end)
     end
 
@@ -88,7 +91,7 @@ end
 ---@param event string
 ---@param callback fun(...: any)
 ---@param once boolean|nil
----@return Chainable
+---@return ChainableEvent
 function M.On(event, callback, once)
     return EventListener.Create(event, callback, once)
 end

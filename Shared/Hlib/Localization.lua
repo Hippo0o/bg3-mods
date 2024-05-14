@@ -45,7 +45,7 @@ function M.Translate(text, version)
 
         if Mod.Dev then
             if Ext.IsClient() then
-                Require("Hlib/Net").Request("DevTranslationAdded", M.Translations).Then(function(event)
+                Require("Hlib/Net").Request("DevTranslationAdded", M.Translations).After(function(_, event)
                     M.Translations = event.Payload
                 end)
             else

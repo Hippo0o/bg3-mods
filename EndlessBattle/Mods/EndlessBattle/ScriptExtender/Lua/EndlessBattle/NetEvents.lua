@@ -53,11 +53,11 @@ Net.On("Start", function(event)
 end)
 
 Net.On("Stop")
-    .Then(function(_, event)
+    .After(function(_, event)
         Scenario.Stop()
         return event, { true }
     end)
-    .Then(Net.Respond)
+    .After(Net.Respond)
 
 Net.On("Teleport", function(event)
     local mapName = event.Payload.Map

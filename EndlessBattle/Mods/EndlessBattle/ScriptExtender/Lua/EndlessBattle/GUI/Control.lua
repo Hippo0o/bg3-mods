@@ -8,7 +8,7 @@ function Control.Main(tab)
         Net.Request("Start", {
             Scenario = scenarioName,
             Map = mapName,
-        }).Then(function(event)
+        }).After(function(_, event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
@@ -18,13 +18,13 @@ function Control.Main(tab)
     end)
 
     WindowEvent("Stop", function()
-        Net.Request("Stop").Then(function()
+        Net.Request("Stop").After(function()
             Net.Send("GetState")
         end)
     end)
 
     WindowEvent("Teleport", function(data)
-        Net.Request("Teleport", data).Then(function(event)
+        Net.Request("Teleport", data).After(function(_, event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
@@ -33,7 +33,7 @@ function Control.Main(tab)
     end)
 
     WindowEvent("PingSpawns", function(data)
-        Net.Request("PingSpawns", data).Then(function(event)
+        Net.Request("PingSpawns", data).After(function(_, event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
