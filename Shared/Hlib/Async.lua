@@ -83,7 +83,7 @@ local Loop = Libs.Class({
             for _, runner in queue:Iter() do
                 local success, result = pcall(function()
                     if runner:ExecCond(time) then
-                        runner.Exec(time)
+                        runner.Exec()
 
                         if runner:ClearCond(time) then
                             runner:Clear()
@@ -176,10 +176,12 @@ end
 ---@class Runner : LibsClass
 ---@field Cleared boolean
 ---@field ExecCond fun(self: Runner, time: GameTime): boolean
----@field Exec fun(time: GameTime) will be set by Chainable
+---@field Exec fun(self: Runner)
 ---@field ClearCond fun(self: Runner, time: GameTime): boolean
 ---@field Clear fun(self: Runner)
 local Runner = Libs.Class({
+    _Id = nil,
+    _Queue = nil,
     Cleared = false,
     ExecCond = function(_, _)
         return true
@@ -188,28 +190,42 @@ local Runner = Libs.Class({
     ClearCond = function(_, _)
         return true
     end,
+    Clear = function(self)
+        self._Queue:Dequeue(self._Id)
+        self.Cleared = true
+    end,
 })
+
+---@param queue Queue
+---@param func fun()
+---@return ChainableRunner
+function Runner.New(queue, func)
+    local obj = Runner.Init()
+
+    obj.Exec = func
+
+    obj._Id = queue:Enqueue(obj)
+    obj._Queue = queue
+
+    return obj
+end
 
 ---@class ChainableRunner : Chainable
 ---@field Source Runner
----@field After fun(func: fun(self: ChainableRunner, time: GameTime): any): ChainableRunner
+---@field After fun(func: fun(self: ChainableRunner, ...: any): any): ChainableRunner
 ---@param queue Queue
 ---@param func fun()|nil
 ---@return ChainableRunner
-function Runner.Create(queue, func)
-    local obj = Runner.Init()
+function Runner.Chainable(queue, func)
+    local obj = Runner.New(queue, func)
 
     local chainable, startChain = Libs.Chainable(obj)
-    obj.Exec = startChain
+    obj.Exec = function()
+        startChain()
+    end
 
     if func then
         chainable.After(func)
-    end
-
-    local tid = queue:Enqueue(obj)
-    obj.Clear = function()
-        queue:Dequeue(tid)
-        obj.Cleared = true
     end
 
     return chainable
@@ -246,13 +262,13 @@ GameState.OnLoad(function()
 end)
 
 ---@param ms number
----@param func fun(self: ChainableRunner, time: GameTime)
+---@param func fun(self: ChainableRunner)|nil
 ---@return ChainableRunner
 function M.Defer(ms, func)
     local seconds = ms / 1000
     local last = 0
 
-    local chainable = Runner.Create(prio, func)
+    local chainable = Runner.Chainable(prio, func)
 
     chainable.Source.ExecCond = function(_, time)
         last = last + time.DeltaTime
@@ -262,28 +278,27 @@ function M.Defer(ms, func)
     return chainable
 end
 
----@param func fun(self: ChainableRunner, time: GameTime)
+---@param func fun(self: ChainableRunner)|nil
 ---@return ChainableRunner
 function M.Run(func)
-    return Runner.Create(prio, func)
+    return Runner.Chainable(prio, func)
 end
 
----@param func fun(self: ChainableRunner, time: GameTime)
+---@param func fun(self: ChainableRunner)|nil
 ---@return ChainableRunner
 function M.Schedule(func)
-    return Runner.Create(lowPrio, func)
+    return Runner.Chainable(lowPrio, func)
 end
 
 ---@param ms number
----@param func fun(self: ChainableRunner, time: GameTime)
----@return ChainableRunner
+---@param func fun(self: Runner)
+---@return Runner
 function M.Interval(ms, func)
     local seconds = ms / 1000
     local last = 0
     local skip = false -- avoid consecutive executions
 
-    local chainable = Runner.Create(lowPrio, func)
-    local runner = chainable.Source
+    local runner = Runner.New(lowPrio, func)
 
     runner.ExecCond = function(_, time)
         last = last + time.DeltaTime
@@ -301,15 +316,15 @@ function M.Interval(ms, func)
         return false
     end
 
-    return chainable
+    return runner
 end
 
 ---@param cond fun(self: ChainableRunner, time: GameTime): boolean
----@param func fun(self: ChainableRunner, time: GameTime)
+---@param func fun(self: ChainableRunner)|nil
 ---@return ChainableRunner
 -- check for condition every ~100ms
 function M.WaitFor(cond, func)
-    local chainable = Runner.Create(prio, func)
+    local chainable = Runner.Chainable(prio, func)
     local last = 0
 
     chainable.Source.ExecCond = function(self, time)
@@ -329,9 +344,9 @@ end
 ---@field retries number|nil default: 3, -1 for infinite
 ---@field interval number|nil default: 1000
 ---@field immediate boolean|nil default: false
----@param cond fun(self: ChainableRunner, triesLeft: number, time: GameTime): boolean
+---@param cond fun(self: Runner, triesLeft: number, time: GameTime): boolean
 ---@param options RetryForOptions|nil
----@return Runner
+---@return ChainableRunner
 -- retries every (default: 1000 ms) until condition is met or tries(default: 3) are exhausted
 function M.RetryUntil(cond, options)
     options = options or {}
@@ -343,9 +358,9 @@ function M.RetryUntil(cond, options)
     chainable.Catch(function() end) -- ignore errors by default
 
     local runner = M.Interval(interval, function(self, time)
-        local ok, result = pcall(cond, chainable, retries, time)
+        local ok, result = pcall(cond, self, retries, time)
         if ok and result then
-            self.Source:Clear()
+            self:Clear()
             startChain(result)
             return
         end
@@ -357,16 +372,16 @@ function M.RetryUntil(cond, options)
         retries = retries - 1
 
         if retries == 0 then
-            self.Source:Clear()
+            self:Clear()
             chainable.Throw(result)
         end
     end)
 
-    chainable.Source = runner.Source
+    chainable.Source = runner
 
     if immediate then
-        M.Run(function(_, time)
-            chainable.Source:Exec(time)
+        M.Run(function()
+            chainable.Source:Exec()
         end)
     end
 

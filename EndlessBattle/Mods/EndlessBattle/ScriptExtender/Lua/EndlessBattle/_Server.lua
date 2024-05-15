@@ -91,15 +91,13 @@ GameState.OnUnload(function()
     end
 end)
 
-do -- check for interaction to enable the mod
-    local checkActive
-    checkActive = Event.On(Net.EventOnSend, function(event)
-        if event.Action == "OpenGUI" then
-            PersistentVars.Active = true
-            checkActive.Source:Unregister()
-        end
-    end)
-end
+-- check for interaction to enable the mod
+Event.ChainOn(Net.EventOnSend).After(function(self, event)
+    if event.Action == "OpenGUI" then
+        PersistentVars.Active = true
+        self.Source:Unregister()
+    end
+end)
 
 local count = 0
 local reset = Async.Debounce(5000, function()
