@@ -91,9 +91,10 @@ function M.Get(handle)
 end
 
 ---@param strict boolean
+---@param version number|nil
 ---@return string
 function M.GenerateHandle(str, version)
-    local handle = "h" .. Utils.UUID.FromString(str, version):gsub("-", "g") .. (version and ";" .. version or "")
+    local handle = "h" .. Utils.UUID.FromString(str):gsub("-", "g") .. (version and ";" .. version or "")
 
     if Mod.Dev and M.Get(handle) ~= "" and M.Get(handle) ~= str then
         Utils.Log.Debug("Handle translated: ", handle, str, M.Get(handle))
@@ -102,11 +103,16 @@ function M.GenerateHandle(str, version)
     return handle
 end
 
----@param text string text
+---@param text string text "...;2" for version 2
 ---@vararg any passed to string.format
 ---@return string
 function M.Localize(text, ...)
-    return string.format(M.Translate(text), ...)
+    local version = text:match(";%d+$")
+    if version then
+        text = text:gsub(";%d+$", "")
+    end
+
+    return string.format(M.Translate(text, version), ...)
 end
 
 function M.BuildLocaFile()
