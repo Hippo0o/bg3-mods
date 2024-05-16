@@ -136,7 +136,7 @@ if Ext.IsServer() then
         if not includeParty and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
             return false
         end
-        return not M.Entity.IsOrigin(character) and not M.Entity.IsHireling(character) and Osi.IsPlayer(character) == 0
+        return not M.Entity.IsOrigin(character) and not M.Entity.IsHireling(character) and Osi.IsPlayer(character) ~= 1
     end
 
     ---@param character string GUID
@@ -549,7 +549,10 @@ end
 ---@param uuid string
 ---@return boolean
 function M.UUID.Exists(uuid)
-    return Ext.Template.GetTemplate(uuid) or Ext.Mod.IsModLoaded(uuid) or Ext.Entity.GetAllEntitiesWithUuid()[uuid]
+    return Ext.Template.GetTemplate(uuid)
+        or Ext.Mod.IsModLoaded(uuid)
+        or Ext.Entity.GetAllEntitiesWithUuid()[uuid] and true
+        or false
 end
 
 ---@param strict boolean|nil prevent UUID collision - slow
@@ -598,8 +601,8 @@ function M.UUID.FromString(str, iteration)
         return string.format("%08x%08x%08x%08x", hash, hash ~ 0x55555555, hash ~ 0x33333333, hash ~ 0x11111111)
     end
 
-    local prefix = Mod.UUID
-    for i = 1, (iteration or 0) do
+    local prefix = ""
+    for i = 1, (iteration or 1) do
         prefix = prefix .. Mod.UUID
     end
 

@@ -78,9 +78,9 @@ function EventListener.New(event, callback, once)
     return obj
 end
 
----@class ChainableEvent : Chainable
+---@class ChainableEvent : LibsChainable
 ---@field Source EventListener
----@field After fun(func: fun(self: ChainableEvent, ...: any): any): ChainableEvent
+---@field After fun(func: fun(self: EventListener, ...: any): any): LibsChainable
 ---@param event string
 ---@param once boolean|nil
 ---@return ChainableEvent
@@ -89,7 +89,9 @@ function EventListener.Chainable(event, once)
 
     local chainable, startChain = Libs.Chainable(obj)
 
-    obj._Func = startChain
+    obj._Func = function(...)
+        startChain(obj, ...)
+    end
 
     return chainable
 end

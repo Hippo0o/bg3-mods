@@ -56,7 +56,7 @@ GameState.OnSave(function()
 
     for obj, _ in pairs(PersistentVars.SpawnedItems) do
         if
-            Item.IsOwned(obj) or Osi.IsItem(obj) == 0 -- was used
+            Item.IsOwned(obj) or Osi.IsItem(obj) ~= 1 -- was used
         then
             L.Debug("Cleaning up SpawnedItems", obj)
             PersistentVars.SpawnedItems[obj] = nil
@@ -95,7 +95,7 @@ end)
 Event.ChainOn(Net.EventOnSend).After(function(self, event)
     if event.Action == "OpenGUI" then
         PersistentVars.Active = true
-        self.Source:Unregister()
+        self:Unregister()
     end
 end)
 
@@ -154,6 +154,9 @@ do
     local start = 0
     function Commands.Dev(new_start, amount)
         L.Info(":)")
+        Mod.Dev = true
+        Mod.Debug = true
+        Config.Debug = true
 
         -- for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
         --     -- L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
@@ -293,7 +296,7 @@ do
             return
         end
 
-        L.Info("ID", "Name", "!JC Maps [id]")
+        L.Info("ID", "Name", "!EB Maps [id]")
 
         for i, v in pairs(maps) do
             if id and i == tonumber(id) then
@@ -305,7 +308,7 @@ do
     end
 
     function Commands.Scenarios(id)
-        L.Info("ID", "Name", "!JC Scenarios [id]")
+        L.Info("ID", "Name", "!EB Scenarios [id]")
         for i, v in pairs(Scenario.GetTemplates()) do
             if id and i == tonumber(id) then
                 L.Info(i, v.Name, Ext.DumpExport(v))
@@ -316,9 +319,9 @@ do
     end
 
     function Commands.Start(scenarioId, mapId)
-        L.Info("!JC Scenarios", "List scenarios")
-        L.Info("!JC Maps", "List maps")
-        L.Info("!JC Start [scenarioId] [mapId]")
+        L.Info("!EB Scenarios", "List scenarios")
+        L.Info("!EB Maps", "List maps")
+        L.Info("!EB Start [scenarioId] [mapId]")
         if not scenarioId then
             L.Error("Scenario ID is required.")
             return
@@ -422,7 +425,7 @@ do
         Commands.StoryBypass(0)
     end
 
-    Ext.RegisterConsoleCommand("JC", function(_, fn, ...)
+    Ext.RegisterConsoleCommand("EB", function(_, fn, ...)
         if fn == nil or Commands[fn] == nil then
             L.Dump("Available Commands", UT.Keys(Commands))
             return

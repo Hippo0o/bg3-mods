@@ -1,11 +1,15 @@
 ---@type Mod
 local Mod = Require("Hlib/Mod")
-
 ---@type Utils
 local Utils = Require("Hlib/Utils")
-
 ---@type Libs
 local Libs = Require("Hlib/Libs")
+---@type IO
+local IO = Require("Hlib/IO")
+---@type Event
+local Event = Require("Hlib/Event")
+---@type Net
+local Net = Require("Hlib/Net")
 
 ---@class Localization
 local M = {}
@@ -21,11 +25,35 @@ local Localization = Libs.Class({
     LocaText = nil,
 })
 
+local filepath = "Localization/" .. Mod.TableKey
+M.Translations = IO.LoadJson("Localization/" .. Mod.TableKey) or {}
+
+if Ext.IsServer() then
+    Net.On("_TranslationRequest", function(event)
+        Utils.Table.Merge(M.Translations, event.Payload)
+        Net.Respond(event, M.Translations)
+        Event.Trigger("_TranslationChanged")
+    end)
+    Event.On("_TranslationChanged", function(event)
+        IO.SaveJson(filepath, M.Translations)
+        if Mod.Dev then
+            IO.Save(filepath .. ".xml", M.BuildLocaFile())
+        end
+    end)
+end
+
 function M.Translate(text, version)
-    local key = text .. (version and ":" .. version or "")
+    version = version or 1
+
+    local key = text .. ";" .. version
 
     if M.Translations[key] == nil then
+        local stack = Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
+            return not line:match("stack traceback:") and not line:match("Hlib/Localization.lua")
+        end)
+
         M.Translations[key] = Localization.Init({
+            Stack = Utils.String.Trim(stack),
             Text = text,
             Version = version,
         })
@@ -43,14 +71,13 @@ function M.Translate(text, version)
 
         M.Translations[key].Text = text
 
-        if Mod.Dev then
-            if Ext.IsClient() then
-                Require("Hlib/Net").Request("DevTranslationAdded", M.Translations).After(function(_, event)
-                    M.Translations = event.Payload
-                end)
-            else
-                Require("Hlib/Event").Trigger("DevSaveTranslations")
-            end
+        if Ext.IsClient() then
+            Net.Request("_TranslationRequest", M.Translations).After(function(event)
+                -- potential race condition
+                M.Translations = event.Payload
+            end)
+        else
+            Event.Trigger("_TranslationChanged")
         end
     end
 
@@ -66,9 +93,9 @@ end
 ---@param strict boolean
 ---@return string
 function M.GenerateHandle(str, version)
-    local handle = "h" .. Utils.UUID.FromString(str, version):gsub("-", "g")
+    local handle = "h" .. Utils.UUID.FromString(str, version):gsub("-", "g") .. (version and ";" .. version or "")
 
-    if M.Get(handle) ~= "" and M.Get(handle) ~= str then
+    if Mod.Dev and M.Get(handle) ~= "" and M.Get(handle) ~= str then
         Utils.Log.Debug("Handle translated: ", handle, str, M.Get(handle))
     end
 
@@ -82,56 +109,27 @@ function M.Localize(text, ...)
     return string.format(M.Translate(text), ...)
 end
 
--- for dev purposes
-if Mod.Dev then
-    function M.BuildLocaFile()
-        local xmlWrap = [[
+function M.BuildLocaFile()
+    local xmlWrap = [[
 <?xml version="1.0" encoding="utf-8"?>
 <contentList>
 %s
 </contentList>
 ]]
-        local xmlEntry = [[
-    <content contentuid="%s" version="1">%s</content>
+    local xmlEntry = [[
+    <!-- %s -->
+    <content contentuid="%s" version="%d">%s</content>
 ]]
 
-        local entries = {}
-        for text, translation in pairs(M.Translations) do
-            table.insert(entries, string.format(xmlEntry, translation.Handle, translation.Text))
-        end
-
-        local loca = string.format(xmlWrap, table.concat(entries, "\n"))
-
-        return loca
+    local entries = {}
+    for text, translation in pairs(M.Translations) do
+        local handle = translation.Handle:gsub(";%d+$", "")
+        table.insert(entries, string.format(xmlEntry, translation.Stack, handle, translation.Version, translation.Text))
     end
 
-    function M.CreateLocaFile()
-        local path = Mod.Prefix .. "/Localization/" .. Mod.TableKey .. ".xml"
+    local loca = string.format(xmlWrap, table.concat(entries, "\n"))
 
-        local loca = M.BuildLocaFile()
-        Ext.IO.SaveFile(path, loca)
-
-        return path, loca
-    end
-
-    if Ext.IsServer() then
-        local Net = Require("Hlib/Net")
-        local Event = Require("Hlib/Event")
-
-        local filepath = Mod.Prefix .. "/Localization/" .. Mod.TableKey .. ".json"
-        M.Translations = Ext.Json.Parse(Ext.IO.LoadFile(filepath) or "{}")
-
-        Net.On("DevTranslationAdded", function(event)
-            Utils.Table.Merge(M.Translations, event.Payload)
-            Net.Respond(event, M.Translations)
-            Event.Trigger("DevSaveTranslations")
-        end)
-
-        Event.On("DevSaveTranslations", function(event)
-            Ext.IO.SaveFile(filepath, Ext.Json.Stringify(M.Translations))
-            M.CreateLocaFile()
-        end)
-    end
+    return loca
 end
 
 return M

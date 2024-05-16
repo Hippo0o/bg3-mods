@@ -315,6 +315,15 @@ function Object:Clear(keepCorpse)
         return Osi.IsDead(guid) == 1 or not entity:IsAlive()
     end, { retries = 3, interval = 300, immediate = true }).After(function()
         if not keepCorpse then
+            for db, matches in pairs({
+                DB_Was_InCombat = Osi.DB_Was_InCombat:Get(guid, nil),
+                DB_Sees = Osi.DB_Sees:Get(nil, guid),
+            }) do
+                for _, v in pairs(matches) do
+                    Osi[db]:Delete(table.unpack(v))
+                end
+            end
+
             PersistentVars.SpawnedEnemies[guid] = nil
         end
     end).Catch(function()
@@ -697,7 +706,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
             error(err)
         end)
     end, { retries = -1, interval = 1 }).After(function()
-        Ext.IO.SaveFile(Require("Hlib/Mod").TableKey .. "/Enemies.json", Ext.Json.Stringify(dump))
+        IO.SaveJson("Enemies.json", dump)
     end).Catch(function(err)
         L.Error(err)
     end)

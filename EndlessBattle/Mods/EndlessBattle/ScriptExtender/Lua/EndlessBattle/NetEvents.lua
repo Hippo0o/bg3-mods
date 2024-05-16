@@ -122,3 +122,13 @@ Net.On("Config", function(event)
 
     Net.Respond(event, Config)
 end)
+
+Net.On("KillNearby", function(event)
+    local nearby = UE.GetNearby(Player.Host(event:UserId()), 10, true)
+
+    for _, v in ipairs(nearby) do
+        if v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid) then
+            UE.Remove(v.Guid)
+        end
+    end
+end)

@@ -83,6 +83,7 @@ Utils.Entity.IsOrigin(Osi.GetHostCharacter()) -- true
 Utils.Equals({ a = 1 }, { a = 1 }) -- true
 Utils.UUID.Equals('Foo_00000000-0000-0000-0000-000000000000', 'Bar_00000000-0000-0000-0000-000000000000') -- true
 ```
+
 More functions can be found in the `Utils` module.
 
 ## Optional Modules
@@ -90,6 +91,7 @@ More functions can be found in the `Utils` module.
 ### Async
 
 The `Async` module for Async programming.
+
 ```lua
 ---@type Async
 local Async = Require("Hlib/Async")
@@ -106,11 +108,8 @@ end)
 local handle = Async.Interval(1000, function()
     print("Hello World!")
 end)
-local handle = Async.Interval(1000).After(function()
-    print("Hello World!")
-end)
 -- can be stopped manually
-handle.Source:Unregister()
+handle:Unregister()
 
 -- run a function when a condition is met
 Async.WaitFor(function()
@@ -136,6 +135,7 @@ end)
 ### Event
 
 The `Event` module for a custom event bus.
+
 ```lua
 ---@type Event
 local Event = Require("Hlib/Event")
@@ -152,6 +152,7 @@ Event.Trigger("MyEvent", "Hello", "World!")
 ### Net
 
 The `Net` module for network communication between clients and server.
+
 ```lua
 ---@type Net
 local Net = Require("Hlib/Net")
@@ -173,11 +174,13 @@ Net.On("RequestData", function(event) ---@type NetEvent
 end)
 
 -- request a network event (client-side only)
-Net.Request("RequestData", function(event) ---@type NetEvent
+Net.Request("RequestData",{ Entity = "..." }).After(function(event) ---@type NetEvent
     print("Received RequestData response: " .. event.Payload)
-end, { Entity = "..." })
+end)
 ```
+
 `Net` is using `Event` internally to handle the network events.
+
 ```lua
 ---@type Event
 local Event = Require("Hlib/Event")
@@ -193,6 +196,7 @@ Event.Trigger(Net.EventName("MyEvent"), { MyData = "Hello World!" })
 ### GameState
 
 The `GameState` module handles events when saving and loading game states.
+
 ```lua
 ---@type GameState
 local GameState = Require("Hlib/GameState")
@@ -205,7 +209,9 @@ GameState.OnLoad(function()
     print("Game is loading!")
 end)
 ```
+
 `GameState` is using `Event` internally to handle the game state events.
+
 ```lua
 ---@type Event
 local Event = Require("Hlib/Event")
@@ -220,6 +226,7 @@ Event.Trigger(GameState.EventSave)
 ### Libs
 
 The `Libs` module contains a class implementation.
+
 ```lua
 ---@type Libs
 local Libs = Require("Hlib/Libs")
@@ -241,13 +248,16 @@ local myObject2 = MyClass.Init({ MyVar = 3 })
 ```
 
 # Example Setup
+
 `BootstrapServer.lua`
+
 ```lua
 Ext.Require('Hlib/_Init.lua')
 Ext.Require('MyMod/_Server.lua')
 ```
 
 `MyMod/_Server.lua`
+
 ```lua
 Require('MyMod/Shared.lua')
 
@@ -256,6 +266,7 @@ Utils.Log.Info("Hello World!")
 ```
 
 `MyMod/Shared.lua`
+
 ```lua
 ---@type Mod
 Mod = Require('Hlib/Mod')

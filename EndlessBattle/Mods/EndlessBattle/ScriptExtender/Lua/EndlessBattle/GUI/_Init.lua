@@ -5,56 +5,6 @@ Require("EndlessBattle/GUI/Creation")
 Require("EndlessBattle/GUI/Config")
 Require("EndlessBattle/GUI/Debug")
 
-local window
-GameState.OnUnload(function()
-    if window then
-        window.Visible = false
-    end
-end)
-GameState.OnLoad(function()
-    if window then
-        window.Visible = true
-    end
-end)
-
-do
-    local handles = {}
-    Event.On("WindowClosed", function()
-        for _, handle in ipairs(handles) do
-            Ext.UI.GetRoot():Unsubscribe(handle)
-        end
-    end)
-    Event.On("WindowOpened", function()
-        -- auto hide window
-        local windowVisible = Async.Debounce(1000, function(bool)
-            window.Visible = bool
-        end)
-        local windowAlpha = Async.Debounce(100, function(bool)
-            if bool then
-                window:SetStyle("Alpha", 1)
-                window.Visible = bool
-            else
-                window:SetStyle("Alpha", 0.5)
-            end
-        end)
-
-        handles[1] = Ext.UI.GetRoot():Subscribe("MouseEnter", function()
-            if not window then
-                return
-            end
-            windowVisible(false)
-            windowAlpha(false)
-        end)
-        handles[2] = Ext.UI.GetRoot():Subscribe("MouseLeave", function()
-            if not window then
-                return
-            end
-            windowVisible(true)
-            windowAlpha(true)
-        end)
-    end)
-end
-
 -- register window event listeners
 local listeners = {}
 ---@return EventListener
@@ -65,7 +15,7 @@ function WindowEvent(event, callback, once)
         end)
         .Catch(function(self, err)
             L.Debug("WindowEvent", event, err)
-            self.Source:Unregister()
+            self:Unregister()
         end)
 
     table.insert(listeners, chain.Source)
@@ -81,13 +31,16 @@ Event.On("WindowClosed", function()
     listeners = {}
 end)
 
+local window
 local function openWindow()
     if window then
-        if window.Open then
-            return
+        if not window.Open then
+            window.Open = true
+            window.Visible = true
         end
-        window:Destroy()
+        return
     end
+
     ---@type ExtuiWindow
     window = Ext.IMGUI.NewWindow("Endless Battle")
     Event.Trigger("WindowOpened")
@@ -99,9 +52,9 @@ local function openWindow()
     window:SetSize({ 670, 550 })
     window.Closeable = true
     window.NoFocusOnAppearing = true
-    window.OnClose = function()
-        Event.Trigger("WindowClosed")
-    end
+    -- window.OnClose = function()
+    --     Event.Trigger("WindowClosed")
+    -- end
 
     Net.Send("GetState")
 
@@ -110,6 +63,46 @@ local function openWindow()
     Creation.Main(tabs)
     Config.Main(tabs)
     Debug.Main(tabs)
+
+    do -- auto hide window
+        local windowVisible = Async.Debounce(1000, function(bool)
+            window.Visible = bool
+        end)
+        local windowAlpha = Async.Debounce(100, function(bool)
+            if bool then
+                window:SetStyle("Alpha", 1)
+                window.Visible = bool
+            else
+                window:SetStyle("Alpha", 0.5)
+            end
+        end)
+
+        Ext.UI.GetRoot():Subscribe("MouseEnter", function()
+            if not window then
+                return
+            end
+            windowVisible(false)
+            windowAlpha(false)
+        end)
+        Ext.UI.GetRoot():Subscribe("MouseLeave", function()
+            if not window then
+                return
+            end
+            windowVisible(true)
+            windowAlpha(true)
+        end)
+    end
+
+    GameState.OnUnload(function()
+        if window then
+            window.Visible = false
+        end
+    end)
+    GameState.OnLoad(function()
+        if window then
+            window.Visible = true
+        end
+    end)
 end
 
 Net.On("OpenGUI", openWindow)

@@ -214,28 +214,23 @@ function M.TypedTable(typeDefs, repeatable)
 end
 
 ---@param source any
----@return Chainable
+---@return LibsChainable
 function M.Chainable(source)
-    ---@class Chainable
-    ---@field After fun(func: fun(self: Chainable, ...: any): any): Chainable
-    ---@field Catch fun(func: fun(self: Chainable, err: string)): Chainable
-    ---@field Chain table<number, fun(...: any): any>
+    ---@class LibsChainable
+    ---@field After fun(func: fun(...: any): any, continueOnNil: boolean|nil): LibsChainable
+    ---@field Catch fun(func: fun(source: any, err: string)): LibsChainable
     ---@field Source any
     local Chainable = {
         _IsChainable = true,
         _InitalInput = {},
         Source = source,
-        Chain = {},
+        _Chain = {},
     }
 
-    function Chainable.After(func)
+    function Chainable.After(func, continueOnNil)
         assert(type(func) == "function", "Chainable.After(func) - function expected, got " .. type(func))
-        table.insert(Chainable.Chain, func)
+        table.insert(Chainable._Chain, { func, continueOnNil })
         return Chainable
-    end
-
-    function Chainable.Stop()
-        return { _IsChainable = true }
     end
 
     local catch = nil
@@ -247,15 +242,17 @@ function M.Chainable(source)
 
     function Chainable.Throw(err)
         assert(type(catch) == "function", err)
-        catch(Chainable, err)
+        catch(Chainable.Source, err)
     end
 
     local function start(...)
         local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(Chainable._InitalInput))
 
-        for i, func in ipairs(Chainable.Chain) do
+        for i, chain in ipairs(Chainable._Chain) do
+            local func, continueOnNil = table.unpack(chain)
+
             local ok = xpcall(function()
-                state = Utils.Table.Pack(func(Chainable, table.unpack(state)))
+                state = Utils.Table.Pack(func(table.unpack(state)))
             end, function(err)
                 Chainable.Throw(err)
             end)
@@ -264,14 +261,18 @@ function M.Chainable(source)
                 break
             end
 
+            if not continueOnNil and state[1] == nil then
+                break
+            end
+
             -- interrupt chain if a nested chainable is returned
-            if type(state) == "table" and type(state[1]) == "table" and state[1]._IsChainable then
+            if type(state[1]) == "table" and state[1]._IsChainable then
                 ---@type Chainable
                 local nested = state[1]
 
-                nested.Chain = Utils.Table.DeepClone(Chainable.Chain)
+                nested._Chain = Utils.Table.DeepClone(Chainable._Chain)
                 for j = 1, i do
-                    table.remove(nested.Chain, 1)
+                    table.remove(nested._Chain, 1)
                 end
 
                 nested._InitalInput = state

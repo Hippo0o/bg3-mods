@@ -83,7 +83,7 @@ local Loop = Libs.Class({
             for _, runner in queue:Iter() do
                 local success, result = pcall(function()
                     if runner:ExecCond(time) then
-                        runner.Exec()
+                        runner:Exec()
 
                         if runner:ClearCond(time) then
                             runner:Clear()
@@ -197,8 +197,8 @@ local Runner = Libs.Class({
 })
 
 ---@param queue Queue
----@param func fun()
----@return ChainableRunner
+---@param func fun(self: Runner)
+---@return Runner
 function Runner.New(queue, func)
     local obj = Runner.Init()
 
@@ -210,9 +210,9 @@ function Runner.New(queue, func)
     return obj
 end
 
----@class ChainableRunner : Chainable
+---@class ChainableRunner : LibsChainable
 ---@field Source Runner
----@field After fun(func: fun(self: ChainableRunner, ...: any): any): ChainableRunner
+---@field After fun(func: fun(...: any): any): LibsChainable
 ---@param queue Queue
 ---@param func fun()|nil
 ---@return ChainableRunner
@@ -262,7 +262,7 @@ GameState.OnLoad(function()
 end)
 
 ---@param ms number
----@param func fun(self: ChainableRunner)|nil
+---@param func fun()|nil
 ---@return ChainableRunner
 function M.Defer(ms, func)
     local seconds = ms / 1000
@@ -278,13 +278,13 @@ function M.Defer(ms, func)
     return chainable
 end
 
----@param func fun(self: ChainableRunner)|nil
+---@param func fun()|nil
 ---@return ChainableRunner
 function M.Run(func)
     return Runner.Chainable(prio, func)
 end
 
----@param func fun(self: ChainableRunner)|nil
+---@param func fun()|nil
 ---@return ChainableRunner
 function M.Schedule(func)
     return Runner.Chainable(lowPrio, func)
@@ -319,8 +319,8 @@ function M.Interval(ms, func)
     return runner
 end
 
----@param cond fun(self: ChainableRunner, time: GameTime): boolean
----@param func fun(self: ChainableRunner)|nil
+---@param cond fun(self: Runner, time: GameTime): boolean
+---@param func fun()|nil
 ---@return ChainableRunner
 -- check for condition every ~100ms
 function M.WaitFor(cond, func)

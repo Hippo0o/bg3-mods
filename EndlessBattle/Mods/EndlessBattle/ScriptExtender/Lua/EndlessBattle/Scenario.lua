@@ -184,7 +184,7 @@ function Action.SpawnLoot()
         i = i + 1
 
         if i > #loot then
-            self.Source:Clear()
+            self:Clear()
 
             return
         end
@@ -336,7 +336,7 @@ function Action.Failsafe(enemy)
             if not e:IsSpawned() then
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 UT.Remove(s.SpawnedEnemies, e)
-            elseif Osi.IsDead(e.GUID) == 0 and Osi.IsInCombat(e.GUID) == 0 then
+            elseif Osi.IsDead(e.GUID) ~= 1 and Osi.IsInCombat(e.GUID) ~= 1 then
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
                 e:Combat(true)
@@ -351,7 +351,7 @@ function Action.Failsafe(enemy)
 
                     return Defer(1000)
                 end).After(function()
-                    if Osi.IsInCombat(e.GUID) == 0 then
+                    if Osi.IsInCombat(e.GUID) ~= 1 then
                         UT.Remove(s.SpawnedEnemies, e)
                         e:Clear()
                     end

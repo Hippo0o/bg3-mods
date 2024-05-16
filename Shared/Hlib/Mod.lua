@@ -15,7 +15,7 @@ M.PersistentVarsTemplate = {}
 if Ext.Mod.IsModLoaded(M.UUID) then
     local ModInfo = Ext.Mod.GetMod(M.UUID)["Info"]
 
-    M.TableKey = ModInfo.Name
+    M.TableKey = ModInfo.Directory
     M.Prefix = ModInfo.Name
     M.Version = { major = ModInfo.ModVersion[1], minor = ModInfo.ModVersion[2], revision = ModInfo.ModVersion[3] }
 end
