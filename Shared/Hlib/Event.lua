@@ -87,10 +87,10 @@ end
 function EventListener.Chainable(event, once)
     local obj = EventListener.New(event, nil, once)
 
-    local chainable, startChain = Libs.Chainable(obj)
+    local chainable = Libs.Chainable(obj)
 
     obj._Func = function(...)
-        startChain(obj, ...)
+        chainable.Begin(obj, ...)
     end
 
     return chainable

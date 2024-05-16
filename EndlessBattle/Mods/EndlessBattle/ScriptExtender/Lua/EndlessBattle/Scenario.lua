@@ -669,6 +669,7 @@ U.Osiris.On(
                 Action.ResumeCombat()
                 return
             end
+            -- TODO if no enemies are spawned due to error, the combat will get stuck
         end
     end)
 )

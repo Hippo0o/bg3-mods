@@ -81,6 +81,7 @@ end)
 Net.On("KillSpawned", function(event)
     Enemy.KillSpawned()
 
+
     Net.Respond(event, { true })
 end)
 
@@ -124,7 +125,7 @@ Net.On("Config", function(event)
 end)
 
 Net.On("KillNearby", function(event)
-    local nearby = UE.GetNearby(Player.Host(event:UserId()), 10, true)
+    local nearby = UE.GetNearby(Player.Host(event:UserId()), 50, true)
 
     for _, v in ipairs(nearby) do
         if v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid) then

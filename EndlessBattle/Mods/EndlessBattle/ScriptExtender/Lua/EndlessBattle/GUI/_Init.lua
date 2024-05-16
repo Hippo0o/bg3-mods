@@ -78,30 +78,20 @@ local function openWindow()
         end)
 
         Ext.UI.GetRoot():Subscribe("MouseEnter", function()
-            if not window then
-                return
-            end
             windowVisible(false)
             windowAlpha(false)
         end)
         Ext.UI.GetRoot():Subscribe("MouseLeave", function()
-            if not window then
-                return
-            end
             windowVisible(true)
             windowAlpha(true)
         end)
     end
 
     GameState.OnUnload(function()
-        if window then
-            window.Visible = false
-        end
+        window.Visible = false
     end)
     GameState.OnLoad(function()
-        if window then
-            window.Visible = true
-        end
+        window.Visible = true
     end)
 end
 
