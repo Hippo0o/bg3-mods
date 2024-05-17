@@ -1,5 +1,5 @@
 {
-    "RequiredVersion": 14,
+    "RequiredVersion": 16,
     "ModTable": "EndlessBattle",
     "FeatureFlags": ["Lua", "Osiris"]
 }
