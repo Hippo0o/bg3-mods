@@ -95,11 +95,13 @@ function Config.Main(tab)
 
     WindowEvent("UpdateConfig", function(config)
         Net.Send("Config", config)
+
         showStatus("Updating config...")
     end)
 
     WindowEvent("ConfigChange", function(config)
         showStatus("Config updated", true)
+
         Mod.Debug = config.Debug
         c1.Checked = config.Debug
         c2.Checked = config.BypassStory

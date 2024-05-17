@@ -295,7 +295,7 @@ U.Osiris.On(
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-function GameMode.GenerateScenario()
+function GameMode.GenerateScenario(score)
     -- ChatGPT made this ................................ i made this
 
     local minRounds = 1
@@ -305,13 +305,14 @@ function GameMode.GenerateScenario()
 
     -- Define tiers and their corresponding difficulty values
     local tiers = {
-        { name = "low", value = 3 },
-        { name = "medium", value = 9 },
-        { name = "high", value = 15 },
-        { name = "ultra", value = 22 },
-        { name = "epic", value = 40 },
-        { name = "legendary", value = 69 },
+        { name = C.EnemyTier[1], value = 3 },
+        { name = C.EnemyTier[2], value = 9 },
+        { name = C.EnemyTier[3], value = 15 },
+        { name = C.EnemyTier[4], value = 22 },
+        { name = C.EnemyTier[5], value = 40 },
+        { name = C.EnemyTier[6], value = 69 },
     }
+    score = score >= tiers[1].value and score or tiers[1].value
 
     -- Weighted random function to bias towards a preferred number of rounds
     local function weightedRandom()
@@ -353,7 +354,6 @@ function GameMode.GenerateScenario()
 
     -- Function to generate a random timeline with bias and possible empty rounds
     local function generateTimeline(maxValue)
-        L.Debug("generateTimeline", maxValue)
         local timeline = {}
         local numRounds = weightedRandom()
         local remainingValue = maxValue
@@ -416,21 +416,5 @@ function GameMode.GenerateScenario()
         return timeline
     end
 
-    local list = {}
-    for max = 10, 100 do
-        -- Example usage
-        local timeline = generateTimeline(max)
-
-        list[max] = timeline
-
-        -- Print the generated timeline
-        for i, round in ipairs(timeline) do
-            if #round == 0 then
-                print("Round " .. i .. ": [Empty]")
-            else
-                print("Round " .. i .. ": " .. table.concat(round, ", "))
-            end
-        end
-    end
-    IO.SaveJson("timeline.json", list)
+    return generateTimeline(score)
 end

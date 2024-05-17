@@ -445,15 +445,23 @@ function Scenario.Start(template, map)
     ---@type Enemy[]
     local enemies = {}
 
+    local timeline = template.Timeline
+    if timeline == "roguelike" then
+        PersistentVars.RogueScore = U.Random(5, 100)
+        L.Debug("Testing Random Scenario", PersistentVars.RogueScore)
+        timeline = GameMode.GenerateScenario(PersistentVars.RogueScore)
+        L.Dump("Generated Scenario", timeline)
+    end
+
     local scenario = Object.New()
     scenario.Name = template.Name
     scenario.Map = map
-    scenario.Timeline = template.Timeline
+    scenario.Timeline = timeline
     scenario.LootObjects = template.Loot.Objects
     scenario.LootArmor = template.Loot.Armor
     scenario.LootWeapons = template.Loot.Weapons
 
-    for round, definition in pairs(template.Timeline) do
+    for round, definition in pairs(scenario.Timeline) do
         local enemyCount = #definition
         for i = 1, enemyCount do
             local e
