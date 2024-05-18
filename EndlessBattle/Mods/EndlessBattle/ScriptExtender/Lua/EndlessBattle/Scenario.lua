@@ -199,44 +199,9 @@ function Action.SpawnLoot()
             L.Error("Loot was empty.", i, #loot)
             return
         end
+
         map:SpawnLoot(loot[i])
     end)
-end
-
-function Action.UpdateRogueScore()
-    local s = Current()
-    if not s.RogueMode then
-        return
-    end
-
-    -- Always has 1 round more than the timeline because of CombatRoundStarted
-    local endRound = s.Round - 1
-    L.Dump(endRound, s:TotalRounds())
-
-    local score = PersistentVars.RogueScore
-    local prev = score
-
-    if endRound == s:TotalRounds() then
-        Player.AskConfirmation(__("Perfect Clear! Increase score by %d?", 10)).After(function(confirmed)
-            if confirmed then
-                score = score + 10
-            else
-                score = score + 5
-            end
-
-            PersistentVars.RogueScore = score
-            Player.Notify(__("Your score increased: %d -> %d!", prev, score))
-        end)
-
-        return
-    end
-
-    local diff = endRound - s:TotalRounds()
-    score = score + math.max(5 - diff, 1)
-
-    PersistentVars.RogueScore = score
-
-    Player.Notify(__("Your score increased: %d -> %d!", prev, score))
 end
 
 function Action.EmptyArea()
@@ -339,6 +304,18 @@ function Action.StartRound()
     Action.SpawnRound()
 end
 
+function Action.NotifyStarted()
+    return RetryUntil(function()
+        Player.Notify(__("Leave camp to join the battle."))
+
+        return not S or S.OnMap
+    end, {
+        retries = -1,
+        interval = 10000,
+        immediate = true,
+    })
+end
+
 function Action.MapEntered()
     if S:HasStarted() then
         return
@@ -347,7 +324,7 @@ function Action.MapEntered()
     local x, y, z = Player.Pos()
     RetryUntil(function(self, tries)
         if S == nil then -- scenario stopped
-            self.Source:Clear()
+            self:Clear()
             return
         end
         if tries % 10 == 0 then
@@ -451,8 +428,12 @@ function Scenario.RestoreFromState(state)
 
         Player.Notify(__("Scenario restored."))
 
-        if not S:HasStarted() and S.OnMap then
-            Action.MapEntered()
+        if not S:HasStarted() then
+            if S.OnMap then
+                Action.MapEntered()
+            else
+                Action.NotifyStarted()
+            end
         end
     end, function(err)
         L.Error(err)
@@ -490,7 +471,7 @@ function Scenario.Restore(scenario)
 end
 
 ---@param template table
----@param map Map
+---@param map Map|nil
 function Scenario.Start(template, map)
     if S ~= nil then
         L.Error("Scenario already started.")
@@ -508,8 +489,9 @@ function Scenario.Start(template, map)
 
     if scenario.RogueMode then
         timeline = GameMode.GenerateScenario(PersistentVars.RogueScore)
+    end
 
-        -- random map for roguelike
+    if map == nil or scenario.RogueMode then
         local maps = Map.Get()
         map = maps[U.Random(#maps)]
     end
@@ -544,14 +526,15 @@ function Scenario.Start(template, map)
     Player.Notify(__("Scenario %s started.", template.Name))
     S = scenario
     PersistentVars.Scenario = S
-    Player.Notify(__("Leave camp to join the battle."))
+
+    Action.NotifyStarted()
 
     Enemy.Cleanup()
 end
 
 function Scenario.End()
     Action.SpawnLoot()
-    Action.UpdateRogueScore()
+    GameMode.UpdateRogueScore(Current())
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario ended."))

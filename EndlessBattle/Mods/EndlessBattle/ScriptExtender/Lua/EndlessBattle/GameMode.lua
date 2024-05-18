@@ -37,7 +37,7 @@ function GameMode.AskOnboarding()
                 return
             end
 
-            PersistentVars.Active = true
+            Event.Trigger("ModActive")
 
             return GameMode.AskEnableRogueMode()
         end)
@@ -55,25 +55,56 @@ function GameMode.AskRecruitStarters()
         end
 
         local function fixGale()
+            Osi.SetFlag("Gale_Recruitment_HasMet_0657f240-7a46-e767-044c-ff8e1349744e", Player.Host())
             Osi.SetFlag(
                 "ORI_Gale_Event_DisruptedWaypoint_eb1df53c-f315-fc93-9d83-af3d3aa7411d",
                 "NULL_00000000-0000-0000-0000-000000000000"
             )
             Osi.Use(Player.Host(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
-            -- Osi.SetFlag("Gale_Recruitment_HasMet_0657f240-7a46-e767-044c-ff8e1349744e", Player.Host())
-            -- Osi.QuestAdd(GetHostCharacter(), "ORI_COM_Gale")
+            Osi.QuestAdd("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "ORI_COM_Gale")
+
+            -- Osi.SetFlag(
+            --     "ORI_State_Recruited_e78c0aab-fb48-98e9-3ed9-773a0c39988d",
+            --     "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"
+            -- )
+            -- Osi.SetFlag(
+            --     "ORI_Gale_ControlledByUser_7b597686-21d1-43b6-9b4b-e2be86129ab6",
+            --     "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"
+            -- )
+            -- Osi.SetFlag("ORI_Gale_ControlledByUser_7b597686-21d1-43b6-9b4b-e2be86129ab6", GetHostCharacter())
+            -- Osi.SetFlag("GALECAMP_c67a2f36-9984-4097-8c4e-0ba1661b56f2", "NULL_00000000-0000-0000-0000-000000000000")
+            -- Osi.SetFlag("GALEPARTY_f173fce5-b79e-4970-b77c-2e3be02b7d34", "NULL_00000000-0000-0000-0000-000000000000")
+            -- Osi.SetFlag(
+            --     "ORI_Gale_State_WasRecruited_a56d3a51-2983-5f82-25f4-ad142948b133",
+            --     "NULL_00000000-0000-0000-0000-000000000000"
+            -- )
+            -- Osi.RemoveStatus("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "INVULNERABLE_NOT_SHOWN")
+            --
+            -- Osi.SetOnStage("8ebd584c-97e3-42fd-b81f-80d7841ebdf3", 1) -- the waypoint
             -- Osi.SetFlag("ORI_Gale_State_HasRecruited_7548c517-72a8-b9c5-c9e9-49d8d9d71172", Player.Host())
+            -- Osi.SetTag("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "d27831df-2891-42e4-b615-ae555404918b")
+            -- Osi.SetTag("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "6fe3ae27-dc6c-4fc9-9245-710c790c396c")
+            -- Osi.SetOnStage("c158fa86-3ecf-4d1b-a502-34618f77e3a9", 1)
+            -- Osi.SetFlag("GLO_InfernalBox_State_CharacterHasBox_2ff44b15-a351-401b-8da9-cf42364af274", GetHostCharacter())
+        end
+
+        local function fixShart()
+            Osi.QuestAdd("S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679", "ORI_COM_ShadowHeart")
         end
 
         local f = Osi.GetFaction(Player.Host())
 
         for _, o in pairs(C.OriginCharactersStarter) do
             Osi.PROC_ORI_SetupCamp(o, 1)
-            Osi.SetFaction(o, f)
+            Osi.SetFaction(o, "4abec10d-c2d1-a505-a09a-719c83999847")
             Osi.RegisterAsCompanion(o, Player.Host())
+            Osi.SetEntityEvent(o, "CampSwapped_WLDMAIN", 1)
+            Osi.SetEntityEvent(o, "CAMP_CamperInCamp_WLDMAIN", 1)
+            Osi.SetFlag("GLO_InfernalBox_State_CharacterHasBox_2ff44b15-a351-401b-8da9-cf42364af274", o)
         end
 
         fixGale()
+        fixShart()
     end)
 end
 
@@ -84,7 +115,9 @@ function GameMode.AskEnableRogueMode()
         You will gain a higher score with every completed Fight.
         Difficulty increases with higher score.
         ]]).After(function(confirmed)
+        L.Debug("RogueMode", confirmed)
         PersistentVars.RogueModeActive = confirmed
+        Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
 
         return confirmed
     end)
@@ -177,7 +210,6 @@ U.Osiris.On(
 )
 
 U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor, speakerIndex)
-    L.Dump("AutomatedDialogStarted", dialog, instanceID)
     if
         US.Contains(dialog, {
             "TUT_Start_PAD_Start_",
@@ -188,11 +220,25 @@ U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor,
     end
 end)
 
+Event.On("ModActivated", function()
+    if not PersistentVars.RogueModeActive then
+        GameMode.AskEnableRogueMode()
+    end
+end)
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                       Rogue-like mode                                       --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
+
+local function ifRogueLike(func)
+    return IfActive(function(...)
+        if PersistentVars.RogueModeActive then
+            func(...)
+        end
+    end)
+end
 
 function GameMode.GenerateScenario(score)
     -- ChatGPT made this ................................ i made this
@@ -318,6 +364,70 @@ function GameMode.GenerateScenario(score)
     return generateTimeline(score)
 end
 
+function GameMode.UpdateRogueScore(scenario)
+    if not scenario.RogueMode then
+        return
+    end
+
+    -- Always has 1 round more than the timeline because of CombatRoundStarted
+    local endRound = scenario.Round - 1
+    L.Dump(endRound, scenario:TotalRounds())
+
+    local score = PersistentVars.RogueScore
+    local prev = score
+
+    if endRound <= scenario:TotalRounds() then
+        Player.AskConfirmation(__("Perfect Clear! Increase score by %d?", 10)).After(function(confirmed)
+            if confirmed then
+                score = score + 10
+            else
+                score = score + math.max(5 - diff, 1)
+            end
+
+            PersistentVars.RogueScore = score
+            Player.Notify(__("Your score increased: %d -> %d!", prev, score))
+        end)
+
+        return
+    end
+
+    local diff = endRound - scenario:TotalRounds()
+    score = score + math.max(5 - diff, 1)
+
+    PersistentVars.RogueScore = score
+
+    Player.Notify(__("Your score increased: %d -> %d!", prev, score))
+end
+
+function GameMode.StartNext()
+    if not S then
+        local rogueTemp = UT.Find(Scenario.GetTemplates(), function(v)
+            return v.Timeline == C.RoguelikeScenario
+        end)
+        if rogueTemp then
+            Scenario.Start(rogueTemp)
+        end
+    end
+end
+
+U.Osiris.On(
+    "TeleportedToCamp",
+    1,
+    "after",
+    ifRogueLike(function(uuid)
+        if U.UUID.Equals(uuid, Player.Host()) then
+            GameMode.StartNext()
+        end
+    end)
+)
+
+Event.On("RogueModeChanged", function(bool)
+    if not bool then
+        return
+    end
+    GameMode.StartNext()
+end)
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Story? No!                                         --
@@ -341,7 +451,7 @@ local function cancelDialog(dialog, instanceID)
         return
     end
 
-    handlers[instanceID] = Async.Debounce(100, function(dialog, instanceID)
+    handlers[instanceID] = Async.Debounce(10, function(dialog, instanceID)
         Schedule(function()
             actors[instanceID] = nil
             handlers[instanceID] = nil

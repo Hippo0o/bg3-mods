@@ -90,6 +90,10 @@ end
 ---@param loot Item
 function Object:SpawnLoot(loot)
     local x, y, z = self.Enter[1], self.Enter[2], self.Enter[3]
+    if Config.SpawnItemsAtPlayer then
+        x, y, z = Player.Pos()
+    end
+
     -- x,z is x,y in game map
     x = x + U.Random() * U.Random(-1, 1)
     z = z + U.Random() * U.Random(-1, 1)
