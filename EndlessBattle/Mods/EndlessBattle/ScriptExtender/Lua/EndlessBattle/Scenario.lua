@@ -20,6 +20,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field LootArmor table<string, number>
 ---@field LootWeapons table<string, number>
 ---@field OnMap boolean
+---@field RogueMode boolean
 ---@field New fun(self): self
 local Object = Libs.Class({
     Name = nil,
@@ -29,6 +30,7 @@ local Object = Libs.Class({
     Map = nil,
     CombatId = nil,
     OnMap = false,
+    RogueMode = false,
     Round = 0,
     Timeline = {},
     LootObjects = {},
@@ -48,8 +50,12 @@ function Object:SpawnsForRound()
     return self.Enemies[self.Round] or {}
 end
 
+function Object:TotalRounds()
+    return #self.Timeline
+end
+
 function Object:HasMoreRounds()
-    return self.Round < #self.Timeline
+    return self.Round < self:TotalRounds()
 end
 
 function Object:HasStarted()
@@ -195,6 +201,42 @@ function Action.SpawnLoot()
         end
         map:SpawnLoot(loot[i])
     end)
+end
+
+function Action.UpdateRogueScore()
+    local s = Current()
+    if not s.RogueMode then
+        return
+    end
+
+    -- Always has 1 round more than the timeline because of CombatRoundStarted
+    local endRound = s.Round - 1
+    L.Dump(endRound, s:TotalRounds())
+
+    local score = PersistentVars.RogueScore
+    local prev = score
+
+    if endRound == s:TotalRounds() then
+        Player.AskConfirmation(__("Perfect Clear! Increase score by %d?", 10)).After(function(confirmed)
+            if confirmed then
+                score = score + 10
+            else
+                score = score + 5
+            end
+
+            PersistentVars.RogueScore = score
+            Player.Notify(__("Your score increased: %d -> %d!", prev, score))
+        end)
+
+        return
+    end
+
+    local diff = endRound - s:TotalRounds()
+    score = score + math.max(5 - diff, 1)
+
+    PersistentVars.RogueScore = score
+
+    Player.Notify(__("Your score increased: %d -> %d!", prev, score))
 end
 
 function Action.EmptyArea()
@@ -381,7 +423,20 @@ end
 
 ---@return table
 function Scenario.GetTemplates()
-    return External.Templates.GetScenarios() or scenarioTemplates
+    local templates = External.Templates.GetScenarios() or scenarioTemplates
+
+    local hasRoguelike = UT.Find(templates, function(v)
+        return v.Timeline == C.RoguelikeScenario
+    end) ~= nil
+    -- ensure roguelike always exists
+    if not hasRoguelike then
+        local roguetemp = UT.Find(scenarioTemplates, function(v)
+            return v.Timeline == C.RoguelikeScenario
+        end)
+        table.insert(templates, 1, roguetemp)
+    end
+
+    return templates
 end
 
 function Scenario.ExportTemplates()
@@ -445,15 +500,20 @@ function Scenario.Start(template, map)
     ---@type Enemy[]
     local enemies = {}
 
+    ---@type Scenario
+    local scenario = Object.New()
+
     local timeline = template.Timeline
-    if timeline == "roguelike" then
-        PersistentVars.RogueScore = U.Random(5, 100)
-        L.Debug("Testing Random Scenario", PersistentVars.RogueScore)
+    scenario.RogueMode = timeline == "roguelike"
+
+    if scenario.RogueMode then
         timeline = GameMode.GenerateScenario(PersistentVars.RogueScore)
-        L.Dump("Generated Scenario", timeline)
+
+        -- random map for roguelike
+        local maps = Map.Get()
+        map = maps[U.Random(#maps)]
     end
 
-    local scenario = Object.New()
     scenario.Name = template.Name
     scenario.Map = map
     scenario.Timeline = timeline
@@ -491,6 +551,7 @@ end
 
 function Scenario.End()
     Action.SpawnLoot()
+    Action.UpdateRogueScore()
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario ended."))

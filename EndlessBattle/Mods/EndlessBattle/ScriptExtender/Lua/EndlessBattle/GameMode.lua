@@ -106,17 +106,6 @@ function GameMode.AskUnlockAll()
     end)
 end
 
-U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
-    if
-        US.Contains(dialog, {
-            "GLO_Jergal_AD_AttackFromDialog",
-            "GLO_Jergal_AD_AttackedByPlayer",
-        })
-    then
-        Net.Send("OpenGUI", {})
-    end
-end)
-
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Story? No!                                         --
@@ -126,7 +115,7 @@ end)
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
     return function(...)
-        if Config.BypassStory and (Config.BypassStoryAlways or S ~= nil) then
+        if PersistentVars.Active and Config.BypassStory and (Config.BypassStoryAlways or S ~= nil) then
             func(...)
         end
     end
@@ -213,15 +202,6 @@ U.Osiris.On(
     4,
     "after",
     ifBypassStory(function(dialog, instanceID, actor, speakerIndex)
-        if
-            US.Contains(dialog, {
-                "TUT_Start_PAD_Start_",
-                "TUT_Misc_PAD_OriginPod_PlayerEmpty_",
-            }) and U.UUID.Equals(actor, Player.Host())
-        then
-            GameMode.AskTutSkip()
-        end
-
         if dialog:match("^CHA_Crypt_SkeletonRisingCinematic") or actor:match("^CHA_Crypt_SkeletonRisingCinematic") then
             Osi.PROC_GLO_Jergal_MoveToCamp()
         end
@@ -386,7 +366,7 @@ function GameMode.GenerateScenario(score)
         end
 
         -- Distribute the total value randomly across rounds
-        local failedAttempts = 0
+        local failsafe = 0
         while remainingValue > 0 do
             distribute()
 
@@ -394,9 +374,9 @@ function GameMode.GenerateScenario(score)
                 break
             end
 
-            failedAttempts = failedAttempts + 1
+            failsafe = failsafe + 1
 
-            if failedAttempts > 100 then
+            if failsafe > 1000 then
                 break
             end
         end
@@ -418,3 +398,45 @@ function GameMode.GenerateScenario(score)
 
     return generateTimeline(score)
 end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
+    if
+        US.Contains(dialog, {
+            "GLO_Jergal_AD_AttackFromDialog",
+            "GLO_Jergal_AD_AttackedByPlayer",
+        })
+    then
+        Net.Send("OpenGUI", {})
+    end
+end)
+
+local count = 0
+local reset = Async.Debounce(5000, function()
+    count = 0
+end)
+U.Osiris.On("StatusRemoved", 4, "after", function(object, status, causee, applyStoryActionID)
+    if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
+        count = count + 1
+        if count >= 3 then
+            Net.Send("OpenGUI")
+        end
+        reset()
+    end
+end)
+
+U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
+    if
+        US.Contains(dialog, {
+            "TUT_Start_PAD_Start_",
+            "TUT_Misc_PAD_OriginPod_PlayerEmpty_",
+        }) and U.UUID.Equals(actor, Player.Host())
+    then
+        GameMode.AskTutSkip()
+    end
+end)

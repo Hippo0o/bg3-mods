@@ -108,7 +108,7 @@ end
 
 local readyChecks = {}
 ---@class ChainableConfirmation : LibsChainable
----@field After fun(result: boolean): Chainable
+---@field After fun(func: fun(result: boolean): any): LibsChainable
 ---@param message string
 ---@return ChainableConfirmation
 function Player.AskConfirmation(message)

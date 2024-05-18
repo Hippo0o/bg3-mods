@@ -6,33 +6,26 @@ Require("EndlessBattle/GUI/Config")
 Require("EndlessBattle/GUI/Debug")
 
 -- register window event listeners
-local listeners = {}
 ---@return EventListener
 function WindowEvent(event, callback, once)
-    local chain = Event.ChainOn(event, once)
-        .After(function(_, ...)
-            callback(...)
-        end)
-        .Catch(function(self, err)
-            L.Debug("WindowEvent", event, err)
-            self:Unregister()
-        end)
+    local chain = Event.ChainOn(event, once).After(callback):Catch(function(self, err)
+        self:Unregister()
+    end)
 
-    table.insert(listeners, chain.Source)
     return chain.Source
 end
 function WindowNet(event, callback, ...)
     return WindowEvent(Net.EventName(event), callback, ...)
 end
 Event.On("WindowClosed", function()
-    for _, listener in ipairs(listeners) do
-        listener:Unregister()
-    end
-    listeners = {}
+    Net.Send("WindowClosed")
+end)
+Event.On("WindowOpened", function()
+    Net.Send("WindowOpened")
 end)
 
 local window
-local function openWindow()
+function OpenWindow()
     if window then
         if not window.Open then
             window.Open = true
@@ -52,11 +45,22 @@ local function openWindow()
     window:SetSize({ 670, 550 })
     window.Closeable = true
     window.NoFocusOnAppearing = true
-    -- window.OnClose = function()
-    --     Event.Trigger("WindowClosed")
-    -- end
+    window.OnClose = function()
+        Event.Trigger("WindowClosed")
+    end
 
     Net.Send("GetState")
+
+    local errorBox = window:AddText("")
+    errorBox:SetColor("Text", { 1, 0.4, 0.4, 1 })
+
+    Components.Computed(errorBox, function(box, result)
+        Defer(3000, function()
+            box.Label = ""
+        end)
+
+        return result
+    end, "Error")
 
     local tabs = window:AddTabBar(__("Main"))
     Control.Main(tabs)
@@ -65,7 +69,7 @@ local function openWindow()
     Debug.Main(tabs)
 
     do -- auto hide window
-        local windowVisible = Async.Debounce(1000, function(bool)
+        local windowVisible = Async.Debounce(500, function(bool)
             window.Visible = bool
         end)
         local windowAlpha = Async.Debounce(100, function(bool)
@@ -94,5 +98,3 @@ local function openWindow()
         window.Visible = true
     end)
 end
-
-Net.On("OpenGUI", openWindow)

@@ -1,7 +1,7 @@
 Net.On("GetSelection", function(event)
     Net.Respond(event, {
         Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
-            return { Id = k, Name = v.Name }
+            return { Id = k, Name = v.Name, Roguelike = v.Timeline == C.RoguelikeScenario }
         end),
         Maps = UT.Map(Map.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }
@@ -15,6 +15,20 @@ Net.On("GetTemplates", function(event)
         Maps = Map.GetTemplates(),
         Enemies = Enemy.GetTemplates(),
     })
+end)
+
+Net.On("ResetTemplates", function(event)
+    if event.Payload.Scenarios then
+        Scenario.ExportTemplates()
+    end
+    if event.Payload.Maps then
+        Map.ExportTemplates()
+    end
+    if event.Payload.Enemies then
+        Enemy.ExportTemplates()
+    end
+
+    Net.Respond(event, { true })
 end)
 
 Net.On("GetItems", function(event)
@@ -78,9 +92,16 @@ Net.On("Teleport", function(event)
     Net.Respond(event, { true })
 end)
 
+Net.On("WindowOpened", function(event)
+    PersistentVars.GUIOpen = true
+    PersistentVars.Active = true
+end)
+Net.On("WindowClosed", function(event)
+    PersistentVars.GUIOpen = false
+end)
+
 Net.On("KillSpawned", function(event)
     Enemy.KillSpawned()
-
 
     Net.Respond(event, { true })
 end)

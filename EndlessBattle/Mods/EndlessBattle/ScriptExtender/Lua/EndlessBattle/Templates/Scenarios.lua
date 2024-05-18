@@ -27,7 +27,7 @@ local defaultLoot = {
 
 return {
     {
-        Name = "Auto Generated",
+        Name = "Roguelike",
 
         -- Spawns per Round
         Timeline = "roguelike",

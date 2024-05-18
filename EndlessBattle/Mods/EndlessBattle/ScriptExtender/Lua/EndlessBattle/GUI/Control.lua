@@ -41,17 +41,6 @@ function Control.Main(tab)
         end)
     end)
 
-    local errorBox = root:AddText("")
-    errorBox:SetColor("Text", { 1, 0.4, 0.4, 1 })
-
-    Components.Computed(errorBox, function(box, result)
-        Defer(3000, function()
-            box.Label = ""
-        end)
-
-        return result
-    end, "Error")
-
     local header = root:AddSeparatorText("")
     Components.Layout(root, 1, 2, function(layout)
         local cellStart, cellStop = layout.Cells[1][1], layout.Cells[2][1]
@@ -104,7 +93,11 @@ function Control.StartPanel(root)
             mapSelection.Reset()
 
             for i, item in ipairs(event.Payload.Scenarios) do
-                scenarioSelection.AddItem(item.Name, item.Name)
+                local label = item.Name
+                if item.Roguelike then
+                    label = label .. " (Score: " .. tostring(State.RogueScore) .. ")"
+                end
+                scenarioSelection.AddItem(label, item.Name)
             end
 
             for i, item in ipairs(event.Payload.Maps) do
@@ -112,7 +105,9 @@ function Control.StartPanel(root)
             end
         end)
 
-        Net.Send("GetSelection")
+        WindowEvent("StateChange", function()
+            Net.Send("GetSelection")
+        end)
 
         listCols[1]:AddButton(__("Start")).OnClick = function(button)
             Event.Trigger("Start", scenarioSelection.Value, mapSelection.Value)
@@ -148,6 +143,7 @@ function Control.RunningPanel(root)
                 return table.concat({
                     "Scenario: " .. tostring(state.Scenario.Name),
                     "Round: " .. tostring(state.Scenario.Round),
+                    "Total Rounds: " .. tostring(#state.Scenario.Timeline),
                     "Killed: " .. tostring(#state.Scenario.KilledEnemies),
                     -- "Next: " .. tostring(#state.Scenario.Enemies[state.Scenario.Round + 1] or 0),
                 }, "\n")

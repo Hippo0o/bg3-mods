@@ -209,8 +209,9 @@ end
 ---@param root ExtuiTreeParent
 ---@param tbl table
 ---@param label string|nil
+---@param onText fun(node: ExtuiTree, key: any, value: any)
 ---@return ExtuiTree
-function Components.Tree(root, tbl, label)
+function Components.Tree(root, tbl, label, onText)
     local tree
     if label then
         tree = root:AddTree(U.RandomId())
@@ -220,14 +221,12 @@ function Components.Tree(root, tbl, label)
     end
 
     local function addNode(node, data)
+        node.IDContext = U.RandomId()
+
         for k, v in pairs(data) do
             if type(k) == "number" then
                 k = "[" .. k .. "]"
             end
-            if type(v) == "string" then
-                v = '"' .. v .. '"'
-            end
-
             if type(v) == "table" then
                 local label = k .. " (" .. UT.Size(v) .. ")"
                 addNode(node:AddTree(label), v)

@@ -212,7 +212,6 @@ end
 
 ---@class ChainableRunner : LibsChainable
 ---@field Source Runner
----@field After fun(func: fun(...: any): any): LibsChainable
 ---@param queue Queue
 ---@param func fun()|nil
 ---@return ChainableRunner
