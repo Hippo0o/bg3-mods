@@ -85,6 +85,30 @@ function M.RandomId(prefix)
     return tostring({}):gsub("table: ", prefix or "")
 end
 
+---@param code string x, y => x + y
+---@vararg any input for code, e.g. 1, 2
+---@return any
+function M.Lamda(code, ...)
+    local argString, evalString = table.unpack(M.String.Split(code, "=>"))
+
+    local args = M.String.Split(argString, ",")
+
+    local env = { _G = _G }
+
+    for i, arg in ipairs(args) do
+        env[M.String.Trim(arg)] = select(i, ...)
+    end
+
+    code = "return " .. M.String.Trim(evalString)
+
+    local ok, res = pcall(Ext.Utils.LoadString(code, env))
+    if not ok then
+        error('\n[Lamda]: "' .. code .. '"\n' .. res)
+    end
+
+    return res
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Entity                                            --
