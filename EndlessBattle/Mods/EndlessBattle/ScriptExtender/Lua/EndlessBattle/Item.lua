@@ -254,27 +254,30 @@ U.Osiris.On(
     "AddedTo",
     3,
     "before",
-    Async.Throttle(1000, function(object, inventoryHolder, addType) -- avoid recursion
-        if addType ~= "Regular" or UE.IsNonPlayer(inventoryHolder, true) then
-            return
-        end
+    Async.Throttle(
+        1000,
+        IfActive(function(object, inventoryHolder, addType) -- avoid recursion
+            if addType ~= "Regular" or UE.IsNonPlayer(inventoryHolder, true) then
+                return
+            end
 
-        local items = UT.Map(PersistentVars.SpawnedItems, function(item)
-            return U.UUID.GetGUID(item.GUID)
-        end)
+            local items = UT.Map(PersistentVars.SpawnedItems, function(item)
+                return U.UUID.GetGUID(item.GUID)
+            end)
 
-        if UT.Contains(items, U.UUID.GetGUID(object)) then
-            L.Debug("Auto pickup:", object, inventoryHolder)
-            for _, item in ipairs(items) do
-                if not Item.IsOwned(item) then
-                    Osi.ToInventory(item, inventoryHolder)
-                    Schedule(function()
-                        if Item.IsOwned(item) then
-                            PersistentVars.SpawnedItems[item] = nil
-                        end
-                    end)
+            if UT.Contains(items, U.UUID.GetGUID(object)) then
+                L.Debug("Auto pickup:", object, inventoryHolder)
+                for _, item in ipairs(items) do
+                    if not Item.IsOwned(item) then
+                        Osi.ToInventory(item, inventoryHolder)
+                        Schedule(function()
+                            if Item.IsOwned(item) then
+                                PersistentVars.SpawnedItems[item] = nil
+                            end
+                        end)
+                    end
                 end
             end
-        end
-    end)
+        end)
+    )
 )

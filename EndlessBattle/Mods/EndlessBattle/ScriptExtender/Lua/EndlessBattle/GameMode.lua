@@ -5,7 +5,10 @@
 -------------------------------------------------------------------------------------------------
 
 function GameMode.AskTutSkip()
-    Player.AskConfirmation("Skip to Camp?")
+    Config.BypassStory = true
+    Config.BypassStoryAlways = true
+
+    return Player.AskConfirmation("Skip to Camp?")
         .After(function(confirmed)
             if not confirmed then
                 return
@@ -20,11 +23,33 @@ function GameMode.AskTutSkip()
         .After(function()
             Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
             GameMode.AskRecruitStarters()
+
+            External.LoadConfig()
+        end)
+end
+
+function GameMode.AskOnboarding()
+    PersistentVars.Active = false
+
+    return Player.AskConfirmation("Welcome to Endless Battle! Start playing?")
+        .After(function(confirmed)
+            if not confirmed then
+                return
+            end
+
+            PersistentVars.Active = true
+
+            return GameMode.AskEnableRogueMode()
+        end)
+        .After(function()
+            if Player.Region() == C.Regions.Act0 then
+                GameMode.AskTutSkip()
+            end
         end)
 end
 
 function GameMode.AskRecruitStarters()
-    Player.AskConfirmation("Recruit Origin characters?").After(function(confirmed)
+    return Player.AskConfirmation("Recruit Origin characters?").After(function(confirmed)
         if not confirmed then
             return
         end
@@ -49,6 +74,19 @@ function GameMode.AskRecruitStarters()
         end
 
         fixGale()
+    end)
+end
+
+function GameMode.AskEnableRogueMode()
+    return Player.AskConfirmation([[
+        Play Roguelike mode?
+        Continuely creates new battles.
+        You will gain a higher score with every completed Fight.
+        Difficulty increases with higher score.
+        ]]).After(function(confirmed)
+        PersistentVars.RogueModeActive = confirmed
+
+        return confirmed
     end)
 end
 
@@ -108,17 +146,191 @@ end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+U.Osiris.On(
+    "AutomatedDialogStarted",
+    2,
+    "after",
+    IfActive(function(dialog, instanceID)
+        if
+            US.Contains(dialog, {
+                "GLO_Jergal_AD_AttackFromDialog",
+                "GLO_Jergal_AD_AttackedByPlayer",
+            })
+        then
+            if PersistentVars.Active then
+                if PersistentVars.RogueModeActive == nil then
+                    GameMode.AskEnableRogueMode()
+                elseif PersistentVars.RogueModeActive == false then
+                    Net.Send("OpenGUI", {})
+                end
+            elseif PersistentVars.Active == nil then
+                GameMode.AskOnboarding()
+            elseif dialog:match("GLO_Jergal_AD_AttackFromDialog") then
+                PersistentVars.Active = nil
+            end
+        end
+    end)
+)
+
+U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor, speakerIndex)
+    L.Dump("AutomatedDialogStarted", dialog, instanceID)
+    if
+        US.Contains(dialog, {
+            "TUT_Start_PAD_Start_",
+            "TUT_Misc_PAD_OriginPod_PlayerEmpty_",
+        }) and U.UUID.Equals(actor, Player.Host())
+    then
+        GameMode.AskOnboarding()
+    end
+end)
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                       Rogue-like mode                                       --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+function GameMode.GenerateScenario(score)
+    -- ChatGPT made this ................................ i made this
+
+    local minRounds = 1
+    local maxRounds = 10
+    local preferredRounds = 3
+    local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
+
+    -- Define tiers and their corresponding difficulty values
+    local tiers = {
+        { name = C.EnemyTier[1], value = 3 },
+        { name = C.EnemyTier[2], value = 9 },
+        { name = C.EnemyTier[3], value = 15 },
+        { name = C.EnemyTier[4], value = 22 },
+        { name = C.EnemyTier[5], value = 40 },
+        { name = C.EnemyTier[6], value = 69 },
+    }
+    score = score >= tiers[1].value and score or tiers[1].value
+
+    -- Weighted random function to bias towards a preferred number of rounds
+    local function weightedRandom()
+        local weights = {}
+        local totalWeight = 0
+        for i = minRounds, maxRounds do
+            local weight = 1 / (math.abs(i - preferredRounds) + 1) -- Adjusted weight calculation
+            weights[i] = weight
+            totalWeight = totalWeight + weight
+        end
+        local randomWeight = U.Random() * totalWeight
+        for i = minRounds, maxRounds do
+            randomWeight = randomWeight - weights[i]
+            if randomWeight <= 0 then
+                return i
+            end
+        end
+        return maxRounds
+    end
+
+    -- Function to select a tier based on remaining value
+    local function selectTier(remainingValue)
+        local totalWeight = 0
+        local weights = {}
+        for i, tier in ipairs(tiers) do
+            local weight = tier.value / remainingValue -- Higher bias towards higher tiers
+            weights[i] = weight
+            totalWeight = totalWeight + weight
+        end
+        local randomWeight = math.random() * totalWeight
+        for i, weight in ipairs(weights) do
+            randomWeight = randomWeight - weight
+            if randomWeight <= 0 then
+                return tiers[i]
+            end
+        end
+        return tiers[#tiers] -- Fallback to the highest tier
+    end
+
+    -- Function to generate a random timeline with bias and possible empty rounds
+    local function generateTimeline(maxValue)
+        local timeline = {}
+        local numRounds = weightedRandom()
+        local remainingValue = maxValue
+        -- Initialize rounds with empty tables
+        for i = 1, numRounds do
+            table.insert(timeline, {})
+        end
+
+        local roundsSkipped = {}
+        local function distribute()
+            local roundIndex = U.Random(1, numRounds)
+
+            if roundsSkipped[roundIndex] then
+                return
+            end
+
+            -- Add a chance for the round to remain empty, except for the first round
+            if not roundsSkipped[roundIndex - 1] and U.Random() < emptyRoundChance then -- Chance to skip adding a tier
+                roundsSkipped[roundIndex] = true
+                remainingValue = remainingValue + maxValue * emptyRoundChance
+                return
+            end
+
+            local tier = selectTier(remainingValue)
+
+            if remainingValue - tier.value >= 0 then
+                table.insert(timeline[roundIndex], tier.name)
+                remainingValue = remainingValue - tier.value
+            end
+        end
+
+        -- Distribute the total value randomly across rounds
+        local failsafe = 0
+        while remainingValue > 0 do
+            distribute()
+
+            if remainingValue < tiers[1].value then
+                break
+            end
+
+            failsafe = failsafe + 1
+
+            if failsafe > 1000 then
+                break
+            end
+        end
+
+        -- Ensure the first round is not empty by swapping with the first non-empty round if necessary
+        if #timeline[1] == 0 then
+            return generateTimeline(maxValue)
+        end
+
+        -- Ensure no two consecutive rounds exist
+        for i = 2, #timeline do
+            if #timeline[i] == 0 and #timeline[i - 1] == 0 then
+                return generateTimeline(maxValue)
+            end
+        end
+
+        return timeline
+    end
+
+    return generateTimeline(score)
+end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
 --                                          Story? No!                                         --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
-    return function(...)
-        if PersistentVars.Active and Config.BypassStory and (Config.BypassStoryAlways or S ~= nil) then
+    return IfActive(function(...)
+        if Config.BypassStory and (Config.BypassStoryAlways or S ~= nil) then
             func(...)
         end
-    end
+    end)
 end
 
 local actors = {}
@@ -268,175 +480,3 @@ U.Osiris.On(
         end)
     end)
 )
-
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                       Rogue-like mode                                       --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
-function GameMode.GenerateScenario(score)
-    -- ChatGPT made this ................................ i made this
-
-    local minRounds = 1
-    local maxRounds = 10
-    local preferredRounds = 3
-    local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
-
-    -- Define tiers and their corresponding difficulty values
-    local tiers = {
-        { name = C.EnemyTier[1], value = 3 },
-        { name = C.EnemyTier[2], value = 9 },
-        { name = C.EnemyTier[3], value = 15 },
-        { name = C.EnemyTier[4], value = 22 },
-        { name = C.EnemyTier[5], value = 40 },
-        { name = C.EnemyTier[6], value = 69 },
-    }
-    score = score >= tiers[1].value and score or tiers[1].value
-
-    -- Weighted random function to bias towards a preferred number of rounds
-    local function weightedRandom()
-        local weights = {}
-        local totalWeight = 0
-        for i = minRounds, maxRounds do
-            local weight = 1 / (math.abs(i - preferredRounds) + 1) -- Adjusted weight calculation
-            weights[i] = weight
-            totalWeight = totalWeight + weight
-        end
-        local randomWeight = U.Random() * totalWeight
-        for i = minRounds, maxRounds do
-            randomWeight = randomWeight - weights[i]
-            if randomWeight <= 0 then
-                return i
-            end
-        end
-        return maxRounds
-    end
-
-    -- Function to select a tier based on remaining value
-    local function selectTier(remainingValue)
-        local totalWeight = 0
-        local weights = {}
-        for i, tier in ipairs(tiers) do
-            local weight = tier.value / remainingValue -- Higher bias towards higher tiers
-            weights[i] = weight
-            totalWeight = totalWeight + weight
-        end
-        local randomWeight = math.random() * totalWeight
-        for i, weight in ipairs(weights) do
-            randomWeight = randomWeight - weight
-            if randomWeight <= 0 then
-                return tiers[i]
-            end
-        end
-        return tiers[#tiers] -- Fallback to the highest tier
-    end
-
-    -- Function to generate a random timeline with bias and possible empty rounds
-    local function generateTimeline(maxValue)
-        local timeline = {}
-        local numRounds = weightedRandom()
-        local remainingValue = maxValue
-        -- Initialize rounds with empty tables
-        for i = 1, numRounds do
-            table.insert(timeline, {})
-        end
-
-        local roundsSkipped = {}
-        local function distribute()
-            local roundIndex = U.Random(1, numRounds)
-
-            if roundsSkipped[roundIndex] then
-                return
-            end
-
-            -- Add a chance for the round to remain empty, except for the first round
-            if not roundsSkipped[roundIndex - 1] and U.Random() < emptyRoundChance then -- Chance to skip adding a tier
-                roundsSkipped[roundIndex] = true
-                remainingValue = remainingValue + maxValue * emptyRoundChance
-                return
-            end
-
-            local tier = selectTier(remainingValue)
-
-            if remainingValue - tier.value >= 0 then
-                table.insert(timeline[roundIndex], tier.name)
-                remainingValue = remainingValue - tier.value
-            end
-        end
-
-        -- Distribute the total value randomly across rounds
-        local failsafe = 0
-        while remainingValue > 0 do
-            distribute()
-
-            if remainingValue < tiers[1].value then
-                break
-            end
-
-            failsafe = failsafe + 1
-
-            if failsafe > 1000 then
-                break
-            end
-        end
-
-        -- Ensure the first round is not empty by swapping with the first non-empty round if necessary
-        if #timeline[1] == 0 then
-            return generateTimeline(maxValue)
-        end
-
-        -- Ensure no two consecutive rounds exist
-        for i = 2, #timeline do
-            if #timeline[i] == 0 and #timeline[i - 1] == 0 then
-                return generateTimeline(maxValue)
-            end
-        end
-
-        return timeline
-    end
-
-    return generateTimeline(score)
-end
-
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                           Events                                            --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
-U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
-    if
-        US.Contains(dialog, {
-            "GLO_Jergal_AD_AttackFromDialog",
-            "GLO_Jergal_AD_AttackedByPlayer",
-        })
-    then
-        Net.Send("OpenGUI", {})
-    end
-end)
-
-local count = 0
-local reset = Async.Debounce(5000, function()
-    count = 0
-end)
-U.Osiris.On("StatusRemoved", 4, "after", function(object, status, causee, applyStoryActionID)
-    if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
-        count = count + 1
-        if count >= 3 then
-            Net.Send("OpenGUI")
-        end
-        reset()
-    end
-end)
-
-U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
-    if
-        US.Contains(dialog, {
-            "TUT_Start_PAD_Start_",
-            "TUT_Misc_PAD_OriginPod_PlayerEmpty_",
-        }) and U.UUID.Equals(actor, Player.Host())
-    then
-        GameMode.AskOnboarding()
-    end
-end)
