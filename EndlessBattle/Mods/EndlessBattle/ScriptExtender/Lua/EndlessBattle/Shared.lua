@@ -49,7 +49,7 @@ C = UT.Merge(Constants, C)
 
 Mod.PersistentVarsTemplate = {
     Active = nil,
-    RogueModeActive = nil,
+    RogueModeActive = false,
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = S,
