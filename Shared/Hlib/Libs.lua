@@ -339,4 +339,104 @@ function M.Chainable(source)
     return Chainable
 end
 
+---@param t table
+---@param onSet fun(actual: table, key: string, value: any, parent: table|nil): any
+---@param onGet fun(actual: table, key: string, value: any, parent: table|nil): any
+---@return LibsProxy, fun(): table toTable
+function M.Proxy(t, onSet, onGet)
+    local raw = {}
+    t = t or {}
+
+    ---@class LibsProxy: table
+    local Proxy = setmetatable({}, {
+        __metatable = false,
+        __name = "Proxy",
+        __eq = function(self, other)
+            -- create a closure around `t` to emulate shallow equality
+            return rawequal(t, other) or rawequal(self, other)
+        end,
+        __pairs = function(self)
+            -- wrap `next` to enable proxy hits during traversal
+            return function(tab, key)
+                local index, value = next(raw, key)
+
+                return index, value ~= nil and self[index]
+            end,
+                self,
+                nil
+        end,
+        -- these metamethods create closures around `actual`
+        __len = function(self)
+            return rawlen(raw)
+        end,
+        __index = function(self, key)
+            local v = rawget(raw, key)
+            if onGet then
+                v = onGet(raw, key, v)
+            end
+
+            return v
+        end,
+        __newindex = function(self, key, value)
+            if onSet then
+                value = onSet(raw, key, value)
+            end
+
+            if type(value) == "table" then
+                value = Libs.Proxy(value, function(sub, subKey, subValue)
+                    local parent = {}
+                    for k, v in pairs(raw) do
+                        parent[k] = v
+                    end
+
+                    parent[key] = sub
+
+                    if onSet then
+                        return onSet(parent, subKey, subValue, raw)
+                    end
+
+                    return subValue
+                end, function(sub, subKey, subValue)
+                    local parent = {}
+                    for k, v in pairs(raw) do
+                        parent[k] = v
+                    end
+
+                    parent[key] = sub
+
+                    if onGet then
+                        return onGet(parent, subKey, subValue, raw)
+                    end
+
+                    return subValue
+                end)
+            end
+
+            rawset(raw, key, value)
+        end,
+    })
+
+    -- copy all values from `t` to `proxy`
+    for key, value in pairs(t) do
+        Proxy[key] = value
+    end
+
+    -- recursively convert `proxy` to a table
+    local function toTable(tbl)
+        local t = {}
+        for k, v in pairs(tbl) do
+            if type(v) == "table" then
+                t[k] = toTable(v)
+            else
+                t[k] = v
+            end
+        end
+        return t
+    end
+
+    return Proxy, function()
+        return toTable(raw)
+    end
+end
+
 return M

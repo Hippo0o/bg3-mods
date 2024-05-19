@@ -81,15 +81,3 @@ Event = Require("Hlib/Event")
 ---@type Localization
 Localization = Require("Hlib/Localization")
 __ = Localization.Localize
-
-if Ext.IsClient() then
-    L.Dump(Mod.Vars)
-    Defer(1000, function()
-        L.Dump(Mod.Vars)
-    end)
-end
-
-function Sync()
-    L.Dump(Mod.Vars)
-    Ext.Vars.SyncModVariables(Mod.UUID)
-end

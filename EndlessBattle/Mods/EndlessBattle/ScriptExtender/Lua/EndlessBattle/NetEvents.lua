@@ -121,6 +121,8 @@ Net.On("PingSpawns", function(event)
 end)
 
 Net.On("GetState", function(event)
+    Mod.Vars.State.Active = true
+
     Net.Respond(event, PersistentVars)
 end)
 

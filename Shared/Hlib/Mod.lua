@@ -53,7 +53,6 @@ function M.PreparePersistentVars()
     applyTemplate(PersistentVars, M.PersistentVarsTemplate)
 end
 
--- TODO sync broken
 function M.PrepareModVars(tableKey, sync, template)
     Ext.Vars.RegisterModVariable(M.UUID, tableKey, {
         Persistent = true,
@@ -68,10 +67,12 @@ function M.PrepareModVars(tableKey, sync, template)
     })
 
     Ext.Events.SessionLoaded:Subscribe(function()
-        M.Vars = Ext.Vars.GetModVariables(M.UUID)
+        local vars = Ext.Vars.GetModVariables(M.UUID)
         if Ext.IsClient() and sync then
+            M.Vars = vars
             return
         end
+
         Ext.OnNextTick(function()
             if type(template) == "table" then
                 M.Vars[tableKey] = M.Vars[tableKey] or {}
@@ -79,8 +80,24 @@ function M.PrepareModVars(tableKey, sync, template)
             else
                 M.Vars[tableKey] = M.Vars[tableKey] or template
             end
+
+            if sync then
+                M.Vars[tableKey] = Require("Hlib/Libs").Proxy(M.Vars[tableKey], function(actual, key, value)
+                    vars[tableKey] = vars[tableKey] or {}
+                    vars[tableKey] = actual
+
+                    return value
+                end)
+            end
         end)
     end)
+end
+
+function M.SyncModVars()
+    for k, v in pairs(M.Vars) do
+        M.Vars[k] = v
+    end
+    Ext.Vars.SyncModVariables(M.UUID)
 end
 
 return M
