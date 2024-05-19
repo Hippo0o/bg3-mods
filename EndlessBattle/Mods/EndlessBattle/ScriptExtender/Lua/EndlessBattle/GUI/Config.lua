@@ -66,6 +66,9 @@ function Config.Main(tab)
         10
     )
 
+    local c8 =
+        Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
+
     -- status label
     root:AddSeparator()
     local status = root:AddText("")
@@ -96,6 +99,7 @@ function Config.Main(tab)
             RandomizeSpawnOffset = c5.Value[1],
             SpawnItemsAtPlayer = c6.Checked,
             ExpMultiplier = c7.Value[1],
+            RoguelikeMode = c8.Checked,
             Persist = true,
         })
     end
@@ -138,6 +142,7 @@ function Config.Main(tab)
         c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
         c6.Checked = config.SpawnItemsAtPlayer
         c7.Value = { config.ExpMultiplier, 0, 0, 0 }
+        c8.Checked = config.RoguelikeMode
     end)
 
     root:AddSeparator()

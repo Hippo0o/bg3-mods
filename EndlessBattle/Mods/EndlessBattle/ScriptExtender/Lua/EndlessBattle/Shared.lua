@@ -1,6 +1,6 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
-Mod.Debug = true
+Mod.Debug = false
 Mod.Dev = false
 Mod.EnableRCE = true
 Mod.Prefix = "Endless Battle"
@@ -57,7 +57,7 @@ Mod.PersistentVarsTemplate = {
     GUIOpen = false,
 }
 
-Mod.PrepareModVars("State", true, Mod.PersistentVarsTemplate)
+-- Mod.CreateModVar("State", false, Mod.PersistentVarsTemplate)
 
 ---@type GameState
 GameState = Require("Hlib/GameState")

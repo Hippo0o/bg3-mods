@@ -183,31 +183,22 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Osiris.On(
-    "AutomatedDialogStarted",
-    2,
-    "after",
-    IfActive(function(dialog, instanceID)
-        if
-            US.Contains(dialog, {
-                "GLO_Jergal_AD_AttackFromDialog",
-                "GLO_Jergal_AD_AttackedByPlayer",
-            })
-        then
-            if PersistentVars.Active then
-                if PersistentVars.RogueModeActive == nil then
-                    GameMode.AskEnableRogueMode()
-                elseif PersistentVars.RogueModeActive == false then
-                    Net.Send("OpenGUI", {})
-                end
-            elseif PersistentVars.Active == nil then
-                GameMode.AskOnboarding()
-            elseif dialog:match("GLO_Jergal_AD_AttackFromDialog") then
-                PersistentVars.Active = nil
-            end
+U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
+    if
+        US.Contains(dialog, {
+            "GLO_Jergal_AD_AttackFromDialog",
+            "GLO_Jergal_AD_AttackedByPlayer",
+        })
+    then
+        if PersistentVars.Active then
+            Net.Send("OpenGUI", {})
         end
-    end)
-)
+    end
+
+    if not PersistentVars.Active and dialog:match("GLO_Jergal_AD_AttackFromDialog") then
+        GameMode.AskOnboarding()
+    end
+end)
 
 U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor, speakerIndex)
     if

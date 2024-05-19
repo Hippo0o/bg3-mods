@@ -11,7 +11,7 @@ end)
 State = {}
 Net.On(
     "GetState",
-    Async.Debounce(10, function(event)
+    Async.Debounce(100, function(event)
         State = event.Payload or {}
         Event.Trigger("StateChange", State)
     end)

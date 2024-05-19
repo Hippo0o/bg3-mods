@@ -428,7 +428,10 @@ function Enemy.Iter(filter)
         i = i + 1
         j = j + 1
         if filter then
-            while templates[j] and not filter(templates[j]) do
+            while
+                templates[j]
+                and not filter(templates[j])
+            do
                 j = j + 1
             end
         end
