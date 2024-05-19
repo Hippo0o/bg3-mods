@@ -310,8 +310,8 @@ function Action.NotifyStarted()
 
         return not S or S.OnMap
     end, {
-        retries = -1,
-        interval = 10000,
+        retries = 10,
+        interval = 15000,
         immediate = true,
     })
 end

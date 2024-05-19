@@ -251,13 +251,13 @@ end
 -------------------------------------------------------------------------------------------------
 
 U.Osiris.On(
-    "AddedTo",
+    "RequestCanPickup",
     3,
-    "before",
+    "after",
     Async.Throttle(
         1000,
-        IfActive(function(object, inventoryHolder, addType) -- avoid recursion
-            if addType ~= "Regular" or UE.IsNonPlayer(inventoryHolder, true) then
+        IfActive(function(character, object, requestID) -- avoid recursion
+            if UE.IsNonPlayer(character, true) then
                 return
             end
 
@@ -266,10 +266,10 @@ U.Osiris.On(
             end)
 
             if UT.Contains(items, U.UUID.GetGUID(object)) then
-                L.Debug("Auto pickup:", object, inventoryHolder)
+                L.Debug("Auto pickup:", object, character)
                 for _, item in ipairs(items) do
                     if not Item.IsOwned(item) then
-                        Osi.ToInventory(item, inventoryHolder)
+                        Osi.ToInventory(item, character)
                         Schedule(function()
                             if Item.IsOwned(item) then
                                 PersistentVars.SpawnedItems[item] = nil

@@ -16,12 +16,6 @@ Net.On(
         Event.Trigger("StateChange", State)
     end)
 )
-Net.On(
-    "PlayerNotify",
-    Async.Throttle(1000, function()
-        Net.Send("GetState")
-    end)
-)
 
 Net.On(
     "OpenGUI",

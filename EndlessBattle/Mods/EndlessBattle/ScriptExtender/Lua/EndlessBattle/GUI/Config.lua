@@ -8,51 +8,66 @@ function Config.Main(tab)
     Net.Send("Config")
 
     ---@type ExtuiCheckbox
-    local c1 = root:AddCheckbox(__("Enable Debug"))
+
+    local c1 = Config.Checkbox(
+        root,
+        "Enable Debug",
+        "some more info in the console and other debug features",
+        "Debug",
+        function(ckb)
+            Event.Trigger("ToggleDebug", ckb.Checked)
+        end
+    )
     c1.Checked = Mod.Debug
-    root:AddText(__("some more info in the console and other debug features"))
-    c1.OnChange = function(ckb)
-        Event.Trigger("ToggleDebug", ckb.Checked)
-        Event.Trigger("UpdateConfig", { Debug = ckb.Checked })
-    end
 
+    local c2 = Config.Checkbox(
+        root,
+        "Bypass Story",
+        "skip dialogues, combat and interactions that aren't related to a scenario",
+        "BypassStory"
+    )
+
+    local c3 = Config.Checkbox(
+        root,
+        "Always Bypass Story",
+        "always skip dialogues, combat and interactions even if no scenario is active",
+        "BypassStoryAlways"
+    )
+
+    local c4 = Config.Checkbox(
+        root,
+        "Force Enter Combat",
+        "more continues battle between rounds at the cost of cheesy out of combat strats",
+        "ForceEnterCombat"
+    )
+
+    local c5 = Config.Slider(
+        root,
+        "Randomize Spawn Offset",
+        "randomize spawn position for more varied encounters (too high may cause issues)",
+        "RandomizeSpawnOffset",
+        0,
+        20
+    )
+
+    local c6 = Config.Checkbox(
+        root,
+        "Spawn Items At Player",
+        "items will spawn at the current player's position instead the maps entry point",
+        "SpawnItemsAtPlayer"
+    )
+
+    local c7 = Config.Slider(
+        root,
+        "Exp Multiplier",
+        "multiplies the experience gained by killing enemies",
+        "ExpMultiplier",
+        1,
+        10
+    )
+
+    -- status label
     root:AddSeparator()
-    local c2 = root:AddCheckbox(__("Bypass Story"))
-    root:AddText(__("skip dialogues, combat and interactions that aren't related to a scenario"))
-    c2.OnChange = function(ckb)
-        Event.Trigger("UpdateConfig", { BypassStory = ckb.Checked })
-    end
-
-    root:AddSeparator()
-    local c3 = root:AddCheckbox(__("Always Bypass Story"))
-    root:AddText(__("always skip dialogues, combat and interactions even if no scenario is active"))
-    c3.OnChange = function(ckb)
-        Event.Trigger("UpdateConfig", { BypassStoryAlways = ckb.Checked, BypassStory = ckb.Checked or c2.Checked })
-    end
-
-    root:AddSeparator()
-    local c4 = root:AddCheckbox(__("Force Enter Combat"))
-    root:AddText(__("more continues battle between rounds at the cost of cheesy out of combat strats"))
-    c4.OnChange = function(ckb)
-        Event.Trigger("UpdateConfig", { ForceEnterCombat = ckb.Checked })
-    end
-
-    root:AddSeparator()
-    local c5 = root:AddSliderInt(__("Randomize Spawn Offset"), 0, 0, 20)
-    root:AddText(__("randomize spawn position for more varied encounters (too high may cause issues)"))
-    c5.OnChange = Async.Debounce(500, function(sld)
-        Event.Trigger("UpdateConfig", { RandomizeSpawnOffset = sld.Value[1] })
-    end)
-
-    root:AddSeparator()
-    local c6 = root:AddCheckbox(__("Spawn Items At Player"))
-    root:AddText(__("items will spawn at the current player's position instead the maps entry point"))
-    c6.OnChange = function(ckb)
-        Event.Trigger("UpdateConfig", { SpawnItemsAtPlayer = ckb.Checked })
-    end
-
-    root:AddSeparator()
-
     local status = root:AddText("")
     status:SetColor("Text", { 0.4, 1, 0.4, 1 })
     local clearStatus = Async.Debounce(2000, function(text)
@@ -67,6 +82,7 @@ function Config.Main(tab)
         clearStatus()
     end
 
+    -- buttons
     root:AddSeparator()
     local btn = root:AddButton(__("Persist Config"))
     btn.OnClick = function()
@@ -78,6 +94,8 @@ function Config.Main(tab)
             BypassStoryAlways = c3.Checked,
             ForceEnterCombat = c4.Checked,
             RandomizeSpawnOffset = c5.Value[1],
+            SpawnItemsAtPlayer = c6.Checked,
+            ExpMultiplier = c7.Value[1],
             Persist = true,
         })
     end
@@ -98,6 +116,7 @@ function Config.Main(tab)
         Net.Send("Config", { Default = true })
     end
 
+    -- events
     WindowNet("Config", function(event)
         Event.Trigger("ConfigChange", event.Payload)
     end)
@@ -118,6 +137,7 @@ function Config.Main(tab)
         c4.Checked = config.ForceEnterCombat
         c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
         c6.Checked = config.SpawnItemsAtPlayer
+        c7.Value = { config.ExpMultiplier, 0, 0, 0 }
     end)
 
     root:AddSeparator()
@@ -132,4 +152,29 @@ function Config.Main(tab)
         end)
     end
     root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true
+end
+
+function Config.Checkbox(root, label, desc, field, onChange)
+    root:AddSeparator()
+    local checkbox = root:AddCheckbox(__(label))
+    root:AddText(__(desc))
+    checkbox.OnChange = function(ckb)
+        Event.Trigger("UpdateConfig", { [field] = ckb.Checked })
+        if onChange then
+            onChange(ckb)
+        end
+    end
+
+    return checkbox
+end
+
+function Config.Slider(root, label, desc, field, min, max, onChange)
+    root:AddSeparator()
+    local slider = root:AddSliderInt(__(label), 0, min, max)
+    root:AddText(__(desc))
+    slider.OnChange = Async.Debounce(500, function(sld)
+        Event.Trigger("UpdateConfig", { [field] = sld.Value[1] })
+    end)
+
+    return slider
 end
