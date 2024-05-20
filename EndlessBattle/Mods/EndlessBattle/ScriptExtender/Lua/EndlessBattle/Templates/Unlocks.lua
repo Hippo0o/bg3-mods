@@ -1,5 +1,5 @@
 local function getUnlocks()
-    return PersistentVars.Unlocks
+    return Unlock.Get()
 end
 
 return {
@@ -9,7 +9,6 @@ return {
         Icon = "GEN_Armor",
         Cost = 100,
         Amount = 10,
-        Bought = 0,
         Character = false,
         Unlocked = true,
         OnActivate = function(self, character)
@@ -22,7 +21,6 @@ return {
         Icon = "GEN_Armor",
         Cost = 333,
         Amount = nil,
-        Bought = 0,
         Character = false,
         Unlocked = true,
         OnActivate = function(self, character)
@@ -35,7 +33,6 @@ return {
         Icon = "GEN_Armor",
         Cost = 1000,
         Amount = 1,
-        Bought = 0,
         Character = false,
         Unlocked = true,
         OnActivate = function(self, character)
@@ -52,7 +49,6 @@ return {
         Icon = "GEN_Armor",
         Cost = 1337,
         Amount = 2,
-        Bought = 0,
         Character = true,
         Unlocked = false,
     },
@@ -62,7 +58,6 @@ return {
         Icon = "GEN_Armor",
         Cost = 10000,
         Amount = nil,
-        Bought = 0,
         Character = true,
         Unlocked = false,
     },

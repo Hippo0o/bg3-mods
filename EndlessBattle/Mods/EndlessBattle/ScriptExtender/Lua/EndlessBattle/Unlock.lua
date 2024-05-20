@@ -75,8 +75,12 @@ function Unlock.CalculateReward(scenario)
     PersistentVars.Currency = (PersistentVars.Currency or 0) + math.ceil(reward * rewardMulti)
 end
 
-function Unlock.GetAll()
+function Unlock.GetTemplates()
     return unlocks
+end
+
+function Unlock.Get()
+    return PersistentVars.Unlocks
 end
 
 -------------------------------------------------------------------------------------------------
@@ -87,14 +91,14 @@ end
 
 GameState.OnLoad(function()
     local unlocks = PersistentVars.Unlocks or {}
-    for _, unlock in ipairs(Unlock.GetAll()) do
+    for _, unlock in ipairs(Unlock.GetTemplates()) do
         local found = UT.Find(unlocks, function(u)
             return u.Id == unlock.Id
         end)
 
         table.insert(unlocks, Unlock.Restore(found or unlock))
     end
-
+    L.Dump("Unlocks", unlocks)
     PersistentVars.Unlocks = unlocks
 end)
 
