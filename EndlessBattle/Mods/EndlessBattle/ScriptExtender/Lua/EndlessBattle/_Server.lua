@@ -15,12 +15,13 @@ Mod.PersistentVarsTemplate = {
         Looted = {},
         Killed = {},
     },
-    Currency = 0,
-    Unlocks = {
+    Currency = 99990,
+    Unlocked = {
         ExpMultiplier = false,
         LootMultiplier = false,
         CurrencyMultiplier = false,
     },
+    Unlocks = {},
 }
 
 DefaultConfig = {
@@ -49,7 +50,7 @@ Map = {}
 Item = {}
 GameMode = {}
 StoryBypass = {}
-Unlocks = {}
+Unlock = {}
 
 -- wrap event handlers in IfActive to prevent them from running when the mod is not active
 function IfActive(func)
@@ -68,7 +69,7 @@ Require("EndlessBattle/Item")
 Require("EndlessBattle/StoryBypass")
 Require("EndlessBattle/GameMode")
 Require("EndlessBattle/NetEvents")
-Require("EndlessBattle/Unlocks")
+Require("EndlessBattle/Unlock")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -203,7 +204,9 @@ do
     --
     --     Net.Respond(event, Commands[fn](table.unpack(event.Payload.Args or {})))
     -- end)
-
+    Defer(1000, function()
+        Commands.UI()
+    end)
     function Commands.UI()
         Event.Trigger("ModActive")
         if PersistentVars.GUIOpen then

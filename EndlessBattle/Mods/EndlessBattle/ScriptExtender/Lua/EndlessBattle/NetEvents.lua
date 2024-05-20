@@ -57,6 +57,10 @@ Net.On("GetItems", function(event)
     })
 end)
 
+Net.On("GetUnlocks", function(event)
+    Net.Respond(event, Unlock.GetAll())
+end)
+
 Net.On("Start", function(event)
     local scenarioName = event.Payload.Scenario
     local mapName = event.Payload.Map
@@ -136,25 +140,25 @@ Net.On("PingSpawns", function(event)
     Net.Respond(event, { true })
 end)
 
-Net.On("GetState", function(event)
+Net.On("SyncState", function(event)
     Net.Respond(event, PersistentVars)
 end)
 
 Event.On("ScenarioStarted", function()
     Schedule(function()
-        Net.Send("GetState", PersistentVars)
+        Net.Send("SyncState", PersistentVars)
     end)
 end)
 
 Event.On("ScenarioEnded", function()
     Schedule(function()
-        Net.Send("GetState", PersistentVars)
+        Net.Send("SyncState", PersistentVars)
     end)
 end)
 
 Event.On("ScenarioStopped", function()
     Schedule(function()
-        Net.Send("GetState", PersistentVars)
+        Net.Send("SyncState", PersistentVars)
     end)
 end)
 

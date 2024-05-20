@@ -5,7 +5,6 @@ function Config.Main(tab)
     ---@type ExtuiTabItem
     local root = tab:AddTabItem(__("Config"))
 
-
     Net.Send("Config")
 
     ---@type ExtuiCheckbox
@@ -61,20 +60,15 @@ function Config.Main(tab)
     local c1 = Config.Checkbox(root, "Enable Debug", "some more info in the console and other debug features", "Debug")
     c1.Checked = Mod.Debug
 
-    -- status label
-    root:AddSeparator()
-    local status = root:AddText("")
-    status:SetColor("Text", { 0.4, 1, 0.4, 1 })
-    local clearStatus = Async.Debounce(2000, function(text)
-        status.Label = ""
-    end)
-    local function showStatus(text, append)
+    local text = ""
+    local function showStatus(msg, append)
         if append then
-            text = status.Label .. text
+            text = text .. " " .. msg
+        else
+            text = msg
         end
 
-        status.Label = text .. " "
-        clearStatus()
+        Event.Trigger("Success", text)
     end
 
     -- buttons
@@ -113,17 +107,17 @@ function Config.Main(tab)
     end
 
     -- events
-    WindowNet("Config", function(event)
+    Net.On("Config", function(event)
         Event.Trigger("ConfigChange", event.Payload)
     end)
 
-    WindowEvent("UpdateConfig", function(config)
+    Event.On("UpdateConfig", function(config)
         Net.Send("Config", config)
 
         showStatus("Updating config...")
     end)
 
-    WindowEvent("ConfigChange", function(config)
+    Event.On("ConfigChange", function(config)
         showStatus("Config updated", true)
 
         Mod.Debug = config.Debug

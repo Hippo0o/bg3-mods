@@ -95,7 +95,7 @@ function Action.CalculateLoot()
     local scenario = Current()
 
     local lootMultiplier = 1
-    if PersistentVars.Unlocks.LootMultiplier then
+    if PersistentVars.Unlocked.LootMultiplier then
         lootMultiplier = 1.5
     end
 

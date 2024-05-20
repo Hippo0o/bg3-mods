@@ -4,7 +4,7 @@ Control = {}
 function Control.Main(tab)
     local root = tab:AddTabItem(__("Main"))
 
-    WindowEvent("Start", function(scenarioName, mapName)
+    Event.On("Start", function(scenarioName, mapName)
         Net.Request("Start", {
             Scenario = scenarioName,
             Map = mapName,
@@ -13,17 +13,17 @@ function Control.Main(tab)
             if not success then
                 Event.Trigger("Error", err)
             end
-            Net.Send("GetState")
+            Net.Send("SyncState")
         end)
     end)
 
-    WindowEvent("Stop", function()
+    Event.On("Stop", function()
         Net.Request("Stop").After(function()
-            Net.Send("GetState")
+            Net.Send("SyncState")
         end)
     end)
 
-    WindowEvent("Teleport", function(data)
+    Event.On("Teleport", function(data)
         Net.Request("Teleport", data).After(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
@@ -32,7 +32,7 @@ function Control.Main(tab)
         end)
     end)
 
-    WindowEvent("PingSpawns", function(data)
+    Event.On("PingSpawns", function(data)
         Net.Request("PingSpawns", data).After(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
@@ -49,7 +49,7 @@ function Control.Main(tab)
 
         local stopLayout = Control.RunningPanel(cellStop)
 
-        WindowEvent("StateChange", function(state)
+        Event.On("StateChange", function(state)
             if state and state.Scenario then
                 startLayout.Table.Visible = false
                 stopLayout.Table.Visible = true
@@ -70,7 +70,7 @@ function Control.Main(tab)
         ---@type ExtuiInputText
         local textBox = scrollable[1][1]:AddText("")
 
-        WindowEvent("Start", function()
+        Event.On("Start", function()
             textBox.Label = ""
         end)
         Components.Computed(textBox, function(_, event)
@@ -88,7 +88,7 @@ function Control.StartPanel(root)
         local scenarioSelection = Components.Selection(listCols[1])
         local mapSelection = Components.Selection(listCols[2])
 
-        WindowNet("GetSelection", function(event)
+        Net.On("GetSelection", function(event)
             scenarioSelection.Reset()
             mapSelection.Reset()
 
@@ -105,7 +105,7 @@ function Control.StartPanel(root)
             end
         end)
 
-        WindowEvent("StateChange", function()
+        Event.On("StateChange", function()
             Net.Send("GetSelection")
         end)
 
