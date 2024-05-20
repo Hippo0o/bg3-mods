@@ -94,6 +94,11 @@ local Action = {}
 function Action.CalculateLoot()
     local scenario = Current()
 
+    local lootMultiplier = 1
+    if PersistentVars.Unlocks.LootMultiplier then
+        lootMultiplier = 1.5
+    end
+
     local loot = {}
     for _, e in pairs(scenario.KilledEnemies) do
         -- each kill gets an object/weapon/armor roll
@@ -105,7 +110,7 @@ function Action.CalculateLoot()
         for k, v in ipairs(C.EnemyTier) do
             if e.Tier == v then
                 -- k is higher for higher tier
-                bonusRolls = k
+                bonusRolls = math.ceil(k * lootMultiplier)
                 break
             end
         end
@@ -121,10 +126,14 @@ function Action.CalculateLoot()
         -- build rarity roll tables from template e.g. { "Common", "Common", "Uncommon", "Rare" }
         -- if rarity is 0 it will be at least added once
         -- if rarity is not defined it will not be added
+        local sum = 0
         for _, r in ipairs(C.ItemRarity) do
             if scenario.LootObjects[r] then
-                fixed = add(fixed, r, scenario.LootObjects[r])
+                local rate = scenario.LootObjects[r]
+                sum = sum + rate
+                add(fixed, r, rate)
             end
+            add(fixed, "Nothing", math.ceil(sum / 2)) -- make a chance to get nothing
         end
 
         for i = 1, bonusRolls do
@@ -151,11 +160,11 @@ function Action.CalculateLoot()
 
                 for _, r in ipairs(C.ItemRarity) do
                     if bonusCategory == "Object" and scenario.LootObjects[r] then
-                        bonus = add(bonus, r, scenario.LootObjects[r])
+                        add(bonus, r, scenario.LootObjects[r])
                     elseif bonusCategory == "Weapon" and scenario.LootWeapons[r] then
-                        bonus = add(bonus, r, scenario.LootWeapons[r])
+                        add(bonus, r, scenario.LootWeapons[r])
                     elseif bonusCategory == "Armor" and scenario.LootArmor[r] then
-                        bonus = add(bonus, r, scenario.LootArmor[r])
+                        add(bonus, r, scenario.LootArmor[r])
                     end
                 end
 
@@ -185,6 +194,8 @@ function Action.SpawnLoot()
 
     local map = Current().Map
     local loot = Action.CalculateLoot()
+    Event.Trigger("ScenarioLoot", Current(), loot)
+
     local i = 0
     Async.Interval(300 - (#loot * 2), function(self)
         i = i + 1
@@ -531,24 +542,23 @@ function Scenario.Start(template, map)
     Action.NotifyStarted()
 
     Enemy.Cleanup()
-    Event.Trigger("ScenarioStarted")
+    Event.Trigger("ScenarioStarted", Current())
 end
 
 function Scenario.End()
+    Event.Trigger("ScenarioEnded", Current())
     Action.SpawnLoot()
-    GameMode.UpdateRogueScore(Current())
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario ended."))
-    Event.Trigger("ScenarioEnded")
 end
 
 function Scenario.Stop()
+    Event.Trigger("ScenarioStopped", Current())
     Enemy.Cleanup()
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario stopped."))
-    Event.Trigger("ScenarioStopped")
 end
 
 function Scenario.Teleport(uuid)
@@ -665,7 +675,7 @@ U.Osiris.On(
             return
         end
 
-        local guid = U.UUID.GetGUID(object)
+        local guid = U.UUID.Extract(object)
 
         if not Enemy.IsValid(guid) then
             return
@@ -781,9 +791,10 @@ U.Osiris.On(
             if U.UUID.Equals(e.GUID, uuid) then
                 table.insert(s.KilledEnemies, e)
                 table.remove(s.SpawnedEnemies, i)
-
                 Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()), true)
                 spawnedKilled = true
+
+                Event.Trigger("ScenarioEnemyKilled", Current(), e)
                 break
             end
         end

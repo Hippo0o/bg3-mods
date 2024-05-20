@@ -297,13 +297,12 @@ function M.Chainable(source)
         end
 
         for i, func in ipairs(Chainable._Chain) do
-            local ok = xpcall(function()
+            local ok, err = pcall(function()
                 state = Utils.Table.Pack(func(Chainable, table.unpack(state)))
-            end, function(err)
-                state = Chainable.Throw(err)
             end)
 
             if not ok then
+                state = Chainable.Throw(err)
                 break
             end
 

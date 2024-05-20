@@ -141,15 +141,21 @@ Net.On("GetState", function(event)
 end)
 
 Event.On("ScenarioStarted", function()
-    Net.Send("GetState", PersistentVars)
+    Schedule(function()
+        Net.Send("GetState", PersistentVars)
+    end)
 end)
 
 Event.On("ScenarioEnded", function()
-    Net.Send("GetState", PersistentVars)
+    Schedule(function()
+        Net.Send("GetState", PersistentVars)
+    end)
 end)
 
 Event.On("ScenarioStopped", function()
-    Net.Send("GetState", PersistentVars)
+    Schedule(function()
+        Net.Send("GetState", PersistentVars)
+    end)
 end)
 
 Net.On("Config", function(event)
@@ -179,6 +185,7 @@ Net.On("Config", function(event)
 
     local c = UT.DeepClone(Config)
     c.RoguelikeMode = PersistentVars.RogueModeActive
+    c.Debug = Mod.Debug
 
     Net.Respond(event, c)
 end)

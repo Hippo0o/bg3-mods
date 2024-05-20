@@ -6,50 +6,48 @@ function Debug.Main(tab)
         Event.Trigger("ToggleDebug", Mod.Debug)
     end)
 
-    Components.Conditional(root, function()
-        local root = tab:AddTabItem(__("Debug"))
+    local root = tab:AddTabItem(__("Debug"))
 
-        root:AddButton(__("Reload")).OnClick = function()
-            Net.Send("GetState")
-            Net.Send("GetTemplates")
-            Net.Send("GetItems")
+    root:AddButton(__("Reload")).OnClick = function()
+        Net.Send("GetState")
+        Net.Send("GetTemplates")
+        Net.Send("GetItems")
+    end
+
+    -- section State
+    local state = root:AddGroup(__("State"))
+    state:AddSeparatorText(__("State"))
+
+    local stateTree
+    WindowEvent("StateChange", function()
+        if stateTree then
+            stateTree:Destroy()
         end
 
-        -- section State
-        local state = root:AddGroup(__("State"))
-        state:AddSeparatorText(__("State"))
+        stateTree = Components.Tree(state, State)
+    end):Exec()
 
-        local stateTree
-        WindowEvent("StateChange", function()
-            if stateTree then
-                stateTree:Destroy()
-            end
+    -- section Templates
+    local templates = root:AddGroup(__("Templates"))
+    templates:AddSeparatorText(__("Templates"))
 
-            stateTree = Components.Tree(state, State)
-        end):Exec()
+    local templatesTree
+    WindowNet("GetTemplates", function(event)
+        if templatesTree then
+            templatesTree:Destroy()
+        end
 
-        -- section Templates
-        local templates = root:AddGroup(__("Templates"))
-        templates:AddSeparatorText(__("Templates"))
+        templatesTree = Components.Tree(templates, event.Payload)
+    end):Exec({ Payload = {} })
+    Net.Send("GetTemplates")
 
-        local templatesTree
-        WindowNet("GetTemplates", function(event)
-            if templatesTree then
-                templatesTree:Destroy()
-            end
+    -- section Enemies
+    Debug.Enemies(root)
 
-            templatesTree = Components.Tree(templates, event.Payload)
-        end):Exec({ Payload = {} })
-        Net.Send("GetTemplates")
+    -- section Items
+    Debug.Items(root)
 
-        -- section Enemies
-        Debug.Enemies(root)
-
-        -- section Items
-        Debug.Items(root)
-
-        return root
-    end, "ToggleDebug")
+    return root
 end
 
 function Debug.Enemies(root)

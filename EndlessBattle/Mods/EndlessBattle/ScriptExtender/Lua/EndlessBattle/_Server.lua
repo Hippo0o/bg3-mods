@@ -1,5 +1,28 @@
 Require("EndlessBattle/Shared")
 
+---@type Scenario|nil
+S = nil
+
+Mod.PersistentVarsTemplate = {
+    Active = nil,
+    RogueModeActive = false,
+    SpawnedEnemies = {},
+    SpawnedItems = {},
+    Scenario = S,
+    RogueScore = 0,
+    GUIOpen = false,
+    Stats = {
+        Looted = {},
+        Killed = {},
+    },
+    Currency = 0,
+    Unlocks = {
+        ExpMultiplier = false,
+        LootMultiplier = false,
+        CurrencyMultiplier = false,
+    },
+}
+
 DefaultConfig = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = true, -- more continues battle between rounds at the cost of cheesy out of combat strats
@@ -25,6 +48,8 @@ Enemy = {}
 Map = {}
 Item = {}
 GameMode = {}
+StoryBypass = {}
+Unlocks = {}
 
 -- wrap event handlers in IfActive to prevent them from running when the mod is not active
 function IfActive(func)
@@ -40,8 +65,10 @@ Require("EndlessBattle/Scenario")
 Require("EndlessBattle/Enemy")
 Require("EndlessBattle/Map")
 Require("EndlessBattle/Item")
+Require("EndlessBattle/StoryBypass")
 Require("EndlessBattle/GameMode")
 Require("EndlessBattle/NetEvents")
+Require("EndlessBattle/Unlocks")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -114,6 +141,16 @@ Event.On("ModDeactive", function()
     if PersistentVars.GUIOpen then
         Net.Send("CloseGUI")
     end
+end)
+
+Event.On("ScenarioLoot", function(_, loot)
+    for _, item in ipairs(loot) do
+        table.insert(PersistentVars.Stats.Looted, item)
+    end
+end)
+
+Event.On("ScenarioEnemyKilled", function(_, enemy)
+    table.insert(PersistentVars.Stats.Killed, enemy)
 end)
 
 do

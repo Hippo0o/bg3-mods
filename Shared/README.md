@@ -125,7 +125,7 @@ end)
 Async.RetryUntil(function(self, triesLeft, time)
     -- can be any code here
     return var == true
-end, retries = 3, interval = 1000).After(function()
+end, { retries = 3, interval = 1000 }).After(function()
     print("Hello World!")
 end).Catch(function(_, err)
     print(var .. " is not true")

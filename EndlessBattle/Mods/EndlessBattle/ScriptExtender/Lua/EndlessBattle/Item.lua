@@ -136,7 +136,7 @@ function Item.Objects(rarity, forCombat)
         else
             if
                 not (
-                    cat:match("^Food")
+                    (cat:match("^Food") and name:match("^CONS_") and not name:match("Soup"))
                     -- or cat:match("^Drink")
                     or cat:match("^Ingredient")
                     or cat:match("Potion")
@@ -263,10 +263,10 @@ U.Osiris.On(
             end
 
             local items = UT.Map(PersistentVars.SpawnedItems, function(item)
-                return U.UUID.GetGUID(item.GUID)
+                return U.UUID.Extract(item.GUID)
             end)
 
-            if UT.Contains(items, U.UUID.GetGUID(object)) then
+            if UT.Contains(items, U.UUID.Extract(object)) then
                 L.Debug("Auto pickup:", object, character)
                 for _, item in ipairs(items) do
                     if not Item.IsOwned(item) then

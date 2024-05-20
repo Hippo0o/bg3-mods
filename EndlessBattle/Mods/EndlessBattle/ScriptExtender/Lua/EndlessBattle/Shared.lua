@@ -1,7 +1,7 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
-Mod.Debug = false
-Mod.Dev = false
+Mod.Debug = true
+Mod.Dev = true
 Mod.EnableRCE = true
 Mod.Prefix = "Endless Battle"
 
@@ -16,9 +16,6 @@ L = Utils.Log
 
 ---@type IO
 IO = Require("Hlib/IO")
-
----@type Scenario|nil
-S = nil
 
 ---@type Constants
 local Constants = Require("Hlib/Constants")
@@ -46,18 +43,6 @@ C = {
     RoguelikeScenario = "roguelike",
 }
 C = UT.Merge(Constants, C)
-
-Mod.PersistentVarsTemplate = {
-    Active = nil,
-    RogueModeActive = false,
-    SpawnedEnemies = {},
-    SpawnedItems = {},
-    Scenario = S,
-    RogueScore = 0,
-    GUIOpen = false,
-}
-
--- Mod.CreateModVar("State", false, Mod.PersistentVarsTemplate)
 
 ---@type GameState
 GameState = Require("Hlib/GameState")

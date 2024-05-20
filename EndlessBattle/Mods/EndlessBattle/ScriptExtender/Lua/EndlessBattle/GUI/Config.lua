@@ -5,6 +5,7 @@ function Config.Main(tab)
     ---@type ExtuiTabItem
     local root = tab:AddTabItem(__("Config"))
 
+
     Net.Send("Config")
 
     ---@type ExtuiCheckbox
