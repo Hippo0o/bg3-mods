@@ -1,7 +1,8 @@
 local function getUnlocks()
     return PersistentVars.Unlocks
 end
-local unlocks = {
+
+return {
     {
         Id = "BOB_1",
         Name = "Unlock 1",
