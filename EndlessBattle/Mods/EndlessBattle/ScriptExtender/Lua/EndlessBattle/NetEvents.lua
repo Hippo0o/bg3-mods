@@ -1,7 +1,7 @@
 Net.On("GetSelection", function(event)
     Net.Respond(event, {
         Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
-            return { Id = k, Name = v.Name, Roguelike = v.Timeline == C.RoguelikeScenario }
+            return { Id = k, Name = v.Name }
         end),
         Maps = UT.Map(Map.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }

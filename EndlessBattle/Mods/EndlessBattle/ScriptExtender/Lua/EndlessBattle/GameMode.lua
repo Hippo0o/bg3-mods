@@ -393,6 +393,9 @@ function GameMode.UpdateRogueScore(scenario)
             end
 
             PersistentVars.RogueScore = score
+
+            Event.Trigger("RogueScoreChanged", prev, score)
+
             Player.Notify(__("Your score increased: %d -> %d!", prev, score))
         end)
 
@@ -404,13 +407,15 @@ function GameMode.UpdateRogueScore(scenario)
 
     PersistentVars.RogueScore = score
 
+    Event.Trigger("RogueScoreChanged", prev, score)
+
     Player.Notify(__("Your score increased: %d -> %d!", prev, score))
 end
 
 function GameMode.StartNext()
     if not S then
         local rogueTemp = UT.Find(Scenario.GetTemplates(), function(v)
-            return v.Timeline == C.RoguelikeScenario
+            return v.Name == C.RoguelikeScenario
         end)
         if rogueTemp then
             Scenario.Start(rogueTemp)
@@ -437,9 +442,20 @@ Event.On("RogueModeChanged", function(bool)
 end)
 
 Event.On("ScenarioEnded", function(scenario)
-    if not scenario.RogueMode then
-        return
+    if scenario.Name == C.RoguelikeScenario then
+        GameMode.UpdateRogueScore(scenario)
     end
+end)
 
-    GameMode.UpdateRogueScore(scenario)
+Schedule(function()
+    External.Templates.AddScenario({
+        Name = C.RoguelikeScenario,
+
+        -- Spawns per Round
+        Timeline = function()
+            return GameMode.GenerateScenario(PersistentVars.RogueScore)
+        end,
+
+        Loot = C.LootRates,
+    })
 end)

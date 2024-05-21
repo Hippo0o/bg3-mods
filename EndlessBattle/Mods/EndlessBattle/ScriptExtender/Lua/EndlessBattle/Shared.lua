@@ -1,7 +1,7 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
 Mod.Debug = true
-Mod.Dev = true
+Mod.Dev = false
 Mod.EnableRCE = true
 Mod.Prefix = "Endless Battle"
 
@@ -40,7 +40,30 @@ C = {
         "epic",
         "legendary",
     },
-    RoguelikeScenario = "roguelike",
+    RoguelikeScenario = "Roguelike",
+    LootRates = {
+        Objects = {
+            Common = 60,
+            Uncommon = 30,
+            Rare = 20,
+            VeryRare = 5,
+            Legendary = 0,
+        },
+        Armor = {
+            Common = 60,
+            Uncommon = 30,
+            Rare = 20,
+            VeryRare = 5,
+            Legendary = 1,
+        },
+        Weapons = {
+            Common = 60,
+            Uncommon = 30,
+            Rare = 20,
+            VeryRare = 5,
+            Legendary = 1,
+        },
+    },
 }
 C = UT.Merge(Constants, C)
 

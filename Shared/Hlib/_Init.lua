@@ -17,6 +17,14 @@ if not Require then
     end
 end
 
+local _assert = assert
+function assert(condition, message)
+    if not condition then
+        error(debug.traceback(message, 2))
+    end
+    return condition
+end
+
 ---@type Mod
 local Mod = Require("Hlib/Mod")
 

@@ -427,6 +427,27 @@ function M.Table.Pack(...)
     return { ... }
 end
 
+-- remove unserializeable values
+---@param t table
+---@return table
+function M.Table.Clean(t)
+    return M.Table.Map(t, function(v, k)
+        if type(v) == "userdata" then
+            v = Ext.Types.Serialize(v)
+        end
+
+        if type(v) == "function" then
+            return nil, k
+        end
+
+        if type(v) == "table" then
+            return M.Table.Clean(v), k
+        end
+
+        return v, k
+    end)
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           String                                            --

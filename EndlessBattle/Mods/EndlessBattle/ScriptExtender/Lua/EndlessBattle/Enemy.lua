@@ -19,6 +19,7 @@ L.Debug("Enemies loaded", #enemyTemplates)
 -- potential overwrites
 ---@field LevelOverride integer
 ---@field Equipment string
+---@field Race string
 ---@field Stats string
 ---@field SpellSet string
 ---@field AiHint string
@@ -33,6 +34,7 @@ local Object = Libs.Class({
     GUID = nil,
     IsBoss = false,
     -- not required
+    Race = nil,
     LevelOverride = nil,
     Equipment = nil,
     Stats = nil,
@@ -149,6 +151,10 @@ function Object:ModifyTemplate()
         templateOverwrite("Stats", self.Stats)
     end
 
+    if self.Race ~= nil then
+        templateOverwrite("Race", self.Race)
+    end
+
     if self.SpellSet ~= nil then
         templateOverwrite("SpellSet", self.SpellSet)
     end
@@ -230,6 +236,7 @@ function Object:Sync()
     self.IsBoss = currentTemplate.CombatComponent.IsBoss
     self.SpellSet = currentTemplate.SpellSet
     self.LevelOverride = currentTemplate.LevelOverride
+    self.Race = currentTemplate.Race
 end
 
 ---@param x number

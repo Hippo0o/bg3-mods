@@ -4,61 +4,68 @@ end
 
 return {
     {
-        Id = "BOB_1",
-        Name = "Unlock 1",
+        Id = "UnlockTadpole",
+        Name = "Unlock Tadpole",
+        Icon = "GEN_Armor",
+        Cost = 10,
+        Amount = nil,
+        Character = true,
+        OnActivate = function(self, character)
+            Osi.SetTag(character, "089d4ca5-2cf0-4f54-84d9-1fdea055c93f")
+            Osi.SetTag(character, "efedb058-d4f5-4ab8-8add-bd5e32cdd9cd")
+            Osi.SetTag(character, "c15c2234-9b19-453e-99cc-00b7358b9fce")
+            Osi.SetTadpoleTreeState(character, 2)
+            Osi.AddTadpole(character, 1)
+            Osi.AddTadpolePower(character, "TAD_IllithidPersuasion", 1)
+            Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", character)
+        end,
+    },
+    {
+        Id = "Tadpole",
+        Name = "Get a tadpole",
         Icon = "GEN_Armor",
         Cost = 100,
-        Amount = 10,
-        Character = false,
-        Unlocked = true,
-        OnActivate = function(self, character)
-            Osi.ShowNotification(character, "Bought " .. self.Name)
-        end,
-    },
-    {
-        Id = "BOB_2",
-        Name = "Unlock Inf",
-        Icon = "GEN_Armor",
-        Cost = 333,
         Amount = nil,
         Character = false,
-        Unlocked = true,
         OnActivate = function(self, character)
-            Osi.ShowNotification(character, "Bought " .. self.Name)
+            Osi.AddTadpole(character, 1)
         end,
     },
     {
-        Id = "AOSAD",
-        Name = "Unlock More",
-        Icon = "GEN_Armor",
-        Cost = 1000,
-        Amount = 1,
-        Character = false,
-        Unlocked = true,
-        OnActivate = function(self, character)
-            for _, unlock in pairs(getUnlocks()) do
-                if US.Contains(unlock.Id, { "PEPGA", "PEPGA2" }) then
-                    unlock.Unlocked = true
-                end
-            end
-        end,
-    },
-    {
-        Id = "PEPGA2",
-        Name = "Character UP",
-        Icon = "GEN_Armor",
-        Cost = 1337,
-        Amount = 2,
-        Character = true,
-        Unlocked = false,
-    },
-    {
-        Id = "PEPGA",
-        Name = "Character UP",
+        Id = "MOD_BOOSTS",
+        Name = "Unlock Multipliers",
         Icon = "GEN_Armor",
         Cost = 10000,
-        Amount = nil,
-        Character = true,
-        Unlocked = false,
+        Amount = 1,
+        Character = false,
+        Persistent = true,
+        Requirement = 100,
+    },
+    {
+        Id = "ExpMultiplier",
+        Name = "Gain double XP",
+        Icon = "GEN_Armor",
+        Cost = 100,
+        Amount = 1,
+        Character = false,
+        Requirement = "MOD_BOOSTS",
+    },
+    {
+        Id = "LootMultiplier",
+        Name = "Gain 50% more loot",
+        Icon = "GEN_Armor",
+        Cost = 100,
+        Amount = 1,
+        Character = false,
+        Requirement = { "MOD_BOOSTS", 20 },
+    },
+    {
+        Id = "CurrencyMultiplier",
+        Name = "Gain 20% more currency",
+        Icon = "GEN_Armor",
+        Cost = 100,
+        Amount = 1,
+        Character = false,
+        Requirement = "MOD_BOOSTS",
     },
 }
