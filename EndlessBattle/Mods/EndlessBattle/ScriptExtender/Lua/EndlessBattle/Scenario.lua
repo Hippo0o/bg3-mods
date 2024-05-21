@@ -245,6 +245,8 @@ function Action.StartCombat()
 
     Current().Map:PingSpawns()
 
+    Event.Trigger("ScenarioCombatStarted", Current())
+
     Player.Notify(__("Combat is Starting."), true)
     -- Osi.ForceTurnBasedMode(Player.Host(), 1)
     Action.StartRound()
@@ -273,6 +275,8 @@ function Action.SpawnRound()
             if Config.ForceEnterCombat or Player.InCombat() then
                 Scenario.CombatSpawned(e)
             end
+
+            Event.Trigger("ScenarioEnemySpawned", Current(), e)
         end).Catch(function()
             L.Error("Spawn limit exceeded.", e:GetId())
             UT.Remove(s.SpawnedEnemies, e)
@@ -312,6 +316,8 @@ function Action.StartRound()
     Current().Round = Current().Round + 1
     Player.Notify(__("Round %d", Current().Round))
 
+    Event.Trigger("ScenarioRoundStarted", Current())
+
     Action.SpawnRound()
 end
 
@@ -328,9 +334,11 @@ function Action.NotifyStarted()
 end
 
 function Action.MapEntered()
-    if S:HasStarted() then
+    if Current():HasStarted() then
         return
     end
+
+    Event.Trigger("ScenarioMapEntered", Current())
 
     local x, y, z = Player.Pos()
     Action.ClearArea()
@@ -414,10 +422,10 @@ end
 function Scenario.GetTemplates()
     local templates = External.Templates.GetScenarios() or scenarioTemplates
 
+    -- ensure roguelike always exists
     local hasRoguelike = UT.Find(templates, function(v)
         return v.Timeline == C.RoguelikeScenario
     end) ~= nil
-    -- ensure roguelike always exists
     if not hasRoguelike then
         local roguetemp = UT.Find(scenarioTemplates, function(v)
             return v.Timeline == C.RoguelikeScenario
@@ -497,7 +505,7 @@ function Scenario.Start(template, map)
     local scenario = Object.New()
 
     local timeline = template.Timeline
-    scenario.RogueMode = timeline == "roguelike"
+    scenario.RogueMode = timeline == C.RoguelikeScenario
 
     if scenario.RogueMode then
         timeline = GameMode.GenerateScenario(PersistentVars.RogueScore)
@@ -546,8 +554,14 @@ function Scenario.Start(template, map)
 end
 
 function Scenario.End()
-    Event.Trigger("ScenarioEnded", Current())
+    local s = Current()
+    Event.Trigger("ScenarioEnded", s)
     Action.SpawnLoot()
+
+    if s.RogueMode then
+        GameMode.UpdateRogueScore(s)
+    end
+
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario ended."))
@@ -595,7 +609,7 @@ function Scenario.CombatSpawned(specific)
             retries = 5,
             interval = 1000,
         }).Catch(ifScenario(function()
-            if Player.InCombat() or Config.ForceEnterCombat then
+            if Config.ForceEnterCombat or Player.InCombat() then
                 Action.Failsafe(enemy)
             end
         end))
