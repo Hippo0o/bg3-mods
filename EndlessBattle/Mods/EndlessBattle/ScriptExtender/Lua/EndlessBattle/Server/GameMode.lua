@@ -359,7 +359,7 @@ function GameMode.GenerateScenario(score)
             end
         end
 
-        -- Ensure the first round is not empty by swapping with the first non-empty round if necessary
+        -- Ensure the first round is not empty
         if #timeline[1] == 0 then
             return generateTimeline(maxValue)
         end
@@ -384,6 +384,14 @@ function GameMode.UpdateRogueScore(scenario)
     local score = PersistentVars.RogueScore
     local prev = score
 
+    local function updateScore(score)
+        PersistentVars.RogueScore = score
+
+        Event.Trigger("RogueScoreChanged", prev, score)
+
+        Player.Notify(__("Your score increased: %d -> %d!", prev, score))
+    end
+
     if endRound <= scenario:TotalRounds() then
         Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", 5, 10)).After(function(confirmed)
             if confirmed then
@@ -392,11 +400,7 @@ function GameMode.UpdateRogueScore(scenario)
                 score = score + math.max(5 - diff, 1)
             end
 
-            PersistentVars.RogueScore = score
-
-            Event.Trigger("RogueScoreChanged", prev, score)
-
-            Player.Notify(__("Your score increased: %d -> %d!", prev, score))
+            updateScore(score)
         end)
 
         return
@@ -405,11 +409,7 @@ function GameMode.UpdateRogueScore(scenario)
     local diff = endRound - scenario:TotalRounds()
     score = score + math.max(5 - diff, 1)
 
-    PersistentVars.RogueScore = score
-
-    Event.Trigger("RogueScoreChanged", prev, score)
-
-    Player.Notify(__("Your score increased: %d -> %d!", prev, score))
+    updateScore(score)
 end
 
 function GameMode.StartNext()

@@ -38,7 +38,7 @@ DefaultConfig = {
 Config = UT.DeepClone(DefaultConfig)
 
 External = {}
-Require("EndlessBattle/External")
+Require("EndlessBattle/Server/External")
 
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)
@@ -61,15 +61,15 @@ function IfActive(func)
     end
 end
 
-Require("EndlessBattle/Player")
-Require("EndlessBattle/Scenario")
-Require("EndlessBattle/Enemy")
-Require("EndlessBattle/Map")
-Require("EndlessBattle/Item")
-Require("EndlessBattle/StoryBypass")
-Require("EndlessBattle/GameMode")
-Require("EndlessBattle/NetEvents")
-Require("EndlessBattle/Unlock")
+Require("EndlessBattle/Server/Player")
+Require("EndlessBattle/Server/Scenario")
+Require("EndlessBattle/Server/Enemy")
+Require("EndlessBattle/Server/Map")
+Require("EndlessBattle/Server/Item")
+Require("EndlessBattle/Server/StoryBypass")
+Require("EndlessBattle/Server/GameMode")
+Require("EndlessBattle/Server/NetEvents")
+Require("EndlessBattle/Server/Unlock")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --

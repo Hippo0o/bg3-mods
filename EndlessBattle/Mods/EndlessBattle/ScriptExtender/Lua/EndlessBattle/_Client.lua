@@ -21,7 +21,7 @@ Net.On(
     "OpenGUI",
     Async.Throttle(1000, function()
         -- only load client code when needed
-        Require("EndlessBattle/GUI/_Init")
+        Require("EndlessBattle/Client/GUI/_Init")
         OpenWindow()
     end)
 )

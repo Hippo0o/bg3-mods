@@ -155,8 +155,8 @@ end
 
 GameState.OnLoad(function()
     Unlock.Sync()
-    Unlock.UpdateUnlocked()
 end)
+
 GameState.OnSave(function()
     for i, u in ipairs(PersistentVars.Unlocks) do
         PersistentVars.Unlocks[i] = UT.Clean(u)
