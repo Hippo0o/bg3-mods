@@ -98,7 +98,7 @@ External.Validators.Map = tt({
 })
 
 local function validateTimelineEntry(value)
-    if Enemy.Find(value) ~= nil then
+    if type(value) == "string" and Enemy.Find(value) ~= nil then
         return true
     end
 
@@ -147,10 +147,10 @@ External.Validators.Scenario = tt({
 
 External.Templates = {}
 
-local function validateAndError(validator, data)
+local function validateAndError(validator, data, key)
     local ok, error = validator:Validate(data)
     if not ok then
-        L.Error("Invalid data.", Ext.DumpExport({ Data = data, Error = { [tostring(k)] = error } }))
+        L.Error("Invalid data.", Ext.DumpExport({ Data = data, Error = { [tostring(key)] = error } }))
         return false
     end
 
@@ -159,28 +159,28 @@ end
 
 local addedMaps = {}
 function External.Templates.AddMap(data)
-    if validateAndError(External.Validators.Map, data) then
+    if validateAndError(External.Validators.Map, data, "AddMap") then
         table.insert(addedMaps, data)
     end
 end
 
 local addedEnemies = {}
 function External.Templates.AddEnemy(data)
-    if validateAndError(External.Validators.Enemy, data) then
+    if validateAndError(External.Validators.Enemy, data, "AddEnemy") then
         table.insert(addedMaps, data)
     end
 end
 
 local addedScenarios = {}
 function External.Templates.AddScenario(data)
-    if validateAndError(External.Validators.Scenario, data) then
+    if validateAndError(External.Validators.Scenario, data, "AddScenario") then
         table.insert(addedScenarios, data)
     end
 end
 
 local addedUnlocks = {}
 function External.Templates.AddUnlock(data)
-    if validateAndError(External.Validators.Unlock, data) then
+    if validateAndError(External.Validators.Unlock, data, "AddUnlock") then
         table.insert(addedUnlocks, data)
     end
 end
@@ -221,7 +221,7 @@ function External.Templates.GetScenarios()
     data = UT.Combine({},addedScenarios, data)
 
     for k, scenario in pairs(data) do
-        if not validateAndError(External.Validators.Scenario, scenario) then
+        if not validateAndError(External.Validators.Scenario, scenario, k) then
             return {}
         end
     end
@@ -243,7 +243,7 @@ function External.Templates.GetEnemies()
     data = UT.Combine({},addedEnemies, data)
 
     for k, enemy in pairs(data) do
-        if not validateAndError(External.Validators.Enemy, enemy) then
+        if not validateAndError(External.Validators.Enemy, enemy, k) then
             return {}
         end
     end

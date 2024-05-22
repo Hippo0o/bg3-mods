@@ -75,8 +75,8 @@ function OpenWindow()
     end
 
     local tabs = window:AddTabBar(__("Main"))
-    Control.Main(tabs)
     ClientUnlock.Main(tabs)
+    Control.Main(tabs)
     Config.Main(tabs)
     Components.Conditional(_, function()
         return { Creation.Main(tabs), Debug.Main(tabs) }

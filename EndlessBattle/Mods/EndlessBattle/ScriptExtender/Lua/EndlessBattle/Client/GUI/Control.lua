@@ -2,7 +2,7 @@ Control = {}
 
 ---@param tab ExtuiTabBar
 function Control.Main(tab)
-    local root = tab:AddTabItem(__("Main"))
+    local root = tab:AddTabItem(__("Play"))
 
     Event.On("Start", function(scenarioName, mapName)
         Net.Request("Start", {
@@ -100,6 +100,7 @@ function Control.StartPanel(root)
                 scenarioSelection.AddItem(label, item.Name)
             end
 
+            mapSelection.AddItem("Random", nil)
             for i, item in ipairs(event.Payload.Maps) do
                 mapSelection.AddItem(item.Name, item.Name)
             end

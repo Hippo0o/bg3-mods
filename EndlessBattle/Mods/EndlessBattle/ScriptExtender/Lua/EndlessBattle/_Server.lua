@@ -265,8 +265,8 @@ do
         -- end
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "EndlessBattle")
 
+        Require("Hlib/OsirisEventDebug").Attach()
         -- GameMode.AskUnlockAll()
-        -- Require("Hlib/OsirisEventDebug").Attach()
         -- Osi.Use(GetHostCharacter(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
         --
         -- new_start = tonumber(new_start) or start

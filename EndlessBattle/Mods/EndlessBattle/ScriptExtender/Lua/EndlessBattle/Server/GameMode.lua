@@ -147,6 +147,9 @@ function GameMode.AskUnlockAll()
             unlockTadpole(p)
         end
 
+        do
+            return
+        end
         local function fixMinthara()
             Osi.PROC_RemoveAllDialogEntriesForSpeaker("S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b")
             Osi.DB_Dialogs(
