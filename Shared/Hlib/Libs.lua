@@ -46,8 +46,8 @@ function M.Class(props)
     return Class
 end
 
----@param typeDefs table<number, table<string, string|function|table|LibsTypedTable>>|LibsTypedTable
----@param repeatable boolean|nil
+---@param typeDefs table { [1] = {"nil", "string"}, [2] = {"nil", {...enum}} }|{ ["key1"] = {"nil", "string"}, ["key2"] = {LibsTypedTable, ...} }
+---@param repeatable boolean|nil true -> typeDefs = { "nil", "string", ... }|LibsTypedTable
 ---@return LibsTypedTable
 function M.TypedTable(typeDefs, repeatable)
     if type(typeDefs) ~= "table" then
@@ -58,8 +58,8 @@ function M.TypedTable(typeDefs, repeatable)
         typeDefs = { typeDefs }
     end
 
-    if repeatable and #typeDefs ~= 1 then
-        error("Libs.TypedTable - repeatable table must have exactly one type definition")
+    if repeatable then
+        typeDefs = { typeDefs }
     end
 
     -- exposed
@@ -170,6 +170,7 @@ function M.TypedTable(typeDefs, repeatable)
             return false, { "table expected, got " .. type(tableToValidate) }
         end
 
+        -- should never happen
         if self._TypeDefs._IsTypedTable then
             self._TypeDefs = { self._TypeDefs }
         end

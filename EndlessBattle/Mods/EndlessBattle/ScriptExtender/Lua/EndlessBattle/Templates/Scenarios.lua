@@ -14,6 +14,10 @@ return {
             { low },
         },
 
+        Positions = { 3, 5, 1 },
+
+        Map = "Swamp",
+
         Loot = defaultLoot,
     },
     {
@@ -27,6 +31,8 @@ return {
             {},
             { low },
         },
+
+        Positions = { 3, 1, 2, -1, 4, 1 },
 
         Loot = defaultLoot,
     },

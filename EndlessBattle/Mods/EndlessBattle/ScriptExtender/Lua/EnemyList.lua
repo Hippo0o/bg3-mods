@@ -1,10 +1,12 @@
 local MT = Mods.EndlessBattle
+
 local str = table.concat({
     "TemplateId",
     "Name",
     "Tier",
     "IsBoss",
     "Archetype",
+    "Race",
     "Stats",
     "Equipment",
     "Info.AC",
@@ -25,6 +27,7 @@ for _, tier in pairs(MT.C.EnemyTier) do
                 enemy.Tier,
                 enemy.IsBoss and 1 or 0,
                 enemy.Archetype,
+                enemy.Race,
                 enemy.Stats,
                 enemy.Equipment,
                 enemy.Info.AC,

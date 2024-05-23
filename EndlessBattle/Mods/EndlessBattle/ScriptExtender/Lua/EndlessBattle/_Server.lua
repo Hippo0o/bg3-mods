@@ -250,6 +250,13 @@ do
         Mod.Debug = true
         Config.Debug = true
 
+        -- local e = {}
+        -- for i, v in Enemy.Iter() do
+        --     v:SyncTemplate()
+        --     table.insert(e, v)
+        -- end
+        -- External.File.Export("Enemies", e)
+
         -- _D(Ext.Template.GetRootTemplate(Item.Armor("Legendary")[1].RootTemplate))
         -- for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
         --     -- L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
@@ -265,13 +272,12 @@ do
         -- end
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "EndlessBattle")
 
-        Require("Hlib/OsirisEventDebug").Attach()
+        -- Require("Hlib/OsirisEventDebug").Attach()
         -- GameMode.AskUnlockAll()
         -- Osi.Use(GetHostCharacter(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
         --
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100
-
 
         -- local j = 0
         -- local templates = {}
@@ -287,8 +293,9 @@ do
         --
         -- Enemy.TestEnemies(enemies)
 
-        -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
-        -- Enemy.TestEnemies(enemies, false)
+        local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
+        Enemy.TestEnemies(enemies, false)
+
         -- local templates = {}
         -- for i, v in Enemy.Iter() do
         --     table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))

@@ -87,6 +87,25 @@ function Object:GetTemplate()
     return Ext.Template.GetTemplate(self.TemplateId)
 end
 
+function Object:SyncTemplate()
+    local template = self:GetTemplate()
+    if template == nil then
+        L.Error("Template not found: ", self.TemplateId)
+        return
+    end
+
+    self.CharacterVisualResourceID = template.CharacterVisualResourceID
+    self.Icon = template.Icon
+    self.Stats = template.Stats
+    self.Equipment = template.Equipment
+    self.Archetype = template.CombatComponent.Archetype
+    self.AiHint = template.CombatComponent.AiHint
+    self.IsBoss = template.CombatComponent.IsBoss
+    self.SpellSet = template.SpellSet
+    self.LevelOverride = template.LevelOverride
+    self.Race = template.Race
+end
+
 function Object:ModifyTemplate()
     local template = self:GetTemplate()
     if template == nil then

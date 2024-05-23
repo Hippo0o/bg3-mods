@@ -16,6 +16,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field CombatId string
 ---@field Round integer
 ---@field Timeline table<string, number> Round, Amount of enemies
+---@field Positions table<number, number> Index, Spawn
 ---@field LootObjects table<string, number>
 ---@field LootArmor table<string, number>
 ---@field LootWeapons table<string, number>
@@ -33,6 +34,7 @@ local Object = Libs.Class({
     RogueMode = false,
     Round = 0,
     Timeline = {},
+    Positions = {},
     LootObjects = {},
     LootArmor = {},
     LootWeapons = {},
@@ -48,6 +50,17 @@ end
 ---@return Enemy[]
 function Object:SpawnsForRound()
     return self.Enemies[self.Round] or {}
+end
+
+function Object:GetPosition(enemyIndex)
+    local posIndex = 0
+    for round, enemies in pairs(self.Enemies) do
+        if round < self.Round then
+            posIndex = posIndex + #enemies
+        end
+    end
+
+    return self.Positions[posIndex + enemyIndex] or -1
 end
 
 function Object:TotalRounds()
@@ -264,11 +277,12 @@ function Action.SpawnRound()
     for i, e in pairs(toSpawn) do
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
         RetryUntil(function()
-            L.Debug("Spawning enemy.", e:GetId())
-            return s.Map:SpawnIn(e, -1)
+            local posIndex = s:GetPosition(i)
+            L.Debug("Spawning enemy.", e:GetId(), posIndex)
+            return s.Map:SpawnIn(e, posIndex)
         end, {
             immediate = true,
-            retries = #Current().Map.Spawns,
+            retries = #s.Map.Spawns,
             interval = 500,
         }).After(function()
             Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
@@ -505,20 +519,21 @@ function Scenario.Start(template, map)
     scenario.Name = template.Name
     scenario.Map = map
     scenario.Timeline = timeline
-    scenario.LootObjects = template.Loot.Objects
-    scenario.LootArmor = template.Loot.Armor
-    scenario.LootWeapons = template.Loot.Weapons
+    scenario.Positions = template.Positions or {}
+    local loot = template.Loot or C.LootRates
+    scenario.LootObjects = loot.Objects
+    scenario.LootArmor = loot.Armor
+    scenario.LootWeapons = loot.Weapons
 
-    for round, definition in pairs(scenario.Timeline) do
-        local enemyCount = #definition
-        for i = 1, enemyCount do
+    for round, definitions in pairs(scenario.Timeline) do
+        for _, definition in pairs(definitions) do
             local e
-            if UT.Contains(C.EnemyTier, definition[i]) then
+            if UT.Contains(C.EnemyTier, definition) then
                 e = Enemy.Random(function(e)
-                    return e.Tier == definition[i] and Ext.Template.GetTemplate(e.TemplateId) ~= nil
+                    return e.Tier == definition and Ext.Template.GetTemplate(e.TemplateId) ~= nil
                 end)
             else
-                e = Enemy.Find(definition[i])
+                e = Enemy.Find(definition)
             end
 
             if e == nil then
