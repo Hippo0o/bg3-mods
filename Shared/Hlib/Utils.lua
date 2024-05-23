@@ -95,8 +95,10 @@ function M.Lambda(code, ...)
 
     code = "return " .. M.String.Trim(evalString)
 
-    local env = {}
+    local env = { _G = _G }
 
+    -- Add vararg values to env with keys from args
+    -- Remove from args those that are injected via vararg
     for i, arg in ipairs(M.Table.Values(args)) do
         env[arg] = select(i, ...)
         if select("#", ...) < i then
@@ -615,24 +617,13 @@ function M.UUID.Exists(uuid)
         or false
 end
 
----@param strict boolean|nil prevent UUID collision - slow
-function M.UUID.Random(strict)
+---@return string @UUIDv4
+function M.UUID.Random()
     -- version 4 UUID
-    local template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
-    local uuid = string.gsub(template, "[xy]", function(c)
+    return string.gsub("xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", "[xy]", function(c)
         local v = (c == "x") and M.Random(0, 0xf) or M.Random(8, 0xb)
         return string.format("%x", v)
     end)
-
-    if not strict then
-        return uuid
-    end
-
-    if M.UUID.Exists(uuid) then
-        return M.UUID.Random(true)
-    end
-
-    return uuid
 end
 
 ---@param str string
@@ -640,7 +631,7 @@ end
 ---@return string @UUIDv4
 function M.UUID.FromString(str, iteration)
     local function hashToUUID(hash)
-        local uuid = string.format(
+        return string.format(
             "%08x-%04x-4%03x-%04x-%012x",
             tonumber(hash:sub(1, 8), 16),
             tonumber(hash:sub(9, 12), 16),
@@ -648,7 +639,6 @@ function M.UUID.FromString(str, iteration)
             tonumber(hash:sub(16, 19), 16) & 0x3fff | 0x8000,
             tonumber(hash:sub(20, 31), 16)
         )
-        return uuid
     end
 
     local function simpleHash(input)
@@ -666,9 +656,7 @@ function M.UUID.FromString(str, iteration)
         prefix = prefix .. Mod.UUID
     end
 
-    local uuid = hashToUUID(simpleHash(prefix .. str))
-
-    return uuid
+    return hashToUUID(simpleHash(prefix .. str))
 end
 
 -------------------------------------------------------------------------------------------------
