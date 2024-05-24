@@ -20,6 +20,7 @@ Mod.PersistentVarsTemplate = {
         ExpMultiplier = false,
         LootMultiplier = false,
         CurrencyMultiplier = false,
+        RogueScoreMultiplier = false,
     },
     Unlocks = {},
 }
@@ -293,8 +294,8 @@ do
         --
         -- Enemy.TestEnemies(enemies)
 
-        local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
-        Enemy.TestEnemies(enemies, false)
+        -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
+        -- Enemy.TestEnemies(enemies, false)
 
         -- local templates = {}
         -- for i, v in Enemy.Iter() do

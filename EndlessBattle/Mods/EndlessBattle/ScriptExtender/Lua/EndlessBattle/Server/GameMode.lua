@@ -65,6 +65,9 @@ function GameMode.AskRecruitStarters()
             Osi.Use(Player.Host(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
             Osi.QuestAdd("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "ORI_COM_Gale")
 
+            Osi.PROC_ORI_Gale_DoINTSetup()
+            Osi.PROC_ORI_Gale_INTSetup()
+
             -- Osi.SetFlag(
             --     "ORI_State_Recruited_e78c0aab-fb48-98e9-3ed9-773a0c39988d",
             --     "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"
@@ -91,7 +94,8 @@ function GameMode.AskRecruitStarters()
         end
 
         local function fixShart()
-            Osi.QuestAdd("S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679", "ORI_COM_ShadowHeart")
+            -- Osi.QuestAdd("S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679", "ORI_COM_ShadowHeart")
+            Osi.PROC_ORI_Shadowheart_COM_Init()
         end
 
         local f = Osi.GetFaction(Player.Host())
@@ -395,22 +399,28 @@ function GameMode.UpdateRogueScore(scenario)
         Player.Notify(__("Your score increased: %d -> %d!", prev, score))
     end
 
-    if endRound <= scenario:TotalRounds() then
-        Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", 5, 10)).After(function(confirmed)
-            if confirmed then
-                score = score + 10
-            else
-                score = score + math.max(5 - diff, 1)
-            end
+    local baseScore = 5
+    if PersistentVars.Unlocked.RogueScoreMultiplier then
+        baseScore = baseScore * 2
+    end
 
-            updateScore(score)
-        end)
+    if endRound <= scenario:TotalRounds() then
+        Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", baseScore, baseScore * 2))
+            .After(function(confirmed)
+                if confirmed then
+                    score = score + baseScore * 2
+                else
+                    score = score + math.max(baseScore - diff, 1)
+                end
+
+                updateScore(score)
+            end)
 
         return
     end
 
     local diff = endRound - scenario:TotalRounds()
-    score = score + math.max(5 - diff, 1)
+    score = score + math.max(baseScore - diff, 1)
 
     updateScore(score)
 end

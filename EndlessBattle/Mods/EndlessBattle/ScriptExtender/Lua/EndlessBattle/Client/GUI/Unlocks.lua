@@ -45,7 +45,10 @@ end
 function ClientUnlock.Tile(root, unlock)
     local grp = root:AddGroup(unlock.Id)
 
-    grp:AddIcon(unlock.Icon)
+    local icon = grp:AddIcon(unlock.Icon)
+    if unlock.Description then
+        icon:Tooltip():AddText(unlock.Description)
+    end
 
     local col2 = grp:AddGroup(unlock.Id)
     col2.SameLine = true
@@ -74,6 +77,10 @@ function ClientUnlock.Tile(root, unlock)
     grp:AddSeparator()
 
     local text = grp:AddText(unlock.Name)
+    if unlock.Description then
+        text:Tooltip():AddText(unlock.Description)
+    end
+
     grp:AddSeparator()
     do
         local unlock = unlock
@@ -124,18 +131,19 @@ function ClientUnlock.Buy(root, unlock)
 
     ---@type ExtuiButton
     local btn = grp:AddButton(__("Buy"))
+    btn.IDContext = U.RandomId()
 
     if unlock.Amount ~= nil then
         Event.On("StateChange", function(state)
             for _, new in pairs(state.Unlocks) do
                 if new.Id == unlock.Id then
                     btn.Visible = new.Bought < new.Amount
+                    return
                 end
             end
         end):Exec(State)
     end
 
-    btn.IDContext = U.RandomId()
     btn.OnClick = function()
         btn:SetStyle("Alpha", 0.2)
         Net.Request("BuyUnlock", { Id = unlock.Id }).After(function(event)
@@ -158,66 +166,73 @@ end
 function ClientUnlock.BuyChar(root, unlock)
     local grp = root:AddGroup(U.RandomId())
 
-    ---@type ExtuiCombo
-    local combo = grp:AddCombo("")
-    combo.IDContext = U.RandomId()
-    combo.SelectedIndex = 0
     ---@type ExtuiButton
     local btn = grp:AddButton(__("Buy"))
     btn.IDContext = U.RandomId()
-    btn.SameLine = true
 
-    if unlock.Amount ~= nil then
-        Event.On("StateChange", function(state)
-            for _, new in pairs(state.Unlocks) do
-                if new.Id == unlock.Id then
-                    local buyable = new.Amount == nil or new.Bought < new.Amount
-                    btn.Visible = buyable
-                    combo.Visible = buyable
-                end
+    ---@type ExtuiPopup
+    local popup = grp:AddPopup("")
+    popup.IDContext = U.RandomId()
+    popup:AddSeparatorText(__("Select character"))
+
+    local list = {}
+    local function createPopup(unlock)
+        for _, b in pairs(list) do
+            b:Destroy()
+        end
+        list = {}
+
+        for i, u in ipairs(UE.GetParty()) do
+            local name
+            if not u.CustomName then
+                name = Localization.Get(u.DisplayName.NameKey.Handle.Handle)
             end
-        end):Exec(State)
-    end
+            if not name then
+                name = u.CustomName.Name
+            end
 
-    local list = UT.Map(UE.GetParty(), function(e)
-        return e.CustomName.Name .. " (" .. e.Uuid.EntityUuid .. ")", e.Uuid.EntityUuid
-    end)
-    Components.Computed(combo, function(_, state)
-        local options = list
-        if state.Unlocks then
-            for _, u in pairs(state.Unlocks) do
-                if u.Id == unlock.Id then
-                    options = UT.Filter(list, function(v, k)
-                        return not u.BoughtBy[k]
-                    end, true)
-                end
+            local uuid = u.Uuid.EntityUuid
+
+            ---@type ExtuiButton
+            local b = popup:AddButton(name)
+            table.insert(list, b)
+
+            if unlock.BoughtBy[uuid] then
+                b.Label = string.format("%s (%s)", name, __("bought"))
+                b:SetStyle("Alpha", 0.5)
+            end
+
+            b.OnClick = function()
+                b:SetStyle("Alpha", 0.2)
+                Net.Request("BuyUnlock", { Id = unlock.Id, Character = uuid }).After(function(event)
+                    local ok, res = table.unpack(event.Payload)
+
+                    if not ok then
+                        Event.Trigger("Error", res)
+                    else
+                        Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, u.CustomName.Name))
+                    end
+                    b:SetStyle("Alpha", 1)
+                end)
             end
         end
+    end
 
-        return UT.Values(options)
-    end, "StateChange", "Options").Update(State)
+    Event.On("StateChange", function(state)
+        for _, new in pairs(state.Unlocks) do
+            if new.Id == unlock.Id then
+                local buyable = new.Amount == nil or new.Bought < new.Amount
+                btn.Visible = buyable
+                popup.Visible = buyable
+                createPopup(new)
+                return
+            end
+        end
+    end):Exec(State)
 
     btn.OnClick = function()
-        local val = combo.Options[combo.SelectedIndex + 1]
-        L.Debug("Buy", val, unlock.Id)
-        local _, uuid = UT.Find(list, function(v)
-            return v == val
-        end)
-        btn:SetStyle("Alpha", 0.2)
-        Net.Request("BuyUnlock", { Id = unlock.Id, Character = uuid }).After(function(event)
-            local ok, res = table.unpack(event.Payload)
-            combo.SelectedIndex = 0
-
-            if not ok then
-                Event.Trigger("Error", res)
-            else
-                local name = list[uuid]:match("^(.-) %(")
-                Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, name))
-            end
-            btn:SetStyle("Alpha", 1)
-        end)
+        popup:Open()
     end
-    grp:AddText("").SameLine = true
 
     return grp
 end
