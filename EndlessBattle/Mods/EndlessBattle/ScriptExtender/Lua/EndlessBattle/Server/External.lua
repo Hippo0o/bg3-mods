@@ -1,7 +1,6 @@
 ---@type Mod
 local Mod = Require("Hlib/Mod")
 
----@type LibsTypedTable
 local tt = Libs.TypedTable
 
 -------------------------------------------------------------------------------------------------
@@ -85,6 +84,8 @@ External.Validators.Enemy = tt({
     Icon = { "nil", "string" },
 })
 
+local positionTimelineType = { "nil", tt({ "number" }, true) }
+
 local posType = tt({
     { "number" }, -- x
     { "number" }, -- y
@@ -96,6 +97,7 @@ External.Validators.Map = tt({
     Enter = { posType },
     Spawns = tt(posType, true),
     Race = { "nil", U.UUID.IsValid, tt({ "nil", U.UUID.IsValid }, true) },
+    Timeline = positionTimelineType,
 })
 
 local function validateTimelineEntry(value)
@@ -113,7 +115,7 @@ External.Validators.Scenario = tt({
             tt({ "nil", C.EnemyTier, validateTimelineEntry }, true),
         }, true),
     },
-    Positions = { "nil", tt({ "number" }, true) },
+    Positions = positionTimelineType,
     Map = { "nil", "string" },
     Loot = tt({
         Objects = tt({

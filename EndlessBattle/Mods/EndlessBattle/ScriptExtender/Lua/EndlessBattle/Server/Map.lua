@@ -15,10 +15,12 @@ External.File.ExportIfNeeded("Maps", mapTemplates)
 ---@field Region string
 ---@field Enter Pos
 ---@field Spawns Pos[]
+---@field Timeline number[]
 local Object = Libs.Class({
     Region = nil,
     Enter = nil,
     Spawns = nil,
+    Timeline = nil, -- used on scenario creation
 })
 
 ---@return Map

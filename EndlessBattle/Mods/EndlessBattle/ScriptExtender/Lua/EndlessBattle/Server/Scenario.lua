@@ -526,11 +526,13 @@ function Scenario.Start(template, map)
     scenario.Map = map
     scenario.Timeline = timeline
     scenario.Positions = template.Positions or {}
+
     local loot = template.Loot or C.LootRates
     scenario.LootObjects = loot.Objects
     scenario.LootArmor = loot.Armor
     scenario.LootWeapons = loot.Weapons
 
+    local enemyCount = 0
     for round, definitions in pairs(scenario.Timeline) do
         for _, definition in pairs(definitions) do
             local e
@@ -546,7 +548,20 @@ function Scenario.Start(template, map)
                 L.Error("Starting scenario failed.", "Enemy configuration is wrong.")
                 return
             end
+            enemyCount = enemyCount + 1
             scenario:AddEnemy(round, e)
+        end
+    end
+
+    if map.Timeline then
+        -- pad positions from the map timeline
+        if UT.Size(scenario.Positions) < UT.Size(map.Timeline) then
+            UT.Merge(scenario.Positions, map.Timeline)
+        end
+
+        -- append the map timeline until we have enough positions
+        while UT.Size(scenario.Positions) < enemyCount do
+            UT.Combine(scenario.Positions, map.Timeline)
         end
     end
 
