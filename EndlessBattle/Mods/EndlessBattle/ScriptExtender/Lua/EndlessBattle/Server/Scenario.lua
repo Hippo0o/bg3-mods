@@ -17,9 +17,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field Round integer
 ---@field Timeline table<string, number> Round, Amount of enemies
 ---@field Positions table<number, number> Index, Spawn
----@field LootObjects table<string, number>
----@field LootArmor table<string, number>
----@field LootWeapons table<string, number>
+---@field LootRates table<string, table<string, number>>
 ---@field OnMap boolean
 ---@field RogueMode boolean
 ---@field New fun(self): self
@@ -35,9 +33,7 @@ local Object = Libs.Class({
     Round = 0,
     Timeline = {},
     Positions = {},
-    LootObjects = {},
-    LootArmor = {},
-    LootWeapons = {},
+    LootRates = {},
 })
 
 ---@param round number
@@ -112,93 +108,22 @@ function Action.CalculateLoot()
         lootMultiplier = 1.5
     end
 
-    local loot = {}
+    local rolls = 0
+
     for _, e in pairs(scenario.KilledEnemies) do
         -- each kill gets an object/weapon/armor roll
-        -- TODO drop gold
-
-        local fixed = {}
-        local bonusRolls = 1
 
         for k, v in ipairs(C.EnemyTier) do
             if e.Tier == v then
                 -- k is higher for higher tier
-                bonusRolls = math.ceil(k * lootMultiplier)
+                rolls = rolls + math.ceil(k * lootMultiplier)
                 break
-            end
-        end
-
-        local function add(t, rarity, amount)
-            for i = 1, amount do
-                table.insert(t, rarity)
-            end
-
-            return t
-        end
-
-        -- build rarity roll tables from template e.g. { "Common", "Common", "Uncommon", "Rare" }
-        -- if rarity is 0 it will be at least added once
-        -- if rarity is not defined it will not be added
-        local sum = 0
-        for _, r in ipairs(C.ItemRarity) do
-            if scenario.LootObjects[r] then
-                local rate = scenario.LootObjects[r]
-                sum = sum + rate
-                add(fixed, r, rate)
-            end
-            add(fixed, "Nothing", math.ceil(sum / 2)) -- make a chance to get nothing
-        end
-
-        for i = 1, bonusRolls do
-            do
-                local rarity = fixed[U.Random(#fixed)]
-                local items = Item.Objects(rarity, false)
-
-                L.Debug("Rolling fixed loot items:", #items, "Object", rarity)
-                if #items > 0 then
-                    table.insert(loot, items[U.Random(#items)])
-                end
-            end
-
-            local items = {}
-            local fail = 0
-            local bonusCategory = nil
-            local rarity = nil
-            -- avoid 0 rolls e.g. legendary objects dont exist
-            while #items == 0 and fail < 3 do
-                fail = fail + 1
-
-                bonusCategory = ({ "Object", "Weapon", "Armor" })[U.Random(3)]
-                local bonus = {}
-
-                for _, r in ipairs(C.ItemRarity) do
-                    if bonusCategory == "Object" and scenario.LootObjects[r] then
-                        add(bonus, r, scenario.LootObjects[r])
-                    elseif bonusCategory == "Weapon" and scenario.LootWeapons[r] then
-                        add(bonus, r, scenario.LootWeapons[r])
-                    elseif bonusCategory == "Armor" and scenario.LootArmor[r] then
-                        add(bonus, r, scenario.LootArmor[r])
-                    end
-                end
-
-                rarity = bonus[U.Random(#bonus)]
-                if bonusCategory == "Object" then
-                    items = Item.Objects(rarity, true)
-                elseif bonusCategory == "Weapon" then
-                    items = Item.Weapons(rarity)
-                elseif bonusCategory == "Armor" then
-                    items = Item.Armor(rarity)
-                end
-            end
-
-            L.Debug("Rolling bonus loot items:", #items, bonusCategory, rarity)
-            if #items > 0 then
-                table.insert(loot, items[U.Random(#items)])
             end
         end
     end
 
-    L.Dump("Loot", loot)
+    local loot = Item.GenerateLoot(rolls, scenario.LootRates)
+    L.Dump("Loot", loot, rolls, scenario.LootRates)
     return loot
 end
 
@@ -209,23 +134,7 @@ function Action.SpawnLoot()
     local loot = Action.CalculateLoot()
     Event.Trigger("ScenarioLoot", Current(), loot)
 
-    local i = 0
-    Async.Interval(300 - (#loot * 2), function(self)
-        i = i + 1
-
-        if i > #loot then
-            self:Clear()
-
-            return
-        end
-
-        if loot[i] == nil then
-            L.Error("Loot was empty.", i, #loot)
-            return
-        end
-
-        map:SpawnLoot(loot[i])
-    end)
+    map:SpawnLoot(loot)
 end
 
 function Action.ClearArea()
@@ -527,10 +436,7 @@ function Scenario.Start(template, map)
     scenario.Timeline = timeline
     scenario.Positions = template.Positions or {}
 
-    local loot = template.Loot or C.LootRates
-    scenario.LootObjects = loot.Objects
-    scenario.LootArmor = loot.Armor
-    scenario.LootWeapons = loot.Weapons
+    scenario.LootRates = template.Loot or C.LootRates
 
     local enemyCount = 0
     for round, definitions in pairs(scenario.Timeline) do

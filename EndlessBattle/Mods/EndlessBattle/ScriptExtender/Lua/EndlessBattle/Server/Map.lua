@@ -96,10 +96,7 @@ function Object:SpawnLoot(loot)
         x, y, z = Player.Pos()
     end
 
-    -- x,z is x,y in game map
-    x = x + U.Random() * U.Random(-1, 1)
-    z = z + U.Random() * U.Random(-1, 1)
-    loot:Spawn(x, y, z)
+    Item.SpawnLoot(loot, x, y, z)
 end
 
 function Object:PingSpawns()

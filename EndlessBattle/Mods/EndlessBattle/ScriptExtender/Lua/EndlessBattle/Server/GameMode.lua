@@ -65,8 +65,8 @@ function GameMode.AskRecruitStarters()
             Osi.Use(Player.Host(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
             Osi.QuestAdd("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "ORI_COM_Gale")
 
-            Osi.PROC_ORI_Gale_DoINTSetup()
-            Osi.PROC_ORI_Gale_INTSetup()
+            -- Osi.PROC_ORI_Gale_DoINTSetup()
+            -- Osi.PROC_ORI_Gale_INTSetup()
 
             -- Osi.SetFlag(
             --     "ORI_State_Recruited_e78c0aab-fb48-98e9-3ed9-773a0c39988d",

@@ -74,6 +74,20 @@ return {
         end,
     },
     {
+        Id = "BuyLoot",
+        Name = "Roll Loot 10x",
+        Icon = "Action_Dash_Bonus",
+        Cost = 30,
+        Amount = 10,
+        Character = false,
+        OnActivate = function(self, character)
+            local loot = Item.GenerateLoot(10, C.LootRates)
+
+            local x, y, z = Osi.GetPosition(character)
+            Item.SpawnLoot(loot, x, y, z)
+        end,
+    },
+    {
         Id = "BuyExp",
         Name = "1000 EXP",
         Icon = "Action_Dash_Bonus",
