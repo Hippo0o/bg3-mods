@@ -18,7 +18,7 @@ function GameMode.AskTutSkip()
         end)
         .After(function()
             Osi.PROC_GLO_Jergal_MoveToCamp()
-            Osi.AddGold(Player.Host(), 1000)
+
             return Defer(1000)
         end)
         .After(function()

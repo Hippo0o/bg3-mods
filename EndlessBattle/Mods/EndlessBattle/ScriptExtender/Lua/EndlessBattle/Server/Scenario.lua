@@ -626,6 +626,15 @@ U.Osiris.On(
             return
         end
 
+        -- probably revived from shadow curse
+        for i, e in ipairs(s.KilledEnemies) do
+            if U.UUID.Equals(e.GUID, uuid) then
+                table.insert(s.SpawnedEnemies, e)
+                table.remove(s.KilledEnemies, i)
+                return
+            end
+        end
+
         if UT.Find(s.SpawnedEnemies, function(e)
             return U.UUID.Equals(e.GUID, guid)
         end) then
