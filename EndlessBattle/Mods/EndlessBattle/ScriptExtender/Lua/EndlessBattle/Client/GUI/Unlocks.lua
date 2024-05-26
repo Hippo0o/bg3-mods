@@ -24,6 +24,7 @@ function ClientUnlock.Main(tab)
         local nrows = math.ceil(UT.Size(unlocks) / cols)
         Components.Layout(root, cols, nrows, function(layout)
             layout.Table.Borders = true
+            layout.Table.ScrollY = true
             for i, unlock in ipairs(UT.Values(unlocks)) do
                 local c = (i - 1) % cols
                 local r = math.ceil(i / cols)
@@ -85,8 +86,11 @@ function ClientUnlock.Tile(root, unlock)
     do
         local unlock = unlock
 
-        local notUnlocked = grp:AddText("")
-        notUnlocked.Visible = not unlock.Unlocked
+        local bottomText = grp:AddText("")
+        local function checkVisable()
+            bottomText.Visible = not unlock.Unlocked and unlock.Bought < 1
+        end
+        checkVisable()
 
         if unlock.Requirement then
             if type(unlock.Requirement) ~= "table" then
@@ -95,12 +99,12 @@ function ClientUnlock.Tile(root, unlock)
 
             for _, req in pairs(unlock.Requirement) do
                 if type(req) == "number" then
-                    notUnlocked.Label = notUnlocked.Label .. __("%d RogueScore required", req) .. "\n"
+                    bottomText.Label = bottomText.Label .. __("%d RogueScore required", req) .. "\n"
                 elseif type(req) == "string" then
                     local u = UT.Find(State.Unlocks, function(u)
                         return u.Id == req
                     end)
-                    notUnlocked.Label = notUnlocked.Label .. __("%s required", u.Name) .. "\n"
+                    bottomText.Label = bottomText.Label .. __("%s required", u.Name) .. "\n"
                 end
             end
         end
@@ -119,7 +123,7 @@ function ClientUnlock.Tile(root, unlock)
                 if new.Id == unlock.Id then
                     unlock = new
                     cond.Update(unlock.Unlocked)
-                    notUnlocked.Visible = not unlock.Unlocked
+                    checkVisable()
                 end
             end
         end):Exec(State)
@@ -194,7 +198,8 @@ function ClientUnlock.BuyChar(root, unlock)
             local uuid = u.Uuid.EntityUuid
 
             ---@type ExtuiButton
-            local b = popup:AddButton(name)
+            local b = popup:AddButton(unlock.Id .. "_" .. i)
+            b.Label = name
             table.insert(list, b)
 
             if unlock.BoughtBy[uuid] then

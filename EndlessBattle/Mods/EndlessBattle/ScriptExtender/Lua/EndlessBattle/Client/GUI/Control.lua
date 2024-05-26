@@ -141,13 +141,17 @@ function Control.RunningPanel(root)
 
         Components.Computed(scenarioName, function(box, state)
             if state.Scenario then
-                return table.concat({
+                local text = {
                     "Scenario: " .. tostring(state.Scenario.Name),
                     "Round: " .. tostring(state.Scenario.Round),
                     "Total Rounds: " .. tostring(#state.Scenario.Timeline),
                     "Killed: " .. tostring(#state.Scenario.KilledEnemies),
                     -- "Next: " .. tostring(#state.Scenario.Enemies[state.Scenario.Round + 1] or 0),
-                }, "\n")
+                }
+                if state.Scenario.Name == C.RoguelikeScenario then
+                    table.insert(text, 2, "RogueScore: " .. tostring(state.RogueScore))
+                end
+                return table.concat(text, "\n")
             end
         end, "StateChange")
 
@@ -172,11 +176,11 @@ function Control.RunningPanel(root)
                 Net.Send("KillSpawned")
             end
 
+            grp:AddButton(__("Stop")).OnClick = function()
+                Event.Trigger("Stop")
+            end
+
             return grp
         end, "ToggleDebug").Update(Mod.Debug)
-
-        layout.Cells[1][1]:AddButton(__("Stop")).OnClick = function()
-            Event.Trigger("Stop")
-        end
     end)
 end

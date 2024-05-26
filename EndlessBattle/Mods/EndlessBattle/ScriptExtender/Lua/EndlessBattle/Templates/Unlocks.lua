@@ -53,7 +53,7 @@ return {
     },
     {
         Id = "Tadpole",
-        Name = "Tadpole",
+        Name = "Get a Tadpole",
         Icon = "Item_LOOT_Druid_Autopsy_Set_Tadpole",
         Cost = 30,
         Amount = nil,
@@ -74,20 +74,6 @@ return {
         end,
     },
     {
-        Id = "BuyLoot",
-        Name = "Roll Loot 10x",
-        Icon = "Action_Dash_Bonus",
-        Cost = 30,
-        Amount = 10,
-        Character = false,
-        OnActivate = function(self, character)
-            local loot = Item.GenerateLoot(10, C.LootRates)
-
-            local x, y, z = Osi.GetPosition(character)
-            Item.SpawnLoot(loot, x, y, z)
-        end,
-    },
-    {
         Id = "BuyExp",
         Name = "1000 EXP",
         Icon = "Action_Dash_Bonus",
@@ -100,7 +86,60 @@ return {
             end
         end,
     },
-    -- PROC_CAMP_GiveFreeSupplies()
+    {
+        Id = "BuyLoot",
+        Name = "Roll Loot 10x",
+        Icon = "Item_CONT_GEN_Chest_Jewel_B",
+        Cost = 30,
+        Amount = 10,
+        Character = false,
+        OnActivate = function(self, character)
+            local loot = Item.GenerateLoot(10, C.LootRates)
+
+            local x, y, z = Osi.GetPosition(character)
+            Item.SpawnLoot(loot, x, y, z)
+        end,
+    },
+    {
+        Id = "BuySupplies",
+        Name = "Buy 40 Camp Supplies",
+        Icon = "Item_CONT_GEN_CampSupplySack",
+        Cost = 20,
+        Amount = 4,
+        Character = false,
+        OnActivate = function(self, character)
+            Osi.PROC_CAMP_GiveFreeSupplies()
+        end,
+    },
+    {
+        Id = "BuyEmperor",
+        Name = "Spawn Mindflayer Companion",
+        Description = "Spawns the Emperor as controllable party follower.",
+        Icon = "TadpoleSuperPower_StageFright",
+        Cost = 500,
+        Amount = nil,
+        Character = false,
+        OnActivate = function(self, character)
+            local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
+            -- Osi.AddToParty(guid, character)
+            Osi.AddPartyFollower(guid, character)
+            -- Osi.Follow(guid, character)
+        end,
+    },
+    {
+        Id = "Moonshield",
+        Name = __("Get Pixie Blessing"),
+        Description = __("Counter the Shadow Curse."),
+        Icon = "statIcons_Moonshield",
+        Cost = 30,
+        Amount = nil,
+        Character = false,
+        OnActivate = function(self, character)
+            for _, p in pairs(UE.GetParty()) do
+                Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
+            end
+        end,
+    },
     {
         Id = "BreakOath",
         Name = __("Break Oath"),
@@ -121,7 +160,7 @@ return {
         Id = "MOD_BOOSTS",
         Name = __("Unlock Multipliers"),
         Icon = "PassiveFeature_Generic_Explosion",
-        Cost = 2000,
+        Cost = 1000,
         Amount = 1,
         Character = false,
         Persistent = true,
@@ -197,6 +236,20 @@ return {
         Requirement = "NEWGAME_PLUS",
         OnActivate = function(self, character)
             PersistentVars.Unlocked.RogueScoreMultiplier = true
+        end,
+    },
+    {
+        Id = "BuyDeathWard",
+        Name = "Death Ward",
+        Icon = "Spell_Abjuration_DeathWard",
+        Cost = 1000,
+        Amount = nil,
+        Requirement = "NEWGAME_PLUS",
+        Character = false,
+        OnActivate = function(self, character)
+            for _, p in pairs(UE.GetParty()) do
+                Osi.ApplyStatus(p.Uuid.EntityUuid, "DEATH_WARD", -1)
+            end
         end,
     },
 }

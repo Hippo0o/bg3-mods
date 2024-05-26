@@ -9,13 +9,13 @@ Mod.PersistentVarsTemplate = {
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = S,
-    RogueScore = Mod.Debug and 100 or 0,
+    RogueScore = 0,
     GUIOpen = false,
     Stats = {
         Looted = {},
         Killed = {},
     },
-    Currency = Mod.Debug and 10000 or 0,
+    Currency = 0,
     Unlocked = {
         ExpMultiplier = false,
         LootMultiplier = false,

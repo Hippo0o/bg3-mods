@@ -121,6 +121,19 @@ function Item.Objects(rarity, forCombat)
             return false
         end
 
+        -- explodes on pickup
+        if name == "OBJ_FreezingSphere" then
+            return false
+        end
+
+        if stat.Rarity == "" or stat.RootTemplate == "" then
+            return false
+        end
+
+        if rarity ~= nil and stat.Rarity ~= rarity then
+            return false
+        end
+
         if forCombat then
             if
                 not (
@@ -149,14 +162,6 @@ function Item.Objects(rarity, forCombat)
             then
                 return false
             end
-        end
-
-        if stat.Rarity == "" or stat.RootTemplate == "" then
-            return false
-        end
-
-        if rarity ~= nil and stat.Rarity ~= rarity then
-            return false
         end
 
         return true
@@ -353,7 +358,7 @@ function Item.GenerateLoot(rolls, lootRates)
         while #items == 0 and fail < 3 do
             fail = fail + 1
 
-            local rarity = bonusRarities[bonusCategory][U.Random(#bonusRarities[bonusCategory])]
+            rarity = bonusRarities[bonusCategory][U.Random(#bonusRarities[bonusCategory])]
 
             if bonusCategory == "Object" then
                 items = Item.Objects(rarity, true)

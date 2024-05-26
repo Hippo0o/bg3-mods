@@ -188,10 +188,10 @@ function External.Templates.AddUnlock(data)
     end
 end
 
-function External.Templates.GetMaps()
+function External.Templates.GetMaps(defaults)
     local exists = External.File.Exists("Maps")
     if not exists then
-        return nil
+        return UT.Combine({}, addedMaps, defaults)
     end
 
     local data = External.File.Import("Maps")
@@ -210,10 +210,10 @@ function External.Templates.GetMaps()
     return data
 end
 
-function External.Templates.GetScenarios()
+function External.Templates.GetScenarios(defaults)
     local exists = External.File.Exists("Scenarios")
     if not exists then
-        return nil
+        return UT.Combine({}, addedScenarios, defaults)
     end
 
     local data = External.File.Import("Scenarios")
@@ -232,10 +232,10 @@ function External.Templates.GetScenarios()
     return data
 end
 
-function External.Templates.GetEnemies()
+function External.Templates.GetEnemies(default)
     local exists = External.File.Exists("Enemies")
     if not exists then
-        return nil
+        return UT.Combine({}, addedEnemies, default)
     end
 
     local data = External.File.Import("Enemies")

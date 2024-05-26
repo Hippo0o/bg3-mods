@@ -22,7 +22,8 @@ function GameMode.AskTutSkip()
             return Defer(1000)
         end)
         .After(function()
-            Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
+            -- Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
+            Osi.PROC_Camp_ForcePlayersToCamp()
 
             External.LoadConfig()
             return Defer(3000)
@@ -121,7 +122,11 @@ Continuously create new battles.
 You will gain a higher score with every completed fight.
 Difficulty increases with the score.]]).After(function(confirmed)
         L.Debug("RogueMode", confirmed)
+
         PersistentVars.RogueModeActive = confirmed
+
+        PersistentVars.RogueScore = UE.GetHost().EocLevel.Level * 5
+
         Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
 
         return confirmed
@@ -217,6 +222,17 @@ U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor,
     then
         GameMode.AskOnboarding()
     end
+
+    if dialog:match("CAMP_Jergal_") then
+        if PersistentVars.Active and not PersistentVars.GUIOpen then
+            Osi.DialogRemoveActorFromDialog(instanceID, actor)
+            Osi.DialogRequestStopForDialog(dialog, actor)
+
+            if U.UUID.Equals(actor, Player.Host()) then
+                Net.Send("OpenGUI", {})
+            end
+        end
+    end
 end)
 
 Event.On("ModActivated", function()
@@ -241,11 +257,22 @@ end
 
 function GameMode.GenerateScenario(score)
     -- ChatGPT made this ................................ i made this
+    L.Debug("Generate Scenario", score)
 
     local minRounds = 1
     local maxRounds = 10
     local preferredRounds = 3
     local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
+    if score > 1000 then
+        maxRounds = 20
+        preferredRounds = 5
+        emptyRoundChance = 0.1
+    end
+    if score > 3000 then
+        maxRounds = 30
+        preferredRounds = 10
+        emptyRoundChance = 0
+    end
 
     -- Define tiers and their corresponding difficulty values
     local tiers = {
@@ -259,7 +286,7 @@ function GameMode.GenerateScenario(score)
     score = score >= tiers[1].value and score or tiers[1].value
 
     -- Weighted random function to bias towards a preferred number of rounds
-    local function weightedRandom()
+    local function weightedRandom(maxValue)
         local weights = {}
         local totalWeight = 0
         for i = minRounds, maxRounds do
@@ -318,7 +345,13 @@ function GameMode.GenerateScenario(score)
     -- end
 
     -- Function to generate a random timeline with bias and possible empty rounds
-    local function generateTimeline(maxValue)
+    local function generateTimeline(maxValue, failed)
+        failed = failed + 1
+        if failed > 100 then
+            L.Error("Failed to generate timeline", maxValue)
+            return {}
+        end
+
         local timeline = {}
         local numRounds = weightedRandom()
         local remainingValue = maxValue
@@ -331,12 +364,21 @@ function GameMode.GenerateScenario(score)
         local function distribute()
             local roundIndex = U.Random(1, numRounds)
 
+            if #timeline[roundIndex] > 10 then
+                return
+            end
+
             if roundsSkipped[roundIndex] then
                 return
             end
 
             -- Add a chance for the round to remain empty, except for the first round
-            if not roundsSkipped[roundIndex - 1] and U.Random() < emptyRoundChance then -- Chance to skip adding a tier
+            if
+                roundIndex > 1
+                and not roundsSkipped[roundIndex - 1]
+                and #timeline[roundIndex] == 0
+                and U.Random() < emptyRoundChance
+            then -- Chance to skip adding a tier
                 roundsSkipped[roundIndex] = true
                 remainingValue = remainingValue + maxValue * emptyRoundChance
                 return
@@ -361,27 +403,36 @@ function GameMode.GenerateScenario(score)
 
             failsafe = failsafe + 1
 
-            if failsafe > 1000 then
-                break
+            if failsafe > maxValue * 100 then
+                if Mod.Debug then
+                    L.Error("Failsafe", remainingValue, maxValue)
+                end
+                return generateTimeline(maxValue, failed)
             end
         end
 
         -- Ensure the first round is not empty
         if #timeline[1] == 0 then
-            return generateTimeline(maxValue)
+            if Mod.Debug then
+                L.Error("Empty first round", remainingValue, maxValue)
+            end
+            return generateTimeline(maxValue, failed)
         end
 
         -- Ensure no two consecutive rounds exist
         for i = 2, #timeline do
             if #timeline[i] == 0 and #timeline[i - 1] == 0 then
-                return generateTimeline(maxValue)
+                if Mod.Debug then
+                    L.Error("Consecutive empty rounds", remainingValue, maxValue)
+                end
+                return generateTimeline(maxValue, failed)
             end
         end
 
         return timeline
     end
 
-    return generateTimeline(score)
+    return generateTimeline(score, 0)
 end
 
 function GameMode.UpdateRogueScore(scenario)
@@ -443,6 +494,8 @@ U.Osiris.On(
     ifRogueLike(function(uuid)
         if U.UUID.Equals(uuid, Player.Host()) then
             GameMode.StartNext()
+            Item.PickupAll(Player.Host())
+            Osi.PROC_LockAllUnlockedWaypoints()
         end
     end)
 )
@@ -457,6 +510,20 @@ end)
 Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then
         GameMode.UpdateRogueScore(scenario)
+
+        Player.Notify(__("Teleporting back to camp in %d seconds.", 60), true)
+        local d1 = Defer(30000, function()
+            Player.Notify(__("Teleporting back to camp in %d seconds.", 30))
+        end)
+        local d2 = Defer(60000, function()
+            Item.PickupAll(Player.Host())
+            Osi.PROC_Camp_ForcePlayersToCamp()
+        end)
+
+        Event.On("ScenarioStarted", function(scenario)
+            d1.Source:Clear()
+            d2.Source:Clear()
+        end, true)
     end
 end)
 

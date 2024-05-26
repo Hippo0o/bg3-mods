@@ -194,6 +194,7 @@ end
 ---@return EntityHandle
 function M.Entity.GetHost()
     if Ext.IsClient() then
+        --- might not give the correct entity
         return Ext.Entity.GetAllEntitiesWithComponent("PartyMember")[1]
     end
 
@@ -453,6 +454,24 @@ function M.Table.Clean(t)
     end)
 end
 
+---@param t table
+---@param size number
+---@return table
+function M.Table.Batch(t, size)
+    local r = {}
+    local i = 1
+    for _, v in pairs(t) do
+        if not r[i] then
+            r[i] = {}
+        end
+        table.insert(r[i], v)
+        if #r[i] == size then
+            i = i + 1
+        end
+    end
+    return r
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           String                                            --
@@ -686,8 +705,7 @@ function M.Osiris.On(name, arity, typeName, callback)
         SubscriberId = id,
         Params = { name, arity, typeName, callback },
         Unregister = function(self)
-            L.Warn("Can lock up the game, so its disabled.")
-            -- return Ext.Osiris.UnregisterListener(self.SubscriberId)
+            return Ext.Osiris.UnregisterListener(self.SubscriberId)
         end,
     }
 end
