@@ -4,20 +4,17 @@
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@param userId number
+---@param userId number|nil
 ---@return string GUID of the host character
 function Player.Host(userId)
     if userId then
-        local player = UT.Find(U.DB.GetPlayers(), function(guid)
-            if Ext.Entity.Get(guid).ServerCharacter.UserID == userId then
-                return guid
-            end
-        end)
+        local player = Osi.GetCurrentCharacter(userId)
 
         if player then
             return player
         end
     end
+
     return Osi.GetHostCharacter()
 end
 
@@ -106,6 +103,29 @@ function Player.TeleportToRegion(region)
     end
 end
 
+function Player.ReturnToCamp()
+    if Player.Region() == "END_Main" then
+        -- act 1 seems to load fastest
+        return Player.TeleportToAct("act1").After(function()
+            Osi.PROC_Camp_ForcePlayersToCamp()
+            return true
+        end)
+    end
+
+    Osi.PROC_Camp_ForcePlayersToCamp()
+    return Schedule()
+end
+
+function StoryBypass.UnblockTravel(entity)
+    Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_CANTMOVE")
+    Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_BLOCKEDZONE")
+
+    entity.ServerCharacter.PlayerData.IsInDangerZone = false
+    entity.CanTravel.ErrorFlags = {}
+    entity.CanTravel.field_2 = 0
+    entity:Replicate("CanTravel")
+end
+
 local readyChecks = {}
 ---@class ChainableConfirmation : LibsChainable
 ---@field After fun(func: fun(result: boolean): any): LibsChainable
@@ -143,4 +163,8 @@ U.Osiris.On("ReadyCheckFailed", 1, "after", function(id)
         readyChecks[id] = nil
         func(false)
     end
+end)
+
+Event.On("ScenarioStarted", function()
+    Player.ReturnToCamp()
 end)

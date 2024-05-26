@@ -276,12 +276,12 @@ function GameMode.GenerateScenario(score)
 
     -- Define tiers and their corresponding difficulty values
     local tiers = {
-        { name = C.EnemyTier[1], value = 3 },
-        { name = C.EnemyTier[2], value = 9 },
-        { name = C.EnemyTier[3], value = 15 },
-        { name = C.EnemyTier[4], value = 22 },
-        { name = C.EnemyTier[5], value = 40 },
-        { name = C.EnemyTier[6], value = 69 },
+        { name = C.EnemyTier[1], value = 3, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
+        { name = C.EnemyTier[2], value = 9, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+        { name = C.EnemyTier[3], value = 15, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+        { name = C.EnemyTier[4], value = 22, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
+        { name = C.EnemyTier[5], value = 40, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+        { name = C.EnemyTier[6], value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
     score = score >= tiers[1].value and score or tiers[1].value
 
@@ -304,13 +304,14 @@ function GameMode.GenerateScenario(score)
         return maxRounds
     end
 
-    -- Function to select a tier based on remaining value
+    -- Function to select a tier based on amount of enemies in tier
     local function selectTier(remainingValue)
         local validTiers = {}
         local totalWeight = 0
         for i, tier in ipairs(tiers) do
             if remainingValue >= tier.value then
-                local weight = 1 / (i + 1) -- Higher bias towards lower tiers
+                local weight = tier.amount / (tier.amount + 100)
+                L.Debug("Tier", tier.name, weight)
                 table.insert(validTiers, { tier = tier, weight = weight })
                 totalWeight = totalWeight + weight
             end
@@ -505,19 +506,23 @@ Event.On("RogueModeChanged", function(bool)
         return
     end
     GameMode.StartNext()
+
+    if not PersistentVars.GUIOpen then
+        Net.Send("OpenGUI", {})
+    end
 end)
 
 Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then
         GameMode.UpdateRogueScore(scenario)
 
-        Player.Notify(__("Teleporting back to camp in %d seconds.", 60), true)
-        local d1 = Defer(30000, function()
-            Player.Notify(__("Teleporting back to camp in %d seconds.", 30))
+        Player.Notify(__("Teleporting back to camp in %d seconds.", 20), true)
+        local d1 = Defer(10000, function()
+            Player.Notify(__("Teleporting back to camp in %d seconds.", 10))
         end)
-        local d2 = Defer(60000, function()
+        local d2 = Defer(20000, function()
             Item.PickupAll(Player.Host())
-            Osi.PROC_Camp_ForcePlayersToCamp()
+            Player.ReturnToCamp()
         end)
 
         Event.On("ScenarioStarted", function(scenario)

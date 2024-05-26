@@ -152,6 +152,15 @@ function Unlock.Sync()
             end
         end
 
+        local existing = UT.Find(Unlock.GetTemplates(), function(p)
+            return p.Id == u.Id
+        end)
+
+        if not existing then
+            u.Amount = -1
+            u.Requirement = ""
+        end
+
         PersistentVars.Unlocks[i] = Unlock.Restore(u)
     end
 
@@ -194,10 +203,10 @@ Net.On("BuyUnlock", function(event)
     end)
 
     local function soundFail()
-        Osi.PlaySoundResource(Player.Host(event:UserId()), "294bbcfa-fd7b-d8bf-bba1-5b790f8518af")
+        Osi.PlaySoundResource(event:Character(), "294bbcfa-fd7b-d8bf-bba1-5b790f8518af")
     end
     local function soundSuccess()
-        Osi.PlaySoundResource(Player.Host(event:UserId()), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
+        Osi.PlaySoundResource(event:Character(), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
     end
 
     if unlock == nil then
@@ -225,7 +234,7 @@ Net.On("BuyUnlock", function(event)
         return
     end
 
-    unlock:Buy(event.Payload.Character or Player.Host(event:UserId()))
+    unlock:Buy(event.Payload.Character or event:Character())
     PersistentVars.Currency = PersistentVars.Currency - unlock.Cost
     soundSuccess()
 

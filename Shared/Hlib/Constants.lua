@@ -1,25 +1,26 @@
 ---@class Constants
 local M = {
     OriginCharactersStarter = {
-        "S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c",
-        "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604",
-        "S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255",
-        "S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12",
-        "S_Player_Wyll_c774d764-4a17-48dc-b470-32ace9ce447d",
-        "S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679",
+        Karlach = "S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c",
+        Gale = "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604",
+        Astarion = "S_Player_Astarion_c7c13742-bacd-460a-8f65-f864fe41f255",
+        Laezel = "S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12",
+        Wyll = "S_Player_Wyll_c774d764-4a17-48dc-b470-32ace9ce447d",
+        ShadowHeart = "S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679",
     },
     OriginCharactersSpecial = {
-        "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
-        "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
-        "S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
-        "S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba",
+        Halsin = "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
+        Minthara = "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
+        Jaheira = "S_Player_Jaheira_91b6b200-7d00-4d62-8dc9-99e8339dfa1a",
+        Minsc = "S_Player_Minsc_0de603c5-42e2-4811-9dad-f652de080eba",
     },
     NPCCharacters = {
         -- TODO: Add more NPCs
-        "S_GLO_Volo_2af25a85-5b9a-4794-85d3-0bd4c4d262fa",
-        "S_GLO_JergalAvatar_0133f2ad-e121-4590-b5f0-a79413919805",
-        "S_GLO_Orin_bf24e0ec-a3a6-4905-bd2d-45dc8edf8101",
-        "S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac",
+        Volo = "S_GLO_Volo_2af25a85-5b9a-4794-85d3-0bd4c4d262fa",
+        Jergal = "S_GLO_JergalAvatar_0133f2ad-e121-4590-b5f0-a79413919805",
+        Orin = "S_GLO_Orin_bf24e0ec-a3a6-4905-bd2d-45dc8edf8101",
+        Gortash = "S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac",
+        Oathbreaker = "S_GLO_OathbreakerKnight_3939625d-86cc-4395-9d50-4f8b846c4231",
     },
     Regions = {
         Act0 = "TUT_Avernus_C",
@@ -47,7 +48,7 @@ local M = {
             MyconidColony = "S_UND_Myconid_WaypointTrigger_b83f13a0-e988-48f1-9068-ea9be2adffb2",
             GrymForge = "S_UND_Duergar_WaypointTrigger_01d43e65-d370-46c6-9998-a9f7523221eb",
             RisenRoad = "S_PLA_WaypointShrine_f68dedbb-a256-40f6-a01e-ab261851df5d",
-            WisperingDepth = "S_FOR_Bottomless_WaypointTrigger_ad3614e0-8895-45dd-a05d-a78eba584202"
+            WisperingDepth = "S_FOR_Bottomless_WaypointTrigger_ad3614e0-8895-45dd-a05d-a78eba584202",
         },
         Act1b = { -- CRE_Main_A
             TrieltaCrags = "S_CRE_Exterior_Waypoint_Pos_00abc10c-921d-46f9-80e0-2b8f92f884c7",
@@ -84,10 +85,10 @@ local M = {
 }
 
 M.OriginCharacters = {}
-for _, v in ipairs(M.OriginCharactersStarter) do
+for _, v in pairs(M.OriginCharactersStarter) do
     table.insert(M.OriginCharacters, v)
 end
-for _, v in ipairs(M.OriginCharactersSpecial) do
+for _, v in pairs(M.OriginCharactersSpecial) do
     table.insert(M.OriginCharacters, v)
 end
 

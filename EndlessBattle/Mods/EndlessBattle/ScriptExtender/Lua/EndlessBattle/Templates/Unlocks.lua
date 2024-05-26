@@ -37,6 +37,7 @@ return {
             unlockTadpole(character)
             Osi.SetTag(character, "c0cd4ed8-11d1-4fb1-ae3a-3a14e41267c8")
             Osi.ApplyStatus(character, "TAD_PARTIAL_CEREMORPH", -1)
+            -- Osi.RemoveCustomMaterialOverride(character, "398ca8ae-c3c0-47f5-8e45-d9402e198389")
         end,
     },
     {
@@ -115,13 +116,13 @@ return {
         Id = "BuyEmperor",
         Name = "Spawn Mindflayer Companion",
         Description = "Spawns the Emperor as controllable party follower.",
-        Icon = "TadpoleSuperPower_StageFright",
+        Icon = "TadpoleSuperPower_SurvivalInstinct",
         Cost = 500,
         Amount = nil,
         Character = false,
         OnActivate = function(self, character)
+            -- TODO fix HEALTHBOOST_HARDCODE
             local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
-            -- Osi.AddToParty(guid, character)
             Osi.AddPartyFollower(guid, character)
             -- Osi.Follow(guid, character)
         end,
@@ -250,6 +251,18 @@ return {
             for _, p in pairs(UE.GetParty()) do
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "DEATH_WARD", -1)
             end
+        end,
+    },
+    {
+        Id = "TransformMindflayer",
+        Name = "Become a true Mindflayer",
+        Icon = "TadpoleSuperPower_StageFright",
+        Cost = 300,
+        Amount = nil,
+        Character = true,
+        Requirement = "NEWGAME_PLUS",
+        OnActivate = function(self, character)
+            Osi.PROC_END_General_ApplyMindFlayerForm(character)
         end,
     },
 }

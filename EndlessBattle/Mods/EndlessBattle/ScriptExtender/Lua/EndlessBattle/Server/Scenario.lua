@@ -415,14 +415,19 @@ function Scenario.Start(template, map)
 
     local timeline = template.Timeline
 
+    local maps = Map.Get()
+    if #maps == 0 then
+        L.Error("Starting scenario failed.", "No maps found.")
+        return
+    end
+
     if template.Map ~= nil then
-        map = UT.Find(Map.Get(), function(m)
+        map = UT.Find(maps, function(m)
             return m.Name == template.Map
         end) or map
     end
 
     if map == nil then
-        local maps = Map.Get()
         map = maps[U.Random(#maps)]
     end
 
@@ -508,7 +513,8 @@ end
 ---@param specific Enemy
 -- we want to have all enemies on the map in combat
 function Scenario.CombatSpawned(specific)
-    local enemies = UT.Filter(Current().SpawnedEnemies, function(e)
+    -- using PersistentVars here bcs resurrections
+    local enemies = UT.Filter(PersistentVars.SpawnedEnemies, function(e)
         return specific == nil or U.Equals(e, specific)
     end)
 
@@ -710,12 +716,17 @@ U.Osiris.On(
     "after",
     ifScenario(function(uuid)
         if S.OnMap and U.UUID.Equals(uuid, Player.Host()) then
-            Scenario.Stop()
-            Player.Notify(__("Returned to camp."))
+            Defer(1000, function()
+                if not Player.InCombat() then
+                    Scenario.Stop()
+                    Player.Notify(__("Returned to camp."))
+                end
+            end)
         end
     end)
 )
 
+-- TODO maybe move to entity events
 U.Osiris.On(
     "Died",
     1,
@@ -732,6 +743,7 @@ U.Osiris.On(
             if U.UUID.Equals(e.GUID, uuid) then
                 table.insert(s.KilledEnemies, e)
                 table.remove(s.SpawnedEnemies, i)
+                -- might revive and rejoin battle
                 Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()), true)
                 spawnedKilled = true
 

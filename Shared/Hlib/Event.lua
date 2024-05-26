@@ -111,7 +111,7 @@ end
 function M.Trigger(event, ...)
     local eventListeners = M.Listeners(event)
 
-    Utils.Log.Debug("Event/Trigger", #eventListeners, event, Mod.Dev and debug.traceback())
+    Utils.Log.Debug("Event/Trigger", #eventListeners, event, Mod.Dev and debug.traceback() or nil)
 
     for _, l in ipairs(Utils.Table.Values(eventListeners)) do
         l:Exec(...)

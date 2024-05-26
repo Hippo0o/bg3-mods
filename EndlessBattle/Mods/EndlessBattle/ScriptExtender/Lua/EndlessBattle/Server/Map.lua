@@ -175,7 +175,9 @@ function Map.TeleportTo(map, character, withOffset)
     if teleporting then
         Player.Notify(__("Teleporting to different ACT"))
         teleporting.After(function()
-            Map.TeleportTo(map, character, withOffset)
+            for _, character in pairs(U.DB.GetPlayers()) do
+                Map.TeleportTo(map, character, withOffset)
+            end
         end)
     end
 

@@ -173,6 +173,15 @@ if Ext.IsServer() then
             )
     end
 
+    function M.Entity.IsImportant(character)
+        return M.Entity.IsPlayable(character)
+            or (
+                M.Table.Find(Constants.NPCCharacters, function(v)
+                    return M.UUID.Equals(v, character)
+                end) ~= nil
+            )
+    end
+
     -- also works for items
     function M.Entity.Remove(guid)
         Osi.PROC_RemoveAllPolymorphs(guid)
@@ -195,7 +204,7 @@ end
 function M.Entity.GetHost()
     if Ext.IsClient() then
         --- might not give the correct entity
-        return Ext.Entity.GetAllEntitiesWithComponent("PartyMember")[1]
+        return Ext.Entity.GetAllEntitiesWithComponent("ClientControl")[1]
     end
 
     return Ext.Entity.Get(Osi.GetHostCharacter())
