@@ -518,7 +518,7 @@ Event.On("ScenarioEnded", function(scenario)
 
         Player.Notify(__("Teleporting back to camp in %d seconds.", 20), true)
         local d1 = Defer(10000, function()
-            Player.Notify(__("Teleporting back to camp in %d seconds.", 10))
+            Player.Notify(__("Teleporting back to camp in %d seconds.", 10, true))
         end)
         local d2 = Defer(20000, function()
             Item.PickupAll(Player.Host())

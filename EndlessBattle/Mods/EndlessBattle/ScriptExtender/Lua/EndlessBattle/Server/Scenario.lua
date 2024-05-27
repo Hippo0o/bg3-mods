@@ -629,8 +629,10 @@ U.Osiris.On(
         -- probably revived from shadow curse
         for i, e in ipairs(s.KilledEnemies) do
             if U.UUID.Equals(e.GUID, uuid) then
+                -- let it count twice for loot
                 table.insert(s.SpawnedEnemies, e)
-                table.remove(s.KilledEnemies, i)
+                Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()), true)
+                -- table.remove(s.KilledEnemies, i)
                 return
             end
         end
