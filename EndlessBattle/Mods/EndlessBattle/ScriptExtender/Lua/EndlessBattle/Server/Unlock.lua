@@ -25,7 +25,8 @@ end
 ---@field Unlocked boolean
 ---@field Requirement string|nil
 ---@field Persistent boolean
----@field OnActivate fun(self: Unlock)
+---@field OnBuy fun(self: Unlock)
+---@field OnInit fun(self: Unlock)
 ---@field Buy fun(self: Unlock)
 local Object = Libs.Class({
     Id = nil,
@@ -39,13 +40,14 @@ local Object = Libs.Class({
     Unlocked = false,
     Requirement = nil,
     Persistent = false,
-    OnActivate = function() end,
+    OnBuy = function() end,
+    OnInit = function() end,
 })
 
 function Object:Buy(character)
     self.Bought = self.Bought + 1
     self.BoughtBy[U.UUID.Extract(character)] = true
-    self.OnActivate(self, character)
+    self.OnBuy(self, character)
 
     if self.Persistent then
         persistUnlock(self)
@@ -162,6 +164,10 @@ function Unlock.Sync()
         end
 
         PersistentVars.Unlocks[i] = Unlock.Restore(u)
+
+        if existing then
+            PersistentVars.Unlocks[i]:OnInit()
+        end
     end
 
     Unlock.UpdateUnlocked()
@@ -179,7 +185,8 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-GameState.OnLoad(function()
+-- TODO maybe OnLoad once
+GameState.OnSessionLoaded(function()
     Unlock.Sync()
 end)
 

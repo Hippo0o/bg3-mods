@@ -302,7 +302,7 @@ function Action.Failsafe(enemy)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
                 e:Combat(true)
 
-                Schedule(function()
+                Defer(1000).After(function()
                     if Osi.IsInCombat(e.GUID) == 1 then
                         return
                     end

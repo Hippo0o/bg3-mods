@@ -12,6 +12,7 @@ local function unlockTadpole(object)
     Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", object)
 end
 
+--- @type table<number, Unlock>
 return {
     {
         Id = "UnlockTadpole",
@@ -20,7 +21,7 @@ return {
         Cost = 10,
         Amount = nil,
         Character = true,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             unlockTadpole(character)
         end,
     },
@@ -33,7 +34,7 @@ return {
         Amount = nil,
         Character = true,
         Requirement = 45,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             unlockTadpole(character)
             Osi.SetTag(character, "c0cd4ed8-11d1-4fb1-ae3a-3a14e41267c8")
             Osi.ApplyStatus(character, "TAD_PARTIAL_CEREMORPH", -1)
@@ -48,7 +49,7 @@ return {
         Cost = 100,
         Amount = 1,
         Character = true,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             Osi.AddPassive(character, "CRE_GithInfirmary_Awakened")
         end,
     },
@@ -59,7 +60,7 @@ return {
         Cost = 30,
         Amount = nil,
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             Osi.AddTadpole(character, 1)
         end,
     },
@@ -70,7 +71,7 @@ return {
         Cost = 5,
         Amount = nil,
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             Osi.AddGold(character, 100)
         end,
     },
@@ -81,7 +82,7 @@ return {
         Cost = 40,
         Amount = 3,
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             for _, p in pairs(U.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
             end
@@ -94,7 +95,7 @@ return {
         Cost = 30,
         Amount = 10,
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             local loot = Item.GenerateLoot(10, C.LootRates)
 
             local x, y, z = Osi.GetPosition(character)
@@ -108,7 +109,7 @@ return {
         Cost = 20,
         Amount = 4,
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             Osi.PROC_CAMP_GiveFreeSupplies()
         end,
     },
@@ -120,7 +121,7 @@ return {
         Cost = 500,
         Amount = nil,
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             -- TODO fix HEALTHBOOST_HARDCODE
             local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
             Osi.AddPartyFollower(guid, character)
@@ -135,10 +136,19 @@ return {
         Cost = 30,
         Amount = nil,
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             for _, p in pairs(UE.GetParty()) do
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
             end
+        end,
+        OnInit = function(self) ---@param self Unlock
+            L.Dump("Pixie init")
+            Event.On("ScenarioMapEntered", function()
+                L.Dump("Pixie event")
+                if self.Bought > 0 then
+                    self:OnBuy()
+                end
+            end)
         end,
     },
     {
@@ -149,7 +159,7 @@ return {
         Cost = 10,
         Amount = nil,
         Character = true,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             Osi.PROC_GLO_PaladinOathbreaker_BrokeOath(character)
             Osi.PROC_GLO_PaladinOathbreaker_BecomesOathbreaker(character)
             -- Osi.RequestRespec(character)
@@ -175,7 +185,7 @@ return {
         Amount = 1,
         Character = false,
         Requirement = "MOD_BOOSTS",
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             PersistentVars.Unlocked.ExpMultiplier = true
         end,
     },
@@ -187,7 +197,7 @@ return {
         Amount = 1,
         Character = false,
         Requirement = { "MOD_BOOSTS", 20 },
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             PersistentVars.Unlocked.LootMultiplier = true
         end,
     },
@@ -199,7 +209,7 @@ return {
         Amount = 1,
         Character = false,
         Requirement = { "MOD_BOOSTS", 40 },
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             PersistentVars.Unlocked.CurrencyMultiplier = true
         end,
     },
@@ -221,7 +231,7 @@ return {
         Amount = 3,
         Character = false,
         Requirement = "NEWGAME_PLUS",
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             for _, p in pairs(U.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
             end
@@ -235,7 +245,7 @@ return {
         Amount = 1,
         Character = false,
         Requirement = "NEWGAME_PLUS",
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             PersistentVars.Unlocked.RogueScoreMultiplier = true
         end,
     },
@@ -247,7 +257,7 @@ return {
         Amount = nil,
         Requirement = "NEWGAME_PLUS",
         Character = false,
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             for _, p in pairs(UE.GetParty()) do
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "DEATH_WARD", -1)
             end
@@ -261,7 +271,7 @@ return {
         Amount = nil,
         Character = true,
         Requirement = "NEWGAME_PLUS",
-        OnActivate = function(self, character)
+        OnBuy = function(self, character)
             Osi.PROC_END_General_ApplyMindFlayerForm(character)
         end,
     },
