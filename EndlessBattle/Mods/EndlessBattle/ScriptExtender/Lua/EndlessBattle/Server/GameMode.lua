@@ -28,7 +28,7 @@ function GameMode.AskTutSkip()
             External.LoadConfig()
             return Defer(3000)
         end)
-        .After(GameMode.AskRecruitStarters)
+        .After(GameMode.AskRecruit)
 end
 
 function GameMode.AskOnboarding()
@@ -51,7 +51,7 @@ function GameMode.AskOnboarding()
         end)
 end
 
-function GameMode.AskRecruitStarters()
+function GameMode.AskRecruit()
     return Player.AskConfirmation("Recruit Origin characters?").After(function(confirmed)
         if not confirmed then
             return
@@ -99,66 +99,6 @@ function GameMode.AskRecruitStarters()
             Osi.PROC_ORI_Shadowheart_COM_Init()
         end
 
-        local f = Osi.GetFaction(Player.Host())
-
-        for _, o in pairs(C.OriginCharactersStarter) do
-            Osi.PROC_ORI_SetupCamp(o, 1)
-            Osi.SetFaction(o, "4abec10d-c2d1-a505-a09a-719c83999847")
-            Osi.RegisterAsCompanion(o, Player.Host())
-            Osi.SetEntityEvent(o, "CampSwapped_WLDMAIN", 1)
-            Osi.SetEntityEvent(o, "CAMP_CamperInCamp_WLDMAIN", 1)
-            Osi.SetFlag("GLO_InfernalBox_State_CharacterHasBox_2ff44b15-a351-401b-8da9-cf42364af274", o)
-        end
-
-        fixGale()
-        fixShart()
-    end)
-end
-
-function GameMode.AskEnableRogueMode()
-    return Player.AskConfirmation([[
-Play Roguelike mode?
-Continuously create new battles.
-You will gain a higher score with every completed fight.
-Difficulty increases with the score.]]).After(function(confirmed)
-        L.Debug("RogueMode", confirmed)
-
-        PersistentVars.RogueModeActive = confirmed
-
-        PersistentVars.RogueScore = UE.GetHost().EocLevel.Level * 5
-
-        Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
-
-        return confirmed
-    end)
-end
-
--- TODO
-function GameMode.AskUnlockAll()
-    Player.AskConfirmation("Unlock all?").After(function(confirmed)
-        if not confirmed then
-            return
-        end
-
-        local function unlockTadpole(object)
-            Osi.SetTag(object, "089d4ca5-2cf0-4f54-84d9-1fdea055c93f")
-            Osi.SetTag(object, "efedb058-d4f5-4ab8-8add-bd5e32cdd9cd")
-            Osi.SetTag(object, "c15c2234-9b19-453e-99cc-00b7358b9fce")
-            Osi.SetTadpoleTreeState(object, 2)
-            Osi.AddTadpole(object, 1)
-            Osi.AddTadpolePower(object, "TAD_IllithidPersuasion", 1)
-            Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", object)
-        end
-
-        Osi.TemplateAddTo("4a82e6f2-839f-434e-addf-b07dd1578194", Player.Host(), 1, 1) -- Astral Tadpole
-
-        for _, p in pairs(U.DB.GetPlayers()) do
-            unlockTadpole(p)
-        end
-
-        do
-            return
-        end
         local function fixMinthara()
             Osi.PROC_RemoveAllDialogEntriesForSpeaker("S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b")
             Osi.DB_Dialogs(
@@ -177,16 +117,37 @@ function GameMode.AskUnlockAll()
             -- )
         end
 
-        local f = Osi.GetFaction(Player.Host())
-
-        for _, o in pairs(C.OriginCharacters) do
+        for _, o in pairs(C.OriginCharactersStarter) do -- C.OriginCharacters for all
             Osi.PROC_ORI_SetupCamp(o, 1)
-            Osi.SetFaction(o, f)
+            Osi.SetFaction(o, "4abec10d-c2d1-a505-a09a-719c83999847")
             Osi.RegisterAsCompanion(o, Player.Host())
-            unlockTadpole(o)
+            Osi.SetEntityEvent(o, "CampSwapped_WLDMAIN", 1)
+            Osi.SetEntityEvent(o, "CAMP_CamperInCamp_WLDMAIN", 1)
+            Osi.SetFlag("GLO_InfernalBox_State_CharacterHasBox_2ff44b15-a351-401b-8da9-cf42364af274", o)
         end
-        fixHalsin()
-        fixMinthara()
+
+        fixGale()
+        fixShart()
+        -- fixHalsin()
+        -- fixMinthara()
+    end)
+end
+
+function GameMode.AskEnableRogueMode()
+    return Player.AskConfirmation([[
+Play Roguelike mode?
+Continuously create new battles.
+You will gain a higher score with every completed fight.
+Difficulty increases with the score.]]).After(function(confirmed)
+        L.Debug("RogueMode", confirmed)
+
+        PersistentVars.RogueModeActive = confirmed
+
+        PersistentVars.RogueScore = UE.GetHost().EocLevel.Level * 5
+
+        Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
+
+        return confirmed
     end)
 end
 
