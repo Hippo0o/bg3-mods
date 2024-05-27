@@ -143,7 +143,7 @@ Difficulty increases with the score.]]).After(function(confirmed)
 
         PersistentVars.RogueModeActive = confirmed
 
-        PersistentVars.RogueScore = UE.GetHost().EocLevel.Level * 5
+        PersistentVars.RogueScore = (UE.GetHost().EocLevel.Level - 1) * 10 -- +10 per level
 
         Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
 
@@ -271,8 +271,10 @@ function GameMode.GenerateScenario(score)
         local totalWeight = 0
         for i, tier in ipairs(tiers) do
             if remainingValue >= tier.value then
-                local weight = tier.amount / (tier.amount + 100)
+                -- Bias towards tiers with more enemies
+                local weight = (tier.amount - 25) / (100 - 25) * 0.7 + 0.1 
                 L.Debug("Tier", tier.name, weight)
+
                 table.insert(validTiers, { tier = tier, weight = weight })
                 totalWeight = totalWeight + weight
             end
@@ -286,25 +288,9 @@ function GameMode.GenerateScenario(score)
                 end
             end
         end
+
         return tiers[1] -- Fallback to the lowest tier
     end
-    -- local function selectTier(remainingValue)
-    --     local totalWeight = 0
-    --     local weights = {}
-    --     for i, tier in ipairs(tiers) do
-    --         local weight = tier.value / remainingValue -- Higher bias towards higher tiers
-    --         weights[i] = weight
-    --         totalWeight = totalWeight + weight
-    --     end
-    --     local randomWeight = U.Random() * totalWeight
-    --     for i, weight in ipairs(weights) do
-    --         randomWeight = randomWeight - weight
-    --         if randomWeight <= 0 then
-    --             return tiers[i]
-    --         end
-    --     end
-    --     return tiers[#tiers] -- Fallback to the highest tier
-    -- end
 
     -- Function to generate a random timeline with bias and possible empty rounds
     local function generateTimeline(maxValue, failed)
