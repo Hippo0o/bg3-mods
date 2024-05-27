@@ -236,7 +236,7 @@ function ClientUnlock.BuyChar(root, unlock)
                     if not ok then
                         Event.Trigger("Error", res)
                     else
-                        Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, u.CustomName.Name))
+                        Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, name))
                     end
                     b:SetStyle("Alpha", 1)
                 end)

@@ -194,6 +194,7 @@ function Action.SpawnRound()
         end).Catch(function()
             L.Error("Spawn limit exceeded.", e:GetId())
             UT.Remove(s.SpawnedEnemies, e)
+            Action.EnemyRemoved()
         end)
         table.insert(s.SpawnedEnemies, e)
     end
@@ -255,6 +256,7 @@ function Action.NotifyStarted()
     })
 end
 
+-- map entered from camp or teleport
 function Action.MapEntered()
     if Current():HasStarted() then
         return
@@ -286,6 +288,18 @@ function Action.MapEntered()
     end)
 end
 
+-- Enemy died or couldnt spawn
+function Action.EnemyRemoved()
+    local s = Current()
+
+    Action.CheckEnded()
+
+    if #s.SpawnedEnemies == 0 and s:HasMoreRounds() then
+        Action.ResumeCombat()
+    end
+end
+
+-- Enemy spawned but is out of bounds
 function Action.Failsafe(enemy)
     local s = Current()
 
@@ -476,6 +490,9 @@ function Scenario.Start(template, map)
             UT.Combine(scenario.Positions, map.Timeline)
         end
     end
+    while UT.Size(scenario.Positions) < enemyCount do
+        table.insert(scenario.Positions, U.Random(#map.Spawns))
+    end
 
     Player.Notify(__("Scenario %s started.", template.Name))
     S = scenario
@@ -492,6 +509,7 @@ function Scenario.End()
     Event.Trigger("ScenarioEnded", s)
     Action.SpawnLoot()
 
+    PersistentVars.LastScenario = S
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario ended."))
@@ -510,11 +528,10 @@ function Scenario.Teleport(uuid)
     Map.TeleportTo(s.Map, uuid, true)
 end
 
----@param specific Enemy
+---@param specific Enemy|nil
 -- we want to have all enemies on the map in combat
 function Scenario.CombatSpawned(specific)
-    -- using PersistentVars here bcs resurrections
-    local enemies = UT.Filter(PersistentVars.SpawnedEnemies, function(e)
+    local enemies = UT.Filter(Current().SpawnedEnemies, function(e)
         return specific == nil or U.Equals(e, specific)
     end)
 
@@ -626,17 +643,6 @@ U.Osiris.On(
             return
         end
 
-        -- probably revived from shadow curse
-        for i, e in ipairs(s.KilledEnemies) do
-            if U.UUID.Equals(e.GUID, uuid) then
-                -- let it count twice for loot
-                table.insert(s.SpawnedEnemies, e)
-                Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()), true)
-                -- table.remove(s.KilledEnemies, i)
-                return
-            end
-        end
-
         if UT.Find(s.SpawnedEnemies, function(e)
             return U.UUID.Equals(e.GUID, guid)
         end) then
@@ -688,12 +694,12 @@ U.Osiris.On(
         local s = Current()
         if s.CombatId == combatGuid then
             s.CombatId = nil
-            --- empty round wont progress the combat
+
+            -- empty round wont progress the combat
+            -- manually progress the combat
             if s:HasMoreRounds() and #s:SpawnsForRound() == 0 then
                 Action.ResumeCombat()
-                return
             end
-            -- TODO if no enemies are spawned due to error, the combat will get stuck
         end
     end)
 )
@@ -739,6 +745,36 @@ U.Osiris.On(
 
 -- TODO maybe move to entity events
 U.Osiris.On(
+    "Resurrected",
+    1,
+    "before",
+    ifScenario(function(uuid)
+        local s = Current()
+
+        if not s:HasStarted() then
+            return
+        end
+
+        for i, e in ipairs(s.KilledEnemies) do
+            if U.UUID.Equals(e.GUID, uuid) then
+                if Osi.IsDead(e.GUID) ~= 0 then
+                    -- manually killed on resurrection
+                    return
+                end
+                -- let it count twice for loot
+                table.insert(s.SpawnedEnemies, e)
+                Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()), true)
+                -- table.remove(s.KilledEnemies, i)
+
+                Scenario.CombatSpawned()
+                return
+            end
+        end
+    end)
+)
+
+-- TODO maybe move to entity events
+U.Osiris.On(
     "Died",
     1,
     "before",
@@ -768,10 +804,6 @@ U.Osiris.On(
             return
         end
 
-        Action.CheckEnded()
-
-        if #s.SpawnedEnemies == 0 and s:HasMoreRounds() then
-            Action.ResumeCombat()
-        end
+        Action.EnemyRemoved()
     end)
 )

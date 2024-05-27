@@ -116,16 +116,6 @@ function Player.ReturnToCamp()
     return Schedule()
 end
 
-function StoryBypass.UnblockTravel(entity)
-    Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_CANTMOVE")
-    Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_BLOCKEDZONE")
-
-    entity.ServerCharacter.PlayerData.IsInDangerZone = false
-    entity.CanTravel.ErrorFlags = {}
-    entity.CanTravel.field_2 = 0
-    entity:Replicate("CanTravel")
-end
-
 local readyChecks = {}
 ---@class ChainableConfirmation : LibsChainable
 ---@field After fun(func: fun(result: boolean): any): LibsChainable

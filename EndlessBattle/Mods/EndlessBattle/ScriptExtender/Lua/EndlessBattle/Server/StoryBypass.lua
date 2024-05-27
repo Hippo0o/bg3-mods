@@ -145,20 +145,36 @@ U.Osiris.On(
     2,
     "after",
     ifBypassStory(function(object, combatGuid)
-        Schedule(function()
-            if not Enemy.IsValid(object) and UE.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
-                L.Debug("Removing", object)
-                Osi.LeaveCombat(object)
-                UE.Remove(object)
-                Player.Notify(
-                    __(
-                        "Skipped combat with %s",
-                        Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle)
-                    ),
-                    true
-                )
-            end
-        end)
+        if not Enemy.IsValid(object) and UE.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
+            L.Debug("Removing", object)
+            Osi.LeaveCombat(object)
+            UE.Remove(object)
+            Player.Notify(
+                __(
+                    "Skipped combat with %s",
+                    Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle)
+                ),
+                true
+            )
+        end
+    end)
+)
+
+U.Osiris.On(
+    "Resurrected",
+    1,
+    "after",
+    ifBypassStory(function(character)
+        if not S and UE.IsNonPlayer(character) and Osi.IsCharacter(character) == 1 then
+            UE.Remove(character)
+            Player.Notify(
+                __(
+                    "Skipped combat with %s",
+                    Osi.ResolveTranslatedString(Ext.Entity.Get(character).DisplayName.NameKey.Handle.Handle)
+                ),
+                true
+            )
+        end
     end)
 )
 
@@ -197,7 +213,7 @@ U.Osiris.On(
         Defer(1000, function()
             if S and not S.OnMap then
                 L.Error("Teleport workaround", character)
-                Scenario.Teleport(character)
+                -- Scenario.Teleport(character)
             end
         end)
 
@@ -222,41 +238,61 @@ U.Osiris.On(
     end)
 )
 
-function StoryBypass.UnblockTravel()
-    for _, e in pairs(UE.GetParty()) do
-        Osi.RemoveStatus(e.Uuid.EntityUuid, "TRAVELBLOCK_CANTMOVE")
-        Osi.RemoveStatus(e.Uuid.EntityUuid, "TRAVELBLOCK_BLOCKEDZONE")
+function StoryBypass.UnblockTravel(entity)
+    Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_CANTMOVE")
+    Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_BLOCKEDZONE")
 
-        e.ServerCharacter.PlayerData.IsInDangerZone = false
-        e.CanTravel.ErrorFlags = {}
-        e.CanTravel.field_2 = 0
-        e:Replicate("CanTravel")
-    end
+    entity.ServerCharacter.PlayerData.IsInDangerZone = false
+    entity.CanTravel.ErrorFlags = {}
+    entity.CanTravel.field_2 = 0
+    entity:Replicate("CanTravel")
 end
 
 function StoryBypass.ClearArea(character)
-    local nearby = UE.GetNearby(character, 50, true)
+    local nearby = UE.GetNearby(character, 100, true)
 
     local toRemove = UT.Filter(nearby, function(v)
-        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid) and not UE.IsImportant(v.Guid)
-            or (v.Entity.ServerItem and not Item.IsOwned(v.Guid) and v.Entity.ServerItem.CanBePickedUp)
-    end)
-
-    local toBlockUse = UT.Filter(nearby, function(v)
-        return v.Entity.ServerItem and not Item.IsOwned(v.Guid) and v.Entity.ServerItem.CanUse
+        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
     end)
 
     for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
         Schedule(function()
             for _, b in pairs(batch) do
-                L.Debug("Removing entity.", b.Guid)
-                UE.Remove(b.Guid)
+                if UE.IsImportant(b.Guid) and not b.Entity.PartyMember then
+                    Osi.TeleportTo(b.Guid, C.NPCCharacters.Jergal, "", 1, 1, 1, 1, 0)
+                else
+                    UE.Remove(b.Guid)
+                end
             end
         end)
     end
 
-    for _, v in pairs(toBlockUse) do
-        L.Debug("Blocking use", v.Guid)
-        v.Entity.ServerItem.CanUse = false
+    local objects = UT.Filter(nearby, function(v)
+        return v.Entity.ServerItem and not Item.IsOwned(v.Guid)
+    end)
+    for _, batch in pairs(UT.Batch(objects, math.ceil(#objects / 5))) do
+        Schedule(function()
+            for _, b in pairs(batch) do
+                if b.Entity.ServerItem then
+                    if b.Entity.ServerItem.IsLadder or b.Entity.ServerItem.IsDoor or b.Entity.GameplayLight then
+                        b.Entity.ServerItem.CanBePickedUp = false
+                        b.Entity.ServerItem.CanBeMoved = false
+                        if b.Entity.Health then
+                            b.Entity.Health.Hp = 999
+                            b.Entity.Health.MaxHp = 999
+                            b.Entity:Replicate("Health")
+                        end
+                    elseif b.Entity.Health then
+                        UE.Remove(b.Guid)
+                    end
+                end
+            end
+        end)
     end
+
+    -- Osi.ClearTag(v.Guid, "867f3a1e-1e4b-48c2-869e-343415231727")
+    -- Osi.ClearTag(v.Guid, "f0020818-86f1-4ee9-a5a9-9ace9ecc9010")
+    -- Osi.Resurrect(v.Guid)
+    -- Osi.SetHitpointsPercentage(v.Guid, 100)
+    -- L.Dump(Osi.IsDestroyed(v.Guid))
 end

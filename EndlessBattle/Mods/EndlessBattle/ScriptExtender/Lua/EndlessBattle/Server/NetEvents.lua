@@ -154,6 +154,18 @@ Event.On("ScenarioStarted", function()
     end)
 end)
 
+Event.On("ScenarioRoundStarted", function()
+    Schedule(function()
+        Net.Send("SyncState", PersistentVars)
+    end)
+end)
+
+Event.On("ScenarioEnemyKilled", function()
+    Schedule(function()
+        Net.Send("SyncState", PersistentVars)
+    end)
+end)
+
 Event.On("ScenarioCombatStarted", function()
     Schedule(function()
         Net.Send("SyncState", PersistentVars)

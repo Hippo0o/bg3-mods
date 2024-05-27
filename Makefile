@@ -15,7 +15,10 @@ fix-permissions:
 	chown -R $(UID) $(MOD_SUBDIR)
 
 sync-files:
-	while sleep 0.1; do fd . | entr -d rsync --verbose -avc --copy-links --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/." ; done
+	@inotifywait -m -r -e modify,create,delete . | \
+	while read path action file; do \
+		rsync --verbose -avc --copy-links --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/."; \
+	done
 
 copy:
 	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/EndlessBattle/."

@@ -9,6 +9,7 @@ Mod.PersistentVarsTemplate = {
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = S,
+    LastScenario = nil,
     RogueScore = 0,
     GUIOpen = false,
     Stats = {
@@ -29,7 +30,7 @@ DefaultConfig = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = true, -- more continues battle between rounds at the cost of cheesy out of combat strats
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
-    BypassStoryAlways = false, -- always skip dialogues, combat and interactions even if no scenario is active
+    BypassStoryAlways = true, -- always skip dialogues, combat and interactions even if no scenario is active
     LootIncludesCampSlot = false, -- include camp clothes in item lists
     Debug = false,
     RandomizeSpawnOffset = 3,
@@ -98,20 +99,22 @@ GameState.OnSave(function()
     end
 end)
 
-GameState.OnSessionLoaded(function()
+GameState.OnLoad(function()
     External.LoadConfig()
 
-    Async.Run(function() -- runs on OnLoad instead of OnSessionLoaded
-        if PersistentVars.Active == nil then
-            GameMode.AskOnboarding()
-        end
+    if PersistentVars.Active == nil then
+        GameMode.AskOnboarding()
+    end
 
-        S = PersistentVars.Scenario
-        if S ~= nil then
-            Scenario.RestoreFromState(S)
-        end
-    end)
-end)
+    if PersistentVars.Active then
+        Event.Trigger("ModActive")
+    end
+
+    S = PersistentVars.Scenario
+    if S ~= nil then
+        Scenario.RestoreFromState(S)
+    end
+end, true)
 
 GameState.OnLoad(IfActive(function()
     if PersistentVars.GUIOpen then
@@ -132,6 +135,7 @@ Event.On("ModActive", function()
         Player.Notify(__("Endless Battle is now active."), true)
     end
     PersistentVars.Active = true
+    Net.Send("ModActive")
 end)
 
 Event.On("ModDeactive", function()
