@@ -134,7 +134,10 @@ Event.On("ModActive", function()
     if not PersistentVars.Active then
         Player.Notify(__("Endless Battle is now active."), true)
     end
+
     PersistentVars.Active = true
+
+    -- client only listens once for this event
     Net.Send("ModActive")
 end)
 
@@ -149,46 +152,15 @@ Event.On("ModDeactive", function()
     end
 end)
 
+-- collect stats
 Event.On("ScenarioLoot", function(_, loot)
     for _, item in ipairs(loot) do
         table.insert(PersistentVars.Stats.Looted, item)
     end
 end)
-
 Event.On("ScenarioEnemyKilled", function(_, enemy)
     table.insert(PersistentVars.Stats.Killed, enemy)
 end)
-
-do
-    local count = 0
-    local reset = Async.Debounce(5000, function()
-        count = 0
-    end)
-    U.Osiris.On(
-        "StatusApplied",
-        4,
-        "after",
-        IfActive(function(object, status, causee, applyStoryActionID)
-            if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
-                --- deactivate automated rogue mode
-            end
-        end)
-    )
-    U.Osiris.On(
-        "StatusRemoved",
-        4,
-        "after",
-        IfActive(function(object, status, causee, applyStoryActionID)
-            if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
-                count = count + 1
-                if count >= 3 then
-                    Net.Send("OpenGUI")
-                end
-                reset()
-            end
-        end)
-    )
-end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --

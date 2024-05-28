@@ -47,7 +47,7 @@ function Object:Teleport(character, withOffset)
         z = self.Enter[3]
     end
 
-    Osi.TeleportToPosition(character, x, y, z, "JC_MapTeleport", 1, 1, 1)
+    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
 end
 
 ---@param enemy Enemy

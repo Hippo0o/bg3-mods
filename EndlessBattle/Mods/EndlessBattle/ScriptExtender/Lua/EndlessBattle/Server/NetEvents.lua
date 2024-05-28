@@ -148,45 +148,21 @@ Net.On("SyncState", function(event)
     Net.Respond(event, PersistentVars)
 end)
 
-Event.On("ScenarioStarted", function()
-    Schedule(function()
-        Net.Send("SyncState", PersistentVars)
-    end)
-end)
+do
+    local function broadcastState()
+        Schedule(function()
+            Net.Send("SyncState", PersistentVars)
+        end)
+    end
 
-Event.On("ScenarioRoundStarted", function()
-    Schedule(function()
-        Net.Send("SyncState", PersistentVars)
-    end)
-end)
-
-Event.On("ScenarioEnemyKilled", function()
-    Schedule(function()
-        Net.Send("SyncState", PersistentVars)
-    end)
-end)
-
-Event.On("ScenarioCombatStarted", function()
-    Schedule(function()
-        Net.Send("SyncState", PersistentVars)
-    end)
-end)
-
-Event.On("ScenarioEnded", function()
-    Schedule(function()
-        Net.Send("SyncState", PersistentVars)
-    end)
-end)
-
-Event.On("RogueScoreChanged", function()
-    Net.Send("SyncState", PersistentVars)
-end)
-
-Event.On("ScenarioStopped", function()
-    Schedule(function()
-        Net.Send("SyncState", PersistentVars)
-    end)
-end)
+    Event.On("ScenarioStarted", broadcastState)
+    Event.On("ScenarioRoundStarted", broadcastState)
+    Event.On("ScenarioEnemyKilled", broadcastState)
+    Event.On("ScenarioCombatStarted", broadcastState)
+    Event.On("ScenarioEnded", broadcastState)
+    Event.On("ScenarioStopped", broadcastState)
+    Event.On("RogueScoreChanged", broadcastState)
+end
 
 Net.On("Config", function(event)
     if event:IsHost() then

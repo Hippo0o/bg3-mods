@@ -13,14 +13,11 @@ function Control.Main(tab)
             if not success then
                 Event.Trigger("Error", err)
             end
-            Net.Send("SyncState")
         end)
     end)
 
     Event.On("Stop", function()
-        Net.Request("Stop").After(function()
-            Net.Send("SyncState")
-        end)
+        Net.Request("Stop")
     end)
 
     Event.On("Teleport", function(data)

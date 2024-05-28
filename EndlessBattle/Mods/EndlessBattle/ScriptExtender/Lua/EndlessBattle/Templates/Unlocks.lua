@@ -141,7 +141,7 @@ return {
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
             end
         end,
-        OnInit = function(self) ---@param self Unlock
+        OnLoad = function(self) ---@param self Unlock
             if self.Bought > 0 then
                 self:OnBuy()
             end
@@ -246,6 +246,18 @@ return {
         end,
     },
     {
+        Id = "CurrencyPlus",
+        Name = "We take those\n+100 Currency",
+        Icon = "Action_EndGameAlly_ShadowAdepts",
+        Cost = 0,
+        Amount = 1,
+        Character = false,
+        Requirement = "NEWGAME_PLUS",
+        OnBuy = function(self, character)
+            PersistentVars.Currency = (PersistentVars.Currency or 0) + 100
+        end,
+    },
+    {
         Id = "BuyDeathWard",
         Name = "Death Ward",
         Icon = "Spell_Abjuration_DeathWard",
@@ -259,6 +271,21 @@ return {
             end
         end,
     },
+    {
+        Id = "BuyLootPlus",
+        Name = "More Gamba\nRoll Loot 10x",
+        Icon = "Item_CONT_GEN_Chest_Jewel_B",
+        Cost = 20,
+        Amount = 10,
+        Character = false,
+        OnBuy = function(self, character)
+            local loot = Item.GenerateLoot(10, C.LootRates)
+
+            local x, y, z = Osi.GetPosition(character)
+            Item.SpawnLoot(loot, x, y, z)
+        end,
+    },
+    -- Not working outside END_Main
     -- {
     --     Id = "TransformMindflayer",
     --     Name = "Become a true Mindflayer",

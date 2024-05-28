@@ -26,7 +26,7 @@ end
 ---@field Requirement string|nil
 ---@field Persistent boolean
 ---@field OnBuy fun(self: Unlock)
----@field OnInit fun(self: Unlock)
+---@field OnLoad fun(self: Unlock)
 ---@field Buy fun(self: Unlock)
 local Object = Libs.Class({
     Id = nil,
@@ -41,7 +41,7 @@ local Object = Libs.Class({
     Requirement = nil,
     Persistent = false,
     OnBuy = function() end,
-    OnInit = function() end,
+    OnLoad = function() end,
 })
 
 function Object:Buy(character)
@@ -167,7 +167,7 @@ function Unlock.Sync()
 
         if existing then
             -- TODO check makes sense to call this here
-            PersistentVars.Unlocks[i]:OnInit()
+            PersistentVars.Unlocks[i]:OnLoad()
         end
     end
 
@@ -188,14 +188,15 @@ end
 
 Event.On("ModActive", function()
     Unlock.Sync()
-    GameState.OnLoad(Unlock.Sync)
-end, true)
 
-GameState.OnSave(function()
-    for i, u in ipairs(PersistentVars.Unlocks) do
-        PersistentVars.Unlocks[i] = UT.Clean(u)
-    end
-end)
+    GameState.OnLoad(Unlock.Sync)
+
+    GameState.OnSave(function()
+        for i, u in ipairs(PersistentVars.Unlocks) do
+            PersistentVars.Unlocks[i] = UT.Clean(u)
+        end
+    end)
+end, true)
 
 Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)

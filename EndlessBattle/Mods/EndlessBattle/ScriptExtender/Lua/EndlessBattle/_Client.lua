@@ -28,20 +28,21 @@ GameState.OnLoad(function()
 end, true)
 
 Net.On("ModActive", function(event)
-    local _, toggle, open, close = table.unpack(Require("EndlessBattle/Client/GUI/_Init"))
-    Net.On("OpenGUI", open)
-    Net.On("CloseGUI", close)
-    local toggleWindow = Async.Throttle(100, function()
-        -- only load client code when needed
+    WaitFor(function()
+        return hostChecked
+    end, function()
+        local _, toggle, open, close = table.unpack(Require("EndlessBattle/Client/GUI/_Init"))
 
-        WaitFor(function()
-            return hostChecked
-        end).After(toggle)
-    end)
+        Net.On("OpenGUI", open)
+        Net.On("CloseGUI", close)
 
-    Ext.Events.KeyInput:Subscribe(function(e)
-        if e.Event == "KeyDown" and e.Repeat == false and e.Key == "U" then
-            toggleWindow()
-        end
+        local toggleWindow = Async.Throttle(100, toggle)
+
+        Ext.Events.KeyInput:Subscribe(function(e)
+            -- TODO Add keybinds to config
+            if e.Event == "KeyDown" and e.Repeat == false and e.Key == "U" then
+                toggleWindow()
+            end
+        end)
     end)
 end, true)
