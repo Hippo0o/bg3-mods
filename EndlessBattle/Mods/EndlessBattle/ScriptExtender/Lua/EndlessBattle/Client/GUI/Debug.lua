@@ -25,7 +25,7 @@ function Debug.Main(tab)
         end
 
         stateTree = Components.Tree(state, State)
-    end):Exec()
+    end)
 
     -- section Templates
     local templates = root:AddGroup(__("Templates"))
@@ -38,7 +38,7 @@ function Debug.Main(tab)
         end
 
         templatesTree = Components.Tree(templates, event.Payload)
-    end):Exec({ Payload = {} })
+    end)
     Net.Send("GetTemplates")
 
     -- section Enemies
@@ -61,7 +61,7 @@ function Debug.Enemies(root)
         end
 
         tree = Components.Tree(grp, event.Payload)
-    end):Exec({ Payload = {} })
+    end)
 
     local combo = grp:AddCombo(__("Tier"))
     combo.Options = C.EnemyTier
@@ -88,8 +88,29 @@ function Debug.Items(root)
             tree:Destroy()
         end
 
-        tree = Components.Tree(grp, event.Payload)
-    end):Exec({ Payload = {} })
+        tree = Components.Tree(grp, event.Payload, nil, function(node, key, value)
+            if key == "RootTemplate" then
+                local imageLoaded = false
+
+                node.OnClick = function(v)
+                    if imageLoaded then
+                        return
+                    end
+                    local temp = Ext.Template.GetTemplate(value)
+                    if temp then
+                        node:AddText("   DisplayName = ")
+                        node:AddText(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle)).SameLine = true
+                        node:AddText("   Icon = ")
+                        node:AddImage(temp.Icon).SameLine = true
+                        node:AddText("   Dump = ")
+                        Components.Tree(node, UT.Clean(temp), value)
+                    end
+
+                    imageLoaded = true
+                end
+            end
+        end)
+    end)
 
     local combo = grp:AddCombo(__("Rarity"))
     combo.Options = C.ItemRarity

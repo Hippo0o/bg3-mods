@@ -238,6 +238,9 @@ function Components.Tree(root, tbl, label, onText)
                 addNode(node:AddTree(label), v)
             else
                 node:AddText("   " .. k .. " = " .. tostring(v))
+                if onText then
+                    onText(node, k, v)
+                end
             end
         end
     end
