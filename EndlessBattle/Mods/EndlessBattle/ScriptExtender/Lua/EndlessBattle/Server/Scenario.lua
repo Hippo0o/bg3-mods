@@ -200,31 +200,6 @@ function Action.SpawnRound()
     L.Debug("Enemies queued for spawning.", #toSpawn)
 end
 
-function Action.ResumeCombat()
-    local s = Current()
-    if not s:IsRunning() then
-        L.Error("Scenario has ended.")
-        return
-    end
-
-    s.CombatId = nil
-    Action.StartRound()
-
-    if not s:HasMoreRounds() then
-        return
-    end
-
-    local amount = #s.SpawnedEnemies
-    if amount > 0 then
-        if Config.ForceEnterCombat then
-            Scenario.CombatSpawned()
-        end
-        return
-    end
-
-    Action.ResumeCombat()
-end
-
 function Action.StartRound()
     Current().Round = Current().Round + 1
     Player.Notify(__("Round %d", Current().Round))
@@ -299,7 +274,7 @@ function Action.EnemyRemoved()
     Action.CheckEnded()
 
     if #s.SpawnedEnemies == 0 and s:HasMoreRounds() then
-        Action.ResumeCombat()
+        Scenario.ResumeCombat()
     end
 end
 
@@ -537,6 +512,32 @@ function Scenario.Teleport(uuid)
     Map.TeleportTo(s.Map, uuid, true)
 end
 
+-- TODO check if breaks when used manually
+function Scenario.ResumeCombat()
+    local s = Current()
+    if not s:IsRunning() then
+        L.Error("Scenario has ended.")
+        return
+    end
+
+    s.CombatId = nil
+    Action.StartRound()
+
+    if not s:HasMoreRounds() then
+        return
+    end
+
+    local amount = #s.SpawnedEnemies
+    if amount > 0 then
+        if Config.ForceEnterCombat then
+            Scenario.CombatSpawned()
+        end
+        return
+    end
+
+    Scenario.ResumeCombat()
+end
+
 ---@param specific Enemy|nil
 -- we want to have all enemies on the map in combat
 function Scenario.CombatSpawned(specific)
@@ -705,7 +706,7 @@ U.Osiris.On(
             -- empty round wont progress the combat
             -- manually progress the combat
             if s:HasMoreRounds() and #s:SpawnsForRound() == 0 then
-                Action.ResumeCombat()
+                Scenario.ResumeCombat()
             end
         end
     end)

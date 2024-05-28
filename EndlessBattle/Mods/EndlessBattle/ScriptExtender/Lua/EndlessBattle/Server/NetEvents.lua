@@ -95,6 +95,27 @@ Net.On("Stop", function(event)
     Net.Respond(event, { true })
 end)
 
+Net.On("ToCamp", function(event)
+    if Player.InCombat() then
+        Net.Respond(event, { false, "Cannot teleport while in combat." })
+        return
+    end
+    Player.ReturnToCamp()
+
+    Net.Respond(event, { true })
+end)
+
+Net.On("ResumeCombat", function(event)
+    if Player.InCombat() then
+        Net.Respond(event, { false, "Cannot force next round while in combat." })
+        return
+    end
+
+    Scenario.ResumeCombat()
+
+    Net.Respond(event, { true })
+end)
+
 Net.On("Teleport", function(event)
     local mapName = event.Payload.Map
 
