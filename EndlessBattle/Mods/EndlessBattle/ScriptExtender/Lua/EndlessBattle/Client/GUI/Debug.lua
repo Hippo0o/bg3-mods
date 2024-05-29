@@ -64,12 +64,14 @@ function Debug.Enemies(root)
     end)
 
     local combo = grp:AddCombo(__("Tier"))
+    combo.IDContext = U.RandomId()
     combo.Options = C.EnemyTier
     combo.OnChange = function()
         Net.Send("GetEnemies", { Tier = combo.Options[combo.SelectedIndex + 1] })
     end
 
     local btn = grp:AddButton(__("Reset"))
+    btn.IDContext = U.RandomId()
     btn.OnClick = function()
         combo.SelectedIndex = -1
         Net.Send("GetEnemies")
@@ -117,12 +119,14 @@ function Debug.Items(root)
     end)
 
     local combo = grp:AddCombo(__("Rarity"))
+    combo.IDContext = U.RandomId()
     combo.Options = C.ItemRarity
     combo.OnChange = function()
         Net.Send("GetItems", { Rarity = combo.Options[combo.SelectedIndex + 1] })
     end
 
     local btn = grp:AddButton(__("Reset"))
+    btn.IDContext = U.RandomId()
     btn.OnClick = function()
         combo.SelectedIndex = -1
         Net.Send("GetItems")

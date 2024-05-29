@@ -425,14 +425,23 @@ function GameMode.UpdateRogueScore(scenario)
 end
 
 function GameMode.StartNext()
-    if not S then
-        local rogueTemp = UT.Find(Scenario.GetTemplates(), function(v)
-            return v.Name == C.RoguelikeScenario
-        end)
-        if rogueTemp then
-            Scenario.Start(rogueTemp)
-        end
+    if S then
+        return
     end
+
+    local rogueTemp = UT.Find(Scenario.GetTemplates(), function(v)
+        return v.Name == C.RoguelikeScenario
+    end)
+
+    if not rogueTemp then
+        return
+    end
+
+    local maps = UT.Filter(Map.Get(), function(v)
+        return PersistentVars.RogueScore > 20 or v.Region == Player.Region()
+    end)
+
+    Scenario.Start(rogueTemp, maps[U.Random(#maps)])
 end
 
 U.Osiris.On(

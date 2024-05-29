@@ -87,28 +87,28 @@ Components.Conditional(_, function()
     return { Creation.Main(tabs), Debug.Main(tabs) }
 end, "ToggleDebug")
 
-do -- auto hide window
-    local windowVisible = Async.Debounce(1000, function(bool)
-        window.Visible = bool
-    end)
-    -- local windowAlpha = Async.Debounce(100, function(bool)
-    --     if bool then
-    --         window:SetStyle("Alpha", 1)
-    --         window.Visible = bool
-    --     else
-    --         window:SetStyle("Alpha", 0.5)
-    --     end
-    -- end)
-
-    Ext.UI.GetRoot():Subscribe("MouseEnter", function()
-        windowVisible(false)
-        -- windowAlpha(false)
-    end)
-    Ext.UI.GetRoot():Subscribe("MouseLeave", function()
-        windowVisible(true)
-        -- windowAlpha(true)
-    end)
-end
+-- do -- auto hide window
+--     local windowVisible = Async.Debounce(1000, function(bool)
+--         window.Visible = bool
+--     end)
+--     -- local windowAlpha = Async.Debounce(100, function(bool)
+--     --     if bool then
+--     --         window:SetStyle("Alpha", 1)
+--     --         window.Visible = bool
+--     --     else
+--     --         window:SetStyle("Alpha", 0.5)
+--     --     end
+--     -- end)
+--
+--     Ext.UI.GetRoot():Subscribe("MouseEnter", function()
+--         windowVisible(false)
+--         -- windowAlpha(false)
+--     end)
+--     Ext.UI.GetRoot():Subscribe("MouseLeave", function()
+--         windowVisible(true)
+--         -- windowAlpha(true)
+--     end)
+-- end
 
 GameState.OnUnload(function()
     window.Visible = false
