@@ -14,6 +14,11 @@ end
 
 L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 
+local itemBlacklist = {
+    "OBJ_FreezingSphere", -- explodes on pickup
+    "MAG_OfTheShapeshifter_Mask",
+}
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Structures                                         --
@@ -117,12 +122,11 @@ function Item.Objects(rarity, forCombat)
         local stat = Ext.Stats.Get(name)
         local cat = stat.ObjectCategory
 
-        if name:match("^DLC_") then
+        if name:match("^_") or name:match("^DLC_") then
             return false
         end
 
-        -- explodes on pickup
-        if name == "OBJ_FreezingSphere" then
+        if US.Contains(name, itemBlacklist) then
             return false
         end
 
@@ -180,6 +184,11 @@ function Item.Armor(rarity)
         if name:match("^_") or name:match("^DLC_") then
             return false
         end
+
+        if US.Contains(name, itemBlacklist) then
+            return false
+        end
+
         if
             not Config.LootIncludesCampSlot
             and (slot:match("VanityBody") or slot:match("VanityBoots") or slot:match("Underwear"))
@@ -213,6 +222,10 @@ function Item.Weapons(rarity)
         local stat = Ext.Stats.Get(name)
 
         if name:match("^_") or name:match("^DLC_") then
+            return false
+        end
+
+        if US.Contains(name, itemBlacklist) then
             return false
         end
 
@@ -250,9 +263,9 @@ function Item.Cleanup()
     end
 end
 
-function Item.PickupAll(character)
+function Item.PickupAll(character, rarity)
     local items = UT.Map(PersistentVars.SpawnedItems, function(item)
-        return U.UUID.Extract(item.GUID)
+        return U.UUID.Extract(item.GUID) and (rarity == nil or item.Rarity == rarity)
     end)
 
     for _, item in ipairs(items) do
@@ -388,20 +401,20 @@ U.Osiris.On(
     "RequestCanPickup",
     3,
     "after",
-    Async.Throttle(
-        1000,
-        IfActive(function(character, object, requestID) -- avoid recursion
+    Async.Throttle( -- avoid recursion
+        10,
+        IfActive(function(character, object, requestID)
             if UE.IsNonPlayer(character, true) then
                 return
             end
 
-            local items = UT.Map(PersistentVars.SpawnedItems, function(item)
-                return U.UUID.Extract(item.GUID)
+            local item = UT.Find(PersistentVars.SpawnedItems, function(item)
+                return U.UUID.Equals(item.GUID, object)
             end)
 
-            if UT.Contains(items, U.UUID.Extract(object)) then
+            if item then
                 L.Debug("Auto pickup:", object, character)
-                Item.PickupAll(character)
+                Item.PickupAll(character, item.Rarity)
             end
         end)
     )

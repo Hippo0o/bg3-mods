@@ -35,6 +35,10 @@ function Player.InCombat()
     end)
 end
 
+function Player.PickupAll()
+    Item.PickupAll(Player.Host())
+end
+
 local buffering = false
 function Player.Notify(message, instant, ...)
     L.Info("Notify:", message, ...)
