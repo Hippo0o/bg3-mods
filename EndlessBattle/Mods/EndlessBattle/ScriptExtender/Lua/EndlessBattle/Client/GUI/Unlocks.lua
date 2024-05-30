@@ -9,10 +9,6 @@ function ClientUnlock.Main(tab)
         return __("Currency owned: %d   RogueScore: %d", state.Currency, state.RogueScore or 0)
     end, "StateChange")
 
-    Event.On("StateChange", function(state)
-        Event.Trigger("CurrencyChanged", state.Currency or 0)
-    end):Exec(State)
-
     Event.ChainOn("StateChange"):After(function(self, state)
         local unlocks = state.Unlocks
         if UT.Size(unlocks) == 0 then
@@ -125,6 +121,8 @@ function ClientUnlock.Tile(root, unlock)
             end
         end
 
+        grp:AddDummy(1, 2)
+
         local cond = Components.Conditional(grp, function()
             if unlock.Character then
                 return ClientUnlock.BuyChar(grp, unlock)
@@ -133,6 +131,8 @@ function ClientUnlock.Tile(root, unlock)
             return ClientUnlock.Buy(grp, unlock)
         end)
         cond.Update(unlock.Unlocked)
+
+        grp:AddDummy(1, 2)
 
         Event.On("StateChange", function(state)
             for _, new in pairs(state.Unlocks) do

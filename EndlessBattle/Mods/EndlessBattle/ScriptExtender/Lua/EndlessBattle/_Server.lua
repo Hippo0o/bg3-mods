@@ -12,6 +12,18 @@ Mod.PersistentVarsTemplate = {
     LastScenario = nil,
     RogueScore = 0,
     GUIOpen = false,
+    LootFilter = {
+        Object = UT.Map(C.ItemRarity, function(v, k)
+            return true, v
+        end),
+        Armor = UT.Map(C.ItemRarity, function(v, k)
+            return true, v
+        end),
+        Weapon = UT.Map(C.ItemRarity, function(v, k)
+            return true, v
+        end),
+    },
+
     Stats = {
         Looted = {},
         Killed = {},
@@ -83,7 +95,7 @@ GameState.OnSave(function()
     PersistentVars.Scenario = S
 
     for obj, _ in pairs(PersistentVars.SpawnedEnemies) do
-        if not Ext.Entity.Get(obj):IsAlive() then
+        if not Ext.Entity.Get(obj) then
             L.Debug("Cleaning up SpawnedEnemies", obj)
             PersistentVars.SpawnedEnemies[obj] = nil
         end
@@ -309,7 +321,7 @@ do
         end
 
         WaitUntil(function()
-            return e:IsSpawned() and e:Entity():IsAlive()
+            return e:IsSpawned() and e:Entity()
         end, function()
             L.Dump(e, e:Entity().ServerCharacter)
             e:Combat()

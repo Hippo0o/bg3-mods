@@ -247,7 +247,7 @@ return {
     },
     {
         Id = "CurrencyPlus",
-        Name = "We take those\n+100 Currency",
+        Name = "+100 Currency",
         Icon = "Action_EndGameAlly_ShadowAdepts",
         Cost = 0,
         Amount = 1,
@@ -273,7 +273,7 @@ return {
     },
     {
         Id = "BuyLootPlus",
-        Name = "More Gamba\nRoll Loot 10x",
+        Name = "More Gamba - Roll Loot 10x",
         Icon = "Item_CONT_GEN_Chest_Jewel_A",
         Cost = 20,
         Amount = 10,

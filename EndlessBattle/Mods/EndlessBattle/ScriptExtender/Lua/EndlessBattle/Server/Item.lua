@@ -16,7 +16,13 @@ L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 
 local itemBlacklist = {
     "OBJ_FreezingSphere", -- explodes on pickup
-    "MAG_OfTheShapeshifter_Mask",
+    "MAG_OfTheShapeshifter_Mask", -- DLC mask
+    "ARM_Breastplate_Body_Githyanki", -- template invalid
+    "LOW_RamazithsTower_Nightsong_Silver_Shield", -- %%% in name
+    "TWN_TollCollector_", -- useless
+    "WPN_KingsKnife", -- its common bro
+    "_Destroyed$", -- junk
+    "_REF$", -- junk
 }
 
 -------------------------------------------------------------------------------------------------
@@ -263,17 +269,26 @@ function Item.Cleanup()
     end
 end
 
-function Item.PickupAll(character, rarity)
-    local items = UT.Map(PersistentVars.SpawnedItems, function(item)
-        return U.UUID.Extract(item.GUID) and (rarity == nil or item.Rarity == rarity)
-    end)
+function Item.DestroyAll(rarity, type)
+    for guid, item in pairs(PersistentVars.SpawnedItems) do
+        if item.Rarity == rarity and not Item.IsOwned(item.GUID) and item.Type == type then
+            UE.Remove(guid)
+            PersistentVars.SpawnedItems[guid] = nil
+        end
+    end
+end
 
-    for _, item in ipairs(items) do
-        if not Item.IsOwned(item) then
-            Osi.ToInventory(item, character)
+function Item.PickupAll(character, rarity, type)
+    for _, item in pairs(PersistentVars.SpawnedItems) do
+        if
+            not Item.IsOwned(item.GUID)
+            and (type == nil or item.Type == type)
+            and (rarity == nil or item.Rarity == rarity)
+        then
+            Osi.ToInventory(item.GUID, character)
             Schedule(function()
-                if Item.IsOwned(item) then
-                    PersistentVars.SpawnedItems[item] = nil
+                if Item.IsOwned(item.GUID) then
+                    PersistentVars.SpawnedItems[item.GUID] = nil
                 end
             end)
         end
@@ -331,7 +346,7 @@ function Item.GenerateLoot(rolls, lootRates)
             sum = sum + rate
             add(fixed, r, rate)
         end
-        add(fixed, "Nothing", math.ceil(sum / 2)) -- make a chance to get nothing
+        add(fixed, "Nothing", math.ceil(sum / 4)) -- make a chance to get nothing
     end
 
     local bonusRarities = {}
@@ -414,7 +429,7 @@ U.Osiris.On(
 
             if item then
                 L.Debug("Auto pickup:", object, character)
-                Item.PickupAll(character, item.Rarity)
+                Player.PickupAll()
             end
         end)
     )

@@ -32,7 +32,6 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
     elseif (e.FromState == "Running" or e.FromState == "Idle") and e.ToState == "UnloadLevel" then
         Event.Trigger(M.EventUnload)
     elseif e.FromState == "UnloadSession" and e.ToState == "LoadSession" then
-        -- only on server between bg3se::ExtensionStateBase::LuaResetInternal(): LUA VM reset
         Event.Trigger(M.EventUnloadSession)
     elseif e.FromState == "UnloadLevel" and (e.ToState == "LoadLevel" or e.ToState == "Idle") then
         Event.Trigger(M.EventUnloadLevel)
