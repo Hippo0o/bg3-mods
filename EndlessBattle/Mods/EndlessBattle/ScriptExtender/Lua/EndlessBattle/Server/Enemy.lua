@@ -211,7 +211,7 @@ function Object:Modify(keepFaction)
         Osi.SetFaction(self.GUID, C.NeutralFaction)
     end
 
-    WaitFor(function()
+    WaitUntil(function()
         return self:Entity():IsAlive()
     end, function()
         local entity = self:Entity()

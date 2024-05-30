@@ -308,7 +308,7 @@ do
             return
         end
 
-        WaitFor(function()
+        WaitUntil(function()
             return e:IsSpawned() and e:Entity():IsAlive()
         end, function()
             L.Dump(e, e:Entity().ServerCharacter)

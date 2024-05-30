@@ -318,7 +318,7 @@ end
 ---@param func fun()|nil
 ---@return ChainableRunner
 -- check for condition every ~100ms
-function M.WaitFor(cond, func)
+function M.WaitUntil(cond, func)
     local chainable = Runner.Chainable(prio, func)
     local last = 0
 

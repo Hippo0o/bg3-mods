@@ -44,7 +44,7 @@ function Player.Notify(message, instant, ...)
     L.Info("Notify:", message, ...)
     Net.Send("PlayerNotify", { message, ... })
 
-    WaitFor(function()
+    WaitUntil(function()
         return not buffering or instant
     end).After(function()
         Osi.ShowNotification(Player.Host(), message)
@@ -94,7 +94,7 @@ function Player.TeleportToAct(act)
         end
     end)
 
-    return WaitFor(function()
+    return WaitUntil(function()
         return not teleporting
     end)
 end

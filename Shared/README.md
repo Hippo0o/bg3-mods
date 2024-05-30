@@ -112,7 +112,7 @@ end)
 handle:Unregister()
 
 -- run a function when a condition is met
-Async.WaitFor(function()
+Async.WaitUntil(function()
     return var == true
 end).After(function()
     print("Hello World!")
