@@ -144,7 +144,7 @@ end)
 
 Event.On("ModActive", function()
     if not PersistentVars.Active then
-        Player.Notify(__("Endless Battle is now active."), true)
+        Player.Notify(__("%s is now active.", Mod.Prefix), true)
     end
 
     PersistentVars.Active = true
@@ -155,7 +155,7 @@ end)
 
 Event.On("ModDeactive", function()
     if PersistentVars.Active then
-        Player.Notify(__("Endless Battle is now inactive. Good bye!"), true)
+        Player.Notify(__("%s is now inactive. Good bye!", Mod.Prefix), true)
     end
 
     PersistentVars.Active = false

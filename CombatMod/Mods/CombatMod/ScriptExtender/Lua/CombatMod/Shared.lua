@@ -3,7 +3,7 @@ Mod = Require("Hlib/Mod")
 Mod.Debug = false
 Mod.Dev = false
 Mod.EnableRCE = true
-Mod.Prefix = "Endless Battle"
+Mod.Prefix = string.format("Trials of Tav v%d.%d.%d", Mod.Version.major, Mod.Version.minor, Mod.Version.revision)
 
 ---@type Utils
 local Utils = Require("Hlib/Utils")
@@ -50,15 +50,15 @@ C = {
             Legendary = 1,
         },
         Armor = {
-            Common = 60,
-            Uncommon = 25,
+            Common = 0,
+            Uncommon = 85,
             Rare = 10,
             VeryRare = 5,
             Legendary = 1,
         },
         Weapons = {
-            Common = 60,
-            Uncommon = 25,
+            Common = 0,
+            Uncommon = 85,
             Rare = 10,
             VeryRare = 5,
             Legendary = 1,
@@ -72,7 +72,7 @@ GameState = Require("Hlib/GameState")
 
 ---@type Async
 Async = Require("Hlib/Async")
-WaitUntil = Async.WaitUntil
+WaitFor = Async.WaitFor
 RetryUntil = Async.RetryUntil
 Schedule = Async.Schedule
 Defer = Async.Defer

@@ -34,7 +34,7 @@ end
 function GameMode.AskOnboarding()
     PersistentVars.Active = false
 
-    return Player.AskConfirmation("Welcome to Endless Battle! Start playing?")
+    return Player.AskConfirmation("Welcome to %s! Start playing?", Mod.Prefix)
         .After(function(confirmed)
             if not confirmed then
                 return

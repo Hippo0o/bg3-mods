@@ -15,7 +15,7 @@ Event.On("WindowOpened", function()
 end)
 
 ---@type ExtuiWindow
-local window = Ext.IMGUI.NewWindow("Endless Battle - " .. __("Press %s to toggle window.", "U"))
+local window = Ext.IMGUI.NewWindow(Mod.Prefix .. " - " .. __("Press %s to toggle window.", "U"))
 
 L.Warn("Window opened.", "Support is currently in an experimental state.", "DX11 is known to cause issues.")
 L.Warn("If the window is not visible, make sure to update to the latest version of Script Extender.")
