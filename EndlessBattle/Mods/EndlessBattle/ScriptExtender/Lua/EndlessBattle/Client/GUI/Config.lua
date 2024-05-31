@@ -7,147 +7,159 @@ function Config.Main(tab)
 
     Net.Send("Config")
 
-    local c8 =
-        Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
+    Components.Layout(root, 1, 1, function(layout)
+        layout.Table.ScrollY = true
+        local root = layout.Cells[1][1]
 
-    local c6 = Config.Checkbox(
-        root,
-        "Spawn Items At Player",
-        "items will spawn at the current player's position instead the maps entry point",
-        "SpawnItemsAtPlayer"
-    )
+        local c8 = Config.Checkbox(
+            root,
+            "Play Roguelike Mode",
+            "get continuesly harder battles automatically",
+            "RoguelikeMode"
+        )
 
-    ---@type ExtuiCheckbox
-    local c2 = Config.Checkbox(
-        root,
-        "Bypass Story",
-        "skip dialogues, combat and interactions that aren't related to a scenario",
-        "BypassStory"
-    )
+        local c6 = Config.Checkbox(
+            root,
+            "Spawn Items At Player",
+            "items will spawn at the current player's position instead the maps entry point",
+            "SpawnItemsAtPlayer"
+        )
 
-    local c3 = Config.Checkbox(
-        root,
-        "Always Bypass Story",
-        "always skip dialogues, combat and interactions even if no scenario is active",
-        "BypassStoryAlways"
-    )
+        ---@type ExtuiCheckbox
+        local c2 = Config.Checkbox(
+            root,
+            "Bypass Story",
+            "skip dialogues, combat and interactions that aren't related to a scenario",
+            "BypassStory"
+        )
 
-    local c4 = Config.Checkbox(
-        root,
-        "Force Enter Combat",
-        "more continues battle between rounds at the cost of cheesy out of combat strats",
-        "ForceEnterCombat"
-    )
+        local c3 = Config.Checkbox(
+            root,
+            "Always Bypass Story",
+            "always skip dialogues, combat and interactions even if no scenario is active",
+            "BypassStoryAlways"
+        )
 
-    local c5 = Config.Slider(
-        root,
-        "Randomize Spawn Offset",
-        "randomize spawn position for more varied encounters (too high may cause issues)",
-        "RandomizeSpawnOffset",
-        0,
-        20
-    )
+        local c4 = Config.Checkbox(
+            root,
+            "Force Enter Combat",
+            "more continues battle between rounds at the cost of cheesy out of combat strats",
+            "ForceEnterCombat"
+        )
 
-    local c7 = Config.Slider(
-        root,
-        "Exp Multiplier",
-        "multiplies the experience gained by killing enemies",
-        "ExpMultiplier",
-        1,
-        10
-    )
+        local c5 = Config.Slider(
+            root,
+            "Randomize Spawn Offset",
+            "randomize spawn position for more varied encounters (too high may cause issues)",
+            "RandomizeSpawnOffset",
+            0,
+            20
+        )
 
-    local c1 = Config.Checkbox(root, "Enable Debug", "some more info in the console and other debug features", "Debug")
-    c1.Checked = Mod.Debug
+        local c7 = Config.Slider(
+            root,
+            "Exp Multiplier",
+            "multiplies the experience gained by killing enemies",
+            "ExpMultiplier",
+            1,
+            10
+        )
 
-    local text = ""
-    local function showStatus(msg, append)
-        if append then
-            text = text .. " " .. msg
-        else
-            text = msg
+        local c1 =
+            Config.Checkbox(root, "Enable Debug", "some more info in the console and other debug features", "Debug")
+        c1.Checked = Mod.Debug
+
+        local text = ""
+        local function showStatus(msg, append)
+            if append then
+                if not text:match(msg) then
+                    text = text .. " " .. msg
+                end
+            else
+                text = msg
+            end
+
+            Event.Trigger("Success", text)
         end
 
-        Event.Trigger("Success", text)
-    end
-
-    Net.On("Config", function(event)
-        Event.Trigger("ConfigChange", event.Payload)
-    end)
-
-    Event.On("ConfigChange", function(config)
-        showStatus("Config updated", true)
-
-        Mod.Debug = config.Debug
-        c1.Checked = config.Debug
-        c2.Checked = config.BypassStory
-        c3.Checked = config.BypassStoryAlways
-        c4.Checked = config.ForceEnterCombat
-        c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
-        c6.Checked = config.SpawnItemsAtPlayer
-        c7.Value = { config.ExpMultiplier, 0, 0, 0 }
-        c8.Checked = config.RoguelikeMode
-
-        Event.Trigger("ToggleDebug", config.Debug)
-    end)
-
-    if not IsHost then
-        return
-    end
-
-    -- buttons
-    root:AddSeparator()
-    local btn = root:AddButton(__("Persist Config"))
-    btn.OnClick = function()
-        showStatus("Persisting config...")
-
-        Net.Send("Config", {
-            Debug = c1.Checked,
-            BypassStory = c2.Checked,
-            BypassStoryAlways = c3.Checked,
-            ForceEnterCombat = c4.Checked,
-            RandomizeSpawnOffset = c5.Value[1],
-            SpawnItemsAtPlayer = c6.Checked,
-            ExpMultiplier = c7.Value[1],
-            RoguelikeMode = c8.Checked,
-            Persist = true,
-        })
-    end
-
-    local btn = root:AddButton(__("Reset Config"))
-    btn.SameLine = true
-    btn.OnClick = function()
-        showStatus("Resetting config...")
-
-        Net.Send("Config", { Reset = true })
-    end
-
-    local btn = root:AddButton(__("Default Config"))
-    btn.SameLine = true
-    btn.OnClick = function()
-        showStatus("Default config...")
-
-        Net.Send("Config", { Default = true })
-    end
-
-    Event.On("UpdateConfig", function(config)
-        Net.Send("Config", config)
-
-        showStatus("Updating config...")
-    end)
-
-    root:AddSeparator()
-    local btn = root:AddButton(__("Reset Templates"))
-    btn.OnClick = function()
-        showStatus("Resetting templates...")
-        Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true }).After(function(event)
-            Net.Send("GetTemplates")
-            Net.Send("GetSelection")
-
-            showStatus("Templates reset", true)
+        Net.On("Config", function(event)
+            Event.Trigger("ConfigChange", event.Payload)
         end)
-    end
-    root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true
+
+        Event.On("ConfigChange", function(config)
+            showStatus("Config updated", true)
+
+            Mod.Debug = config.Debug
+            c1.Checked = config.Debug
+            c2.Checked = config.BypassStory
+            c3.Checked = config.BypassStoryAlways
+            c4.Checked = config.ForceEnterCombat
+            c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
+            c6.Checked = config.SpawnItemsAtPlayer
+            c7.Value = { config.ExpMultiplier, 0, 0, 0 }
+            c8.Checked = config.RoguelikeMode
+
+            Event.Trigger("ToggleDebug", config.Debug)
+        end)
+
+        if not IsHost then
+            return
+        end
+
+        -- buttons
+        root:AddSeparator()
+        local btn = root:AddButton(__("Persist Config"))
+        btn.OnClick = function()
+            showStatus("Persisting config...")
+
+            Net.Send("Config", {
+                Debug = c1.Checked,
+                BypassStory = c2.Checked,
+                BypassStoryAlways = c3.Checked,
+                ForceEnterCombat = c4.Checked,
+                RandomizeSpawnOffset = c5.Value[1],
+                SpawnItemsAtPlayer = c6.Checked,
+                ExpMultiplier = c7.Value[1],
+                RoguelikeMode = c8.Checked,
+                Persist = true,
+            })
+        end
+
+        local btn = root:AddButton(__("Reset Config"))
+        btn.SameLine = true
+        btn.OnClick = function()
+            showStatus("Resetting config...")
+
+            Net.Send("Config", { Reset = true })
+        end
+
+        local btn = root:AddButton(__("Default Config"))
+        btn.SameLine = true
+        btn.OnClick = function()
+            showStatus("Default config...")
+
+            Net.Send("Config", { Default = true })
+        end
+
+        Event.On("UpdateConfig", function(config)
+            Net.Send("Config", config)
+
+            showStatus("Updating config...")
+        end)
+
+        root:AddSeparator()
+        local btn = root:AddButton(__("Reset Templates"))
+        btn.OnClick = function()
+            showStatus("Resetting templates...")
+            Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true }).After(function(event)
+                Net.Send("GetTemplates")
+                Net.Send("GetSelection")
+
+                showStatus("Templates reset", true)
+            end)
+        end
+        root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true
+    end)
 end
 
 function Config.Checkbox(root, label, desc, field, onChange)

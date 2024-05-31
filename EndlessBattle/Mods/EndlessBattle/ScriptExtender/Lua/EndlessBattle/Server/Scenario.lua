@@ -214,8 +214,10 @@ function Action.StartRound()
 end
 
 function Action.NotifyStarted()
+    local id = tostring(S)
+
     return RetryUntil(function(self)
-        if not S then
+        if tostring(S) ~= id then
             self:Clear()
             return
         end
@@ -243,8 +245,10 @@ function Action.MapEntered()
 
     local x, y, z = Player.Pos()
     Action.ClearArea()
+
+    local id = tostring(S)
     RetryUntil(function(self, tries)
-        if S == nil then -- scenario stopped
+        if tostring(S) ~= id then -- scenario stopped
             self:Clear()
             return
         end

@@ -54,7 +54,7 @@ function M.Translate(text, version)
 
     if M.Translations[key] == nil or Mod.Dev then
         local stack = Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
-            return not line:match("stack traceback:") and not line:match("Hlib/Localization.lua")
+            return not line:match("stack traceback:") and not line:match("Hlib/Localization.lua") and not line:match("(...tail calls...)")
         end)
 
         M.Translations[key] = Localization.Init({

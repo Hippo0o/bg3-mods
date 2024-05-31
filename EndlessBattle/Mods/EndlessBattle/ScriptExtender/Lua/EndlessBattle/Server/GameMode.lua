@@ -468,6 +468,13 @@ Event.On("RogueModeChanged", function(bool)
     end
 end)
 
+Event.On(
+    "ScenarioStopped",
+    ifRogueLike(function(scenario)
+        Schedule(GameMode.StartNext)
+    end)
+)
+
 Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then
         GameMode.UpdateRogueScore(scenario)

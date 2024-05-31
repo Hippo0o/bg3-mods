@@ -13,9 +13,6 @@ function Creation.Main(tab)
         local pb = root:AddButton(__("Pos"))
         pb.SameLine = true
 
-        local ca = root:AddButton(__("Clear Area"))
-        ca.SameLine = true
-
         local pi = root:AddInputText(__("Pos"))
         pi.IDContext = U.RandomId()
         pi.Text = "0, 0, 0"
@@ -37,10 +34,6 @@ function Creation.Main(tab)
                 posBox.Text = posBox.Text .. string.format("%s: %s, %s, %s", region, x, y, z) .. "\n"
                 pi.Text = string.format("%s, %s, %s", x, y, z)
             end)
-        end
-
-        ca.OnClick = function()
-            Net.Send("KillNearby")
         end
 
         ping.OnClick = function()

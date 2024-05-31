@@ -117,12 +117,12 @@ function Player.ReturnToCamp()
     if Player.Region() == "END_Main" then
         -- act 1 seems to load fastest
         return Player.TeleportToAct("act1").After(function()
-            Osi.PROC_Camp_ForcePlayersToCamp()
+            Osi.PROC_Camp_TeleportAllToCamp()
             return true
         end)
     end
 
-    Osi.PROC_Camp_ForcePlayersToCamp()
+    Osi.PROC_Camp_TeleportAllToCamp()
     return Schedule()
 end
 

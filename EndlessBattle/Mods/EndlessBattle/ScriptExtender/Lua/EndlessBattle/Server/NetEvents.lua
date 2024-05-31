@@ -78,26 +78,26 @@ Net.On("Start", function(event)
     end)
 
     if template == nil then
-        Net.Respond(event, { false, "Scenario not found." })
+        Net.Respond(event, { false, __("Scenario not found.") })
         return
     end
     if mapName and map == nil then
-        Net.Respond(event, { false, "Map not found." })
+        Net.Respond(event, { false, __("Map not found.") })
         return
     end
 
     Scenario.Start(template, map)
-    Net.Respond(event, { true })
+    Net.Respond(event, { true, __("Scenario %s started.", template.Name) })
 end)
 
 Net.On("Stop", function(event)
     Scenario.Stop()
-    Net.Respond(event, { true })
+    Net.Respond(event, { true, __("Scenario stopped.") })
 end)
 
 Net.On("ToCamp", function(event)
     if Player.InCombat() and not Mod.Debug then
-        Net.Respond(event, { false, "Cannot teleport while in combat." })
+        Net.Respond(event, { false, __("Cannot teleport while in combat.") })
         return
     end
     Player.ReturnToCamp()
@@ -107,7 +107,7 @@ end)
 
 Net.On("ResumeCombat", function(event)
     if Player.InCombat() and not Mod.Debug then
-        Net.Respond(event, { false, "Cannot force next round while in combat." })
+        Net.Respond(event, { false, __("Cannot force next round while in combat.") })
         return
     end
 
@@ -124,12 +124,12 @@ Net.On("Teleport", function(event)
     end)
 
     if map == nil then
-        Net.Respond(event, { false, "Map not found." })
+        Net.Respond(event, { false, __("Map not found.") })
         return
     end
 
     if event.Payload.Restrict and Player.InCombat() and not Mod.Debug then
-        Net.Respond(event, { false, "Cannot teleport while in combat." })
+        Net.Respond(event, { false, __("Cannot teleport while in combat.") })
         return
     end
 
@@ -162,7 +162,7 @@ Net.On("PingSpawns", function(event)
         return v.Name == mapName
     end)
     if map == nil then
-        Net.Respond(event, { false, "Map not found." })
+        Net.Respond(event, { false, __("Map not found.") })
         return
     end
 
@@ -179,6 +179,18 @@ local function broadcastState()
         Net.Send("SyncState", PersistentVars)
     end)
 end
+
+local function broadcastConfig()
+    Schedule(function()
+        local c = UT.DeepClone(Config)
+        c.RoguelikeMode = PersistentVars.RogueModeActive
+        c.Debug = Mod.Debug
+
+        Net.Send("Config", c)
+    end)
+end
+
+Event.On("RogueModeChanged", broadcastConfig)
 
 Event.On("ScenarioStarted", broadcastState)
 Event.On("ScenarioRoundStarted", broadcastState)
@@ -215,11 +227,7 @@ Net.On("Config", function(event)
         end
     end
 
-    local c = UT.DeepClone(Config)
-    c.RoguelikeMode = PersistentVars.RogueModeActive
-    c.Debug = Mod.Debug
-
-    Net.Respond(event, c)
+    broadcastConfig()
 end)
 
 Net.On("KillNearby", function(event)
