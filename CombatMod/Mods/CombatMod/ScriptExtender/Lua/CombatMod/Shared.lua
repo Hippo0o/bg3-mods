@@ -4,6 +4,7 @@ Mod.Debug = false
 Mod.Dev = false
 Mod.EnableRCE = true
 Mod.Prefix = string.format("Trials of Tav v%d.%d.%d", Mod.Version.major, Mod.Version.minor, Mod.Version.revision)
+Mod.TableKey = "ToT"
 
 ---@type Utils
 local Utils = Require("Hlib/Utils")
@@ -50,15 +51,15 @@ C = {
             Legendary = 1,
         },
         Armor = {
-            Common = 0,
-            Uncommon = 85,
+            Common = 60,
+            Uncommon = 25,
             Rare = 10,
             VeryRare = 5,
             Legendary = 1,
         },
         Weapons = {
-            Common = 0,
-            Uncommon = 85,
+            Common = 60,
+            Uncommon = 25,
             Rare = 10,
             VeryRare = 5,
             Legendary = 1,
@@ -72,7 +73,7 @@ GameState = Require("Hlib/GameState")
 
 ---@type Async
 Async = Require("Hlib/Async")
-WaitFor = Async.WaitFor
+WaitUntil = Async.WaitUntil
 RetryUntil = Async.RetryUntil
 Schedule = Async.Schedule
 Defer = Async.Defer

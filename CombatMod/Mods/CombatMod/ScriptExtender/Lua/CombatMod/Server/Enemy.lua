@@ -1,4 +1,4 @@
-local enemyTemplates = Require("EndlessBattle/Templates/Enemies.lua")
+local enemyTemplates = Require("CombatMod/Templates/Enemies.lua")
 External.File.ExportIfNeeded("Enemies", enemyTemplates)
 
 L.Debug("Enemies loaded", #enemyTemplates)
@@ -211,7 +211,9 @@ function Object:Modify(keepFaction)
         Osi.SetFaction(self.GUID, C.NeutralFaction)
     end
 
-    Defer(100, function()
+    WaitUntil(function()
+        return self:Entity():IsAlive()
+    end, function()
         local entity = self:Entity()
 
         local expMod = Config.ExpMultiplier or 1

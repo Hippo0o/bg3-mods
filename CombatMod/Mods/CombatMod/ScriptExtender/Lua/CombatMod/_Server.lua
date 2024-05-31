@@ -1,4 +1,4 @@
-Require("EndlessBattle/Shared")
+Require("CombatMod/Shared")
 
 ---@type Scenario|nil
 S = nil
@@ -52,7 +52,7 @@ DefaultConfig = {
 Config = UT.DeepClone(DefaultConfig)
 
 External = {}
-Require("EndlessBattle/Server/External")
+Require("CombatMod/Server/External")
 
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)
@@ -75,15 +75,15 @@ function IfActive(func)
     end
 end
 
-Require("EndlessBattle/Server/Player")
-Require("EndlessBattle/Server/Scenario")
-Require("EndlessBattle/Server/Enemy")
-Require("EndlessBattle/Server/Map")
-Require("EndlessBattle/Server/Item")
-Require("EndlessBattle/Server/StoryBypass")
-Require("EndlessBattle/Server/GameMode")
-Require("EndlessBattle/Server/NetEvents")
-Require("EndlessBattle/Server/Unlock")
+Require("CombatMod/Server/Player")
+Require("CombatMod/Server/Scenario")
+Require("CombatMod/Server/Enemy")
+Require("CombatMod/Server/Map")
+Require("CombatMod/Server/Item")
+Require("CombatMod/Server/StoryBypass")
+Require("CombatMod/Server/GameMode")
+Require("CombatMod/Server/NetEvents")
+Require("CombatMod/Server/Unlock")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -182,7 +182,7 @@ end)
 
 do
     local Commands = {}
-    Api = Commands -- Mods.EndlessBattle.Api
+    Api = Commands -- Mods.CombatMod.Api
 
     -- Net.On("Api", function(event)
     --     local fn = event.Payload.Command
@@ -257,9 +257,9 @@ do
         -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
         -- local parts = US.Split(dump, "\n")
         -- for _, part in ipairs(parts) do
-        --     Osi.AddEntryToCustomBook("EndlessBattle", part .. "\n")
+        --     Osi.AddEntryToCustomBook("CombatMod", part .. "\n")
         -- end
-        -- Osi.OpenCustomBookUI(GetHostCharacter(), "EndlessBattle")
+        -- Osi.OpenCustomBookUI(GetHostCharacter(), "CombatMod")
 
         -- Require("Hlib/OsirisEventDebug").Attach()
         -- GameMode.AskUnlockAll()
@@ -388,7 +388,7 @@ do
             return
         end
 
-        L.Info("ID", "Name", "!EB Maps [id]")
+        L.Info("ID", "Name", "!TT Maps [id]")
 
         for i, v in pairs(maps) do
             if id and i == tonumber(id) then
@@ -400,7 +400,7 @@ do
     end
 
     function Commands.Scenarios(id)
-        L.Info("ID", "Name", "!EB Scenarios [id]")
+        L.Info("ID", "Name", "!TT Scenarios [id]")
         for i, v in pairs(Scenario.GetTemplates()) do
             if id and i == tonumber(id) then
                 L.Info(i, v.Name, Ext.DumpExport(v))
@@ -411,9 +411,9 @@ do
     end
 
     function Commands.Start(scenarioId, mapId)
-        L.Info("!EB Scenarios", "List scenarios")
-        L.Info("!EB Maps", "List maps")
-        L.Info("!EB Start [scenarioId] [mapId]")
+        L.Info("!TT Scenarios", "List scenarios")
+        L.Info("!TT Maps", "List maps")
+        L.Info("!TT Start [scenarioId] [mapId]")
         if not scenarioId then
             L.Error("Scenario ID is required.")
             return
@@ -517,7 +517,7 @@ do
         Commands.StoryBypass(0)
     end
 
-    Ext.RegisterConsoleCommand("EB", function(_, fn, ...)
+    Ext.RegisterConsoleCommand("TT", function(_, fn, ...)
         if fn == nil or Commands[fn] == nil then
             L.Dump("Available Commands", UT.Keys(Commands))
             return

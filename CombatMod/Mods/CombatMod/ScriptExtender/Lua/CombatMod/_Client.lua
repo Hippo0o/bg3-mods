@@ -1,4 +1,4 @@
-Require("EndlessBattle/Shared")
+Require("CombatMod/Shared")
 if Ext.IMGUI == nil then
     L.Warn("IMGUI not available.", "Update to Script Extender v16.")
     return
@@ -31,7 +31,7 @@ Net.On("ModActive", function(event)
     WaitUntil(function()
         return hostChecked
     end, function()
-        local _, toggle, open, close = table.unpack(Require("EndlessBattle/Client/GUI/_Init"))
+        local _, toggle, open, close = table.unpack(Require("CombatMod/Client/GUI/_Init"))
 
         Net.On("OpenGUI", open)
         Net.On("CloseGUI", close)

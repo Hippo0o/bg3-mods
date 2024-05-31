@@ -1,3 +1,3 @@
 Ext.Require("Hlib/_Init.lua")
-Ext.Require("EndlessBattle/_Client.lua")
+Ext.Require("CombatMod/_Client.lua")
 

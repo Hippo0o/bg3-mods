@@ -1,4 +1,4 @@
-local scenarioTemplates = Require("EndlessBattle/Templates/Scenarios.lua")
+local scenarioTemplates = Require("CombatMod/Templates/Scenarios.lua")
 External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 
 -------------------------------------------------------------------------------------------------
@@ -156,9 +156,11 @@ function Action.StartCombat()
     -- remove all non-player characters
     Action.ClearArea()
 
-    for _, p in pairs(U.DB.GetPlayers()) do
-        Osi.ForceTurnBasedMode(p, 0)
-    end
+    Schedule(function()
+        for _, p in pairs(UE.GetParty()) do
+            Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 0)
+        end
+    end)
 
     Current().Map:PingSpawns()
 

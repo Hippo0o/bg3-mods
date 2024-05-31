@@ -1,11 +1,11 @@
-Require("EndlessBattle/Client/GUI/Components")
+Require("CombatMod/Client/GUI/Components")
 
-Require("EndlessBattle/Client/GUI/Control")
-Require("EndlessBattle/Client/GUI/Unlocks")
-Require("EndlessBattle/Client/GUI/Creation")
-Require("EndlessBattle/Client/GUI/Config")
-Require("EndlessBattle/Client/GUI/Debug")
-Require("EndlessBattle/Client/GUI/Loot")
+Require("CombatMod/Client/GUI/Control")
+Require("CombatMod/Client/GUI/Unlocks")
+Require("CombatMod/Client/GUI/Creation")
+Require("CombatMod/Client/GUI/Config")
+Require("CombatMod/Client/GUI/Debug")
+Require("CombatMod/Client/GUI/Loot")
 
 Event.On("WindowClosed", function()
     Net.Send("WindowClosed")

@@ -16,8 +16,6 @@ return {
 
         Positions = { 3, 5, 1 },
 
-        Map = "Swamp",
-
         Loot = defaultLoot,
     },
     {
