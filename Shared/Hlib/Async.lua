@@ -341,7 +341,7 @@ end
 ---@param cond fun(self: Runner, triesLeft: number, time: GameTime): boolean
 ---@param options RetryForOptions|nil
 ---@return ChainableRunner
--- retries every (default: 1000 ms) until condition is met or tries(default: 3) are exhausted
+-- retries every (default: 1000 ms) until condition is met or tries (default: 3) are exhausted
 function M.RetryUntil(cond, options)
     options = options or {}
     local retries = options.retries or 3
