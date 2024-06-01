@@ -23,7 +23,6 @@ Mod.PersistentVarsTemplate = {
             return true, v
         end),
     },
-
     Stats = {
         Looted = {},
         Killed = {},
@@ -278,7 +277,7 @@ do
         -- end
         -- start = new_start + j
         --
-        -- local enemies = Enemy.GenerateEnemyList(templates)
+        -- local enemies = Enemy.GetByTemplateId("0ea356fc-7a6f-4c60-8017-86349e2777ab")
         --
         -- Enemy.TestEnemies(enemies)
 

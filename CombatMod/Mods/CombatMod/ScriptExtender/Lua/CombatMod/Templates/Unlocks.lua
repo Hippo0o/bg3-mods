@@ -134,7 +134,7 @@ return {
         Description = __("Counter the Shadow Curse."),
         Icon = "statIcons_Moonshield",
         Cost = 30,
-        Amount = nil,
+        Amount = 1,
         Character = false,
         OnBuy = function(self, character)
             for _, p in pairs(UE.GetParty()) do

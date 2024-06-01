@@ -15,7 +15,7 @@ fix-permissions:
 	chown -R $(UID) $(MOD_SUBDIR)
 
 sync-files:
-	@inotifywait -m -r -e modify,create,delete . | \
+	@inotifywait -m -r -e modify,create,delete $(MOD_SUBDIR) | \
 	while read path action file; do \
 		rsync --verbose -avc --copy-links --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/."; \
 	done

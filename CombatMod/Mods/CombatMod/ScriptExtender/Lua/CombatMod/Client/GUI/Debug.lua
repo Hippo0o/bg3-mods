@@ -6,70 +6,70 @@ function Debug.Main(tab)
         Event.Trigger("ToggleDebug", Mod.Debug)
     end)
 
-    local root = tab:AddTabItem(__("Debug"))
-    Components.Layout(root, 1, 1, function(layout)
-        layout.Table.ScrollY = true
-        local root = layout.Cells[1][1]
+    local tabRoot = tab:AddTabItem(__("Debug"))
+    local root = tabRoot:AddChildWindow(""):AddGroup("")
+    root.PositionOffset = { 5, 5 }
 
-        root:AddButton(__("Reload")).OnClick = function()
-            Net.Send("SyncState")
-            Net.Send("GetTemplates")
-            Net.Send("GetItems")
-        end
-
-        local ca = root:AddButton(__("Clear Area"))
-        ca.SameLine = true
-        ca.OnClick = function()
-            Net.Send("KillNearby")
-        end
-
-        root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Async.Debounce(1000, function(input)
-            Net.RCE("PersistentVars.RogueScore = %d", input.Value[1]).After(function()
-                Net.Send("SyncState")
-            end)
-        end)
-
-        root:AddInputInt("Currency", State.Currency or 0).OnChange = Async.Debounce(1000, function(input)
-            Net.RCE("PersistentVars.Currency = %d", input.Value[1]).After(function()
-                Net.Send("SyncState")
-            end)
-        end)
-
-        -- section State
-        local state = root:AddGroup(__("State"))
-        state:AddSeparatorText(__("State"))
-
-        local stateTree
-        Event.On("StateChange", function()
-            if stateTree then
-                stateTree:Destroy()
-            end
-
-            stateTree = Components.Tree(state, State)
-        end)
-
-        -- section Templates
-        local templates = root:AddGroup(__("Templates"))
-        templates:AddSeparatorText(__("Templates"))
-
-        local templatesTree
-        Net.On("GetTemplates", function(event)
-            if templatesTree then
-                templatesTree:Destroy()
-            end
-
-            templatesTree = Components.Tree(templates, event.Payload)
-        end)
+    root:AddButton(__("Reload")).OnClick = function()
+        Net.Send("SyncState")
         Net.Send("GetTemplates")
+        Net.Send("GetItems")
+    end
 
-        -- section Enemies
-        Debug.Enemies(root)
+    local ca = root:AddButton(__("Clear Area"))
+    ca.SameLine = true
+    ca.OnClick = function()
+        Net.Send("KillNearby")
+    end
 
-        -- section Items
-        Debug.Items(root)
+    root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Async.Debounce(1000, function(input)
+        Net.RCE("PersistentVars.RogueScore = %d", input.Value[1]).After(function()
+            Net.Send("SyncState")
+        end)
     end)
 
-    return root
+    root:AddInputInt("Currency", State.Currency or 0).OnChange = Async.Debounce(1000, function(input)
+        Net.RCE("PersistentVars.Currency = %d", input.Value[1]).After(function()
+            Net.Send("SyncState")
+        end)
+    end)
+
+    -- section State
+    local state = root:AddGroup(__("State"))
+    state:AddSeparatorText(__("State"))
+
+    local stateTree
+    Event.On("StateChange", function()
+        if stateTree then
+            stateTree:Destroy()
+        end
+
+        stateTree = Components.Tree(state, State)
+    end)
+
+    -- section Templates
+    local templates = root:AddGroup(__("Templates"))
+    templates:AddSeparatorText(__("Templates"))
+
+    local templatesTree
+    Net.On("GetTemplates", function(event)
+        if templatesTree then
+            templatesTree:Destroy()
+        end
+
+        templatesTree = Components.Tree(templates, event.Payload)
+    end)
+    Net.Send("GetTemplates")
+
+    -- section Enemies
+    Debug.Enemies(root)
+
+    -- section Items
+    Debug.Items(root)
+
+    root:AddDummy(1, 2)
+
+    return tabRoot
 end
 
 function Debug.Enemies(root)
@@ -185,6 +185,7 @@ function Debug.Items(root)
                     L.Error("Template not found", item.RootTemplate, item.Name)
                     return false
                 end
+
                 return US.Contains(item.Name, input.Text, true, true)
                     or US.Contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
             end)

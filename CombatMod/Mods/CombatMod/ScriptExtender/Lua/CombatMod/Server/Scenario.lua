@@ -315,7 +315,9 @@ function Action.Failsafe(enemy)
                         return
                     end
 
-                    s.Map:Teleport(e.GUID)
+                    local x, y, z = s.Map:GetSpawn(-1)
+                    Osi.TeleportToPosition(e.GUID, x, y, z, "", 1, 1, 1)
+
                     e:Combat(true)
 
                     return Defer(1000)
