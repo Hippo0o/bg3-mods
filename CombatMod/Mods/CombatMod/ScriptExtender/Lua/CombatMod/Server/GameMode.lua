@@ -395,7 +395,7 @@ function GameMode.UpdateRogueScore(scenario)
 
         Event.Trigger("RogueScoreChanged", prev, score)
 
-        Player.Notify(__("Your score increased: %d -> %d!", prev, score))
+        Player.Notify(__("Your RogueScore increased: %d -> %d!", prev, score))
     end
 
     local baseScore = 5

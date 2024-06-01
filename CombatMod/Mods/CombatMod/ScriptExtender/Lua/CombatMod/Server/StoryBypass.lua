@@ -275,12 +275,15 @@ function StoryBypass.ClearArea(character)
                     if b.Entity.ServerItem.IsLadder or b.Entity.ServerItem.IsDoor or b.Entity.GameplayLight then
                         b.Entity.ServerItem.CanBePickedUp = false
                         b.Entity.ServerItem.CanBeMoved = false
+                        if b.Entity.ServerItem.IsDoor then
+                            Osi.Unlock(b.Guid)
+                        end
                         if b.Entity.Health then
                             b.Entity.Health.Hp = 999
                             b.Entity.Health.MaxHp = 999
                             b.Entity:Replicate("Health")
                         end
-                    elseif b.Entity.Health or b.Entity.ServerItem.CanBePickedUp then
+                    elseif b.Entity.Health or b.Entity.ServerItem.CanBePickedUp or b.Entity.ServerItem.CanUse then -- TODO remove more CanUse objects
                         UE.Remove(b.Guid)
                     end
                 end

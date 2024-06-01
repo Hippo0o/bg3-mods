@@ -519,10 +519,14 @@ function Scenario.Stop()
     Player.Notify(__("Scenario stopped."))
 end
 
-function Scenario.Teleport(uuid)
+Scenario.Teleport = Async.Throttle(3000, function()
     local s = Current()
-    Map.TeleportTo(s.Map, uuid, true)
-end
+    -- TODO teleport party
+
+    for _, character in pairs(U.DB.GetPlayers()) do
+        Map.TeleportTo(s.Map, character)
+    end
+end)
 
 -- TODO check if breaks when used manually
 function Scenario.ResumeCombat()
@@ -583,7 +587,8 @@ function Scenario.CombatSpawned(specific)
             retries = 5,
             interval = 1000,
         }).Catch(ifScenario(function()
-            Action.Failsafe(enemy)
+            -- TODO dominate will break this
+            -- Action.Failsafe(enemy)
         end))
     end
 end
@@ -737,7 +742,7 @@ U.Osiris.On(
             return
         end
 
-        Scenario.Teleport(uuid)
+        Scenario.Teleport()
     end)
 )
 

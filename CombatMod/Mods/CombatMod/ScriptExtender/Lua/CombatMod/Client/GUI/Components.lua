@@ -281,12 +281,12 @@ function Components.Paged(root, list, pageSize)
         bp.OnClick = function()
             if currentPage > 1 then
                 currentPage = currentPage - 1
-                changePage(currentPage)
-                cond.Refresh()
+            else
+                currentPage = math.ceil(#o.List / o.PageSize)
             end
-        end
-        if currentPage == 1 then
-            bp:SetStyle("Alpha", 0.2)
+
+            changePage(currentPage)
+            cond.Refresh()
         end
         bp.SameLine = false
 
@@ -297,14 +297,14 @@ function Components.Paged(root, list, pageSize)
         bn.OnClick = function()
             if currentPage < math.ceil(#o.List / o.PageSize) then
                 currentPage = currentPage + 1
-                changePage(currentPage)
-                cond.Refresh()
+            else
+                currentPage = 1
             end
+
+            changePage(currentPage)
+            cond.Refresh()
         end
         bn.SameLine = true
-        if currentPage == math.ceil(#o.List / o.PageSize) then
-            bn:SetStyle("Alpha", 0.2)
-        end
 
         return { bp, st, bn }
     end)

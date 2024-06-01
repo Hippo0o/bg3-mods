@@ -122,7 +122,9 @@ function Player.ReturnToCamp()
         end)
     end
 
+    -- TODO find another function
     Osi.PROC_Camp_TeleportAllToCamp()
+
     return Schedule()
 end
 

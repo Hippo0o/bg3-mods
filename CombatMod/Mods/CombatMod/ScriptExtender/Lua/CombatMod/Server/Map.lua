@@ -32,20 +32,21 @@ end
 function Object:Teleport(character, withOffset)
     local x, y, z = table.unpack(self.Enter)
 
-    pcall(function()
-        local offset = tonumber(Config.RandomizeSpawnOffset)
-        if offset > 0 and withOffset then
-            x = x + U.Random() * U.Random(-offset, offset)
-            z = z + U.Random() * U.Random(-offset, offset)
-        end
-
-        x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 1)
-    end)
-    if not x or not y or not z then
-        x = self.Enter[1]
-        y = self.Enter[2]
-        z = self.Enter[3]
-    end
+    -- sucks to suck
+    -- pcall(function()
+    --     local offset = tonumber(Config.RandomizeSpawnOffset)
+    --     if offset > 0 and withOffset then
+    --         x = x + U.Random() * U.Random(-offset, offset)
+    --         z = z + U.Random() * U.Random(-offset, offset)
+    --     end
+    --
+    --     x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 1) -- TODO fix dangerous surface
+    -- end)
+    -- if not x or not y or not z then
+    --     x = self.Enter[1]
+    --     y = self.Enter[2]
+    --     z = self.Enter[3]
+    -- end
 
     Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
 end
@@ -110,9 +111,7 @@ end
 function Object:PingSpawns()
     for _, pos in pairs(self.Spawns) do
         local x, y, z = table.unpack(pos)
-        Schedule(function()
-            Osi.RequestPing(x, y, z, "", "")
-        end)
+        Osi.RequestPing(x, y, z, "", "")
     end
 end
 
@@ -154,11 +153,10 @@ end
 
 ---@param map Map
 ---@param character string GUID
----@param withOffset boolean
 ---@return boolean
-function Map.TeleportTo(map, character, withOffset)
+function Map.TeleportTo(map, character)
     if map.Region == Osi.GetRegion(Player.Host()) then
-        Object.Init(map):Teleport(character, withOffset)
+        Object.Init(map):Teleport(character)
 
         if S and U.Equals(map, S.Map) then
             Event.Trigger("ScenarioTeleport", character)
@@ -186,7 +184,7 @@ function Map.TeleportTo(map, character, withOffset)
         Player.Notify(__("Teleporting to different ACT"))
         teleporting.After(function()
             for _, character in pairs(U.DB.GetPlayers()) do
-                Map.TeleportTo(map, character, withOffset)
+                Map.TeleportTo(map, character)
             end
         end)
     end
