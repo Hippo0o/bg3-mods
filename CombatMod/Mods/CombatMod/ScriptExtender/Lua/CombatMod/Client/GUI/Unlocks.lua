@@ -132,8 +132,6 @@ function ClientUnlock.Tile(root, unlock)
         end)
         cond.Update(unlock.Unlocked)
 
-        grp:AddDummy(1, 2)
-
         Event.On("StateChange", function(state)
             for _, new in pairs(state.Unlocks) do
                 if new.Id == unlock.Id then
@@ -180,6 +178,8 @@ function ClientUnlock.Buy(root, unlock)
     end
 
     grp:AddText("").SameLine = true
+
+    grp:AddDummy(1, 2)
 
     return grp
 end
@@ -259,6 +259,8 @@ function ClientUnlock.BuyChar(root, unlock)
     btn.OnClick = function()
         popup:Open()
     end
+
+    grp:AddDummy(1, 2)
 
     return grp
 end

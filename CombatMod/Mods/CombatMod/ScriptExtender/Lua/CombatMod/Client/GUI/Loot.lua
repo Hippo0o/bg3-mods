@@ -2,15 +2,18 @@ Loot = {}
 
 -- TODO UI feedback
 function Loot.Main(tab)
-    local root = tab:AddTabItem(__("Loot"))
+    local root = tab:AddTabItem(__("Loot")):AddChildWindow("")
 
-    root:AddButton(__("Pickup All")).OnClick = function()
+    local btn = root:AddButton(__("Pickup All"))
+    btn.IDContext = U.RandomId()
+    btn.PositionOffset = { 5, 5 }
+    btn.OnClick = function()
         Net.Send("PickupAll")
     end
 
     Components.Layout(root, 1, 1, function(layout)
-        layout.Table.ScrollY = true
-        local root = layout.Cells[1][1]
+        local root = layout.Cells[1][1]:AddGroup("")
+        root.PositionOffset = { 5, 5 }
 
         root:AddSeparatorText(__("Auto-Pickup for Armor"))
         for _, rarity in pairs(C.ItemRarity) do

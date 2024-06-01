@@ -11,10 +11,15 @@ local tt = Libs.TypedTable
 
 External.File = {}
 
-local function filePath(name)
+local function filePath(name, dir)
     if name:sub(-5) ~= ".json" then
         name = name .. ".json"
     end
+
+    if US.Contains(name, { "Enemies", "Maps", "Scenario" }) then
+        name = string.format("v%d.%d/%s", Mod.Version.major, Mod.Version.minor, name)
+    end
+
     return name
 end
 
@@ -23,12 +28,12 @@ function External.File.Exists(name)
 end
 
 function External.File.Import(name)
-    name = filePath(name)
+    local filePath = filePath(name)
 
     if External.File.Exists(name) then
-        local ok, result = pcall(IO.LoadJson, name)
+        local ok, result = pcall(IO.LoadJson, filePath)
         if not ok then
-            L.Error("Failed to parse file.", name, result)
+            L.Error("Failed to parse file.", filePath, result)
             return
         end
 
@@ -41,9 +46,9 @@ function External.File.Export(name, data)
 end
 
 function External.File.ExportIfNeeded(name, data)
-    name = filePath(name)
+    local existing = filePath(name)
 
-    if not External.File.Exists(name) then
+    if not External.File.Exists(existing) then
         External.File.Export(name, data)
     end
 end
