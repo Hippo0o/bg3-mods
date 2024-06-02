@@ -114,30 +114,25 @@ function Player.TeleportToRegion(region)
 end
 
 function Player.TeleportToCamp()
-    local activecamp = U.DB.TryGet("DB_ActiveCamp", 1, nil, 1)[1]
-    if activecamp == nil then
+    local activeCamp = U.DB.TryGet("DB_ActiveCamp", 1, nil, 1)[1]
+    if activeCamp == nil then
         L.Error("No active camp found.")
         return
     end
 
-    local camptrigger = U.DB.TryGet("DB_Camp", 4, { activecamp }, 3)[1]
-    if not camptrigger then
+    local campEntry = U.DB.TryGet("DB_Camp", 4, { activeCamp }, 2)[1]
+    if not campEntry then
         L.Error("No camp trigger found.")
-    end
-
-    if not Ext.Entity.Get(C.NPCCharacters.Jergal).CampPresence then
-        Osi.PROC_GLO_Jergal_MoveToCamp()
+        return
     end
 
     for _, entity in pairs(UE.GetParty()) do
         if not entity.CampPresence then
-            if camptrigger then
-                Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, camptrigger)
-            end
+            Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntry)
 
-            Schedule(function()
-                Osi.TeleportTo(entity.Uuid.EntityUuid, C.NPCCharacters.Jergal, "", 1, 1, 1, 1, 0)
-            end)
+            -- Schedule(function()
+            --     Osi.TeleportTo(entity.Uuid.EntityUuid, C.NPCCharacters.Jergal, "", 1, 1, 1, 1, 0)
+            -- end)
         end
     end
 end

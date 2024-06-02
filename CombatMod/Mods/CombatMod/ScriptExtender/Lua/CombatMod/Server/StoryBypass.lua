@@ -205,9 +205,11 @@ U.Osiris.On(
             return
         end
 
-        if not Ext.Entity.Get(C.NPCCharacters.Jergal).CampPresence then
-            Osi.PROC_GLO_Jergal_MoveToCamp()
-        end
+        Schedule(function()
+            if not Ext.Entity.Get(C.NPCCharacters.Jergal).CampPresence then
+                Osi.PROC_GLO_Jergal_MoveToCamp()
+            end
+        end)
 
         -- workaround for blocked travel
         -- TODO fix this
