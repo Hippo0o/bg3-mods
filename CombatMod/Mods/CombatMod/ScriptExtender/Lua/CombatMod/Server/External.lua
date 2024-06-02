@@ -16,7 +16,7 @@ local function filePath(name, dir)
         name = name .. ".json"
     end
 
-    if US.Contains(name, { "Enemies", "Maps", "Scenario" }) then
+    if US.Contains(name, { "Enemies", "Maps", "Scenarios" }) then
         name = string.format("v%d.%d/%s", Mod.Version.major, Mod.Version.minor, name)
     end
 
@@ -46,9 +46,7 @@ function External.File.Export(name, data)
 end
 
 function External.File.ExportIfNeeded(name, data)
-    local existing = filePath(name)
-
-    if not External.File.Exists(existing) then
+    if not External.File.Exists(name) then
         External.File.Export(name, data)
     end
 end

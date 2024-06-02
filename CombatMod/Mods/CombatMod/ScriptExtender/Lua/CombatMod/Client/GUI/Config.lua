@@ -24,7 +24,7 @@ function Config.Main(tab)
             input.Text = "U"
         end
 
-        Event.Trigger("ToggleKey", input.Text)
+        PersistentVars.ToggleKey = input.Text
     end
     k.Text = PersistentVars.ToggleKey
     k.CharsNoBlank = true
@@ -33,7 +33,7 @@ function Config.Main(tab)
     k.AlwaysOverwrite = true
     k.ItemWidth = 25
 
-    root:AddSeparatorText(__("Global Settings"))
+    root:AddSeparatorText(__("Global Settings - Host only"))
 
     local c8 =
         Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
@@ -179,7 +179,14 @@ function Config.Checkbox(root, label, desc, field, onChange)
     local checkbox = root:AddCheckbox(__(label))
     root:AddText(__(desc))
 
+    local hostValue
+
     checkbox.OnChange = function(ckb)
+        if not IsHost then
+            ckb.Checked = hostValue
+            return
+        end
+
         Event.Trigger("UpdateConfig", { [field] = ckb.Checked })
         if onChange then
             onChange(ckb)
@@ -188,6 +195,7 @@ function Config.Checkbox(root, label, desc, field, onChange)
 
     Event.On("ConfigChange", function(config)
         checkbox.Checked = config[field]
+        hostValue = config[field]
     end)
 
     return checkbox
@@ -198,12 +206,20 @@ function Config.Slider(root, label, desc, field, min, max, onChange)
     local slider = root:AddSliderInt(__(label), 0, min, max)
     root:AddText(__(desc))
 
+    local hostValue
+
     slider.OnChange = Async.Debounce(500, function(sld)
+        if not IsHost then
+            sld.Value = { hostValue, 0, 0, 0 }
+            return
+        end
+
         Event.Trigger("UpdateConfig", { [field] = sld.Value[1] })
     end)
 
     Event.On("ConfigChange", function(config)
         slider.Value = { config[field], 0, 0, 0 }
+        hostValue = config[field]
     end)
 
     return slider

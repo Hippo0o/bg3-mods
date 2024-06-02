@@ -603,35 +603,40 @@ if Ext.IsServer() then
 
     ---@param query string
     ---@param arity number
+    ---@param args table
+    ---@param take number|nil
     ---@return table
-    function M.DB.TryGet(query, arity)
+    function M.DB.TryGet(query, arity, args, take)
+        args = args or {}
         local success, result = pcall(function()
             local db = Osi[query]
             if db and db.Get then
-                return db:Get(table.unpack({}, 1, arity))
+                return db:Get(table.unpack(args, 1, arity))
             end
         end)
 
-        if success then
-            return result
-        else
+        if not success then
             M.Log.Error("Failed to get DB", query, result)
             return {}
         end
+
+        if take then
+            result = M.Table.Map(result, function(v)
+                return v[take]
+            end)
+        end
+
+        return result
     end
 
     ---@return string[] list of avatar characters
     function M.DB.GetAvatars()
-        return M.Table.Map(M.DB.TryGet("DB_Avatars", 1), function(v)
-            return v[1]
-        end)
+        return M.DB.TryGet("DB_Avatars", 1, nil, 1)
     end
 
     ---@return string[] list of playable characters
     function M.DB.GetPlayers()
-        return M.Table.Map(M.DB.TryGet("DB_Players", 1), function(v)
-            return v[1]
-        end)
+        return M.DB.TryGet("DB_Players", 1, nil, 1)
     end
 end
 

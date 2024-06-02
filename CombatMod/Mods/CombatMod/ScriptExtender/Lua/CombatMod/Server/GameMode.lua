@@ -216,7 +216,7 @@ local function ifRogueLike(func)
     end)
 end
 
-function GameMode.GenerateScenario(score)
+function GameMode.GenerateScenario(score, cow)
     -- ChatGPT made this ................................ i made this
     L.Debug("Generate Scenario", score)
 
@@ -244,6 +244,11 @@ function GameMode.GenerateScenario(score)
         { name = C.EnemyTier[5], value = 40, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
         { name = C.EnemyTier[6], value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
+
+    if cow then
+        tiers = { { name = "OX_A", value = 3, amount = 100 } }
+    end
+
     score = score >= tiers[1].value and score or tiers[1].value
 
     -- Weighted random function to bias towards a preferred number of rounds
@@ -484,11 +489,11 @@ Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then
         GameMode.UpdateRogueScore(scenario)
 
-        Player.Notify(__("Teleporting back to camp in %d seconds.", 20), true)
-        local d1 = Defer(10000, function()
+        Player.Notify(__("Teleporting back to camp in %d seconds.", 30), true)
+        local d1 = Defer(20000, function()
             Player.Notify(__("Teleporting back to camp in %d seconds.", 10, true))
         end)
-        local d2 = Defer(20000, function()
+        local d2 = Defer(30000, function()
             Player.PickupAll()
             Player.ReturnToCamp()
         end)
@@ -506,7 +511,19 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function()
-            return GameMode.GenerateScenario(PersistentVars.RogueScore)
+            local lolcow = U.Random() < 0.01
+            if lolcow then
+                local hasOX = Enemy.Find("OX_A")
+                lolcow = hasOX and true or false
+            end
+
+            if lolcow then
+                Defer(1000, function()
+                    Player.Notify(__("You found the secret cow level!"))
+                end)
+            end
+
+            return GameMode.GenerateScenario(PersistentVars.RogueScore, lolcow)
         end,
 
         Loot = C.LootRates,

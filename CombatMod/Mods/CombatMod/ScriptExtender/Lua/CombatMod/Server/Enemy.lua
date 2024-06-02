@@ -211,6 +211,7 @@ function Object:Modify(keepFaction)
         Osi.SetFaction(self.GUID, C.NeutralFaction)
     end
 
+    -- can fail
     WaitUntil(function()
         return self:Entity():IsAlive()
     end, function()

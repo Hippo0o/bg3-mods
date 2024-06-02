@@ -308,21 +308,26 @@ function Action.Failsafe(enemy)
             elseif Osi.IsDead(e.GUID) ~= 1 and Osi.IsInCombat(e.GUID) ~= 1 then
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
+
+                local x, y, z = s.Map:GetSpawn(-1)
+                Osi.TeleportToPosition(e.GUID, x, y, z, "", 1, 1, 1)
+
                 e:Combat(true)
 
-                Defer(1000).After(function()
+                Defer(2000).After(function()
                     if Osi.IsInCombat(e.GUID) == 1 then
                         return
                     end
 
-                    local x, y, z = s.Map:GetSpawn(-1)
-                    Osi.TeleportToPosition(e.GUID, x, y, z, "", 1, 1, 1)
+                    L.Error("Failsafe 2 triggered.", e:GetId(), e.GUID)
 
                     e:Combat(true)
 
-                    return Defer(1000)
+                    return Defer(3000)
                 end).After(function()
                     if Osi.IsInCombat(e.GUID) ~= 1 then
+                        L.Error("Failsafe 3 triggered.", e:GetId(), e.GUID)
+
                         UT.Remove(s.SpawnedEnemies, e)
                         e:Clear()
                     end
@@ -452,7 +457,6 @@ function Scenario.Start(template, map)
 
     scenario.LootRates = template.Loot or C.LootRates
 
-    L.Dump(time)
     local enemyCount = 0
     for round, definitions in pairs(scenario.Timeline) do
         L.Dump("Adding enemies for round.", round, definitions)
@@ -521,7 +525,6 @@ end
 
 Scenario.Teleport = Async.Throttle(3000, function()
     local s = Current()
-    -- TODO teleport party
 
     for _, character in pairs(U.DB.GetPlayers()) do
         Map.TeleportTo(s.Map, character)
@@ -570,6 +573,10 @@ function Scenario.CombatSpawned(specific)
     local target = Player.InCombat() or Player.Host()
     for _, enemy in ipairs(enemies) do
         RetryUntil(function()
+            if not S then
+                return true
+            end
+
             if not enemy:IsSpawned() then
                 return false
             end
@@ -579,7 +586,9 @@ function Scenario.CombatSpawned(specific)
             end
 
             enemy:Combat(Config.ForceEnterCombat)
-            Osi.EnterCombat(enemy.GUID, target)
+            if S.CombatId then -- TODO check if works
+                Osi.PROC_EnterCombatByID(enemy.GUID, S.CombatId)
+            end
 
             return Osi.IsInCombat(enemy.GUID) == 1
         end, {
@@ -587,8 +596,7 @@ function Scenario.CombatSpawned(specific)
             retries = 5,
             interval = 1000,
         }).Catch(ifScenario(function()
-            -- TODO dominate will break this
-            -- Action.Failsafe(enemy)
+            Action.Failsafe(enemy)
         end))
     end
 end
