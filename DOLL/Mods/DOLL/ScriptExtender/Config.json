@@ -1,0 +1,6 @@
+{
+    "RequiredVersion": 17,
+    "ModTable": "DOLL",
+    "FeatureFlags": ["Lua"]
+}
+

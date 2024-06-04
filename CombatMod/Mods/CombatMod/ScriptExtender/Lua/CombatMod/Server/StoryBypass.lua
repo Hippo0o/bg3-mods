@@ -93,10 +93,9 @@ U.Osiris.On(
     4,
     "after",
     ifBypassStory(function(dialog, instanceID, actor, speakerIndex)
-        if dialog:match("^CHA_Crypt_SkeletonRisingCinematic") or actor:match("^CHA_Crypt_SkeletonRisingCinematic") then
-            Osi.PROC_GLO_Jergal_MoveToCamp()
-        end
-
+        -- if dialog:match("^CHA_Crypt_SkeletonRisingCinematic") or actor:match("^CHA_Crypt_SkeletonRisingCinematic") then
+        --     Osi.PROC_GLO_Jergal_MoveToCamp()
+        -- end
         if
             dialog:match("CAMP_")
             or dialog:match("Tadpole")
@@ -104,6 +103,7 @@ U.Osiris.On(
             or dialog:match("InParty")
             or dialog:match("^BHVR_WRLD")
             or dialog:match("^GLO_Avatar")
+            or dialog:match("^UNI_MagicMirror")
         then
             return
         end
