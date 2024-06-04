@@ -1,6 +1,6 @@
 return {
     {
-        Name = "Pre Swamp near Blighted Village",
+        Name = "Swamp (entrance)",
         Region = "WLD_Main_A",
         Enter = { 72.510108947754, 13.5703125, 342.33239746094 },
         Spawns = {
@@ -78,7 +78,7 @@ return {
         },
     },
     {
-        Name = "Goblin Camp entrance",
+        Name = "Goblin Camp (entrance)",
         Region = "WLD_Main_A",
         Enter = { -107.61608886719, 18.390625, 344.26062011719 },
         Spawns = {
@@ -91,7 +91,7 @@ return {
         },
     },
     {
-        Name = "Underdark near Beach",
+        Name = "Underdark (near beach)",
         Region = "WLD_Main_A",
         Enter = { 78.75, 25.068359375, -167.75 },
         Spawns = {
@@ -106,7 +106,7 @@ return {
         },
     },
     {
-        Name = "Underdark Dread Hollow",
+        Name = "Underdark (Dread Hollow)",
         Region = "WLD_Main_A",
         Enter = { -36.05912399292, 25.93359375, -190.44284057617 },
         Spawns = {
@@ -119,7 +119,7 @@ return {
     },
 
     {
-        Name = "Underdark near Selune outpost",
+        Name = "Underdark (near Selune Outpost)",
         Region = "WLD_Main_A",
         Enter = { 149.56359863281, 59.6376953125, -139.54454040527 },
         Spawns = {
@@ -133,7 +133,7 @@ return {
         },
     },
     {
-        Name = "Goblin Camp Ext",
+        Name = "Goblin Camp (exterior)",
         Region = "WLD_Main_A",
         Enter = { -84.605316162109, 10.76171875, 438.62936401367 },
         Spawns = {
@@ -145,7 +145,7 @@ return {
         },
     },
     {
-        Name = "Exterior ruins",
+        Name = "Exterior Ruins",
         Region = "WLD_Main_A",
         Enter = { 285.0, 18.892578125, 336.0 },
         Spawns = {
@@ -212,7 +212,7 @@ return {
         },
     },
     {
-        Name = "Underdark Beach",
+        Name = "Underdark (beach)",
         Region = "WLD_Main_A",
         Enter = { 8.75, 0.0, -204.25 },
         Spawns = {
@@ -292,7 +292,7 @@ return {
         },
     },
     {
-        Name = "Grymforge lava golem area",
+        Name = "Grymforge (lava golem area)",
         Region = "WLD_Main_A",
         Enter = { -604.0, -6.83984375, 215.0 },
         Spawns = {
@@ -334,7 +334,7 @@ return {
         },
     },
     {
-        Name = "mountain pass (creche exterior wilds)",
+        Name = "Mountain Pass (creche exterior wilds)",
         Region = "CRE_Main_A",
         Enter = { -7.0, 16.5126953125, -9.0 },
         Spawns = {
@@ -356,7 +356,7 @@ return {
         },
     },
     {
-        Name = "Rosymorn Monastery (Roof)",
+        Name = "Rosymorn Monastery (roof)",
         Region = "CRE_Main_A",
         Enter = { 68.0, 37.3759765625, 35.0 },
         Spawns = {
@@ -375,7 +375,7 @@ return {
         },
     },
     {
-        Name = "Rosymorn Monastery (Interior outside creche enterance)",
+        Name = "Rosymorn Monastery (interior outside creche enterance)",
         Region = "CRE_Main_A",
         Enter = { 74.0, 7.45703125, 65.0 },
         Spawns = {
@@ -395,34 +395,34 @@ return {
             { 59.486843109131, 6.5283203125, 78.921844482422 },
         },
     },
-    {
-        Name = "Last Light Inn",
-        Region = "SCL_Main_A",
-        Enter = { -76.0, 27.5234375, 144.0 },
-        Spawns = {
-            { -83.138648986816, 27.525390625, 134.19332885742 },
-            { -55.741355895996, 27.5087890625, 131.80215454102 },
-            { -55.25313949585, 27.4931640625, 135.12754821777 },
-            { -55.300354003906, 27.470703125, 140.72969055176 },
-            { -56.416015625, 27.470703125, 147.68644714355 },
-            { -45.75, 27.5107421875, 145.75 },
-            { -45.74324798584, 27.5107421875, 142.71737670898 },
-            { -59.144870758057, 27.470703125, 153.25247192383 },
-            { -61.270847320557, 27.470703125, 153.55918884277 },
-            { -59.205211639404, 27.5087890625, 155.21011352539 },
-            { -79.308502197266, 27.4951171875, 155.30944824219 },
-            { -75.21940612793, 27.521484375, 157.77874755859 },
-            { -72.94620513916, 31.533203125, 136.65328979492 },
-            { -77.777587890625, 31.521484375, 137.62326049805 },
-            { -78.406677246094, 31.521484375, 144.21492004395 },
-            { -74.99169921875, 31.533203125, 151.31257629395 },
-            { -65.75, 31.533203125, 151.25 },
-            { -60.25, 31.56640625, 149.25 },
-            { -54.75, 31.533203125, 143.75 },
-            { -59.484928131104, 31.533203125, 137.10000610352 },
-            { -67.933349609375, 31.533203125, 137.46368408203 },
-        },
-    },
+    -- { -- needs more story bypass work
+    --     Name = "Last Light Inn",
+    --     Region = "SCL_Main_A",
+    --     Enter = { -76.0, 27.5234375, 144.0 },
+    --     Spawns = {
+    --         { -83.138648986816, 27.525390625, 134.19332885742 },
+    --         { -55.741355895996, 27.5087890625, 131.80215454102 },
+    --         { -55.25313949585, 27.4931640625, 135.12754821777 },
+    --         { -55.300354003906, 27.470703125, 140.72969055176 },
+    --         { -56.416015625, 27.470703125, 147.68644714355 },
+    --         { -45.75, 27.5107421875, 145.75 },
+    --         { -45.74324798584, 27.5107421875, 142.71737670898 },
+    --         { -59.144870758057, 27.470703125, 153.25247192383 },
+    --         { -61.270847320557, 27.470703125, 153.55918884277 },
+    --         { -59.205211639404, 27.5087890625, 155.21011352539 },
+    --         { -79.308502197266, 27.4951171875, 155.30944824219 },
+    --         { -75.21940612793, 27.521484375, 157.77874755859 },
+    --         { -72.94620513916, 31.533203125, 136.65328979492 },
+    --         { -77.777587890625, 31.521484375, 137.62326049805 },
+    --         { -78.406677246094, 31.521484375, 144.21492004395 },
+    --         { -74.99169921875, 31.533203125, 151.31257629395 },
+    --         { -65.75, 31.533203125, 151.25 },
+    --         { -60.25, 31.56640625, 149.25 },
+    --         { -54.75, 31.533203125, 143.75 },
+    --         { -59.484928131104, 31.533203125, 137.10000610352 },
+    --         { -67.933349609375, 31.533203125, 137.46368408203 },
+    --     },
+    -- },
     {
         Name = "Shadow Cursed Lands",
         Region = "SCL_Main_A",
@@ -511,29 +511,7 @@ return {
         },
     },
     {
-        Name = "He Who Doesnt Remain",
-        Region = "SCL_Main_A",
-        Enter = { 125.0, 54.6494140625, 106.0 },
-        Spawns = {
-            { 113.57725524902, 55.365234375, 85.78727722168 },
-            { 114.47676849365, 54.6171875, 83.940887451172 },
-            { 115.3836517334, 55.1298828125, 80.292335510254 },
-            { 108.53461456299, 55.9638671875, 87.485534667969 },
-            { 104.79356384277, 55.9189453125, 89.223815917969 },
-            { 101.3540802002, 52.10546875, 98.131118774414 },
-            { 102.7036819458, 52.6103515625, 95.462768554688 },
-            { 97.950401306152, 53.01953125, 90.428482055664 },
-            { 109.78988647461, 52.8193359375, 103.48655700684 },
-            { 111.98503875732, 53.2109375, 107.26051330566 },
-            { 110.17272949219, 54.986328125, 119.08401489258 },
-            { 105.9460067749, 52.224609375, 112.12649536133 },
-            { 102.21774291992, 53.8037109375, 109.62240600586 },
-            { 100.25075531006, 56.0244140625, 107.70000457764 },
-            { 98.353324890137, 57.6669921875, 103.99858093262 },
-        },
-    },
-    {
-        Name = "Rethwin Town Mason Guild",
+        Name = "Rethwin Town (Mason Guild)",
         Region = "SCL_Main_A",
         Enter = { -113.0, 26.056640625, -6.0 },
         Spawns = {
@@ -596,7 +574,7 @@ return {
         },
     },
     {
-        Name = "Gauntlet Of Shar Broken Mirror Room",
+        Name = "Gauntlet Of Shar (broken mirror room)",
         Region = "SCL_Main_A",
         Enter = { -635.0, -25.30859375, -722.0 },
         Spawns = {
@@ -614,7 +592,7 @@ return {
         },
     },
     {
-        Name = "Gauntlet of Shar Mushroom Dance",
+        Name = "Gauntlet of Shar (mushroom dance)",
         Region = "SCL_Main_A",
         Enter = { -817.0, 15.2099609375, -851.0 },
         Spawns = {
@@ -635,7 +613,7 @@ return {
         },
     },
     {
-        Name = "Rethwin town large tree",
+        Name = "Rethwin Town (large tree)",
         Region = "SCL_Main_A",
         Enter = { -151.0, 26.5947265625, -51.0 },
         Spawns = {
@@ -655,7 +633,7 @@ return {
         },
     },
     {
-        Name = "Rethwin town Bar",
+        Name = "Rethwin Town (bar)",
         Region = "SCL_Main_A",
         Enter = { -223.0, 15.3076171875, -77.0 },
         Spawns = {
@@ -678,7 +656,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town Road to baldurs gate barn",
+        Name = "Rethwin Town (road to Baldurs Gate barn)",
         Region = "SCL_Main_A",
         Enter = { -246.0, 31.087890625, -5.0 },
         Spawns = {
@@ -698,7 +676,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town House of Healing Library",
+        Name = "Rethwin Town (House of Healing library)",
         Region = "SCL_Main_A",
         Enter = { -194.0, 41.568359375, 47.0 },
         Spawns = {
@@ -727,7 +705,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town Graveyard Mausoleum",
+        Name = "Rethwin Town (graveyard mausoleum)",
         Region = "SCL_Main_A",
         Enter = { -155.0, 31.529296875, 65.0 },
         Spawns = {
@@ -747,7 +725,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town Tollhouse Roof Party Rager Extravaganza",
+        Name = "Rethwin Town (Tollhouse roof party rager extravaganza)",
         Region = "SCL_Main_A",
         Enter = { -108.0, 35.548828125, -71.0 },
         Spawns = {

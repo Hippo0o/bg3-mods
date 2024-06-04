@@ -36,12 +36,8 @@ function Player.InCombat()
 end
 
 function Player.PickupAll(character)
-    for type, data in pairs(PersistentVars.LootFilter) do
-        for rarity, pickup in pairs(data) do
-            if pickup then
-                Item.PickupAll(character or Player.Host(), rarity, type)
-            end
-        end
+    for _, rarity in pairs(C.ItemRarity) do
+        Item.PickupAll(character or Player.Host(), rarity)
     end
 end
 
@@ -188,8 +184,4 @@ U.Osiris.On("ReadyCheckFailed", 1, "after", function(id)
         readyChecks[id] = nil
         func(false)
     end
-end)
-
-Event.On("ScenarioStarted", function()
-    Player.ReturnToCamp()
 end)

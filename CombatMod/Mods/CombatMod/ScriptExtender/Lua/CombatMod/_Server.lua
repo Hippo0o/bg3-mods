@@ -12,17 +12,6 @@ Mod.PersistentVarsTemplate = {
     LastScenario = nil,
     RogueScore = 0,
     GUIOpen = false,
-    LootFilter = {
-        Object = UT.Map(C.ItemRarity, function(v, k)
-            return true, v
-        end),
-        Armor = UT.Map(C.ItemRarity, function(v, k)
-            return true, v
-        end),
-        Weapon = UT.Map(C.ItemRarity, function(v, k)
-            return true, v
-        end),
-    },
     Stats = {
         Looted = {},
         Killed = {},

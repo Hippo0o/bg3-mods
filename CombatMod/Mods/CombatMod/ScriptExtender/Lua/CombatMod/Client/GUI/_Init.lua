@@ -5,7 +5,6 @@ Require("CombatMod/Client/GUI/Unlocks")
 Require("CombatMod/Client/GUI/Creation")
 Require("CombatMod/Client/GUI/Config")
 Require("CombatMod/Client/GUI/Debug")
-Require("CombatMod/Client/GUI/Loot")
 
 ---@type ExtuiWindow
 local window = Ext.IMGUI.NewWindow(
@@ -25,7 +24,7 @@ L.Warn("Window opened.", "Support is currently in an experimental state.", "DX11
 L.Warn("If the window is not visible, make sure to update to the latest version of Script Extender.")
 L.Warn("Furthermore, try switching to Vulkan and disable all overlays (Steam, Discord, AMD, NVIDIA, etc.).")
 
-window:SetSize({ 900, 600 })
+window:SetSize({ 1000, 600 })
 window.Closeable = true
 window.NoFocusOnAppearing = true
 window.OnClose = function()
@@ -88,10 +87,6 @@ local tabs = window:AddTabBar(U.RandomId())
 Control.Main(tabs)
 
 ClientUnlock.Main(tabs)
-
-if IsHost then
-    Loot.Main(tabs)
-end
 
 Config.Main(tabs)
 Components.Conditional(_, function()

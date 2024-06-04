@@ -103,6 +103,7 @@ U.Osiris.On(
             or dialog:match("Recruitment")
             or dialog:match("InParty")
             or dialog:match("^BHVR_WRLD")
+            or dialog:match("^GLO_Avatar")
         then
             return
         end
@@ -284,11 +285,22 @@ function StoryBypass.ClearArea(character)
                         b.Entity.ServerItem.CanBeMoved = false
                         if b.Entity.ServerItem.IsDoor then
                             Osi.Unlock(b.Guid)
+                            Osi.Open(b.Guid)
                         end
                         if b.Entity.Health then
-                            b.Entity.Health.Hp = 999
-                            b.Entity.Health.MaxHp = 999
+                            b.Entity.Health.Hp = 666
+                            b.Entity.Health.MaxHp = 666
                             b.Entity:Replicate("Health")
+                            b.Entity.Resistances.Resistances = UT.Map(
+                                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, -- 14
+                                function()
+                                    return {
+                                        "ImmuneToMagical",
+                                        "ImmuneToNonMagical",
+                                    }
+                                end
+                            )
+                            b.Entity:Replicate("Resistances")
                         end
                     elseif b.Entity.Health or b.Entity.ServerItem.CanBePickedUp or b.Entity.ServerItem.CanUse then -- TODO remove more CanUse objects
                         UE.Remove(b.Guid)
@@ -304,3 +316,17 @@ function StoryBypass.ClearArea(character)
     -- Osi.SetHitpointsPercentage(v.Guid, 100)
     -- L.Dump(Osi.IsDestroyed(v.Guid))
 end
+
+Event.On(
+    "ScenarioCombatStarted",
+    ifBypassStory(function()
+        StoryBypass.ClearArea(Player.Host())
+    end)
+)
+
+Event.On(
+    "ScenarioMapEntered",
+    ifBypassStory(function()
+        StoryBypass.ClearArea(Player.Host())
+    end)
+)
