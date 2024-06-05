@@ -1,6 +1,6 @@
 Require("DOLL/Shared")
 
-Require("DOLL/Server/Armor")
+Require("DOLL/Server/Transmog")
 Require("DOLL/Server/Visual")
 Require("DOLL/Server/Doll")
 
@@ -16,8 +16,8 @@ function VisualTest()
     end
 end
 
-function DollTest()
-    L.Dump(Doll.Visuals(GetHostCharacter(), true))
+function Dump()
+    L.Dump(UT.Clean(_C().ServerIsCurrentOwner, 1))
 end
 
 function Debug()

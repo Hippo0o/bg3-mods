@@ -518,16 +518,15 @@ function M.Table.Clean(t, maxEntityDepth)
             local ok, value = pcall(Ext.Types.Serialize, v)
             if ok then
                 v = value
-            elseif getmetatable(v) == "EntityProxy" and maxEntityDepth <= 0 then
+            elseif getmetatable(v) == "EntityProxy" and maxEntityDepth > 0 then
                 v = M.Table.Clean(v:GetAllComponents(), maxEntityDepth - 1)
             else
-                v = tostring(v)
-                -- v = Ext.Json.Parse(Ext.Json.Stringify(v, {
-                --     Beautify = false,
-                --     StringifyInternalTypes = true,
-                --     IterateUserdata = true,
-                --     AvoidRecursion = true,
-                -- }))
+                v = Ext.Json.Parse(Ext.Json.Stringify(v, {
+                    Beautify = false,
+                    StringifyInternalTypes = true,
+                    IterateUserdata = true,
+                    AvoidRecursion = true,
+                }))
             end
         end
 
