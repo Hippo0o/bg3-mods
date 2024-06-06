@@ -10,7 +10,7 @@ Net.On("DollChangeAppearance", function(event)
     Osi.StartChangeAppearance(event:Character())
 
     Defer(1000, function()
-        Net.Respond(event, Doll.Visuals(event:Character(), event.Payload ~= true))
+        Net.Respond(event, Doll.Visuals(Doll.Build(event:Character()), event.Payload ~= true))
     end)
 end)
 

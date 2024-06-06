@@ -1,9 +1,9 @@
 .PHONY: clrf-to-lf lf-to-clrf fix-permissions sync-files copy
 
 UID=1000
-# CUR_MOD=CombatMod
-CUR_MOD=DOLL
-MOD_SUBDIR=$(MOD_DIR)/$(CUR_MOD)/Mods/$(CUR_MOD)
+MOD?=CombatMod
+# MOD=DOLL
+MOD_SUBDIR=$(MOD_DIR)/$(MOD)/Mods/$(MOD)
 
 clrf-to-lf:
 	fd -t file . $(MOD_SUBDIR) -x sed -i 's/\r$$//'
@@ -19,16 +19,16 @@ fix-permissions:
 sync-files:
 	@inotifywait -m -r -e modify,create,delete $(MOD_SUBDIR) | \
 	while read path action file; do \
-		rsync --verbose -avc --copy-links --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/$(CUR_MOD)/."; \
+		rsync --verbose -avc --copy-links --delete "$(MOD_SUBDIR)/." "$(DEST_DIR)/$(MOD)/."; \
 	done
 
 copy:
-	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/$(CUR_MOD)/."
+	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/$(MOD)/."
 
 copy-back:
-	cp $(MOUNT_DIR)/Temp/$(CUR_MOD).zip .
-	unzip $(CUR_MOD).zip $(CUR_MOD).pak
-	mv $(CUR_MOD).pak Releases/$(CUR_MOD).pak
+	cp $(MOUNT_DIR)/Temp/$(MOD).zip .
+	unzip $(MOD).zip $(MOD).pak
+	mv $(MOD).pak Releases/$(MOD).pak
 
 mounts: # dont forgor to pacman -S cifs-utils
 	mount -t cifs -o rw,username=user,uid=$(UID),file_mode=0777,dir_mode=0777 "//$(WIN_IP)/Temp" $(MOUNT_DIR)/Temp

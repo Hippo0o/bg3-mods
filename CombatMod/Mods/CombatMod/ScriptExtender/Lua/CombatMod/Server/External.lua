@@ -100,6 +100,7 @@ External.Validators.Map = tt({
     Enter = { posType },
     Spawns = tt(posType, true),
     Timeline = positionTimelineType,
+    Author = { "nil", "string" },
 })
 
 local function validateTimelineEntry(value)
