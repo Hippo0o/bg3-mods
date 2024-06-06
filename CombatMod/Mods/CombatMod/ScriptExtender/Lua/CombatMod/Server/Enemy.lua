@@ -336,7 +336,7 @@ function Object:Combat(force)
     Osi.SetCanFight(enemy, 1)
 
     if force then
-        for _, player in pairs(U.DB.GetPlayers()) do
+        for _, player in pairs(GU.DB.GetPlayers()) do
             Osi.EnterCombat(enemy, player)
             Osi.EnterCombat(player, enemy)
         end
@@ -352,7 +352,7 @@ function Object:Clear(keepCorpse)
         if keepCorpse then
             Osi.Die(guid, 0, C.NullGuid, 0, 0)
         else
-            UE.Remove(guid)
+            GU.Object.Remove(guid)
         end
 
         return Osi.IsDead(guid) == 1 or not entity or not entity:IsAlive()
@@ -495,7 +495,7 @@ end
 ---@param object string GUID
 ---@return boolean
 function Enemy.IsValid(object)
-    return UE.IsNonPlayer(object)
+    return GC.IsNonPlayer(object)
         and (
             Osi.IsSummon(object) == 1
             or (S and UT.Find(S.SpawnedEnemies, function(v)

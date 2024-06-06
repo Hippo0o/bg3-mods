@@ -10,15 +10,12 @@ M.Dev = false
 M.EnableRCE = false
 M.NetChannel = "Net_" .. M.UUID
 
-M.PersistentVarsTemplate = {}
-M.Vars = {}
-
 if Ext.Mod.IsModLoaded(M.UUID) then
-    local ModInfo = Ext.Mod.GetMod(M.UUID)["Info"]
+    local modInfo = Ext.Mod.GetMod(M.UUID)["Info"]
 
-    M.TableKey = ModInfo.Directory
-    M.Prefix = ModInfo.Name
-    M.Version = { major = ModInfo.ModVersion[1], minor = ModInfo.ModVersion[2], revision = ModInfo.ModVersion[3] }
+    M.TableKey = modInfo.Directory
+    M.Prefix = modInfo.Name
+    M.Version = { major = modInfo.ModVersion[1], minor = modInfo.ModVersion[2], revision = modInfo.ModVersion[3] }
 end
 
 local function applyTemplate(vars, template)
@@ -37,6 +34,14 @@ local function applyTemplate(vars, template)
     end
 end
 
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                       PersistentVars                                        --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+M.PersistentVarsTemplate = {}
+
 function M.PreparePersistentVars()
     if not PersistentVars then
         PersistentVars = {}
@@ -53,6 +58,17 @@ function M.PreparePersistentVars()
     applyTemplate(PersistentVars, M.PersistentVarsTemplate)
 end
 
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           ModVars                                           --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+M.Vars = {}
+
+---@param tableKey string
+---@param sync boolean
+---@param template table
 function M.CreateModVar(tableKey, sync, template)
     Ext.Vars.RegisterModVariable(M.UUID, tableKey, {
         Persistent = true,

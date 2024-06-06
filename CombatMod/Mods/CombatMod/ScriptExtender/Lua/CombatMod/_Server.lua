@@ -235,7 +235,7 @@ do
         -- External.File.Export("Enemies", e)
 
         -- _D(Ext.Template.GetRootTemplate(Item.Armor("Legendary")[1].RootTemplate))
-        -- for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
+        -- for _, e in ipairs(GE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
         --     -- L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
         --     L.Dump(Ext.Loca.GetTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
         -- end

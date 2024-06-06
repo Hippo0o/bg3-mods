@@ -147,7 +147,7 @@ function Action.StartCombat()
     Enemy.Cleanup()
 
     Schedule(function()
-        for _, p in pairs(UE.GetParty()) do
+        for _, p in pairs(GE.GetParty()) do
             Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 0)
         end
     end)
@@ -515,7 +515,7 @@ end
 Scenario.Teleport = Async.Throttle(3000, function()
     local s = Current()
 
-    for _, character in pairs(U.DB.GetPlayers()) do
+    for _, character in pairs(GU.DB.GetPlayers()) do
         Map.TeleportTo(s.Map, character)
     end
 end)
@@ -739,7 +739,7 @@ U.Osiris.On(
     1,
     "before",
     ifScenario(function(uuid)
-        if UE.IsNonPlayer(uuid) then
+        if GC.IsNonPlayer(uuid) then
             return
         end
 
