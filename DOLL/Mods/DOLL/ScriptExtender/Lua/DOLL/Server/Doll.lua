@@ -40,18 +40,12 @@ end
 -------------------------------------------------------------------------------------------------
 
 ---@param entity EntityHandle
----@return ResourceCharacterCreationPreset|nil
+---@return ResourceCharacterCreationPreset[]
 function Doll.CreationPresets(entity)
     local subRace = entity.Race.Race
     -- local rootTemplate = entity.GameObjectVisual.RootTemplateId
 
-    return UT.Map(Ext.StaticData.GetAll("CharacterCreationPreset"), function(preset)
-        local c = Ext.StaticData.Get(preset, "CharacterCreationPreset")
-
-        if c.SubRaceUUID == subRace then
-            return c
-        end
-    end)
+    return Preset.GetForRace(subRace)
 end
 
 ---@param character string
@@ -106,8 +100,6 @@ end
 
 function Doll.ApplyVisualSlot(character, slot, visual)
     local doll = Doll.Build(character)
-    doll.BodyShape = 1
-    doll.BodyType = 1
     local visuals = Doll.Visuals(doll, false)[slot]
 
     for _, v in pairs(visuals) do
