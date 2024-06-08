@@ -21,10 +21,11 @@ return {
         Amount = nil,
         Character = true,
         OnBuy = function(self, character)
-            unlockTadpole(character)
             if Osi.GetTadpolePowersCount(character) < 1 then
                 Osi.AddTadpole(character, 1)
+                Osi.AddTadpole(character, 1)
             end
+            unlockTadpole(character)
         end,
     },
     {
@@ -151,7 +152,7 @@ return {
     },
     {
         Id = "BreakOath",
-        Name = __("Break Oath"),
+        Name = __("Break/Restore Oath"),
         Icon = "statIcons_OathBroken",
         Description = __("Needs to be a Paladin."),
         Cost = 10,
@@ -160,9 +161,10 @@ return {
         OnBuy = function(self, character)
             Osi.PROC_GLO_PaladinOathbreaker_BrokeOath(character)
             Osi.PROC_GLO_PaladinOathbreaker_BecomesOathbreaker(character)
+            Osi.StartRespecToOathbreaker(character)
+            Osi.PROC_GLO_PaladinOathbreaker_RedemptionObtained(character)
             -- Osi.RequestRespec(character)
             -- Osi.StartRespec(character)
-            -- Osi.StartRespecToOathbreaker(character)
         end,
     },
     {

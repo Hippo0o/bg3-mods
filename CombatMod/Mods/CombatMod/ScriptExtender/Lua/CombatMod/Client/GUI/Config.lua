@@ -35,8 +35,7 @@ function Config.Main(tab)
 
     root:AddSeparatorText(__("Global Settings - Host only"))
 
-    local c8 =
-        Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
+    local c8 = Config.Checkbox(root, "Play Roguelike Mode", "get continuously harder battles", "RoguelikeMode")
 
     local c6 = Config.Checkbox(
         root,
@@ -53,19 +52,7 @@ function Config.Main(tab)
         "BypassStory"
     )
 
-    local c3 = Config.Checkbox(
-        root,
-        "Always Bypass Story",
-        "always skip dialogues, combat and interactions even if no scenario is active",
-        "BypassStoryAlways"
-    )
-
-    local c4 = Config.Checkbox(
-        root,
-        "Force Enter Combat",
-        "more continuous battle between rounds at the cost of cheesy out of combat strats",
-        "ForceEnterCombat"
-    )
+    local c4 = Config.Checkbox(root, "Force Enter Combat", "automatically starts combat between rounds", "ForceEnterCombat")
 
     local c5 = Config.Slider(
         root,
@@ -126,7 +113,6 @@ function Config.Main(tab)
         Net.Send("Config", {
             Debug = c1.Checked,
             BypassStory = c2.Checked,
-            BypassStoryAlways = c3.Checked,
             ForceEnterCombat = c4.Checked,
             RandomizeSpawnOffset = c5.Value[1],
             SpawnItemsAtPlayer = c6.Checked,

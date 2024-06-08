@@ -116,15 +116,18 @@ function Player.TeleportToCamp()
         return
     end
 
-    local campEntry = GU.DB.TryGet("DB_Camp", 4, { activeCamp }, 2)[1]
+    local campEntry = GU.DB.TryGet("DB_Camp", 4, { activeCamp }, 3)[1]
+    local campEntryFallback = GU.DB.TryGet("DB_Camp", 4, { activeCamp }, 2)[1]
     if not campEntry then
         L.Error("No camp trigger found.")
         return
     end
 
     for _, entity in pairs(GE.GetParty()) do
+        L.Debug("TeleportToCamp", entity.Uuid.EntityUuid, campEntry)
         if not entity.CampPresence then
             Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntry)
+            Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntryFallback)
 
             -- Schedule(function()
             --     Osi.TeleportTo(entity.Uuid.EntityUuid, C.NPCCharacters.Jergal, "", 1, 1, 1, 1, 0)

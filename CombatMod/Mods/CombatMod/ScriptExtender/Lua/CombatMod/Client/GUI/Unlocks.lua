@@ -225,7 +225,7 @@ function ClientUnlock.BuyChar(root, unlock)
             if unlock.BoughtBy[uuid] then
                 b.Label = string.format("%s (%s)", name, __("bought"))
 
-                b:SetStyle("Alpha", 0.5)
+                -- b:SetStyle("Alpha", 0.5)
             end
 
             b.Label = string.format("  %s  ", b.Label)
