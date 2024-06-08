@@ -1,11 +1,11 @@
-Require("DOLL/Shared")
+Require("GOV/Shared")
 
 Event.On("ToggleDebug", function(bool)
     Mod.Debug = bool
 end)
 
-Require("DOLL/Client/Components")
+Require("GOV/Client/Components")
 
 GameState.OnLoad(function()
-    Require("DOLL/Client/Window")
+    Require("GOV/Client/Window")
 end, true)
