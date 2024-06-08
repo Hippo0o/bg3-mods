@@ -254,5 +254,5 @@ Net.On("BuyUnlock", function(event)
     Net.Respond(event, { true, PersistentVars.Currency })
     Unlock.UpdateUnlocked()
 
-    Net.Send("SyncState", PersistentVars)
+    SyncState()
 end)

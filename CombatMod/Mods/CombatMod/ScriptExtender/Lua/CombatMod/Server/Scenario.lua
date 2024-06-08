@@ -684,7 +684,7 @@ U.Osiris.On(
         end
 
         L.Debug("Entered combat.", guid, combatGuid)
-        Schedule(function()
+        Async.WaitTicks(5, function()
             Enemy.CreateTemporary(guid)
         end)
     end)
@@ -763,12 +763,16 @@ U.Osiris.On(
     "after",
     ifScenario(function(uuid)
         if S.OnMap and U.UUID.Equals(uuid, Player.Host()) then
-            Defer(1000, function()
-                if not Player.InCombat() then
-                    Scenario.Stop()
-                    Player.Notify(__("Returned to camp."))
-                end
-            end)
+            if not Player.InCombat() then
+                Scenario.Stop()
+                Player.Notify(__("Returned to camp."))
+            end
+            -- Defer(1000, function()
+            --     if not Player.InCombat() then
+            --         Scenario.Stop()
+            --         Player.Notify(__("Returned to camp."))
+            --     end
+            -- end)
         end
     end)
 )

@@ -229,8 +229,8 @@ function GameMode.GenerateScenario(score, cow)
         emptyRoundChance = 0.1
     end
     if score > 3000 then
-        maxRounds = 30
-        preferredRounds = 10
+        maxRounds = math.ceil(score / 100)
+        preferredRounds = math.ceil(score / 300)
         emptyRoundChance = 0
     end
 

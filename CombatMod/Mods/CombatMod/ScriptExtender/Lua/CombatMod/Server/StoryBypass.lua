@@ -7,7 +7,7 @@
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
     return IfActive(function(...)
-        if Config.BypassStory and S ~= nil then
+        if Config.BypassStory or S ~= nil then
             func(...)
         end
     end)
