@@ -20,9 +20,7 @@ Event.On("WindowOpened", function()
     Net.Send("WindowOpened")
 end)
 
-L.Warn("Window opened.", "Support is currently in an experimental state.", "DX11 is known to cause issues.")
-L.Warn("If the window is not visible, make sure to update to the latest version of Script Extender.")
-L.Warn("Furthermore, try switching to Vulkan and disable all overlays (Steam, Discord, AMD, NVIDIA, etc.).")
+L.Warn("Window created.", "If the window is not visible, make sure to update to the latest version of Script Extender.")
 
 window:SetSize({ 1000, 600 })
 window.Closeable = true
