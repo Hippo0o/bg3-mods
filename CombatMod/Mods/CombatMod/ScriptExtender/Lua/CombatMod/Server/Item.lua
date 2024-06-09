@@ -33,6 +33,7 @@ local itemBlacklist = {
     "DEN_VoloOperation_ErsatzEye", -- vololo
     "SHA_SharSpear", -- shar does not give us permission
     "MAG_Cunning_HandCrossbow", -- does not work
+    "LOW_OskarsBeloved_"
 
     -- "_Myrmidon_ConjureElemental$",
     -- "_Myrmidon_WildShape$",
@@ -83,6 +84,20 @@ end
 
 function Object:IsSpawned()
     return self.GUID ~= nil
+end
+
+function Object:GetTemplate()
+    return Ext.Template.GetTemplate(self.RootTemplate)
+end
+
+function Object:GetTranslatedName()
+    local handle
+    if self:IsSpawned() then
+        handle = Osi.GetDisplayName(self.GUID)
+    else
+        handle = self:GetTemplate().DisplayName.Handle.Handle
+    end
+    return Osi.ResolveTranslatedString(handle)
 end
 
 ---@param x number

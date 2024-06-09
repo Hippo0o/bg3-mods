@@ -1,3 +1,4 @@
+-- Ext.Utils.Include(nil, "Mods/CombatMod/ScriptExtender/Lua/ListExport.lua")
 local MT = Mods.ToT
 
 local str = table.concat({
@@ -42,3 +43,40 @@ for _, tier in pairs(MT.C.EnemyTier) do
 end
 
 MT.IO.Save("EnemyList.csv", str)
+
+local str = table.concat({
+    "Type",
+    "Rarity",
+    "RootTemplate",
+    "Name",
+    "DisplayName",
+    "Link",
+    "Link2",
+}, ",") .. "\n"
+
+local list = {
+    Objects = MT.Item.Objects(rarity, false),
+    CombatObjects = MT.Item.Objects(rarity, true),
+    Armor = MT.Item.Armor(rarity),
+    Weapons = MT.Item.Weapons(rarity),
+}
+
+for cat, li in pairs(list) do
+    _D(cat)
+    for _, item in pairs(li) do
+        _D(item.Name)
+        str = str
+            .. table.concat({
+                cat,
+                item.Rarity,
+                item.RootTemplate,
+                item.Name,
+                '"' .. item:GetTranslatedName() .. '"',
+                '"' .. "https://bg3.norbyte.dev/search?q=" .. item.Name .. '"',
+                '"' .. "https://bg3.norbyte.dev/search?q=" .. item.RootTemplate .. '"',
+            }, ",")
+            .. "\n"
+    end
+end
+
+MT.IO.Save("ItemList.csv", str)
