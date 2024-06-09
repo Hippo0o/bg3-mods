@@ -7,7 +7,7 @@
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
     return IfActive(function(...)
-        if Config.BypassStory or S ~= nil then
+        if Config.BypassStory or (S ~= nil and S.OnMap) then
             func(...)
         end
     end)
@@ -38,7 +38,7 @@ local function cancelDialog(dialog, instanceID)
                 "Jergal",
                 "OathbreakerKnight",
                 -- "Orpheus",
-                -- "Volo"
+                -- "Volo",
             })
             if paidActor then
                 return
@@ -94,9 +94,6 @@ U.Osiris.On(
     4,
     "after",
     ifBypassStory(function(dialog, instanceID, actor, speakerIndex)
-        -- if dialog:match("^CHA_Crypt_SkeletonRisingCinematic") or actor:match("^CHA_Crypt_SkeletonRisingCinematic") then
-        --     Osi.PROC_GLO_Jergal_MoveToCamp()
-        -- end
         if
             dialog:match("CAMP_")
             or dialog:match("Tadpole")
@@ -215,12 +212,12 @@ U.Osiris.On(
 
         -- workaround for blocked travel
         -- TODO fix this
-        Defer(1000, function()
-            if S and not S.OnMap then
-                L.Error("Teleport workaround", character)
-                -- Scenario.Teleport(character)
-            end
-        end)
+        -- Defer(1000, function()
+        --     if S and not S.OnMap then
+        --         L.Error("Teleport workaround", character)
+        --         -- Scenario.Teleport(character)
+        --     end
+        -- end)
 
         if not Ext.Entity.Get(character).CampPresence or not S then
             L.Debug("ReturnToCamp", character)
@@ -256,20 +253,25 @@ function StoryBypass.UnblockTravel(entity)
 end
 
 function StoryBypass.ClearArea(character)
-    local nearby = GE.GetNearby(character, 50, true)
+    if Ext.Entity.Get(character).CampPresence then
+        L.Error("ClearArea", "Cannot clear area while in camp.")
+        return
+    end
+
+    local nearby = GE.GetNearby(character, 100, true)
 
     local toRemove = UT.Filter(nearby, function(v)
-        return v.Entity.IsCharacter and GC.IsNonPlayer(v.Guid)
+        return v.Entity.IsCharacter
+            and GC.IsNonPlayer(v.Guid)
+            and not v.Entity.PartyMember
+            and not U.UUID.Equals(C.NPCCharacters.Oathbreaker, v.Guid)
+            and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Guid)
     end)
 
     for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
         Schedule(function()
             for _, b in pairs(batch) do
-                if GC.IsImportant(b.Guid) and not b.Entity.PartyMember then
-                    Osi.TeleportTo(b.Guid, C.NPCCharacters.Jergal, "", 1, 1, 1, 1, 0)
-                else
-                    GU.Object.Remove(b.Guid)
-                end
+                GU.Object.Remove(b.Guid)
             end
         end)
     end

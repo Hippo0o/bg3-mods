@@ -237,7 +237,7 @@ function GameMode.GenerateScenario(score, cow)
     -- Define tiers and their corresponding difficulty values
     local tiers = {
         { name = C.EnemyTier[1], value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
-        { name = C.EnemyTier[2], value = 8, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+        { name = C.EnemyTier[2], value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
         { name = C.EnemyTier[3], value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
         { name = C.EnemyTier[4], value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
         { name = C.EnemyTier[5], value = 42, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
@@ -407,25 +407,19 @@ function GameMode.UpdateRogueScore(scenario)
         baseScore = baseScore * 2
     end
 
+    local diff = endRound - scenario:TotalRounds()
+
+    score = score + math.max(baseScore - diff, 1)
+    updateScore(score)
+
     if endRound <= scenario:TotalRounds() then
         Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", baseScore, baseScore * 2))
             .After(function(confirmed)
                 if confirmed then
-                    score = score + baseScore * 2
-                else
-                    score = score + math.max(baseScore - diff, 1)
+                    updateScore(score + baseScore)
                 end
-
-                updateScore(score)
             end)
-
-        return
     end
-
-    local diff = endRound - scenario:TotalRounds()
-    score = score + math.max(baseScore - diff, 1)
-
-    updateScore(score)
 end
 
 function GameMode.StartNext()
@@ -488,19 +482,21 @@ Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then
         GameMode.UpdateRogueScore(scenario)
 
-        Player.Notify(__("Teleporting back to camp in %d seconds.", 30), true)
-        local d1 = Defer(20000, function()
-            Player.Notify(__("Teleporting back to camp in %d seconds.", 10), true)
-        end)
-        local d2 = Defer(30000, function()
-            Player.PickupAll()
-            Player.ReturnToCamp()
-        end)
+        ifRogueLike(function()
+            Player.Notify(__("Teleporting back to camp in %d seconds.", 60), true)
+            local d1 = Defer(30000, function()
+                Player.Notify(__("Teleporting back to camp in %d seconds.", 30), true)
+            end)
+            local d2 = Defer(60000, function()
+                Player.PickupAll()
+                Player.ReturnToCamp()
+            end)
 
-        Event.On("ScenarioStarted", function(scenario)
-            d1.Source:Clear()
-            d2.Source:Clear()
-        end, true)
+            Event.On("ScenarioStarted", function(scenario)
+                d1.Source:Clear()
+                d2.Source:Clear()
+            end, true)
+        end)()
     end
 end)
 
@@ -510,7 +506,7 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function()
-            local lolcow = U.Random() < 0.01
+            local lolcow = U.Random() < 0.001
             if lolcow then
                 local hasOX = Enemy.Find("OX_A")
                 lolcow = hasOX and true or false

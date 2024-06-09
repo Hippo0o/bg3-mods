@@ -26,7 +26,7 @@ end
 ---@field Requirement string|nil
 ---@field Persistent boolean
 ---@field OnBuy fun(self: Unlock)
----@field OnLoad fun(self: Unlock)
+---@field OnReapply fun(self: Unlock)
 ---@field Buy fun(self: Unlock)
 local Object = Libs.Class({
     Id = nil,
@@ -41,7 +41,7 @@ local Object = Libs.Class({
     Requirement = nil,
     Persistent = false,
     OnBuy = function() end,
-    OnLoad = function() end,
+    OnReapply = function() end,
 })
 
 function Object:Buy(character)
@@ -147,6 +147,10 @@ function Unlock.Sync()
         else
             -- update keys from template that aren't stateful
             UT.Merge(existing, unlockTemplate)
+            -- only key that can be nil on template
+            if not unlockTemplate.Amount then
+                existing.Amount = nil
+            end
         end
     end
 
@@ -171,7 +175,7 @@ function Unlock.Sync()
         PersistentVars.Unlocks[i] = Unlock.Restore(u)
 
         if existing then
-            PersistentVars.Unlocks[i]:OnLoad()
+            PersistentVars.Unlocks[i]:OnReapply()
         end
     end
 
@@ -201,6 +205,18 @@ Event.On("ModActive", function()
         end
     end)
 end, true)
+
+Event.On("ScenarioTeleport", function()
+    for _, u in pairs(Unlock.Get()) do
+        u:OnReapply()
+    end
+end)
+
+Event.On("ScenarioStarted", function(scenario)
+    for _, u in pairs(Unlock.Get()) do
+        u:OnReapply()
+    end
+end)
 
 Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)

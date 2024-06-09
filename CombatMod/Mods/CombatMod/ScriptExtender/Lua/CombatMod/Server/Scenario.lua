@@ -479,6 +479,8 @@ function Scenario.Start(template, map)
             UT.Combine(scenario.Positions, map.Timeline)
         end
     end
+
+    -- get spawn positions for every enemy
     while UT.Size(scenario.Positions) < enemyCount do
         table.insert(scenario.Positions, U.Random(#map.Spawns))
     end
@@ -520,7 +522,6 @@ Scenario.Teleport = Async.Throttle(3000, function()
     end
 end)
 
--- TODO check if breaks when used manually
 function Scenario.ResumeCombat()
     local s = Current()
     if not s:IsRunning() then
@@ -684,7 +685,7 @@ U.Osiris.On(
         end
 
         L.Debug("Entered combat.", guid, combatGuid)
-        Async.WaitTicks(5, function()
+        Schedule(function()
             Enemy.CreateTemporary(guid)
         end)
     end)
@@ -767,12 +768,6 @@ U.Osiris.On(
                 Scenario.Stop()
                 Player.Notify(__("Returned to camp."))
             end
-            -- Defer(1000, function()
-            --     if not Player.InCombat() then
-            --         Scenario.Stop()
-            --         Player.Notify(__("Returned to camp."))
-            --     end
-            -- end)
         end
     end)
 )

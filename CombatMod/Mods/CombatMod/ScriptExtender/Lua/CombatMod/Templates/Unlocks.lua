@@ -83,7 +83,7 @@ return {
         Name = "1000 EXP",
         Icon = "Action_Dash_Bonus",
         Cost = 40,
-        Amount = 3,
+        Amount = nil,
         Character = false,
         OnBuy = function(self, character)
             for _, p in pairs(GU.DB.GetPlayers()) do
@@ -96,7 +96,7 @@ return {
         Name = __("Roll Loot %dx", 10),
         Icon = "Item_CONT_GEN_Chest_Jewel_B",
         Cost = 30,
-        Amount = 10,
+        Amount = nil,
         Character = false,
         OnBuy = function(self, character)
             local loot = Item.GenerateLoot(10, C.LootRates)
@@ -110,7 +110,7 @@ return {
         Name = __("Buy 40 Camp Supplies"),
         Icon = "Item_CONT_GEN_CampSupplySack",
         Cost = 20,
-        Amount = 4,
+        Amount = nil,
         Character = false,
         OnBuy = function(self, character)
             Osi.PROC_CAMP_GiveFreeSupplies()
@@ -144,7 +144,7 @@ return {
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
             end
         end,
-        OnLoad = function(self) ---@param self Unlock
+        OnReapply = function(self) ---@param self Unlock
             if self.Bought > 0 then
                 self:OnBuy()
             end
@@ -163,8 +163,6 @@ return {
             Osi.PROC_GLO_PaladinOathbreaker_BecomesOathbreaker(character)
             Osi.StartRespecToOathbreaker(character)
             Osi.PROC_GLO_PaladinOathbreaker_RedemptionObtained(character)
-            -- Osi.RequestRespec(character)
-            -- Osi.StartRespec(character)
         end,
     },
     {
@@ -224,20 +222,6 @@ return {
         Requirement = 300,
     },
     {
-        Id = "BuyExpPlus",
-        Name = "1000 EXP",
-        Icon = "Action_Dash",
-        Cost = 0,
-        Amount = 3,
-        Character = false,
-        Requirement = "NEWGAME_PLUS",
-        OnBuy = function(self, character)
-            for _, p in pairs(GU.DB.GetPlayers()) do
-                Osi.AddExplorationExperience(p, 1000)
-            end
-        end,
-    },
-    {
         Id = "ScoreMultiplier",
         Name = __("Gain double RogueScore"),
         Icon = "Action_EndGameAlly_ShadowAdepts",
@@ -256,18 +240,32 @@ return {
         Cost = 0,
         Amount = 1,
         Character = false,
-        Requirement = "NEWGAME_PLUS",
+        Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
             PersistentVars.Currency = (PersistentVars.Currency or 0) + 100
         end,
     },
     {
+        Id = "BuyExpPlus",
+        Name = "1000 EXP",
+        Icon = "Action_Dash",
+        Cost = 0,
+        Amount = 3,
+        Character = false,
+        Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
+        OnBuy = function(self, character)
+            for _, p in pairs(GU.DB.GetPlayers()) do
+                Osi.AddExplorationExperience(p, 1000)
+            end
+        end,
+    },
+    {
         Id = "BuyDeathWard",
-        Name = Localization.Get("hbd168de5gbd55g4d55g947eg6f5d9b3313a5;2"),
+        Name = Localization.Get("hbd168de5gbd55g4d55g947eg6f5d9b3313a5"),
         Icon = "Spell_Abjuration_DeathWard",
         Cost = 1000,
         Amount = nil,
-        Requirement = "NEWGAME_PLUS",
+        Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         Character = false,
         OnBuy = function(self, character)
             for _, p in pairs(GE.GetParty()) do
@@ -277,14 +275,14 @@ return {
     },
     {
         Id = "BuyLootPlus",
-        Name = __("Roll Loot %dx", 20),
+        Name = __("Roll Loot %dx", 10),
         Icon = "Item_CONT_GEN_Chest_Jewel_A",
-        Cost = 20,
+        Cost = 0,
         Amount = 10,
         Character = false,
-        Requirement = "NEWGAME_PLUS",
+        Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
-            local loot = Item.GenerateLoot(20, C.LootRates)
+            local loot = Item.GenerateLoot(10, C.LootRates)
 
             local x, y, z = Osi.GetPosition(character)
             Item.SpawnLoot(loot, x, y, z)
@@ -298,7 +296,7 @@ return {
     --     Cost = 300,
     --     Amount = nil,
     --     Character = true,
-    --     Requirement = "NEWGAME_PLUS",
+    --     Requirement = {"NEWGAME_PLUS", "ScoreMultiplier"},
     --     OnBuy = function(self, character)
     --         Osi.PROC_END_General_ApplyMindFlayerForm(character)
     --     end,

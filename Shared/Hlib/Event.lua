@@ -13,7 +13,7 @@ local listeners = {}
 ---@class EventListener : LibsClass
 ---@field private _Id string
 ---@field private _Event string
----@field private _Func fun( ...: any)
+---@field private _Func fun(...: any)
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
