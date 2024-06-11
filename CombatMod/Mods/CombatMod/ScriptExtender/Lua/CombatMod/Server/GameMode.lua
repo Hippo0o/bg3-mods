@@ -240,9 +240,21 @@ function GameMode.GenerateScenario(score, cow)
         { name = C.EnemyTier[2], value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
         { name = C.EnemyTier[3], value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
         { name = C.EnemyTier[4], value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
-        { name = C.EnemyTier[5], value = 42, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+        { name = C.EnemyTier[5], value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
         { name = C.EnemyTier[6], value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
+
+    if Config.HardMode then
+        -- Define tiers and their corresponding difficulty values
+        tiers = {
+            { name = C.EnemyTier[1], value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
+            { name = C.EnemyTier[2], value = 8, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+            { name = C.EnemyTier[3], value = 16, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+            { name = C.EnemyTier[4], value = 28, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
+            { name = C.EnemyTier[5], value = 36, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+            { name = C.EnemyTier[6], value = 52, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
+        }
+    end
 
     if cow then
         tiers = { { name = "OX_A", value = 4, amount = 100 } }
@@ -388,9 +400,6 @@ function GameMode.GenerateScenario(score, cow)
 end
 
 function GameMode.UpdateRogueScore(scenario)
-    -- Always has 1 round more than the timeline because of CombatRoundStarted
-    local endRound = scenario.Round - 1
-
     local score = PersistentVars.RogueScore
     local prev = score
 
@@ -407,7 +416,15 @@ function GameMode.UpdateRogueScore(scenario)
         baseScore = baseScore * 2
     end
 
-    local diff = endRound - scenario:TotalRounds()
+    -- Always has 1 round more than the timeline because of CombatRoundStarted
+    local endRound = scenario.Round - 1
+
+    -- If not hard mode, give a bonus for perfect clear
+    if not Config.HardMode then
+        endRound = endRound - 1
+    end
+
+    local diff = math.max(0, endRound - scenario:TotalRounds())
 
     score = score + math.max(baseScore - diff, 1)
     updateScore(score)
@@ -435,8 +452,10 @@ function GameMode.StartNext()
         return
     end
 
+    local threshold = Config.HardMode and 20 or 40
+
     local maps = UT.Filter(Map.Get(), function(v)
-        return PersistentVars.RogueScore > 40 or v.Region == C.Regions.Act1
+        return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
     end)
 
     local map = nil
@@ -456,6 +475,15 @@ U.Osiris.On(
             GameMode.StartNext()
             Player.PickupAll()
             Osi.PROC_LockAllUnlockedWaypoints()
+        end
+    end)
+)
+
+Event.On(
+    "LootSpawned",
+    ifRogueLike(function()
+        if Player.InCamp() then
+            Player.PickupAll()
         end
     end)
 )

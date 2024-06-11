@@ -240,7 +240,11 @@ function ClientUnlock.BuyChar(root, unlock)
                     else
                         Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, name))
                     end
-                    b:SetStyle("Alpha", 1)
+
+                    -- might not exist anymore
+                    pcall(function()
+                        b:SetStyle("Alpha", 1)
+                    end)
                 end)
             end
         end
@@ -251,6 +255,7 @@ function ClientUnlock.BuyChar(root, unlock)
             if new.Id == unlock.Id then
                 local buyable = new.Amount == nil or new.Bought < new.Amount
                 btn.Visible = buyable
+
                 popup.Visible = buyable
                 createPopup(new)
                 return
@@ -261,6 +266,8 @@ function ClientUnlock.BuyChar(root, unlock)
     btn.OnClick = function()
         popup:Open()
     end
+
+    grp:AddText("").SameLine = true
 
     grp:AddDummy(1, 2)
 

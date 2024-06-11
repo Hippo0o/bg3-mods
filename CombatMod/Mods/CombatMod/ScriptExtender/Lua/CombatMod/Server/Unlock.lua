@@ -154,7 +154,8 @@ function Unlock.Sync()
         end
     end
 
-    for i, u in pairs(PersistentVars.Unlocks) do
+    local unlocks = {}
+    UT.Each(PersistentVars.Unlocks, function(u)
         if u.Persistent then
             if persistentUnlocks[u.Id] and persistentUnlocks[u.Id] > 0 then
                 u.Bought = persistentUnlocks[u.Id]
@@ -170,14 +171,15 @@ function Unlock.Sync()
         if not existing then
             u.Amount = -1
             u.Requirement = ""
+            if tonumber(u.Bought) < 1 then
+                return
+            end
         end
 
-        PersistentVars.Unlocks[i] = Unlock.Restore(u)
+        table.insert(unlocks, Unlock.Restore(u))
+    end)
 
-        if existing then
-            PersistentVars.Unlocks[i]:OnReapply()
-        end
-    end
+    PersistentVars.Unlocks = unlocks
 
     Unlock.UpdateUnlocked()
 end
@@ -185,6 +187,9 @@ end
 function Unlock.UpdateUnlocked()
     for _, u in pairs(Unlock.Get()) do
         u:UpdateUnlocked()
+    end
+    for _, u in pairs(Unlock.Get()) do
+        u:OnReapply()
     end
 end
 

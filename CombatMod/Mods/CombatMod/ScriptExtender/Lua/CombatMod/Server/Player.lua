@@ -35,6 +35,10 @@ function Player.InCombat()
     end)
 end
 
+function Player.InCamp(character)
+    return Ext.Entity.Get(character or Player.Host()).CampPresence ~= nil
+end
+
 function Player.PickupAll(character)
     for _, rarity in pairs(C.ItemRarity) do
         Item.PickupAll(character or Player.Host(), rarity)
@@ -131,7 +135,7 @@ function Player.TeleportToCamp()
                 Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntry)
             end
             if campEntryFallback then
-                Osi.TeleportTo(entity.Uuid.EntityUuid, campEntryFallback, "", 1, 1, 1, 1,  1)
+                Osi.TeleportTo(entity.Uuid.EntityUuid, campEntryFallback, "", 1, 1, 1, 1, 1)
                 Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntryFallback)
             end
         end

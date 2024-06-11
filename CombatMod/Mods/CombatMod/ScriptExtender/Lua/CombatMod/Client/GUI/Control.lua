@@ -109,7 +109,7 @@ function Control.StartPanel(root)
             for i, item in ipairs(event.Payload.Scenarios) do
                 local label = item.Name
                 if item.Name == C.RoguelikeScenario then
-                    label = label .. " (Score: " .. tostring(State.RogueScore) .. ")"
+                    label = label .. " (RogueScore: " .. tostring(State.RogueScore) .. ")"
                 end
                 scenarioSelection.AddItem(label, item.Name)
             end
@@ -176,11 +176,11 @@ function Control.RunningPanel(root)
         Components.Computed(scenarioName, function(box, state)
             if state.Scenario then
                 local text = {
-                    "Scenario: " .. tostring(state.Scenario.Name),
-                    "Round: " .. tostring(state.Scenario.Round),
-                    "Total Rounds: " .. tostring(#state.Scenario.Timeline),
-                    "Killed: " .. tostring(#state.Scenario.KilledEnemies),
-                    -- "Next: " .. tostring(#state.Scenario.Enemies[state.Scenario.Round + 1] or 0),
+                    __("Scenario: %s", tostring(state.Scenario.Name)),
+                    __("Round: %s", tostring(state.Scenario.Round)),
+                    __("Total Rounds: %s", tostring(#state.Scenario.Timeline)),
+                    __("Upcoming Spawns: %s", tostring(#(state.Scenario.Enemies[state.Scenario.Round + 1] or {}))),
+                    __("Killed: %s", tostring(#state.Scenario.KilledEnemies)),
                 }
                 if state.Scenario.Name == C.RoguelikeScenario then
                     table.insert(text, 2, "RogueScore: " .. tostring(state.RogueScore))
@@ -191,7 +191,7 @@ function Control.RunningPanel(root)
 
         Components.Computed(mapName, function(box, state)
             if state.Scenario then
-                return "Map: " .. tostring(state.Scenario.Map.Name)
+                return __("Map: %s", tostring(state.Scenario.Map.Name))
             end
         end, "StateChange")
 

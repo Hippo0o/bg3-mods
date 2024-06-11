@@ -29,6 +29,7 @@ Mod.PersistentVarsTemplate = {
 DefaultConfig = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = true, -- more continuous battle between rounds at the cost of cheesy out of combat strats
+    HardMode = false, -- applies additional difficulty to the game
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
     LootIncludesCampSlot = false, -- include camp clothes in item lists
     Debug = false,

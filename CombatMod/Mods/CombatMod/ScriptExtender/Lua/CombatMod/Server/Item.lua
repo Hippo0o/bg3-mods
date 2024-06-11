@@ -16,6 +16,8 @@ L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 
 local itemBlacklist = {
     "^DLC_", -- DLC items
+    "OBJ_BloodPotion_", -- we ain't roleplaying
+    "GLO_", -- useless
     "OBJ_FreezingSphere", -- explodes on pickup
     "LOW_DeadMansSwitch_Shield", -- a bomb
     "MAG_OfTheShapeshifter_Mask", -- DLC mask
@@ -26,6 +28,7 @@ local itemBlacklist = {
     "_Destroyed$", -- junk
     "_REF$", -- junk
     "^Quest_", -- junk
+    "OBJ_Bomb_Orthon",
     "CONS_FOOD_Soup_Tomato", -- invalid template
     "ARM_Vanity_Body_Shar", -- invalid template
     "WPN_LightCrossbow_Makeshift", -- broken model
@@ -33,7 +36,9 @@ local itemBlacklist = {
     "DEN_VoloOperation_ErsatzEye", -- vololo
     "SHA_SharSpear", -- shar does not give us permission
     "MAG_Cunning_HandCrossbow", -- does not work
-    "LOW_OskarsBeloved_"
+    "LOW_OskarsBeloved_",
+    "WPN_Dart", -- unfinished
+    "WPN_Sling", -- unfinished
 
     -- "_Myrmidon_ConjureElemental$",
     -- "_Myrmidon_WildShape$",
@@ -53,12 +58,14 @@ local itemBlacklist = {
 ---@field RootTemplate string
 ---@field Rarity string
 ---@field GUID string|nil
+---@field Slot string|nil
 local Object = Libs.Class({
     Name = nil,
     Type = nil,
     RootTemplate = "",
     Rarity = C.ItemRarity[1],
     GUID = nil,
+    Slot = nil,
 })
 
 ---@param name string
@@ -75,6 +82,12 @@ function Object.New(name, type, fake)
         local item = Ext.Stats.Get(name)
         o.RootTemplate = item.RootTemplate
         o.Rarity = item.Rarity
+        if type == "Armor" or type == "Weapon" then
+            o.Slot = item.Slot
+        end
+        if type == "Object" then
+            o.Slot = item.InventoryTab
+        end
     end
 
     o.GUID = nil
@@ -157,6 +170,8 @@ function Item.Objects(rarity, forCombat)
     local items = UT.Filter(objects, function(name)
         local stat = Ext.Stats.Get(name)
         local cat = stat.ObjectCategory
+        local tab = stat.InventoryTab
+        local type = stat.ItemUseType
 
         if name:match("^_") then
             return false
@@ -175,15 +190,7 @@ function Item.Objects(rarity, forCombat)
         end
 
         if forCombat then
-            if
-                not (
-                    cat:match("Arrow")
-                    or cat:match("Potion")
-                    or cat:match("MagicScroll")
-                    or cat:match("Poison")
-                    or cat:match("Throwable")
-                )
-            then
+            if not (type == "Potion" or tab == "Magical") then
                 return false
             end
         else
@@ -192,7 +199,7 @@ function Item.Objects(rarity, forCombat)
                     (cat:match("^Food") and name:match("^CONS_"))
                     -- or cat:match("^Drink")
                     or cat:match("^Ingredient")
-                    or cat:match("Potion")
+                    or cat == "PotionHealing"
                     -- alchemy items
                     -- or name:match("^OBJ_Crystal_")
                     or name:match("^CONS_Mushrooms_")
@@ -202,6 +209,11 @@ function Item.Objects(rarity, forCombat)
             then
                 return false
             end
+        end
+
+        local temp = Ext.Template.GetTemplate(stat.RootTemplate)
+        if not temp or temp.Name:match("DONOTUSE$") then
+            return false
         end
 
         return true
@@ -245,6 +257,11 @@ function Item.Armor(rarity)
             return false
         end
 
+        local temp = Ext.Template.GetTemplate(stat.RootTemplate)
+        if not temp or temp.Name:match("DONOTUSE$") then
+            return false
+        end
+
         return true
     end)
 
@@ -275,6 +292,11 @@ function Item.Weapons(rarity)
 
         -- weapons that can't be used by players
         if stat.UseConditions ~= "" then
+            return false
+        end
+
+        local temp = Ext.Template.GetTemplate(stat.RootTemplate)
+        if not temp or temp.Name:match("DONOTUSE$") then
             return false
         end
 
@@ -332,7 +354,7 @@ function Item.SpawnLoot(loot, x, y, z)
 
         if i > #loot then
             self:Clear()
-
+            Event.Trigger("LootSpawned", loot)
             return
         end
 
@@ -424,6 +446,13 @@ function Item.GenerateLoot(rolls, lootRates)
                 items = Item.Weapons(rarity)
             elseif bonusCategory == "Armor" then
                 items = Item.Armor(rarity)
+                if #items > 0 then
+                    local bySlot = UT.GroupBy(items, "Slot")
+                    local slots = UT.Keys(bySlot)
+                    local randomSlot = slots[U.Random(#slots)]
+                    L.Debug("Rolling Armor loot slot:", randomSlot, rarity)
+                    items = UT.Values(bySlot[randomSlot])
+                end
             end
         end
 
