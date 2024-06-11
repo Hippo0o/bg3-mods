@@ -4,18 +4,17 @@ Require("CombatMod/Shared")
 S = nil
 
 Mod.PersistentVarsTemplate = {
-    Active = nil,
+    Asked = false,
+    Active = false,
     RogueModeActive = false,
     SpawnedEnemies = {},
     SpawnedItems = {},
-    Scenario = S,
+    Scenario = {},
     LastScenario = nil,
     RogueScore = 0,
+    HardMode = false, -- applies additional difficulty to the game
     GUIOpen = false,
-    Stats = {
-        Looted = {},
-        Killed = {},
-    },
+    History = {},
     Currency = 0,
     Unlocked = {
         ExpMultiplier = false,
@@ -29,13 +28,13 @@ Mod.PersistentVarsTemplate = {
 DefaultConfig = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = true, -- more continuous battle between rounds at the cost of cheesy out of combat strats
-    HardMode = false, -- applies additional difficulty to the game
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
     LootIncludesCampSlot = false, -- include camp clothes in item lists
     Debug = false,
     RandomizeSpawnOffset = 3,
     ExpMultiplier = 3,
     SpawnItemsAtPlayer = false,
+    TurnOffNotifications = false,
 }
 Config = UT.DeepClone(DefaultConfig)
 
@@ -102,7 +101,8 @@ end)
 GameState.OnLoad(function()
     External.LoadConfig()
 
-    if PersistentVars.Active == nil then
+    PersistentVars.Asked = PersistentVars.Active
+    if PersistentVars.Asked == false then
         GameMode.AskOnboarding()
     end
 
@@ -153,13 +153,17 @@ Event.On("ModDeactive", function()
 end)
 
 -- collect stats
-Event.On("ScenarioLoot", function(_, loot)
-    for _, item in ipairs(loot) do
-        table.insert(PersistentVars.Stats.Looted, item)
-    end
-end)
-Event.On("ScenarioEnemyKilled", function(_, enemy)
-    table.insert(PersistentVars.Stats.Killed, enemy)
+Event.On("ScenarioEnded", function(scenario)
+    table.insert(PersistentVars.History, {
+        HardMode = PersistentVars.HardMode,
+        RogueScore = PersistentVars.RogueScore,
+        Currency = PersistentVars.Currency,
+        Scenario = {
+            Enemies = UT.Size(scenario.KilledEnemies),
+            Rounds = scenario.Round - 1,
+            Map = scenario.Map.Name,
+        },
+    })
 end)
 
 -------------------------------------------------------------------------------------------------

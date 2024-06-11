@@ -36,7 +36,7 @@ local function cancelDialog(dialog, instanceID)
             local paidActor = US.Contains(actor, {
                 "_Daisy_",
                 "Jergal",
-                "OathbreakerKnight",
+                -- "OathbreakerKnight",
                 -- "Orpheus",
                 -- "Volo",
             })
@@ -141,7 +141,7 @@ U.Osiris.On(
     2,
     "after",
     ifBypassStory(function(object, combatGuid)
-        if not Enemy.IsValid(object) and GC.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
+        if not S and GC.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
             L.Debug("Removing", object)
             Osi.LeaveCombat(object)
             GU.Object.Remove(object)
@@ -264,7 +264,6 @@ function StoryBypass.ClearArea(character)
         return v.Entity.IsCharacter
             and GC.IsNonPlayer(v.Guid)
             and not v.Entity.PartyMember
-            and not U.UUID.Equals(C.NPCCharacters.Oathbreaker, v.Guid)
             and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Guid)
     end)
 

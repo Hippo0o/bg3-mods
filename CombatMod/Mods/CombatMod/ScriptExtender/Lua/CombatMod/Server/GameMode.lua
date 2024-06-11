@@ -32,6 +32,7 @@ end
 
 function GameMode.AskOnboarding()
     PersistentVars.Active = false
+    PersistentVars.Asked = true
 
     return Player.AskConfirmation("Welcome to %s! Start playing?", Mod.Prefix)
         .After(function(confirmed)
@@ -142,7 +143,9 @@ Difficulty increases with the score.]]).After(function(confirmed)
 
         PersistentVars.RogueModeActive = confirmed
 
-        PersistentVars.RogueScore = (GE.GetHost().EocLevel.Level - 1) * 10 -- +10 per level
+        if PersistentVars.RogueScore == 0 then
+            PersistentVars.RogueScore = (GE.GetHost().EocLevel.Level - 1) * 10 -- +10 per level
+        end
 
         Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
 
@@ -244,7 +247,7 @@ function GameMode.GenerateScenario(score, cow)
         { name = C.EnemyTier[6], value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
 
-    if Config.HardMode then
+    if PersistentVars.HardMode then
         -- Define tiers and their corresponding difficulty values
         tiers = {
             { name = C.EnemyTier[1], value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
@@ -420,7 +423,7 @@ function GameMode.UpdateRogueScore(scenario)
     local endRound = scenario.Round - 1
 
     -- If not hard mode, give a bonus for perfect clear
-    if not Config.HardMode then
+    if not PersistentVars.HardMode then
         endRound = endRound - 1
     end
 
@@ -452,7 +455,7 @@ function GameMode.StartNext()
         return
     end
 
-    local threshold = Config.HardMode and 20 or 40
+    local threshold = PersistentVars.HardMode and 20 or 40
 
     local maps = UT.Filter(Map.Get(), function(v)
         return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
@@ -475,15 +478,6 @@ U.Osiris.On(
             GameMode.StartNext()
             Player.PickupAll()
             Osi.PROC_LockAllUnlockedWaypoints()
-        end
-    end)
-)
-
-Event.On(
-    "LootSpawned",
-    ifRogueLike(function()
-        if Player.InCamp() then
-            Player.PickupAll()
         end
     end)
 )

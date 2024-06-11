@@ -116,7 +116,7 @@ function Unlock.CalculateReward(scenario)
             return tier == e.Tier
         end)
         if value == nil then
-            U.Error("Invalid tier for enemy", e.Tier, e.Name)
+            L.Error("Invalid tier for enemy", e.Tier, e.Name)
             value = 1
         end
         reward = reward + value

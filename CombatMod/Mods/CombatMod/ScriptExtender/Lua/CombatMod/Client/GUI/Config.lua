@@ -37,6 +37,8 @@ function Config.Main(tab)
 
     local c8 = Config.Checkbox(root, "Play Roguelike Mode", "get continuously harder battles", "RoguelikeMode")
 
+    local c3 = Config.Checkbox(root, "Challenge Mode", "apparently it was too easy", "HardMode")
+
     local c6 = Config.Checkbox(
         root,
         "Spawn Items At Player",
@@ -52,10 +54,11 @@ function Config.Main(tab)
         "BypassStory"
     )
 
-    local c3 = Config.Checkbox(root, "Challenge Mode", "apparently it was too easy", "HardMode")
+    local c4 =
+        Config.Checkbox(root, "Force Enter Combat", "automatically starts combat between rounds", "ForceEnterCombat")
 
-    local c4 = Config.Checkbox(root, "Force Enter Combat", "automatically starts combat between rounds", "ForceEnterCombat")
-
+    local c9 =
+        Config.Checkbox(root, "Turn Off Notifications", "don't show ingame notifications", "TurnOffNotifications")
 
     local c5 = Config.Slider(
         root,
@@ -114,14 +117,6 @@ function Config.Main(tab)
         showStatus(__("Persisting config..."))
 
         Net.Send("Config", {
-            Debug = c1.Checked,
-            BypassStory = c2.Checked,
-            HardMode = c3.Checked,
-            ForceEnterCombat = c4.Checked,
-            RandomizeSpawnOffset = c5.Value[1],
-            SpawnItemsAtPlayer = c6.Checked,
-            ExpMultiplier = c7.Value[1],
-            RoguelikeMode = c8.Checked,
             Persist = true,
         })
     end
