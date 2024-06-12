@@ -308,10 +308,7 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 0)
-
-    -- snap to ground can put enemies under the map
-    y = y + 10
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 0) -- not avoiding dangerous surfaces
 
     local success = self:CreateAt(x, y, z)
 

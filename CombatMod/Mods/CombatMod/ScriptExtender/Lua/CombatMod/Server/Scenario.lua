@@ -653,48 +653,6 @@ U.Osiris.On(
 )
 
 U.Osiris.On(
-    "EnteredCombat",
-    2,
-    "after",
-    ifScenario(function(object, combatGuid)
-        local s = Current()
-        if not s:HasStarted() then
-            return
-        end
-
-        if s.CombatId ~= combatGuid then -- should not happen
-            return
-        end
-
-        local guid = U.UUID.Extract(object)
-
-        if not GC.IsNonPlayer(guid) then
-            return
-        end
-
-        if UT.Find(s.SpawnedEnemies, function(e)
-            return U.UUID.Equals(e.GUID, guid)
-        end) then
-            return
-        end
-
-        if PersistentVars.SpawnedEnemies[guid] then
-            return
-        end
-
-        L.Debug("Entered combat.", guid, combatGuid)
-        Schedule(function()
-            local e = Enemy.CreateTemporary(guid)
-
-            if Osi.IsAlly(Player.Host(), guid) == 0 and Osi.IsCharacter == 1 then
-                table.insert(s.SpawnedEnemies, e)
-                Player.Notify(__("Enemy %s joined.", e:GetTranslatedName()), true)
-            end
-        end)
-    end)
-)
-
-U.Osiris.On(
     "CombatStarted",
     1,
     "before",
@@ -741,9 +699,17 @@ U.Osiris.On(
 U.Osiris.On(
     "TeleportedFromCamp",
     1,
-    "before",
+    "after",
     ifScenario(function(uuid)
-        if GC.IsNonPlayer(uuid) then
+        local isPlayer = UT.Find(GU.DB.GetPlayers(), function(character)
+            return U.UUID.Equals(character, uuid)
+        end)
+
+        if not isPlayer then
+            return
+        end
+
+        if Ext.Entity.Get(uuid).CampPresence then
             return
         end
 
@@ -772,6 +738,52 @@ U.Osiris.On(
                 Player.Notify(__("Returned to camp."))
             end
         end
+    end)
+)
+
+U.Osiris.On(
+    "EnteredCombat",
+    2,
+    "after",
+    ifScenario(function(object, combatGuid)
+        local s = Current()
+        if not s:HasStarted() then
+            return
+        end
+
+        if s.CombatId ~= combatGuid then -- should not happen
+            return
+        end
+
+        local guid = U.UUID.Extract(object)
+
+        if not GC.IsNonPlayer(guid) then
+            return
+        end
+
+        if Osi.IsCharacter(object) ~= 1 then
+            return
+        end
+
+        if UT.Find(s.SpawnedEnemies, function(e)
+            return U.UUID.Equals(e.GUID, guid)
+        end) then
+            return
+        end
+
+        if PersistentVars.SpawnedEnemies[guid] then
+            return
+        end
+
+        L.Debug("Entered combat.", guid, combatGuid)
+        Schedule(function()
+            local e = Enemy.CreateTemporary(guid)
+
+            if Osi.IsAlly(Player.Host(), guid) == 0 then
+                table.insert(s.SpawnedEnemies, e)
+                Player.Notify(__("Enemy %s joined.", e:GetTranslatedName()), true)
+            end
+        end)
     end)
 )
 

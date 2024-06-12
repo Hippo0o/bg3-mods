@@ -144,7 +144,7 @@ Difficulty increases with the score.]]).After(function(confirmed)
         PersistentVars.RogueModeActive = confirmed
 
         if PersistentVars.RogueScore == 0 then
-            PersistentVars.RogueScore = math.max(100, (GE.GetHost().EocLevel.Level - 1) * 10) -- +10 per level, max 100
+            PersistentVars.RogueScore = math.min(100, (GE.GetHost().EocLevel.Level - 1) * 10) -- +10 per level, max 100
         end
 
         Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
@@ -505,11 +505,11 @@ Event.On("ScenarioEnded", function(scenario)
         GameMode.UpdateRogueScore(scenario)
 
         ifRogueLike(function()
-            Player.Notify(__("Teleporting back to camp in %d seconds.", 60), true)
-            local d1 = Defer(30000, function()
-                Player.Notify(__("Teleporting back to camp in %d seconds.", 30), true)
+            Player.Notify(__("Teleporting back to camp in %d seconds.", 30), true)
+            local d1 = Defer(10000, function()
+                Player.Notify(__("Teleporting back to camp in %d seconds.", 20), true)
             end)
-            local d2 = Defer(60000, function()
+            local d2 = Defer(30000, function()
                 Player.PickupAll()
                 Player.ReturnToCamp()
             end)
