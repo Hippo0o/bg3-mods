@@ -16,13 +16,13 @@ function Debug.Main(tab)
         Net.Send("KillNearby")
     end
 
-    root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Async.Debounce(1000, function(input)
+    root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Debounce(1000, function(input)
         Net.RCE("PersistentVars.RogueScore = %d", input.Value[1]).After(function()
             Net.Send("SyncState")
         end)
     end)
 
-    root:AddInputInt("Currency", State.Currency or 0).OnChange = Async.Debounce(1000, function(input)
+    root:AddInputInt("Currency", State.Currency or 0).OnChange = Debounce(1000, function(input)
         Net.RCE("PersistentVars.Currency = %d", input.Value[1]).After(function()
             Net.Send("SyncState")
         end)
@@ -114,7 +114,7 @@ function Debug.Enemies(root)
 
     local search = grp:AddInputText(__("Search"))
     search.IDContext = U.RandomId()
-    search.OnChange = Async.Debounce(100, function(input)
+    search.OnChange = Debounce(100, function(input)
         local list = {}
         for k, enemies in pairs(netEnemies) do
             list[k] = UT.Filter(enemies, function(item)
@@ -197,7 +197,7 @@ function Debug.Items(root)
 
     local search = grp:AddInputText(__("Search"))
     search.IDContext = U.RandomId()
-    search.OnChange = Async.Debounce(100, function(input)
+    search.OnChange = Debounce(100, function(input)
         local list = {}
         for k, items in pairs(netItems) do
             list[k] = UT.Filter(items, function(item)

@@ -59,7 +59,7 @@ Net.Send("SyncState")
 do
     local errorBox = window:AddText("")
     errorBox:SetColor("Text", { 1, 0.4, 0.4, 1 })
-    local clearError = Async.Debounce(2000, function()
+    local clearError = Debounce(2000, function()
         errorBox.Label = ""
     end)
     Components.Computed(errorBox, function(box, result)
@@ -70,7 +70,7 @@ do
 
     local successBox = window:AddText("")
     successBox:SetColor("Text", { 0.4, 1, 0.4, 1 })
-    local clearSuccess = Async.Debounce(2000, function()
+    local clearSuccess = Debounce(2000, function()
         successBox.Label = ""
     end)
     Components.Computed(successBox, function(box, result)
@@ -104,12 +104,12 @@ Components.Conditional(_, function()
 end, "ToggleDebug")
 
 do -- auto hide window
-    local windowVisible = Async.Debounce(1000, function(bool)
+    local windowVisible = Debounce(1000, function(bool)
         if PersistentVars.AutoHide then
             window.Visible = bool
         end
     end)
-    -- local windowAlpha = Async.Debounce(100, function(bool)
+    -- local windowAlpha = Debounce(100, function(bool)
     --     if bool then
     --         window:SetStyle("Alpha", 1)
     --         window.Visible = bool

@@ -21,7 +21,6 @@ local function unlockTadpole(object)
     Osi.SetTadpoleTreeState(object, 2)
     Osi.AddTadpolePower(object, "TAD_IllithidPersuasion", 1)
     Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", object)
-
 end
 
 local function hagHair()
@@ -67,6 +66,16 @@ end
 
 local multis = {
     {
+        Id = "MOD_BOOSTS",
+        Name = __("Unlock Multipliers"),
+        Icon = "PassiveFeature_Generic_Explosion",
+        Cost = 1000,
+        Amount = 1,
+        Character = false,
+        Persistent = true,
+        Requirement = 100,
+    },
+    {
         Id = "ExpMultiplier",
         Name = __("Gain double XP"),
         Icon = "Spell_MagicJar",
@@ -101,16 +110,6 @@ local multis = {
         OnBuy = function(self, character)
             PersistentVars.Unlocked.CurrencyMultiplier = true
         end,
-    },
-    {
-        Id = "MOD_BOOSTS",
-        Name = __("Unlock Multipliers"),
-        Icon = "PassiveFeature_Generic_Explosion",
-        Cost = 1000,
-        Amount = 1,
-        Character = false,
-        Persistent = true,
-        Requirement = 100,
     },
 }
 
@@ -183,9 +182,13 @@ local ngPlus = {
         Character = false,
         Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
+            GameMode.ExpLock.Pause()
+
             for _, p in pairs(GU.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
             end
+
+            Defer(1000, GameMode.ExpLock.Resume)
         end,
     },
     {
@@ -266,17 +269,6 @@ return UT.Combine(
             end,
         },
         {
-            Id = "BuyGold",
-            Name = "100 Gold",
-            Icon = "Item_LOOT_COINS_Gold_Pile_Single_A",
-            Cost = 5,
-            Amount = nil,
-            Character = false,
-            OnBuy = function(self, character)
-                Osi.AddGold(character, 100)
-            end,
-        },
-        {
             Id = "BuyExp",
             Name = "1000 EXP",
             Icon = "Action_Dash_Bonus",
@@ -284,9 +276,13 @@ return UT.Combine(
             Amount = nil,
             Character = false,
             OnBuy = function(self, character)
+                GameMode.ExpLock.Pause()
+
                 for _, p in pairs(GU.DB.GetPlayers()) do
                     Osi.AddExplorationExperience(p, 1000)
                 end
+
+                Defer(1000, GameMode.ExpLock.Resume)
             end,
         },
         {
@@ -380,8 +376,8 @@ return UT.Combine(
             end,
         },
     },
-    hagHair(),
     multis,
+    hagHair(),
     ngPlus
     -- Not working outside END_Main
     -- {

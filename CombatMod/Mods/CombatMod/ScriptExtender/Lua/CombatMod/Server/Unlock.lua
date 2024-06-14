@@ -121,9 +121,11 @@ function Unlock.CalculateReward(scenario)
         end
         reward = reward + value
     end
+    local gained = math.ceil(reward * rewardMulti)
 
     local prev = PersistentVars.Currency or 0
-    PersistentVars.Currency = prev + math.ceil(reward * rewardMulti)
+    PersistentVars.Currency = prev + gained
+    Osi.AddGold(Player.Host(), gained * 10)
 
     Player.Notify(__("Your Currency increased: %d -> %d!", prev, PersistentVars.Currency))
 end
@@ -201,15 +203,15 @@ end
 
 Event.On("ModActive", function()
     Unlock.Sync()
+end)
 
-    GameState.OnLoad(Unlock.Sync)
+GameState.OnLoad(IfActive(Unlock.Sync))
 
-    GameState.OnSave(function()
-        for i, u in ipairs(PersistentVars.Unlocks) do
-            PersistentVars.Unlocks[i] = UT.Clean(u)
-        end
-    end)
-end, true)
+GameState.OnSave(IfActive(function()
+    for i, u in ipairs(PersistentVars.Unlocks) do
+        PersistentVars.Unlocks[i] = UT.Clean(u)
+    end
+end))
 
 Event.On("ScenarioTeleport", function()
     for _, u in pairs(Unlock.Get()) do
@@ -243,7 +245,7 @@ Net.On("BuyUnlock", function(event)
         Osi.PlaySoundResource(event:Character(), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
     end
 
-    if Osi.IsInCombat(event:Character()) == 1 then
+    if Osi.IsInCombat(event:Character()) == 1 or (S and S:HasStarted()) then
         Net.Respond(event, { false, __("Cannot buy while in combat.") })
         soundFail()
         return

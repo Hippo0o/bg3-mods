@@ -27,7 +27,6 @@ function GameMode.AskTutSkip()
             External.LoadConfig()
             return Defer(3000)
         end)
-        .After(GameMode.AskRecruit)
 end
 
 function GameMode.AskOnboarding()
@@ -51,14 +50,6 @@ function GameMode.AskOnboarding()
         end)
 end
 
-function GameMode.AskRecruit()
-    return Player.AskConfirmation("Recruit Origin characters?").After(function(confirmed)
-        if not confirmed then
-            return
-        end
-    end)
-end
-
 function GameMode.AskEnableRogueMode()
     return Player.AskConfirmation([[
 Play Roguelike mode?
@@ -78,12 +69,6 @@ Difficulty increases with the score.]]).After(function(confirmed)
         return confirmed
     end)
 end
-
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                           Events                                            --
---                                                                                             --
--------------------------------------------------------------------------------------------------
 
 U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
     -- if
@@ -122,12 +107,6 @@ U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor,
     --         end
     --     end
     -- end
-end)
-
-Event.On("ModActivated", function()
-    if not PersistentVars.RogueModeActive then
-        GameMode.AskEnableRogueMode()
-    end
 end)
 
 -------------------------------------------------------------------------------------------------
@@ -216,7 +195,7 @@ function GameMode.GenerateScenario(score, cow)
         for i, tier in ipairs(tiers) do
             if remainingValue >= tier.value then
                 -- Bias towards tiers with more enemies
-                local weight = (tier.amount - 25) / (100 - 25) * 0.7 + 0.1
+                local weight = tier.amount / 100 * 0.7 + 0.1
                 L.Debug("Tier", tier.name, weight)
 
                 table.insert(validTiers, { tier = tier, weight = weight })
@@ -319,6 +298,11 @@ function GameMode.GenerateScenario(score, cow)
                 end
                 return generateTimeline(maxValue, failed)
             end
+        end
+
+        if #timeline > 1 and #timeline[#timeline] > #timeline[#timeline - 1] then
+            L.Error("Last round is too big", #timeline[#timeline], #timeline[#timeline - 1])
+            return generateTimeline(maxValue, failed)
         end
 
         return timeline
@@ -603,4 +587,92 @@ end
 
 function GameMode.OverridePartySize(size)
     Osi.SetMaxPartySizeOverride(size)
+end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                            Fixes                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+do -- EXP Lock
+    GameMode.ExpLock = {}
+
+    local entityData = {}
+    local function snapEntity(entity)
+        entityData[entity.Uuid.EntityUuid] = {
+            exp = UT.Clean(entity.Experience),
+            level = entity.EocLevel.Level,
+        }
+        entity:Replicate("Experience")
+    end
+
+    function GameMode.ExpLock.SnapshotEntitiesExp()
+        entityData = {}
+        for i, e in pairs(GE.GetParty()) do
+            snapEntity(e)
+        end
+    end
+
+    local paused = false
+    function GameMode.ExpLock.Pause()
+        paused = true
+    end
+
+    function GameMode.ExpLock.Resume()
+        paused = false
+        GameMode.ExpLock.SnapshotEntitiesExp()
+    end
+
+    local entityListener = nil
+    local function subscribeEntitiesExp()
+        if not entityListener then
+            GameMode.ExpLock.SnapshotEntitiesExp()
+            entityListener = Ext.Entity.Subscribe("Experience", function(e)
+                if paused then
+                    return
+                end
+
+                local data = entityData[e.Uuid.EntityUuid]
+
+                if data then
+                    local exp = data.exp
+                    local level = data.level
+                    if e.Experience.CurrentLevelExperience == exp.CurrentLevelExperience then
+                        L.Debug("Experience unchanged", e.Uuid.EntityUuid)
+                        return
+                    end
+
+                    e.EocLevel.Level = level
+                    e.AvailableLevel.Level = level
+
+                    e.Experience.CurrentLevelExperience = exp.CurrentLevelExperience
+                    e.Experience.TotalExperience = exp.TotalExperience
+                    e.Experience.NextLevelExperience = exp.NextLevelExperience
+                    -- e.Experience.field_28 = exp.field_28
+
+                    e:Replicate("EocLevel")
+                    e:Replicate("AvailableLevel")
+                    e:Replicate("Experience")
+                    L.Debug("Experience restored", e.Uuid.EntityUuid)
+                else
+                    snapEntity(e)
+                end
+            end)
+        end
+    end
+    local function unsubscribeEntitiesExp()
+        if entityListener then
+            Ext.Entity.Unsubscribe(entityListener)
+            entityListener = nil
+        end
+    end
+
+    Event.On("ModActive", subscribeEntitiesExp)
+    GameState.OnLoad(IfActive(subscribeEntitiesExp))
+    GameState.OnUnload(unsubscribeEntitiesExp)
+
+    Event.On("ScenarioCombatStarted", GameMode.ExpLock.Pause)
+    Event.On("ScenarioEnded", GameMode.ExpLock.Resume)
+    Event.On("ScenarioStopped", GameMode.ExpLock.Resume)
 end

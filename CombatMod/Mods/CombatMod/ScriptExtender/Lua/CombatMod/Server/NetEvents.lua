@@ -1,5 +1,4 @@
 function SyncState()
-    PersistentVars.OldItems = Item.OldItems()
     Net.Send(
         "SyncState",
         UT.Filter(PersistentVars, function(v, k)
@@ -283,6 +282,11 @@ Net.On("RecruitOrigin", function(event)
     else
         Net.Respond(event, { false, string.format("Origin %s not found.", name) })
     end
+end)
+
+Net.On("CancelLongRest", function(event)
+    StoryBypass.EndLongRest()
+    Net.Respond(event, { true })
 end)
 
 Net.On("CancelDialog", function(event)

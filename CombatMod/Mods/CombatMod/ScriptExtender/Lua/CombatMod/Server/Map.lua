@@ -161,7 +161,7 @@ function Map.TeleportTo(map, character)
     if map.Region == Osi.GetRegion(Player.Host()) then
         Object.Init(map):Teleport(character, true)
 
-        if S and U.Equals(map, S.Map) then
+        if S and U.Equals(map.Enter, S.Map.Enter) then
             Event.Trigger("ScenarioTeleport", character)
         end
 
