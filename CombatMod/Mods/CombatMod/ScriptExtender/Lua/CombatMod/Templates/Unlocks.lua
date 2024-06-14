@@ -3,16 +3,25 @@ local function getUnlocks()
 end
 
 local function unlockTadpole(object)
+    local e = Ext.Entity.Get(object)
+    if not e.Tadpoled then
+        e:CreateComponent("Tadpoled")
+        e:Replicate("Tadpoled")
+    end
+
+    -- give tadpole on first unlock
     if Osi.GetTadpolePowersCount(object) < 1 then
         Osi.AddTadpole(object, 1)
         Osi.AddTadpole(object, 1)
     end
+
     Osi.SetTag(object, "089d4ca5-2cf0-4f54-84d9-1fdea055c93f")
     Osi.SetTag(object, "efedb058-d4f5-4ab8-8add-bd5e32cdd9cd")
     Osi.SetTag(object, "c15c2234-9b19-453e-99cc-00b7358b9fce")
     Osi.SetTadpoleTreeState(object, 2)
     Osi.AddTadpolePower(object, "TAD_IllithidPersuasion", 1)
     Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", object)
+
 end
 
 local function hagHair()
@@ -206,6 +215,13 @@ return UT.Combine(
             Cost = 10,
             Amount = nil,
             Character = true,
+            OnReapply = function()
+                for _, p in pairs(GU.DB.GetPlayers()) do
+                    if Osi.GetTadpolePowersCount(p) > 0 then
+                        Osi.SetTadpoleTreeState(p, 2)
+                    end
+                end
+            end,
             OnBuy = function(self, character)
                 unlockTadpole(character)
             end,

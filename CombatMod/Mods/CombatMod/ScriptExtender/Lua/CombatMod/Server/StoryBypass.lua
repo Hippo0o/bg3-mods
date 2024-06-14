@@ -60,15 +60,11 @@ local function cancelDialog(dialog, instanceID)
         L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
 
         if #hasRemovable > 0 then
-            for _, player in pairs(GU.DB.GetPlayers()) do
-                Osi.DialogRemoveActorFromDialog(instanceID, player)
-                Osi.DialogRequestStopForDialog(dialog, player)
-            end
+            StoryBypass.CancelDialog(dialog, instanceID)
         end
 
         for _, actor in ipairs(hasRemovable) do
             L.Debug("Removing", actor)
-            -- GU.Object.Remove(actor)
             Osi.DialogRemoveActorFromDialog(instanceID, actor)
             Osi.DialogRequestStopForDialog(dialog, actor)
 
@@ -234,13 +230,24 @@ U.Osiris.On(
     0,
     "after",
     ifBypassStory(function()
-        Osi.PROC_Camp_LongRestFinishForAllPlayers()
-        Osi.PROC_Camp_EveryoneWakeup()
-        Osi.RemoveStatus(GetHostCharacter(), "LONG_REST", "00000000-0000-0000-0000-000000000000")
-        -- Osi.RestoreParty(GetHostCharacter())
-        Osi.PROC_Camp_SetModeToDay()
+        StoryBypass.EndLongRest()
     end)
 )
+
+function StoryBypass.CancelDialog(dialog, instanceID)
+    for _, player in pairs(GU.DB.GetPlayers()) do
+        Osi.DialogRemoveActorFromDialog(instanceID, player)
+        Osi.DialogRequestStopForDialog(dialog, player)
+    end
+end
+
+function StoryBypass.EndLongRest()
+    Osi.PROC_Camp_LongRestFinishForAllPlayers()
+    Osi.PROC_Camp_EveryoneWakeup()
+    Osi.RemoveStatus(GetHostCharacter(), "LONG_REST", "00000000-0000-0000-0000-000000000000")
+    -- Osi.RestoreParty(GetHostCharacter())
+    Osi.PROC_Camp_SetModeToDay()
+end
 
 function StoryBypass.UnblockTravel(entity)
     Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_CANTMOVE")
@@ -252,23 +259,35 @@ function StoryBypass.UnblockTravel(entity)
     entity:Replicate("CanTravel")
 end
 
-function StoryBypass.RemoveEveryone()
+function StoryBypass.RemoveAllEntities()
     local toRemove = UT.Filter(Ext.Entity.GetAllEntitiesWithUuid(), function(v)
         return v.IsCharacter
+            and GC.IsNonPlayer(v.Uuid.EntityUuid)
             and not v.PartyMember
-            and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Uuid.EntityUuid)
-            and not U.UUID.Equals(C.NPCCharacters.Emperor, v.Uuid.EntityUuid)
-            and not GC.IsPlayable(v.Uuid.EntityUuid)
+            and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Uuid.EntityUuid) -- No
+            and not U.UUID.Equals(C.NPCCharacters.Emperor, v.Uuid.EntityUuid) -- Gameover if dead
+            and not v.ServerCharacter.Template.Name:match("Player")
     end)
-    for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
+
+    local bypassConfig = Config.BypassStory
+    Config.BypassStory = false
+
+    for i, batch in ipairs(UT.Batch(toRemove, math.ceil(#toRemove / 10))) do
         Schedule(function()
             for _, b in pairs(batch) do
                 L.Debug("Removing", b.Uuid.EntityUuid, b.ServerCharacter.Template.Name)
-
                 GU.Object.Remove(b.Uuid.EntityUuid)
+            end
+
+            if i == 10 then
+                Defer(1000, function()
+                    Config.BypassStory = bypassConfig
+                end)
             end
         end)
     end
+
+    return toRemove
 end
 
 function StoryBypass.ClearArea(character)
@@ -343,6 +362,9 @@ Event.On(
     "ScenarioCombatStarted",
     ifBypassStory(function()
         StoryBypass.ClearArea(Player.Host())
+        for _, player in pairs(GU.DB.GetPlayers()) do
+            Osi.RemoveStatus(player, "SURPRISED", C.NullGuid)
+        end
     end)
 )
 

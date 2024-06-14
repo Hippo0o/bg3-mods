@@ -243,26 +243,32 @@ Net.On("BuyUnlock", function(event)
         Osi.PlaySoundResource(event:Character(), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
     end
 
+    if Osi.IsInCombat(event:Character()) == 1 then
+        Net.Respond(event, { false, __("Cannot buy while in combat.") })
+        soundFail()
+        return
+    end
+
     if unlock == nil then
-        Net.Respond(event, { false, "Unlock not found." })
+        Net.Respond(event, { false, __("Unlock not found.") })
         soundFail()
         return
     end
 
     if not unlock:Buyable() then
-        Net.Respond(event, { false, "Unlock out of stock." })
+        Net.Respond(event, { false, __("Unlock out of stock.") })
         soundFail()
         return
     end
 
     if unlock.Character and not event.Payload.Character then
-        Net.Respond(event, { false, "Unlock needs a character." })
+        Net.Respond(event, { false, __("Unlock needs a character.") })
         soundFail()
         return
     end
 
     if unlock.Cost > PersistentVars.Currency then
-        Net.Respond(event, { false, "Not enough currency." })
+        Net.Respond(event, { false, __("Not enough currency.") })
         soundFail()
 
         return

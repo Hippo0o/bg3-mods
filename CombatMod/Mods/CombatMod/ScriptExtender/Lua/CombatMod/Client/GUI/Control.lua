@@ -1,50 +1,42 @@
 Control = {}
 
 function Control.Events()
-    local function handleResponse(payload)
-        if payload[1] then
-            Event.Trigger("Success", payload[2])
-        else
-            Event.Trigger("Error", payload[2])
-        end
-    end
-
     Event.On("Start", function(scenarioName, mapName)
         Net.Request("Start", {
             Scenario = scenarioName,
             Map = mapName,
         }).After(function(event)
-            handleResponse(event.Payload)
+            DisplayResponse(event.Payload)
         end)
     end)
 
     Event.On("Stop", function()
         Net.Request("Stop").After(function(event)
-            handleResponse(event.Payload)
+            DisplayResponse(event.Payload)
         end)
     end)
 
     Event.On("PingSpawns", function(data)
         Net.Request("PingSpawns", data).After(function(event)
-            handleResponse(event.Payload)
+            DisplayResponse(event.Payload)
         end)
     end)
 
     Event.On("Teleport", function(data)
         Net.Request("Teleport", data).After(function(event)
-            handleResponse(event.Payload)
+            DisplayResponse(event.Payload)
         end)
     end)
 
     Event.On("ToCamp", function()
         Net.Request("ToCamp").After(function(event)
-            handleResponse(event.Payload)
+            DisplayResponse(event.Payload)
         end)
     end)
 
     Event.On("ResumeCombat", function()
         Net.Request("ResumeCombat").After(function(event)
-            handleResponse(event.Payload)
+            DisplayResponse(event.Payload)
         end)
     end)
 end
@@ -212,6 +204,8 @@ function Control.RunningPanel(root)
         end
 
         local btn = layout.Cells[1][1]:AddButton(__("Next Round"))
+        btn:Tooltip()
+            :AddText("Will forward 1 round. Use when fight gets stuck or you want to fight more enemies at once.")
         btn.SameLine = true
         btn.OnClick = function(button)
             Event.Trigger("ResumeCombat")

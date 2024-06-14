@@ -42,8 +42,9 @@ local itemBlacklist = {
     "MAG_Harpers_SingingSword", -- unfinished
     -- "_Myrmidon_ConjureElemental$",
     -- "_Myrmidon_WildShape$",
-    -- "_Myrmidon_Wildshape$",
-    -- "WPN_Shortbow_Makeshift"
+    "_AnimateDead$",
+    "_Pact$",
+    "_FlameBlade",
 }
 
 -------------------------------------------------------------------------------------------------
@@ -162,17 +163,62 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
+local function parseEquipment()
+    local e1 = Ext.IO.LoadFile("Public/Shared/Stats/Generated/Equipment.txt", "data")
+    local e2 = Ext.IO.LoadFile("Public/SharedDev/Stats/Generated/Equipment.txt", "data")
+    local e3 = Ext.IO.LoadFile("Public/Gustav/Stats/Generated/Equipment.txt", "data")
+    local e4 = Ext.IO.LoadFile("Public/GustavDev/Stats/Generated/Equipment.txt", "data")
+
+    local equipment = {}
+    for _, eqFile in ipairs({ e1, e2, e3, e4 }) do
+        if eqFile then
+            local arr = US.Split(eqFile, "\n")
+            for _, a in ipairs(arr) do
+                local eq = a:match('equipment entry "(%S*)"')
+                if eq then
+                    table.insert(equipment, eq)
+                end
+            end
+        end
+    end
+
+    return equipment
+end
+
+local cache = nil
+function Item.EquipmentList()
+    if cache then
+        return cache
+    end
+    cache = parseEquipment()
+
+    return cache
+end
+
 function Item.Create(name, type, fake)
     return Object.New(name, type, fake)
 end
 
+local itemCache = {
+    Objects = {},
+    Armor = {},
+    Weapons = {},
+    CombatObjects = {},
+}
+
 function Item.Objects(rarity, forCombat)
+    local cacheKey = forCombat and "CombatObjects" or "Objects"
+    if #itemCache[cacheKey] > 0 then
+        return UT.Filter(itemCache[cacheKey], function(item)
+            return rarity == nil or item.Rarity == rarity
+        end)
+    end
+
     local items = UT.Filter(objects, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
             return false
         end
-
         local cat = stat.ObjectCategory
         local tab = stat.InventoryTab
         local type = stat.ItemUseType
@@ -181,15 +227,7 @@ function Item.Objects(rarity, forCombat)
             return false
         end
 
-        if US.Contains(name, itemBlacklist, true) then
-            return false
-        end
-
         if stat.Rarity == "" or stat.RootTemplate == "" then
-            return false
-        end
-
-        if rarity ~= nil and stat.Rarity ~= rarity then
             return false
         end
 
@@ -220,15 +258,46 @@ function Item.Objects(rarity, forCombat)
             return false
         end
 
+        local inList = UT.Contains(Item.EquipmentList(), name)
+        if not inList then
+            local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
+            local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
+            local c = false
+
+            for _, v in pairs(US.Split(stat.ObjectCategory, ";")) do
+                c = Ext.Stats.TreasureCategory.GetLegacy(v)
+                if c then
+                    break
+                end
+            end
+
+            if not a and not b and not c then
+                return false
+            end
+        end
+
+        if US.Contains(name, itemBlacklist, true) then
+            L.Debug("Objects blacklisted", name)
+            return false
+        end
+
         return true
     end)
 
-    return UT.Map(items, function(name)
+    itemCache[cacheKey] = UT.Map(items, function(name)
         return Object.New(name, "Object")
     end)
+
+    return Item.Objects(rarity, forCombat)
 end
 
 function Item.Armor(rarity)
+    if #itemCache.Armor > 0 then
+        return UT.Filter(itemCache.Armor, function(item)
+            return rarity == nil or item.Rarity == rarity
+        end)
+    end
+
     local items = UT.Filter(armor, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
@@ -237,10 +306,6 @@ function Item.Armor(rarity)
         local slot = stat.Slot
 
         if name:match("^_") then
-            return false
-        end
-
-        if US.Contains(name, itemBlacklist, true) then
             return false
         end
 
@@ -269,15 +334,40 @@ function Item.Armor(rarity)
             return false
         end
 
+        local inList = UT.Contains(Item.EquipmentList(), name)
+        if not inList then
+            if name:match("^ARM_") then
+                local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
+                local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
+
+                if not a and not b then
+                    return false
+                end
+            end
+        end
+
+        if US.Contains(name, itemBlacklist, true) then
+            L.Debug("Armor blacklisted", name)
+            return false
+        end
+
         return true
     end)
 
-    return UT.Map(items, function(name)
-        return Object.New(name, "Armor")
+    itemCache.Armor = UT.Map(items, function(name)
+        return Object.New(name, "Object")
     end)
+
+    return Item.Armor(rarity)
 end
 
 function Item.Weapons(rarity)
+    if #itemCache.Weapons > 0 then
+        return UT.Filter(itemCache.Weapons, function(item)
+            return rarity == nil or item.Rarity == rarity
+        end)
+    end
+
     local items = UT.Filter(weapons, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
@@ -285,10 +375,6 @@ function Item.Weapons(rarity)
         end
 
         if name:match("^_") then
-            return false
-        end
-
-        if US.Contains(name, itemBlacklist, true) then
             return false
         end
 
@@ -310,12 +396,30 @@ function Item.Weapons(rarity)
             return false
         end
 
+        if name:match("^WPN_") then
+            local inList = UT.Contains(Item.EquipmentList(), name)
+            if not inList then
+                local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
+                local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
+                if not a and not b then
+                    return false
+                end
+            end
+        end
+
+        if US.Contains(name, itemBlacklist, true) then
+            L.Debug("Weapons blacklisted", name)
+            return false
+        end
+
         return true
     end)
 
-    return UT.Map(items, function(name)
+    itemCache.Weapons = UT.Map(items, function(name)
         return Object.New(name, "Weapon")
     end)
+
+    return Item.Weapons(rarity)
 end
 
 function Item.IsOwned(obj)
@@ -387,7 +491,6 @@ function Item.GenerateLoot(rolls, lootRates)
     local loot = {}
 
     -- each kill gets an object/weapon/armor roll
-    -- TODO drop gold
     if not lootRates then
         lootRates = C.LootRates
     end

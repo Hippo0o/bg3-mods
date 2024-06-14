@@ -27,6 +27,8 @@ copy:
 
 copy-back:
 	cp $(MOUNT_DIR)/Temp/$(MOD).zip .
+	cp $(MOUNT_DIR)/Temp/$(MOD)/Mods/$(MOD)/meta.lsx $(MOD_DIR)/$(MOD)/Mods/$(MOD)/meta.lsx
+	sed -i 's/\r$$//' $(MOD_DIR)/$(MOD)/Mods/$(MOD)/meta.lsx
 	unzip $(MOD).zip $(MOD).pak
 	mv $(MOD).pak Releases/$(MOD).pak
 

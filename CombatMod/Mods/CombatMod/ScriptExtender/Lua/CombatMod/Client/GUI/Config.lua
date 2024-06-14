@@ -162,6 +162,7 @@ end
 function Config.Checkbox(root, label, desc, field, onChange)
     root:AddSeparator()
     local checkbox = root:AddCheckbox(__(label))
+    checkbox.IDContext = U.RandomId()
     root:AddText(__(desc))
 
     local hostValue
