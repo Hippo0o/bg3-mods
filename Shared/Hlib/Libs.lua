@@ -5,31 +5,31 @@ local Utils = Require("Hlib/Utils")
 local M = {}
 
 ---@param props table|nil
----@return LibsClass
-function M.Class(props)
+---@return LibsStruct
+function M.Struct(props)
     if not props then
         props = {}
     end
 
     if type(props) ~= "table" then
-        error("Libs.Class - table expected, got " .. type(props))
+        error("Libs.Struct - table expected, got " .. type(props))
     end
 
     local propKeys = Utils.Table.Keys(props)
 
-    ---@class LibsClass
+    ---@class LibsStruct
     ---@field New fun(): self
     ---@field Init fun(values: table|nil): table
-    local Class = {}
-    Class.__index = Class
+    local Struct = {}
+    Struct.__index = Struct
 
-    function Class.Init(values)
+    function Struct.Init(values)
         if values ~= nil and type(values) ~= "table" then
-            error("Class.Init(values) - table expected, got " .. type(values))
+            error("Struct.Init(values) - table expected, got " .. type(values))
         end
 
         local obj = {}
-        setmetatable(obj, Class)
+        setmetatable(obj, Struct)
 
         local keys = values and Utils.Table.Combine(Utils.Table.Values(propKeys), Utils.Table.Keys(values)) or propKeys
         for _, key in pairs(keys) do
@@ -39,11 +39,11 @@ function M.Class(props)
         return obj
     end
 
-    function Class.New()
-        return Class.Init()
+    function Struct.New()
+        return Struct.Init()
     end
 
-    return Class
+    return Struct
 end
 
 ---@param typeDefs table { [1] = {"nil", "string"}, [2] = {"nil", {...enum}} }|{ ["key1"] = {"nil", "string"}, ["key2"] = {LibsTypedTable, ...} }
@@ -63,10 +63,10 @@ function M.TypedTable(typeDefs, repeatable)
     end
 
     -- exposed
-    ---@class LibsTypedTable : LibsClass
+    ---@class LibsTypedTable : LibsStruct
     ---@field Validate fun(table: table): boolean
     ---@field TypeCheck fun(key: string, value: any): boolean
-    local TT = Libs.Class({
+    local TT = Libs.Struct({
         _IsTypedTable = true,
         _TypeDefs = {},
         _Repeatable = false,

@@ -7,12 +7,12 @@ Doll = {}
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class DollStruct : LibsClass
+---@class DollStruct : LibsStruct
 ---@field Uuid string
 ---@field BodyType number 0|1 (Male,Female)
 ---@field BodyShape number 0|1 (Normal,Strong)
 ---@field Race string
-local Struct = Libs.Class({
+local Struct = Libs.Struct({
     Uuid = nil,
     BodyType = nil,
     BodyShape = nil,

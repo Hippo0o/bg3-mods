@@ -183,7 +183,10 @@ function Control.RunningPanel(root)
 
         Components.Computed(mapName, function(box, state)
             if state.Scenario then
-                return __("Map: %s", tostring(state.Scenario.Map.Name))
+                local _, act = UT.Find(C.Regions, function(region)
+                    return region == state.Scenario.Map.Region
+                end)
+                return __("Map: %s", string.format("%s - %s", state.Scenario.Map.Name, act))
             end
         end, "StateChange")
 

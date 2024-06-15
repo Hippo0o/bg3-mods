@@ -11,6 +11,13 @@ function Loot.Main(tab)
         Net.Send("PickupAll")
     end
 
+    local btn = root:AddButton(__("Destroy All"))
+    btn.IDContext = U.RandomId()
+    btn.SameLine = true
+    btn.OnClick = function()
+        Net.Send("DestroyAll")
+    end
+
     Components.Layout(root, 1, 1, function(layout)
         local root = layout.Cells[1][1]:AddGroup("")
         root.PositionOffset = { 5, 5 }

@@ -7,7 +7,7 @@ local Utils = Require("Hlib/Utils")
 ---@class Async
 local M = {}
 
----@class Loop : LibsClass
+---@class Loop : LibsStruct
 ---@field Startable boolean
 ---@field Queues Queue[]
 ---@field Handle number|nil
@@ -17,7 +17,7 @@ local M = {}
 ---@field Start fun(self: Loop)
 ---@field Stop fun(self: Loop)
 ---@field Tick fun(self: Loop, time: GameTime)
-local Loop = Libs.Class({
+local Loop = Libs.Struct({
     Startable = true,
     Queues = {},
     Tasks = {
@@ -64,8 +64,10 @@ local Loop = Libs.Class({
 
             ticks = ticks + 1
             if ticks % 3000 == 0 then
-                Utils.Log.Warn("Loop is running for too long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
-                Utils.Log.Dump(self)
+                Utils.Log.Debug("Loop is running for too long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
+                if Mod.Dev then
+                    Utils.Log.Dump(self)
+                end
             end
         end)
     end,
@@ -109,14 +111,14 @@ local Loop = Libs.Class({
     end,
 })
 
----@class Queue : LibsClass
+---@class Queue : LibsStruct
 ---@field Loop Loop
 ---@field Tasks table<number, { idx: number, item: Runner }>
 ---@field Enqueue fun(self: Queue, item: Runner): string
 ---@field Dequeue fun(self: Queue, idx: number)
 ---@field Iter fun(self: Queue): fun(): number, Runner
 ---@field New fun(loop: Loop): Queue
-local Queue = Libs.Class({
+local Queue = Libs.Struct({
     Loop = nil,
     Tasks = {},
     Enqueue = function(self, item) ---@param self Queue
@@ -128,7 +130,9 @@ local Queue = Libs.Class({
             self.Loop:Start()
         end
 
-        Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx, Mod.Dev and debug.traceback() or nil)
+        if Mod.Dev then
+            Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx)
+        end
 
         return idx
     end,
@@ -138,7 +142,9 @@ local Queue = Libs.Class({
                 table.remove(self.Tasks, i)
                 self.Loop.Tasks:Dec()
 
-                Utils.Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
+                if Mod.Dev then
+                    Utils.Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
+                end
 
                 return
             end
@@ -168,13 +174,13 @@ function Queue.New(loop)
 end
 
 -- exposed
----@class Runner : LibsClass
+---@class Runner : LibsStruct
 ---@field Cleared boolean
 ---@field ExecCond fun(self: Runner, time: GameTime): boolean
 ---@field Exec fun(self: Runner)
 ---@field ClearCond fun(self: Runner, time: GameTime): boolean
 ---@field Clear fun(self: Runner)
-local Runner = Libs.Class({
+local Runner = Libs.Struct({
     _Id = nil,
     _Queue = nil,
     Cleared = false,

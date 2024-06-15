@@ -14,7 +14,7 @@ local Libs = Require("Hlib/Libs")
 local M = {}
 
 -- exposed
----@class NetEvent : LibsClass
+---@class NetEvent : LibsStruct
 ---@field Action string
 ---@field Payload any
 ---@field PeerId number|nil
@@ -22,7 +22,7 @@ local M = {}
 ---@field UserId fun(self: NetEvent): number
 ---@field Character fun(self: NetEvent): string GUID
 ---@field IsHost fun(self: NetEvent): boolean
-local NetEvent = Libs.Class({
+local NetEvent = Libs.Struct({
     Action = nil,
     Payload = nil,
     PeerId = nil,

@@ -8,7 +8,7 @@ Transmog = {}
 -------------------------------------------------------------------------------------------------
 
 ---@class TransmogStruct
-local Struct = Libs.Class({
+local Struct = Libs.Struct({
     Uuid = nil,
     Slot = nil,
     DisplayName = nil,
