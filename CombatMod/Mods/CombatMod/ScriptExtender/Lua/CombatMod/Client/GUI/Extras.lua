@@ -37,7 +37,7 @@ function Extras.Main(tab)
             desc = "Be in Act 1 and needs Remove all Entities"
         end
         if name == "Gale" then
-            desc = "Be in Act 1"
+            desc = "Be in Act 1. Don't use otherwise."
         end
 
         Extras.Button(root, name, desc, function(btn)

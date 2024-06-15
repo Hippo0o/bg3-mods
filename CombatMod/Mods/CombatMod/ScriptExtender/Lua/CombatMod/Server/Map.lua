@@ -48,6 +48,11 @@ function Object:Teleport(character, withOffset)
     end
 
     Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
+
+    local x, y, z = table.unpack(self.Enter)
+    Async.WaitTicks(10, function()
+        Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset / 2)
+    end)
 end
 
 ---@param spawn number Index of Spawns or -1 for random
@@ -86,13 +91,9 @@ function Object:SpawnIn(enemy, spawn)
         return false
     end
 
+    local x, y, z = self:GetSpawn(spawn)
     Async.WaitTicks(10, function()
-        local x, y, z = self:GetSpawn(spawn)
-        local distance = Osi.GetDistanceToPosition(enemy.GUID, x, y, z)
-        if distance > Config.RandomizeSpawnOffset * 1.5 then
-            L.Error(enemy.GUID, "Spawned too far away.", distance)
-            Osi.TeleportToPosition(enemy.GUID, x, y, z, "", 1, 1, 1)
-        end
+        Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
     end)
 
     Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
@@ -152,6 +153,15 @@ end
 ---@return Map
 function Map.Restore(map)
     return Object.Init(map)
+end
+
+function Map.CorrectPosition(guid, x, y, z, offset)
+    local distance = Osi.GetDistanceToPosition(guid, x, y, z)
+    local _, y2, _ = Osi.GetPosition(guid)
+    if distance > offset * 1.5 or y2 < y - offset then
+        L.Error(guid, "Spawned too far away.", distance)
+        Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1)
+    end
 end
 
 ---@param map Map

@@ -168,6 +168,13 @@ function Debug.Items(root)
         end
 
         tree = Components.Tree(grp, items, nil, function(node, key, value)
+            if key == "Name" then
+                node:AddText("   Name = ")
+                local t = node:AddInputText("")
+                t.SameLine = true
+                t.Text = value
+                return true
+            end
             if key == "RootTemplate" then
                 local nodeLoaded = false
 
@@ -185,6 +192,13 @@ function Debug.Items(root)
 
                         node:AddText("   Icon = ")
                         node:AddImage(temp.Icon).SameLine = true
+
+                        node:AddButton("Spawn").OnClick = function()
+                            Net.RCE("Item.Create('', '', '%s'):Spawn(Osi.GetPosition(RCE:Character()))", value)
+                                .After(function(_, err)
+                                    L.Dump(err)
+                                end)
+                        end
                     end
 
                     nodeLoaded = true

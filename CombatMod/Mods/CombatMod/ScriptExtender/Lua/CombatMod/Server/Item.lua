@@ -1,3 +1,5 @@
+local itemBlacklist = Require("CombatMod/Templates/ItemBlacklist.lua")
+
 local weapons = nil
 local armor = nil
 local objects = nil
@@ -13,39 +15,6 @@ else
 end
 
 L.Debug("Item lists loaded.", #objects, #armor, #weapons)
-
-local itemBlacklist = {
-    "^DLC_", -- DLC items
-    "OBJ_BloodPotion_", -- we ain't roleplaying
-    "GLO_", -- useless
-    "OBJ_FreezingSphere", -- explodes on pickup
-    "LOW_DeadMansSwitch_Shield", -- a bomb
-    "MAG_OfTheShapeshifter_Mask", -- DLC mask
-    "ARM_Breastplate_Body_Githyanki", -- invalid template
-    "LOW_RamazithsTower_Nightsong_Silver_Shield", -- %%% in name
-    "TWN_TollCollector_", -- useless
-    "WPN_KingsKnife", -- its common bro, should be very rare
-    "_Destroyed$", -- junk
-    "_REF$", -- junk
-    "^Quest_", -- junk
-    "OBJ_Bomb_Orthon",
-    "CONS_FOOD_Soup_Tomato", -- invalid template
-    "ARM_Vanity_Body_Shar", -- invalid template
-    "WPN_LightCrossbow_Makeshift", -- broken model
-    "MAG_TheClover_Scimitar", -- unfinished dupe of existing
-    "DEN_VoloOperation_ErsatzEye", -- vololo
-    "SHA_SharSpear", -- shar does not give us permission
-    "MAG_Cunning_HandCrossbow", -- does not work
-    "LOW_OskarsBeloved_",
-    "WPN_Dart", -- unfinished
-    "WPN_Sling", -- unfinished
-    "MAG_Harpers_SingingSword", -- unfinished
-    -- "_Myrmidon_ConjureElemental$",
-    -- "_Myrmidon_WildShape$",
-    "_AnimateDead$",
-    "_Pact$",
-    "_FlameBlade",
-}
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -89,11 +58,35 @@ function Object.New(name, type, fake)
         if type == "Object" then
             o.Slot = item.InventoryTab
         end
+
+        o:ModifyTemplate()
     end
 
     o.GUID = nil
 
     return o
+end
+
+function Object:ModifyTemplate()
+    local template = self:GetTemplate()
+
+    -- only overwrite if different, and save the original value for restoration
+    local overwrites = {}
+
+    if template.Stats ~= self.Name then
+        overwrites.Stats = template.Stats
+        template.Stats = self.Name
+    end
+
+    -- restore template
+    -- maybe not needed but template overwrites seem to be global
+    GameState.OnUnload(function()
+        L.Debug("Restoring template:", self.RootTemplate)
+        local template = self:GetTemplate()
+        for i, v in pairs(overwrites) do
+            template[i] = v
+        end
+    end)
 end
 
 function Object:IsSpawned()
@@ -163,40 +156,12 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-local function parseEquipment()
-    local e1 = Ext.IO.LoadFile("Public/Shared/Stats/Generated/Equipment.txt", "data")
-    local e2 = Ext.IO.LoadFile("Public/SharedDev/Stats/Generated/Equipment.txt", "data")
-    local e3 = Ext.IO.LoadFile("Public/Gustav/Stats/Generated/Equipment.txt", "data")
-    local e4 = Ext.IO.LoadFile("Public/GustavDev/Stats/Generated/Equipment.txt", "data")
+function Item.Create(name, type, rootTemplate, rarity)
+    local item = Object.New(name, type, true)
+    item.RootTemplate = rootTemplate
+    item.Rarity = rarity
 
-    local equipment = {}
-    for _, eqFile in ipairs({ e1, e2, e3, e4 }) do
-        if eqFile then
-            local arr = US.Split(eqFile, "\n")
-            for _, a in ipairs(arr) do
-                local eq = a:match('equipment entry "(%S*)"')
-                if eq then
-                    table.insert(equipment, eq)
-                end
-            end
-        end
-    end
-
-    return equipment
-end
-
-local cache = nil
-function Item.EquipmentList()
-    if cache then
-        return cache
-    end
-    cache = parseEquipment()
-
-    return cache
-end
-
-function Item.Create(name, type, fake)
-    return Object.New(name, type, fake)
+    return item
 end
 
 local itemCache = {
@@ -222,6 +187,10 @@ function Item.Objects(rarity, forCombat)
         local cat = stat.ObjectCategory
         local tab = stat.InventoryTab
         local type = stat.ItemUseType
+
+        if US.Contains(name, itemBlacklist, true) then
+            return false
+        end
 
         if name:match("^_") then
             return false
@@ -258,26 +227,16 @@ function Item.Objects(rarity, forCombat)
             return false
         end
 
-        local inList = UT.Contains(Item.EquipmentList(), name)
-        if not inList then
-            local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
-            local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
-            local c = false
-
-            for _, v in pairs(US.Split(stat.ObjectCategory, ";")) do
-                c = Ext.Stats.TreasureCategory.GetLegacy(v)
-                if c then
-                    break
-                end
-            end
-
-            if not a and not b and not c then
-                return false
+        local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
+        local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
+        local c = false
+        for _, v in pairs(US.Split(stat.ObjectCategory, ";")) do
+            c = Ext.Stats.TreasureCategory.GetLegacy(v)
+            if c then
+                break
             end
         end
-
-        if US.Contains(name, itemBlacklist, true) then
-            L.Debug("Objects blacklisted", name)
+        if not a and not b and not c then
             return false
         end
 
@@ -304,6 +263,10 @@ function Item.Armor(rarity)
             return false
         end
         local slot = stat.Slot
+
+        if US.Contains(name, itemBlacklist, true) then
+            return false
+        end
 
         if name:match("^_") then
             return false
@@ -334,28 +297,11 @@ function Item.Armor(rarity)
             return false
         end
 
-        local inList = UT.Contains(Item.EquipmentList(), name)
-        if not inList then
-            if name:match("^ARM_") then
-                local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
-                local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
-
-                if not a and not b then
-                    return false
-                end
-            end
-        end
-
-        if US.Contains(name, itemBlacklist, true) then
-            L.Debug("Armor blacklisted", name)
-            return false
-        end
-
         return true
     end)
 
     itemCache.Armor = UT.Map(items, function(name)
-        return Object.New(name, "Object")
+        return Object.New(name, "Armor")
     end)
 
     return Item.Armor(rarity)
@@ -371,6 +317,10 @@ function Item.Weapons(rarity)
     local items = UT.Filter(weapons, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
+            return false
+        end
+
+        if US.Contains(name, itemBlacklist, true) then
             return false
         end
 
@@ -393,22 +343,6 @@ function Item.Weapons(rarity)
 
         local temp = Ext.Template.GetTemplate(stat.RootTemplate)
         if not temp or temp.Name:match("DONOTUSE$") then
-            return false
-        end
-
-        if name:match("^WPN_") then
-            local inList = UT.Contains(Item.EquipmentList(), name)
-            if not inList then
-                local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
-                local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
-                if not a and not b then
-                    return false
-                end
-            end
-        end
-
-        if US.Contains(name, itemBlacklist, true) then
-            L.Debug("Weapons blacklisted", name)
             return false
         end
 
@@ -560,6 +494,13 @@ function Item.GenerateLoot(rolls, lootRates)
                 items = Item.Objects(rarity, true)
             elseif bonusCategory == "Weapon" then
                 items = Item.Weapons(rarity)
+                if #items > 0 then
+                    local bySlot = UT.GroupBy(items, "Slot")
+                    local slots = UT.Keys(bySlot)
+                    local randomSlot = slots[U.Random(#slots)]
+                    L.Debug("Rolling Weapon loot slot:", randomSlot, rarity)
+                    items = UT.Values(bySlot[randomSlot])
+                end
             elseif bonusCategory == "Armor" then
                 items = Item.Armor(rarity)
                 if #items > 0 then
