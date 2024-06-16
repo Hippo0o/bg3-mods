@@ -98,8 +98,12 @@ Net.On("Start", function(event)
         Net.Respond(event, { false, __("Map not found.") })
         return
     end
+    if template.Name == C.RoguelikeScenario and not map then
+        GameMode.StartNext()
+    else
+        Scenario.Start(template, map)
+    end
 
-    Scenario.Start(template, map)
     Net.Respond(event, { true, __("Scenario %s started.", template.Name) })
 end)
 
@@ -320,9 +324,7 @@ end)
 
 Net.On("DestroyAll", function(event)
     for _, rarity in pairs(C.ItemRarity) do
-        Item.DestroyAll(rarity, "Armor")
-        Item.DestroyAll(rarity, "Weapon")
-        Item.DestroyAll(rarity, "Object")
+        Item.DestroyAll(rarity)
     end
 end)
 

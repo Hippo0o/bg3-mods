@@ -107,21 +107,23 @@ function Action.CalculateLoot()
     end
 
     local rolls = 0
+    local fixedRolls = 0
 
     for _, e in pairs(scenario.KilledEnemies) do
         -- each kill gets an object/weapon/armor roll
+        fixedRolls = fixedRolls + 1 * lootMultiplier
 
         for k, v in ipairs(C.EnemyTier) do
             if e.Tier == v then
                 -- k is higher for higher tier
-                rolls = rolls + math.ceil(k * lootMultiplier)
+                rolls = rolls + k * lootMultiplier
                 break
             end
         end
     end
 
-    local loot = Item.GenerateLoot(rolls, scenario.LootRates)
-    L.Dump("Loot", loot, rolls, scenario.LootRates)
+    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates, math.floor(fixedRolls))
+    L.Dump("Loot", loot, rolls, fixedRolls, scenario.LootRates)
     return loot
 end
 

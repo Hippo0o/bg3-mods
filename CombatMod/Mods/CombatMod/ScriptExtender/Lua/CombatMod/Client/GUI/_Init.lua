@@ -36,21 +36,23 @@ end
 Event.Trigger("WindowOpened")
 
 local function open()
+    window.Visible = true
     if not window.Open then
-        window.Open = true
         Event.Trigger("WindowOpened")
     end
+    window.Open = true
 end
 
 local function close()
+    window.Visible = false
     if window.Open then
-        window.Open = false
         Event.Trigger("WindowClosed")
     end
+    window.Open = false
 end
 
 local function toggle()
-    if window.Open then
+    if window.Open and window.Visible then
         close()
     else
         open()

@@ -111,6 +111,7 @@ function Control.StartPanel(root)
             for i, item in ipairs(event.Payload.Maps) do
                 mapSelection.AddItem(item.Name, item.Name)
             end
+
             mapSelPaged.UpdateItems(mapSelection.Selectables)
         end)
 
