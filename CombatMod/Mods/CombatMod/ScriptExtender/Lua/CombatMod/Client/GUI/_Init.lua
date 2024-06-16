@@ -110,7 +110,7 @@ end, "ToggleDebug")
 
 do -- auto hide window
     local windowVisible = Debounce(1000, function(bool)
-        if PersistentVars.AutoHide then
+        if Settings.AutoHide then
             window.Visible = bool
         end
     end)

@@ -67,25 +67,35 @@ end
 M.Vars = {}
 
 ---@param tableKey string
----@param sync boolean
 ---@param template table
-function M.CreateModVar(tableKey, sync, template)
+---@param syncServer boolean - sync server to clients
+---@param syncClient boolean - sync client to server
+function M.CreateModVar(tableKey, template, syncServer, syncClient)
+    if syncServer and syncClient then
+        error("Mod.CreateModVar - Cannot sync to both server and client.")
+    end
+
     Ext.Vars.RegisterModVariable(M.UUID, tableKey, {
         Persistent = true,
         SyncOnWrite = false,
         SyncOnTick = true,
-        Server = Ext.IsServer() or sync,
-        Client = Ext.IsClient() or sync,
-        WriteableOnServer = Ext.IsServer() or sync,
-        WriteableOnClient = Ext.IsClient() and not sync,
-        SyncToClient = sync or false,
-        SyncToServer = false,
+        Server = Ext.IsServer() or syncClient or syncServer,
+        Client = Ext.IsClient() or syncClient or syncServer,
+        WriteableOnServer = Ext.IsServer() or syncServer,
+        WriteableOnClient = Ext.IsClient() or syncClient,
+        SyncToClient = syncServer or false,
+        SyncToServer = syncClient or false,
     })
 
     Ext.Events.SessionLoaded:Subscribe(function()
         local vars = Ext.Vars.GetModVariables(M.UUID)
 
-        if Ext.IsClient() and sync then
+        if Ext.IsServer() and syncServer ~= true then
+            M.Vars = vars
+            return
+        end
+
+        if Ext.IsClient() and syncClient ~= true then
             M.Vars = vars
             return
         end
@@ -100,9 +110,9 @@ function M.CreateModVar(tableKey, sync, template)
                 M.Vars[tableKey] = M.Vars[tableKey] or template
             end
 
-            if sync then
-                M.Vars[tableKey] = Require("Hlib/Libs").Proxy(M.Vars[tableKey], function(actual, key, value)
-                    vars[tableKey] = actual
+            if syncServer or syncClient then
+                M.Vars[tableKey] = Require("Hlib/Libs").Proxy(M.Vars[tableKey], function(value, key, raw)
+                    vars[tableKey] = raw
 
                     return value
                 end)

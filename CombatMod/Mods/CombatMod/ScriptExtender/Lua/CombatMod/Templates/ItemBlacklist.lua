@@ -279,4 +279,5 @@ return {
 	-- "MAG_Bhaalist_Paralyzing_Dagger",
 	-- "MAG_TheImpaler_Pike",
 	"WYR_Circus_WetCloak",
+	"MAG_Zhentarim_BloodfeederBlade_Rapier"
 }

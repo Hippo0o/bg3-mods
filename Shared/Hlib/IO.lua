@@ -32,7 +32,13 @@ function M.LoadJson(file)
         return nil
     end
 
-    return Ext.Json.Parse(data)
+    local ok, res = pcall(Ext.Json.Parse, data)
+    if not ok then
+        Utils.Log.Error(debug.traceback(res))
+        res = nil
+    end
+
+    return res
 end
 
 function M.SaveJson(file, data)

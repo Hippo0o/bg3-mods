@@ -343,12 +343,14 @@ function M.Chainable(source)
 end
 
 ---@param t table
----@param onSet fun(actual: table, key: string, value: any, parent: table|nil): any
----@param onGet fun(actual: table, key: string, value: any, parent: table|nil): any
+---@param onSet fun(value: any, key: string, raw: table, parent: table|nil): any value
+---@param onGet fun(value: any, key: string, raw: table, parent: table|nil): any value
 ---@return LibsProxy, fun(): table toTable
 function M.Proxy(t, onSet, onGet)
     local raw = {}
     t = t or {}
+
+    local proxy = false
 
     ---@class LibsProxy: table
     local Proxy = setmetatable({}, {
@@ -374,15 +376,15 @@ function M.Proxy(t, onSet, onGet)
         end,
         __index = function(self, key)
             local v = rawget(raw, key)
-            if onGet then
-                v = onGet(raw, key, v)
+            if proxy and onGet then
+                v = onGet(v, key, raw)
             end
 
             return v
         end,
         __newindex = function(self, key, value)
-            if onSet then
-                value = onSet(raw, key, value)
+            if proxy and onSet then
+                value = onSet(value, key, raw)
             end
 
             if type(value) == "table" then
@@ -394,8 +396,8 @@ function M.Proxy(t, onSet, onGet)
 
                     parent[key] = sub
 
-                    if onSet then
-                        return onSet(parent, subKey, subValue, raw)
+                    if proxy and onSet then
+                        return onSet(subValue, subKey, parent, raw)
                     end
 
                     return subValue
@@ -407,8 +409,8 @@ function M.Proxy(t, onSet, onGet)
 
                     parent[key] = sub
 
-                    if onGet then
-                        return onGet(parent, subKey, subValue, raw)
+                    if proxy and onGet then
+                        return onGet(subValue, subKey, parent, raw)
                     end
 
                     return subValue
@@ -423,6 +425,9 @@ function M.Proxy(t, onSet, onGet)
     for key, value in pairs(t) do
         Proxy[key] = value
     end
+
+    -- enable after initialization
+    proxy = true
 
     -- recursively convert `proxy` to a table
     local function toTable(tbl)

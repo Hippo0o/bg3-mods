@@ -4,10 +4,17 @@ if Ext.IMGUI == nil then
     return
 end
 
-Mod.PersistentVarsTemplate = {
-    AutoHide = false,
-    ToggleKey = "U",
-}
+Settings = Libs.Proxy(
+    UT.Merge({ AutoHide = false, ToggleKey = "U" }, IO.LoadJson("ClientConfig.json") or {}),
+    function(value, _, raw)
+        -- raw not updated yet
+        Schedule(function()
+            IO.SaveJson("ClientConfig.json", raw)
+        end)
+
+        return value
+    end
+)
 
 Event.On("ToggleDebug", function(bool)
     Mod.Debug = bool
@@ -44,7 +51,7 @@ Net.On("ModActive", function(event)
         local toggleWindow = Async.Throttle(100, toggle)
 
         Ext.Events.KeyInput:Subscribe(function(e)
-            if e.Event == "KeyDown" and e.Repeat == false and e.Key == PersistentVars.ToggleKey then
+            if e.Event == "KeyDown" and e.Repeat == false and e.Key == Settings.ToggleKey then
                 toggleWindow()
             end
         end)
