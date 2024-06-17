@@ -132,6 +132,9 @@ Net.On("ResumeCombat", function(event)
         return
     end
     Scenario.ResumeCombat()
+    if not S:IsRunning() then
+        Scenario.CheckEnded()
+    end
 
     Net.Respond(event, { true })
 end)

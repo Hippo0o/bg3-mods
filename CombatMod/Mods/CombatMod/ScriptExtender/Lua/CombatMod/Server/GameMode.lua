@@ -13,19 +13,26 @@ function GameMode.AskTutSkip()
                 return
             end
 
-            return Player.TeleportToAct("Act1")
-        end)
-        .After(function()
-            Osi.PROC_GLO_Jergal_MoveToCamp()
-
+            Osi.Use(Player.Host(), "S_TUT_Helm_ControlPanel_bcbba417-6403-40a6-aef6-6785d585df2a", "")
             return Defer(1000)
         end)
         .After(function()
-            -- Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
-            Osi.PROC_Camp_ForcePlayersToCamp()
+            GameState.OnLoad(function()
+                Defer(3000, function()
+                    Osi.PROC_GLO_Jergal_MoveToCamp()
+                    return Defer(1000)
+                end).After(function()
+                    -- Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
+                    -- Osi.TeleportTo(Player.Host(), C.NPCCharacters.Jergal, "", 1, 1, 1)
+                    Osi.PROC_Camp_ForcePlayersToCamp()
 
-            External.LoadConfig()
-            return Defer(3000)
+                    External.LoadConfig()
+
+                    if Config.ClearAllEntities then
+                        StoryBypass.RemoveAllEntities()
+                    end
+                end)
+            end, true)
         end)
 end
 
@@ -41,7 +48,7 @@ function GameMode.AskOnboarding()
 
             Event.Trigger("ModActive")
 
-            -- return GameMode.AskEnableRogueMode()
+            return GameMode.AskEnableRogueMode()
         end)
         .After(function()
             if Player.Region() == C.Regions.Act0 then
@@ -150,7 +157,7 @@ function GameMode.GenerateScenario(score, cow)
     -- define tiers and their corresponding difficulty values
     local tiers = {
         { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
-        { name = C.EnemyTier[2], min = 15, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+        { name = C.EnemyTier[2], min = 20, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
         { name = C.EnemyTier[3], min = 25, value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
         { name = C.EnemyTier[4], min = 35, value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
         { name = C.EnemyTier[5], min = 50, value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
@@ -422,7 +429,7 @@ function GameMode.ApplyDifficulty(enemy)
     if mod2 > 0 then
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
-        Osi.AddBoosts(enemy.GUID, "AC(" .. math.ceil(mod2 / 2) .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "AC(" .. math.min(6, math.ceil(mod2 / 2)) .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
     end
@@ -536,18 +543,18 @@ function GameMode.RecruitOrigin(id)
             "NULL_00000000-0000-0000-0000-000000000000"
         )
         Osi.Use(Player.Host(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
-        Osi.QuestAdd("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "ORI_COM_Gale")
+        Osi.QuestAdd(C.OriginCharactersStarter.Gale, "ORI_COM_Gale")
 
         -- Osi.PROC_ORI_Gale_DoINTSetup()
         -- Osi.PROC_ORI_Gale_INTSetup()
 
         -- Osi.SetFlag(
         --     "ORI_State_Recruited_e78c0aab-fb48-98e9-3ed9-773a0c39988d",
-        --     "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"
+        --     C.OriginCharactersStarter.Gale
         -- )
         -- Osi.SetFlag(
         --     "ORI_Gale_ControlledByUser_7b597686-21d1-43b6-9b4b-e2be86129ab6",
-        --     "S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604"
+        --     C.OriginCharactersStarter.Gale
         -- )
         -- Osi.SetFlag("ORI_Gale_ControlledByUser_7b597686-21d1-43b6-9b4b-e2be86129ab6", GetHostCharacter())
         -- Osi.SetFlag("GALECAMP_c67a2f36-9984-4097-8c4e-0ba1661b56f2", "NULL_00000000-0000-0000-0000-000000000000")
@@ -556,48 +563,41 @@ function GameMode.RecruitOrigin(id)
         --     "ORI_Gale_State_WasRecruited_a56d3a51-2983-5f82-25f4-ad142948b133",
         --     "NULL_00000000-0000-0000-0000-000000000000"
         -- )
-        -- Osi.RemoveStatus("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "INVULNERABLE_NOT_SHOWN")
+        -- Osi.RemoveStatus(C.OriginCharactersStarter.Gale, "INVULNERABLE_NOT_SHOWN")
         --
         -- Osi.SetOnStage("8ebd584c-97e3-42fd-b81f-80d7841ebdf3", 1) -- the waypoint
         -- Osi.SetFlag("ORI_Gale_State_HasRecruited_7548c517-72a8-b9c5-c9e9-49d8d9d71172", Player.Host())
-        -- Osi.SetTag("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "d27831df-2891-42e4-b615-ae555404918b")
-        -- Osi.SetTag("S_Player_Gale_ad9af97d-75da-406a-ae13-7071c563f604", "6fe3ae27-dc6c-4fc9-9245-710c790c396c")
+        -- Osi.SetTag(C.OriginCharactersStarter.Gale, "d27831df-2891-42e4-b615-ae555404918b")
+        -- Osi.SetTag(C.OriginCharactersStarter.Gale, "6fe3ae27-dc6c-4fc9-9245-710c790c396c")
         -- Osi.SetOnStage("c158fa86-3ecf-4d1b-a502-34618f77e3a9", 1)
         -- Osi.SetFlag("GLO_InfernalBox_State_CharacterHasBox_2ff44b15-a351-401b-8da9-cf42364af274", GetHostCharacter())
     end
 
     local function fixShart()
-        Osi.QuestAdd("S_Player_ShadowHeart_3ed74f06-3c60-42dc-83f6-f034cb47c679", "ORI_COM_ShadowHeart")
+        Osi.QuestAdd(C.OriginCharactersStarter.ShadowHeart, "ORI_COM_ShadowHeart")
         Osi.PROC_ORI_Shadowheart_COM_Init()
     end
 
     local function fixMinthara()
-        Osi.PROC_RemoveAllDialogEntriesForSpeaker("S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b")
-        Osi.DB_Dialogs(
-            "S_GOB_DrowCommander_25721313-0c15-4935-8176-9f134385451b",
-            "Minthara_InParty_13d72d55-0d47-c280-9e9c-da076d8876d8"
-        )
+        Osi.PROC_RemoveAllDialogEntriesForSpeaker(C.OriginCharactersSpecial.Minthara)
+        Osi.DB_Dialogs(C.OriginCharactersSpecial.Minthara, "Minthara_InParty_13d72d55-0d47-c280-9e9c-da076d8876d8")
     end
 
     local function fixHalsin()
         -- Osi.PROC_GLO_Halsin_DebugReturnVictory()
         -- needs certain story outcome
-        Osi.PROC_RemoveAllPolymorphs("S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323")
-        Osi.PROC_RemoveAllDialogEntriesForSpeaker("S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323")
-        Osi.DB_Dialogs(
-            "S_GLO_Halsin_7628bc0e-52b8-42a7-856a-13a6fd413323",
-            "Halsin_InParty_890c2586-6b71-ca01-5bd6-19d533181c71"
-        )
+        Osi.PROC_RemoveAllPolymorphs(C.OriginCharactersSpecial.Halsin)
+        Osi.PROC_RemoveAllDialogEntriesForSpeaker(C.OriginCharactersSpecial.Halsin)
+        Osi.DB_Dialogs(C.OriginCharactersSpecial.Halsin, "Halsin_InParty_890c2586-6b71-ca01-5bd6-19d533181c71")
     end
 
+    local companionFaction = "4abec10d-c2d1-a505-a09a-719c83999847"
+
     local function recruit(character, dialog)
-        Osi.Resurrect(character)
         Osi.PROC_ORI_SetupCamp(character, 1)
-        Osi.SetFaction(character, "4abec10d-c2d1-a505-a09a-719c83999847")
         Osi.RegisterAsCompanion(character, Player.Host())
         Osi.SetEntityEvent(character, "CampSwapped_WLDMAIN", 1)
         Osi.SetEntityEvent(character, "CAMP_CamperInCamp_WLDMAIN", 1)
-        Osi.SetFlag("GLO_InfernalBox_State_CharacterHasBox_2ff44b15-a351-401b-8da9-cf42364af274", character)
 
         Osi.PROC_GLO_InfernalBox_SetNewOwner(character)
         Osi.PROC_GLO_InfernalBox_AddToOwner()
@@ -605,6 +605,40 @@ function GameMode.RecruitOrigin(id)
         if dialog then
             Osi.QRY_StartDialog_Fixed(dialog, character, Player.Host())
         end
+
+        if U.UUID.Equals(Osi.GetFaction(character), companionFaction) then
+            return
+        end
+
+        Osi.SetFaction(character, companionFaction)
+        Osi.Resurrect(character)
+
+        -- reset level
+        Osi.SetLevel(character, 1)
+        Osi.RequestRespec(character)
+
+        Async.WaitTicks(9, function()
+            local entity = Ext.Entity.Get(character)
+            if not entity.Experience then
+                entity:CreateComponent("Experience")
+            end
+            entity.Experience.TotalExperience = 0
+            entity.AvailableLevel.Level = 1
+            entity:Replicate("AvailableLevel")
+            entity:Replicate("Experience")
+
+            local teamExp = 0
+            for _, character in pairs(GU.DB.GetPlayers()) do
+                local entity = Ext.Entity.Get(character)
+                if entity.Experience then
+                    if entity.Experience.TotalExperience > teamExp then
+                        teamExp = entity.Experience.TotalExperience
+                    end
+                end
+            end
+
+            Osi.AddExplorationExperience(character, teamExp)
+        end)
     end
 
     local uuid = C.OriginCharacters[id]
@@ -653,96 +687,4 @@ end
 
 function GameMode.OverridePartySize(size)
     Osi.SetMaxPartySizeOverride(size)
-end
-
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                            Fixes                                            --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
-do -- EXP Lock
-    GameMode.ExpLock = {}
-
-    local entityData = {}
-    local function snapEntity(entity)
-        if entity.Experience == nil then
-            return
-        end
-
-        entityData[entity.Uuid.EntityUuid] = {
-            exp = UT.Clean(entity.Experience),
-            level = entity.EocLevel.Level,
-        }
-        entity:Replicate("Experience")
-    end
-
-    function GameMode.ExpLock.SnapshotEntitiesExp()
-        entityData = {}
-        for i, e in pairs(GE.GetParty()) do
-            snapEntity(e)
-        end
-    end
-
-    local paused = false
-    function GameMode.ExpLock.Pause()
-        paused = true
-    end
-
-    function GameMode.ExpLock.Resume()
-        paused = false
-        GameMode.ExpLock.SnapshotEntitiesExp()
-    end
-
-    local entityListener = nil
-    local function subscribeEntitiesExp()
-        if not entityListener then
-            GameMode.ExpLock.SnapshotEntitiesExp()
-            entityListener = Ext.Entity.Subscribe("Experience", function(e)
-                if paused or not e.Experience then
-                    return
-                end
-
-                local data = entityData[e.Uuid.EntityUuid]
-
-                if data then
-                    local exp = data.exp
-                    local level = data.level
-                    if e.Experience.CurrentLevelExperience == exp.CurrentLevelExperience then
-                        L.Debug("Experience unchanged", e.Uuid.EntityUuid)
-                        return
-                    end
-
-                    e.EocLevel.Level = level
-                    e.AvailableLevel.Level = level
-
-                    e.Experience.CurrentLevelExperience = exp.CurrentLevelExperience
-                    e.Experience.TotalExperience = exp.TotalExperience
-                    e.Experience.NextLevelExperience = exp.NextLevelExperience
-                    -- e.Experience.field_28 = exp.field_28
-
-                    e:Replicate("EocLevel")
-                    e:Replicate("AvailableLevel")
-                    e:Replicate("Experience")
-                    L.Debug("Experience restored", e.Uuid.EntityUuid)
-                else
-                    snapEntity(e)
-                end
-            end)
-        end
-    end
-    local function unsubscribeEntitiesExp()
-        if entityListener then
-            Ext.Entity.Unsubscribe(entityListener)
-            entityListener = nil
-        end
-    end
-
-    Event.On("ModActive", subscribeEntitiesExp)
-    GameState.OnLoad(IfActive(subscribeEntitiesExp))
-    GameState.OnUnload(unsubscribeEntitiesExp)
-
-    Event.On("ScenarioCombatStarted", GameMode.ExpLock.Pause)
-    Event.On("ScenarioEnded", GameMode.ExpLock.Resume)
-    Event.On("ScenarioStopped", GameMode.ExpLock.Resume)
 end

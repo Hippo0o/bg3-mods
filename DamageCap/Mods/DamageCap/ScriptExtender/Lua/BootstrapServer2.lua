@@ -1,8 +1,47 @@
+local healthMap = {}
 local damageMap = {}
 local damageMax = {}
 local cap = 10
 
 local current = nil
+
+local function modifyHealth(entity, health)
+    -- funky stuff
+    if entity.Health.Hp == 0 then
+        return
+    end
+
+    if health.Hp then
+        entity.Health.Hp = health.Hp
+    end
+    if health.MaxHp then
+        entity.Health.MaxHp = health.MaxHp
+    end
+
+    if health.TemporaryHp then
+        entity.Health.TemporaryHp = health.TemporaryHp
+    end
+    if health.MaxTemporaryHp then
+        entity.Health.MaxTemporaryHp = health.MaxTemporaryHp
+    end
+
+    entity:Replicate("Health")
+end
+
+Ext.Entity.Subscribe("Health", function(entity)
+    if not entity.IsCharacter or entity.PartyMember then
+        return
+    end
+
+    local uuid = entity.Uuid.EntityUuid
+
+    local health = healthMap[uuid]
+    if health == nil then
+        return
+    end
+
+    modifyHealth(entity, health)
+end)
 
 local function applyBlock(entity, block)
     entity.Health.field_20 = block and 1 or 0
@@ -35,6 +74,9 @@ local function refresh(block)
         end
 
         applyBlock(entity, block)
+
+        local health = Ext.Json.Parse(Ext.DumpExport(entity.Health))
+        healthMap[entity.Uuid.EntityUuid] = health
     end
 
     for _, entity in ipairs(Ext.Entity.GetAllEntitiesWithComponent("IsInTurnBasedMode")) do
@@ -48,7 +90,6 @@ local function resetCap(character)
     -- Osi.ShowNotification(character, tostring(damageMap[attackerOwner]))
 end
 
-local timer
 local function update()
     if not current then
         refresh(false)
@@ -60,37 +101,30 @@ local function update()
         resetCap(current)
     end
 
-    refresh(damageMap[current] == 0)
-
-    if timer then
-        Ext.Timer.Cancel(timer)
-    end
-    timer = Ext.Timer.WaitFor(100, function()
-        Osi.QuestMessageHide("DamageCap")
-        Ext.Timer.WaitFor(300, function()
-            local status = { "Damage Cap: \n" }
-            for character, _ in pairs(damageMax) do
-                if damageMap[character] then
-                    table.insert(
-                        status,
-                        string.format(
-                            "%s: %d/%d \n",
-                            Osi.ResolveTranslatedString(Osi.GetDisplayName(character)),
-                            tonumber(damageMap[character]) or 0,
-                            tonumber(damageMax[character]) or 0
-                        )
+    Osi.QuestMessageHide("DamageCap")
+    Ext.Timer.WaitFor(1000, function()
+        local status = { "Damage Cap: \n" }
+        for character, _ in pairs(damageMax) do
+            if damageMap[character] then
+                table.insert(
+                    status,
+                    string.format(
+                        "%s: %d/%d \n",
+                        Osi.ResolveTranslatedString(Osi.GetDisplayName(character)),
+                        tonumber(damageMap[character]) or 0,
+                        tonumber(damageMax[character]) or 0
                     )
-                end
+                )
             end
-            Osi.QuestMessageShow("DamageCap", table.concat(status))
-        end)
-
-        timer = nil
+        end
+        Osi.QuestMessageShow("DamageCap", table.concat(status))
     end)
 
+    refresh(damageMap[current] == 0)
 end
 
 Ext.Osiris.RegisterListener("CombatRoundStarted", 2, "after", function(_, _)
+    healthMap = {}
     damageMap = {}
 
     update()
@@ -136,6 +170,7 @@ Ext.Osiris.RegisterListener("StartAttack", 4, "before", function(defender, attac
     current = attackOwner
 end)
 
+local timer
 Ext.Osiris.RegisterListener(
     "AttackedBy",
     7,
@@ -151,14 +186,47 @@ Ext.Osiris.RegisterListener(
             return
         end
 
+        local entity = Ext.Entity.Get(defender)
+
+        local health = healthMap[entity.Uuid.EntityUuid]
+        if health == nil then
+            return
+        end
+
         if not damageMap[attackerOwner] then
             resetCap(attackerOwner)
         end
 
         local leftFromCap = damageMap[attackerOwner]
         local allowedDamage = math.min(leftFromCap, damageAmount)
-        damageMap[attackerOwner] = leftFromCap - allowedDamage
+        local max = health.Hp + health.TemporaryHp
 
-        update()
+        damageMap[attackerOwner] = leftFromCap - math.min(allowedDamage, max)
+
+        if health.TemporaryHp > 0 then
+            if allowedDamage > health.TemporaryHp then
+                health.TemporaryHp = 0
+                allowedDamage = allowedDamage - health.TemporaryHp
+            else
+                health.TemporaryHp = math.max(0, health.TemporaryHp - allowedDamage)
+                allowedDamage = 0
+            end
+        end
+
+        if allowedDamage > 0 then
+            health.Hp = math.max(0, health.Hp - allowedDamage)
+        end
+
+        _D({ damageMap[attackerOwner], allowedDamage, health.Hp, health.TemporaryHp })
+
+        modifyHealth(entity, health)
+
+        if timer then
+            Ext.Timer.Cancel(timer)
+        end
+        timer = Ext.Timer.WaitFor(100, function()
+            update()
+            timer = nil
+        end)
     end
 )
