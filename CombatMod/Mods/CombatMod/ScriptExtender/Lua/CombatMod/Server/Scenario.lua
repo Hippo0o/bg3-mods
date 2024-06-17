@@ -713,11 +713,15 @@ U.Osiris.On(
             return
         end
 
-        if Ext.Entity.Get(uuid).CampPresence then
-            return
-        end
+        Async.WaitTicks(6, function()
+            if Ext.Entity.Get(uuid).CampPresence then
+                return
+            end
 
-        Scenario.Teleport()
+            Osi.DetachFromPartyGroup(uuid)
+
+            Scenario.Teleport()
+        end)
     end)
 )
 

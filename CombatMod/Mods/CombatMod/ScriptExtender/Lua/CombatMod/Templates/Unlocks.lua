@@ -321,8 +321,12 @@ return UT.Combine(
             Amount = nil,
             Character = true,
             OnBuy = function(self, character)
+                -- for _, p in pairs(GE.GetParty()) do
+                --     Osi.PROC_CharacterFullRestore(p.Uuid.EntityUuid)
+                --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
+                -- end
                 Osi.PROC_CharacterFullRestore(character)
-                Osi.UseSpell(character, "Shout_RegainHP_Peace_NPC", character)
+                Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
             end,
         },
         {
@@ -375,6 +379,17 @@ return UT.Combine(
                 local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
                 Osi.AddPartyFollower(guid, character)
                 -- Osi.Follow(guid, character)
+            end,
+            OnReapply = function(self) ---@param self Unlock
+                if self.Bought > 0 then
+                    for _, p in pairs(GE.GetParty()) do
+                        if p.ServerCharacter.Template.Id == "6efb2704-a025-49e0-ba9f-2b4f62dd2195" then
+                            if p.Death then
+                                GU.Object.Remove(p.Uuid.EntityUuid)
+                            end
+                        end
+                    end
+                end
             end,
         },
     },

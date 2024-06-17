@@ -98,8 +98,8 @@ Net.On("Start", function(event)
         Net.Respond(event, { false, __("Map not found.") })
         return
     end
-    if template.Name == C.RoguelikeScenario and not map then
-        GameMode.StartNext()
+    if template.Name == C.RoguelikeScenario and not Mod.Debug then
+        GameMode.StartRoguelike()
     else
         Scenario.Start(template, map)
     end

@@ -339,7 +339,7 @@ U.Osiris.On(
         if not Ext.Entity.Get(character).CampPresence or not S then
             L.Debug("ReturnToCamp", character)
             -- need ~2 ticks for changing CampPresence
-            Schedule().After(Schedule).After(function()
+            Async.WaitTicks(3, function()
                 Player.ReturnToCamp()
             end)
         end

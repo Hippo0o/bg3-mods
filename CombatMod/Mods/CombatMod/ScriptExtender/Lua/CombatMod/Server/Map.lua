@@ -171,7 +171,7 @@ function Map.CorrectPosition(guid, x, y, z, offset)
         return
     end
 
-    if distance > offset * 1.5 or y2 < y - 10 then
+    if distance > offset * 1.5 or y2 < y - 5 or y2 > y + 5 then
         L.Error(guid, "Spawned too far away.", distance)
         Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1)
     end

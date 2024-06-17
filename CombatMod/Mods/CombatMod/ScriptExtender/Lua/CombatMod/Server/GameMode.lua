@@ -41,7 +41,7 @@ function GameMode.AskOnboarding()
 
             Event.Trigger("ModActive")
 
-            return GameMode.AskEnableRogueMode()
+            -- return GameMode.AskEnableRogueMode()
         end)
         .After(function()
             if Player.Region() == C.Regions.Act0 then
@@ -123,6 +123,11 @@ local function ifRogueLike(func)
     end)
 end
 
+function GameMode.StartRoguelike()
+    PersistentVars.RogueModeActive = true
+    Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
+end
+
 function GameMode.GenerateScenario(score, cow)
     -- ChatGPT made this ................................ i made this
     L.Debug("Generate Scenario", score)
@@ -145,7 +150,7 @@ function GameMode.GenerateScenario(score, cow)
     -- define tiers and their corresponding difficulty values
     local tiers = {
         { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
-        { name = C.EnemyTier[2], min = 10, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+        { name = C.EnemyTier[2], min = 15, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
         { name = C.EnemyTier[3], min = 25, value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
         { name = C.EnemyTier[4], min = 35, value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
         { name = C.EnemyTier[5], min = 50, value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
