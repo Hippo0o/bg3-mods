@@ -103,6 +103,9 @@ function Components.Selection(root, multiple)
         end
 
         selection.Selectables = {}
+        selection.Selected = { 1 }
+        selection.Values = {}
+        selection.Value = nil
     end
 
     function selection.AddItem(label, value)

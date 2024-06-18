@@ -65,7 +65,7 @@ function StoryBypass.ClearArea(character)
         return
     end
 
-    local nearby = GE.GetNearby(character, 100, true)
+    local nearby = GE.GetNearby(character, 50, true)
 
     local toRemove = UT.Filter(nearby, function(v)
         return v.Entity.IsCharacter and not v.Entity.PartyMember and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Guid)
@@ -75,7 +75,9 @@ function StoryBypass.ClearArea(character)
         Schedule(function()
             for _, b in pairs(batch) do
                 if GC.IsPlayable(b.Guid) then
-                    Osi.TeleportTo(b.Guid, C.NPCCharacters.Jergal, "", 1, 1, 1)
+                    if GC.IsOrigin(b.Guid) then
+                        Osi.TeleportTo(b.Guid, C.NPCCharacters.Jergal, "", 1, 1, 1)
+                    end
                 else
                     GU.Object.Remove(b.Guid)
                 end
@@ -158,7 +160,7 @@ do -- EXP Lock
     function StoryBypass.ExpLock.Pause()
         paused = true
     end
-    local debouncedSnap = Debounce(100, StoryBypass.ExpLock.SnapshotEntitiesExp)
+    local debouncedSnap = Debounce(1000, StoryBypass.ExpLock.SnapshotEntitiesExp)
 
     function StoryBypass.ExpLock.Resume()
         paused = false
@@ -200,7 +202,6 @@ do -- EXP Lock
                         e:Replicate("AvailableLevel")
                         e:Replicate("Experience")
                         L.Debug("Experience restored", e.Uuid.EntityUuid)
-                        return
                     end
 
                     debouncedSnap()
@@ -224,6 +225,7 @@ do -- EXP Lock
         Defer(1000, StoryBypass.ExpLock.Resume)
     end)
     Event.On("ScenarioStopped", StoryBypass.ExpLock.Resume)
+    Event.On("ScenarioTeleport", StoryBypass.ExpLock.Resume)
 end
 
 -------------------------------------------------------------------------------------------------
@@ -469,17 +471,16 @@ Event.On(
     end)
 )
 
-GameState.OnLoad(ifBypassStory(function()
-    Defer(1000, function()
-        if S or not Config.ClearAllEntities then
-            return
-        end
-        if UT.Contains(PersistentVars.RegionsCleared, Player.Region()) then
-            return
-        end
+GameState.OnLoad(function()
+    if (S and S:HasStarted()) or not Config.ClearAllEntities then
+        return
+    end
 
-        Schedule(function()
-            StoryBypass.RemoveAllEntities()
-        end)
-    end)
-end))
+    Player.Notify(__("Clearing all entities"), true)
+
+    if UT.Contains(PersistentVars.RegionsCleared, Player.Region()) then
+        return
+    end
+
+    StoryBypass.RemoveAllEntities()
+end)

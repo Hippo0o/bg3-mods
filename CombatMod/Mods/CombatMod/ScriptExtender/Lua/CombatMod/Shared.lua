@@ -31,6 +31,8 @@ C = {
     ModUUID = Mod.UUID,
     EnemyFaction = "64321d50-d516-b1b2-cfac-2eb773de1ff6",
     NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral
+    ShadowCurseTag = "b47643e0-583c-4808-b108-f6d3b605b0a9",
+    CompanionFaction = "4abec10d-c2d1-a505-a09a-719c83999847",
     ItemRarity = {
         "Common",
         "Uncommon",
@@ -56,14 +58,14 @@ C = {
             Legendary = 1,
         },
         Armor = {
-            Common = 20, -- has only junk or invalid items
+            Common = 30, -- has only junk or invalid items
             Uncommon = 65,
             Rare = 20,
             VeryRare = 10,
             Legendary = 2,
         },
         Weapons = {
-            Common = 20, -- has only junk or invalid items
+            Common = 30, -- has only junk or invalid items
             Uncommon = 65,
             Rare = 20,
             VeryRare = 10,

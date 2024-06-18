@@ -390,6 +390,7 @@ function GameMode.StartNext()
         map = maps[U.Random(#maps)]
     end
 
+    Net.Send("OpenGUI")
     Scenario.Start(rogueTemp, map)
 end
 
@@ -591,8 +592,6 @@ function GameMode.RecruitOrigin(id)
         Osi.DB_Dialogs(C.OriginCharactersSpecial.Halsin, "Halsin_InParty_890c2586-6b71-ca01-5bd6-19d533181c71")
     end
 
-    local companionFaction = "4abec10d-c2d1-a505-a09a-719c83999847"
-
     local function recruit(character, dialog)
         Osi.PROC_ORI_SetupCamp(character, 1)
         Osi.RegisterAsCompanion(character, Player.Host())
@@ -606,11 +605,11 @@ function GameMode.RecruitOrigin(id)
             Osi.QRY_StartDialog_Fixed(dialog, character, Player.Host())
         end
 
-        if U.UUID.Equals(Osi.GetFaction(character), companionFaction) then
+        if U.UUID.Equals(Osi.GetFaction(character), C.CompanionFaction) then
             return
         end
 
-        Osi.SetFaction(character, companionFaction)
+        Osi.SetFaction(character, C.CompanionFaction)
         Osi.Resurrect(character)
 
         -- reset level
