@@ -11,6 +11,13 @@ local function modifyHealth(entity, health)
         return
     end
 
+    local new = entity.Health.Hp + entity.Health.TemporaryHp
+    local old = health.Hp + health.TemporaryHp
+
+    if new >= old then
+        return
+    end
+
     if health.Hp then
         entity.Health.Hp = health.Hp
     end

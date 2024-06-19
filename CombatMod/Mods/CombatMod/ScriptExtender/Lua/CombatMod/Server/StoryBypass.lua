@@ -38,20 +38,26 @@ function StoryBypass.UnblockTravel(entity)
     entity:Replicate("CanTravel")
 end
 
+function StoryBypass.AllowRemoval(entity)
+    return entity.IsCharacter
+        and GC.IsNonPlayer(entity.Uuid.EntityUuid)
+        and not entity.PartyMember
+        and not U.UUID.Equals(C.NPCCharacters.Jergal, entity.Uuid.EntityUuid) -- No
+        and not U.UUID.Equals(C.NPCCharacters.Emperor, entity.Uuid.EntityUuid) -- Gameover if dead
+        and not U.UUID.Equals("4f6e63a1-b143-46b1-ac0e-834494dfdc6a", entity.Uuid.EntityUuid) -- Oliver quest endless loop
+        and not entity.ServerCharacter.Template.Name:match("Player")
+end
+
 function StoryBypass.RemoveAllEntities()
-    local toRemove = UT.Filter(Ext.Entity.GetAllEntitiesWithUuid(), function(v)
-        return v.IsCharacter
-            and GC.IsNonPlayer(v.Uuid.EntityUuid)
-            and not v.PartyMember
-            and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Uuid.EntityUuid) -- No
-            and not U.UUID.Equals(C.NPCCharacters.Emperor, v.Uuid.EntityUuid) -- Gameover if dead
-            and not v.ServerCharacter.Template.Name:match("Player")
-    end)
+    local toRemove = UT.Filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
 
     for i, e in ipairs(toRemove) do
         L.Debug("Removing", e.Uuid.EntityUuid, e.ServerCharacter.Template.Name)
         GU.Object.Remove(e.Uuid.EntityUuid)
     end
+
+    GU.Object.Remove("S_GLO_DriderMoonlantern_4591d212-8f1b-4b85-880c-dc94f76702f4") -- will endlessly loop dialog
+
     L.Info("Clear All Entities", "Removed " .. tostring(#toRemove) .. " entities")
 
     table.insert(PersistentVars.RegionsCleared, Player.Region())
@@ -65,22 +71,22 @@ function StoryBypass.ClearArea(character)
         return
     end
 
-    local nearby = GE.GetNearby(character, 50, true)
+    local nearby = GE.GetNearby(character, 100, true)
+
+    for _, v in pairs(nearby) do
+        if v.Entity.IsCharacter and not v.Entity.PartyMember and GC.IsOrigin(v.Guid) then
+            Osi.SetOnStage(v.Guid, 0)
+        end
+    end
 
     local toRemove = UT.Filter(nearby, function(v)
-        return v.Entity.IsCharacter and not v.Entity.PartyMember and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Guid)
+        return StoryBypass.AllowRemoval(v.Entity)
     end)
 
     for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
         Schedule(function()
             for _, b in pairs(batch) do
-                if GC.IsPlayable(b.Guid) then
-                    if GC.IsOrigin(b.Guid) then
-                        Osi.TeleportTo(b.Guid, C.NPCCharacters.Jergal, "", 1, 1, 1)
-                    end
-                else
-                    GU.Object.Remove(b.Guid)
-                end
+                GU.Object.Remove(b.Guid)
             end
         end)
     end
@@ -168,7 +174,19 @@ do -- EXP Lock
     end
 
     local entityListener = nil
+
+    local function unsubscribeEntitiesExp()
+        if entityListener then
+            Ext.Entity.Unsubscribe(entityListener)
+            entityListener = nil
+        end
+    end
+
     local function subscribeEntitiesExp()
+        if entityListener then
+            unsubscribeEntitiesExp()
+        end
+
         if not entityListener then
             StoryBypass.ExpLock.SnapshotEntitiesExp()
             entityListener = Ext.Entity.Subscribe(
@@ -207,12 +225,6 @@ do -- EXP Lock
                     debouncedSnap()
                 end)
             )
-        end
-    end
-    local function unsubscribeEntitiesExp()
-        if entityListener then
-            Ext.Entity.Unsubscribe(entityListener)
-            entityListener = nil
         end
     end
 

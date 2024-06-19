@@ -326,14 +326,16 @@ do
         -- )
     end
 
-    function Commands.Spawn(guid)
+    function Commands.Spawn(search, neutral)
         local x, y, z = Player.Pos()
 
-        local e = Enemy.SpawnTemplate(guid, x, y, z)
+        local e = Enemy.Find(search)
         if e == nil then
             L.Error("Enemy not found.", guid)
             return
         end
+
+        e:Spawn(x, y, z, neutral and true or false)
 
         WaitUntil(function()
             return e:IsSpawned() and e:Entity()

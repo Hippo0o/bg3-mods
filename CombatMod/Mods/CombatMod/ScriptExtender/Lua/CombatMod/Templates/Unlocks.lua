@@ -378,6 +378,8 @@ return UT.Combine(
 
                 local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
                 Osi.AddPartyFollower(guid, character)
+                Osi.SetFaction(guid, C.CompanionFaction)
+
                 -- Osi.Follow(guid, character)
             end,
             OnReapply = function(self) ---@param self Unlock

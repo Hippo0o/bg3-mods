@@ -227,11 +227,12 @@ function M.Object.Remove(guid)
     Osi.PROC_RemoveAllPolymorphs(guid)
     Osi.PROC_RemoveAllDialogEntriesForSpeaker(guid)
     Osi.SetOnStage(guid, 0)
-    Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0) -- no blood
-    Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
+    Osi.SetHasDialog(guid, 0)
+    -- Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0) -- no blood
     Osi.RequestDelete(guid)
     Osi.RequestDeleteTemporary(guid)
     Osi.UnloadItem(guid)
+    Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
 end
 
 return M
