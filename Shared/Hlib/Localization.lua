@@ -4,6 +4,9 @@ local Mod = Require("Hlib/Mod")
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Log
+local Log = Require("Hlib/Log")
+
 ---@type Libs
 local Libs = Require("Hlib/Libs")
 
@@ -102,7 +105,7 @@ function M.GenerateHandle(str, version)
     local handle = "h" .. Utils.UUID.FromString(str, version):gsub("-", "g")
 
     if Mod.Dev and M.Get(handle) ~= "" and M.Get(handle) ~= str then
-        Utils.Log.Debug("Handle translated: ", handle, str, M.Get(handle))
+        Log.Debug("Handle translated: ", handle, str, M.Get(handle))
     end
 
     return handle

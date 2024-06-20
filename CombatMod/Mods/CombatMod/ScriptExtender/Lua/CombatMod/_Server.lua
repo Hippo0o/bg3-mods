@@ -49,6 +49,7 @@ DefaultConfig = {
     SpawnItemsAtPlayer = false,
     TurnOffNotifications = false,
     ClearAllEntities = true,
+    MulitplayerRestrictUnlocks = false,
 }
 Config = UT.DeepClone(DefaultConfig)
 

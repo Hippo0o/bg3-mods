@@ -1,0 +1,1122 @@
+{
+	"%d RogueScore required;1": {
+		"Handle": "h8c0d708fgd958g425dgabf3ge43bc9d1c619",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:104: in field 'Tile'",
+		"Text": "%d RogueScore required",
+		"Version": 1
+	},
+	"%d enemies left.;1": {
+		"Handle": "h29013f4fg7c54g46a1ga1a3g20c7c38102e5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:532: in field 'CheckEnded'",
+		"Text": "%d enemies left.",
+		"Version": 1
+	},
+	"%s is now active.;1": {
+		"Handle": "h3b8161bbg6ed4g434ega08bg252882a9070a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/_Server.lua:158: in field '_Func'",
+		"Text": "%s is now active.",
+		"Version": 1
+	},
+	"%s required;1": {
+		"Handle": "h28bc4630g7de9g4136g91b8gf750339ad572",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:110: in field 'Tile'",
+		"Text": "%s required",
+		"Version": 1
+	},
+	"All enemies are dead.;1": {
+		"Handle": "hb5676e2age032g43b7gb865g45d19a4767f3",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:529: in field 'CheckEnded'",
+		"Text": "All enemies are dead.",
+		"Version": 1
+	},
+	"Auto Hide;1": {
+		"Handle": "h3c609e26g6935g4cb7gb0f5g3ad152d718f3",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:150: in field 'Client'",
+		"Text": "Auto Hide",
+		"Version": 1
+	},
+	"Auto Toggle;1": {
+		"Handle": "h34411c36g6114g4496gb077g22f0525500d2",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:157: in field 'Client'",
+		"Text": "Auto Toggle",
+		"Version": 1
+	},
+	"Auto-Pickup for Armor;1": {
+		"Handle": "h94e5715dgc1b0g4240g8a7dg6426e85f4604",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:28: in local 'onCreated'",
+		"Text": "Auto-Pickup for Armor",
+		"Version": 1
+	},
+	"Auto-Pickup for Objects;1": {
+		"Handle": "hc777ee1dg9222g4bb4g8f44g4dd2ed666ff0",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:38: in local 'onCreated'",
+		"Text": "Auto-Pickup for Objects",
+		"Version": 1
+	},
+	"Auto-Pickup for Weapons;1": {
+		"Handle": "hfe76c8bdgab23g49deg8cd4g5fb8eef67d9a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:33: in local 'onCreated'",
+		"Text": "Auto-Pickup for Weapons",
+		"Version": 1
+	},
+	"Awakened Illithid Powers;1": {
+		"Handle": "hf34df053ga618g4a50gac07gec360e25ce14",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:252: in main chunk",
+		"Text": "Awakened Illithid Powers",
+		"Version": 1
+	},
+	"Break/Restore Oath;1": {
+		"Handle": "h337385c4g6626g4d09g9004g0b6f7226294d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:353: in main chunk",
+		"Text": "Break/Restore Oath",
+		"Version": 1
+	},
+	"Buy 40 Camp Supplies;1": {
+		"Handle": "hab83587fgfed6g40d2ga98bg06b4cba92496",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:306: in main chunk",
+		"Text": "Buy 40 Camp Supplies",
+		"Version": 1
+	},
+	"Buy for character;1": {
+		"Handle": "h2cb33b1dg79e6g46e4g81f8g0082e3da22a0",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:190: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:179>",
+		"Text": "Buy for character",
+		"Version": 1
+	},
+	"Buy;1": {
+		"Handle": "h322023aeg6775g476fgb011g3109d233132b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:183: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:179>",
+		"Text": "Buy",
+		"Version": 1
+	},
+	"Bypass Story;1": {
+		"Handle": "h29375bf8g7c62g40eag91a0g468cb38264ae",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Bypass Story",
+		"Version": 1
+	},
+	"Cannot teleport while in combat.;1": {
+		"Handle": "he740f325gb215g4a67g8d47g3c016f651e23",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:117: in field '_Func'",
+		"Text": "Cannot teleport while in combat.",
+		"Version": 1
+	},
+	"Challenge Mode;1": {
+		"Handle": "h26aa74f2g73ffg421agb159g947c137bb65e",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Challenge Mode",
+		"Version": 1
+	},
+	"Clear All Entities;1": {
+		"Handle": "h3bc40171g6e91g4542g808fg732422ad5106",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Clear All Entities",
+		"Version": 1
+	},
+	"Clear Area;1": {
+		"Handle": "h31b7af7eg64e2g4fa2gb028g49c4d20a6be6",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:14: in field 'Main'",
+		"Text": "Clear Area",
+		"Version": 1
+	},
+	"Clearing all entities;1": {
+		"Handle": "h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/StoryBypass.lua:495: in upvalue 'func'",
+		"Text": "Clearing all entities",
+		"Version": 1
+	},
+	"Combat is Starting.;1": {
+		"Handle": "h44afa6c1g11fag4f39g8779gc95f255beb7d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:164: in field 'StartCombat'",
+		"Text": "Combat is Starting.",
+		"Version": 1
+	},
+	"Combat started.;1": {
+		"Handle": "h2e517b01g7b04g42e5g81d6g248323f406a1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:688: in upvalue 'func'",
+		"Text": "Combat started.",
+		"Version": 1
+	},
+	"Common;1": {
+		"Handle": "h22e2080eg77b7g45d5gb11dg13b3d33f3191",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated'",
+		"Text": "Common",
+		"Version": 1
+	},
+	"Config updated;1": {
+		"Handle": "h2e624d0ag7b37g4185gb1d5g17e393f735c1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:87: in field '_Func'",
+		"Text": "Config updated",
+		"Version": 1
+	},
+	"Config;1": {
+		"Handle": "h23c73e06g7692g46b5gb10fg40d3532d62f1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:6: in field 'Main'",
+		"Text": "Config",
+		"Version": 1
+	},
+	"Cost: %s;1": {
+		"Handle": "h38df043eg6d8ag4516gb0begc370d29ce152",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:61: in field 'Tile'",
+		"Text": "Cost: %s",
+		"Version": 1
+	},
+	"Counter the Shadow Curse.;1": {
+		"Handle": "h2e6a96f6g7b3fg4c3agb1d5g9a5c53f7b87e",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:335: in main chunk",
+		"Text": "Counter the Shadow Curse.",
+		"Version": 1
+	},
+	"Creation;1": {
+		"Handle": "h20c028a6g7595g47dfgb13fg31b9531d139b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Creation.lua:6: in field 'Main'",
+		"Text": "Creation",
+		"Version": 1
+	},
+	"Currency owned: %d   RogueScore: %d;1": {
+		"Handle": "h16af0aafg43fag45ffga259gc399c07be1bb",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:8: in field 'Main'",
+		"Text": "Currency owned: %d   RogueScore: %d",
+		"Version": 1
+	},
+	"Debug;1": {
+		"Handle": "h366718e6g6332g44dbgb055g42bd5277609f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:143: in upvalue 'create'",
+		"Text": "Debug",
+		"Version": 1
+	},
+	"Default Config;1": {
+		"Handle": "h29b77480g7ce2g421dg91a8g447b338a6659",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:117: in field 'Main'",
+		"Text": "Default Config",
+		"Version": 1
+	},
+	"Destroy All;1": {
+		"Handle": "h2cf955d8g79acg4008g91fcga66eb3de844c",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:15: in field 'Main'",
+		"Text": "Destroy All",
+		"Version": 1
+	},
+	"Destroy;1": {
+		"Handle": "h254298eeg7017g4cdbgb167g1abdd345389f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:70: in local 'onCreated'",
+		"Text": "Destroy",
+		"Version": 1
+	},
+	"Drop Camp Clothes;1": {
+		"Handle": "h3e82a111g6bd7g4f44g80dbg192222f93b00",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Drop Camp Clothes",
+		"Version": 1
+	},
+	"Dropping loot.;1": {
+		"Handle": "h2a64adc6g7f31g4f89gb195g79ef53b75bcd",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:136: in field 'GiveReward'",
+		"Text": "Dropping loot.",
+		"Version": 1
+	},
+	"Enable Debug;1": {
+		"Handle": "h29620d0ag7c37g4585gb1a5g13e3938731c1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Enable Debug",
+		"Version": 1
+	},
+	"Enemies;1": {
+		"Handle": "h20450ab6g7510g45fegb137g6398531541ba",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:75: in field 'Enemies'",
+		"Text": "Enemies",
+		"Version": 1
+	},
+	"Enemy %s joined.;1": {
+		"Handle": "h35c56325g6090g4367g806fg6501624d4723",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:801: in function <CombatMod/CombatMod/Server/Scenario.lua:796>",
+		"Text": "Enemy %s joined.",
+		"Version": 1
+	},
+	"Enemy %s killed.;1": {
+		"Handle": "h35d521a9g6080g474fg806eg6129a24c430b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:860: in upvalue 'func'",
+		"Text": "Enemy %s killed.",
+		"Version": 1
+	},
+	"Enemy %s rejoined.;1": {
+		"Handle": "h37bb2c47g62eeg4791ga048g81f7426aa3d5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:831: in upvalue 'func'",
+		"Text": "Enemy %s rejoined.",
+		"Version": 1
+	},
+	"Enemy %s spawned.;1": {
+		"Handle": "h37ed89a8g62b8g4dcfg904dgeba9b26fc98b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:188: in function <CombatMod/CombatMod/Server/Scenario.lua:187>",
+		"Text": "Enemy %s spawned.",
+		"Version": 1
+	},
+	"Entered combat area.;1": {
+		"Handle": "hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:246: in function <CombatMod/CombatMod/Server/Scenario.lua:235>",
+		"Text": "Entered combat area.",
+		"Version": 1
+	},
+	"Exp Multiplier;1": {
+		"Handle": "h2c411dfcg7914g448ag91f7g22ecf3d500ce",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:211: in field 'Slider'",
+		"Text": "Exp Multiplier",
+		"Version": 1
+	},
+	"Force Enter Combat;1": {
+		"Handle": "h361503c4g6340g4569g9052g630f7270412d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Force Enter Combat",
+		"Version": 1
+	},
+	"Fully Restore Character;1": {
+		"Handle": "hfea436e8gabf1g463bg9cd9g705dbefb527f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:317: in main chunk",
+		"Text": "Fully Restore Character",
+		"Version": 1
+	},
+	"Gain 20%% more Currency;1": {
+		"Handle": "hce43e6c9g9b16g4b39g8fd7g0d5fadf52f7d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:104: in main chunk",
+		"Text": "Gain 20%% more Currency",
+		"Version": 1
+	},
+	"Gain 50%% more loot;1": {
+		"Handle": "h972818a9gc27dg44dfg8a41gb2b9a863909b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:92: in main chunk",
+		"Text": "Gain 50%% more loot",
+		"Version": 1
+	},
+	"Gain double RogueScore;1": {
+		"Handle": "hb1436254ge416g4370g9827g05167a052734",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:129: in main chunk",
+		"Text": "Gain double RogueScore",
+		"Version": 1
+	},
+	"Gain double XP;1": {
+		"Handle": "h294ce46eg7c19g4b13gb1a7gfd75d385df57",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:80: in main chunk",
+		"Text": "Gain double XP",
+		"Version": 1
+	},
+	"Get Pixie Blessing;1": {
+		"Handle": "h27f7bcfeg72a2g4e9agb14cg48fcd36e6ade",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:334: in main chunk",
+		"Text": "Get Pixie Blessing",
+		"Version": 1
+	},
+	"Get a Tadpole;1": {
+		"Handle": "h36f8f1b6g63adg4a4egb05cgbc28527e9e0a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:264: in main chunk",
+		"Text": "Get a Tadpole",
+		"Version": 1
+	},
+	"Global Settings - Host only;1": {
+		"Handle": "h501f8202g054ag4d75gb632gcb131410e931",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:13: in field 'Main'",
+		"Text": "Global Settings - Host only",
+		"Version": 1
+	},
+	"Go to Camp;1": {
+		"Handle": "h3160102eg6435g4457gb025g3231d2071013",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:163: in local 'onCreated'",
+		"Text": "Go to Camp",
+		"Version": 1
+	},
+	"Hide this window when entering a map. Show this window when starting a scenario.;1": {
+		"Handle": "hd9d18c01g8c84g4d95g8eaeg2bf32c8c09d1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:162: in field 'Client'",
+		"Text": "Hide this window when entering a map. Show this window when starting a scenario.",
+		"Version": 1
+	},
+	"Hide this window when the native UI is focused.;1": {
+		"Handle": "h193979fag4c6cg42cagb2a0ga4ac9082868e",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:155: in field 'Client'",
+		"Text": "Hide this window when the native UI is focused.",
+		"Version": 1
+	},
+	"Host has restricted buying unlocks.;1": {
+		"Handle": "he8dbdedegbd8eg48b8gbdbeg8ededf9cacfc",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:225: in field '_Func'",
+		"Text": "Host has restricted buying unlocks.",
+		"Version": 1
+	},
+	"Include camp clothes in item drops;1": {
+		"Handle": "hd8cafdddg8d9fg4a88g8ebfg9ceeec9dbecc",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "Include camp clothes in item drops",
+		"Version": 1
+	},
+	"Includes %s;1": {
+		"Handle": "h2544d6fag7011g483agb167g7e5c93455c7e",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:238: in main chunk",
+		"Text": "Includes %s",
+		"Version": 1
+	},
+	"Items;1": {
+		"Handle": "h322608ceg6773g45d9gb011g53bfd233719d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:155: in field 'Items'",
+		"Text": "Items",
+		"Version": 1
+	},
+	"Kill spawned;1": {
+		"Handle": "h2d5b4e72g780eg41b2gb1e6g87d413c4a5f6",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:155: in upvalue 'create'",
+		"Text": "Kill spawned",
+		"Version": 1
+	},
+	"Killed: %s;1": {
+		"Handle": "h2cb5c7a2g79e0g492fgb1f8g6f4913da4d6b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:181: in upvalue 'compute'",
+		"Text": "Killed: %s",
+		"Version": 1
+	},
+	"Leave camp to join the battle.;1": {
+		"Handle": "h6119ae15g344cg4fb4g8522ga9d267008bf0",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:224: in function <CombatMod/CombatMod/Server/Scenario.lua:215>",
+		"Text": "Leave camp to join the battle.",
+		"Version": 1
+	},
+	"Legendary;1": {
+		"Handle": "h2795a4eeg72c0g4f1bgb14ag697dd3684b5f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated'",
+		"Text": "Legendary",
+		"Version": 1
+	},
+	"Logs;1": {
+		"Handle": "h31b714deg64e2g4418gb028g427ed20a605c",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:71: in field 'Main'",
+		"Text": "Logs",
+		"Version": 1
+	},
+	"Loot;1": {
+		"Handle": "h31b71a1eg64e2g44f4gb028g4292d20a60b0",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:5: in field 'Main'",
+		"Text": "Loot",
+		"Version": 1
+	},
+	"Map: %s;1": {
+		"Handle": "h3cf1646eg69a4g4313gb0fcg2575d2de0757",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Components.lua:63: in field '_Func'",
+		"Text": "Map: %s",
+		"Version": 1
+	},
+	"Maps;1": {
+		"Handle": "h35341416g6061g4414gb060g727252425050",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:89: in local 'onCreated'",
+		"Text": "Maps",
+		"Version": 1
+	},
+	"Needs to be a Paladin.;1": {
+		"Handle": "had299379gf87cg4c62g89e1gaa04abc38826",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:355: in main chunk",
+		"Text": "Needs to be a Paladin.",
+		"Version": 1
+	},
+	"Next Round;1": {
+		"Handle": "h3097f93eg65c2g4ac6gb03ag4ca0d2186e82",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:215: in local 'onCreated'",
+		"Text": "Next Round",
+		"Version": 1
+	},
+	"Not enough currency.;1": {
+		"Handle": "h9cec8225gc9b9g4d77g8afdgfb1168dfd933",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:252: in field '_Func'",
+		"Text": "Not enough currency.",
+		"Version": 1
+	},
+	"Only Host Can Buy Unlocks;1": {
+		"Handle": "hfadaa9bfgaf8fg4fcegac9eg99a8cebcbb8a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:190: in field 'Checkbox'",
+		"Text": "Only Host Can Buy Unlocks",
+		"Version": 1
+	},
+	"Out of stock;1": {
+		"Handle": "h298720feg7cd2g475agb1abg413cd389631e",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Components.lua:63: in field 'Update'",
+		"Text": "Out of stock",
+		"Version": 1
+	},
+	"Perfect Clear! Double your score from %d to %d?;1": {
+		"Handle": "h979a14b3gc2cfg441egaa4ag92780868b05a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:361: in field 'UpdateRogueScore'",
+		"Text": "Perfect Clear! Double your score from %d to %d?",
+		"Version": 1
+	},
+	"Perfect Clear! Double your score from 5 to 10?;1": {
+		"Handle": "h637ce98fg3629g4bcdga504gfdabc726df89",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Text": "Perfect Clear! Double your score from 5 to 10?",
+		"Version": 1
+	},
+	"Permanent;1": {
+		"Handle": "h255ed026g700bg4857gb166gde315344fc13",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:40: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34>",
+		"Text": "Permanent",
+		"Version": 1
+	},
+	"Persist Config;1": {
+		"Handle": "h28cd5020g7d98g4057g91bfge631339dc413",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:100: in field 'Main'",
+		"Text": "Persist Config",
+		"Version": 1
+	},
+	"Persisting config...;1": {
+		"Handle": "h4d21e11dg1874g4b44g87e1g2d22e5c30f00",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:102: in function <CombatMod/CombatMod/Client/GUI/Config.lua:101>",
+		"Text": "Persisting config...",
+		"Version": 1
+	},
+	"Pickup All;1": {
+		"Handle": "h2dba28d2g78efg47d8gb1e8g91be13cab39c",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:9: in field 'Main'",
+		"Text": "Pickup All",
+		"Version": 1
+	},
+	"Pickup;1": {
+		"Handle": "h243c04feg7169g451agb170gf37cd352d15e",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:64: in local 'onCreated'",
+		"Text": "Pickup",
+		"Version": 1
+	},
+	"Ping Spawns;1": {
+		"Handle": "h315e322eg640bg4677gb026gd011d204f233",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:227: in local 'onCreated'",
+		"Text": "Ping Spawns",
+		"Version": 1
+	},
+	"Ping;1": {
+		"Handle": "h37333c06g6266g4695gb040g00f3526222d1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:218: in upvalue 'createPopup'",
+		"Text": "Ping",
+		"Version": 1
+	},
+	"Play Roguelike Mode;1": {
+		"Handle": "hac065c23gf953g4097ga9f3g56f10bd174d3",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Play Roguelike Mode",
+		"Version": 1
+	},
+	"Play Roguelike mode?\nContinuously create new battles.\nYou will gain a higher score with every completed fight.\nDifficulty increases with the score.;1": {
+		"Handle": "hf44e063cga11bg4536g9c77gd350fe55f172",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Text": "Play Roguelike mode?\nContinuously create new battles.\nYou will gain a higher score with every completed fight.\nDifficulty increases with the score.",
+		"Version": 1
+	},
+	"Play;1": {
+		"Handle": "h307360eeg6526g435bgb034g053dd216271f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:48: in field 'Main'",
+		"Text": "Play",
+		"Version": 1
+	},
+	"Pos;1": {
+		"Handle": "h31b2227eg64e7g4772gb028g1114d20a3336",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Creation.lua:13: in field 'Main'",
+		"Text": "Pos",
+		"Version": 1
+	},
+	"Randomize Spawn Offset;1": {
+		"Handle": "hb823bf93ged76g4eacga8b1g08ca0a932ae8",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:211: in field 'Slider'",
+		"Text": "Randomize Spawn Offset",
+		"Version": 1
+	},
+	"Rare;1": {
+		"Handle": "h35313866g6064g46d3gb060g20b552420297",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated'",
+		"Text": "Rare",
+		"Version": 1
+	},
+	"Rarity;1": {
+		"Handle": "h211f8066g744ag4d53gb122gcb355300e917",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:242: in field 'Items'",
+		"Text": "Rarity",
+		"Version": 1
+	},
+	"Reload;1": {
+		"Handle": "h27b40c36g72e1g4596gb148g73f0536a51d2",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:34: in field 'Main'",
+		"Text": "Reload",
+		"Version": 1
+	},
+	"Reset Config;1": {
+		"Handle": "h3659a876g630cg4fd2gb056ga9b452748b96",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:109: in field 'Main'",
+		"Text": "Reset Config",
+		"Version": 1
+	},
+	"Reset Stock;1": {
+		"Handle": "h360818b2g635dg44degb053gb2b81271909a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:141: in main chunk",
+		"Text": "Reset Stock",
+		"Version": 1
+	},
+	"Reset Templates;1": {
+		"Handle": "h32554192g6700g414cgb016g672a12344508",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:132: in field 'Main'",
+		"Text": "Reset Templates",
+		"Version": 1
+	},
+	"Reset;1": {
+		"Handle": "h367fb87eg632ag4ed2gb054gc8b4d276ea96",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:143: in field 'Enemies'",
+		"Text": "Reset",
+		"Version": 1
+	},
+	"Resets the stock of purchased standard unlocks.;1": {
+		"Handle": "h6256c771g3703g4922g8516g5f4427347d66",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:143: in main chunk",
+		"Text": "Resets the stock of purchased standard unlocks.",
+		"Version": 1
+	},
+	"Resetting templates...;1": {
+		"Handle": "h8ccc2af7gd999g47fagabffgf19c49ddd3be",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:141: in function <CombatMod/CombatMod/Client/GUI/Config.lua:140>",
+		"Text": "Resetting templates...",
+		"Version": 1
+	},
+	"Resurrect character and fully restore all resources.;1": {
+		"Handle": "h06aadbc6g53ffg48e9gb359g9e8f517bbcad",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:319: in main chunk",
+		"Text": "Resurrect character and fully restore all resources.",
+		"Version": 1
+	},
+	"Returned to camp.;1": {
+		"Handle": "h2bc3faaag7e96g4affgb18fg0c9993ad2ebb",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:755: in upvalue 'func'",
+		"Text": "Returned to camp.",
+		"Version": 1
+	},
+	"Roll Loot %dx;1": {
+		"Handle": "h3b8839f6g6eddg46cagb08bgb0ac52a9928e",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:198: in main chunk",
+		"Text": "Roll Loot %dx",
+		"Version": 1
+	},
+	"Round %d;1": {
+		"Handle": "h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:205: in field 'StartRound'",
+		"Text": "Round %d",
+		"Version": 1
+	},
+	"Round: %s;1": {
+		"Handle": "h3d5fde62g680ag48b3gb0e6gced512c4ecf7",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:178: in upvalue 'compute'",
+		"Text": "Round: %s",
+		"Version": 1
+	},
+	"Running;1": {
+		"Handle": "h21780c4eg742dg4591gb124gb3f7d30691d5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:62: in field '_Func'",
+		"Text": "Running",
+		"Version": 1
+	},
+	"Scenario %s started.;1": {
+		"Handle": "hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:107: in field '_Func'",
+		"Text": "Scenario %s started.",
+		"Version": 1
+	},
+	"Scenario ended.;1": {
+		"Handle": "h28fa5cc5g7dafg4099g81bcg96ff639eb4dd",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:506: in field 'End'",
+		"Text": "Scenario ended.",
+		"Version": 1
+	},
+	"Scenario not started.;1": {
+		"Handle": "hb72bdac5ge27eg48f9g8841g8e9f6a63acbd",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:131: in field '_Func'",
+		"Text": "Scenario not started.",
+		"Version": 1
+	},
+	"Scenario restored.;1": {
+		"Handle": "h2bed91d3g7eb8g4c48ga18dgea2e03afc80c",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:359: in function <CombatMod/CombatMod/Server/Scenario.lua:355>",
+		"Text": "Scenario restored.",
+		"Version": 1
+	},
+	"Scenario stopped.;1": {
+		"Handle": "h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:112: in field '_Func'",
+		"Text": "Scenario stopped.",
+		"Version": 1
+	},
+	"Scenario: %s;1": {
+		"Handle": "h218206b6g74d7g453egb12bg13585309317a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:177: in upvalue 'compute'",
+		"Text": "Scenario: %s",
+		"Version": 1
+	},
+	"Scenarios;1": {
+		"Handle": "h2553979eg7006g4c2cgb166g0a4ad3442868",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:88: in local 'onCreated'",
+		"Text": "Scenarios",
+		"Version": 1
+	},
+	"Search;1": {
+		"Handle": "h243816eeg716dg443bgb170gb25dd352907f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:115: in field 'Enemies'",
+		"Text": "Search",
+		"Version": 1
+	},
+	"Skipped combat with %s;1": {
+		"Handle": "hb13de5b9ge468g4b0eg8820ged68aa02cf4a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/StoryBypass.lua:396: in upvalue 'func'",
+		"Text": "Skipped combat with %s",
+		"Version": 1
+	},
+	"Spawn Items At Player;1": {
+		"Handle": "h868cae89gd3d9g4fbdg8b5bgf9dba979dbf9",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Spawn Items At Player",
+		"Version": 1
+	},
+	"Spawn Mindflayer Companion;1": {
+		"Handle": "hc6c558ccg9390g40d9g9f5fg66bffd7d449d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:368: in main chunk",
+		"Text": "Spawn Mindflayer Companion",
+		"Version": 1
+	},
+	"Spawns the Emperor as controllable party follower.;1": {
+		"Handle": "hece89b91gb9bdg4cecg8dfdgba8a2fdf98a8",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:369: in main chunk",
+		"Text": "Spawns the Emperor as controllable party follower.",
+		"Version": 1
+	},
+	"Start Ceremorphosis;1": {
+		"Handle": "h9f1540b5gca40g415eg8ac2g673868e0451a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:236: in main chunk",
+		"Text": "Start Ceremorphosis",
+		"Version": 1
+	},
+	"Start Menu;1": {
+		"Handle": "h3166c60eg6433g4935gb025g5f53d2077d71",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:66: in field '_Func'",
+		"Text": "Start Menu",
+		"Version": 1
+	},
+	"Start;1": {
+		"Handle": "h323096eeg6765g4c3bgb010g3a5dd232187f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:123: in local 'onCreated'",
+		"Text": "Start",
+		"Version": 1
+	},
+	"State;1": {
+		"Handle": "h32391aeeg676cg44fbgb010ga29dd23280bf",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:32: in field 'Main'",
+		"Text": "State",
+		"Version": 1
+	},
+	"Stock: %s;1": {
+		"Handle": "h3e9c6432g6bc9g4316gb0dagf57012f8d752",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:37: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34>",
+		"Text": "Stock: %s",
+		"Version": 1
+	},
+	"Stop;1": {
+		"Handle": "h327e121eg672bg4474gb014gd212d236f030",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:200: in upvalue 'create'",
+		"Text": "Stop",
+		"Version": 1
+	},
+	"TP;1": {
+		"Handle": "h097e26aeg5c2bg473fgb3a4gd159d186f37b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Creation.lua:21: in field 'Main'",
+		"Text": "TP",
+		"Version": 1
+	},
+	"Teleport;1": {
+		"Handle": "h25531a42g7006g44f1gb166g0297134420b5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:223: in local 'onCreated'",
+		"Text": "Teleport",
+		"Version": 1
+	},
+	"Teleporting back to camp in %d seconds.;1": {
+		"Handle": "hf6e3e1c8ga3b6g4b49g9c5dg0d2fbe7f2f0d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:491: in upvalue 'func'",
+		"Text": "Teleporting back to camp in %d seconds.",
+		"Version": 1
+	},
+	"Teleporting to different ACT;1": {
+		"Handle": "hc396e53dg96c3g4b06g8f0ag5d60ed287f42",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Map.lua:210: in field 'TeleportTo'",
+		"Text": "Teleporting to different ACT",
+		"Version": 1
+	},
+	"Templates reset;1": {
+		"Handle": "h2771ca17g7224g49f4ga144g2f9243660db0",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:146: in function <CombatMod/CombatMod/Client/GUI/Config.lua:142>",
+		"Text": "Templates reset",
+		"Version": 1
+	},
+	"Templates;1": {
+		"Handle": "h273d0172g7268g4542gb140ge3241362c106",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:50: in field 'Main'",
+		"Text": "Templates",
+		"Version": 1
+	},
+	"This will reset all changes you've made to the templates.;1": {
+		"Handle": "h7c764b2dg2923g41e7g84f4g5781e6d675a3",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:142: in field 'Main'",
+		"Text": "This will reset all changes you've made to the templates.",
+		"Version": 1
+	},
+	"Tier;1": {
+		"Handle": "h373f16ceg626ag4439gb040gc25fd262e07d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Debug.lua:135: in field 'Enemies'",
+		"Text": "Tier",
+		"Version": 1
+	},
+	"Total Rounds: %s;1": {
+		"Handle": "h33c0b3bcg6695g4e6eg900fg3808f22d1a2a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:179: in upvalue 'compute'",
+		"Text": "Total Rounds: %s",
+		"Version": 1
+	},
+	"Turn Off Notifications;1": {
+		"Handle": "h9dc524a2gc890g471fgbaefg617918cd435b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
+		"Text": "Turn Off Notifications",
+		"Version": 1
+	},
+	"Uncommon;1": {
+		"Handle": "h23579496g7602g4c1cgb106g4a7a53246858",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated'",
+		"Text": "Uncommon",
+		"Version": 1
+	},
+	"Unlock %s bought for %s.;1": {
+		"Handle": "hd0c773c3g8592g4269gae3fg440f0c1d662d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:241: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:235>",
+		"Text": "Unlock %s bought for %s.",
+		"Version": 1
+	},
+	"Unlock %s bought.;1": {
+		"Handle": "h2308c823g765dg49d7ga103gbfb103219d93",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:166: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:160>",
+		"Text": "Unlock %s bought.",
+		"Version": 1
+	},
+	"Unlock Multipliers;1": {
+		"Handle": "h2cd8cf00g798dg49a5g91fegbfc333dc9de1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:70: in main chunk",
+		"Text": "Unlock Multipliers",
+		"Version": 1
+	},
+	"Unlock New Game+;1": {
+		"Handle": "h2d849b5cg78d1g4ce0g91ebg7a86f3c958a4",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:119: in main chunk",
+		"Text": "Unlock New Game+",
+		"Version": 1
+	},
+	"Unlock Tadpole Power;1": {
+		"Handle": "hb00c97b7ge559g4c2ega833gfa484a11d86a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:218: in main chunk",
+		"Text": "Unlock Tadpole Power",
+		"Version": 1
+	},
+	"Unlock Waypoints;1": {
+		"Handle": "h2c5a29c3g790fg47c9ga1f6g91af03d4b38d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Creation.lua:65: in field 'Main'",
+		"Text": "Unlock Waypoints",
+		"Version": 1
+	},
+	"Unlocks;1": {
+		"Handle": "h231a0e4eg764fg45b1gb102g93d7d320b1f5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:6: in field 'Main'",
+		"Text": "Unlocks",
+		"Version": 1
+	},
+	"Upcoming Spawns: %s;1": {
+		"Handle": "h8528df02gd07dg48a5gbb61gbec319439ce1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:180: in upvalue 'compute'",
+		"Text": "Upcoming Spawns: %s",
+		"Version": 1
+	},
+	"Updating config...;1": {
+		"Handle": "h2f0de7b4g7a58g4b2eg91c3ged4873e1cf6a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:128: in field '_Func'",
+		"Text": "Updating config...",
+		"Version": 1
+	},
+	"Use all Illithid Powers with Bonus Actions.;1": {
+		"Handle": "he7764179gb223g4142g8d44g5724af667506",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:254: in main chunk",
+		"Text": "Use all Illithid Powers with Bonus Actions.",
+		"Version": 1
+	},
+	"VeryRare;1": {
+		"Handle": "h27607312g7235g4264gb145g340213671620",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated'",
+		"Text": "VeryRare",
+		"Version": 1
+	},
+	"Waypoints;1": {
+		"Handle": "h273eb1cag726bg4e49gb140gd82f9362fa0d",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Creation.lua:69: in field 'Main'",
+		"Text": "Waypoints",
+		"Version": 1
+	},
+	"Welcome to %s! Start playing?;1": {
+		"Handle": "hfd862893ga8d3g47dcgacebg51ba0ec97398",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Text": "Welcome to %s! Start playing?",
+		"Version": 1
+	},
+	"Window Settings;1": {
+		"Handle": "h2d89694ag78dcg43c1gb1ebga5a793c98785",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:148: in field 'Client'",
+		"Text": "Window Settings",
+		"Version": 1
+	},
+	"Window toggle key;1": {
+		"Handle": "h28a9d2d8g7dfcg4878g91b9gae1eb39b8c3c",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:164: in field 'Client'",
+		"Text": "Window toggle key",
+		"Version": 1
+	},
+	"Your Currency increased: %d -> %d!;1": {
+		"Handle": "hc327dd8cg9672g488dg9f01g4eebfd236cc9",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:118: in field 'CalculateReward'",
+		"Text": "Your Currency increased: %d -> %d!",
+		"Version": 1
+	},
+	"Your RogueScore increased: %d -> %d!;1": {
+		"Handle": "hefbbbf98gbaeeg4eacg9dc8g88cabfeaaae8",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:339: in local 'updateScore'",
+		"Text": "Your RogueScore increased: %d -> %d!",
+		"Version": 1
+	},
+	"apparently it was too easy;1": {
+		"Handle": "hd2a986b6g87fcg4d3egbe19gab585c3b897a",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "apparently it was too easy",
+		"Version": 1
+	},
+	"automatically starts combat between rounds;1": {
+		"Handle": "he3a5992cgb6f0g4cc7g9d09g6aa1ff2b4883",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "automatically starts combat between rounds",
+		"Version": 1
+	},
+	"bought;1": {
+		"Handle": "h22c9bc4eg779cg4e91gb11fga8f7d33d8ad5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Unlocks.lua:226: in upvalue 'createPopup'",
+		"Text": "bought",
+		"Version": 1
+	},
+	"don't show ingame notifications;1": {
+		"Handle": "hf9ba1d4cgacefg4481g9ca8g92e7fe8ab0c5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "don't show ingame notifications",
+		"Version": 1
+	},
+	"get continuously harder battles;1": {
+		"Handle": "hde7c3e25g8b29g46b7g8ed4gf0d16cf6d2f3",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "get continuously harder battles",
+		"Version": 1
+	},
+	"items will spawn at the current player's position instead the maps entry point;1": {
+		"Handle": "hd49633d2g81c3g4668gbe7ag500e1c58722c",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "items will spawn at the current player's position instead the maps entry point",
+		"Version": 1
+	},
+	"multiplies the experience gained by killing enemies;1": {
+		"Handle": "hc2871d37g97d2g4486gaf1bg42e04d3960c2",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:212: in field 'Slider'",
+		"Text": "multiplies the experience gained by killing enemies",
+		"Version": 1
+	},
+	"randomize spawn position for more varied encounters (too high may cause issues);1": {
+		"Handle": "hb2c48751ge791g4d20g881fg7b462a3d5964",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:212: in field 'Slider'",
+		"Text": "randomize spawn position for more varied encounters (too high may cause issues)",
+		"Version": 1
+	},
+	"restrict other players in multiplayer from buying unlocks;1": {
+		"Handle": "h7b948ad7g2ec1g4df8ga48ag7b9e46a859bc",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:192: in field 'Checkbox'",
+		"Text": "restrict other players in multiplayer from buying unlocks",
+		"Version": 1
+	},
+	"skip dialogues, combat and interactions that aren't related to a scenario;1": {
+		"Handle": "h8c247740gd971g4221g9bf1g744739d35665",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "skip dialogues, combat and interactions that aren't related to a scenario",
+		"Version": 1
+	},
+	"some more info in the console and other debug features;1": {
+		"Handle": "h5ed1a319g0b84g4f64g86deg2902a4fc0b20",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "some more info in the console and other debug features",
+		"Version": 1
+	},
+	"will remove all entities from the map automatically and fix most issues with unexpected story triggers;1": {
+		"Handle": "h66887fc3g33ddg42a9ga55bgb4cf077996ed",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
+		"Text": "will remove all entities from the map automatically and fix most issues with unexpected story triggers",
+		"Version": 1
+	}
+}

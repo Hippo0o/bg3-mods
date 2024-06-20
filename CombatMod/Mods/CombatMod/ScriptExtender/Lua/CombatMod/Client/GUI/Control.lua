@@ -103,13 +103,18 @@ function Control.StartPanel(root)
                 if item.Name == C.RoguelikeScenario then
                     label = label .. " (RogueScore: " .. tostring(State.RogueScore) .. ")"
                 end
-                scenarioSelection.AddItem(label, item.Name)
+
+                if not State.RogueModeActive or item.Name == C.RoguelikeScenario then
+                    scenarioSelection.AddItem(label, item.Name)
+                end
             end
             scenarioSelPaged.UpdateItems(scenarioSelection.Selectables)
 
             mapSelection.AddItem("Random", nil)
-            for i, item in ipairs(event.Payload.Maps) do
-                mapSelection.AddItem(item.Name, item.Name)
+            if not State.RogueModeActive then
+                for i, item in ipairs(event.Payload.Maps) do
+                    mapSelection.AddItem(item.Name, item.Name)
+                end
             end
 
             mapSelPaged.UpdateItems(mapSelection.Selectables)

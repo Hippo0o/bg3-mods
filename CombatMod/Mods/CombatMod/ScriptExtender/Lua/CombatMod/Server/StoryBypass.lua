@@ -183,10 +183,6 @@ do -- EXP Lock
     end
 
     local function subscribeEntitiesExp()
-        if entityListener then
-            unsubscribeEntitiesExp()
-        end
-
         if not entityListener then
             StoryBypass.ExpLock.SnapshotEntitiesExp()
             entityListener = Ext.Entity.Subscribe(
@@ -229,8 +225,6 @@ do -- EXP Lock
     end
 
     Event.On("ModActive", subscribeEntitiesExp)
-    GameState.OnLoad(IfActive(subscribeEntitiesExp))
-    GameState.OnUnload(unsubscribeEntitiesExp)
 
     Event.On("ScenarioCombatStarted", StoryBypass.ExpLock.Pause)
     Event.On("ScenarioEnded", function()
@@ -483,16 +477,18 @@ Event.On(
     end)
 )
 
-GameState.OnLoad(function()
+local function removeAllEntities()
     if (S and S:HasStarted()) or not Config.ClearAllEntities then
         return
     end
-
-    Player.Notify(__("Clearing all entities"), true)
 
     if UT.Contains(PersistentVars.RegionsCleared, Player.Region()) then
         return
     end
 
+    Player.Notify(__("Clearing all entities"), true)
+
     StoryBypass.RemoveAllEntities()
-end)
+end
+GameState.OnLoad(ifBypassStory(removeAllEntities))
+Event.On("ModActive", ifBypassStory(removeAllEntities))

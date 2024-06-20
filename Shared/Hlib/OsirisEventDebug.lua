@@ -1,6 +1,9 @@
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Log
+local Log = Require("Hlib/Log")
+
 local M = {}
 
 M.Events = {}
@@ -21,7 +24,7 @@ function M.Attach()
                     v = Utils.String.Trim(v)
                     log[v] = select(i, ...)
                 end
-                Utils.Log.Dump(name, log)
+                Log.Dump(name, log)
             end)
         )
     end

@@ -5,7 +5,7 @@ if Ext.IMGUI == nil then
 end
 
 Settings = Libs.Proxy(
-    UT.Merge({ AutoHide = false, ToggleKey = "U" }, IO.LoadJson("ClientConfig.json") or {}),
+    UT.Merge({ AutoHide = false, ToggleKey = "U", AutoOpen = true }, IO.LoadJson("ClientConfig.json") or {}),
     function(value, _, raw)
         -- raw not updated yet
         Schedule(function()
@@ -45,8 +45,20 @@ Net.On("ModActive", function(event)
     end, function()
         local _, toggle, open, close = table.unpack(Require("CombatMod/Client/GUI/_Init"))
 
-        Net.On("OpenGUI", open)
-        Net.On("CloseGUI", close)
+        Net.On("OpenGUI", function(event)
+            if Settings.AutoOpen == false and event.Payload == "Optional" then
+                return
+            end
+
+            open()
+        end)
+        Net.On("CloseGUI", function(event)
+            if Settings.AutoOpen == false and event.Payload == "Optional" then
+                return
+            end
+
+            close()
+        end)
 
         local toggleWindow = Async.Throttle(100, toggle)
 

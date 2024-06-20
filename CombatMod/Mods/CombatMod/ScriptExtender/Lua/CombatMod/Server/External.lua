@@ -70,6 +70,7 @@ External.Validators.Config = tt({
     Debug = { "nil", "boolean" },
     TurnOffNotifications = { "nil", "boolean" },
     ClearAllEntities = { "nil", "boolean" },
+    MulitplayerRestrictUnlocks = { "nil", "boolean" },
 })
 
 External.Validators.Enemy = tt({
