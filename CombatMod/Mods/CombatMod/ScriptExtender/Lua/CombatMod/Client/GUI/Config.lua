@@ -177,7 +177,7 @@ function Config.Client(root)
     c.Checked = Settings.AutoOpen
     root:AddText(__("Hide this window when entering a map. Show this window when starting a scenario."))
 
-    local k = root:AddInputText(__("Window toggle key"))
+    local k = root:AddInputText(__("Window toggle key") .. " [A-Z]")
     k.OnChange = function(input)
         input.Text = input.Text:upper():sub(1, 1)
         if not input.Text:match("[A-Z]") then

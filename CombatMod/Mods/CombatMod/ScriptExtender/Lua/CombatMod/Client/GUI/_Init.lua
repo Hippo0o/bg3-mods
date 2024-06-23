@@ -135,6 +135,9 @@ do -- auto hide window
     end)
 end
 
+GameState.OnSave(function()
+    window.Visible = false
+end)
 GameState.OnUnload(function()
     window.Visible = false
 end)
