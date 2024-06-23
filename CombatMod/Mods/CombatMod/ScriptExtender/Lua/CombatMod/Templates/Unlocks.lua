@@ -143,7 +143,7 @@ local ngPlus = {
         Description = __("Resets the stock of purchased standard unlocks."),
         Cost = 1000,
         Amount = nil,
-        Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
+        Requirement = { "NEWGAME_PLUS" },
         Character = false,
         OnBuy = function(self, character)
             if self.Bought > 0 then
@@ -184,13 +184,12 @@ local ngPlus = {
         Character = false,
         Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
+            StoryBypass.ExpLock.DebouncedResume()
             StoryBypass.ExpLock.Pause()
 
             for _, p in pairs(GU.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
             end
-
-            Defer(1000, StoryBypass.ExpLock.Resume)
         end,
     },
     {
@@ -211,204 +210,341 @@ local ngPlus = {
 }
 
 --- @type table<number, Unlock>
-return UT.Combine(
+return UT.Combine({
     {
-        {
-            Id = "UnlockTadpole",
-            Name = __("Unlock Tadpole Power"),
-            Icon = "TadpoleSuperPower_IllithidPowers",
-            Cost = 10,
-            Amount = nil,
-            Character = true,
-            OnReapply = function()
-                for _, p in pairs(GU.DB.GetPlayers()) do
-                    if Osi.GetTadpolePowersCount(p) > 0 then
-                        Osi.SetTadpoleTreeState(p, 2)
-                    end
+        Id = "UnlockTadpole",
+        Name = __("Unlock Tadpole Power"),
+        Icon = "TadpoleSuperPower_IllithidPowers",
+        Cost = 10,
+        Amount = nil,
+        Character = true,
+        OnReapply = function()
+            for _, p in pairs(GU.DB.GetPlayers()) do
+                if Osi.GetTadpolePowersCount(p) > 0 then
+                    Osi.SetTadpoleTreeState(p, 2)
                 end
-            end,
-            OnBuy = function(self, character)
-                unlockTadpole(character)
-            end,
-        },
-        {
-            Id = "TadpoleCeremorph",
-            Name = __("Start Ceremorphosis"),
-            Icon = "TadpoleSuperPower_IllithidPersuasion",
-            Description = __("Includes %s", __("Unlock Tadpole Power")),
-            Cost = 300,
-            Amount = nil,
-            Character = true,
-            Requirement = 45,
-            OnBuy = function(self, character)
-                unlockTadpole(character)
-                Osi.SetTag(character, "c0cd4ed8-11d1-4fb1-ae3a-3a14e41267c8")
-                Osi.ApplyStatus(character, "TAD_PARTIAL_CEREMORPH", -1)
-                -- Osi.RemoveCustomMaterialOverride(character, "398ca8ae-c3c0-47f5-8e45-d9402e198389")
-            end,
-        },
-        {
-            Id = "TadAwaken",
-            Name = __("Awakened Illithid Powers"),
-            Icon = "PassiveFeature_CRE_GithInfirmary_Awakened",
-            Description = __("Use all Illithid Powers with Bonus Actions."),
-            Cost = 100,
-            Amount = 1,
-            Character = true,
-            OnBuy = function(self, character)
-                Osi.AddPassive(character, "CRE_GithInfirmary_Awakened")
-            end,
-        },
-        {
-            Id = "Tadpole",
-            Name = __("Get a Tadpole"),
-            Icon = "Item_LOOT_Druid_Autopsy_Set_Tadpole",
-            Cost = 30,
-            Amount = nil,
-            Character = false,
-            OnBuy = function(self, character)
-                Osi.AddTadpole(character, 1)
-            end,
-        },
-        {
-            Id = "BuyExp",
-            Name = "1000 EXP",
-            Icon = "Action_Dash_Bonus",
-            Cost = 40,
-            Amount = 4,
-            Character = false,
-            OnBuy = function(self, character)
-                StoryBypass.ExpLock.Pause()
+            end
+        end,
+        OnBuy = function(self, character)
+            unlockTadpole(character)
+        end,
+    },
+    {
+        Id = "TadpoleCeremorph",
+        Name = __("Start Ceremorphosis"),
+        Icon = "TadpoleSuperPower_IllithidPersuasion",
+        Description = __("Includes %s", __("Unlock Tadpole Power")),
+        Cost = 300,
+        Amount = nil,
+        Character = true,
+        Requirement = 45,
+        OnBuy = function(self, character)
+            unlockTadpole(character)
+            Osi.SetTag(character, "c0cd4ed8-11d1-4fb1-ae3a-3a14e41267c8")
+            Osi.ApplyStatus(character, "TAD_PARTIAL_CEREMORPH", -1)
+            -- Osi.RemoveCustomMaterialOverride(character, "398ca8ae-c3c0-47f5-8e45-d9402e198389")
+        end,
+    },
+    {
+        Id = "BuyMindflayerForm",
+        Name = Localization.Get("hd58a2099g6c22g499fga7acgab8d6fda5615"),
+        Icon = "TadpoleSuperPower_Ceremorphosis",
+        Cost = 900,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.ApplyStatus(character, "MIND_FLAYER_FORM", -1)
+            -- takes a bit to transform
+            Async.WaitTicks(100, function()
+                self:OnReapply()
+            end)
+        end,
+        OnReapply = function(self) ---@param self Unlock
+            for uuid, _ in pairs(self.BoughtBy) do
+                GC.RemoveSpell(uuid, "Target_END_Mindflayer_CrownDomination")
+            end
+        end,
+    },
+    {
+        Id = "TadAwaken",
+        Name = __("Awakened Illithid Powers"),
+        Icon = "PassiveFeature_CRE_GithInfirmary_Awakened",
+        Description = __("Use all Illithid Powers with Bonus Actions."),
+        Cost = 100,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.AddPassive(character, "CRE_GithInfirmary_Awakened")
+        end,
+    },
+    {
+        Id = "BuyTadInstinct",
+        Name = Localization.Get("ha5b687efgdea0g441bg9b23gea473a021ef3"),
+        Icon = "TadpoleSuperPower_SurvivalInstinct",
+        Cost = 40,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.AddSpell(character, "Target_SurvivalInstinct", 1)
+        end,
+    },
+    {
+        Id = "BuyEmperor",
+        Name = __("Spawn Mindflayer Companion"),
+        Description = __("Spawns the Emperor as controllable party follower."),
+        Icon = "TadpoleSuperPower_IllithidExpertise",
+        Cost = 200,
+        Amount = 1,
+        Character = false,
+        OnBuy = function(self, character)
+            -- TODO fix HEALTHBOOST_HARDCODE
+            local temp = Ext.Template.GetTemplate("6efb2704-a025-49e0-ba9f-2b4f62dd2195")
+            temp.DisableEquipping = true
 
-                for _, p in pairs(GU.DB.GetPlayers()) do
-                    Osi.AddExplorationExperience(p, 1000)
-                end
+            local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
+            Osi.SetFaction(guid, C.CompanionFaction)
+            Osi.SetTag(guid, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
+            Osi.AddPassive(guid, "ShortResting")
+            Osi.ApplyStatus(guid, "DISINTEGRATE_DEATH", -1)
+            Osi.AddPartyFollower(guid, character)
 
-                Defer(1000, StoryBypass.ExpLock.Resume)
-            end,
-        },
-        {
-            Id = "BuyLoot",
-            Name = __("Roll Loot %dx", 10),
-            Icon = "Item_CONT_GEN_Chest_Jewel_B",
-            Cost = 30,
-            Amount = 10,
-            Character = false,
-            OnBuy = function(self, character)
-                local loot = Item.GenerateLoot(10, C.LootRates)
-
-                local x, y, z = Osi.GetPosition(character)
-                Item.SpawnLoot(loot, x, y, z)
-            end,
-        },
-        {
-            Id = "BuySupplies",
-            Name = __("Buy 40 Camp Supplies"),
-            Icon = "Item_CONT_GEN_CampSupplySack",
-            Cost = 20,
-            Amount = 5,
-            Character = false,
-            OnBuy = function(self, character)
-                Osi.PROC_CAMP_GiveFreeSupplies()
-            end,
-        },
-        {
-            Id = "BuyRestore",
-            Name = __("Fully Restore Character"),
-            Icon = "Action_EndGame_IsobelHeal",
-            Description = __("Resurrect character and fully restore all resources."),
-            Cost = 20,
-            Amount = nil,
-            Character = true,
-            OnBuy = function(self, character)
-                -- for _, p in pairs(GE.GetParty()) do
-                --     Osi.PROC_CharacterFullRestore(p.Uuid.EntityUuid)
-                --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
-                -- end
-                Osi.PROC_CharacterFullRestore(character)
-                Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
-            end,
-        },
-        {
-            Id = "Moonshield",
-            Name = __("Get Pixie Blessing"),
-            Description = __("Counter the Shadow Curse."),
-            Icon = "statIcons_Moonshield",
-            Cost = 30,
-            Amount = 1,
-            Character = false,
-            OnBuy = function(self, character)
+            -- Osi.Follow(guid, character)
+        end,
+        OnReapply = function(self) ---@param self Unlock
+            if self.Bought > 0 then
                 for _, p in pairs(GE.GetParty()) do
-                    Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
-                end
-            end,
-            OnReapply = function(self) ---@param self Unlock
-                if self.Bought > 0 then
-                    self:OnBuy()
-                end
-            end,
-        },
-        {
-            Id = "BreakOath",
-            Name = __("Break/Restore Oath"),
-            Icon = "statIcons_OathBroken",
-            Description = __("Needs to be a Paladin."),
-            Cost = 10,
-            Amount = nil,
-            Character = true,
-            OnBuy = function(self, character)
-                -- Osi.PROC_GLO_PaladinOathbreaker_BrokeOath(character)
-                Osi.PROC_GLO_PaladinOathbreaker_BecomesOathbreaker(character)
-                Osi.PROC_GLO_PaladinOathbreaker_RedemptionObtained(character)
-                Osi.StartRespecToOathbreaker(character)
-            end,
-        },
-        {
-            Id = "BuyEmperor",
-            Name = __("Spawn Mindflayer Companion"),
-            Description = __("Spawns the Emperor as controllable party follower."),
-            Icon = "TadpoleSuperPower_IllithidExpertise",
-            Cost = 200,
-            Amount = 1,
-            Character = false,
-            OnBuy = function(self, character)
-                -- TODO fix HEALTHBOOST_HARDCODE
-                local temp = Ext.Template.GetTemplate("6efb2704-a025-49e0-ba9f-2b4f62dd2195")
-                temp.DisableEquipping = true
-
-                local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
-                Osi.AddPartyFollower(guid, character)
-                Osi.SetFaction(guid, C.CompanionFaction)
-
-                -- Osi.Follow(guid, character)
-            end,
-            OnReapply = function(self) ---@param self Unlock
-                if self.Bought > 0 then
-                    for _, p in pairs(GE.GetParty()) do
-                        if p.ServerCharacter.Template.Id == "6efb2704-a025-49e0-ba9f-2b4f62dd2195" then
-                            if p.Death then
-                                GU.Object.Remove(p.Uuid.EntityUuid)
-                            end
+                    if p.ServerCharacter.Template.Id == "6efb2704-a025-49e0-ba9f-2b4f62dd2195" then
+                        if p.Death then
+                            GU.Object.Remove(p.Uuid.EntityUuid)
                         end
                     end
                 end
-            end,
-        },
+            end
+        end,
     },
-    multis,
-    hagHair(),
-    ngPlus
-    -- Not working outside END_Main
-    -- {
-    --     Id = "TransformMindflayer",
-    --     Name = "Become a true Mindflayer",
-    --     Icon = "TadpoleSuperPower_StageFright",
-    --     Cost = 300,
-    --     Amount = nil,
-    --     Character = true,
-    --     Requirement = {"NEWGAME_PLUS", "ScoreMultiplier"},
-    --     OnBuy = function(self, character)
-    --         Osi.PROC_END_General_ApplyMindFlayerForm(character)
-    --     end,
-    -- },
-)
+    {
+        Id = "Tadpole",
+        Name = __("Get a Tadpole"),
+        Icon = "Item_LOOT_Druid_Autopsy_Set_Tadpole",
+        Cost = 30,
+        Amount = nil,
+        Character = false,
+        OnBuy = function(self, character)
+            Osi.AddTadpole(character, 1)
+        end,
+    },
+    {
+        Id = "BuyExp",
+        Name = "1000 EXP",
+        Icon = "Action_Dash_Bonus",
+        Cost = 40,
+        Amount = 4,
+        Character = false,
+        OnBuy = function(self, character)
+            StoryBypass.ExpLock.DebouncedResume()
+            StoryBypass.ExpLock.Pause()
+
+            for _, p in pairs(GU.DB.GetPlayers()) do
+                Osi.AddExplorationExperience(p, 1000)
+            end
+        end,
+    },
+    {
+        Id = "BuyLoot",
+        Name = __("Roll Loot %dx", 10),
+        Icon = "Item_CONT_GEN_Chest_Jewel_B",
+        Cost = 30,
+        Amount = 10,
+        Character = false,
+        OnBuy = function(self, character)
+            local loot = Item.GenerateLoot(10, C.LootRates)
+
+            local x, y, z = Osi.GetPosition(character)
+            Item.SpawnLoot(loot, x, y, z)
+        end,
+    },
+    {
+        Id = "BuySupplies",
+        Name = __("Buy 40 Camp Supplies"),
+        Icon = "Item_CONT_GEN_CampSupplySack",
+        Cost = 20,
+        Amount = 5,
+        Character = false,
+        OnBuy = function(self, character)
+            Osi.PROC_CAMP_GiveFreeSupplies()
+        end,
+    },
+    {
+        Id = "BuyRestore",
+        Name = __("Fully Restore Character"),
+        Icon = "Action_EndGame_IsobelHeal",
+        Description = __("Resurrect character and fully restore all resources."),
+        Cost = 20,
+        Amount = nil,
+        Character = true,
+        OnBuy = function(self, character)
+            -- for _, p in pairs(GE.GetParty()) do
+            --     Osi.PROC_CharacterFullRestore(p.Uuid.EntityUuid)
+            --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
+            -- end
+            Osi.PROC_CharacterFullRestore(character)
+            Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
+        end,
+    },
+    {
+        Id = "Moonshield",
+        Name = __("Get Pixie Blessing"),
+        Description = __("Counter the Shadow Curse."),
+        Icon = "statIcons_Moonshield",
+        Cost = 30,
+        Amount = 1,
+        Character = false,
+        OnBuy = function(self, character)
+            for _, p in pairs(GE.GetParty()) do
+                Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
+            end
+        end,
+        OnReapply = function(self) ---@param self Unlock
+            if self.Bought > 0 then
+                self:OnBuy()
+            end
+        end,
+    },
+    {
+        Id = "BreakOath",
+        Name = __("Break/Restore Oath"),
+        Icon = "statIcons_OathBroken",
+        Description = __("Needs to be a Paladin."),
+        Cost = 10,
+        Amount = nil,
+        Character = true,
+        OnBuy = function(self, character)
+            -- Osi.PROC_GLO_PaladinOathbreaker_BrokeOath(character)
+            Osi.PROC_GLO_PaladinOathbreaker_BecomesOathbreaker(character)
+            Osi.PROC_GLO_PaladinOathbreaker_RedemptionObtained(character)
+            Osi.StartRespecToOathbreaker(character)
+        end,
+    },
+    {
+        Id = "BuyGodBlessing",
+        Name = Localization.Get("h86fef9afgeb0eg45e8g8388gd8e9f7c619b7"),
+        Icon = "GenericIcon_Intent_Buff",
+        Description = "Gain +2 bonus to all Saving throws",
+        Cost = 60,
+        Amount = nil,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.ApplyStatus(character, "LOW_STORMSHORETABERNACLE_GODBLESSED", -1)
+        end,
+    },
+    {
+        Id = "BuyLoviatar",
+        Name = Localization.Get("h80729873g86d9g4ddbga01egeebe788f1733"),
+        Icon = "statIcons_GOB_CalmnessInPain",
+        Cost = 40,
+        Amount = nil,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.ApplyStatus(character, "GOB_CALMNESS_IN_PAIN", -1)
+        end,
+    },
+    {
+        Id = "BuyVoloErsatz",
+        Name = Localization.Get("h232cc24ega0f9g4f4dgb5d3g46ab59579d4b"),
+        Description = "Grants See Invisibility",
+        Icon = "Item_DEN_VoloOperation_ErsatzEye",
+        Cost = 10,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.AddPassive(character, "CAMP_Volo_ErsatzEye")
+        end,
+    },
+    {
+        Id = "BuyBrand",
+        Name = Localization.Get("h7cc7adeag848fg491cga683g0faeaea082c3"),
+        Icon = "Item_UNI_Gob_Priest_Shield",
+        Description = "Bear the Absolute's Brand",
+        Cost = 20,
+        Amount = 2,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.SetTag(character, "310f7186-bb0b-4905-b8f6-dfc2fe62570a")
+        end,
+    },
+    {
+        Id = "BuyBOOOALBlessing",
+        Name = Localization.Get("hc6ac3045g2c16g4d9dgb178gfa9c8c0928b6"),
+        Icon = "statIcons_BoooalsBenediction",
+        Description = "Advantage on Attack rolls against Bleeding cratures",
+        Cost = 50,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.ApplyStatus(character, "UND_BOOOALBLESSING", -1)
+        end,
+    },
+    {
+        Id = "BuyFalseLife",
+        Name = Localization.Get("hcb11494cg5afbg4068g8de7g50ccdae27cfe"),
+        Icon = "GenericIcon_Intent_Healing",
+        Description = "20 Temporary HP after Long Rest",
+        Cost = 80,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.AddPassive(character, "CursedTome_FalseLife")
+        end,
+    },
+    {
+        Id = "BuyWakeTheDead",
+        Name = Localization.Get("h107871e3gd9c6g4091g828fg3608cb2cb03f"),
+        Icon = "Spell_WakeTheDead",
+        Cost = 80,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.AddSpell(character, "Target_CursedTome_WakeTheDead", 1)
+        end,
+    },
+    {
+        Id = "BuyVampireAscendant",
+        Name = Localization.Get("h7c8ce380g0d56g4807gb60cg58e283b4ecdb"),
+        Icon = "Action_Monster_Bulette_Bite",
+        Description = "Gain Ascendant Bite and Misty Escape (Vampire Ascendant)",
+        Cost = 100,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.AddPassive(character, "LOW_Astarion_VampireAscendant")
+        end,
+    },
+    {
+        Id = "BuyBloodyInheritance",
+        Name = Localization.Get("hc4d08908g6040g4e50g889cg0ef6e267b6e0"),
+        Icon = "PassiveFeature_Generic_Blood",
+        Description = "Gain Stunning Gaze and Critical Hit -2",
+        Cost = 80,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.ApplyStatus(character, "END_ALLYABILITIES_BHAALBUFF", -1)
+        end,
+        OnReapply = function(self) ---@param self Unlock
+            for uuid, _ in pairs(self.BoughtBy) do
+                self:OnBuy(uuid)
+            end
+        end,
+    },
+    {
+        Id = "BuySlayer",
+        Name = Localization.Get("h7ee059fega56bg48d4g99abg0a1ee50238d1"),
+        Icon = "Action_DarkUrge",
+        Cost = 100,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.AddSpell(character, "Shout_DarkUrge_Slayer", 1)
+        end,
+    },
+}, multis, hagHair(), ngPlus)

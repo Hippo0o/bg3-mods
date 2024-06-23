@@ -35,14 +35,19 @@ local function toRainbowText(text)
     for i = 1, len do
         local char = text:sub(i, i)
         local r, g, b = HSVToRGB(hue, 1, 1)
-        coloredText = coloredText .. string.format("\x1b[38;2;%d;%d;%dm%s\x1b[0m", r, g, b, char)
+        coloredText = coloredText .. M.ColorText(char, { r, g, b })
         hue = (hue + step) % 360
     end
 
     return coloredText
 end
 
-local function colorText(text, color)
+function M.ColorText(text, color)
+    if type(color) == "table" then
+        local r, g, b = color[1], color[2], color[3]
+        return string.format("\x1b[38;2;%d;%d;%dm%s\x1b[0m", r, g, b, text)
+    end
+
     return string.format("\x1b[%dm%s\x1b[0m", color or 37, text)
 end
 
@@ -55,16 +60,16 @@ local function logPrefix()
 end
 
 function M.Info(...)
-    Ext.Utils.Print(logPrefix() .. colorText("[Info]"), ...)
+    Ext.Utils.Print(logPrefix() .. M.ColorText("[Info]"), ...)
 end
 
 function M.Warn(...)
-    Ext.Utils.PrintWarning(logPrefix() .. colorText("[Warning]", 33), ...)
+    Ext.Utils.PrintWarning(logPrefix() .. M.ColorText("[Warning]", 33), ...)
 end
 
 function M.Debug(...)
     if Mod.Debug then
-        Ext.Utils.Print(logPrefix() .. colorText("[Debug]", 36), ...)
+        Ext.Utils.Print(logPrefix() .. M.ColorText("[Debug]", 36), ...)
     end
 end
 
@@ -75,7 +80,7 @@ function M.Dump(...)
 end
 
 function M.Error(...)
-    Ext.Utils.PrintError(logPrefix() .. colorText("[Error]", 31), ...)
+    Ext.Utils.PrintError(logPrefix() .. M.ColorText("[Error]", 31), ...)
 end
 
 return M

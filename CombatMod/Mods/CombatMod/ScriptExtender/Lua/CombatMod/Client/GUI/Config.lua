@@ -52,13 +52,22 @@ function Config.Main(tab)
         "MulitplayerRestrictUnlocks"
     )
 
+    local c2 = Config.Slider(
+        root,
+        "To Camp After n Seconds",
+        "in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport",
+        "AutoTeleport",
+        0,
+        120
+    )
+
     local c5 = Config.Slider(
         root,
         "Randomize Spawn Offset",
         "randomize spawn position for more varied encounters (too high may cause issues)",
         "RandomizeSpawnOffset",
         0,
-        20
+        30
     )
 
     local c7 = Config.Slider(

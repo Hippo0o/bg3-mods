@@ -16,6 +16,10 @@ Mod.PersistentVarsTemplate = {
     HardMode = false, -- applies additional difficulty to the game
     GUIOpen = false,
     History = {},
+    RandomLog = { -- log last random values to prevent repeating the same
+        Maps = {},
+        Items = {},
+    },
     LootFilter = {
         Object = UT.Map(C.ItemRarity, function(v, k)
             return true, v
@@ -50,6 +54,7 @@ DefaultConfig = {
     TurnOffNotifications = false,
     ClearAllEntities = true,
     MulitplayerRestrictUnlocks = false,
+    AutoTeleport = 30,
 }
 Config = UT.DeepClone(DefaultConfig)
 
@@ -74,6 +79,21 @@ function IfActive(func)
         if PersistentVars.Active then
             func(...)
         end
+    end
+end
+
+function LogRandom(key, value, max)
+    if not max then
+        max = 10
+    end
+
+    if not PersistentVars.RandomLog[key] then
+        PersistentVars.RandomLog[key] = {}
+    end
+
+    table.insert(PersistentVars.RandomLog[key], value)
+    if #PersistentVars.RandomLog[key] > max then
+        table.remove(PersistentVars.RandomLog[key], 1)
     end
 end
 

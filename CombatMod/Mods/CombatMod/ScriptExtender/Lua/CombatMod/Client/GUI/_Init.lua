@@ -10,7 +10,7 @@ Require("CombatMod/Client/GUI/Debug")
 
 ---@type ExtuiWindow
 local window = Ext.IMGUI.NewWindow(
-    string.format("%s v%d.%d.%d", Mod.Prefix, Mod.Version.major, Mod.Version.minor, Mod.Version.revision)
+    string.format("%s v%d.%d.%d", Mod.Prefix, Mod.Version.Major, Mod.Version.Minor, Mod.Version.Revision)
 )
 
 Event.On("WindowClosed", function()

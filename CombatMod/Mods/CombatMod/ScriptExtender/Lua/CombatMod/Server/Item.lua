@@ -526,7 +526,14 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
 
         L.Debug("Rolling bonus loot items:", #items, bonusCategory, rarity)
         if #items > 0 then
-            table.insert(loot, items[U.Random(#items)])
+            local random = items[U.Random(#items)]
+
+            if UT.Contains(PersistentVars.RandomLog.Items, random.Name) then
+                random = items[U.Random(#items)]
+            end
+            LogRandom("Items", random.Name, 100)
+
+            table.insert(loot, random)
         end
     end
 

@@ -15,8 +15,6 @@ return {
         },
 
         Positions = { 3, 5, 1 },
-
-        Loot = defaultLoot,
     },
     {
         Name = "level 1 - 3",
@@ -31,8 +29,6 @@ return {
         },
 
         Positions = { 3, 1, 2, -1, 4, 1 },
-
-        Loot = defaultLoot,
     },
     {
         Name = "level 3 - 5",
@@ -45,8 +41,6 @@ return {
             { low, low, low },
             { low },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "level 5 - 7",
@@ -61,8 +55,6 @@ return {
             { low, low },
             { high },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "level 7 - 9",
@@ -77,8 +69,6 @@ return {
             { medium, medium },
             { high },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "level 8 - 10",
@@ -93,8 +83,6 @@ return {
             { medium, low },
             { ultra },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "level 10 - 12",
@@ -109,8 +97,6 @@ return {
             { medium, ultra },
             { ultra },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "very hard",
@@ -122,8 +108,6 @@ return {
             {},
             { epic, epic },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "ultra",
@@ -134,8 +118,6 @@ return {
             {},
             { ultra, ultra },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "epic",
@@ -145,8 +127,6 @@ return {
             {},
             { epic, epic },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "legendary",
@@ -154,8 +134,6 @@ return {
         Timeline = {
             { legendary },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "impossible",
@@ -167,8 +145,6 @@ return {
             {},
             { legendary },
         },
-
-        Loot = defaultLoot,
     },
     {
         Name = "Githyanki",

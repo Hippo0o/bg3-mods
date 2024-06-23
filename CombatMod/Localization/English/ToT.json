@@ -27,6 +27,13 @@
 		"Text": "%s required",
 		"Version": 1
 	},
+	"Active;1": {
+		"Handle": "h270f8076g725ag4d52gb143gcb345361e916",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Components.lua:63: in field 'Update'",
+		"Text": "Active",
+		"Version": 1
+	},
 	"All enemies are dead.;1": {
 		"Handle": "hb5676e2age032g43b7gb865g45d19a4767f3",
 		"LocaText": "",
@@ -109,6 +116,20 @@
 		"LocaText": "",
 		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
 		"Text": "Bypass Story",
+		"Version": 1
+	},
+	"Cannot buy while in combat.;1": {
+		"Handle": "hc1ee9e0bg94bbg4cb5gaf2dgdad38d0ff8f1",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:233: in field '_Func'",
+		"Text": "Cannot buy while in combat.",
+		"Version": 1
+	},
+	"Cannot force next round while in combat.;1": {
+		"Handle": "hfebba60egabeeg4f35gbcd8g8953defaab71",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:127: in field '_Func'",
+		"Text": "Cannot force next round while in combat.",
 		"Version": 1
 	},
 	"Cannot teleport while in combat.;1": {
@@ -461,6 +482,13 @@
 		"Text": "Loot",
 		"Version": 1
 	},
+	"Map not found.;1": {
+		"Handle": "h2cb85222g79edg4077gb1f8gb61113da9433",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:150: in field '_Func'",
+		"Text": "Map not found.",
+		"Version": 1
+	},
 	"Map: %s;1": {
 		"Handle": "h3cf1646eg69a4g4313gb0fcg2575d2de0757",
 		"LocaText": "",
@@ -769,6 +797,13 @@
 		"Text": "Search",
 		"Version": 1
 	},
+	"Skip to Camp?;1": {
+		"Handle": "h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Text": "Skip to Camp?",
+		"Version": 1
+	},
 	"Skipped combat with %s;1": {
 		"Handle": "hb13de5b9ge468g4b0eg8820ged68aa02cf4a",
 		"LocaText": "",
@@ -895,6 +930,13 @@
 		"Text": "Tier",
 		"Version": 1
 	},
+	"To Camp After n Seconds;1": {
+		"Handle": "he699ae7dgb3ccg4fb2g8d5aga9d4ef788bf6",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:227: in field 'Slider'",
+		"Text": "To Camp After n Seconds",
+		"Version": 1
+	},
 	"Total Rounds: %s;1": {
 		"Handle": "h33c0b3bcg6695g4e6eg900fg3808f22d1a2a",
 		"LocaText": "",
@@ -956,6 +998,20 @@
 		"LocaText": "",
 		"Stack": "CombatMod/CombatMod/Client/GUI/Creation.lua:65: in field 'Main'",
 		"Text": "Unlock Waypoints",
+		"Version": 1
+	},
+	"Unlock needs a character.;1": {
+		"Handle": "hd490c7efg81c5g492bgae7ag3f4dcc581d6f",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:251: in field '_Func'",
+		"Text": "Unlock needs a character.",
+		"Version": 1
+	},
+	"Unlock out of stock.;1": {
+		"Handle": "h8bfedf62gdeabg48a3gbb8cgdec519aefce7",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:245: in field '_Func'",
+		"Text": "Unlock out of stock.",
 		"Version": 1
 	},
 	"Unlocks;1": {
@@ -1068,6 +1124,13 @@
 		"LocaText": "",
 		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox'",
 		"Text": "get continuously harder battles",
+		"Version": 1
+	},
+	"in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport;1": {
+		"Handle": "h00e41e74g55b1g44b2g933dg72d4711f50f6",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:228: in field 'Slider'",
+		"Text": "in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport",
 		"Version": 1
 	},
 	"items will spawn at the current player's position instead the maps entry point;1": {

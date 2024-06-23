@@ -5,8 +5,6 @@
 -------------------------------------------------------------------------------------------------
 
 function GameMode.AskTutSkip()
-    Config.BypassStory = true
-
     return Player.AskConfirmation("Skip to Camp?")
         .After(function(confirmed)
             if not confirmed then
@@ -41,11 +39,6 @@ function GameMode.AskTutSkip()
                     Osi.PROC_CAMP_GiveFreeSupplies()
                     Osi.PROC_CAMP_GiveFreeSupplies()
 
-                    External.LoadConfig()
-
-                    if Config.ClearAllEntities then
-                        StoryBypass.RemoveAllEntities()
-                    end
                 end)
             end, true)
         end)
@@ -402,7 +395,14 @@ function GameMode.StartNext()
 
     local map = nil
     if #maps > 0 then
-        map = maps[U.Random(#maps)]
+        local random = U.Random(#maps)
+
+        if UT.Contains(PersistentVars.RandomLog.Maps, random) then
+            random = U.Random(#maps)
+        end
+        LogRandom("Maps", random, 30)
+
+        map = maps[random]
     end
 
     Scenario.Start(rogueTemp, map)
@@ -466,7 +466,6 @@ U.Osiris.On(
         if U.UUID.Equals(uuid, Player.Host()) then
             GameMode.StartNext()
             Player.PickupAll()
-            Osi.PROC_LockAllUnlockedWaypoints()
         end
     end)
 )
@@ -512,19 +511,17 @@ Event.On("ScenarioEnded", function(scenario)
         GameMode.UpdateRogueScore(scenario)
 
         ifRogueLike(function()
-            Player.Notify(__("Teleporting back to camp in %d seconds.", 30), true)
-            local d1 = Defer(10000, function()
-                Player.Notify(__("Teleporting back to camp in %d seconds.", 20), true)
-            end)
-            local d2 = Defer(30000, function()
-                Player.PickupAll()
-                Player.ReturnToCamp()
-            end)
+            if Config.AutoTeleport > 0 then
+                Player.Notify(__("Teleporting back to camp in %d seconds.", Config.AutoTeleport), true)
+                local timer = Defer(Config.AutoTeleport * 1000, function()
+                    Player.PickupAll()
+                    Player.ReturnToCamp()
+                end)
 
-            Event.On("ScenarioStarted", function(scenario)
-                d1.Source:Clear()
-                d2.Source:Clear()
-            end, true)
+                Event.On("ScenarioStarted", function(scenario)
+                    timer.Source:Clear()
+                end, true)
+            end
         end)()
     end
 end)

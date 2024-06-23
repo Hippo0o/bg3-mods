@@ -69,3 +69,11 @@ Net.On("ModActive", function(event)
         end)
     end)
 end, true)
+
+Net.On("Notification", function(event)
+    local data = event.Payload
+    Schedule(function()
+        Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext.CurrentSubtitleDuration = data.Duration or 3
+        Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext.CurrentSubtitle = data.Text
+    end)
+end)

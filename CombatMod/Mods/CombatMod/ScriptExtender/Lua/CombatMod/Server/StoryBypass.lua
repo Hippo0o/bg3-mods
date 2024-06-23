@@ -7,7 +7,7 @@
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
     return IfActive(function(...)
-        if Config.BypassStory or (S ~= nil and S.OnMap) then
+        if Config.BypassStory then
             func(...)
         end
     end)
@@ -173,6 +173,8 @@ do -- EXP Lock
         StoryBypass.ExpLock.SnapshotEntitiesExp()
     end
 
+    StoryBypass.ExpLock.DebouncedResume = Async.Debounce(1000, StoryBypass.ExpLock.Resume)
+
     local entityListener = nil
 
     local function unsubscribeEntitiesExp()
@@ -227,9 +229,12 @@ do -- EXP Lock
     Event.On("ModActive", subscribeEntitiesExp)
 
     Event.On("ScenarioCombatStarted", StoryBypass.ExpLock.Pause)
-    Event.On("ScenarioEnded", function()
-        Defer(1000, StoryBypass.ExpLock.Resume)
+    Event.On("ScenarioRestored", function(scenario)
+        if scenario:HasStarted() then
+            StoryBypass.ExpLock.Pause()
+        end
     end)
+    Event.On("ScenarioEnded", StoryBypass.ExpLock.DebouncedResume)
     Event.On("ScenarioStopped", StoryBypass.ExpLock.Resume)
     Event.On("ScenarioTeleport", StoryBypass.ExpLock.Resume)
 end
