@@ -853,6 +853,13 @@
 		"Text": "Start",
 		"Version": 1
 	},
+	"Starting items added. Hirelings unlocked.;1": {
+		"Handle": "hc1216d49g9474g4381g8f21g25e7ad0307c5",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/Intro.lua:56: in function <CombatMod/CombatMod/Server/Intro.lua:36>",
+		"Text": "Starting items added. Hirelings unlocked.",
+		"Version": 1
+	},
 	"State;1": {
 		"Handle": "h32391aeeg676cg44fbgb010ga29dd23280bf",
 		"LocaText": "",

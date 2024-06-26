@@ -64,6 +64,7 @@ Require("CombatMod/Server/External")
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)
 
+Intro = {}
 Player = {}
 Scenario = {}
 Enemy = {}
@@ -97,6 +98,7 @@ function LogRandom(key, value, max)
     end
 end
 
+Require("CombatMod/Server/Intro")
 Require("CombatMod/Server/Player")
 Require("CombatMod/Server/Scenario")
 Require("CombatMod/Server/Enemy")
@@ -139,7 +141,7 @@ GameState.OnLoad(function()
 
     PersistentVars.Asked = PersistentVars.Active
     if PersistentVars.Asked == false then
-        GameMode.AskOnboarding()
+        Intro.AskOnboarding()
     end
 
     if PersistentVars.Active then

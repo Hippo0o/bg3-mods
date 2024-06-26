@@ -25,6 +25,7 @@ local items = {
 	"LOW_RamazithsTower_Nightsong_Silver_Shield",
 	"WPN_KingsKnife",
 	"OBJ_Bomb_Orthon",
+	"MAG_Hat_Circushat",
 
 	"OBJ_Scrolls_FindFamiliar",
 	-- "OBJ_Scroll_BestowCurse",

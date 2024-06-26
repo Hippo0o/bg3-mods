@@ -150,6 +150,22 @@ External.Validators.Scenario = tt({
         }),
     },
 })
+External.Validators.Unlock = tt({
+    Id = { "string" },
+    Name = { "string" },
+    Icon = { "string" },
+    Cost = { "number" },
+    Amount = { "nil", "number" },
+    Character = { "boolean" },
+    Requirement = { "nil", "number", "string", tt({ "number", "string" }, true) },
+    Persistent = { "nil", "boolean" },
+    OnBuy = { "nil", "function" },
+    OnReapply = { "nil", "function" },
+    -- set by system
+    Bought = { "nil" },
+    BoughtBy = { "nil" },
+    Unlocked = { "nil" },
+})
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -197,74 +213,98 @@ function External.Templates.AddUnlock(data)
     end
 end
 
-function External.Templates.GetMaps(defaults)
-    local exists = External.File.Exists("Maps")
-    if not exists then
-        return UT.Combine({}, addedMaps, defaults)
-    end
+local patchMaps = {}
+function External.Templates.PatchMaps(func)
+    assert(type(func) == "function", "PatchMaps needs to be a function.")
+    table.insert(patchMaps, func)
+end
 
-    local data = External.File.Import("Maps")
-    if data == nil then
-        data = {}
-    end
+local patchScenarios = {}
+function External.Templates.PatchScenarios(func)
+    assert(type(func) == "function", "PatchScenarios needs to be a function.")
+    table.insert(patchScenarios, func)
+end
+
+local patchEnemies = {}
+function External.Templates.PatchEnemies(func)
+    assert(type(func) == "function", "PatchEnemies needs to be a function.")
+    table.insert(patchEnemies, func)
+end
+
+local patchUnlocks = {}
+function External.Templates.PatchUnlocks(func)
+    assert(type(func) == "function", "PatchUnlocks needs to be a function.")
+    table.insert(patchUnlocks, func)
+end
+
+function External.Templates.GetMaps(defaults)
+    local data = External.File.Import("Maps") or defaults or {}
 
     data = UT.Combine({}, addedMaps, data)
 
     for k, map in pairs(data) do
-        if not validateAndError(External.Validators.Map, map, k) then
-            return {}
+        for _, patch in ipairs(patchMaps) do
+            map = patch(map)
+        end
+
+        if not map or not validateAndError(External.Validators.Map, map, k) then
+            data[k] = nil
         end
     end
 
-    return data
+    return UT.Values(data)
 end
 
 function External.Templates.GetScenarios(defaults)
-    local exists = External.File.Exists("Scenarios")
-    if not exists then
-        return UT.Combine({}, addedScenarios, defaults)
-    end
-
-    local data = External.File.Import("Scenarios")
-    if data == nil then
-        data = {}
-    end
+    local data = External.File.Import("Scenarios") or defaults or {}
 
     data = UT.Combine({}, addedScenarios, data)
 
     for k, scenario in pairs(data) do
-        if not validateAndError(External.Validators.Scenario, scenario, k) then
-            return {}
+        for _, patch in ipairs(patchScenarios) do
+            scenario = patch(scenario)
+        end
+
+        if not scenario or not validateAndError(External.Validators.Scenario, scenario, k) then
+            data[k] = nil
         end
     end
 
-    return data
+    return UT.Values(data)
 end
 
-function External.Templates.GetEnemies(default)
-    local exists = External.File.Exists("Enemies")
-    if not exists then
-        return UT.Combine({}, addedEnemies, default)
-    end
-
-    local data = External.File.Import("Enemies")
-    if data == nil then
-        data = {}
-    end
+function External.Templates.GetEnemies(defaults)
+    local data = External.File.Import("Enemies") or defaults or {}
 
     data = UT.Combine({}, addedEnemies, data)
 
     for k, enemy in pairs(data) do
-        if not validateAndError(External.Validators.Enemy, enemy, k) then
-            return {}
+        for _, patch in ipairs(patchEnemies) do
+            enemy = patch(enemy)
+        end
+
+        if not enemy or not validateAndError(External.Validators.Enemy, enemy, k) then
+            data[k] = nil
         end
     end
 
-    return data
+    return UT.Values(data)
 end
 
-function External.Templates.GetUnlocks()
-    return addedUnlocks
+function External.Templates.GetUnlocks(defaults)
+    local data = UT.Combine({}, addedUnlocks, defaults)
+
+    for k, unlock in pairs(data) do
+        for _, patch in ipairs(patchUnlocks) do
+            unlock = patch(unlock)
+        end
+
+        if not unlock or not validateAndError(External.Validators.Unlock, unlock, k) then
+            data[k] = nil
+        end
+    end
+
+    return UT.Values(data)
 end
 
 function External.LoadConfig()

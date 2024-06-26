@@ -32,7 +32,9 @@ function StoryBypass.UnblockTravel(entity)
     Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_CANTMOVE")
     Osi.RemoveStatus(entity.Uuid.EntityUuid, "TRAVELBLOCK_BLOCKEDZONE")
 
-    entity.ServerCharacter.PlayerData.IsInDangerZone = false
+    if entity.ServerCharacter then
+        entity.ServerCharacter.PlayerData.IsInDangerZone = false
+    end
     entity.CanTravel.ErrorFlags = {}
     entity.CanTravel.field_2 = 0
     entity:Replicate("CanTravel")
@@ -211,8 +213,8 @@ do -- EXP Lock
                         e.Experience.CurrentLevelExperience = exp.CurrentLevelExperience
                         e.Experience.TotalExperience = exp.TotalExperience
                         e.Experience.NextLevelExperience = exp.NextLevelExperience
-                        e.Experience.field_28 = exp.field_28 -- dunno
-                        e.Experience.SomeExperience = exp.SomeExperience
+                        -- e.Experience.field_28 = exp.field_28 -- dunno
+                        -- e.Experience.SomeExperience = exp.SomeExperience
 
                         e:Replicate("EocLevel")
                         e:Replicate("AvailableLevel")
@@ -236,7 +238,7 @@ do -- EXP Lock
     end)
     Event.On("ScenarioEnded", StoryBypass.ExpLock.DebouncedResume)
     Event.On("ScenarioStopped", StoryBypass.ExpLock.Resume)
-    Event.On("ScenarioTeleport", StoryBypass.ExpLock.Resume)
+    Event.On("ScenarioTeleporting", StoryBypass.ExpLock.Resume)
 end
 
 -------------------------------------------------------------------------------------------------
@@ -323,8 +325,11 @@ U.Osiris.On(
     4,
     "after",
     ifBypassStory(function(dialog, instanceID, actor, speakerIndex)
+        L.Debug("DialogActorJoined", dialog, actor)
+
         if
             dialog:match("CAMP_")
+            or dialog:match("^Hireling_")
             or dialog:match("Tadpole")
             or dialog:match("Recruitment")
             or dialog:match("InParty")
@@ -466,19 +471,12 @@ U.Osiris.On(
 )
 
 Event.On(
-    "ScenarioCombatStarted",
+    "ScenarioMapEntered",
     ifBypassStory(function()
         StoryBypass.ClearArea(Player.Host())
         for _, player in pairs(GU.DB.GetPlayers()) do
             Osi.RemoveStatus(player, "SURPRISED", C.NullGuid)
         end
-    end)
-)
-
-Event.On(
-    "ScenarioMapEntered",
-    ifBypassStory(function()
-        StoryBypass.ClearArea(Player.Host())
     end)
 )
 

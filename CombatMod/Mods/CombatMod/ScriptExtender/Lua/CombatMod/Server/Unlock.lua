@@ -106,20 +106,20 @@ function Unlock.CalculateReward(scenario)
     local diff = endRound - scenario:TotalRounds()
 
     local rewardMulti = math.max(5 - diff, 1)
+    local gained = math.max(PersistentVars.RogueScore / 2, scenario:KillScore() * rewardMulti)
+
     if PersistentVars.Unlocked.CurrencyMultiplier then
-        rewardMulti = rewardMulti * 1.2
+        gained = gained * 1.2
     end
 
-    local gained = math.floor(math.max(PersistentVars.RogueScore / 2, scenario:KillScore() * rewardMulti))
-
     local prev = PersistentVars.Currency or 0
-    PersistentVars.Currency = prev + gained
+    PersistentVars.Currency = prev + math.floor(gained)
 
     Player.Notify(__("Your Currency increased: %d -> %d!", prev, PersistentVars.Currency))
 end
 
 function Unlock.GetTemplates()
-    return UT.Combine({}, unlocks, External.Templates.GetUnlocks())
+    return External.Templates.GetUnlocks(UT.DeepClone(unlocks))
 end
 
 function Unlock.Get()
@@ -201,7 +201,7 @@ GameState.OnSave(IfActive(function()
     end
 end))
 
-Event.On("ScenarioTeleport", Unlock.UpdateUnlocked)
+Event.On("ScenarioTeleporting", Unlock.UpdateUnlocked)
 Event.On("ScenarioStarted", Unlock.UpdateUnlocked)
 Event.On("RogueScoreChanged", Unlock.UpdateUnlocked)
 U.Osiris.On("LongRestFinished", 0, "after", IfActive(Unlock.UpdateUnlocked))

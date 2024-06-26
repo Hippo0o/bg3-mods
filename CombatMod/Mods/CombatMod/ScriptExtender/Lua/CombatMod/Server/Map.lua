@@ -188,7 +188,7 @@ function Map.TeleportTo(map, character)
         Object.Init(map):Teleport(character, true)
 
         if S and map.Name == S.Map.Name then
-            Event.Trigger("ScenarioTeleport", character)
+            Event.Trigger("ScenarioTeleported", character)
         end
 
         return true

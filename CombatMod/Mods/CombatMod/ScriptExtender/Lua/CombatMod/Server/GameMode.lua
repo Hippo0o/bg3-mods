@@ -1,131 +1,5 @@
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                     Player interaction                                      --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
-function GameMode.AskTutSkip()
-    return Player.AskConfirmation("Skip to Camp?")
-        .After(function(confirmed)
-            if not confirmed then
-                return
-            end
-
-            Schedule(function()
-                for _, entity in pairs(GE.GetParty()) do
-                    for _, item in pairs(entity.InventoryOwner.Inventories[1].InventoryContainer.Items) do
-                        GU.Object.Remove(item.Item.Uuid.EntityUuid)
-                    end
-                end
-            end)
-
-            Osi.Use(Player.Host(), "S_TUT_Helm_ControlPanel_bcbba417-6403-40a6-aef6-6785d585df2a", "")
-            return Defer(1000)
-        end)
-        .After(function()
-            GameState.OnLoad(function()
-                Defer(3000, function()
-                    Osi.PROC_GLO_Jergal_MoveToCamp()
-                    return Defer(1000)
-                end).After(function()
-                    -- Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
-                    -- Osi.TeleportTo(Player.Host(), C.NPCCharacters.Jergal, "", 1, 1, 1)
-                    Osi.PROC_Camp_ForcePlayersToCamp()
-                    Osi.AddGold(Player.Host(), 500)
-                    Osi.TemplateAddTo("efcb70b7-868b-4214-968a-e23f6ad586bc", Player.Host(), 1, 0) -- camp supply backpack
-                    Osi.TemplateAddTo("c1c3e4fb-d68c-4e10-afdc-d4550238d50e", Player.Host(), 4, 1) -- revify scrolls
-                    Osi.TemplateAddTo("d47006e9-8a51-453d-b200-9e0d42e9bbab", Player.Host(), 10, 1) -- health potions
-                    Osi.PROC_CAMP_GiveFreeSupplies()
-                    Osi.PROC_CAMP_GiveFreeSupplies()
-                    Osi.PROC_CAMP_GiveFreeSupplies()
-
-                end)
-            end, true)
-        end)
-end
-
-function GameMode.AskOnboarding()
-    PersistentVars.Active = false
-    PersistentVars.Asked = true
-
-    return Player.AskConfirmation("Welcome to %s! Start playing?", Mod.Prefix)
-        .After(function(confirmed)
-            if not confirmed then
-                return
-            end
-
-            Event.Trigger("ModActive")
-
-            return GameMode.AskEnableRogueMode()
-        end)
-        .After(function()
-            if Player.Region() == C.Regions.Act0 then
-                GameMode.AskTutSkip()
-            end
-        end)
-end
-
-function GameMode.AskEnableRogueMode()
-    return Player.AskConfirmation([[
-Play Roguelike mode?
-Continuously create new battles.
-You will gain a higher score with every completed fight.
-Difficulty increases with the score.]]).After(function(confirmed)
-        L.Debug("RogueMode", confirmed)
-
-        PersistentVars.RogueModeActive = confirmed
-
-        if PersistentVars.RogueScore == 0 then
-            PersistentVars.RogueScore = math.min(100, (GE.GetHost().EocLevel.Level - 1) * 10) -- +10 per level, max 100
-        end
-
-        Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
-
-        return confirmed
-    end)
-end
-
-U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
-    -- if
-    --     US.Contains(dialog, {
-    --         "GLO_Jergal_AD_AttackFromDialog",
-    --         "GLO_Jergal_AD_AttackedByPlayer",
-    --     })
-    -- then
-    --     if PersistentVars.Active then
-    --         Net.Send("OpenGUI", {})
-    --     end
-    -- end
-
-    if not PersistentVars.Active and dialog:match("GLO_Jergal_AD_AttackFromDialog") then
-        GameMode.AskOnboarding()
-    end
-end)
-
-U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor, speakerIndex)
-    if
-        US.Contains(dialog, {
-            "TUT_Start_PAD_Start_",
-            "TUT_Misc_PAD_OriginPod_PlayerEmpty_",
-        }) and U.UUID.Equals(actor, Player.Host())
-    then
-        GameMode.AskOnboarding()
-    end
-
-    -- if dialog:match("CAMP_Jergal_") then
-    --     if PersistentVars.Active and not PersistentVars.GUIOpen then
-    --         Osi.DialogRemoveActorFromDialog(instanceID, actor)
-    --         Osi.DialogRequestStopForDialog(dialog, actor)
-    --
-    --         if U.UUID.Equals(actor, Player.Host()) then
-    --             Net.Send("OpenGUI", {})
-    --         end
-    --     end
-    -- end
-end)
-
--------------------------------------------------------------------------------------------------
---                                                                                             --
 --                                       Rogue-like mode                                       --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
@@ -215,8 +89,8 @@ function GameMode.GenerateScenario(score, cow)
         for i, tier in ipairs(tiers) do
             if score >= (tier.min or tier.value) then -- handle min score
                 if remainingValue >= tier.value then
-                    -- bias towards tiers with more enemies
-                    local weight = tier.amount / 100 * 0.7 + 0.1
+                    local weight = tier.amount / 100 * 0.9 -- bias towards tiers with more enemies
+                    weight = weight + (1 / (i + 1) / 2) -- bias towards lower tiers
                     L.Debug("Tier", tier.name, weight)
 
                     table.insert(validTiers, { tier = tier, weight = weight })
@@ -282,6 +156,17 @@ function GameMode.GenerateScenario(score, cow)
             if remainingValue - tier.value >= 0 then
                 table.insert(timeline[roundIndex], tier.name)
                 remainingValue = remainingValue - tier.value
+
+                -- too strong for single round
+                if tier.name == C.EnemyTier[5] then
+                    table.insert(timeline, roundIndex + 1, {})
+                    numRounds = numRounds + 1
+                end
+                if tier.name == C.EnemyTier[6] then
+                    table.insert(timeline, roundIndex + 1, {})
+                    table.insert(timeline, {})
+                    numRounds = numRounds + 2
+                end
             end
         end
 

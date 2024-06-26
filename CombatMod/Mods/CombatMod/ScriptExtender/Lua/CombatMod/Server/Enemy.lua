@@ -108,6 +108,7 @@ function Object:SyncTemplate()
     self.Race = template.Race
 end
 
+local templateIdsOverwritten = {}
 function Object:ModifyTemplate()
     local template = self:GetTemplate()
     if template == nil then
@@ -184,6 +185,12 @@ function Object:ModifyTemplate()
         templateOverwrite("LevelOverride", self.LevelOverride)
     end
 
+    if templateIdsOverwritten[self.TemplateId] then
+        return
+    end
+
+    templateIdsOverwritten[self.TemplateId] = true
+
     -- restore template
     -- maybe not needed but template overwrites seem to be global
     GameState.OnUnload(function()
@@ -198,6 +205,7 @@ function Object:ModifyTemplate()
                 template[i] = v
             end
         end
+        templateIdsOverwritten[self.TemplateId] = nil
     end)
 end
 
