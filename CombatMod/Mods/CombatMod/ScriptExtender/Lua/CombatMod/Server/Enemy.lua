@@ -830,7 +830,7 @@ U.Osiris.On("EnteredCombat", 2, "after", function(character, _)
 
     local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(character)]
     if enemy then
-        enemy:OnCombat()
+        Object.Init(enemy):OnCombat()
     end
 end)
 
@@ -841,25 +841,23 @@ U.Osiris.On("LeftCombat", 2, "after", function(character, _)
 
     local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(character)]
     if enemy then
-        enemy:OnCombat()
+        Object.Init(enemy):OnCombat()
     end
 end)
 
-U.Osiris.On(
-    "AttackedBy",
-    7,
-    "after",
-    function(defender, attackerOwner, attacker2, damageType, damageAmount, damageCause, storyActionID)
-        if Osi.IsPlayer(defender) == 1 then
-            return
-        end
-        if Osi.IsPlayer(attackerOwner) ~= 1 then
-            return
-        end
-
-        local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(defender)]
-        if enemy then
-            enemy:Combat(true)
-        end
+U.Osiris.On("AttackedBy", 7, "after", function(defender, attackerOwner)
+    if Osi.IsPlayer(defender) == 1 then
+        return
     end
-)
+    if Osi.IsPlayer(attackerOwner) ~= 1 then
+        return
+    end
+    if Osi.IsInCombat(defender) == 1 then
+        return
+    end
+
+    local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(defender)]
+    if enemy then
+        Object.Init(enemy):Combat(true)
+    end
+end)

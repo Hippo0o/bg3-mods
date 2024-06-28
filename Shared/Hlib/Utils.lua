@@ -54,6 +54,20 @@ function M.Equals(v1, v2, ignoreMT)
     return true
 end
 
+---@param userdata userdata
+---@param property string
+---@param default any|nil
+---@return any
+function M.GetProperty(userdata, property, default)
+    local ok, value = pcall(function()
+        return userdata[property]
+    end)
+    if ok then
+        return value
+    end
+    return default
+end
+
 -- probably useless
 function M.Random(...)
     local time = Ext.Utils.MonotonicTime()

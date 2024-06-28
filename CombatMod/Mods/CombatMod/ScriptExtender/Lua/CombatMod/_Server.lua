@@ -43,7 +43,6 @@ Mod.PersistentVarsTemplate = {
 }
 
 DefaultConfig = {
-    ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = true, -- more continuous battle between rounds at the cost of cheesy out of combat strats
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
     LootIncludesCampSlot = false, -- include camp clothes in item lists
@@ -66,75 +65,29 @@ External.File.ExportIfNeeded("Config", Config)
 
 Intro = {}
 Player = {}
-Scenario = {}
-Enemy = {}
-Map = {}
-Item = {}
-GameMode = {}
-StoryBypass = {}
-Unlock = {}
-
--- wrap event handlers in IfActive to prevent them from running when the mod is not active
-function IfActive(func)
-    return function(...)
-        if PersistentVars.Active then
-            func(...)
-        end
-    end
-end
-
-function LogRandom(key, value, max)
-    if not max then
-        max = 10
-    end
-
-    if not PersistentVars.RandomLog[key] then
-        PersistentVars.RandomLog[key] = {}
-    end
-
-    table.insert(PersistentVars.RandomLog[key], value)
-    if #PersistentVars.RandomLog[key] > max then
-        table.remove(PersistentVars.RandomLog[key], 1)
-    end
-end
 
 Require("CombatMod/Server/Intro")
 Require("CombatMod/Server/Player")
-Require("CombatMod/Server/Scenario")
-Require("CombatMod/Server/Enemy")
-Require("CombatMod/Server/Map")
-Require("CombatMod/Server/Item")
-Require("CombatMod/Server/StoryBypass")
-Require("CombatMod/Server/GameMode")
-Require("CombatMod/Server/NetEvents")
-Require("CombatMod/Server/Unlock")
+
+local done = false
+local function init()
+    if done then
+        return
+    end
+    done = true
+
+    Require("CombatMod/Server/Init")
+
+    Event.Trigger(GameState.EventLoad)
+
+    L.Info(L.RainbowText(Mod.Prefix .. " is now active. Have fun!"))
+end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
-
-GameState.OnSave(function()
-    PersistentVars.Scenario = S
-    PersistentVars.Config = Config
-
-    for obj, _ in pairs(PersistentVars.SpawnedEnemies) do
-        if not Ext.Entity.Get(obj) then
-            L.Debug("Cleaning up SpawnedEnemies", obj)
-            PersistentVars.SpawnedEnemies[obj] = nil
-        end
-    end
-
-    for obj, _ in pairs(PersistentVars.SpawnedItems) do
-        if
-            Item.IsOwned(obj) or Osi.IsItem(obj) ~= 1 -- was used
-        then
-            L.Debug("Cleaning up SpawnedItems", obj)
-            PersistentVars.SpawnedItems[obj] = nil
-        end
-    end
-end)
 
 GameState.OnLoad(function()
     External.LoadConfig()
@@ -144,37 +97,14 @@ GameState.OnLoad(function()
         Intro.AskOnboarding()
     end
 
-    if PersistentVars.Active then
-        Event.Trigger("ModActive")
-    end
-
     if not U.Equals(PersistentVars.Config, {}) then
         External.ApplyConfig(PersistentVars.Config)
     end
 
-    if U.Equals(PersistentVars.Scenario, {}) then
-        PersistentVars.Scenario = nil
-    end
-
-    S = PersistentVars.Scenario
-    if S ~= nil then
-        Scenario.RestoreFromState(S)
+    if PersistentVars.Active then
+        Event.Trigger("ModActive")
     end
 end, true)
-
-GameState.OnLoad(IfActive(function()
-    if PersistentVars.GUIOpen then
-        Defer(1000, function()
-            Net.Send("OpenGUI")
-        end)
-    end
-end))
-
-GameState.OnUnload(function()
-    if PersistentVars then
-        PersistentVars.Scenario = S
-    end
-end)
 
 Event.On("ModActive", function()
     if not PersistentVars.Active then
@@ -183,33 +113,10 @@ Event.On("ModActive", function()
 
     PersistentVars.Active = true
 
+    init()
+
     -- client only listens once for this event
     Net.Send("ModActive")
-end)
-
-Event.On("ModDeactive", function()
-    if PersistentVars.Active then
-        Player.Notify(__("%s is now inactive. Good bye!", Mod.Prefix), true)
-    end
-
-    PersistentVars.Active = false
-    if PersistentVars.GUIOpen then
-        Net.Send("CloseGUI")
-    end
-end)
-
--- collect stats
-Event.On("ScenarioEnded", function(scenario)
-    table.insert(PersistentVars.History, {
-        HardMode = PersistentVars.HardMode,
-        RogueScore = PersistentVars.RogueScore,
-        Currency = PersistentVars.Currency,
-        Scenario = {
-            Enemies = UT.Size(scenario.KilledEnemies),
-            Rounds = scenario.Round - 1,
-            Map = scenario.Map.Name,
-        },
-    })
 end)
 
 -------------------------------------------------------------------------------------------------
@@ -243,10 +150,6 @@ do
 
     function Commands.Activate()
         Event.Trigger("ModActive")
-    end
-
-    function Commands.Deactivate()
-        Event.Trigger("ModDeactive")
     end
 
     function Commands.Roguelike()

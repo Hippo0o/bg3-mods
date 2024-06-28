@@ -231,6 +231,11 @@ function Debug.Items(root)
                     return false
                 end
 
+                if input.Text:match("^#") then
+                    return US.Contains(item.Slot, input.Text:sub(2), true, true)
+                        or US.Contains(item.Tab, input.Text:sub(2), true, true)
+                end
+
                 return US.Contains(item.Name, input.Text, true, true)
                     or US.Contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
             end)

@@ -1,3 +1,19 @@
+function Debounce(delay, callback)
+    local timer
+
+    return function(...)
+        local args = { ... }
+
+        if timer then
+            Ext.Timer.Cancel(timer)
+        end
+
+        timer = Ext.Timer.WaitFor(delay, function()
+            callback(table.unpack(args))
+        end)
+    end
+end
+
 PersistentVars = {
     damageMap = {},
     displayedFor = {},
@@ -24,17 +40,32 @@ local function resetCap(character)
     end
 end
 
+local displayDebounced = Debounce(100, function(character)
+    if Osi.HasActiveStatus(character, "DamageCap_Status") == 1 then
+        Ext.Loca.UpdateTranslatedString(
+            "hf1e0c115g6d6cg46efg8a89gcc641d501589",
+            "Damage left: " .. PersistentVars.displayedFor[character]
+        )
+        Osi.RemoveStatus(character, "DamageCap_Status")
+    end
+
+    Ext.Timer.WaitFor(100, function()
+        Ext.Loca.UpdateTranslatedString(
+            "hf1e0c115g6d6cg46efg8a89gcc641d501589",
+            "Damage left: " .. PersistentVars.damageMap[character]
+        )
+        Osi.ApplyStatus(character, "DamageCap_Status", 1)
+    end)
+
+    PersistentVars.displayedFor[character] = PersistentVars.damageMap[character]
+end)
+
 local function updateFor(character)
     defaultVars()
     resetCap(character)
 
     if PersistentVars.displayedFor[character] ~= PersistentVars.damageMap[character] then
-        Ext.Loca.UpdateTranslatedString(
-            "hf1e0c115g6d6cg46efg8a89gcc641d501589",
-            "Damage left: " .. PersistentVars.damageMap[character]
-        )
-        Osi.ApplyStatus(character, "DamageCap_Status", 0)
-        PersistentVars.displayedFor[character] = PersistentVars.damageMap[character]
+        displayDebounced(character)
     end
 
     if PersistentVars.damageMap[character] <= 0 then

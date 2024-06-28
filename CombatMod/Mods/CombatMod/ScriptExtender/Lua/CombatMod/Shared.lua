@@ -54,11 +54,11 @@ C = {
     RoguelikeScenario = "Roguelike",
     LootRates = {
         Objects = {
-            Common = 60,
-            Uncommon = 25,
+            Common = 40,
+            Uncommon = 20,
             Rare = 10,
             VeryRare = 5,
-            Legendary = 1,
+            Legendary = 2,
         },
         Armor = {
             Common = 30, -- has only junk or invalid items

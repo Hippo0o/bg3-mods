@@ -2,7 +2,7 @@
 local M = {}
 
 -- Fallen is the best
-local function toRainbowText(text)
+function M.RainbowText(text)
     local function HSVToRGB(h, s, v)
         local c = v * s
         local hp = h / 60
@@ -52,7 +52,7 @@ function M.ColorText(text, color)
 end
 
 local function logPrefix()
-    local pre = toRainbowText(Mod.Prefix) .. " "
+    local pre = M.RainbowText(Mod.Prefix) .. " "
     if Mod.Debug then
         pre = pre .. (Ext.IsClient() and "[Client]" or "[Server]")
     end
