@@ -21,14 +21,14 @@ function LogRandom(key, value, max)
     end
 end
 
-Require("CombatMod/Server/Scenario")
-Require("CombatMod/Server/Enemy")
-Require("CombatMod/Server/Map")
-Require("CombatMod/Server/Item")
-Require("CombatMod/Server/StoryBypass")
-Require("CombatMod/Server/GameMode")
-Require("CombatMod/Server/NetEvents")
-Require("CombatMod/Server/Unlock")
+Require("CombatMod/Server/ModActive/Scenario")
+Require("CombatMod/Server/ModActive/Enemy")
+Require("CombatMod/Server/ModActive/Map")
+Require("CombatMod/Server/ModActive/Item")
+Require("CombatMod/Server/ModActive/StoryBypass")
+Require("CombatMod/Server/ModActive/GameMode")
+Require("CombatMod/Server/ModActive/NetEvents")
+Require("CombatMod/Server/ModActive/Unlock")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --

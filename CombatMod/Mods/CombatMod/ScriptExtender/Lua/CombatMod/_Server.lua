@@ -76,7 +76,7 @@ local function init()
     end
     done = true
 
-    Require("CombatMod/Server/Init")
+    Require("CombatMod/Server/ModActive/_Init")
 
     Event.Trigger(GameState.EventLoad)
 
@@ -180,6 +180,16 @@ do
         Mod.Debug = true
         Config.Debug = true
 
+        local temps = Ext.Template.GetAllRootTemplates()
+        L.Dump(UT.Map(
+            UT.Filter(temps, function(v)
+                return v.TemplateType == "item" and v.CombatComponent.CanFight
+            end),
+            function(v)
+                return v.Name
+            end
+        ))
+
         -- local e = {}
         -- for i, v in Enemy.Iter() do
         --     v:SyncTemplate()
@@ -275,16 +285,41 @@ do
         -- end)
     end
 
-    function Commands.ToMap(id)
-        local region = Player.Region()
-        L.Info("Region", region)
+    function Commands.Test(mapKey, combat)
+        local x, y, z = Player.Pos()
 
+        local guid = Osi.CreateAt(mapKey, x, y, z, 1, 1, "")
+        if not guid then
+            L.Error("Failed to create object.", mapKey)
+            return
+        end
+
+        local e = Enemy.CreateTemporary(guid)
+
+        if combat then
+            e:Combat(combat)
+        else
+            Osi.SetFaction(guid, C.NeutralFaction)
+        end
+
+        e:Sync()
+
+        Defer(1000, function()
+            L.Dump(Enemy.CalcTier(e))
+        end)
+
+        -- Defer(1000, function()
+        --     Ext.IO.SaveFile("spawn-" .. e:GetId() .. ".json", Ext.DumpExport(e:Entity():GetAllComponents()))
+        -- end)
+    end
+
+    function Commands.ToMap(id)
         if not id and S then
             S.Map:Teleport(Player.Host())
             return
         end
 
-        local maps = Map.Get(region)
+        local maps = Map.Get()
         id = tonumber(id or 1)
         if maps == nil then
             L.Error("No maps found.")
@@ -308,28 +343,8 @@ do
         Enemy.Cleanup()
     end
 
-    function Commands.Spawns(mapId, repeats)
-        RetryUntil(function()
-            L.Info("Pinging spawns.")
-            local mapId = tonumber(mapId)
-            if not mapId then
-                S.Map:PingSpawns()
-                return
-            end
-
-            Map.Get()[tonumber(mapId)]:PingSpawns()
-        end, { retries = tonumber(repeats) or 3 })
-    end
-
     function Commands.Maps(id)
-        local region = Player.Region()
-        L.Info("Region: " .. region)
-
-        local maps = Map.GetTemplates(region)
-        if maps == nil then
-            L.Error("No maps found.")
-            return
-        end
+        local maps = Map.GetTemplates()
 
         L.Info("ID", "Name", "!TT Maps [id]")
 
@@ -392,8 +407,9 @@ do
                 L.Dump(UT.Filter(v:Entity().ServerCharacter, function(v, k)
                     return k ~= "Template" and k ~= "TemplateUsedForSpells"
                 end, true))
+
                 if file then
-                    Ext.IO.SaveFile("dump-" .. v:GetId() .. ".json", Ext.DumpExport(v:Entity():GetAllComponents()))
+                    IO.SaveJson("dump-" .. v:GetId() .. ".json", v:Entity():GetAllComponents())
                 end
             end
         end
@@ -403,23 +419,6 @@ do
         local x, y, z = Player.Pos()
         L.Debug("Region", Player.Region())
         L.Debug("Position", table.concat({ x, y, z }, ", "))
-    end
-
-    function Commands.Items(rarity, type)
-        local w = Item.Weapons(rarity)
-        local o = Item.Objects(rarity)
-        local a = Item.Armor(rarity)
-        if type == "w" then
-            L.Dump("Weapons", w)
-        elseif type == "o" then
-            L.Dump("Objects", o)
-        elseif type == "a" then
-            L.Dump("Armor", a)
-        else
-            L.Dump("Weapons", w)
-            L.Dump("Armor", a)
-            L.Dump("Objects", o)
-        end
     end
 
     function Commands.Reload()

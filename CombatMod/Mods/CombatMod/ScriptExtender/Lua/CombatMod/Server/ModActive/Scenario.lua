@@ -253,12 +253,11 @@ function Action.MapEntered()
     Enemy.Cleanup()
 
     Event.Trigger("ScenarioMapEntered", Current())
+    Player.Notify(__("Entered combat area."))
 
     for _, p in pairs(GE.GetParty()) do
         Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
     end
-
-    Player.Notify(__("Entered combat area."))
 
     local id = tostring(S)
     Async.WaitTicks(33, function()

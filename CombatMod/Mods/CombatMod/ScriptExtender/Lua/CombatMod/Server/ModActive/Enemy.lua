@@ -373,19 +373,7 @@ function Object:Combat(force)
 
     local enemy = self.GUID
 
-    Osi.ApplyStatus(enemy, "InitiateCombat", -1)
-    Osi.ApplyStatus(enemy, "BringIntoCombat", -1)
-
-    Osi.SetFaction(enemy, C.EnemyFaction)
-    Osi.SetCanJoinCombat(enemy, 1)
-    Osi.SetCanFight(enemy, 1)
-
-    if force then
-        for _, player in pairs(GU.DB.GetPlayers()) do
-            Osi.EnterCombat(enemy, player)
-            Osi.EnterCombat(player, enemy)
-        end
-    end
+    Enemy.Combat(enemy, force)
 end
 
 function Object:Clear(keepCorpse)
@@ -561,6 +549,23 @@ function Enemy.Cleanup()
             PersistentVars.SpawnedEnemies[guid] = nil
         else
             Object.Init(enemy):Clear()
+        end
+    end
+end
+
+---@param object string GUID
+function Enemy.Combat(object, force)
+    Osi.ApplyStatus(object, "InitiateCombat", -1)
+    Osi.ApplyStatus(object, "BringIntoCombat", -1)
+
+    Osi.SetFaction(object, C.EnemyFaction)
+    Osi.SetCanJoinCombat(object, 1)
+    Osi.SetCanFight(object, 1)
+
+    if force then
+        for _, player in pairs(GU.DB.GetPlayers()) do
+            Osi.EnterCombat(object, player)
+            Osi.EnterCombat(player, object)
         end
     end
 end
@@ -858,6 +863,6 @@ U.Osiris.On("AttackedBy", 7, "after", function(defender, attackerOwner)
 
     local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(defender)]
     if enemy then
-        Object.Init(enemy):Combat(true)
+        Enemy.Combat(defender, true)
     end
 end)
