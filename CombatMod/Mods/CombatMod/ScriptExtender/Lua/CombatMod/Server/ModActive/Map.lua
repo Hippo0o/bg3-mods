@@ -51,9 +51,69 @@ function Object:Teleport(character, withOffset)
     -- Osi.PROC_Foop(character)
 
     local x, y, z = table.unpack(self.Enter)
+
+    return Async.WaitTicks(10, function()
+        return true, Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset / 2)
+    end)
+end
+
+function Object:Teleport(character)
+    if self.Region ~= Osi.GetRegion(Player.Host()) then
+        if not U.UUID.Equals(character, Player.Host()) then
+            return false
+        end
+
+        local _, act = UT.Find(C.Regions, function(region, act)
+            return region == self.Region
+        end)
+
+        if act == nil then
+            L.Error("Region not found.", self.Region)
+            return false
+        end
+
+        local teleporting = Player.TeleportToAct(act)
+
+        if teleporting then
+            Player.Notify(__("Teleporting to different ACT"))
+            teleporting.After(function()
+                for _, character in pairs(GU.DB.GetPlayers()) do
+                    self:Teleport(character)
+                end
+            end)
+        end
+
+        return false
+    end
+
+    local x, y, z = table.unpack(self.Enter)
+
+    pcall(function()
+        local offset = tonumber(Config.RandomizeSpawnOffset / 2)
+        if offset > 0 and withOffset then
+            x = x + U.Random() * U.Random(-offset, offset)
+            z = z + U.Random() * U.Random(-offset, offset)
+        end
+
+        x, y, z = Osi.FindValidPosition(x, y, z, 50, character, 1)
+    end)
+    if not x or not y or not z then
+        x = self.Enter[1]
+        y = self.Enter[2]
+        z = self.Enter[3]
+    end
+
+    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
+    -- Osi.PROC_Foop(character)
+
+    local x, y, z = table.unpack(self.Enter)
     Async.WaitTicks(10, function()
         Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset / 2)
+
+        Event.Trigger("MapTeleported", self, character)
     end)
+
+    return true
 end
 
 ---@param spawn number Index of Spawns or -1 for random
@@ -94,14 +154,13 @@ function Object:SpawnIn(enemy, spawn)
     Osi.PROC_Foop(enemy.GUID)
 
     local x, y, z = self:GetSpawn(spawn)
-    Async.WaitTicks(10, function()
-        Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
+    return Async.WaitTicks(10, function()
+        local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
+
+        Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+
+        return true, didCorrect
     end)
-
-    Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
-    -- Osi.SetAmbushing(enemy.GUID, 1) -- makes tactical cam outline disappear
-
-    return true
 end
 
 ---@param loot Item
@@ -177,6 +236,7 @@ function Map.CorrectPosition(guid, x, y, z, offset)
         L.Error(guid, "Spawned too far away.", distance)
         Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1)
         Osi.PROC_Foop(guid)
+        return true
     end
 end
 

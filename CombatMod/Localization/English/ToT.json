@@ -9,7 +9,7 @@
 	"%d enemies left.;1": {
 		"Handle": "h29013f4fg7c54g46a1ga1a3g20c7c38102e5",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:532: in field 'CheckEnded'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:548: in field 'CheckEnded'",
 		"Text": "%d enemies left.",
 		"Version": 1
 	},
@@ -37,7 +37,7 @@
 	"All enemies are dead.;1": {
 		"Handle": "hb5676e2age032g43b7gb865g45d19a4767f3",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:529: in field 'CheckEnded'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:545: in field 'CheckEnded'",
 		"Text": "All enemies are dead.",
 		"Version": 1
 	},
@@ -170,14 +170,14 @@
 	"Combat is Starting.;1": {
 		"Handle": "h44afa6c1g11fag4f39g8779gc95f255beb7d",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:164: in field 'StartCombat'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:166: in field 'StartCombat'",
 		"Text": "Combat is Starting.",
 		"Version": 1
 	},
 	"Combat started.;1": {
 		"Handle": "h2e517b01g7b04g42e5g81d6g248323f406a1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:688: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:704: in upvalue 'func'",
 		"Text": "Combat started.",
 		"Version": 1
 	},
@@ -268,7 +268,7 @@
 	"Dropping loot.;1": {
 		"Handle": "h2a64adc6g7f31g4f89gb195g79ef53b75bcd",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:136: in field 'GiveReward'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:141: in field 'GiveReward'",
 		"Text": "Dropping loot.",
 		"Version": 1
 	},
@@ -296,28 +296,28 @@
 	"Enemy %s killed.;1": {
 		"Handle": "h35d521a9g6080g474fg806eg6129a24c430b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:860: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:885: in upvalue 'func'",
 		"Text": "Enemy %s killed.",
 		"Version": 1
 	},
 	"Enemy %s rejoined.;1": {
 		"Handle": "h37bb2c47g62eeg4791ga048g81f7426aa3d5",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:831: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:852: in upvalue 'func'",
 		"Text": "Enemy %s rejoined.",
 		"Version": 1
 	},
 	"Enemy %s spawned.;1": {
 		"Handle": "h37ed89a8g62b8g4dcfg904dgeba9b26fc98b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:188: in function <CombatMod/CombatMod/Server/Scenario.lua:187>",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:200: in function <CombatMod/CombatMod/Server/Scenario.lua:199>",
 		"Text": "Enemy %s spawned.",
 		"Version": 1
 	},
 	"Entered combat area.;1": {
 		"Handle": "hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:246: in function <CombatMod/CombatMod/Server/Scenario.lua:235>",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:261: in function <CombatMod/CombatMod/Server/Scenario.lua:247>",
 		"Text": "Entered combat area.",
 		"Version": 1
 	},
@@ -328,11 +328,11 @@
 		"Text": "Exp Multiplier",
 		"Version": 1
 	},
-	"Force Enter Combat;1": {
-		"Handle": "h361503c4g6340g4569g9052g630f7270412d",
+	"Failed to restore scenario.;1": {
+		"Handle": "hdaa39862g8ff6g4cd3gbe99g0ab51cbb2897",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox'",
-		"Text": "Force Enter Combat",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:395: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:390>",
+		"Text": "Failed to restore scenario.",
 		"Version": 1
 	},
 	"Fully Restore Character;1": {
@@ -440,6 +440,13 @@
 		"Text": "Items",
 		"Version": 1
 	},
+	"Kill Score: %s;1": {
+		"Handle": "h34873bdcg61d2g46e8g907bg408ef25962ac",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:191: in field 'UpdateHelperName'",
+		"Text": "Kill Score: %s",
+		"Version": 1
+	},
 	"Kill spawned;1": {
 		"Handle": "h2d5b4e72g780eg41b2gb1e6g87d413c4a5f6",
 		"LocaText": "",
@@ -457,7 +464,7 @@
 	"Leave camp to join the battle.;1": {
 		"Handle": "h6119ae15g344cg4fb4g8522ga9d267008bf0",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:224: in function <CombatMod/CombatMod/Server/Scenario.lua:215>",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:236: in function <CombatMod/CombatMod/Server/Scenario.lua:227>",
 		"Text": "Leave camp to join the battle.",
 		"Version": 1
 	},
@@ -723,7 +730,7 @@
 	"Round %d;1": {
 		"Handle": "h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:205: in field 'StartRound'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:217: in field 'StartRound'",
 		"Text": "Round %d",
 		"Version": 1
 	},
@@ -744,14 +751,14 @@
 	"Scenario %s started.;1": {
 		"Handle": "hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:107: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:501: in field 'Start'",
 		"Text": "Scenario %s started.",
 		"Version": 1
 	},
 	"Scenario ended.;1": {
 		"Handle": "h28fa5cc5g7dafg4099g81bcg96ff639eb4dd",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:506: in field 'End'",
+		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:520: in field 'End'",
 		"Text": "Scenario ended.",
 		"Version": 1
 	},
@@ -1087,14 +1094,14 @@
 	"Your Currency increased: %d -> %d!;1": {
 		"Handle": "hc327dd8cg9672g488dg9f01g4eebfd236cc9",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:118: in field 'CalculateReward'",
+		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:119: in function <CombatMod/CombatMod/Server/Unlock.lua:118>",
 		"Text": "Your Currency increased: %d -> %d!",
 		"Version": 1
 	},
 	"Your RogueScore increased: %d -> %d!;1": {
 		"Handle": "hefbbbf98gbaeeg4eacg9dc8g88cabfeaaae8",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:339: in local 'updateScore'",
+		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:232: in function <CombatMod/CombatMod/Server/GameMode.lua:231>",
 		"Text": "Your RogueScore increased: %d -> %d!",
 		"Version": 1
 	},

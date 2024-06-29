@@ -39,9 +39,6 @@ function Config.Main(tab)
         "ClearAllEntities"
     )
 
-    local c4 =
-        Config.Checkbox(root, "Force Enter Combat", "automatically starts combat between rounds", "ForceEnterCombat")
-
     local c9 =
         Config.Checkbox(root, "Turn Off Notifications", "don't show ingame notifications", "TurnOffNotifications")
 

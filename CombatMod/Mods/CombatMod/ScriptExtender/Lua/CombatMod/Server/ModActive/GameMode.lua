@@ -61,6 +61,12 @@ function GameMode.GenerateScenario(score, cow)
         tiers = { { name = "OX_A", value = 4, amount = 100 } }
     end
 
+    for i, tier in ipairs(tiers) do
+        local weight = tier.amount / 100 * 0.9 -- bias towards tiers with more enemies
+        tier.weight = weight + (1 / (i + 1) / 2) -- bias towards lower tiers
+        L.Debug("Tier", tier.name, tier.weight)
+    end
+
     score = score >= tiers[1].value and score or tiers[1].value
 
     -- weighted random function to bias towards a preferred number of rounds
@@ -89,9 +95,7 @@ function GameMode.GenerateScenario(score, cow)
         for i, tier in ipairs(tiers) do
             if score >= (tier.min or tier.value) then -- handle min score
                 if remainingValue >= tier.value then
-                    local weight = tier.amount / 100 * 0.9 -- bias towards tiers with more enemies
-                    weight = weight + (1 / (i + 1) / 2) -- bias towards lower tiers
-                    L.Debug("Tier", tier.name, weight)
+                    local weight = tier.weight
 
                     table.insert(validTiers, { tier = tier, weight = weight })
                     totalWeight = totalWeight + weight
@@ -159,13 +163,19 @@ function GameMode.GenerateScenario(score, cow)
 
                 -- too strong for single round
                 if tier.name == C.EnemyTier[5] then
-                    table.insert(timeline, roundIndex + 1, {})
-                    numRounds = numRounds + 1
+                    if not timeline[roundIndex + 1] or numRounds < maxRounds then
+                        table.insert(timeline, roundIndex + 1, {})
+                        numRounds = numRounds + 1
+                    end
                 end
                 if tier.name == C.EnemyTier[6] then
-                    table.insert(timeline, roundIndex + 1, {})
                     table.insert(timeline, {})
-                    numRounds = numRounds + 2
+                    numRounds = numRounds + 1
+
+                    if numRounds < maxRounds then
+                        table.insert(timeline, roundIndex + 1, {})
+                        numRounds = numRounds + 1
+                    end
                 end
             end
         end
@@ -197,11 +207,13 @@ function GameMode.GenerateScenario(score, cow)
             return generateTimeline(maxValue, failed)
         end
 
+        local maxEmpty = math.min(2, math.max(score / 100, numRounds / 3))
+
         -- ensure no two consecutive rounds exist
         for i = 2, #timeline do
-            if #timeline[i] == 0 and #timeline[i - 1] == 0 then
+            if #timeline[i] <= maxEmpty and #timeline[i - 1] <= maxEmpty then
                 if Mod.Debug then
-                    L.Error("Consecutive empty rounds", remainingValue, maxValue)
+                    L.Error("Consecutive empty rounds", remainingValue, maxValue, maxEmpty)
                 end
                 return generateTimeline(maxValue, failed)
             end
@@ -340,6 +352,14 @@ function GameMode.ApplyDifficulty(enemy)
         Osi.AddBoosts(enemy.GUID, "AC(" .. math.min(6, math.ceil(mod2 / 2)) .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
+
+        Async.WaitTicks(5, function()
+            local entity = Ext.Entity.Get(enemy.GUID)
+            local newLevel = math.max(entity.AvailableLevel.Level, math.min(12, mod2))
+
+            entity.EocLevel.Level = newLevel
+            entity:Replicate("EocLevel")
+        end)
     end
 
     GameMode.DifficultyAppliedTo[enemy.GUID] = true

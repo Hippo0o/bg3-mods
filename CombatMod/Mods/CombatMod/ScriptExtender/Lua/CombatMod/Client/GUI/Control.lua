@@ -34,8 +34,8 @@ function Control.Events()
         end)
     end)
 
-    Event.On("ResumeCombat", function()
-        Net.Request("ResumeCombat").After(function(event)
+    Event.On("ForwardCombat", function()
+        Net.Request("ForwardCombat").After(function(event)
             DisplayResponse(event.Payload)
         end)
     end)
@@ -220,7 +220,7 @@ function Control.RunningPanel(root)
 
         btn.SameLine = true
         btn.OnClick = function(button)
-            Event.Trigger("ResumeCombat")
+            Event.Trigger("ForwardCombat")
         end
 
         layout.Cells[1][2]:AddButton(__("Teleport")).OnClick = function()

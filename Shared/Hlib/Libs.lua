@@ -297,7 +297,9 @@ function M.Chainable(source)
 
         -- for when calling :Begin(), the source is passed as the first argument
         if stateIsChainable(state) then
-            state[1] = state[1].Source
+            if Utils.Equals(state[1].Source, Chainable.Source) then
+                state[1] = state[1].Source
+            end
         end
 
         for i, func in ipairs(Chainable._Chain) do

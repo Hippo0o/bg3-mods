@@ -119,9 +119,7 @@ Ext.Osiris.RegisterListener(
         resetCap(attackerOwner)
 
         if damageAmount > 0 then
-            local leftFromCap = PersistentVars.damageMap[attackerOwner]
-            local allowedDamage = math.min(leftFromCap, damageAmount)
-            PersistentVars.damageMap[attackerOwner] = leftFromCap - allowedDamage
+            PersistentVars.damageMap[attackerOwner] = PersistentVars.damageMap[attackerOwner] - damageAmount
         end
 
         updateFor(attackerOwner)

@@ -122,19 +122,13 @@ Net.On("ToCamp", function(event)
     Net.Respond(event, { true })
 end)
 
-Net.On("ResumeCombat", function(event)
-    if Player.InCombat() and not Mod.Debug then
-        Net.Respond(event, { false, __("Cannot force next round while in combat.") })
-        return
-    end
+Net.On("ForwardCombat", function(event)
     if not S or S.Round < 1 then
         Net.Respond(event, { false, __("Scenario not started.") })
         return
     end
-    Scenario.ResumeCombat()
-    if not S:IsRunning() then
-        Scenario.CheckEnded()
-    end
+
+    Scenario.ForwardCombat()
 
     Net.Respond(event, { true })
 end)
@@ -159,7 +153,7 @@ Net.On("Teleport", function(event)
     if S and U.Equals(map, S.Map) then
         Scenario.Teleport(event:Character())
     else
-        Map.TeleportTo(map, event:Character(), false)
+        map:Teleport(event:Character())
     end
 
     Net.Respond(event, { true })

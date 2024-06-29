@@ -32,6 +32,7 @@ local Object = Libs.Struct({
     Timeline = {},
     Positions = {},
     LootRates = {},
+    CombatHelper = nil,
 })
 
 ---@param round number
@@ -118,6 +119,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 -- functions that only get called as part of events
+-- TODO should be Object methods
 
 local Action = {}
 
@@ -130,10 +132,9 @@ function Action.CalculateLoot()
     end
 
     local rolls = scenario:KillScore() * lootMultiplier
-    local fixedRolls = UT.Size(scenario.KilledEnemies) * lootMultiplier
 
-    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates, math.floor(fixedRolls))
-    L.Dump("Loot", loot, rolls, fixedRolls, scenario.LootRates)
+    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates)
+    L.Dump("Loot", loot, rolls, scenario.LootRates)
     return loot
 end
 
@@ -153,6 +154,45 @@ function Action.GiveReward()
     map:SpawnLoot(loot)
 end
 
+function Action.SpawnHelper()
+    local s = Current()
+
+    Player.Notify(__("Combat is Starting."))
+
+    local x, y, z = table.unpack(s.Map.Enter)
+
+    local helper = Osi.CreateAt(C.ScenarioHelper.TemplateId, x, y, z, 1, 1, "")
+    if not helper then
+        L.Error("Failed to create combat helper.")
+        Scenario.Stop()
+        return
+    end
+
+    Enemy.Combat(helper, true)
+    s.CombatHelper = helper
+end
+
+function Action.RemoveHelper()
+    local s = Current()
+    if s.CombatHelper then
+        GU.Object.Remove(s.CombatHelper)
+    end
+end
+
+function Action.UpdateHelperName()
+    local s = Current()
+
+    local text = {
+        __("Scenario: %s", tostring(s.Name)),
+        __("Round: %s", tostring(s.Round)),
+        __("Total Rounds: %s", tostring(#s.Timeline)),
+        __("Upcoming Spawns: %s", tostring(#(s.Enemies[s.Round + 1] or {}))),
+        __("Kill Score: %s", s:KillScore()),
+    }
+
+    Ext.Loca.UpdateTranslatedString(C.ScenarioHelper.Handle, table.concat(text, "\n"))
+end
+
 function Action.StartCombat()
     if Current().CombatId ~= nil then
         L.Error("Combat already started.")
@@ -160,20 +200,21 @@ function Action.StartCombat()
     end
 
     Current().Map:PingSpawns()
+    Action.SpawnHelper()
 
     Event.Trigger("ScenarioCombatStarted", Current())
-
-    Player.Notify(__("Combat is Starting."), true)
     Action.StartRound()
 end
 
+---@return ChainableRunner
 function Action.SpawnRound()
     local s = Current()
     local toSpawn = s:SpawnsForRound()
 
     if #toSpawn == 0 then
         L.Debug("No enemies to spawn.", s.Round)
-        return
+
+        return Schedule()
     end
 
     local triesToSpawn = #s.Map.Spawns
@@ -181,7 +222,7 @@ function Action.SpawnRound()
         triesToSpawn = 5
     end
 
-    for i, e in pairs(toSpawn) do
+    for i, e in ipairs(toSpawn) do
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
         RetryUntil(function(_, triesLeft)
             local posIndex = s:GetPosition(i)
@@ -196,11 +237,16 @@ function Action.SpawnRound()
             immediate = true,
             retries = triesToSpawn,
             interval = 100,
-        }).After(function()
+        }).After(function(posCorrection)
             Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
             Event.Trigger("ScenarioEnemySpawned", Current(), e)
-
             Action.EnemyAdded(e)
+
+            posCorrection.After(function(_, corrected)
+                if corrected then
+                    Scenario.CombatSpawned(e)
+                end
+            end)
         end).Catch(function()
             L.Error("Spawn limit exceeded.", e:GetId())
             UT.Remove(s.SpawnedEnemies, e)
@@ -210,15 +256,25 @@ function Action.SpawnRound()
     end
 
     L.Debug("Enemies queued for spawning.", #toSpawn)
+    return WaitUntil(function()
+        return UT.Find(s.SpawnedEnemies, function(e)
+            return not e:IsSpawned()
+        end) == nil
+    end)
 end
 
+---@return ChainableRunner
 function Action.StartRound()
-    Current().Round = Current().Round + 1
-    Player.Notify(__("Round %d", Current().Round))
+    local s = Current()
 
-    Event.Trigger("ScenarioRoundStarted", Current())
+    s.Round = s.Round + 1
+    Player.Notify(__("Round %d", s.Round))
 
-    Action.SpawnRound()
+    Event.Trigger("ScenarioRoundStarted", s)
+
+    Action.UpdateHelperName()
+
+    return Action.SpawnRound()
 end
 
 function Action.NotifyStarted()
@@ -283,20 +339,12 @@ function Action.MapEntered()
 end
 
 function Action.EnemyAdded(enemy)
-    if Config.ForceEnterCombat or Player.InCombat() then
-        Scenario.CombatSpawned(enemy)
-    end
+    Scenario.CombatSpawned(enemy)
 end
 
 -- Enemy died or couldnt spawn
 function Action.EnemyRemoved()
-    local s = Current()
-
     Scenario.CheckEnded()
-
-    if #s.SpawnedEnemies == 0 and s:HasMoreRounds() then
-        Scenario.ResumeCombat()
-    end
 end
 
 -- Enemy spawned but is out of bounds
@@ -376,6 +424,11 @@ function Scenario.RestoreFromState(state)
                 Action.MapEntered()
             else
                 Action.NotifyStarted()
+            end
+        else
+            -- to not break older saves, will add a filler turn
+            if not S.CombatHelper then
+                Action.SpawnHelper()
             end
         end
 
@@ -504,13 +557,14 @@ function Scenario.Start(template, map)
     Action.NotifyStarted()
 
     Enemy.Cleanup()
+    Player.ReturnToCamp()
+
     Event.Trigger("ScenarioStarted", Current())
 end
 
 function Scenario.End()
-    local s = Current()
-    Event.Trigger("ScenarioEnded", s)
-
+    Action.RemoveHelper()
+    Event.Trigger("ScenarioEnded", Current())
     Action.GiveReward()
 
     PersistentVars.LastScenario = S
@@ -520,8 +574,10 @@ function Scenario.End()
 end
 
 function Scenario.Stop()
+    Action.RemoveHelper()
     Event.Trigger("ScenarioStopped", Current())
     Enemy.Cleanup()
+
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario stopped."))
@@ -531,7 +587,7 @@ Scenario.Teleport = Async.Throttle(3000, function()
     local s = Current()
 
     for _, character in pairs(GU.DB.GetPlayers()) do
-        Map.TeleportTo(s.Map, character)
+        s.Map:Teleport(character)
     end
 
     Event.Trigger("ScenarioTeleporting", s)
@@ -549,10 +605,12 @@ function Scenario.CheckEnded()
     end
 end
 
-function Scenario.ResumeCombat()
+function Scenario.ForwardCombat()
     local s = Current()
     if not s:IsRunning() then
         L.Error("Scenario has ended.")
+        Scenario.CheckEnded()
+
         return
     end
 
@@ -560,22 +618,7 @@ function Scenario.ResumeCombat()
         return
     end
 
-    s.CombatId = nil
     Action.StartRound()
-
-    if not s:HasMoreRounds() then
-        return
-    end
-
-    local amount = #s.SpawnedEnemies
-    if amount > 0 then
-        if Config.ForceEnterCombat then
-            Scenario.CombatSpawned()
-        end
-        return
-    end
-
-    Scenario.ResumeCombat()
 end
 
 ---@param specific Enemy|nil
@@ -602,7 +645,7 @@ function Scenario.CombatSpawned(specific)
                 return true
             end
 
-            enemy:Combat(Config.ForceEnterCombat)
+            enemy:Combat(true)
             if S.CombatId then -- TODO check if works
                 Osi.PROC_EnterCombatByID(enemy.GUID, S.CombatId)
             end
@@ -623,91 +666,6 @@ end
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
-
-Event.On("ScenarioStarted", function()
-    Player.ReturnToCamp()
-end)
-
-U.Osiris.On(
-    "CombatRoundStarted",
-    2,
-    "before",
-    ifScenario(function(combatGuid, round)
-        local s = Current()
-        if not s:HasStarted() then
-            L.Error("Scenario has not started yet.")
-            return
-        end
-
-        if s.CombatId == nil then
-            return
-        end
-
-        if s.CombatId ~= combatGuid then
-            L.Debug("Combat unrelated to the scenario.", combatGuid, s.combatId)
-            -- try to restore the combat
-            local guids = UT.Map(s.SpawnedEnemies, function(e)
-                return e.GUID and Osi.CombatGetGuidFor(e.GUID) or nil
-            end)
-            if UT.Contains(guids, combatGuid) then
-                s.CombatId = combatGuid
-            else
-                return
-            end
-        end
-
-        Scenario.CombatSpawned()
-
-        -- first round is usually the manual start
-        if round > 1 then
-            Action.StartRound()
-        end
-    end)
-)
-
-U.Osiris.On(
-    "CombatStarted",
-    1,
-    "before",
-    ifScenario(function(combatGuid)
-        local s = Current()
-
-        if not s:HasStarted() then
-            return
-        end
-
-        L.Debug("Combat started.", combatGuid)
-
-        if s.CombatId ~= nil then
-            return
-        end
-
-        s.CombatId = combatGuid
-        if s.Round == 1 then
-            Player.Notify(__("Combat started."))
-        end
-    end)
-)
-
-U.Osiris.On(
-    "CombatEnded",
-    1,
-    "after",
-    ifScenario(function(combatGuid)
-        L.Debug("Combat ended.", combatGuid)
-
-        local s = Current()
-        if s.CombatId == combatGuid then
-            s.CombatId = nil
-
-            -- empty round wont progress the combat
-            -- manually progress the combat
-            if s:HasMoreRounds() and #s:SpawnsForRound() == 0 then
-                Scenario.ResumeCombat()
-            end
-        end
-    end)
-)
 
 U.Osiris.On(
     "TeleportedFromCamp",
@@ -734,11 +692,15 @@ U.Osiris.On(
 )
 
 Event.On(
-    "ScenarioTeleported",
-    ifScenario(function(target)
-        if not S.OnMap and U.UUID.Equals(target, Player.Host()) then
-            S.OnMap = true
-            Defer(2000, Action.MapEntered)
+    "MapTeleported",
+    ifScenario(function(map, character)
+        if map.Name == S.Map.Name then
+            if not S.OnMap and U.UUID.Equals(character, Player.Host()) then
+                S.OnMap = true
+                Defer(2000, Action.MapEntered)
+            end
+
+            Event.Trigger("ScenarioTeleported", character)
         end
     end)
 )
@@ -753,6 +715,26 @@ U.Osiris.On(
                 Scenario.Stop()
                 Player.Notify(__("Returned to camp."))
             end
+        end
+    end)
+)
+
+U.Osiris.On(
+    "CombatStarted",
+    1,
+    "before",
+    ifScenario(function(combatGuid)
+        local s = Current()
+
+        if not s:HasStarted() then
+            return
+        end
+
+        L.Debug("Combat started.", combatGuid)
+
+        s.CombatId = combatGuid
+        if s.Round == 1 then
+            Player.Notify(__("Combat started."))
         end
     end)
 )
@@ -879,5 +861,65 @@ U.Osiris.On(
         end
 
         Action.EnemyRemoved()
+    end)
+)
+
+U.Osiris.On(
+    "TurnStarted",
+    1,
+    "before",
+    ifScenario(function(uuid)
+        local s = Current()
+
+        if U.UUID.Equals(uuid, s.CombatHelper) then
+            -- fallback check
+            if not s:IsRunning() then
+                Scenario.End()
+
+                return
+            end
+
+            Action.StartRound()
+                .After(function()
+                    return Defer(3000)
+                end)
+                .After(function()
+                    Osi.EndTurn(uuid)
+                end)
+        end
+    end)
+)
+
+-- TODO maybe not needed
+U.Osiris.On(
+    "CombatRoundStarted",
+    2,
+    "before",
+    ifScenario(function(combatGuid, round)
+        local s = Current()
+
+        if not s:HasStarted() then
+            L.Error("Scenario has not started yet.")
+            return
+        end
+
+        if s.CombatId == nil then
+            return
+        end
+
+        if s.CombatId ~= combatGuid then
+            L.Debug("Combat unrelated to the scenario.", combatGuid, s.combatId)
+            -- try to restore the combat
+            local guids = UT.Map(s.SpawnedEnemies, function(e)
+                return e.GUID and Osi.CombatGetGuidFor(e.GUID) or nil
+            end)
+            if UT.Contains(guids, combatGuid) then
+                s.CombatId = combatGuid
+            else
+                return
+            end
+        end
+
+        Scenario.CombatSpawned()
     end)
 )

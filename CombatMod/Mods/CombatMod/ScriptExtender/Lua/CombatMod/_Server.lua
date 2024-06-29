@@ -43,7 +43,6 @@ Mod.PersistentVarsTemplate = {
 }
 
 DefaultConfig = {
-    ForceEnterCombat = true, -- more continuous battle between rounds at the cost of cheesy out of combat strats
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
     LootIncludesCampSlot = false, -- include camp clothes in item lists
     Debug = false,

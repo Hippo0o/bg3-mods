@@ -35,6 +35,9 @@ function M.Equals(v1, v2, ignoreMT)
         end
     end
 
+    v1 = M.Table.DeepClone(v1)
+    v2 = M.Table.DeepClone(v2)
+
     local keySet = {}
 
     for key1, value1 in pairs(v1) do
