@@ -201,7 +201,7 @@ local ngPlus = {
         Character = false,
         Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
-            local loot = Item.GenerateLoot(10, C.LootRates)
+            local loot = Item.GenerateLoot(10, C.LootRates, 10)
 
             local x, y, z = Osi.GetPosition(character)
             Item.SpawnLoot(loot, x, y, z)
@@ -357,7 +357,7 @@ return UT.Combine({
         Amount = 10,
         Character = false,
         OnBuy = function(self, character)
-            local loot = Item.GenerateLoot(10, C.LootRates)
+            local loot = Item.GenerateLoot(10, C.LootRates, 10)
 
             local x, y, z = Osi.GetPosition(character)
             Item.SpawnLoot(loot, x, y, z)

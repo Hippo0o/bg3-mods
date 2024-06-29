@@ -61,7 +61,7 @@ function Object.New(name, type, fake)
         if type == "Armor" or type == "Weapon" then
             o.Slot = item.Slot
         end
-        if type == "Object" then
+        if type == "Object" or type == "CombatObject" then
             o.Slot = item.ItemUseType
         end
     end
@@ -114,12 +114,6 @@ function Object:Spawn(x, y, z)
 
     if self:IsSpawned() then
         PersistentVars.SpawnedItems[self.GUID] = self
-
-        if self.PingSpawn then
-            Schedule(function() -- basically a pcall
-                Osi.RequestPing(x, y, z, self.GUID, "")
-            end)
-        end
 
         return true
     end
@@ -185,8 +179,10 @@ end
 
 function Item.Objects(rarity, forCombat)
     local cacheKey = forCombat and "CombatObjects" or "Objects"
+    local type = forCombat and "CombatObject" or "Object"
+
     if #itemCache[cacheKey] > 0 then
-        return Item.Get(itemCache[cacheKey], "Object", rarity)
+        return Item.Get(itemCache[cacheKey], type, rarity)
     end
 
     if objects == nil then
@@ -254,7 +250,7 @@ function Item.Objects(rarity, forCombat)
 
     itemCache[cacheKey] = items
 
-    return Item.Get(items, "Object", rarity)
+    return Item.Get(items, type, rarity)
 end
 
 function Item.Armor(rarity)
@@ -355,12 +351,6 @@ function Item.Weapons(rarity)
     return Item.Get(items, "Weapon", rarity)
 end
 
-function Item.IsOwned(obj)
-    return Osi.IsInInventory(obj) == 1
-        or Osi.GetInventoryOwner(obj) ~= nil
-        or Osi.GetFirstInventoryOwnerCharacter(obj) ~= nil
-end
-
 -- not used
 function Item.Cleanup()
     for guid, item in pairs(PersistentVars.SpawnedItems) do
@@ -370,7 +360,7 @@ end
 
 function Item.DestroyAll(rarity, type)
     for guid, item in pairs(PersistentVars.SpawnedItems) do
-        if item.Rarity == rarity and not Item.IsOwned(item.GUID) and (not type or item.Type == type) then
+        if item.Rarity == rarity and not GU.Object.IsOwned(item.GUID) and (not type or item.Type == type) then
             GU.Object.Remove(guid)
             PersistentVars.SpawnedItems[guid] = nil
         end
@@ -380,13 +370,13 @@ end
 function Item.PickupAll(character, rarity, type)
     for _, item in pairs(PersistentVars.SpawnedItems) do
         if
-            not Item.IsOwned(item.GUID)
+            not GU.Object.IsOwned(item.GUID)
             and (type == nil or item.Type == type)
             and (rarity == nil or item.Rarity == rarity)
         then
             Osi.ToInventory(item.GUID, character)
             Schedule(function()
-                if Item.IsOwned(item.GUID) then
+                if GU.Object.IsOwned(item.GUID) then
                     PersistentVars.SpawnedItems[item.GUID] = nil
                 end
             end)
@@ -396,10 +386,19 @@ end
 
 function Item.SpawnLoot(loot, x, y, z, autoPickup)
     local i = 0
-    Async.Interval(300 - (#loot * 2), function(self)
+    local pingedLoot = {}
+    for _, item in pairs(loot) do
+        if item.Type ~= "Object" then
+            table.insert(pingedLoot, item)
+        else
+            item:Spawn(x, y, z)
+        end
+    end
+
+    Async.Interval(300 - (#pingedLoot * 2), function(self)
         i = i + 1
 
-        if i > #loot then
+        if i > #pingedLoot then
             self:Clear()
             if autoPickup and Player.InCamp() then
                 Player.PickupAll()
@@ -408,20 +407,27 @@ function Item.SpawnLoot(loot, x, y, z, autoPickup)
             return
         end
 
-        if loot[i] == nil then
-            L.Error("Loot was empty.", i, #loot)
+        if pingedLoot[i] == nil then
+            L.Error("Loot was empty.", i, #pingedLoot)
             return
         end
 
         local x2 = x + U.Random() * U.Random(-1, 1)
         local z2 = z + U.Random() * U.Random(-1, 1)
+        local item = pingedLoot[i]
 
-        loot[i]:Spawn(x2, y, z2)
+        if item:Spawn(x2, y, z2) then
+            Osi.RequestPing(x2, y, z2, item.GUID, "")
+        end
     end)
 end
 
-function Item.GenerateLoot(rolls, lootRates)
+function Item.GenerateLoot(rolls, lootRates, fixedRolls)
     local loot = {}
+
+    if not fixedRolls then
+        fixedRolls = 1
+    end
 
     -- each kill gets an object/weapon/armor roll
     if not lootRates then
@@ -434,6 +440,36 @@ function Item.GenerateLoot(rolls, lootRates)
         end
 
         return t
+    end
+
+    local function addToLoot(item)
+        table.insert(loot, UT.DeepClone(item))
+    end
+
+    local chanceFood = 9
+    for i = 1, fixedRolls do
+        do
+            local items = Item.Objects(nil, false)
+
+            local isFood = U.Random() < chanceFood / 10
+
+            if isFood then
+                chanceFood = math.max(1, chanceFood - 1)
+            end
+
+            items = UT.Filter(items, function(item)
+                return isFood and item.Tab == "Consumable" or item.Tab ~= "Consumable"
+            end)
+
+            L.Debug("Rolling fixed loot items:", #items, "Object")
+            if #items > 0 then
+                addToLoot(items[U.Random(#items)])
+
+                if isFood then
+                    addToLoot(items[U.Random(#items)])
+                end
+            end
+        end
     end
 
     -- build rarity roll tables from template e.g. { "Common", "Common", "Uncommon", "Rare" }
@@ -456,70 +492,50 @@ function Item.GenerateLoot(rolls, lootRates)
         rarities[category] = rarity
     end
 
-    local chanceFood = 9
     for i = 1, rolls do
         local items = {}
         local fail = 0
 
-        local category = ({ "CombatObject", "Object", "Weapon", "Armor" })[U.Random(4)]
+        local category = ({ "CombatObject", "Weapon", "Armor" })[U.Random(3)]
 
         local rarity = nil
         -- avoid 0 rolls e.g. legendary objects dont exist
         while #items == 0 and fail < 5 do
             fail = fail + 1
 
-            if category == "Object" then
-                items = Item.Objects(nil, false)
+            rarity = rarities[category][U.Random(#rarities[category])]
 
-                local isFood = U.Random() < chanceFood / 10
-
-                if isFood then
-                    chanceFood = math.max(1, chanceFood - 0.5)
-                end
-                L.Debug("Rolling Object loot slot:", isFood, chanceFood)
-
-                items = UT.Filter(items, function(item)
-                    return isFood and item.Tab == "Consumable" or item.Tab ~= "Consumable"
-                end)
-
+            if category == "CombatObject" then
+                items = Item.Objects(rarity, true)
                 if #items > 0 then
-                    i = i - 1
-                end
-            else
-                rarity = rarities[category][U.Random(#rarities[category])]
+                    local bySlot = UT.GroupBy(items, "Slot")
+                    local slots = UT.Keys(bySlot)
+                    local randomSlot = slots[U.Random(#slots)]
+                    L.Debug("Rolling CombatObject loot slot:", randomSlot, rarity)
 
-                if category == "CombatObject" then
-                    items = Item.Objects(rarity, true)
-                    if #items > 0 then
-                        local bySlot = UT.GroupBy(items, "Slot")
-                        local slots = UT.Keys(bySlot)
-                        local randomSlot = slots[U.Random(#slots)]
-                        L.Debug("Rolling CombatObject loot slot:", randomSlot, rarity)
-
-                        if randomSlot == "Potion" and U.Random() < 0.40 then
-                            items = UT.Filter(items, function(item)
-                                return item.Name:match("^OBJ_Potion_Healing")
-                            end)
-                        else
-                            items = UT.Values(bySlot[randomSlot])
-                        end
-                    end
-                elseif category == "Weapon" then
-                    items = Item.Weapons(rarity)
-                elseif category == "Armor" then
-                    items = Item.Armor(rarity)
-                    if #items > 0 then
-                        local bySlot = UT.GroupBy(items, "Slot")
-                        local slots = UT.Keys(bySlot)
-                        local randomSlot = slots[U.Random(#slots)]
-                        L.Debug("Rolling Armor loot slot:", randomSlot, rarity)
+                    if randomSlot == "Potion" and U.Random() < 0.40 then
+                        items = UT.Filter(items, function(item)
+                            return item.Name:match("^OBJ_Potion_Healing")
+                        end)
+                    else
                         items = UT.Values(bySlot[randomSlot])
                     end
+                end
+            elseif category == "Weapon" then
+                items = Item.Weapons(rarity)
+            elseif category == "Armor" then
+                items = Item.Armor(rarity)
+                if #items > 0 then
+                    local bySlot = UT.GroupBy(items, "Slot")
+                    local slots = UT.Keys(bySlot)
+                    local randomSlot = slots[U.Random(#slots)]
+                    L.Debug("Rolling Armor loot slot:", randomSlot, rarity)
+                    items = UT.Values(bySlot[randomSlot])
                 end
             end
         end
 
-        L.Debug("Rolling loot items:", #items, category, rarity)
+        L.Debug("Rolling bonus loot items:", #items, category, rarity)
         if #items > 0 then
             local random = items[U.Random(#items)]
 
@@ -528,11 +544,11 @@ function Item.GenerateLoot(rolls, lootRates)
             end
             LogRandom("Items", random.Name, 100)
 
-            table.insert(loot, random)
+            addToLoot(random)
         end
     end
 
-    return loot
+    return UT.DeepClone(loot)
 end
 
 -------------------------------------------------------------------------------------------------

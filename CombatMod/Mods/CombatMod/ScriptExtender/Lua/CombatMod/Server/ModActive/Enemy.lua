@@ -531,6 +531,8 @@ end
 ---@return boolean
 function Enemy.IsValid(object)
     return GC.IsNonPlayer(object)
+        and Osi.IsAlly(object, Player.Host()) ~= 1 -- probably already handled by IsNonPlayer
+        and not GU.Object.IsOwned(object)
         and (
             Osi.IsSummon(object) == 1
             or (S and UT.Find(S.SpawnedEnemies, function(v)
@@ -545,7 +547,7 @@ end
 
 function Enemy.Cleanup()
     for guid, enemy in pairs(PersistentVars.SpawnedEnemies) do
-        if Item.IsOwned(guid) or Osi.IsAlly(guid, Player.Host()) == 1 then
+        if not Enemy.IsValid(guid) then
             PersistentVars.SpawnedEnemies[guid] = nil
         else
             Object.Init(enemy):Clear()

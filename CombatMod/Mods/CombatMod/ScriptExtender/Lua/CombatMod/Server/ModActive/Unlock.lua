@@ -228,7 +228,7 @@ Net.On("BuyUnlock", function(event)
         return
     end
 
-    if Osi.IsInCombat(event:Character()) == 1 or (S and S:HasStarted()) then
+    if Osi.IsInCombat(event:Character()) == 1 then --or (S and S:HasStarted()) then
         Net.Respond(event, { false, __("Cannot buy while in combat.") })
         soundFail()
         return

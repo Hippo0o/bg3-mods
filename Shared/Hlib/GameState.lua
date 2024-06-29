@@ -15,7 +15,7 @@ local M = {}
 
 M.EventSave = "_GameStateSave"
 M.EventLoad = "_GameStateLoad"
-M.EventSessionLoad = "_GameStateSessionLoad"
+M.EventLoadSession = "_GameStateLoadSession"
 M.EventUnload = "_GameStateUnload"
 M.EventUnloadLevel = "_GameStateUnloadLevel"
 M.EventUnloadSession = "_GameStateUnloadSession"
@@ -25,7 +25,7 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
         Log.Debug("GameState", e.FromState, e.ToState)
     end
     if e.FromState == "LoadSession" and e.ToState == "LoadLevel" then
-        Event.Trigger(M.EventSessionLoad)
+        Event.Trigger(M.EventLoadSession)
     elseif (e.FromState == "Sync" or e.FromState == "PrepareRunning") and e.ToState == "Running" then
         Event.Trigger(M.EventLoad)
     elseif e.FromState == "Running" and e.ToState == "Save" then
@@ -42,6 +42,7 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
 end)
 
 Ext.Events.ResetCompleted:Subscribe(function()
+    Event.Trigger(GameState.EventLoadSession)
     Event.Trigger(GameState.EventLoad)
 end)
 
@@ -70,8 +71,8 @@ end
 ---@param once boolean|nil
 ---@return EventListener
 -- same time as Ext.Events.SessionLoaded
-function M.OnSessionLoad(callback, once)
-    return Event.On(M.EventSessionLoad, callback, once)
+function M.OnLoadSession(callback, once)
+    return Event.On(M.EventLoadSession, callback, once)
 end
 
 ---@param callback fun()

@@ -170,25 +170,27 @@ do
 
     function Commands.Loca()
         Localization.BuildLocaFile()
+        L.Info("Script Extender/" .. Mod.Prefix .. "/" .. Localization.FilePath .. ".xml")
     end
 
-    local start = 0
-    function Commands.Dev(new_start, amount)
+    function Commands.Dev()
         L.Info(":)")
         Mod.Dev = true
         Mod.Debug = true
         Config.Debug = true
+    end
 
-        local temps = Ext.Template.GetAllRootTemplates()
-        L.Dump(UT.Map(
-            UT.Filter(temps, function(v)
-                return v.TemplateType == "item" and v.CombatComponent.CanFight
-            end),
-            function(v)
-                return v.Name
-            end
-        ))
+    function Commands.Test()
 
+        -- local temps = Ext.Template.GetAllRootTemplates()
+        -- L.Dump(UT.Map(
+        --     UT.Filter(temps, function(v)
+        --         return v.TemplateType == "item" and v.CombatComponent.CanFight
+        --     end),
+        --     function(v)
+        --         return v.Name
+        --     end
+        -- ))
         -- local e = {}
         -- for i, v in Enemy.Iter() do
         --     v:SyncTemplate()
@@ -277,34 +279,6 @@ do
         end, function()
             L.Dump(e, e:Entity().ServerCharacter)
             e:Combat()
-        end)
-
-        -- Defer(1000, function()
-        --     Ext.IO.SaveFile("spawn-" .. e:GetId() .. ".json", Ext.DumpExport(e:Entity():GetAllComponents()))
-        -- end)
-    end
-
-    function Commands.Test(mapKey, combat)
-        local x, y, z = Player.Pos()
-
-        local guid = Osi.CreateAt(mapKey, x, y, z, 1, 1, "")
-        if not guid then
-            L.Error("Failed to create object.", mapKey)
-            return
-        end
-
-        local e = Enemy.CreateTemporary(guid)
-
-        if combat then
-            e:Combat(combat)
-        else
-            Osi.SetFaction(guid, C.NeutralFaction)
-        end
-
-        e:Sync()
-
-        Defer(1000, function()
-            L.Dump(Enemy.CalcTier(e))
         end)
 
         -- Defer(1000, function()

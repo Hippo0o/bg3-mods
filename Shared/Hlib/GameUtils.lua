@@ -169,15 +169,14 @@ function M.Character.IsOrigin(character)
 end
 
 ---@param character string GUID
----@param includeParty boolean|nil Summons or QuestNPCs might be considered party members
+---@param checkInPartyIsPlayable boolean|nil default false - party members are considered player characters
 ---@return boolean
-function M.Character.IsNonPlayer(character, includeParty)
-    if not includeParty and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
+function M.Character.IsNonPlayer(character, checkInPartyIsPlayable)
+    if not checkInPartyIsPlayable and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
         return false
     end
-    return not M.Character.IsOrigin(character)
-        and not M.Character.IsHireling(character)
-        and Osi.IsPlayer(character) ~= 1
+
+    return not M.Character.IsPlayable(character)
 end
 
 ---@param character string GUID
@@ -339,6 +338,12 @@ function M.Object.Remove(guid)
     Osi.RequestDeleteTemporary(guid)
     Osi.UnloadItem(guid)
     Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
+end
+
+function M.Object.IsOwned(guid)
+    return Osi.IsInInventory(guid) == 1
+        or Osi.GetInventoryOwner(guid) ~= nil
+        or Osi.GetFirstInventoryOwnerCharacter(guid) ~= nil
 end
 
 return M

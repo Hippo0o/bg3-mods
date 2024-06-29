@@ -43,6 +43,7 @@ end
 function StoryBypass.AllowRemoval(entity)
     return entity.IsCharacter
         and GC.IsNonPlayer(entity.Uuid.EntityUuid)
+        and not GU.Object.IsOwned(entity.Uuid.EntityUuid)
         and not entity.PartyMember
         and not U.UUID.Equals(C.NPCCharacters.Jergal, entity.Uuid.EntityUuid) -- No
         and not U.UUID.Equals(C.NPCCharacters.Emperor, entity.Uuid.EntityUuid) -- Gameover if dead
@@ -94,7 +95,7 @@ function StoryBypass.ClearArea(character)
     end
 
     local objects = UT.Filter(nearby, function(v)
-        return v.Entity.ServerItem and not Item.IsOwned(v.Guid)
+        return v.Entity.ServerItem and not GU.Object.IsOwned(v.Guid)
     end)
     for _, batch in pairs(UT.Batch(objects, math.ceil(#objects / 5))) do
         Schedule(function()
@@ -123,7 +124,12 @@ function StoryBypass.ClearArea(character)
                             )
                             b.Entity:Replicate("Resistances")
                         end
-                    elseif b.Entity.Health or b.Entity.ServerItem.CanBePickedUp or b.Entity.ServerItem.CanUse then -- TODO remove more CanUse objects
+                    elseif
+                        b.Entity.Health
+                        or b.Entity.ServerItem.CanBePickedUp
+                        or b.Entity.ServerItem.CanUse
+                        or b.Entity.ServerItem.Template.Id == C.ScenarioHelper.TemplateId
+                    then -- TODO remove more CanUse objects
                         GU.Object.Remove(b.Guid)
                     end
                 end

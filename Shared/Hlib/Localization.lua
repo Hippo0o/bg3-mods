@@ -19,6 +19,9 @@ local Event = Require("Hlib/Event")
 ---@type Net
 local Net = Require("Hlib/Net")
 
+---@type GameState
+local GameState = Require("Hlib/GameState")
+
 ---@class Localization
 local M = {}
 
@@ -29,12 +32,40 @@ M.UseLoca = true
 local Localization = Libs.Struct({
     Version = nil,
     Text = nil,
+    Stack = nil,
     Handle = nil,
     LocaText = nil,
 })
+function Localization.New(text, version, stack)
+    local obj = Localization.Init({
+        Version = version,
+        Text = text,
+        Stack = stack,
+    })
 
-local filepath = "Localization/" .. Mod.TableKey
-M.Translations = IO.LoadJson(filepath .. ".json") or {}
+    if M.UseLoca then
+        obj.Handle = M.GenerateHandle(text, version)
+        obj.LocaText = M.Get(obj.Handle)
+
+        if obj.LocaText ~= "" then
+            Log.Info("Translation found: ", obj.Handle, obj.Text, obj.LocaText)
+
+            obj.Text = obj.LocaText
+        end
+    end
+
+    return obj
+end
+
+M.FilePath = "Localization/" .. Mod.TableKey
+M.Translations = {}
+
+GameState.OnLoadSession(function()
+    local cached = IO.LoadJson(M.FilePath .. ".json") or {}
+    for k, v in pairs(cached) do
+        M.Translations[k] = Localization.New(v.Text, v.Version, v.Stack)
+    end
+end)
 
 if Ext.IsServer() then
     Net.On("_TranslationRequest", function(event)
@@ -43,10 +74,7 @@ if Ext.IsServer() then
         Event.Trigger("_TranslationChanged")
     end)
     Event.On("_TranslationChanged", function(event)
-        IO.SaveJson(filepath .. ".json", M.Translations)
-        if Mod.Dev then
-            IO.Save(filepath .. ".xml", M.BuildLocaFile())
-        end
+        IO.SaveJson(M.FilePath .. ".json", M.Translations)
     end)
 end
 
@@ -57,27 +85,12 @@ function M.Translate(text, version)
 
     if M.Translations[key] == nil or Mod.Dev then
         local stack = Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
-            return not line:match("stack traceback:") and not line:match("Hlib/Localization.lua") and not line:match("(...tail calls...)")
+            return not line:match("stack traceback:")
+                and not line:match("Hlib/Localization.lua")
+                and not line:match("(...tail calls...)")
         end)
 
-        M.Translations[key] = Localization.Init({
-            Stack = Utils.String.Trim(stack),
-            Text = text,
-            Version = version,
-        })
-
-        if M.UseLoca then
-            local handle = M.GenerateHandle(text, version)
-            local loca = M.Get(handle)
-            M.Translations[key].Handle = handle
-            M.Translations[key].LocaText = loca
-
-            if loca ~= "" then
-                text = loca
-            end
-        end
-
-        M.Translations[key].Text = text
+        M.Translations[key] = Localization.New(text, version, Utils.String.Trim(stack))
 
         if Ext.IsClient() then
             Net.Request("_TranslationRequest", M.Translations).After(function(event)
@@ -87,6 +100,8 @@ function M.Translate(text, version)
         else
             Event.Trigger("_TranslationChanged")
         end
+
+        Log.Debug("Localization/Translate", M.Translations[key].Handle, M.Translations[key].Text)
     end
 
     return M.Translations[key].Text
@@ -102,13 +117,7 @@ end
 ---@param version number|nil
 ---@return string
 function M.GenerateHandle(str, version)
-    local handle = "h" .. Utils.UUID.FromString(str, version):gsub("-", "g")
-
-    if Mod.Dev and M.Get(handle) ~= "" and M.Get(handle) ~= str then
-        Log.Debug("Handle translated: ", handle, str, M.Get(handle))
-    end
-
-    return handle
+    return "h" .. Utils.UUID.FromString(str, version):gsub("-", "g")
 end
 
 ---@param text string text "...;2" for version 2
@@ -143,7 +152,7 @@ function M.BuildLocaFile()
 
     local loca = string.format(xmlWrap, table.concat(entries, "\n"))
 
-    return loca
+    IO.Save(M.FilePath .. ".xml", loca)
 end
 
 return M

@@ -2313,9 +2313,9 @@ return {
     {
         AiHint = "00000000-0000-0000-0000-000000000000",
         Archetype = "ogre_melee",
-        CharacterVisualResourceID = "370ffacc-6ed7-9221-6605-fb9770f08607",
+        CharacterVisualResourceID = "4ac5b5d8-6e26-e59b-42e3-41ed51ad9481",
         Equipment = "EQP_Ogre_Club",
-        Icon = "370ffacc-6ed7-9221-6605-fb9770f08607-EQP_Ogre_Club_(Icon_Ogre)",
+        Icon = "4ac5b5d8-6e26-e59b-42e3-41ed51ad9481-EQP_Ogre_Club_(Icon_Ogre)",
         Info = {
             AC = 12,
             Level = 4,
