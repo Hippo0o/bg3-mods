@@ -21,6 +21,9 @@ Mod.PersistentVarsTemplate = {
         Items = {},
     },
     LootFilter = {
+        CombatObject = UT.Map(C.ItemRarity, function(v, k)
+            return true, v
+        end),
         Object = UT.Map(C.ItemRarity, function(v, k)
             return true, v
         end),

@@ -129,7 +129,7 @@ function Object:Clear()
 
     RetryUntil(function()
         GU.Object.Remove(guid)
-        return Osi.IsItem(guid) ~= 0
+        return Osi.IsItem(guid) ~= 1
     end, { immediate = true }):After(function()
         PersistentVars.SpawnedItems[guid] = nil
     end):Catch(function()
@@ -362,8 +362,7 @@ function Item.DestroyAll(rarity, type)
     local count = 0
     for guid, item in pairs(PersistentVars.SpawnedItems) do
         if item.Rarity == rarity and not GU.Object.IsOwned(item.GUID) and (not type or item.Type == type) then
-            GU.Object.Remove(guid)
-            PersistentVars.SpawnedItems[guid] = nil
+            Object.Init(item):Clear()
             count = count + 1
         end
     end
@@ -383,7 +382,7 @@ function Item.PickupAll(character, rarity, type)
             Osi.ToInventory(item.GUID, character)
             count = count + 1
             Schedule(function()
-                if GU.Object.IsOwned(item.GUID) then
+                if GU.Object.IsOwned(item.GUID) or Osi.IsItem(item.GUID) ~= 1 then
                     PersistentVars.SpawnedItems[item.GUID] = nil
                 end
             end)
@@ -582,7 +581,7 @@ U.Osiris.On(
 
             if item then
                 L.Debug("Auto pickup:", object, character)
-                Item.PickupAll(character, item.Rarity)
+                Item.PickupAll(character, item.Rarity, item.Type)
             end
         end
     )

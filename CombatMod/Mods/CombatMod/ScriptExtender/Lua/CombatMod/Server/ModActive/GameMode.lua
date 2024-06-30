@@ -365,7 +365,7 @@ function GameMode.ApplyDifficulty(enemy)
             local ac = entity.Resistances.AC
             local acMax = math.max(25, mod)
             while ac > acMax do
-                ac = ac - 4
+                ac = ac - 3
             end
             ac = ac - entity.Resistances.AC
             if ac < 0 then
