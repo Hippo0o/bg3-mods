@@ -67,10 +67,7 @@ local Loop = Libs.Struct({
 
             ticks = ticks + 1
             if ticks % 3000 == 0 then
-                Log.Debug("Loop is running for too long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
-                if Mod.Dev then
-                    Log.Dump(self)
-                end
+                Log.Debug("Loop is running for long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
             end
         end)
     end,
@@ -100,7 +97,7 @@ local Loop = Libs.Struct({
 
                 if not success then
                     Log.Error("Async", result)
-                    runner:Clear()
+                    runner:Failed(result)
                     return
                 end
 
@@ -183,6 +180,7 @@ end
 ---@field Exec fun(self: Runner)
 ---@field ClearCond fun(self: Runner, time: GameTime): boolean
 ---@field Clear fun(self: Runner)
+---@field Failed fun(self: Runner, error: any)
 local Runner = Libs.Struct({
     _Id = nil,
     _Queue = nil,
@@ -197,6 +195,9 @@ local Runner = Libs.Struct({
     Clear = function(self)
         self._Queue:Dequeue(self._Id)
         self.Cleared = true
+    end,
+    Failed = function(self, _)
+        self:Clear()
     end,
 })
 
@@ -224,11 +225,16 @@ function Runner.Chainable(queue, func)
 
     local chainable = Libs.Chainable(obj)
     obj.Exec = function()
-        chainable.Begin()
+        chainable:Begin()
+    end
+
+    obj.Failed = function(self, error)
+        self:Clear()
+        chainable:Throw(error)
     end
 
     if func then
-        chainable.After(func)
+        chainable:After(func)
     end
 
     return chainable
@@ -337,7 +343,7 @@ function M.Interval(ms, func)
     return runner
 end
 
----@param cond fun(self: Runner, time: GameTime): boolean
+---@param cond fun(self: Runner, chainable: ChainableRunner): boolean
 ---@param func fun()|nil
 ---@return ChainableRunner
 -- check for condition every ~100ms
@@ -352,7 +358,7 @@ function M.WaitUntil(cond, func)
         end
         last = 0
 
-        return cond(self, time)
+        return cond(self, chainable)
     end
 
     return chainable
@@ -362,7 +368,7 @@ end
 ---@field retries number|nil default: 3, -1 for infinite
 ---@field interval number|nil default: 1000
 ---@field immediate boolean|nil default: false
----@param cond fun(self: Runner, triesLeft: number, time: GameTime): boolean
+---@param cond fun(self: Runner, triesLeft: number, chainable: ChainableRunner): boolean
 ---@param options RetryForOptions|nil
 ---@return ChainableRunner
 -- retries every (default: 1000 ms) until condition is met or tries (default: 3) are exhausted
@@ -373,13 +379,15 @@ function M.RetryUntil(cond, options)
     local immediate = options.immediate or false
 
     local chainable = Libs.Chainable()
-    chainable.Catch(function() end) -- ignore errors by default
+    chainable:Catch(function(err)
+        L.Debug("RetryUntil catch error:", err)
+    end)
 
-    local runner = M.Interval(interval, function(self, time)
-        local ok, result = pcall(cond, self, retries, time)
+    local runner = M.Interval(interval, function(self)
+        local ok, result = pcall(cond, self, retries, chainable)
         if ok and result then
             self:Clear()
-            chainable.Begin(result)
+            chainable:Begin(result)
             return
         end
 
@@ -391,9 +399,14 @@ function M.RetryUntil(cond, options)
 
         if retries == 0 then
             self:Clear()
-            chainable.Throw(result)
+            chainable:Throw(result)
         end
     end)
+
+    runner.Failed = function(self, error)
+        self:Clear()
+        chainable:Throw(error)
+    end
 
     chainable.Source = runner
 

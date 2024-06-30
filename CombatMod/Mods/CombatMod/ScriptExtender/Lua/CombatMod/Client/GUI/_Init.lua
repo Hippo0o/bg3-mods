@@ -13,15 +13,6 @@ local window = Ext.IMGUI.NewWindow(
     string.format("%s v%d.%d.%d", Mod.Prefix, Mod.Version.Major, Mod.Version.Minor, Mod.Version.Revision)
 )
 
-Event.On("WindowClosed", function()
-    window.Visible = false
-    Net.Send("WindowClosed")
-end)
-Event.On("WindowOpened", function()
-    window.Visible = true
-    Net.Send("WindowOpened")
-end)
-
 L.Warn("Window created.", "DX11 is known to cause issues.")
 L.Warn("If the window is not visible, make sure to update to the latest version of Script Extender.")
 L.Warn("Furthermore, try switching to Vulkan and disable all overlays (Steam, Discord, AMD, NVIDIA, etc.).")
@@ -85,7 +76,9 @@ do
 
     successBox.SameLine = true
 
-    function DisplayResponse(payload)
+    function DisplayResponse(event)
+        local payload = event.Payload
+
         if payload[1] then
             Event.Trigger("Success", payload[2])
         else
@@ -109,6 +102,23 @@ Extras.Main(tabs)
 Components.Conditional(_, function()
     return { Creation.Main(tabs), Debug.Main(tabs) }
 end, "ToggleDebug")
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+Event.On("WindowClosed", function()
+    window.Visible = false
+    Net.Send("WindowClosed")
+end)
+
+Event.On("WindowOpened", function()
+    window.Visible = true
+    Net.Send("WindowOpened")
+end)
+
 
 do -- auto hide window
     local windowVisible = Debounce(1000, function(bool)
@@ -145,4 +155,25 @@ GameState.OnLoad(function()
     window.Visible = true
 end)
 
-return { window, toggle, open, close }
+Net.On("OpenGUI", function(event)
+    if Settings.AutoOpen == false and event.Payload == "Optional" then
+        return
+    end
+
+    open()
+end)
+Net.On("CloseGUI", function(event)
+    if Settings.AutoOpen == false and event.Payload == "Optional" then
+        return
+    end
+
+    close()
+end)
+
+local toggleWindow = Async.Throttle(100, toggle)
+
+Ext.Events.KeyInput:Subscribe(function(e)
+    if e.Event == "KeyDown" and e.Repeat == false and e.Key == Settings.ToggleKey then
+        toggleWindow()
+    end
+end)

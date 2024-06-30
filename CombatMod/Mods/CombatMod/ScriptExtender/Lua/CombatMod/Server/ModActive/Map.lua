@@ -29,63 +29,7 @@ function Object.New(data)
 end
 
 ---@param character string GUID
-function Object:Teleport(character, withOffset)
-    local x, y, z = table.unpack(self.Enter)
-
-    pcall(function()
-        local offset = tonumber(Config.RandomizeSpawnOffset / 2)
-        if offset > 0 and withOffset then
-            x = x + U.Random() * U.Random(-offset, offset)
-            z = z + U.Random() * U.Random(-offset, offset)
-        end
-
-        x, y, z = Osi.FindValidPosition(x, y, z, 50, character, 1)
-    end)
-    if not x or not y or not z then
-        x = self.Enter[1]
-        y = self.Enter[2]
-        z = self.Enter[3]
-    end
-
-    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
-    -- Osi.PROC_Foop(character)
-
-    local x, y, z = table.unpack(self.Enter)
-
-    return Async.WaitTicks(10, function()
-        return true, Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset / 2)
-    end)
-end
-
-function Object:Teleport(character)
-    if self.Region ~= Osi.GetRegion(Player.Host()) then
-        if not U.UUID.Equals(character, Player.Host()) then
-            return false
-        end
-
-        local _, act = UT.Find(C.Regions, function(region, act)
-            return region == self.Region
-        end)
-
-        if act == nil then
-            L.Error("Region not found.", self.Region)
-            return false
-        end
-
-        local teleporting = Player.TeleportToAct(act)
-
-        if teleporting then
-            Player.Notify(__("Teleporting to different ACT"))
-            teleporting.After(function()
-                for _, character in pairs(GU.DB.GetPlayers()) do
-                    self:Teleport(character)
-                end
-            end)
-        end
-
-        return false
-    end
-
+function Object:TeleportInRegion(character, withOffset)
     local x, y, z = table.unpack(self.Enter)
 
     pcall(function()
@@ -116,6 +60,39 @@ function Object:Teleport(character)
     return true
 end
 
+local charactersToTeleport = {}
+function Object:Teleport(character, noOffset)
+    if self.Region == Osi.GetRegion(character) then
+        return self:TeleportInRegion(character, not noOffset)
+    end
+
+    local _, act = UT.Find(C.Regions, function(region, act)
+        return region == self.Region
+    end)
+
+    if act == nil then
+        L.Error("Region not found.", self.Region)
+        return false
+    end
+
+    table.insert(charactersToTeleport, character)
+
+    local teleporting = Player.TeleportToAct(act)
+
+    if teleporting then
+        Player.Notify(__("Teleporting to different ACT"))
+        teleporting:After(function()
+            for _, character in pairs(charactersToTeleport) do
+                self:Teleport(character, noOffset)
+            end
+
+            charactersToTeleport = {}
+        end)
+    end
+
+    return false
+end
+
 ---@param spawn number Index of Spawns or -1 for random
 ---@return number x, number y, number z
 function Object:GetSpawn(spawn)
@@ -133,7 +110,7 @@ end
 
 ---@param enemy Enemy
 ---@param spawn number Index of Spawns or -1 for random
----@return boolean
+---@return boolean, ChainableRunner|nil
 function Object:SpawnIn(enemy, spawn)
     local x, y, z = self:GetSpawn(spawn)
 
@@ -146,20 +123,25 @@ function Object:SpawnIn(enemy, spawn)
     end)
 
     -- spawned is combat ready
-    local success = enemy:Spawn(x, y, z)
+    local ok, chainable = enemy:Spawn(x, y, z)
 
-    if not success then
+    if not ok then
         return false
     end
+
     Osi.PROC_Foop(enemy.GUID)
 
     local x, y, z = self:GetSpawn(spawn)
-    return Async.WaitTicks(10, function()
-        local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
 
-        Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+    return true, chainable:After(function()
+        return enemy,
+            Async.WaitTicks(6, function()
+                local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
 
-        return true, didCorrect
+                Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+
+                return enemy, didCorrect
+            end)
     end)
 end
 
@@ -238,45 +220,4 @@ function Map.CorrectPosition(guid, x, y, z, offset)
         Osi.PROC_Foop(guid)
         return true
     end
-end
-
----@param map Map
----@param character string GUID
----@return boolean
-function Map.TeleportTo(map, character)
-    if map.Region == Osi.GetRegion(Player.Host()) then
-        Object.Init(map):Teleport(character, true)
-
-        if S and map.Name == S.Map.Name then
-            Event.Trigger("ScenarioTeleported", character)
-        end
-
-        return true
-    end
-
-    if not U.UUID.Equals(character, Player.Host()) then
-        return false
-    end
-
-    local _, act = UT.Find(C.Regions, function(region, act)
-        return region == map.Region
-    end)
-
-    if act == nil then
-        L.Error("Region not found.", map.Region)
-        return false
-    end
-
-    local teleporting = Player.TeleportToAct(act)
-
-    if teleporting then
-        Player.Notify(__("Teleporting to different ACT"))
-        teleporting.After(function()
-            for _, character in pairs(GU.DB.GetPlayers()) do
-                Map.TeleportTo(map, character)
-            end
-        end)
-    end
-
-    return false
 end

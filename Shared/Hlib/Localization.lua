@@ -93,7 +93,7 @@ function M.Translate(text, version)
         M.Translations[key] = Localization.New(text, version, Utils.String.Trim(stack))
 
         if Ext.IsClient() then
-            Net.Request("_TranslationRequest", M.Translations).After(function(event)
+            Net.Request("_TranslationRequest", M.Translations):After(function(event)
                 -- potential race condition
                 M.Translations = event.Payload
             end)

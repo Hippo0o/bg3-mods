@@ -378,7 +378,7 @@ return UT.Combine({
         Id = "BuyRestore",
         Name = __("Fully Restore Character"),
         Icon = "Action_EndGame_IsobelHeal",
-        Description = __("Resurrect character and fully restore all resources."),
+        Description = __("Heal character and restore used spells."),
         Cost = 20,
         Amount = nil,
         Character = true,
@@ -388,8 +388,8 @@ return UT.Combine({
             --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
             -- end
             -- Osi.PROC_GLO_PartyMembers_TempRestore(character)
-            -- Osi.PROC_CharacterFullRestore(character)
-            Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
+            Osi.PROC_CharacterFullRestore(character)
+            -- Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
         end,
     },
     {

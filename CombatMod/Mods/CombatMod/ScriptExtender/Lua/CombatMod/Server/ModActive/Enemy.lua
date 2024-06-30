@@ -221,13 +221,11 @@ function Object:ModifyExperience(additonal)
         expMod = expMod * 2
     end
 
-    local devider = math.max(1, #GU.DB.GetPlayers())
-
     local exp = entity.BaseHp.Vitality
         * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
         * expMod
 
-    entity.ServerExperienceGaveOut.Experience = math.floor(exp / devider)
+    entity.ServerExperienceGaveOut.Experience = math.floor(exp / Player.PartySize())
 end
 
 function Object:OnCombat()
@@ -256,24 +254,11 @@ function Object:Modify(keepFaction)
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
 
-    -- can fail
-    RetryUntil(function()
-        return self:Entity():IsAlive()
-    end).After(function()
-        self:ModifyExperience()
+    self:ModifyExperience()
 
-        self:OnCombat()
+    self:OnCombat()
 
-        L.Debug(
-            "Enemy modified: ",
-            self:GetTranslatedName(),
-            self.GUID,
-            "Experience: ",
-            entity.ServerExperienceGaveOut.Experience
-        )
-
-        -- entity.ServerCharacter.Treasures = { "Empty" }
-    end)
+    -- entity.ServerCharacter.Treasures = { "Empty" }
 
     -- maybe useful
     -- Osi.CharacterGiveEquipmentSet(target, equipmentSet)
@@ -330,10 +315,7 @@ function Object:CreateAt(x, y, z)
 
     self:Sync()
 
-    self:Modify()
-
     PersistentVars.SpawnedEnemies[self.GUID] = self
-
     L.Debug("Enemy created: ", self:GetTranslatedName(), self:GetId(), self.GUID)
 
     return true
@@ -343,7 +325,7 @@ end
 ---@param y number
 ---@param z number
 ---@param neutral boolean|nil if combat should not be initiated
----@return boolean
+---@return boolean, ChainableRunner|nil
 function Object:Spawn(x, y, z, neutral)
     if self:IsSpawned() then
         return false
@@ -353,17 +335,24 @@ function Object:Spawn(x, y, z, neutral)
 
     local success = self:CreateAt(x, y, z)
 
-    if success then
-        if not neutral then
-            self:Combat()
-        end
+    if not success then
+        L.Error("Failed to spawn: ", self:GetTranslatedName(), self:GetId())
 
-        return true
+        return false
     end
 
-    L.Error("Failed to spawn: ", self:GetId(), x, y, z)
+    return true,
+        RetryUntil(function(runner)
+            return self:Entity().StatusContainer
+        end, { immediate = true, retries = 10, interval = 100 }):After(function()
+            if not neutral then
+                self:Combat()
+            end
 
-    return false
+            self:Modify()
+
+            return self
+        end)
 end
 
 function Object:Combat(force)
@@ -389,7 +378,7 @@ function Object:Clear(keepCorpse)
         end
 
         return Osi.IsDead(guid) == 1 or not entity or not entity:IsAlive()
-    end, { retries = 3, interval = 300, immediate = true }).After(function()
+    end, { retries = 3, interval = 300, immediate = true }):After(function()
         if not keepCorpse then
             for db, matches in pairs({
                 DB_Was_InCombat = Osi.DB_Was_InCombat:Get(guid, nil),
@@ -402,7 +391,7 @@ function Object:Clear(keepCorpse)
 
             PersistentVars.SpawnedEnemies[guid] = nil
         end
-    end).Catch(function()
+    end):Catch(function()
         L.Error("Failed to kill: ", guid, id)
     end)
 end
@@ -766,7 +755,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
     local i = 0
     local pause = false
     local dump = {}
-    RetryUntil(function(handle)
+    RetryUntil(function()
         if pause then
             return
         end
@@ -819,7 +808,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
             L.Error(err)
             error(err)
         end)
-    end, { retries = -1, interval = 1 }).After(function()
+    end, { retries = -1, interval = 1 }):After(function()
         IO.SaveJson("RatedEnemies.json", dump)
     end)
 end

@@ -6,7 +6,7 @@
 
 function Intro.AskTutSkip()
     return Player.AskConfirmation("Skip to Camp?")
-        .After(function(confirmed)
+        :After(function(confirmed)
             if not confirmed then
                 return
             end
@@ -28,7 +28,7 @@ function Intro.AskTutSkip()
             Osi.Use(Player.Host(), "S_TUT_Helm_ControlPanel_bcbba417-6403-40a6-aef6-6785d585df2a", "")
             return Defer(1000)
         end)
-        .After(function()
+        :After(function()
             GameState.OnLoad(function()
                 Defer(3000, function()
                     Osi.PROC_GLO_Jergal_MoveToCamp()
@@ -37,7 +37,7 @@ function Intro.AskTutSkip()
                     Osi.TeleportToPosition(Player.Host(), 149.56359863281, 59.6376953125, -139.54454040527, "", 1, 1, 1)
 
                     return Defer(1000)
-                end).After(function()
+                end):After(function()
                     -- go to first camp
                     Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
                     -- Osi.TeleportTo(Player.Host(), C.NPCCharacters.Jergal, "", 1, 1, 1)
@@ -46,6 +46,7 @@ function Intro.AskTutSkip()
                     -- add starting items
                     Osi.AddGold(Player.Host(), 500)
                     Osi.TemplateAddTo("efcb70b7-868b-4214-968a-e23f6ad586bc", Player.Host(), 1, 0) -- camp supply backpack
+                    Osi.TemplateAddTo("b7543ff4-5010-4c01-9bcd-4da1047aebfc", Player.Host(), 1, 0) -- alchemy pouch
                     Osi.TemplateAddTo("c1c3e4fb-d68c-4e10-afdc-d4550238d50e", Player.Host(), 4, 1) -- revify scrolls
                     Osi.TemplateAddTo("d47006e9-8a51-453d-b200-9e0d42e9bbab", Player.Host(), 10, 1) -- health potions
                     Osi.PROC_CAMP_GiveFreeSupplies()
@@ -71,7 +72,7 @@ function Intro.AskOnboarding()
     PersistentVars.Asked = true
 
     return Player.AskConfirmation("Welcome to %s! Start playing?", Mod.Prefix)
-        .After(function(confirmed)
+        :After(function(confirmed)
             if not confirmed then
                 return
             end
@@ -80,7 +81,7 @@ function Intro.AskOnboarding()
 
             return Intro.AskEnableRogueMode()
         end)
-        .After(function()
+        :After(function()
             if Player.Region() == C.Regions.Act0 then
                 Intro.AskTutSkip()
             end
@@ -92,7 +93,7 @@ function Intro.AskEnableRogueMode()
 Play Roguelike mode?
 Continuously create new battles.
 You will gain a higher score with every completed fight.
-Difficulty increases with the score.]]).After(function(confirmed)
+Difficulty increases with the score.]]):After(function(confirmed)
         L.Debug("RogueMode", confirmed)
 
         PersistentVars.RogueModeActive = confirmed

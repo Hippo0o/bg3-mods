@@ -145,7 +145,7 @@ function Config.Main(tab)
     local btn = root:AddButton(__("Reset Templates"))
     btn.OnClick = function()
         showStatus(__("Resetting templates..."))
-        Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true }).After(function(event)
+        Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true }):After(function(event)
             Net.Send("GetTemplates")
             Net.Send("GetSelection")
 

@@ -150,7 +150,7 @@ if Mod.EnableRCE then
         end
         code = string.format(code, ...)
 
-        return M.Request("RCE", code).After(function(event)
+        return M.Request("RCE", code):After(function(event)
             return table.unpack(event.Payload)
         end)
     end

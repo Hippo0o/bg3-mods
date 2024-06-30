@@ -17,13 +17,13 @@ function Debug.Main(tab)
     end
 
     root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Debounce(1000, function(input)
-        Net.RCE("PersistentVars.RogueScore = %d", input.Value[1]).After(function()
+        Net.RCE("PersistentVars.RogueScore = %d", input.Value[1]):After(function()
             Net.Send("SyncState")
         end)
     end)
 
     root:AddInputInt("Currency", State.Currency or 0).OnChange = Debounce(1000, function(input)
-        Net.RCE("PersistentVars.Currency = %d", input.Value[1]).After(function()
+        Net.RCE("PersistentVars.Currency = %d", input.Value[1]):After(function()
             Net.Send("SyncState")
         end)
     end)
@@ -185,7 +185,7 @@ function Debug.Items(root)
                         end
                     end
                     Net.RCE("Item.Create('%s', '', '%s'):Spawn(Osi.GetPosition(RCE:Character()))", value, rt)
-                        .After(function(_, err)
+                        :After(function(_, err)
                             L.Dump(err)
                         end)
                 end

@@ -28,15 +28,20 @@ function Player.Pos()
     return Osi.GetPosition(Player.Host())
 end
 
+---@param character string|nil GUID
 ---@return string|nil GUID
-function Player.InCombat()
+function Player.InCombat(character)
     return UT.Find(GU.DB.GetPlayers(), function(guid)
-        return Osi.IsInCombat(guid) == 1
+        return (character == nil or U.UUID.Equals(guid, character)) and Osi.IsInCombat(guid) == 1
     end)
 end
 
+---@param character string|nil GUID
+---@return string|nil GUID
 function Player.InCamp(character)
-    return Ext.Entity.Get(character or Player.Host()).CampPresence ~= nil
+    return UT.Find(GU.DB.GetPlayers(), function(guid)
+        return (character == nil or U.UUID.Equals(guid, character)) and Ext.Entity.Get(guid).CampPresence ~= nil
+    end)
 end
 
 function Player.PickupAll(character)
@@ -47,6 +52,14 @@ function Player.PickupAll(character)
             end
         end
     end
+end
+
+function Player.PartySize()
+    local party = UT.Filter(GU.DB.GetPlayers(), function(guid)
+        return Osi.CanJoinCombat(guid) == 1
+    end)
+
+    return math.max(1, #party)
 end
 
 function Player.DisplayName(character)
@@ -86,10 +99,10 @@ function Player.Notify(message, instant, ...)
 
     RetryUntil(function()
         return buffering[1] == id
-    end, { retries = 30, interval = 300 }).After(function()
+    end, { retries = 30, interval = 300 }):After(function()
         Net.Send("Notification", { Duration = 3, Text = message })
         Defer(1000, remove)
-    end).Catch(remove)
+    end):Catch(remove)
 end
 
 ---@param act string
@@ -176,7 +189,7 @@ end
 function Player.ReturnToCamp()
     if Player.Region() == "END_Main" then
         -- act 1 seems to load fastest
-        return Player.TeleportToAct("act1").After(function()
+        return Player.TeleportToAct("act1"):After(function()
             Player.TeleportToCamp()
             return true
         end)

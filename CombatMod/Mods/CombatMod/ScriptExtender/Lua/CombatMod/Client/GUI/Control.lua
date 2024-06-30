@@ -5,39 +5,27 @@ function Control.Events()
         Net.Request("Start", {
             Scenario = scenarioName,
             Map = mapName,
-        }).After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        }):After(DisplayResponse)
     end)
 
     Event.On("Stop", function()
-        Net.Request("Stop").After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        Net.Request("Stop"):After(DisplayResponse)
     end)
 
     Event.On("PingSpawns", function(data)
-        Net.Request("PingSpawns", data).After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        Net.Request("PingSpawns", data):After(DisplayResponse)
     end)
 
     Event.On("Teleport", function(data)
-        Net.Request("Teleport", data).After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        Net.Request("Teleport", data):After(DisplayResponse)
     end)
 
     Event.On("ToCamp", function()
-        Net.Request("ToCamp").After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        Net.Request("ToCamp"):After(DisplayResponse)
     end)
 
     Event.On("ForwardCombat", function()
-        Net.Request("ForwardCombat").After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        Net.Request("ForwardCombat"):After(DisplayResponse)
     end)
 end
 
@@ -196,31 +184,25 @@ function Control.RunningPanel(root)
             end
         end, "StateChange")
 
-        local cond = Components.Conditional(layout.Cells[1][1], function(cond)
-            local b = cond.Root:AddButton(__("Stop"))
-            b.OnClick = function()
-                Event.Trigger("Stop")
-            end
-
-            return b
-        end, "StateChange")
-        cond.OnEvent = function(state)
-            return state.Scenario and (state.Scenario.OnMap == false or state.Scenario.Round == 0)
+        layout.Cells[1][1]:AddButton(__("Stop")).OnClick = function()
+            Event.Trigger("Stop")
         end
 
         layout.Cells[1][1]:AddButton(__("Go to Camp")).OnClick = function(button)
             Event.Trigger("ToCamp")
         end
 
-        local btn = layout.Cells[1][1]:AddButton(__("Next Round"))
+        do
+            local btn = layout.Cells[1][1]:AddButton(__("Next Round"))
 
-        local t = btn:Tooltip()
-        t:SetStyle("WindowPadding", 30, 10)
-        t:AddText("Will forward 1 round. Use when fight gets stuck or you want to fight more enemies at once.")
+            local t = btn:Tooltip()
+            t:SetStyle("WindowPadding", 30, 10)
+            t:AddText("Will forward 1 round. Use when fight gets stuck or you want to fight more enemies at once.")
 
-        btn.SameLine = true
-        btn.OnClick = function(button)
-            Event.Trigger("ForwardCombat")
+            btn.SameLine = true
+            btn.OnClick = function(button)
+                Event.Trigger("ForwardCombat")
+            end
         end
 
         layout.Cells[1][2]:AddButton(__("Teleport")).OnClick = function()
@@ -236,10 +218,6 @@ function Control.RunningPanel(root)
 
             grp:AddButton(__("Kill spawned")).OnClick = function()
                 Net.Send("KillSpawned")
-            end
-
-            grp:AddButton(__("Stop")).OnClick = function()
-                Event.Trigger("Stop")
             end
 
             return grp
