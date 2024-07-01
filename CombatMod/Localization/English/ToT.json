@@ -16,7 +16,7 @@
 	"%s is now active.;1": {
 		"Handle": "h3b8161bbg6ed4g434ega08bg252882a9070a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/_Server.lua:110: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/_Server.lua:113: in field '_Func'",
 		"Text": "%s is now active.",
 		"Version": 1
 	},
@@ -86,21 +86,21 @@
 	"Awakened Illithid Powers;1": {
 		"Handle": "hf34df053ga618g4a50gac07gec360e25ce14",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:270: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:269: in main chunk",
 		"Text": "Awakened Illithid Powers",
 		"Version": 1
 	},
 	"Break/Restore Oath;1": {
 		"Handle": "h337385c4g6626g4d09g9004g0b6f7226294d",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:416: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:414: in main chunk",
 		"Text": "Break/Restore Oath",
 		"Version": 1
 	},
 	"Buy 40 Camp Supplies;1": {
 		"Handle": "hab83587fgfed6g40d2ga98bg06b4cba92496",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:368: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:366: in main chunk",
 		"Text": "Buy 40 Camp Supplies",
 		"Version": 1
 	},
@@ -177,7 +177,7 @@
 	"Clearing all entities;1": {
 		"Handle": "h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:488: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:524: in upvalue 'func'",
 		"Text": "Clearing all entities",
 		"Version": 1
 	},
@@ -226,7 +226,7 @@
 	"Counter the Shadow Curse.;1": {
 		"Handle": "h2e6a96f6g7b3fg4c3agb1d5g9a5c53f7b87e",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:398: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:396: in main chunk",
 		"Text": "Counter the Shadow Curse.",
 		"Version": 1
 	},
@@ -256,6 +256,13 @@
 		"LocaText": "",
 		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:117: in field 'Main'",
 		"Text": "Default Config",
+		"Version": 1
+	},
+	"Default config...;1": {
+		"Handle": "h29895c61g7cdcg4093g81abga6f5238984d7",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:133: in function <CombatMod/CombatMod/Client/GUI/Config.lua:132>",
+		"Text": "Default config...",
 		"Version": 1
 	},
 	"Destroy All;1": {
@@ -324,7 +331,7 @@
 	"Enemy %s rejoined.;1": {
 		"Handle": "h37bb2c47g62eeg4791ga048g81f7426aa3d5",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:852: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:856: in upvalue 'func'",
 		"Text": "Enemy %s rejoined.",
 		"Version": 1
 	},
@@ -359,7 +366,7 @@
 	"Fully Restore Character;1": {
 		"Handle": "hfea436e8gabf1g463bg9cd9g705dbefb527f",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:379: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:377: in main chunk",
 		"Text": "Fully Restore Character",
 		"Version": 1
 	},
@@ -394,14 +401,14 @@
 	"Get Pixie Blessing;1": {
 		"Handle": "h27f7bcfeg72a2g4e9agb14cg48fcd36e6ade",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:397: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:395: in main chunk",
 		"Text": "Get Pixie Blessing",
 		"Version": 1
 	},
 	"Get a Tadpole;1": {
 		"Handle": "h36f8f1b6g63adg4a4egb05cgbc28527e9e0a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:327: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:326: in main chunk",
 		"Text": "Get a Tadpole",
 		"Version": 1
 	},
@@ -422,7 +429,7 @@
 	"Heal character and restore used spells.;1": {
 		"Handle": "h23173fb5g7642g46aeg8102g40c8632062ea",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:381: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:379: in main chunk",
 		"Text": "Heal character and restore used spells.",
 		"Version": 1
 	},
@@ -457,7 +464,7 @@
 	"Includes %s;1": {
 		"Handle": "h2544d6fag7011g483agb167g7e5c93455c7e",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:236: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:235: in main chunk",
 		"Text": "Includes %s",
 		"Version": 1
 	},
@@ -548,7 +555,7 @@
 	"Needs to be a Paladin.;1": {
 		"Handle": "had299379gf87cg4c62g89e1gaa04abc38826",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:418: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:416: in main chunk",
 		"Text": "Needs to be a Paladin.",
 		"Version": 1
 	},
@@ -590,7 +597,7 @@
 	"Perfect Clear! Double your score from 5 to 10?;1": {
 		"Handle": "h637ce98fg3629g4bcdga504gfdabc726df89",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Player.lua:212: in field 'AskConfirmation'",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation'",
 		"Text": "Perfect Clear! Double your score from 5 to 10?",
 		"Version": 1
 	},
@@ -618,7 +625,7 @@
 	"Picked up %d items.;1": {
 		"Handle": "h410f889dg145ag4ddcg8723gcbbae501e998",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:356: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:349: in field '_Func'",
 		"Text": "Picked up %d items.",
 		"Version": 1
 	},
@@ -699,6 +706,13 @@
 		"Text": "Rarity",
 		"Version": 1
 	},
+	"Recruiting %s.;1": {
+		"Handle": "h2e7ceb9cg7b29g4becg91d4gfd8af3f6dfa8",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:313: in field '_Func'",
+		"Text": "Recruiting %s.",
+		"Version": 1
+	},
 	"Reload;1": {
 		"Handle": "h27b40c36g72e1g4596gb148g73f0536a51d2",
 		"LocaText": "",
@@ -741,6 +755,13 @@
 		"Text": "Resets the stock of purchased standard unlocks.",
 		"Version": 1
 	},
+	"Resetting config...;1": {
+		"Handle": "h413f98d6g146ag4cd8gb720gcabe5502e89c",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:125: in function <CombatMod/CombatMod/Client/GUI/Config.lua:124>",
+		"Text": "Resetting config...",
+		"Version": 1
+	},
 	"Resetting templates...;1": {
 		"Handle": "h8ccc2af7gd999g47fagabffgf19c49ddd3be",
 		"LocaText": "",
@@ -765,7 +786,7 @@
 	"Roll Loot %dx;1": {
 		"Handle": "h3b8839f6g6eddg46cagb08bgb0ac52a9928e",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:354: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:352: in main chunk",
 		"Text": "Roll Loot %dx",
 		"Version": 1
 	},
@@ -793,7 +814,7 @@
 	"Scenario %s started.;1": {
 		"Handle": "hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:107: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:575: in field 'Start'",
 		"Text": "Scenario %s started.",
 		"Version": 1
 	},
@@ -856,8 +877,15 @@
 	"Skipped combat with %s;1": {
 		"Handle": "hb13de5b9ge468g4b0eg8820ged68aa02cf4a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/StoryBypass.lua:396: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:424: in upvalue 'func'",
 		"Text": "Skipped combat with %s",
+		"Version": 1
+	},
+	"Skipped interaction with %s;1": {
+		"Handle": "hf1c74802ga492g41d5gbc2fg47b31e0d6591",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:348: in upvalue 'func'",
+		"Text": "Skipped interaction with %s",
 		"Version": 1
 	},
 	"Spawn Items At Player;1": {
@@ -870,21 +898,21 @@
 	"Spawn Mindflayer Companion;1": {
 		"Handle": "hc6c558ccg9390g40d9g9f5fg66bffd7d449d",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:293: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:292: in main chunk",
 		"Text": "Spawn Mindflayer Companion",
 		"Version": 1
 	},
 	"Spawns the Emperor as controllable party follower.;1": {
 		"Handle": "hece89b91gb9bdg4cecg8dfdgba8a2fdf98a8",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:294: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:293: in main chunk",
 		"Text": "Spawns the Emperor as controllable party follower.",
 		"Version": 1
 	},
 	"Start Ceremorphosis;1": {
 		"Handle": "h9f1540b5gca40g415eg8ac2g673868e0451a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:234: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:233: in main chunk",
 		"Text": "Start Ceremorphosis",
 		"Version": 1
 	},
@@ -947,7 +975,7 @@
 	"Teleporting back to camp in %d seconds.;1": {
 		"Handle": "hf6e3e1c8ga3b6g4b49g9c5dg0d2fbe7f2f0d",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:491: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/GameMode.lua:434: in upvalue 'func'",
 		"Text": "Teleporting back to camp in %d seconds.",
 		"Version": 1
 	},
@@ -1045,7 +1073,7 @@
 	"Unlock Tadpole Power;1": {
 		"Handle": "hb00c97b7ge559g4c2ega833gfa484a11d86a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:236: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:235: in main chunk",
 		"Text": "Unlock Tadpole Power",
 		"Version": 1
 	},
@@ -1094,7 +1122,7 @@
 	"Use all Illithid Powers with Bonus Actions.;1": {
 		"Handle": "he7764179gb223g4142g8d44g5724af667506",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:272: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:271: in main chunk",
 		"Text": "Use all Illithid Powers with Bonus Actions.",
 		"Version": 1
 	},
@@ -1131,6 +1159,13 @@
 		"LocaText": "",
 		"Stack": "CombatMod/CombatMod/Client/GUI/Config.lua:164: in field 'Client'",
 		"Text": "Window toggle key",
+		"Version": 1
+	},
+	"You found the secret cow level!;1": {
+		"Handle": "hcb742a6eg9e21g47f3gbf84g7195dda653b7",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/GameMode.lua:462: in function <CombatMod/CombatMod/Server/ModActive/GameMode.lua:461>",
+		"Text": "You found the secret cow level!",
 		"Version": 1
 	},
 	"Your Currency increased: %d -> %d!;1": {

@@ -344,7 +344,7 @@ function Object:Spawn(x, y, z, neutral)
     return true,
         RetryUntil(function(runner)
             return self:Entity().StatusContainer
-        end, { immediate = true, retries = 10, interval = 100 }):After(function()
+        end, { retries = 10, interval = 100 }):After(function()
             if not neutral then
                 self:Combat()
             end

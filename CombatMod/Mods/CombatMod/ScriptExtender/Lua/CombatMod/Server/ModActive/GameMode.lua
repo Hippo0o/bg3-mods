@@ -332,6 +332,7 @@ function GameMode.ApplyDifficulty(enemy)
 
     local mod = scale(PersistentVars.RogueScore, PersistentVars.HardMode)
     local mod2 = math.floor(mod / 2)
+    local mod3 = math.floor(mod2 / 2)
 
     local map = {}
     local abilties = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" }
@@ -351,28 +352,53 @@ function GameMode.ApplyDifficulty(enemy)
     if mod2 > 0 then
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
-        Osi.AddBoosts(enemy.GUID, "AC(" .. math.ceil(mod2 / 2) .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
+    end
+    if mod3 > 0 then
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[5][1] .. ",+" .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[6][1] .. ",+" .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "AC(" .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
+    end
 
-        Async.WaitTicks(5, function()
-            local entity = Ext.Entity.Get(enemy.GUID)
+    Async.WaitTicks(6, function()
+        local entity = Ext.Entity.Get(enemy.GUID)
+
+        if mod2 > 0 then
             local newLevel = math.max(entity.AvailableLevel.Level, math.min(12, mod2))
-
             entity.EocLevel.Level = newLevel
             entity:Replicate("EocLevel")
+        end
 
-            local ac = entity.Resistances.AC
-            local acMax = math.max(25, mod)
-            while ac > acMax do
-                ac = ac - 3
+        local currentAc = entity.Resistances.AC
+
+        local armor = Osi.GetEquippedItem(enemy.GUID, "Breast")
+        local dexScaling = true
+        if armor then
+            dexScaling = Ext.Entity.Get(armor).Armor.ArmorType < 5
+        end
+
+        if dexScaling then
+            local acMax = math.max(4, mod3)
+            local dexAc = entity.Stats.AbilityModifiers[3] - acMax
+
+            if dexAc > 0 then
+                currentAc = currentAc - dexAc
+                Osi.AddBoosts(enemy.GUID, "AC(-" .. dexAc .. ")", Mod.TableKey, Mod.TableKey)
             end
-            ac = ac - entity.Resistances.AC
-            if ac < 0 then
-                Osi.AddBoosts(enemy.GUID, "AC(" .. ac .. ")", Mod.TableKey, Mod.TableKey)
-            end
-        end)
-    end
+        end
+
+        local acMax = math.max(25, mod)
+        local ac = currentAc
+        while ac > acMax do
+            ac = ac - 3
+        end
+
+        ac = ac - currentAc
+        if ac < 0 then
+            Osi.AddBoosts(enemy.GUID, "AC(" .. ac .. ")", Mod.TableKey, Mod.TableKey)
+        end
+    end)
 
     GameMode.DifficultyAppliedTo[enemy.GUID] = true
 end

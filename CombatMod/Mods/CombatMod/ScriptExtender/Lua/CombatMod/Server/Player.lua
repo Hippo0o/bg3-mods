@@ -49,9 +49,6 @@ function Player.PickupAll(character)
         for rarity, pickup in pairs(data) do
             if pickup then
                 Item.PickupAll(character or Player.Host(), rarity, type)
-                if type == "Object" then
-                    Item.PickupAll(character or Player.Host(), rarity, "CombatObject")
-                end
             end
         end
     end

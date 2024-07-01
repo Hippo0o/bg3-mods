@@ -52,6 +52,8 @@ function StoryBypass.AllowRemoval(entity)
 end
 
 function StoryBypass.RemoveAllEntities()
+    StoryBypass.ExpLock.ResumeTemporary()
+
     local toRemove = UT.Filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
 
     for i, e in ipairs(toRemove) do
@@ -171,17 +173,40 @@ do -- EXP Lock
     end
 
     local paused = false
+    function StoryBypass.ExpLock.IsPaused()
+        return paused
+    end
+
     function StoryBypass.ExpLock.Pause()
         paused = true
+        L.Debug("ExpLock Paused")
     end
     local debouncedSnap = Debounce(1000, StoryBypass.ExpLock.SnapshotEntitiesExp)
 
     function StoryBypass.ExpLock.Resume()
         paused = false
         StoryBypass.ExpLock.SnapshotEntitiesExp()
+        L.Debug("ExpLock Resumed")
+    end
+
+    function StoryBypass.ExpLock.ResumeTemporary()
+        if paused then
+            StoryBypass.ExpLock.DebouncedPause()
+        end
+
+        StoryBypass.ExpLock.Resume()
+    end
+
+    function StoryBypass.ExpLock.PauseTemporary()
+        if not paused then
+            StoryBypass.ExpLock.DebouncedResume()
+        end
+
+        StoryBypass.ExpLock.Pause()
     end
 
     StoryBypass.ExpLock.DebouncedResume = Async.Debounce(1000, StoryBypass.ExpLock.Resume)
+    StoryBypass.ExpLock.DebouncedPause = Async.Debounce(1000, StoryBypass.ExpLock.Pause)
 
     local entityListener = nil
 
@@ -219,8 +244,8 @@ do -- EXP Lock
                         e.Experience.CurrentLevelExperience = exp.CurrentLevelExperience
                         e.Experience.TotalExperience = exp.TotalExperience
                         e.Experience.NextLevelExperience = exp.NextLevelExperience
-                        -- e.Experience.field_28 = exp.field_28 -- dunno
-                        -- e.Experience.SomeExperience = exp.SomeExperience
+                        e.Experience.field_28 = exp.field_28 -- dunno
+                        e.Experience.SomeExperience = exp.SomeExperience
 
                         e:Replicate("EocLevel")
                         e:Replicate("AvailableLevel")
@@ -236,15 +261,27 @@ do -- EXP Lock
 
     subscribeEntitiesExp()
 
-    Event.On("ScenarioCombatStarted", StoryBypass.ExpLock.Pause)
+    Event.On("ScenarioRoundStarted", StoryBypass.ExpLock.Pause)
     Event.On("ScenarioRestored", function(scenario)
         if scenario:HasStarted() then
             StoryBypass.ExpLock.Pause()
         end
     end)
-    Event.On("ScenarioEnded", StoryBypass.ExpLock.DebouncedResume)
-    Event.On("ScenarioStopped", StoryBypass.ExpLock.Resume)
-    Event.On("ScenarioTeleporting", StoryBypass.ExpLock.Resume)
+
+    local toggleCamp = Async.Throttle(100, function()
+        StoryBypass.ExpLock.Resume()
+        Async.WaitTicks(12, function()
+            if Player.InCamp() then
+                StoryBypass.ExpLock.Pause()
+            else
+                StoryBypass.ExpLock.Resume()
+            end
+        end)
+    end)
+
+    U.Osiris.On("TeleportedFromCamp", 1, "before", toggleCamp)
+    U.Osiris.On("TeleportedToCamp", 1, "before", toggleCamp)
+    GameState.OnLoad(toggleCamp)
 end
 
 -------------------------------------------------------------------------------------------------

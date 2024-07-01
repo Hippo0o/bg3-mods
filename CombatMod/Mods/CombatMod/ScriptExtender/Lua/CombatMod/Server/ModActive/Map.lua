@@ -33,7 +33,7 @@ function Object:TeleportInRegion(character, withOffset)
     local x, y, z = table.unpack(self.Enter)
 
     pcall(function()
-        local offset = tonumber(Config.RandomizeSpawnOffset / 2)
+        local offset = math.floor(tonumber(Config.RandomizeSpawnOffset / 2))
         if offset > 0 and withOffset then
             x = x + U.Random() * U.Random(-offset, offset)
             z = z + U.Random() * U.Random(-offset, offset)
@@ -52,7 +52,7 @@ function Object:TeleportInRegion(character, withOffset)
 
     local x, y, z = table.unpack(self.Enter)
     Async.WaitTicks(10, function()
-        Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset / 2)
+        Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset)
 
         Event.Trigger("MapTeleported", self, character)
     end)

@@ -466,12 +466,15 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
             end
 
             items = UT.Filter(items, function(item)
-                return isFood and item.Tab == "Consumable" or item.Tab ~= "Consumable"
+                if isFood then
+                    return item.Tab == "Consumable"
+                else
+                    return item.Tab ~= "Consumable"
+                end
             end)
 
             L.Debug("Rolling fixed loot items:", #items, "Object")
             if #items > 0 then
-                addToLoot(items[U.Random(#items)])
                 addToLoot(items[U.Random(#items)])
             end
         end
