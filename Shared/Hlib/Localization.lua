@@ -144,8 +144,16 @@ function M.BuildLocaFile()
     <content contentuid="%s" version="%d">%s</content>
 ]]
 
+    local ordered = {}
+    for k, v in pairs(M.Translations) do
+        table.insert(ordered, k)
+    end
+    table.sort(ordered)
+
     local entries = {}
-    for text, translation in pairs(M.Translations) do
+    for _, key in ipairs(ordered) do
+        local translation = M.Translations[key]
+
         local handle = translation.Handle:gsub(";%d+$", "") -- handle should not have a version
         table.insert(entries, string.format(xmlEntry, translation.Stack, handle, 1, translation.Text))
     end
