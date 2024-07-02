@@ -274,7 +274,7 @@ function GameMode.UpdateRogueScore(scenario)
 end
 
 function GameMode.StartNext()
-    if S then
+    if Scenario.Current() then
         return
     end
 

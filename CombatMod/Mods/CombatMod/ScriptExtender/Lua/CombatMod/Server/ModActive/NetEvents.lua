@@ -108,12 +108,14 @@ Net.On("Start", function(event)
 end)
 
 Net.On("Stop", function(event)
-    if not S then
+    local s = Scenario.Current()
+
+    if not s then
         Net.Respond(event, { false, __("Scenario not started.") })
         return
     end
 
-    if S:HasStarted() and not Mod.Debug then
+    if s:HasStarted() and not Mod.Debug then
         Net.Respond(event, { false, __("Cannot stop while in progress.") })
         return
     end
@@ -133,7 +135,9 @@ Net.On("ToCamp", function(event)
 end)
 
 Net.On("ForwardCombat", function(event)
-    if not S or S.Round < 1 then
+    local s = Scenario.Current()
+
+    if not s or s.Round < 1 then
         Net.Respond(event, { false, __("Scenario not started.") })
         return
     end
@@ -160,7 +164,9 @@ Net.On("Teleport", function(event)
         return
     end
 
-    if S and U.Equals(map, S.Map) then
+    local s = Scenario.Current()
+
+    if s and U.Equals(map, s.Map) then
         Scenario.Teleport(event:Character())
     else
         map:Teleport(event:Character())
