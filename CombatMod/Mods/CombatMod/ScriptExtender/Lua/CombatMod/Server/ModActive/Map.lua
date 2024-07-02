@@ -133,16 +133,22 @@ function Object:SpawnIn(enemy, spawn)
 
     local x, y, z = self:GetSpawn(spawn)
 
-    return true, chainable:After(function()
-        return enemy,
-            WaitTicks(6, function()
-                local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
+    local x2, y2, z2 = Osi.FindValidPosition(x, y, z, 50, enemy.GUID, 1)
+    if x2 and y2 and z2 then
+        x, y, z = x2, y2, z2
+    end
 
-                Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+    return true,
+        chainable:After(function()
+            return enemy,
+                WaitTicks(6, function()
+                    local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
 
-                return enemy, didCorrect
-            end)
-    end)
+                    Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+
+                    return enemy, didCorrect
+                end)
+        end)
 end
 
 ---@param loot Item

@@ -331,7 +331,7 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 100, Player.Host(), 1) -- avoiding dangerous surfaces
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 1) -- avoiding dangerous surfaces
 
     local success = self:CreateAt(x, y, z)
 

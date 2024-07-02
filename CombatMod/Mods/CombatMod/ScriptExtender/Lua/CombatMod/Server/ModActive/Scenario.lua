@@ -240,8 +240,10 @@ function Action.SpawnRound()
         triesToSpawn = 5
     end
 
+    local waitSpawn = 0
     for i, e in ipairs(toSpawn) do
         table.insert(s.SpawnedEnemies, e)
+        waitSpawn = waitSpawn + 1
 
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
         RetryUntil(function(_, triesLeft)
@@ -265,17 +267,21 @@ function Action.SpawnRound()
             interval = 100,
         }):After(function(spawnedChainable)
             spawnedChainable:After(function(e, posCorrectionChainable)
-                Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
-                Event.Trigger("ScenarioEnemySpawned", Current(), e)
-                Action.EnemyAdded(e)
-
                 posCorrectionChainable:After(function(e, corrected)
+                    waitSpawn = waitSpawn - 1
+
                     if corrected then
                         Scenario.CombatSpawned(e)
                     end
                 end)
+
+                Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
+                Event.Trigger("ScenarioEnemySpawned", Current(), e)
+                Action.EnemyAdded(e)
             end)
         end):Catch(function()
+            waitSpawn = waitSpawn - 1
+
             L.Error("Spawn limit exceeded.", e:GetId())
             UT.Remove(s.SpawnedEnemies, e)
             Action.EnemyRemoved()
@@ -284,9 +290,7 @@ function Action.SpawnRound()
 
     L.Debug("Enemies queued for spawning.", #toSpawn)
     return WaitUntil(function()
-        return UT.Find(s.SpawnedEnemies, function(e)
-            return not e:IsSpawned()
-        end) == nil
+        return waitSpawn == 0
     end)
 end
 
