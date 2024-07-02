@@ -89,6 +89,7 @@ GameState = Require("Hlib/GameState")
 ---@type Async
 Async = Require("Hlib/Async")
 WaitUntil = Async.WaitUntil
+WaitTicks = Async.WaitTicks
 RetryUntil = Async.RetryUntil
 Schedule = Async.Schedule
 Defer = Async.Defer

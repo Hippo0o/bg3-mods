@@ -254,7 +254,7 @@ return UT.Combine({
         OnBuy = function(self, character)
             Osi.ApplyStatus(character, "MIND_FLAYER_FORM", -1)
             -- takes a bit to transform
-            Async.WaitTicks(100, function()
+            WaitTicks(100, function()
                 self:OnReapply()
             end)
         end,
