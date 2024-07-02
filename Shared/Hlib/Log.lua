@@ -75,7 +75,7 @@ end
 
 function M.Dump(...)
     for i, v in pairs({ ... }) do
-        M.Debug(i .. ":", Ext.DumpExport(v))
+        M.Debug(i .. ":", type(v) == "string" and v or Ext.DumpExport(v))
     end
 end
 

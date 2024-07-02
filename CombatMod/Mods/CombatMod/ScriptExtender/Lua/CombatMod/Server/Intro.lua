@@ -82,6 +82,7 @@ function Intro.AskOnboarding()
             return Intro.AskEnableRogueMode()
         end)
         :After(function()
+            Net.Send("OpenGUI")
             if Player.Region() == C.Regions.Act0 then
                 Intro.AskTutSkip()
             end

@@ -44,6 +44,14 @@ function Player.InCamp(character)
     end)
 end
 
+---@param character string|nil GUID
+---@return boolean
+function Player.IsPlayer(character)
+    return UT.Find(GU.DB.GetPlayers(), function(uuid)
+        return U.UUID.Equals(character, uuid)
+    end) ~= nil
+end
+
 function Player.PickupAll(character)
     for type, data in pairs(PersistentVars.LootFilter) do
         for rarity, pickup in pairs(data) do

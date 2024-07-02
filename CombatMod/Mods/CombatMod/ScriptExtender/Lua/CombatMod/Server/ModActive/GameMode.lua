@@ -410,7 +410,6 @@ U.Osiris.On(
     ifRogueLike(function(uuid)
         if U.UUID.Equals(uuid, Player.Host()) then
             GameMode.StartNext()
-            Player.PickupAll()
         end
     end)
 )

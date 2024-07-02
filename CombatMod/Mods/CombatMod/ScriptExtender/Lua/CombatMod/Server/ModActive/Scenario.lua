@@ -98,6 +98,10 @@ function Object:KillScore()
     return score
 end
 
+function Object:DetectCombatId()
+    self.CombatId = Osi.CombatGetGuidFor(self.CombatHelper)
+end
+
 ---@return Scenario|nil
 local function S()
     return PersistentVars.Scenario
@@ -125,7 +129,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 -- functions that only get called as part of events
--- TODO should be Object methods
+-- TODO cleanup code smh
 
 local Action = {}
 
@@ -138,10 +142,30 @@ function Action.CalculateLoot()
     end
 
     local rolls = scenario:KillScore() * lootMultiplier
-    local fixedRolls = math.max(10, UT.Size(scenario.KilledEnemies)) * lootMultiplier
 
-    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates, math.floor(fixedRolls))
-    L.Dump("Loot", loot, rolls, fixedRolls, scenario.LootRates)
+    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates)
+    L.Dump("Loot", loot, rolls, scenario.LootRates)
+    return loot
+end
+
+function Action.CalculateKillLoot()
+    local scenario = Current()
+
+    local nr = #scenario.KilledEnemies
+
+    local chanceFood = 1
+    if nr <= 6 then
+        chanceFood = 0.9
+    else
+        chanceFood = math.max(1, 10 - nr) / 10
+    end
+
+    if PersistentVars.Unlocked.LootMultiplier then
+        rolls = nr % 2 == 0 and 2 or 1
+    end
+
+    local loot = Item.GenerateSimpleLoot(rolls, chanceFood, scenario.LootRates)
+    L.Dump(L.ColorText("Kill loot", { 0, 255, 0 }), loot, rolls, chanceFood)
     return loot
 end
 
@@ -380,6 +404,18 @@ end
 -- Enemy died or couldnt spawn
 function Action.EnemyRemoved()
     Scenario.CheckEnded()
+end
+
+function Action.EnemyKilled(enemy)
+    local loot = Action.CalculateKillLoot()
+
+    local x, y, z = Osi.GetPosition(enemy.GUID)
+    x, y, z = Osi.FindValidPosition(x, y, z, 20, enemy.GUID, 1)
+    if not x or not y or not z then
+        x, y, z = Osi.GetPosition(enemy.GUID)
+    end
+
+    Item.SpawnLoot(loot, x, y, z)
 end
 
 -- Enemy spawned but is out of bounds
@@ -762,7 +798,7 @@ Event.On(
         if map.Name == s.Map.Name then
             if not s.OnMap and U.UUID.Equals(character, Player.Host()) then
                 s.OnMap = true
-                WaitTicks(60, Action.MapEntered)
+                WaitTicks(20, Action.MapEntered)
             end
 
             Event.Trigger("ScenarioTeleported", character)
@@ -776,26 +812,6 @@ U.Osiris.On(
     "after",
     ifScenario(function(uuid)
         Scenario.CheckShouldStop()
-    end)
-)
-
-U.Osiris.On(
-    "CombatStarted",
-    1,
-    "before",
-    ifScenario(function(combatGuid)
-        local s = Current()
-
-        if not s:HasStarted() then
-            return
-        end
-
-        L.Debug("CombatStarted", combatGuid)
-
-        s.CombatId = combatGuid
-        if s.Round == 1 then
-            Player.Notify(__("Combat started."))
-        end
     end)
 )
 
@@ -913,6 +929,7 @@ U.Osiris.On(
                 -- might revive and rejoin battle
                 Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()))
                 Event.Trigger("ScenarioEnemyKilled", Current(), e)
+                Action.EnemyKilled(e)
 
                 spawnedKilled = true
                 break
@@ -953,7 +970,7 @@ U.Osiris.On(
 
             Action.StartRound()
                 :After(function()
-                    return Defer(3000)
+                    return Defer(1000)
                 end)
                 :After(function()
                     Osi.EndTurn(uuid)
@@ -962,7 +979,6 @@ U.Osiris.On(
     end)
 )
 
--- TODO maybe not needed
 U.Osiris.On(
     "CombatRoundStarted",
     2,
@@ -975,20 +991,12 @@ U.Osiris.On(
             return
         end
 
-        if s.CombatId == nil then
-            return
-        end
+        s:DetectCombatId()
 
-        if s.CombatId ~= combatGuid then
-            L.Debug("Combat unrelated to the scenario.", combatGuid, s.combatId)
-            -- try to restore the combat
-            local guids = UT.Map(s.SpawnedEnemies, function(e)
-                return e.GUID and Osi.CombatGetGuidFor(e.GUID) or nil
-            end)
-            if UT.Contains(guids, combatGuid) then
-                s.CombatId = combatGuid
-            else
-                return
+        -- happens to be mismatching on spawn sometimes
+        if s.CombatId == combatGuid then
+            if s.Round == 1 then
+                Player.Notify(__("Combat started."))
             end
         end
 
