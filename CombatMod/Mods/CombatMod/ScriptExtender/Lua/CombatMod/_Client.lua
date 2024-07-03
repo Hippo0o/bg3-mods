@@ -1,8 +1,9 @@
-Require("CombatMod/Shared")
 if Ext.IMGUI == nil then
     L.Warn("IMGUI not available.", "Update to Script Extender v16.")
     return
 end
+
+Require("CombatMod/Shared")
 
 IsHost = false
 
@@ -42,6 +43,18 @@ Net.On("Notification", function(event)
     end)
 end)
 
-Net.On("ModActive", function()
+local done = false
+local function init()
+    if done then
+        return
+    end
+    done = true
+
+    Require("CombatMod/Overwrites")
+
     Require("CombatMod/Client/_Init")
-end, true)
+
+    Event.Trigger(GameState.EventLoad)
+end
+
+Net.On("ModActive", init, true)

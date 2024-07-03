@@ -75,6 +75,8 @@ local function init()
     end
     done = true
 
+    Require("CombatMod/Overwrites")
+
     Require("CombatMod/Server/ModActive/_Init")
 
     Event.Trigger(GameState.EventLoad)
