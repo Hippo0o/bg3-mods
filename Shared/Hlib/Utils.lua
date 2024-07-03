@@ -52,28 +52,6 @@ function M.GetProperty(userdata, property, default)
     return default
 end
 
--- probably useless
-function M.Random(...)
-    local time = Ext.Utils.MonotonicTime()
-    local rand = Ext.Math.Random(...)
-    local args = { ... }
-
-    if #args == 0 then
-        local r1 = math.floor(rand * time)
-        local r2 = math.ceil(rand * time)
-        rand = Ext.Math.Random(r1, r2) / time
-        return rand
-    end
-
-    if #args == 1 then
-        args[2] = args[1]
-        args[1] = 1
-    end
-
-    rand = Ext.Math.Random(args[1] + rand * time, args[2] + rand * time) / time
-    return Ext.Math.Round(rand)
-end
-
 ---@param prefix string|nil
 ---@return string
 function M.RandomId(prefix)
@@ -519,7 +497,7 @@ end
 function M.UUID.Random()
     -- version 4 UUID
     return string.gsub("xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", "[xy]", function(c)
-        local v = (c == "x") and M.Random(0, 0xf) or M.Random(8, 0xb)
+        local v = (c == "x") and math.random(0, 0xf) or math.random(8, 0xb)
         return string.format("%x", v)
     end)
 end

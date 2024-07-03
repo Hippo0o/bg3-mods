@@ -35,8 +35,8 @@ function Object:TeleportInRegion(character, withOffset)
     pcall(function()
         local offset = math.floor(tonumber(Config.RandomizeSpawnOffset / 2))
         if offset > 0 and withOffset then
-            x = x + U.Random() * U.Random(-offset, offset)
-            z = z + U.Random() * U.Random(-offset, offset)
+            x = x + math.random() * math.random(-offset, offset)
+            z = z + math.random() * math.random(-offset, offset)
         end
 
         x, y, z = Osi.FindValidPosition(x, y, z, 50, character, 1)
@@ -102,7 +102,7 @@ function Object:GetSpawn(spawn)
         pos = self.Spawns[spawn]
     end
     if not pos then
-        pos = self.Spawns[U.Random(1, #self.Spawns)]
+        pos = self.Spawns[math.random(1, #self.Spawns)]
     end
 
     return table.unpack(pos)
@@ -117,8 +117,8 @@ function Object:SpawnIn(enemy, spawn)
     pcall(function()
         local offset = tonumber(Config.RandomizeSpawnOffset)
         if offset > 0 then
-            x = x + U.Random() * U.Random(-offset, offset)
-            z = z + U.Random() * U.Random(-offset, offset)
+            x = x + math.random() * math.random(-offset, offset)
+            z = z + math.random() * math.random(-offset, offset)
         end
     end)
 
