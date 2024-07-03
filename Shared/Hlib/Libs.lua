@@ -211,118 +211,109 @@ function M.TypedTable(typeDefs, repeatable)
     })
 end
 
+---@class LibsChainable
+---@field After fun(self: LibsChainable, func: fun(source: any|nil, ...: any), passSource: boolean|nil): LibsChainable
+---@field Catch fun(self: LibsChainable, func: fun(source: any|nil, err: string), passSource: boolean|nil): LibsChainable
+---@field Source any
+local Chainable = M.Struct({
+    _IsChainable = nil,
+    _InitalInput = {},
+    Source = nil,
+    _Chain = {},
+    _Catch = nil,
+})
+function Chainable.New(source)
+    local obj = Chainable.Init()
+    obj._IsChainable = Utils.RandomId("Chainable_")
+    obj.Source = source
+    obj._InitalInput = {}
+    obj._Chain = {}
+
+    return obj
+end
+function Chainable:After(func, passSource)
+    if type(func) ~= "function" then
+        error("Chainable:After(func) - function expected, got " .. type(func))
+    end
+
+    table.insert(self._Chain, function(...)
+        if passSource then
+            return func(self.Source, ...)
+        end
+
+        return func(...)
+    end)
+
+    return self
+end
+function Chainable:Catch(func, passSource)
+    if type(func) ~= "function" then
+        error("Chainable:Catch(func) - function expected, got " .. type(func))
+    end
+
+    self._Catch = function(...)
+        if passSource then
+            return func(self.Source, ...)
+        end
+
+        return func(...)
+    end
+
+    return self
+end
+function Chainable:Throw(err)
+    if type(self._Catch) ~= "function" then
+        error(err)
+    end
+
+    return self._Catch(err)
+end
+function Chainable:Begin(...)
+    local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(self._InitalInput))
+
+    for i, func in ipairs(self._Chain) do
+        local ok, err = pcall(function()
+            state = Utils.Table.Pack(func(table.unpack(state)))
+        end)
+
+        if not ok then
+            state = self:Throw(err)
+            break
+        end
+
+        if state[1] == nil then
+            break
+        end
+
+        -- interrupt chain if a nested chainable is returned
+        if type(state[1]) == "table" and state[1]._IsChainable then
+            ---@type Chainable
+            local nested = state[1]
+
+            local addonChain = Utils.Table.DeepClone(self._Chain)
+            for j = 1, i do
+                table.remove(addonChain, 1)
+            end
+
+            Utils.Table.Combine(nested._Chain, addonChain)
+
+            nested._InitalInput = state
+            table.remove(nested._InitalInput, 1)
+            if self._Catch then
+                nested._Catch = self._Catch
+            end
+
+            break
+        end
+    end
+
+    return state
+end
+
 ---@param source any
 ---@return LibsChainable
 function M.Chainable(source)
-    ---@class LibsChainable
-    ---@field After fun(self: LibsChainable, func: fun(source: any|nil, ...: any), passSource: boolean|nil): LibsChainable
-    ---@field Catch fun(self: LibsChainable, func: fun(source: any|nil, err: string), passSource: boolean|nil): LibsChainable
-    ---@field Source any
-    local Chainable = M.Struct({
-        _IsChainable = nil,
-        _InitalInput = {},
-        Source = nil,
-        _Chain = {},
-        _Catch = nil,
-    })
-
-    function Chainable.New()
-        local obj = Chainable.Init()
-        obj._IsChainable = Utils.RandomId("Chainable_")
-        obj.Source = source
-        obj._InitalInput = {}
-        obj._Chain = {}
-
-        return obj
-    end
-
-    function Chainable:After(func, passSource)
-        if type(func) ~= "function" then
-            error("Chainable:After(func) - function expected, got " .. type(func))
-        end
-
-        table.insert(self._Chain, function(...)
-            if passSource then
-                return func(self.Source, ...)
-            end
-
-            return func(...)
-        end)
-
-        return self
-    end
-
-    function Chainable:Catch(func, passSource)
-        if type(func) ~= "function" then
-            error("Chainable:Catch(func) - function expected, got " .. type(func))
-        end
-
-        self._Catch = function(...)
-            if passSource then
-                return func(self.Source, ...)
-            end
-
-            return func(...)
-        end
-
-        return self
-    end
-
-    function Chainable:Throw(err)
-        if type(self._Catch) ~= "function" then
-            error(err)
-        end
-
-        return self._Catch(err)
-    end
-
-    local function stateIsChainable(state)
-        return type(state[1]) == "table" and state[1]._IsChainable
-    end
-
-    function Chainable:Begin(...)
-        local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(self._InitalInput))
-
-        for i, func in ipairs(self._Chain) do
-            local ok, err = pcall(function()
-                state = Utils.Table.Pack(func(table.unpack(state)))
-            end)
-
-            if not ok then
-                state = self:Throw(err)
-                break
-            end
-
-            if state[1] == nil then
-                break
-            end
-
-            -- interrupt chain if a nested chainable is returned
-            if stateIsChainable(state) then
-                ---@type Chainable
-                local nested = state[1]
-
-                local addonChain = Utils.Table.DeepClone(self._Chain)
-                for j = 1, i do
-                    table.remove(addonChain, 1)
-                end
-
-                Utils.Table.Combine(nested._Chain, addonChain)
-
-                nested._InitalInput = state
-                table.remove(nested._InitalInput, 1)
-                if self._Catch then
-                    nested._Catch = self._Catch
-                end
-
-                break
-            end
-        end
-
-        return state
-    end
-
-    return Chainable.New()
+    return Chainable.New(source)
 end
 
 ---@param t table
