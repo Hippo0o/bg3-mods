@@ -211,16 +211,16 @@ function M.TypedTable(typeDefs, repeatable)
     })
 end
 
----@class LibsChainable
+---@class LibsChainable : LibsStruct
 ---@field After fun(self: LibsChainable, func: fun(source: any|nil, ...: any), passSource: boolean|nil): LibsChainable
 ---@field Catch fun(self: LibsChainable, func: fun(source: any|nil, err: string), passSource: boolean|nil): LibsChainable
 ---@field Source any
 local Chainable = M.Struct({
     _IsChainable = nil,
-    _InitalInput = {},
     Source = nil,
+    _InitalInput = {},
     _Chain = {},
-    _Catch = nil,
+    _Catch = {},
 })
 function Chainable.New(source)
     local obj = Chainable.Init()
@@ -236,13 +236,7 @@ function Chainable:After(func, passSource)
         error("Chainable:After(func) - function expected, got " .. type(func))
     end
 
-    table.insert(self._Chain, function(...)
-        if passSource then
-            return func(self.Source, ...)
-        end
-
-        return func(...)
-    end)
+    table.insert(self._Chain, { func, passSource })
 
     return self
 end
@@ -251,29 +245,35 @@ function Chainable:Catch(func, passSource)
         error("Chainable:Catch(func) - function expected, got " .. type(func))
     end
 
-    self._Catch = function(...)
-        if passSource then
-            return func(self.Source, ...)
-        end
-
-        return func(...)
-    end
+    self._Catch = { func, passSource }
 
     return self
 end
 function Chainable:Throw(err)
-    if type(self._Catch) ~= "function" then
+    local func, passSource = table.unpack(self._Catch)
+
+    if type(func) ~= "function" then
         error(err)
     end
 
-    return self._Catch(err)
+    if passSource then
+        func(self.Source, err)
+    else
+        func(err)
+    end
 end
 function Chainable:Begin(...)
     local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(self._InitalInput))
 
-    for i, func in ipairs(self._Chain) do
+    for i, link in ipairs(self._Chain) do
+        local func, passSource = table.unpack(link)
+
         local ok, err = pcall(function()
-            state = Utils.Table.Pack(func(table.unpack(state)))
+            if passSource then
+                state = { func(self.Source, table.unpack(state)) }
+            else
+                state = { func(table.unpack(state)) }
+            end
         end)
 
         if not ok then
