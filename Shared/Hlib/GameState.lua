@@ -42,8 +42,8 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
 end)
 
 Ext.Events.ResetCompleted:Subscribe(function()
-    Event.Trigger(GameState.EventLoadSession)
-    Event.Trigger(GameState.EventLoad)
+    Event.Trigger(M.EventLoadSession)
+    Event.Trigger(M.EventLoad)
 end)
 
 ---@param callback fun()
