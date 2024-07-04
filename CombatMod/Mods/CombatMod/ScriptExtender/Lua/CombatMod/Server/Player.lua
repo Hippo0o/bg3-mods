@@ -189,6 +189,7 @@ function Player.TeleportToCamp()
 
             if Osi.IsDead(entity.Uuid.EntityUuid) == 1 then
                 Osi.SetHitpoints(entity.Uuid.EntityUuid, 20)
+                Osi.EndTurn(entity.Uuid.EntityUuid)
             end
         end
     end

@@ -188,7 +188,7 @@ end
 local characters = {}
 function ClientUnlock.GetCharacters(refresh)
     if refresh or #characters == 0 then
-        characters = UT.Filter(GE.GetParty(), "e -> e.PartyMember.IsPermanent")
+        characters = UT.Map(GE.GetParty(), "e -> e")
 
         table.sort(characters, function(a, b)
             return a.Uuid.EntityUuid < b.Uuid.EntityUuid

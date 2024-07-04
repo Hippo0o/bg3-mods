@@ -29,7 +29,6 @@ Require("CombatMod/Server/ModActive/StoryBypass")
 Require("CombatMod/Server/ModActive/GameMode")
 Require("CombatMod/Server/ModActive/NetEvents")
 Require("CombatMod/Server/ModActive/Unlock")
-Require("CombatMod/Server/ModActive/Overwrites")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --

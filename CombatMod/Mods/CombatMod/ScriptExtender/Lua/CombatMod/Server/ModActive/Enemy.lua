@@ -433,14 +433,19 @@ end
 ---@return Enemy
 function Enemy.Restore(enemy)
     local e = Object.Init(enemy)
+
+    if not e:IsSpawned() then
+        return e
+    end
+
     e:ModifyTemplate()
 
     RetryUntil(function(runner)
         return e:Entity().StatusContainer
     end, { retries = 10, interval = 100 }):After(function()
-        self:Modify(true)
+        e:Modify(true)
 
-        return self
+        return e
     end)
 
     return e
