@@ -388,7 +388,8 @@ function Action.MapEntered()
             function() -- TODO need to find the right timing or actions might not refresh because round never ended for that character
                 if tostring(S()) == id then
                     for _, p in pairs(GE.GetParty()) do
-                        Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 0)
+                        -- Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 0)
+                        Osi.EndTurn(p.Uuid.EntityUuid)
                     end
 
                     WaitTicks(6, function()
