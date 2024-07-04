@@ -32,19 +32,18 @@ M.UseLoca = true
 local Localization = Libs.Struct({
     Version = nil,
     Text = nil,
-    Stack = nil,
+    Stack = {},
     Handle = nil,
     LocaText = nil,
 })
-function Localization.New(text, version, stack)
+function Localization.New(text, version, handle)
     local obj = Localization.Init({
         Version = version,
         Text = text,
-        Stack = stack,
     })
 
     if M.UseLoca then
-        obj.Handle = M.GenerateHandle(text, version)
+        obj.Handle = handle or M.GenerateHandle(text, version)
         obj.LocaText = M.Get(obj.Handle)
 
         if obj.LocaText ~= "" then
@@ -56,6 +55,19 @@ function Localization.New(text, version, stack)
 
     return obj
 end
+function Localization:ExtendStack(stack)
+    if stack == "" then -- should not happen
+        return
+    end
+
+    for _, v in ipairs(self.Stack) do
+        if v == stack then
+            return
+        end
+    end
+
+    table.insert(self.Stack, stack)
+end
 
 M.FilePath = "Localization/" .. Mod.TableKey
 M.Translations = {}
@@ -63,7 +75,7 @@ M.Translations = {}
 GameState.OnLoadSession(function()
     local cached = IO.LoadJson(M.FilePath .. ".json") or {}
     for k, v in pairs(cached) do
-        M.Translations[k] = Localization.New(v.Text, v.Version, v.Stack)
+        M.Translations[k] = Localization.New(v.Text, v.Version, v.Handle)
     end
 end)
 
@@ -84,13 +96,17 @@ function M.Translate(text, version)
     local key = text .. ";" .. version
 
     if M.Translations[key] == nil or Mod.Dev then
-        local stack = Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
+        local stack = Utils.String.Trim(Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
             return not line:match("stack traceback:")
                 and not line:match("Hlib/Localization.lua")
                 and not line:match("(...tail calls...)")
-        end)
+        end) or "")
 
-        M.Translations[key] = Localization.New(text, version, Utils.String.Trim(stack))
+        if not M.Translations[key] then
+            M.Translations[key] = Localization.New(text, version)
+        end
+
+        M.Translations[key]:ExtendStack(stack)
 
         if Ext.IsClient() then
             Net.Request("_TranslationRequest", M.Translations):After(function(event)
@@ -139,8 +155,7 @@ function M.BuildLocaFile()
 %s
 </contentList>
 ]]
-    local xmlEntry = [[
-    <!-- %s -->
+    local xmlEntry = [[%s
     <content contentuid="%s" version="%d">%s</content>
 ]]
 
@@ -155,7 +170,13 @@ function M.BuildLocaFile()
         local translation = M.Translations[key]
 
         local handle = translation.Handle:gsub(";%d+$", "") -- handle should not have a version
-        table.insert(entries, string.format(xmlEntry, translation.Stack, handle, 1, translation.Text))
+
+        local stack = ""
+        for _, v in ipairs(translation.Stack) do
+            stack = stack .. string.format("<!-- %s -->\n", v)
+        end
+
+        table.insert(entries, string.format(xmlEntry, stack, handle, 1, translation.Text))
     end
 
     local loca = string.format(xmlWrap, table.concat(entries, "\n"))
