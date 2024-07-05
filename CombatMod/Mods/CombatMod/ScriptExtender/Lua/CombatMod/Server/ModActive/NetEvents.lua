@@ -44,6 +44,9 @@ Net.On("ResetTemplates", function(event)
     if event.Payload.Enemies then
         Enemy.ExportTemplates()
     end
+    if event.Payload.LootRates then
+        External.ExportLootRates()
+    end
 
     Net.Respond(event, { true })
 end)

@@ -146,12 +146,13 @@ function Config.Main(tab)
     local btn = root:AddButton(__("Reset Templates"))
     btn.OnClick = function()
         showStatus(__("Resetting templates..."))
-        Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true }):After(function(event)
-            Net.Send("GetTemplates")
-            Net.Send("GetSelection")
+        Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true, LootRates = true })
+            :After(function(event)
+                Net.Send("GetTemplates")
+                Net.Send("GetSelection")
 
-            showStatus(__("Templates reset"), true)
-        end)
+                showStatus(__("Templates reset"), true)
+            end)
     end
     root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true
 

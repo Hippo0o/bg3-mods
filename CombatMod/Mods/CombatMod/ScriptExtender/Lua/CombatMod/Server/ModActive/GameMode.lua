@@ -419,10 +419,6 @@ Event.On("RogueModeChanged", function(bool)
         return
     end
     GameMode.StartNext()
-
-    if not PersistentVars.GUIOpen then
-        Net.Send("OpenGUI")
-    end
 end)
 
 Event.On(
