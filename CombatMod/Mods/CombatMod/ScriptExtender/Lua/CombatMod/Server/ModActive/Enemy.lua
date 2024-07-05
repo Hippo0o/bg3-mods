@@ -41,7 +41,7 @@ local Object = Libs.Struct({
     Temporary = false,
     -- not required
     Race = nil,
-    LevelOverride = nil,
+    LevelOverride = 0,
     Equipment = nil,
     Stats = nil,
     SpellSet = nil,
@@ -237,11 +237,11 @@ function Object:OnCombat()
         return
     end
 
-    if Osi.IsInCombat(self.GUID) ~= 1 then
-        Osi.SetTag(self.GUID, C.ShadowCurseTag)
-    else
-        Osi.ClearTag(self.GUID, C.ShadowCurseTag)
-    end
+    -- if Osi.IsInCombat(self.GUID) ~= 1 then
+    --     Osi.SetTag(self.GUID, C.ShadowCurseTag)
+    -- else
+    --     Osi.ClearTag(self.GUID, C.ShadowCurseTag)
+    -- end
 end
 
 function Object:OnAttacked(attacker)
@@ -282,8 +282,6 @@ function Object:Modify(keepFaction)
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
 
     self:ModifyExperience()
-
-    self:OnCombat()
 
     -- entity.ServerCharacter.Treasures = { "Empty" }
 
@@ -370,7 +368,7 @@ function Object:Spawn(x, y, z, neutral)
 
     return true,
         RetryUntil(function(runner)
-            return self:Entity().StatusContainer
+            return self:Entity().BaseStats
         end, { retries = 10, interval = 100 }):After(function()
             self:Modify()
 
@@ -441,8 +439,8 @@ function Enemy.Restore(enemy)
     e:ModifyTemplate()
 
     RetryUntil(function(runner)
-        return e:Entity().StatusContainer
-    end, { retries = 10, interval = 100 }):After(function()
+        return e:Entity().BaseStats
+    end, { retries = 30, interval = 100 }):After(function()
         e:Modify(true)
 
         return e

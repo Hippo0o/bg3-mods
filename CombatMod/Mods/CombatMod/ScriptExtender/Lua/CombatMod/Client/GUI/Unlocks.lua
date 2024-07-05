@@ -29,10 +29,6 @@ function ClientUnlock.Main(tab)
             end
         end)
     end, true)
-
-    root.OnActivate = function()
-        ClientUnlock.GetCharacters(true)
-    end
 end
 
 function ClientUnlock.GetStock(unlock)
@@ -185,15 +181,12 @@ function ClientUnlock.Buy(root, unlock)
     return grp
 end
 
-local characters = {}
-function ClientUnlock.GetCharacters(refresh)
-    if refresh or #characters == 0 then
-        characters = UT.Map(GE.GetParty(), "e -> e")
+function ClientUnlock.GetCharacters()
+    local characters = UT.Map(GE.GetParty(), "e -> e")
 
-        table.sort(characters, function(a, b)
-            return a.Uuid.EntityUuid < b.Uuid.EntityUuid
-        end)
-    end
+    table.sort(characters, function(a, b)
+        return a.Uuid.EntityUuid < b.Uuid.EntityUuid
+    end)
 
     return characters
 end

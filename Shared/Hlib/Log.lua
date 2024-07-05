@@ -1,6 +1,9 @@
 ---@class Log
 local M = {}
 
+---@type Mod
+local Mod = Require("Hlib/Mod")
+
 -- Fallen is the best
 function M.RainbowText(text)
     local function HSVToRGB(h, s, v)

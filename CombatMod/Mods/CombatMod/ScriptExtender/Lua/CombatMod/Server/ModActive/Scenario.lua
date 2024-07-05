@@ -73,7 +73,7 @@ function Object:HasMoreRounds()
 end
 
 function Object:HasStarted()
-    return #self.SpawnedEnemies > 0 or self.Round > 0
+    return self.CombatHelper and (#self.SpawnedEnemies > 0 or self.Round > 0)
 end
 
 function Object:IsRunning()
@@ -206,6 +206,20 @@ function Action.SpawnHelper()
     Osi.SetFaction(helper, C.ScenarioHelper.Faction)
     s.CombatHelper = helper
 
+    RetryUntil(function()
+        for _, player in pairs(GU.DB.GetPlayers()) do
+            Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), s.CombatHelper, player)
+        end
+
+        return Player.InCombat()
+    end, {
+        immediate = true,
+        retries = -1,
+        interval = 200,
+    })
+
+    Action.UpdateHelperName()
+
     L.Debug("Combat helper spawned.", helper)
 end
 
@@ -232,19 +246,16 @@ end
 
 function Action.StartCombat()
     local s = Current()
-    if s.CombatId ~= nil then
-        L.Error("Combat already started.")
-        return
+
+    s:DetectCombatId()
+
+    for _, p in pairs(GE.GetParty()) do
+        Osi.LeaveCombat(p.Uuid.EntityUuid)
     end
 
     s.Map:PingSpawns()
-    Action.SpawnHelper()
-    for _, player in pairs(GU.DB.GetPlayers()) do
-        Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), s.CombatHelper, player)
-    end
 
     Event.Trigger("ScenarioCombatStarted", s)
-    Action.StartRound()
 end
 
 ---@return ChainableRunner
@@ -321,6 +332,10 @@ end
 function Action.StartRound()
     local s = Current()
 
+    if s.Round == 0 then
+        Action.StartCombat()
+    end
+
     s.Round = s.Round + 1
     Player.Notify(__("Round %d", s.Round))
 
@@ -360,61 +375,59 @@ function Action.MapEntered()
     end
     Action.SpawnHelper()
 
-    Schedule(function()
-        -- remove corpses from previous combat
-        Enemy.Cleanup()
+    -- remove corpses from previous combat
+    Enemy.Cleanup()
 
-        Event.Trigger("ScenarioMapEntered", Current())
-        Player.Notify(__("Entered combat area."))
-    end)
+    Event.Trigger("ScenarioMapEntered", Current())
+    Player.Notify(__("Entered combat area."))
 
-    for _, p in pairs(GE.GetParty()) do
-        Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
-    end
+    -- for _, p in pairs(GE.GetParty()) do
+    --     Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
+    -- end
 
-    local id = tostring(S())
-    WaitTicks(33, function()
-        return WaitUntil(function(self)
-            if tostring(S()) ~= id then
-                self:Clear()
-                return
-            end
-
-            -- check if no character in forced turnbased anymore or all ended turn
-            return UT.Find(GE.GetParty(), function(e)
-                return e.IsInTurnBasedMode
-                    and e.TurnBased.ActedThisRoundInCombat == false
-                    and e.TurnBased.RequestedEndTurn == false
-                    and e.TurnBased.IsInCombat_M == true
-            end) == nil
-        end)
-    end):After(function()
-        local count = 0
-
-        for _, p in pairs(GE.GetParty()) do
-            -- if still in turn based, return early
-            if p.IsInTurnBasedMode then
-                return WaitTicks(33)
-            end
-
-            Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
-            count = count + 1
-        end
-
-        return WaitUntil(function(self)
-            if tostring(S()) ~= id then
-                self:Clear()
-                return
-            end
-
-            -- check if party in forced turnbased again
-            return #UT.Filter(GE.GetParty(), function(e)
-                return e.IsInTurnBasedMode
-            end) == count
-        end):After(function()
-            return WaitTicks(33)
-        end)
-    end):After(Action.StartCombat)
+    -- local id = tostring(S())
+    -- WaitTicks(33, function()
+    --     return WaitUntil(function(self)
+    --         if tostring(S()) ~= id then
+    --             self:Clear()
+    --             return
+    --         end
+    --
+    --         -- check if no character in forced turnbased anymore or all ended turn
+    --         return UT.Find(GE.GetParty(), function(e)
+    --             return e.IsInTurnBasedMode
+    --                 and e.TurnBased.ActedThisRoundInCombat == false
+    --                 and e.TurnBased.RequestedEndTurn == false
+    --                 and e.TurnBased.IsInCombat_M == true
+    --         end) == nil
+    --     end)
+    -- end):After(function()
+    --     local count = 0
+    --
+    --     for _, p in pairs(GE.GetParty()) do
+    --         -- if still in turn based, return early
+    --         if p.IsInTurnBasedMode then
+    --             return WaitTicks(33)
+    --         end
+    --
+    --         Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
+    --         count = count + 1
+    --     end
+    --
+    --     return WaitUntil(function(self)
+    --         if tostring(S()) ~= id then
+    --             self:Clear()
+    --             return
+    --         end
+    --
+    --         -- check if party in forced turnbased again
+    --         return #UT.Filter(GE.GetParty(), function(e)
+    --             return e.IsInTurnBasedMode
+    --         end) == count
+    --     end):After(function()
+    --         return WaitTicks(33)
+    --     end)
+    -- end):After(Action.StartCombat)
 end
 
 function Action.EnemyAdded(enemy)
@@ -728,10 +741,6 @@ end
 function Scenario.CombatSpawned(specific)
     local s = Current()
 
-    if not Player.InCombat() then
-        return
-    end
-
     local enemies = UT.Filter(s.SpawnedEnemies, function(e)
         return specific == nil or U.Equals(e, specific)
     end)
@@ -841,17 +850,18 @@ U.Osiris.On(
     "after",
     ifScenario(function(object, combatGuid)
         local s = Current()
+
         if not s:HasStarted() then
             return
         end
 
-        L.Dump("EnteredCombat", object, Ext.Entity.Get(object).TurnBased)
+        s:DetectCombatId()
 
         if s.CombatId ~= combatGuid then -- should not happen
             return
         end
 
-        Osi.ResumeCombat(s.CombatId)
+        Osi.ResumeCombat(combatGuid)
 
         local guid = U.UUID.Extract(object)
 
@@ -972,6 +982,11 @@ U.Osiris.On(
     ifScenario(function(uuid)
         local s = Current()
 
+        if not Player.InCombat() and s.CombatId then
+            Osi.PauseCombat(s.CombatId)
+            return
+        end
+
         if U.UUID.Equals(uuid, s.CombatHelper) then
             L.Debug("Combat helper turn started.", uuid)
 
@@ -979,12 +994,6 @@ U.Osiris.On(
             if not s:IsRunning() then
                 Scenario.End()
 
-                return
-            end
-
-            -- should not happen
-            if not Player.InCombat() then
-                Osi.PauseCombat(s.CombatId)
                 return
             end
 
@@ -1007,7 +1016,11 @@ U.Osiris.On(
         local s = Current()
 
         if not s:HasStarted() then
-            L.Error("Scenario has not started yet.")
+            return
+        end
+
+        if not Player.InCombat() then
+            Osi.PauseCombat(combatGuid)
             return
         end
 

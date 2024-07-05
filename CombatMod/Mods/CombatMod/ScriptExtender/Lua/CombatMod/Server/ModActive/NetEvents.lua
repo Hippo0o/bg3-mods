@@ -125,6 +125,12 @@ Net.On("Stop", function(event)
 end)
 
 Net.On("ToCamp", function(event)
+    if Player.Region() == C.Regions.Act0 then
+        Intro.AskTutSkip()
+        Net.Send("CloseGUI")
+        return
+    end
+
     if Player.InCombat() and not Mod.Debug then
         Net.Respond(event, { false, __("Cannot teleport while in combat.") })
         return
@@ -137,7 +143,7 @@ end)
 Net.On("ForwardCombat", function(event)
     local s = Scenario.Current()
 
-    if not s or s.Round < 1 then
+    if not s then
         Net.Respond(event, { false, __("Scenario not started.") })
         return
     end
@@ -148,6 +154,12 @@ Net.On("ForwardCombat", function(event)
 end)
 
 Net.On("Teleport", function(event)
+    if Player.Region() == C.Regions.Act0 then
+        Intro.AskTutSkip()
+        Net.Send("CloseGUI")
+        return
+    end
+
     local mapName = event.Payload.Map
 
     local map = UT.Find(Map.Get(), function(v)
