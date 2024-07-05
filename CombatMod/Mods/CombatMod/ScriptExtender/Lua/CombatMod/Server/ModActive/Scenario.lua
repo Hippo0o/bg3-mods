@@ -374,7 +374,7 @@ function Action.MapEntered()
 
     local id = tostring(S())
     WaitTicks(33, function()
-        WaitUntil(function(self)
+        return WaitUntil(function(self)
             if tostring(S()) ~= id then
                 self:Clear()
                 return
@@ -387,34 +387,34 @@ function Action.MapEntered()
                     and e.TurnBased.RequestedEndTurn == false
                     and e.TurnBased.IsInCombat_M == true
             end) == nil
-        end, function()
-            local count = 0
+        end)
+    end):After(function()
+        local count = 0
 
-            for _, p in pairs(GE.GetParty()) do
-                -- if still in turn based, return early
-                if p.IsInTurnBasedMode then
-                    return WaitTicks(33)
-                end
-
-                Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
-                count = count + 1
+        for _, p in pairs(GE.GetParty()) do
+            -- if still in turn based, return early
+            if p.IsInTurnBasedMode then
+                return WaitTicks(33)
             end
 
-            return WaitUntil(function(self)
-                if tostring(S()) ~= id then
-                    self:Clear()
-                    return
-                end
+            Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
+            count = count + 1
+        end
 
-                -- check if party in forced turnbased again
-                return #UT.Filter(GE.GetParty(), function(e)
-                    return e.IsInTurnBasedMode
-                end) == count
-            end):After(function()
-                return WaitTicks(33)
-            end)
-        end):After(Action.StartCombat)
-    end)
+        return WaitUntil(function(self)
+            if tostring(S()) ~= id then
+                self:Clear()
+                return
+            end
+
+            -- check if party in forced turnbased again
+            return #UT.Filter(GE.GetParty(), function(e)
+                return e.IsInTurnBasedMode
+            end) == count
+        end):After(function()
+            return WaitTicks(33)
+        end)
+    end):After(Action.StartCombat)
 end
 
 function Action.EnemyAdded(enemy)
