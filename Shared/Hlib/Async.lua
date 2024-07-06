@@ -96,7 +96,6 @@ local Loop = Libs.Struct({
                 end)
 
                 if not success then
-                    Log.Error("Async", result)
                     runner:Failed(result)
                     return
                 end

@@ -118,7 +118,7 @@ function GameMode.GenerateScenario(score, cow)
     -- generate a random timeline with bias and possible empty rounds
     local function generateTimeline(maxValue, failed)
         failed = failed + 1
-        if failed > 100 then
+        if failed > 1000 then
             L.Error("Failed to generate timeline", maxValue)
             return {}
         end
@@ -162,13 +162,13 @@ function GameMode.GenerateScenario(score, cow)
                 remainingValue = remainingValue - tier.value
 
                 -- too strong for single round
-                if tier.name == C.EnemyTier[5] then
+                if score <= 1000 and tier.name == C.EnemyTier[5] then
                     if not timeline[roundIndex + 1] or numRounds < maxRounds then
                         table.insert(timeline, roundIndex + 1, {})
                         numRounds = numRounds + 1
                     end
                 end
-                if tier.name == C.EnemyTier[6] then
+                if score <= 3000 and tier.name == C.EnemyTier[6] then
                     table.insert(timeline, {})
                     numRounds = numRounds + 1
 
@@ -363,6 +363,7 @@ function GameMode.ApplyDifficulty(enemy)
 
     WaitTicks(6, function()
         local entity = Ext.Entity.Get(enemy.GUID)
+        assert(entity, "ApplyDifficulty: entity not found")
 
         if mod2 > 0 then
             local newLevel = math.max(entity.AvailableLevel.Level, math.min(12, mod2))
@@ -419,6 +420,10 @@ Event.On("RogueModeChanged", function(bool)
         return
     end
     GameMode.StartNext()
+
+    if not PersistentVars.GUIOpen then
+        Net.Send("OpenGUI")
+    end
 end)
 
 Event.On(

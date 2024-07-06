@@ -73,7 +73,7 @@ function Object:HasMoreRounds()
 end
 
 function Object:HasStarted()
-    return self.CombatHelper and (#self.SpawnedEnemies > 0 or self.Round > 0)
+    return #self.SpawnedEnemies > 0 or self.Round > 0
 end
 
 function Object:IsRunning()
@@ -206,18 +206,6 @@ function Action.SpawnHelper()
     Osi.SetFaction(helper, C.ScenarioHelper.Faction)
     s.CombatHelper = helper
 
-    RetryUntil(function()
-        for _, player in pairs(GU.DB.GetPlayers()) do
-            Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), s.CombatHelper, player)
-        end
-
-        return Player.InCombat()
-    end, {
-        immediate = true,
-        retries = -1,
-        interval = 200,
-    })
-
     Action.UpdateHelperName()
 
     L.Debug("Combat helper spawned.", helper)
@@ -249,10 +237,6 @@ function Action.StartCombat()
 
     s:DetectCombatId()
 
-    for _, p in pairs(GE.GetParty()) do
-        Osi.LeaveCombat(p.Uuid.EntityUuid)
-    end
-
     s.Map:PingSpawns()
 
     Event.Trigger("ScenarioCombatStarted", s)
@@ -281,45 +265,52 @@ function Action.SpawnRound()
 
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
         RetryUntil(function(_, triesLeft)
-            local posIndex = s:GetPosition(i)
-            if triesLeft < triesToSpawn / 2 then
-                posIndex = -1
-            end
+                local posIndex = s:GetPosition(i)
+                if triesLeft < triesToSpawn / 2 then
+                    posIndex = -1
+                end
 
-            L.Debug("Spawning enemy.", e:GetId(), posIndex)
+                L.Debug("Spawning enemy.", e:GetId(), posIndex)
 
-            local ok, chainable = s.Map:SpawnIn(e, posIndex)
+                local ok, chainable = s.Map:SpawnIn(e, posIndex)
 
-            if not ok then
-                return false
-            end
+                if not ok then
+                    return false
+                end
 
-            return chainable
-        end, {
-            immediate = true,
-            retries = triesToSpawn,
-            interval = 100,
-        }):After(function(spawnedChainable)
-            spawnedChainable:After(function(e, posCorrectionChainable)
-                posCorrectionChainable:After(function(e, corrected)
-                    waitSpawn = waitSpawn - 1
+                return chainable
+            end, {
+                immediate = true,
+                retries = triesToSpawn,
+                interval = 100,
+            })
+            :After(function(spawnedChainable)
+                return spawnedChainable
+                    :After(function(e, posCorrectionChainable)
+                        Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
+                        Event.Trigger("ScenarioEnemySpawned", Current(), e)
+                        Action.EnemyAdded(e)
 
-                    if corrected then
-                        Scenario.CombatSpawned(e)
-                    end
-                end)
+                        return posCorrectionChainable
+                    end)
+                    :After(function(e, corrected)
+                        if corrected then
+                            Scenario.CombatSpawned(e)
+                        end
 
-                Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
-                Event.Trigger("ScenarioEnemySpawned", Current(), e)
-                Action.EnemyAdded(e)
+                        return Defer(1000)
+                    end)
             end)
-        end):Catch(function()
-            waitSpawn = waitSpawn - 1
+            :Catch(function()
+                waitSpawn = waitSpawn - 1
 
-            L.Error("Spawn limit exceeded.", e:GetId())
-            UT.Remove(s.SpawnedEnemies, e)
-            Action.EnemyRemoved()
-        end)
+                L.Error("Spawn limit exceeded.", e:GetId())
+                UT.Remove(s.SpawnedEnemies, e)
+                Action.EnemyRemoved()
+            end)
+            :After(function()
+                waitSpawn = waitSpawn - 1
+            end)
     end
 
     L.Debug("Enemies queued for spawning.", #toSpawn)
@@ -373,61 +364,32 @@ function Action.MapEntered()
     if Current():HasStarted() then
         return
     end
+
     Action.SpawnHelper()
 
-    -- remove corpses from previous combat
-    Enemy.Cleanup()
+    Schedule(function()
+        -- remove corpses from previous combat
+        Enemy.Cleanup()
 
-    Event.Trigger("ScenarioMapEntered", Current())
-    Player.Notify(__("Entered combat area."))
+        Event.Trigger("ScenarioMapEntered", Current())
+        Player.Notify(__("Entered combat area."))
+    end)
 
-    -- for _, p in pairs(GE.GetParty()) do
-    --     Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
-    -- end
+    RetryUntil(function()
+        if not S() then
+            return true
+        end
 
-    -- local id = tostring(S())
-    -- WaitTicks(33, function()
-    --     return WaitUntil(function(self)
-    --         if tostring(S()) ~= id then
-    --             self:Clear()
-    --             return
-    --         end
-    --
-    --         -- check if no character in forced turnbased anymore or all ended turn
-    --         return UT.Find(GE.GetParty(), function(e)
-    --             return e.IsInTurnBasedMode
-    --                 and e.TurnBased.ActedThisRoundInCombat == false
-    --                 and e.TurnBased.RequestedEndTurn == false
-    --                 and e.TurnBased.IsInCombat_M == true
-    --         end) == nil
-    --     end)
-    -- end):After(function()
-    --     local count = 0
-    --
-    --     for _, p in pairs(GE.GetParty()) do
-    --         -- if still in turn based, return early
-    --         if p.IsInTurnBasedMode then
-    --             return WaitTicks(33)
-    --         end
-    --
-    --         Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
-    --         count = count + 1
-    --     end
-    --
-    --     return WaitUntil(function(self)
-    --         if tostring(S()) ~= id then
-    --             self:Clear()
-    --             return
-    --         end
-    --
-    --         -- check if party in forced turnbased again
-    --         return #UT.Filter(GE.GetParty(), function(e)
-    --             return e.IsInTurnBasedMode
-    --         end) == count
-    --     end):After(function()
-    --         return WaitTicks(33)
-    --     end)
-    -- end):After(Action.StartCombat)
+        for _, player in pairs(GU.DB.GetPlayers()) do
+            Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), S().CombatHelper, player)
+        end
+
+        return Player.InCombat()
+    end, {
+        immediate = true,
+        retries = -1,
+        interval = 200,
+    })
 end
 
 function Action.EnemyAdded(enemy)
@@ -443,10 +405,6 @@ function Action.EnemyKilled(enemy)
     local loot = Action.CalculateKillLoot()
 
     local x, y, z = Osi.GetPosition(enemy.GUID)
-    x, y, z = Osi.FindValidPosition(x, y, z, 20, enemy.GUID, 1)
-    if not x or not y or not z then
-        x, y, z = Osi.GetPosition(enemy.GUID)
-    end
 
     Item.SpawnLoot(loot, x, y, z)
 end
@@ -473,7 +431,7 @@ function Action.Failsafe(enemy)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
 
                 local x, y, z = s.Map:GetSpawn(-1)
-                Osi.TeleportToPosition(e.GUID, x, y, z, "", 1, 1, 1)
+                Osi.TeleportToPosition(e.GUID, x, y, z, "", 1, 1, 1, 0, 1)
 
                 e:Combat(true)
 
@@ -720,6 +678,14 @@ function Scenario.CheckShouldStop()
     end
 end
 
+function Scenario.IsHelper(uuid)
+    return S() and U.UUID.Equals(S().CombatHelper, uuid)
+end
+
+function Scenario.HasStarted()
+    return S() and S():HasStarted()
+end
+
 function Scenario.ForwardCombat()
     local s = Current()
     if not s:IsRunning() then
@@ -855,7 +821,9 @@ U.Osiris.On(
             return
         end
 
-        s:DetectCombatId()
+        if s.CombatId ~= combatGuid then
+            s:DetectCombatId()
+        end
 
         if s.CombatId ~= combatGuid then -- should not happen
             return
@@ -863,11 +831,11 @@ U.Osiris.On(
 
         Osi.ResumeCombat(combatGuid)
 
-        local guid = U.UUID.Extract(object)
-
         if Osi.IsCharacter(object) ~= 1 then
             return
         end
+
+        local guid = U.UUID.Extract(object)
 
         if not GC.IsNonPlayer(guid) then
             return
@@ -999,6 +967,16 @@ U.Osiris.On(
 
             Action.StartRound()
                 :After(function()
+                    if Current().Round == 1 then
+                        for _, p in pairs(GE.GetParty()) do
+                            Osi.LeaveCombat(p.Uuid.EntityUuid)
+                        end
+
+                        Player.Notify(__("Combat started."))
+
+                        Scenario.CombatSpawned()
+                    end
+
                     return Defer(1000)
                 end)
                 :After(function()
@@ -1025,13 +1003,6 @@ U.Osiris.On(
         end
 
         s:DetectCombatId()
-
-        -- happens to be mismatching on spawn sometimes
-        if s.CombatId == combatGuid then
-            if s.Round == 1 then
-                Player.Notify(__("Combat started."))
-            end
-        end
 
         Scenario.CombatSpawned()
 

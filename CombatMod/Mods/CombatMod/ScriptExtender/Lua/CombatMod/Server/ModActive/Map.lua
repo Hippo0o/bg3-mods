@@ -47,7 +47,7 @@ function Object:TeleportInRegion(character, withOffset)
         z = self.Enter[3]
     end
 
-    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
+    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1, 0, 1)
     -- Osi.PROC_Foop(character)
 
     local x, y, z = table.unpack(self.Enter)
@@ -144,7 +144,8 @@ function Object:SpawnIn(enemy, spawn)
                 WaitTicks(6, function()
                     local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
 
-                    Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+                    Osi.SteerTo(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 1)
+                    -- Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
 
                     return enemy, didCorrect
                 end)
@@ -210,6 +211,10 @@ end
 ---@param map Map
 ---@return Map
 function Map.Restore(map)
+    -- map = UT.Find(Map.GetTemplates(map.Region), function(v)
+    --     return v.Name == map.Name
+    -- end) or map
+
     return Object.Init(map)
 end
 
@@ -222,7 +227,7 @@ function Map.CorrectPosition(guid, x, y, z, offset)
 
     if distance > offset * 1.5 or y2 < y - 5 or y2 > y + 5 then
         L.Error(guid, "Spawned too far away.", distance)
-        Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1)
+        Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1, 0, 0)
         Osi.PROC_Foop(guid)
         return true
     end

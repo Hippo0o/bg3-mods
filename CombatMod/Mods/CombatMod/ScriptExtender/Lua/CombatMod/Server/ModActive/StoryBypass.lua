@@ -76,7 +76,7 @@ function StoryBypass.ClearArea(character)
         return
     end
 
-    local nearby = GE.GetNearby(character, 100, true)
+    local nearby = GE.GetNearby(character, 150, true)
 
     for _, v in pairs(nearby) do
         if v.Entity.IsCharacter and not v.Entity.PartyMember and GC.IsOrigin(v.Guid) then
@@ -130,7 +130,10 @@ function StoryBypass.ClearArea(character)
                         b.Entity.Health
                         or b.Entity.ServerItem.CanBePickedUp
                         or b.Entity.ServerItem.CanUse
-                        or b.Entity.ServerItem.Template.Id == C.ScenarioHelper.TemplateId
+                        or (
+                            b.Entity.ServerItem.Template.Id == C.ScenarioHelper.TemplateId
+                            and not Scenario.IsHelper(b.Guid)
+                        )
                     then -- TODO remove more CanUse objects
                         GU.Object.Remove(b.Guid)
                     end
@@ -147,6 +150,45 @@ function StoryBypass.ClearArea(character)
     -- Osi.Resurrect(v.Guid)
     -- Osi.SetHitpointsPercentage(v.Guid, 100)
     -- L.Dump(Osi.IsDestroyed(v.Guid))
+end
+
+function StoryBypass.ClearSurfaces(character)
+    local x, y, z = Osi.GetPosition(character)
+
+    local function generateSpiral(x, y, numPoints, angleIncrement, radiusIncrement)
+        local points = {}
+        local angle = 0
+        local radius = 0
+        for i = 1, numPoints do
+            local newX = x + radius * math.cos(angle)
+            local newY = y + radius * math.sin(angle)
+            table.insert(points, { newX, newY })
+            angle = angle + angleIncrement
+            radius = radius + radiusIncrement
+        end
+        return points
+    end
+
+    local centerX, centerY = x, z
+    local numPoints = 30
+    local angleIncrement = math.pi / 4 -- Adjust as needed
+    local radiusIncrement = 1 -- Adjust as needed
+    local spiralPoints = generateSpiral(centerX, centerY, numPoints, angleIncrement, radiusIncrement)
+
+    for i, point in ipairs(spiralPoints) do
+        WaitTicks(12 * i, function()
+            local nx, ny, nz = Osi.FindValidPosition(point[1], y, point[2], 100, character, 1) -- avoiding dangerous surfaces
+            -- Osi.CreateSurfaceAtPosition(nx, ny, nz, "None", 100, -1)
+            -- Osi.RemoveSurfaceLayerAtPosition(nx, ny, nz, "Ground", 100)
+            Osi.TeleportToPosition(character, nx, y, nz)
+            Osi.UseSpell(character, "TOT_Zone_Clear", character)
+            Osi.RequestPing(nx, ny, nz, "", character)
+        end)
+    end
+
+    WaitTicks(13 * #spiral_points, function()
+        Osi.TeleportToPosition(character, x, y, z)
+    end)
 end
 
 do -- EXP Lock
@@ -269,7 +311,7 @@ do -- EXP Lock
     end)
 
     local toggleCamp = Async.Throttle(100, function()
-        if Scenario.Current() and Scenario.Current():HasStarted() then
+        if Scenario.HasStarted() then
             StoryBypass.ExpLock.Pause()
             return
         end
@@ -510,6 +552,10 @@ U.Osiris.On(
 Event.On(
     "MapTeleported",
     ifBypassStory(function(_, character)
+        if Scenario.HasStarted() then
+            return
+        end
+
         if U.UUID.Equals(Player.Host(), character) then
             StoryBypass.ClearArea(Player.Host())
         end
@@ -533,6 +579,6 @@ local function removeAllEntities()
 
     StoryBypass.RemoveAllEntities()
 
-    Osi.Resurrect(C.OriginCharacters.Halsin)
+    Osi.Resurrect(C.OriginCharacters.Halsin) -- Halsin will be dead once entering Act 2 for the first time
 end
 GameState.OnLoad(ifBypassStory(removeAllEntities))
