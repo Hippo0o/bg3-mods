@@ -77,6 +77,7 @@ local function init()
         return
     end
     done = true
+    math.randomseed(os.time())
 
     Require("CombatMod/Overwrites")
 
