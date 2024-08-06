@@ -205,6 +205,10 @@ U.Osiris.On(
             return
         end
 
+        if not Ext.Entity.Get(C.NPCCharacters.Jergal).CampPresence then
+            Osi.PROC_GLO_Jergal_MoveToCamp()
+        end
+
         -- workaround for blocked travel
         -- TODO fix this
         Defer(1000, function()
@@ -214,11 +218,12 @@ U.Osiris.On(
             end
         end)
 
-        if U.UUID.Equals(Player.Host(), character) then
-            if not Ext.Entity.Get(character).CampPresence or not S then
-                L.Debug("ReturnToCamp", character)
+        if not Ext.Entity.Get(character).CampPresence or not S then
+            L.Debug("ReturnToCamp", character)
+            -- need ~2 ticks for changing CampPresence
+            Schedule().After(Schedule).After(function()
                 Player.ReturnToCamp()
-            end
+            end)
         end
     end)
 )

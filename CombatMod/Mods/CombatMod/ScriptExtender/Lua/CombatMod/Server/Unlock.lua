@@ -154,6 +154,8 @@ function Unlock.Sync()
         if u.Persistent then
             if persistentUnlocks[u.Id] and persistentUnlocks[u.Id] > 0 then
                 u.Bought = persistentUnlocks[u.Id]
+            else
+                u.Bought = 0
             end
         end
 

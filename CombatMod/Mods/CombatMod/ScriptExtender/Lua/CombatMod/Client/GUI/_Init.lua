@@ -8,16 +8,9 @@ Require("CombatMod/Client/GUI/Debug")
 Require("CombatMod/Client/GUI/Loot")
 
 ---@type ExtuiWindow
-local window = Ext.IMGUI.NewWindow(Mod.Prefix)
-
-Event.On("ToggleKey", function(key)
-    PersistentVars.ToggleKey = key
-    window.Label = Mod.Prefix .. " - " .. __("Press %s to toggle window.", PersistentVars.ToggleKey)
-end)
-
-GameState.OnLoad(function()
-    Event.Trigger("ToggleKey", PersistentVars.ToggleKey)
-end)
+local window = Ext.IMGUI.NewWindow(
+    string.format("%s v%d.%d.%d", Mod.Prefix, Mod.Version.major, Mod.Version.minor, Mod.Version.revision)
+)
 
 Event.On("WindowClosed", function()
     window.Visible = false
@@ -92,9 +85,9 @@ end
 
 local tabs = window:AddTabBar(U.RandomId())
 
-ClientUnlock.Main(tabs)
-
 Control.Main(tabs)
+
+ClientUnlock.Main(tabs)
 
 if IsHost then
     Loot.Main(tabs)

@@ -55,7 +55,7 @@ return {
     },
     {
         Id = "Tadpole",
-        Name = "Get a Tadpole",
+        Name = __("Get a Tadpole"),
         Icon = "Item_LOOT_Druid_Autopsy_Set_Tadpole",
         Cost = 30,
         Amount = nil,
@@ -90,7 +90,7 @@ return {
     },
     {
         Id = "BuyLoot",
-        Name = "Roll Loot 10x",
+        Name = __("Roll Loot %dx", 10),
         Icon = "Item_CONT_GEN_Chest_Jewel_B",
         Cost = 30,
         Amount = 10,
@@ -104,7 +104,7 @@ return {
     },
     {
         Id = "BuySupplies",
-        Name = "Buy 40 Camp Supplies",
+        Name = __("Buy 40 Camp Supplies"),
         Icon = "Item_CONT_GEN_CampSupplySack",
         Cost = 20,
         Amount = 4,
@@ -115,8 +115,8 @@ return {
     },
     {
         Id = "BuyEmperor",
-        Name = "Spawn Mindflayer Companion",
-        Description = "Spawns the Emperor as controllable party follower.",
+        Name = __("Spawn Mindflayer Companion"),
+        Description = __("Spawns the Emperor as controllable party follower."),
         Icon = "TadpoleSuperPower_SurvivalInstinct",
         Cost = 500,
         Amount = nil,
@@ -259,7 +259,7 @@ return {
     },
     {
         Id = "BuyDeathWard",
-        Name = "Death Ward",
+        Name = Localization.Get("hbd168de5gbd55g4d55g947eg6f5d9b3313a5;2"),
         Icon = "Spell_Abjuration_DeathWard",
         Cost = 1000,
         Amount = nil,
@@ -273,13 +273,14 @@ return {
     },
     {
         Id = "BuyLootPlus",
-        Name = "More Gamba - Roll Loot 10x",
+        Name = __("Roll Loot %dx", 20),
         Icon = "Item_CONT_GEN_Chest_Jewel_A",
         Cost = 20,
         Amount = 10,
         Character = false,
+        Requirement = "NEWGAME_PLUS",
         OnBuy = function(self, character)
-            local loot = Item.GenerateLoot(10, C.LootRates)
+            local loot = Item.GenerateLoot(20, C.LootRates)
 
             local x, y, z = Osi.GetPosition(character)
             Item.SpawnLoot(loot, x, y, z)
