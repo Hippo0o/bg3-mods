@@ -186,11 +186,9 @@ function Action.SpawnRound()
             interval = 500,
         }).After(function()
             Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
-            if Config.ForceEnterCombat or Player.InCombat() then
-                Scenario.CombatSpawned(e)
-            end
-
             Event.Trigger("ScenarioEnemySpawned", Current(), e)
+
+            Action.EnemyAdded(e)
         end).Catch(function()
             L.Error("Spawn limit exceeded.", e:GetId())
             UT.Remove(s.SpawnedEnemies, e)
@@ -288,6 +286,12 @@ function Action.MapEntered()
     end)
 end
 
+function Action.EnemyAdded(enemy)
+    if Player.InCombat() then
+        Scenario.CombatSpawned(enemy)
+    end
+end
+
 -- Enemy died or couldnt spawn
 function Action.EnemyRemoved()
     local s = Current()
@@ -300,7 +304,12 @@ function Action.EnemyRemoved()
 end
 
 -- Enemy spawned but is out of bounds
+-- Player needs to be in combat for this to work
 function Action.Failsafe(enemy)
+    if not Player.InCombat() then
+        return
+    end
+
     local s = Current()
 
     local list = enemy and { enemy } or s.SpawnedEnemies
@@ -557,9 +566,7 @@ function Scenario.CombatSpawned(specific)
             retries = 5,
             interval = 1000,
         }).Catch(ifScenario(function()
-            if Config.ForceEnterCombat or Player.InCombat() then
-                Action.Failsafe(enemy)
-            end
+            Action.Failsafe(enemy)
         end))
     end
 end
@@ -766,7 +773,7 @@ U.Osiris.On(
                 Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()), true)
                 -- table.remove(s.KilledEnemies, i)
 
-                Scenario.CombatSpawned()
+                Action.EnemyAdded(e)
                 return
             end
         end
@@ -790,11 +797,12 @@ U.Osiris.On(
             if U.UUID.Equals(e.GUID, uuid) then
                 table.insert(s.KilledEnemies, e)
                 table.remove(s.SpawnedEnemies, i)
+
                 -- might revive and rejoin battle
                 Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()), true)
-                spawnedKilled = true
-
                 Event.Trigger("ScenarioEnemyKilled", Current(), e)
+
+                spawnedKilled = true
                 break
             end
         end
