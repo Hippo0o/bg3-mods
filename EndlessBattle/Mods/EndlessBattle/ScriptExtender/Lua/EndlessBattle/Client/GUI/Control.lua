@@ -19,7 +19,9 @@ function Control.Events()
     end)
 
     Event.On("Stop", function()
-        Net.Request("Stop")
+        Net.Request("Stop").After(function(event)
+            handleResponse(event.Payload)
+        end)
     end)
 
     Event.On("PingSpawns", function(data)
@@ -73,16 +75,6 @@ function Control.Main(tab)
             end
         end):Exec()
     end)
-
-    root:AddButton(__("Go to Camp")).OnClick = function(button)
-        Event.Trigger("ToCamp")
-    end
-
-    local btn = root:AddButton(__("Resume Combat"))
-    btn.SameLine = true
-    btn.OnClick = function(button)
-        Event.Trigger("ResumeCombat")
-    end
 
     root:AddSeparatorText(__("Logs"))
     Components.Layout(root, 1, 1, function(layout)
@@ -160,6 +152,10 @@ function Control.StartPanel(root)
 
             return grp
         end, "ToggleDebug").Update(Mod.Debug)
+
+        listCols[1]:AddButton(__("Go to Camp")).OnClick = function(button)
+            Event.Trigger("ToCamp")
+        end
     end)
 end
 
@@ -200,6 +196,16 @@ function Control.RunningPanel(root)
         end, "StateChange")
         cond.OnEvent = function(state)
             return state.Scenario and (state.Scenario.OnMap == false or state.Scenario.Round == 0)
+        end
+
+        layout.Cells[1][1]:AddButton(__("Go to Camp")).OnClick = function(button)
+            Event.Trigger("ToCamp")
+        end
+
+        local btn = layout.Cells[1][1]:AddButton(__("Next Round"))
+        btn.SameLine = true
+        btn.OnClick = function(button)
+            Event.Trigger("ResumeCombat")
         end
 
         layout.Cells[1][2]:AddButton(__("Teleport")).OnClick = function()

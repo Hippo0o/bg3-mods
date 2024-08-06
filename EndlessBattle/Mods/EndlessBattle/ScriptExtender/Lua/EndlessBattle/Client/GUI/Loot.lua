@@ -1,5 +1,6 @@
 Loot = {}
 
+-- TODO UI feedback
 function Loot.Main(tab)
     local root = tab:AddTabItem(__("Loot"))
 
@@ -7,23 +8,28 @@ function Loot.Main(tab)
         Net.Send("PickupAll")
     end
 
-    root:AddSeparatorText(__("Lootfilter for Armor"))
-    for _, rarity in pairs(C.ItemRarity) do
-        Loot.Rarity(root, rarity, "Armor")
-        root:AddSeparator()
-    end
+    Components.Layout(root, 1, 1, function(layout)
+        layout.Table.ScrollY = true
+        local root = layout.Cells[1][1]
 
-    root:AddSeparatorText(__("Lootfilter for Weapons"))
-    for _, rarity in pairs(C.ItemRarity) do
-        Loot.Rarity(root, rarity, "Weapon")
-        root:AddSeparator()
-    end
+        root:AddSeparatorText(__("Auto-Pickup for Armor"))
+        for _, rarity in pairs(C.ItemRarity) do
+            Loot.Rarity(root, rarity, "Armor")
+            root:AddSeparator()
+        end
 
-    root:AddSeparatorText(__("Lootfilter for Objects"))
-    for _, rarity in pairs(C.ItemRarity) do
-        Loot.Rarity(root, rarity, "Object")
-        root:AddSeparator()
-    end
+        root:AddSeparatorText(__("Auto-Pickup for Weapons"))
+        for _, rarity in pairs(C.ItemRarity) do
+            Loot.Rarity(root, rarity, "Weapon")
+            root:AddSeparator()
+        end
+
+        root:AddSeparatorText(__("Auto-Pickup for Objects"))
+        for _, rarity in pairs(C.ItemRarity) do
+            Loot.Rarity(root, rarity, "Object")
+            root:AddSeparator()
+        end
+    end)
 end
 
 function Loot.Rarity(root, rarity, type)

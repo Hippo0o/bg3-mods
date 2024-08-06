@@ -80,10 +80,16 @@ do
     successBox.SameLine = true
 end
 
-local tabs = window:AddTabBar(__("Main"))
+local tabs = window:AddTabBar(U.RandomId())
+
 ClientUnlock.Main(tabs)
+
 Control.Main(tabs)
-Loot.Main(tabs)
+
+if IsHost then
+    Loot.Main(tabs)
+end
+
 Config.Main(tabs)
 Components.Conditional(_, function()
     return { Creation.Main(tabs), Debug.Main(tabs) }

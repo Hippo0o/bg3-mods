@@ -219,6 +219,7 @@ U.Osiris.On(
 
         if U.UUID.Equals(Player.Host(), character) then
             if not Ext.Entity.Get(character).CampPresence or not S then
+                L.Debug("ReturnToCamp", character)
                 Player.ReturnToCamp()
             end
         end
