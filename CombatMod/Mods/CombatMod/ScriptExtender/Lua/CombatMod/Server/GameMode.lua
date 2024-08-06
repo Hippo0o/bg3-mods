@@ -458,6 +458,15 @@ Event.On("ScenarioEnemySpawned", function(scenario, enemy)
     GameMode.ApplyDifficulty(enemy)
 end)
 
+Event.On("ScenarioRestored", function(scenario)
+    if scenario.Name ~= C.RoguelikeScenario then
+        return
+    end
+    for _, enemy in pairs(scenario.SpawnedEnemies) do
+        GameMode.ApplyDifficulty(enemy)
+    end
+end)
+
 Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then
         GameMode.UpdateRogueScore(scenario)

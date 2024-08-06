@@ -12,9 +12,9 @@ function Config.Main(tab)
 
     local c = root:AddCheckbox(__("Auto Hide"))
     c.OnChange = function(ckb)
-        PersistentVars.AutoHide = ckb.Checked
+        Settings.AutoHide = ckb.Checked
     end
-    c.Checked = PersistentVars.AutoHide
+    c.Checked = Settings.AutoHide
     root:AddText(__("Hide this window when the native UI is focused."))
 
     local k = root:AddInputText(__("Window toggle key"))
@@ -24,9 +24,9 @@ function Config.Main(tab)
             input.Text = "U"
         end
 
-        PersistentVars.ToggleKey = input.Text
+        Settings.ToggleKey = input.Text
     end
-    k.Text = PersistentVars.ToggleKey
+    k.Text = Settings.ToggleKey
     k.CharsNoBlank = true
     k.CharsUppercase = true
     k.AutoSelectAll = true

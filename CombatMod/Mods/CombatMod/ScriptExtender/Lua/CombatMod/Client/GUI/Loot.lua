@@ -2,25 +2,28 @@ Loot = {}
 
 -- TODO UI feedback
 function Loot.Main(tab)
-    local root = tab:AddTabItem(__("Loot")):AddChildWindow("")
+    local root = tab:AddTabItem(__("Loot")):AddChildWindow(""):AddGroup("")
+    root.PositionOffset = { 5, 5 }
 
-    local btn = root:AddButton(__("Pickup All"))
-    btn.IDContext = U.RandomId()
-    btn.PositionOffset = { 5, 5 }
-    btn.OnClick = function()
-        Net.Send("PickupAll")
-    end
+    if IsHost then
+        local btn = root:AddButton(__("Pickup All"))
+        btn.IDContext = U.RandomId()
+        btn.OnClick = function()
+            Net.Send("PickupAll")
+        end
 
-    local btn = root:AddButton(__("Destroy All"))
-    btn.IDContext = U.RandomId()
-    btn.SameLine = true
-    btn.OnClick = function()
-        Net.Send("DestroyAll")
+        local btn = root:AddButton(__("Destroy All"))
+        btn.IDContext = U.RandomId()
+        btn.SameLine = true
+        btn.OnClick = function()
+            Net.Send("DestroyAll")
+        end
+    else
+        root:AddSeparatorText(__("Global Settings - Host only"))
     end
 
     Components.Layout(root, 1, 1, function(layout)
         local root = layout.Cells[1][1]:AddGroup("")
-        root.PositionOffset = { 5, 5 }
 
         root:AddSeparatorText(__("Auto-Pickup for Armor"))
         for _, rarity in pairs(C.ItemRarity) do
@@ -39,7 +42,6 @@ function Loot.Main(tab)
     end)
 
     local ckb = Config.Checkbox(root, "Drop Camp Clothes", "Include camp clothes in item drops", "LootIncludesCampSlot")
-    ckb.PositionOffset = { 5, 5 }
 end
 
 function Loot.Rarity(root, rarity, type)
@@ -52,6 +54,10 @@ function Loot.Rarity(root, rarity, type)
         end, "StateChange", "Checked")
 
         checkbox.OnChange = function(ckb)
+            if not IsHost then
+                ckb.Checked = not ckb.Checked
+                return
+            end
             Net.Send("UpdateLootFilter", { rarity, type, ckb.Checked })
         end
 

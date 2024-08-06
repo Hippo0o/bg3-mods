@@ -1,7 +1,7 @@
 .PHONY: clrf-to-lf lf-to-clrf fix-permissions sync-files copy
 
 UID=1000
-MOD=CombatMod
+MOD?=CombatMod
 # MOD=DOLL
 MOD_SUBDIR=$(MOD_DIR)/$(MOD)/Mods/$(MOD)
 

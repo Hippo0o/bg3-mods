@@ -1,0 +1,6 @@
+{
+    "RequiredVersion": 15,
+    "ModTable": "DCap",
+    "FeatureFlags": ["Lua"]
+}
+

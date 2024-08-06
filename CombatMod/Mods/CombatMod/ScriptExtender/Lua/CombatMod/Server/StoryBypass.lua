@@ -370,15 +370,17 @@ Event.On(
 )
 
 GameState.OnLoad(ifBypassStory(function()
-    if not Config.ClearAllEntities then
-        return
-    end
-    if UT.Contains(PersistentVars.RegionsCleared, Player.Region()) then
-        return
-    end
+    Defer(1000, function()
+        if S or not Config.ClearAllEntities then
+            return
+        end
+        if UT.Contains(PersistentVars.RegionsCleared, Player.Region()) then
+            return
+        end
 
-    Schedule(function()
-        StoryBypass.RemoveAllEntities()
-        table.insert(PersistentVars.RegionsCleared, Player.Region())
+        Schedule(function()
+            StoryBypass.RemoveAllEntities()
+            table.insert(PersistentVars.RegionsCleared, Player.Region())
+        end)
     end)
 end))

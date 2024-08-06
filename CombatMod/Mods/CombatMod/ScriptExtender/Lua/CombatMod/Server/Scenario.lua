@@ -366,6 +366,8 @@ function Scenario.RestoreFromState(state)
                 Action.NotifyStarted()
             end
         end
+
+        Event.Trigger("ScenarioRestored", S)
     end, function(err)
         L.Error(err)
         Enemy.Cleanup()

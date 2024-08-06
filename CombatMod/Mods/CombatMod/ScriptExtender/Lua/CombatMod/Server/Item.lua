@@ -168,16 +168,20 @@ function Item.ClearCache()
     }
 end
 
+function Item.Get(items, type, rarity)
+    return UT.Map(items, function(name)
+        local item = Object.New(name, type)
+
+        if rarity == nil or item.Rarity == rarity then
+            return item
+        end
+    end)
+end
+
 function Item.Objects(rarity, forCombat)
     local cacheKey = forCombat and "CombatObjects" or "Objects"
     if #itemCache[cacheKey] > 0 then
-        return UT.Map(itemCache[cacheKey], function(name)
-            local item = Object.New(name, "Object")
-
-            if rarity == nil or item.Rarity == rarity then
-                return item
-            end
-        end)
+        return Item.Get(itemCache[cacheKey], "Object", rarity)
     end
 
     if objects == nil then
@@ -250,18 +254,12 @@ function Item.Objects(rarity, forCombat)
 
     itemCache[cacheKey] = items
 
-    return Item.Objects(rarity, forCombat)
+    return Item.Get(items, "Object", rarity)
 end
 
 function Item.Armor(rarity)
     if #itemCache.Armor > 0 then
-        return UT.Map(itemCache.Armor, function(name)
-            local item = Object.New(name, "Armor")
-
-            if rarity == nil or item.Rarity == rarity then
-                return item
-            end
-        end)
+        return Item.Get(itemCache.Armor, "Armor", rarity)
     end
 
     if armor == nil then
@@ -294,10 +292,6 @@ function Item.Armor(rarity)
             return false
         end
 
-        if rarity ~= nil and stat.Rarity ~= rarity then
-            return false
-        end
-
         -- doesnt exist iirc
         if stat.UseConditions ~= "" then
             return false
@@ -311,20 +305,14 @@ function Item.Armor(rarity)
         return true
     end)
 
-    itemCache.Armor = items
+    itemCache.Armors = items
 
-    return Item.Armor(rarity)
+    return Item.Get(items, "Armor", rarity)
 end
 
 function Item.Weapons(rarity)
     if #itemCache.Weapons > 0 then
-        return UT.Map(itemCache.Weapons, function(name)
-            local item = Object.New(name, "Weapon")
-
-            if rarity == nil or item.Rarity == rarity then
-                return item
-            end
-        end)
+        return Item.Get(itemCache.Weapons, "Weapon", rarity)
     end
 
     if weapons == nil then
@@ -349,10 +337,6 @@ function Item.Weapons(rarity)
             return false
         end
 
-        if rarity ~= nil and stat.Rarity ~= rarity then
-            return false
-        end
-
         -- weapons that can't be used by players
         if stat.UseConditions ~= "" then
             return false
@@ -368,7 +352,7 @@ function Item.Weapons(rarity)
 
     itemCache.Weapons = items
 
-    return Item.Weapons(rarity)
+    return Item.Get(items, "Weapon", rarity)
 end
 
 function Item.IsOwned(obj)
