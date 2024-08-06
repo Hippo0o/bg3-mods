@@ -142,13 +142,9 @@ return {
             end
         end,
         OnInit = function(self) ---@param self Unlock
-            L.Dump("Pixie init")
-            Event.On("ScenarioMapEntered", function()
-                L.Dump("Pixie event")
-                if self.Bought > 0 then
-                    self:OnBuy()
-                end
-            end)
+            if self.Bought > 0 then
+                self:OnBuy()
+            end
         end,
     },
     {
@@ -263,16 +259,16 @@ return {
             end
         end,
     },
-    {
-        Id = "TransformMindflayer",
-        Name = "Become a true Mindflayer",
-        Icon = "TadpoleSuperPower_StageFright",
-        Cost = 300,
-        Amount = nil,
-        Character = true,
-        Requirement = "NEWGAME_PLUS",
-        OnBuy = function(self, character)
-            Osi.PROC_END_General_ApplyMindFlayerForm(character)
-        end,
-    },
+    -- {
+    --     Id = "TransformMindflayer",
+    --     Name = "Become a true Mindflayer",
+    --     Icon = "TadpoleSuperPower_StageFright",
+    --     Cost = 300,
+    --     Amount = nil,
+    --     Character = true,
+    --     Requirement = "NEWGAME_PLUS",
+    --     OnBuy = function(self, character)
+    --         Osi.PROC_END_General_ApplyMindFlayerForm(character)
+    --     end,
+    -- },
 }

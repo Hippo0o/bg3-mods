@@ -21,6 +21,7 @@ local M = {
         Orin = "S_GLO_Orin_bf24e0ec-a3a6-4905-bd2d-45dc8edf8101",
         Gortash = "S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac",
         Oathbreaker = "S_GLO_OathbreakerKnight_3939625d-86cc-4395-9d50-4f8b846c4231",
+        Isobel = "S_GLO_Isobel_263bfbfc-6160-46f4-a9e1-1089cdb5c211",
     },
     Regions = {
         Act0 = "TUT_Avernus_C",

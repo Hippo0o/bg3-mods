@@ -10,6 +10,13 @@ function Config.Main(tab)
     local c8 =
         Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
 
+    local c6 = Config.Checkbox(
+        root,
+        "Spawn Items At Player",
+        "items will spawn at the current player's position instead the maps entry point",
+        "SpawnItemsAtPlayer"
+    )
+
     ---@type ExtuiCheckbox
     local c2 = Config.Checkbox(
         root,
@@ -39,13 +46,6 @@ function Config.Main(tab)
         "RandomizeSpawnOffset",
         0,
         20
-    )
-
-    local c6 = Config.Checkbox(
-        root,
-        "Spawn Items At Player",
-        "items will spawn at the current player's position instead the maps entry point",
-        "SpawnItemsAtPlayer"
     )
 
     local c7 = Config.Slider(

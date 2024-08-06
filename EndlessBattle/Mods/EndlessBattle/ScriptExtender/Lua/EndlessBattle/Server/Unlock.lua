@@ -166,6 +166,7 @@ function Unlock.Sync()
         PersistentVars.Unlocks[i] = Unlock.Restore(u)
 
         if existing then
+            -- TODO check makes sense to call this here
             PersistentVars.Unlocks[i]:OnInit()
         end
     end
@@ -185,10 +186,10 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
--- TODO maybe OnLoad once
-GameState.OnSessionLoaded(function()
+Event.On("ModActive", function()
     Unlock.Sync()
-end)
+    GameState.OnLoad(Unlock.Sync)
+end, true)
 
 GameState.OnSave(function()
     for i, u in ipairs(PersistentVars.Unlocks) do

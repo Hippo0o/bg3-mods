@@ -158,16 +158,16 @@ end
 -------------------------------------------------------------------------------------------------
 
 U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
-    if
-        US.Contains(dialog, {
-            "GLO_Jergal_AD_AttackFromDialog",
-            "GLO_Jergal_AD_AttackedByPlayer",
-        })
-    then
-        if PersistentVars.Active then
-            Net.Send("OpenGUI", {})
-        end
-    end
+    -- if
+    --     US.Contains(dialog, {
+    --         "GLO_Jergal_AD_AttackFromDialog",
+    --         "GLO_Jergal_AD_AttackedByPlayer",
+    --     })
+    -- then
+    --     if PersistentVars.Active then
+    --         Net.Send("OpenGUI", {})
+    --     end
+    -- end
 
     if not PersistentVars.Active and dialog:match("GLO_Jergal_AD_AttackFromDialog") then
         GameMode.AskOnboarding()
@@ -184,16 +184,16 @@ U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor,
         GameMode.AskOnboarding()
     end
 
-    if dialog:match("CAMP_Jergal_") then
-        if PersistentVars.Active and not PersistentVars.GUIOpen then
-            Osi.DialogRemoveActorFromDialog(instanceID, actor)
-            Osi.DialogRequestStopForDialog(dialog, actor)
-
-            if U.UUID.Equals(actor, Player.Host()) then
-                Net.Send("OpenGUI", {})
-            end
-        end
-    end
+    -- if dialog:match("CAMP_Jergal_") then
+    --     if PersistentVars.Active and not PersistentVars.GUIOpen then
+    --         Osi.DialogRemoveActorFromDialog(instanceID, actor)
+    --         Osi.DialogRequestStopForDialog(dialog, actor)
+    --
+    --         if U.UUID.Equals(actor, Player.Host()) then
+    --             Net.Send("OpenGUI", {})
+    --         end
+    --     end
+    -- end
 end)
 
 Event.On("ModActivated", function()
@@ -272,7 +272,7 @@ function GameMode.GenerateScenario(score)
         for i, tier in ipairs(tiers) do
             if remainingValue >= tier.value then
                 -- Bias towards tiers with more enemies
-                local weight = (tier.amount - 25) / (100 - 25) * 0.7 + 0.1 
+                local weight = (tier.amount - 25) / (100 - 25) * 0.7 + 0.1
                 L.Debug("Tier", tier.name, weight)
 
                 table.insert(validTiers, { tier = tier, weight = weight })

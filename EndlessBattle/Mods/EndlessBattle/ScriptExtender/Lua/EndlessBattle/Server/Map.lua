@@ -102,7 +102,9 @@ end
 function Object:PingSpawns()
     for _, pos in pairs(self.Spawns) do
         local x, y, z = table.unpack(pos)
-        Osi.RequestPing(x, y, z, "", "")
+        Schedule(function()
+            Osi.RequestPing(x, y, z, "", "")
+        end)
     end
 end
 
