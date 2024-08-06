@@ -309,6 +309,7 @@ function GameMode.StartNext()
     end)
 
     if not rogueTemp then
+        Player.Notify(__("Select a Roguelike scenario to start!"))
         return
     end
 

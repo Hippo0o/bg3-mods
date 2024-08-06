@@ -57,7 +57,14 @@ function Config.Main(tab)
         120
     )
 
-    Config.Slider(root, "Difficulty scaling modifier", "in roguelike, scale the stats of enemies based on this number", "ScalingModifier", -50, 100)
+    Config.Slider(
+        root,
+        "Difficulty scaling modifier",
+        "in roguelike, scale the stats of enemies based on this number",
+        "ScalingModifier",
+        0,
+        100
+    )
 
     Config.Slider(
         root,
