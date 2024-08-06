@@ -327,10 +327,6 @@ function M.Table.GroupBy(t, key)
     return r
 end
 
-function M.Table.Pack(...)
-    return { ... }
-end
-
 -- remove unserializeable values
 ---@param t table
 ---@param maxEntityDepth number|nil default: 0

@@ -136,7 +136,7 @@ if Mod.EnableRCE then
         setmetatable(env, { __index = _G })
         env.RCE = event
 
-        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code, env)))
+        local res = { pcall(Ext.Utils.LoadString(code, env)) }
 
         M.Respond(event, res)
     end)
