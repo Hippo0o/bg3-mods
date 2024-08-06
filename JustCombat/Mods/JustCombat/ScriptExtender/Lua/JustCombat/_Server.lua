@@ -203,7 +203,7 @@ do
     end
 
     function Commands.Debug()
-        local oed = Require("Shared/OsirisEventDebug")
+        local oed = Require("Hlib/OsirisEventDebug")
 
         if #oed.Listeners > 0 then
             oed.Detach()

@@ -1,6 +1,6 @@
-Require("Shared/_Init")
+Require("Hlib/_Init")
 Require("JustCombat/_Init")
 
-Require("Shared/Mod").PreparePersistentVars()
+Require("Hlib/Mod").PreparePersistentVars()
 
-Require("Shared/GameState").OnLoadedActions({ FromState = "Sync", ToState = "Running" })
+Require("Hlib/GameState").OnLoadedActions({ FromState = "Sync", ToState = "Running" })

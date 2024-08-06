@@ -1,8 +1,8 @@
 ---@type Utils
-local Utils = Require("Shared/Utils")
+local Utils = Require("Hlib/Utils")
 
 ---@type Libs
-local Libs = Require("Shared/Libs")
+local Libs = Require("Hlib/Libs")
 
 ---@class Event
 local M = {}

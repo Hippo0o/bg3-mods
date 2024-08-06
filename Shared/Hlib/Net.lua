@@ -1,14 +1,14 @@
 ---@type Constants
-local Constants = Require("Shared/Constants")
+local Constants = Require("Hlib/Constants")
 
 ---@type Utils
-local Utils = Require("Shared/Utils")
+local Utils = Require("Hlib/Utils")
 
 ---@type Event
-local Event = Require("Shared/Event")
+local Event = Require("Hlib/Event")
 
 ---@type Libs
-local Libs = Require("Shared/Libs")
+local Libs = Require("Hlib/Libs")
 
 ---@class Net
 local M = {}

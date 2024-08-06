@@ -1,8 +1,8 @@
 ---@type Libs
-local Libs = Require("Shared/Libs")
+local Libs = Require("Hlib/Libs")
 
 ---@type Utils
-local Utils = Require("Shared/Utils")
+local Utils = Require("Hlib/Utils")
 
 ---@class Async
 local M = {}
@@ -195,7 +195,7 @@ local prio = Queue.New(loop)
 local lowPrio = Queue.New(loop)
 
 ---@type GameState
-local GameState = Require("Shared/GameState")
+local GameState = Require("Hlib/GameState")
 -- TODO save loop state in SavingAction or run all tasks from prio queue at once
 GameState.OnUnload(function()
     if loop:IsRunning() then

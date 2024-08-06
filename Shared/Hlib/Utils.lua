@@ -1,8 +1,8 @@
 ---@type Mod
-local Mod = Require("Shared/Mod")
+local Mod = Require("Hlib/Mod")
 
 ---@type Constants
-local Constants = Require("Shared/Constants")
+local Constants = Require("Hlib/Constants")
 
 ---@class Utils
 local M = {}
@@ -214,6 +214,7 @@ function M.Entity.GetNearby(source, radius, ignoreHeight, withComponent)
     table.sort(nearby, function(a, b)
         return a.Distance < b.Distance
     end)
+
     return nearby
 end
 

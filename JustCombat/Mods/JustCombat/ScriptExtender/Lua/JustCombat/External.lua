@@ -1,5 +1,5 @@
 ---@type Mod
-local Mod = Require("Shared/Mod")
+local Mod = Require("Hlib/Mod")
 
 local tt = Libs.TypedTable
 
