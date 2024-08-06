@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                          Story? No!                                         --
+--                                     Player interaction                                      --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
@@ -116,6 +116,12 @@ U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
         Net.Send("OpenGUI", {})
     end
 end)
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                          Story? No!                                         --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
 
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
@@ -282,3 +288,149 @@ U.Osiris.On(
         end)
     end)
 )
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                       Rogue-like mode                                       --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+function GameMode.GenerateScenario()
+    -- ChatGPT made this ................................ i made this
+
+    local minRounds = 1
+    local maxRounds = 10
+    local preferredRounds = 3
+    local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
+
+    -- Define tiers and their corresponding difficulty values
+    local tiers = {
+        { name = "low", value = 3 },
+        { name = "medium", value = 9 },
+        { name = "high", value = 15 },
+        { name = "ultra", value = 22 },
+        { name = "epic", value = 40 },
+        { name = "legendary", value = 69 },
+    }
+
+    -- Weighted random function to bias towards a preferred number of rounds
+    local function weightedRandom()
+        local weights = {}
+        local totalWeight = 0
+        for i = minRounds, maxRounds do
+            local weight = 1 / (math.abs(i - preferredRounds) + 1) -- Adjusted weight calculation
+            weights[i] = weight
+            totalWeight = totalWeight + weight
+        end
+        local randomWeight = U.Random() * totalWeight
+        for i = minRounds, maxRounds do
+            randomWeight = randomWeight - weights[i]
+            if randomWeight <= 0 then
+                return i
+            end
+        end
+        return maxRounds
+    end
+
+    -- Function to select a tier based on remaining value
+    local function selectTier(remainingValue)
+        local totalWeight = 0
+        local weights = {}
+        for i, tier in ipairs(tiers) do
+            local weight = tier.value / remainingValue -- Higher bias towards higher tiers
+            weights[i] = weight
+            totalWeight = totalWeight + weight
+        end
+        local randomWeight = math.random() * totalWeight
+        for i, weight in ipairs(weights) do
+            randomWeight = randomWeight - weight
+            if randomWeight <= 0 then
+                return tiers[i]
+            end
+        end
+        return tiers[#tiers] -- Fallback to the highest tier
+    end
+
+    -- Function to generate a random timeline with bias and possible empty rounds
+    local function generateTimeline(maxValue)
+        L.Debug("generateTimeline", maxValue)
+        local timeline = {}
+        local numRounds = weightedRandom()
+        local remainingValue = maxValue
+        -- Initialize rounds with empty tables
+        for i = 1, numRounds do
+            table.insert(timeline, {})
+        end
+
+        local roundsSkipped = {}
+        local function distribute()
+            local roundIndex = U.Random(1, numRounds)
+
+            if roundsSkipped[roundIndex] then
+                return
+            end
+
+            -- Add a chance for the round to remain empty, except for the first round
+            if not roundsSkipped[roundIndex - 1] and U.Random() < emptyRoundChance then -- Chance to skip adding a tier
+                roundsSkipped[roundIndex] = true
+                remainingValue = remainingValue + maxValue * emptyRoundChance
+                return
+            end
+
+            local tier = selectTier(remainingValue)
+
+            if remainingValue - tier.value >= 0 then
+                table.insert(timeline[roundIndex], tier.name)
+                remainingValue = remainingValue - tier.value
+            end
+        end
+
+        -- Distribute the total value randomly across rounds
+        local failedAttempts = 0
+        while remainingValue > 0 do
+            distribute()
+
+            if remainingValue < tiers[1].value then
+                break
+            end
+
+            failedAttempts = failedAttempts + 1
+
+            if failedAttempts > 100 then
+                break
+            end
+        end
+
+        -- Ensure the first round is not empty by swapping with the first non-empty round if necessary
+        if #timeline[1] == 0 then
+            return generateTimeline(maxValue)
+        end
+
+        -- Ensure no two consecutive rounds exist
+        for i = 2, #timeline do
+            if #timeline[i] == 0 and #timeline[i - 1] == 0 then
+                return generateTimeline(maxValue)
+            end
+        end
+
+        return timeline
+    end
+
+    local list = {}
+    for max = 10, 100 do
+        -- Example usage
+        local timeline = generateTimeline(max)
+
+        list[max] = timeline
+
+        -- Print the generated timeline
+        for i, round in ipairs(timeline) do
+            if #round == 0 then
+                print("Round " .. i .. ": [Empty]")
+            else
+                print("Round " .. i .. ": " .. table.concat(round, ", "))
+            end
+        end
+    end
+    IO.SaveJson("timeline.json", list)
+end
