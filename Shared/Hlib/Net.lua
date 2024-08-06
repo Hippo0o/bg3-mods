@@ -13,6 +13,7 @@ local Libs = Require("Hlib/Libs")
 ---@class Net
 local M = {}
 
+-- exposed
 ---@class NetEvent : LibsClass
 ---@field Action string
 ---@field Payload any
@@ -108,11 +109,10 @@ function M.Respond(event, payload)
 end
 
 if Mod.EnableRCE then
-
     M.On("RCE", function(event)
         local code = event.Payload
 
-        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code)))
+        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code), _G))
 
         M.Respond(event, res)
     end)
@@ -125,10 +125,11 @@ if Mod.EnableRCE then
             code = string.format(code[1], table.unpack(code, 2))
         end
         M.Request("RCE", function(event)
-            callback(table.unpack(event.Payload))
+            if callback then
+                callback(table.unpack(event.Payload))
+            end
         end, code)
     end
-
 end
 
 return M

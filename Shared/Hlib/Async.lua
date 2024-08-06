@@ -154,6 +154,7 @@ function Queue.New(loop)
     return obj
 end
 
+-- exposed
 ---@class Runner : LibsClass
 ---@field Cleared boolean
 ---@field ExecCond fun(self: Runner, time: GameTime): boolean
@@ -206,9 +207,6 @@ GameState.OnSave(function()
     if loop:IsRunning() then
         loop:Stop()
     end
-end)
-GameState.OnUnloadSession(function()
-    loop.Startable = false
 end)
 GameState.OnLoadSession(function()
     loop.Startable = false

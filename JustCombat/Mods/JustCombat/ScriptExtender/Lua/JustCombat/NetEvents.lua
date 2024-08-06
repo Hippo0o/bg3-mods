@@ -78,6 +78,12 @@ Net.On("Teleport", function(event)
     Net.Respond(event, { true })
 end)
 
+Net.On("KillSpawned", function(event)
+    Enemy.KillSpawned()
+
+    Net.Respond(event, { true })
+end)
+
 Net.On("PingSpawns", function(event)
     local mapName = event.Payload.Map
     local map = UT.Find(Map.Get(), function(v)

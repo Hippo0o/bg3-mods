@@ -63,6 +63,7 @@ function M.TypedTable(typeDefs, repeatable)
         error("Libs.TypedTable - repeatable table must have exactly one type definition")
     end
 
+    -- exposed
     ---@class LibsTypedTable : LibsClass
     ---@field Validate fun(table: table): boolean
     ---@field TypeCheck fun(key: string, value: any): boolean

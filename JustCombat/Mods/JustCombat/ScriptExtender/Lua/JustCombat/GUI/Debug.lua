@@ -7,17 +7,17 @@ function Debug.Main(tab)
     end)
 
     Components.Conditional(root, function()
-        local root = tab:AddTabItem("Debug")
+        local root = tab:AddTabItem(__("Debug"))
 
-        root:AddButton("Reload").OnClick = function()
+        root:AddButton(__("Reload")).OnClick = function()
             Net.Send("GetState")
             Net.Send("GetTemplates")
             Net.Send("GetItems")
         end
 
         -- section State
-        local state = root:AddGroup("State")
-        state:AddSeparatorText("State")
+        local state = root:AddGroup(__("State"))
+        state:AddSeparatorText(__("State"))
 
         local stateTree
         WindowEvent("StateChange", function()
@@ -29,8 +29,8 @@ function Debug.Main(tab)
         end):Exec()
 
         -- section Templates
-        local templates = root:AddGroup("Templates")
-        templates:AddSeparatorText("Templates")
+        local templates = root:AddGroup(__("Templates"))
+        templates:AddSeparatorText(__("Templates"))
 
         local templatesTree
         WindowNet("GetTemplates", function(event)
@@ -50,8 +50,8 @@ function Debug.Main(tab)
 end
 
 function Debug.Items(root)
-    local grp = root:AddGroup("Items")
-    grp:AddSeparatorText("Items")
+    local grp = root:AddGroup(__("Items"))
+    grp:AddSeparatorText(__("Items"))
 
     local tree
     WindowNet("GetItems", function(event)
@@ -62,13 +62,13 @@ function Debug.Items(root)
         tree = Components.Tree(grp, event.Payload)
     end):Exec({ Payload = {} })
 
-    local combo = grp:AddCombo("Rarity")
+    local combo = grp:AddCombo(__("Rarity"))
     combo.Options = C.ItemRarity
     combo.OnChange = function()
         Net.Send("GetItems", { Rarity = combo.Options[combo.SelectedIndex + 1] })
     end
 
-    local btn = grp:AddButton("Reset")
+    local btn = grp:AddButton(__("Reset"))
     btn.OnClick = function()
         combo.SelectedIndex = -1
         Net.Send("GetItems")
