@@ -15,7 +15,7 @@ Mod.PersistentVarsTemplate = {
         Looted = {},
         Killed = {},
     },
-    Currency = 99990,
+    Currency = 0,
     Unlocked = {
         ExpMultiplier = false,
         LootMultiplier = false,
@@ -204,9 +204,7 @@ do
     --
     --     Net.Respond(event, Commands[fn](table.unpack(event.Payload.Args or {})))
     -- end)
-    Defer(1000, function()
-        Commands.UI()
-    end)
+
     function Commands.UI()
         Event.Trigger("ModActive")
         if PersistentVars.GUIOpen then

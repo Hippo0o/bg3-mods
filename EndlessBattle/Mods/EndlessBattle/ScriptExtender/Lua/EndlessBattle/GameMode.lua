@@ -385,7 +385,7 @@ function GameMode.UpdateRogueScore(scenario)
     local prev = score
 
     if endRound <= scenario:TotalRounds() then
-        Player.AskConfirmation(__("Perfect Clear! Increase score by %d?", 10)).After(function(confirmed)
+        Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", 5, 10)).After(function(confirmed)
             if confirmed then
                 score = score + 10
             else
@@ -443,4 +443,3 @@ Event.On("ScenarioEnded", function(scenario)
 
     GameMode.UpdateRogueScore(scenario)
 end)
-

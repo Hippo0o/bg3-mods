@@ -215,7 +215,7 @@ function Action.SpawnLoot()
     end)
 end
 
-function Action.EmptyArea()
+function Action.ClearArea()
     if not Config.BypassStory then
         return
     end
@@ -226,9 +226,9 @@ function Action.EmptyArea()
 
     for _, v in pairs(toRemove) do
         L.Debug("Removing entity.", v.Guid)
-        -- UE.Remove(v.Guid)
-        Osi.SetOnStage(v.Guid, 0)
-        Osi.DisappearOutOfSightTo(v.Guid, Player.Host(), "Run", 1, "")
+        UE.Remove(v.Guid)
+        -- Osi.SetOnStage(v.Guid, 0)
+        -- Osi.DisappearOutOfSightTo(v.Guid, Player.Host(), "Run", 1, "")
     end
 end
 
@@ -241,7 +241,7 @@ function Action.StartCombat()
     -- remove corpses from previous combat
     Enemy.Cleanup()
     -- remove all non-player characters
-    Action.EmptyArea()
+    Action.ClearArea()
 
     Current().Map:PingSpawns()
 
@@ -333,7 +333,7 @@ function Action.MapEntered()
     end
 
     local x, y, z = Player.Pos()
-    Action.EmptyArea()
+    Action.ClearArea()
     RetryUntil(function(self, tries)
         if S == nil then -- scenario stopped
             self:Clear()
