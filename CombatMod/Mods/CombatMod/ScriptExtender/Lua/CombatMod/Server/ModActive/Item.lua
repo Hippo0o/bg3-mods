@@ -107,7 +107,11 @@ function Object:Spawn(x, y, z)
 
     self:ModifyTemplate()
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 20, Player.Host(), 1)
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, Player.Host(), 1)
+    if not x or not y or not z then
+        L.Error("Failed to find valid position for: ", self.Name)
+        return false
+    end
 
     self.GUID = Osi.CreateAt(self.RootTemplate, x, y, z, 0, 1, "")
 

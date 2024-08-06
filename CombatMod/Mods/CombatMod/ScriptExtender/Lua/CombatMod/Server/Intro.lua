@@ -29,9 +29,8 @@ function Intro.AskTutSkip()
             return Defer(1000)
         end)
         :After(function()
+            local done = false
             GameState.OnLoad(function()
-                Net.Send("OpenGUI")
-
                 Defer(3000, function()
                     Osi.PROC_GLO_Jergal_MoveToCamp()
 
@@ -64,8 +63,13 @@ function Intro.AskTutSkip()
                     )
 
                     Player.Notify(__("Starting items added. Hirelings unlocked."))
+                    done = true
                 end)
             end, true)
+
+            return WaitUntil(function()
+                return done
+            end)
         end)
 end
 
@@ -81,12 +85,13 @@ function Intro.AskOnboarding()
 
             Event.Trigger("ModActive")
 
-            return Intro.AskEnableRogueMode()
+            if Player.Region() == C.Regions.Act0 then
+                return Intro.AskTutSkip()
+            end
+            return true
         end)
         :After(function()
-            if Player.Region() == C.Regions.Act0 then
-                Intro.AskTutSkip()
-            end
+            Intro.AskEnableRogueMode()
         end)
 end
 

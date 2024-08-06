@@ -102,7 +102,9 @@ GameState.OnLoad(function()
     end
 
     if not U.Equals(PersistentVars.Config, {}) then
-        External.ApplyConfig(PersistentVars.Config)
+        External.ApplyConfig(UT.Filter(PersistentVars.Config, function(v, k)
+            return k ~= "Dev" and k ~= "Debug"
+        end, true))
     end
 
     if PersistentVars.Active then

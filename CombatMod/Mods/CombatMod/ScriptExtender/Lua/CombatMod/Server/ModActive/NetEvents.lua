@@ -306,16 +306,7 @@ Net.On("KillNearby", function(event)
 end)
 
 Net.On("ClearSurfaces", function(event)
-    local x, y, z = Osi.GetPosition(event:Character())
-
-    for ny = y - 30, y + 30, 0.1 do
-        Schedule(function()
-            local nx, _, nz = Osi.FindValidPosition(x, y, z, 100, event:Character(), 1) -- avoiding dangerous surfaces
-            Osi.CreateSurfaceAtPosition(nx, ny, nz, "None", 100, -1)
-            Osi.RemoveSurfaceLayerAtPosition(nx, ny, nz, "Ground", 100)
-        end)
-    end
-
+    StoryBypass.ClearSurfaces(event:Character())
     Net.Respond(event, { true })
 end)
 

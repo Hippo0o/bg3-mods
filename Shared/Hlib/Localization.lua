@@ -16,6 +16,9 @@ local IO = Require("Hlib/IO")
 ---@type Event
 local Event = Require("Hlib/Event")
 
+---@type Event
+local Async = Require("Hlib/Async")
+
 ---@type Net
 local Net = Require("Hlib/Net")
 
@@ -35,6 +38,7 @@ local Localization = Libs.Struct({
     Stack = {},
     Handle = nil,
     LocaText = nil,
+    _StackNew = true,
 })
 function Localization.New(text, version, handle)
     local obj = Localization.Init({
@@ -57,9 +61,9 @@ function Localization.New(text, version, handle)
 end
 local stackNew = {}
 function Localization:ExtendStack(stack)
-    if not stackNew[self] then
+    if self._StackNew then
         self.Stack = {}
-        stackNew[self] = true
+        self._StackNew = false
     end
 
     if stack == "" then -- should not happen
@@ -93,13 +97,34 @@ end)
 if Ext.IsServer() then
     Net.On("_TranslationRequest", function(event)
         Utils.Table.Merge(M.Translations, event.Payload)
-        Net.Respond(event, M.Translations)
         Event.Trigger("_TranslationChanged")
     end)
-    Event.On("_TranslationChanged", function(event)
-        IO.SaveJson(M.FilePath .. ".json", M.Translations)
+else
+    Net.On("_TranslationRequest", function(event)
+        Utils.Table.Merge(M.Translations, event.Payload)
     end)
 end
+
+Event.On(
+    "_TranslationChanged",
+    Async.Debounce(100, function()
+        if Ext.IsServer() then
+            IO.SaveJson(
+                M.FilePath .. ".json",
+                Utils.Table.Map(M.Translations, function(v, k)
+                    return {
+                        Text = v.Text,
+                        Version = v.Version,
+                        Handle = v.Handle,
+                        Stack = v.Stack,
+                    },
+                        k
+                end)
+            )
+        end
+        Net.Send("_TranslationRequest", M.Translations)
+    end)
+)
 
 function M.Translate(text, version)
     version = version or 1
@@ -119,14 +144,7 @@ function M.Translate(text, version)
 
         Localization.ExtendStack(M.Translations[key], stack)
 
-        if Ext.IsClient() then
-            Net.Request("_TranslationRequest", M.Translations):After(function(event)
-                -- potential race condition
-                M.Translations = event.Payload
-            end)
-        else
-            Event.Trigger("_TranslationChanged")
-        end
+        Event.Trigger("_TranslationChanged")
 
         Log.Debug("Localization/Translate", M.Translations[key].Handle, M.Translations[key].Text)
     end
@@ -189,8 +207,14 @@ function M.BuildLocaFile()
         local handle = translation.Handle:gsub(";%d+$", "") -- handle should not have a version
 
         local stack = {}
+        local duplicate = {}
         for i, v in ipairs(translation.Stack) do
-            table.insert(stack, string.format("    <!-- %s -->", v))
+            local simple = v:match("([^:]+):%d+")
+
+            if not duplicate[simple] then
+                table.insert(stack, string.format("    <!-- %s -->", v:match("([^:]+):%d+")))
+                duplicate[simple] = true
+            end
         end
 
         table.insert(entries, string.format(xmlEntry, table.concat(stack, "\n"), handle, 1, translation.Text))

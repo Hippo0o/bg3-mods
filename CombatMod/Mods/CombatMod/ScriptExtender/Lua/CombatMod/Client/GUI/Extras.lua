@@ -18,7 +18,7 @@ function Extras.Main(tab)
     root:AddSeparator()
     Extras.Button(
         root,
-        "Clean Ground",
+        "Clean Ground (WIP)",
         "Clean the ground from blood and similar.\nWill also remove important map properties such as lava, swamp, water, etc.\nReload the save or switch act to restore them.",
         function(btn)
             Net.Request("ClearSurfaces"):After(DisplayResponse)
