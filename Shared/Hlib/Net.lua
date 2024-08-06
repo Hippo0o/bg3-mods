@@ -91,7 +91,7 @@ end
 ---@param action string
 ---@param callback fun(event: NetEvent)
 ---@param once boolean|nil
----@return ChainableEvent
+---@return EventListener
 function M.On(action, callback, once)
     return Event.On(M.EventName(action), callback, once)
 end
@@ -101,7 +101,7 @@ end
 ---@return ChainableEvent
 function M.Request(action, payload)
     local responseAction = action .. Utils.RandomId("_Response_")
-    local chainable = M.On(responseAction, nil, true)
+    local chainable = Event.ChainOn(M.EventName(responseAction), true)
 
     M.Send(action, payload, responseAction)
 

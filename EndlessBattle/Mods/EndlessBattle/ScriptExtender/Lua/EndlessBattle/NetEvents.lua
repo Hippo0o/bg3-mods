@@ -52,12 +52,10 @@ Net.On("Start", function(event)
     Net.Respond(event, { true })
 end)
 
-Net.On("Stop")
-    .After(function(_, event)
-        Scenario.Stop()
-        return event, { true }
-    end)
-    .After(Net.Respond)
+Net.On("Stop", function(event)
+    Scenario.Stop()
+    Net.Respond(event, { true })
+end)
 
 Net.On("Teleport", function(event)
     local mapName = event.Payload.Map

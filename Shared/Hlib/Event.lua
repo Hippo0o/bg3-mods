@@ -13,7 +13,7 @@ local listeners = {}
 ---@class EventListener : LibsClass
 ---@field private _Id string
 ---@field private _Event string
----@field private _Func fun(self: EventListener, ...: any)
+---@field private _Func fun( ...: any)
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
@@ -56,26 +56,16 @@ local EventListener = Libs.Class({
     end,
 })
 
----@class ChainableEvent : Chainable
----@field Source EventListener
----@field After fun(func: fun(self: ChainableEvent, ...: any): any): ChainableEvent
----@return fun(event: string, callback: fun(event: table), once: boolean|nil): Chainable
-function EventListener.Create(event, callback, once)
-    local chainable, startChain = Libs.Chainable()
-
+---@param event string
+---@param callback fun(...: any)
+---@param once boolean|nil
+---@return EventListener
+function EventListener.New(event, callback, once)
     local obj = EventListener.Init({
-        _Func = startChain,
+        _Func = callback,
         _Event = event,
         Once = once and true or false,
     })
-
-    chainable.Source = obj
-
-    if callback then
-        chainable.After(function(_, ...)
-            return callback(...)
-        end)
-    end
 
     obj._Id = Utils.RandomId(event .. "_")
 
@@ -85,15 +75,38 @@ function EventListener.Create(event, callback, once)
 
     table.insert(listeners[event], obj)
 
+    return obj
+end
+
+---@class ChainableEvent : Chainable
+---@field Source EventListener
+---@field After fun(func: fun(self: ChainableEvent, ...: any): any): ChainableEvent
+---@param event string
+---@param once boolean|nil
+---@return ChainableEvent
+function EventListener.Chainable(event, once)
+    local obj = EventListener.New(event, nil, once)
+
+    local chainable, startChain = Libs.Chainable(obj)
+
+    obj._Func = startChain
+
     return chainable
+end
+
+---@param event string
+---@param once boolean|nil
+---@return ChainableEvent
+function M.ChainOn(event, once)
+    return EventListener.Chainable(event, once)
 end
 
 ---@param event string
 ---@param callback fun(...: any)
 ---@param once boolean|nil
----@return ChainableEvent
+---@return EventListener
 function M.On(event, callback, once)
-    return EventListener.Create(event, callback, once)
+    return EventListener.New(event, callback, once)
 end
 
 ---@param event string

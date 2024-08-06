@@ -58,11 +58,16 @@ end
 -- register window event listeners
 local listeners = {}
 ---@return EventListener
-function WindowEvent(event, callback, ...)
-    local chain = Event.On(event, callback, ...).Catch(function(self, err)
-        L.Debug("WindowEvent", event, err)
-        self.Source:Unregister()
-    end)
+function WindowEvent(event, callback, once)
+    local chain = Event.ChainOn(event, once)
+        .After(function(_, ...)
+            callback(...)
+        end)
+        .Catch(function(self, err)
+            L.Debug("WindowEvent", event, err)
+            self.Source:Unregister()
+        end)
+
     table.insert(listeners, chain.Source)
     return chain.Source
 end
