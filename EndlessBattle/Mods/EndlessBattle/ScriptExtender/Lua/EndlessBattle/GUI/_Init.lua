@@ -6,14 +6,6 @@ Require("EndlessBattle/GUI/Creation")
 Require("EndlessBattle/GUI/Config")
 Require("EndlessBattle/GUI/Debug")
 
--- register window event listeners
----@return EventListener
-function WindowEvent(event, callback, once)
-    return Event.On(event, callback, once)
-end
-function WindowNet(event, callback, ...)
-    return WindowEvent(Net.EventName(event), callback, ...)
-end
 Event.On("WindowClosed", function()
     Net.Send("WindowClosed")
 end)
@@ -55,22 +47,36 @@ function OpenWindow()
         end)
     )
 
-    Net.Send("GetState")
+    Net.Send("SyncState")
 
-    local errorBox = window:AddText("")
-    errorBox:SetColor("Text", { 1, 0.4, 0.4, 1 })
-
-    Components.Computed(errorBox, function(box, result)
-        Defer(3000, function()
-            box.Label = ""
+    do
+        local errorBox = window:AddText("")
+        errorBox:SetColor("Text", { 1, 0.4, 0.4, 1 })
+        local clearError = Async.Debounce(2000, function()
+            errorBox.Label = ""
         end)
+        Components.Computed(errorBox, function(box, result)
+            clearError()
 
-        return result
-    end, "Error")
+            return result
+        end, "Error")
+
+        local successBox = window:AddText("")
+        successBox:SetColor("Text", { 0.4, 1, 0.4, 1 })
+        local clearSuccess = Async.Debounce(2000, function()
+            successBox.Label = ""
+        end)
+        Components.Computed(successBox, function(box, result)
+            clearSuccess()
+            return result
+        end, "Success")
+
+        successBox.SameLine = true
+    end
 
     local tabs = window:AddTabBar(__("Main"))
     Control.Main(tabs)
-    Unlocks.Main(tabs)
+    ClientUnlock.Main(tabs)
     Config.Main(tabs)
     Components.Conditional(_, function()
         return { Creation.Main(tabs), Debug.Main(tabs) }

@@ -10,7 +10,7 @@ end)
 
 State = {}
 Net.On(
-    "GetState",
+    "SyncState",
     Async.Debounce(100, function(event)
         State = event.Payload or {}
         Event.Trigger("StateChange", State)

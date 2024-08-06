@@ -279,7 +279,7 @@ function M.Chainable(source)
     end
 
     function Chainable.Throw(err)
-        assert(type(catch) == "function", err)
+        assert(type(catch) == "function", debug.traceback(err))
 
         return catch(Chainable, err)
     end

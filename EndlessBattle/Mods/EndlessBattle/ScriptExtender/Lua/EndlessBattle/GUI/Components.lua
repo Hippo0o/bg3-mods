@@ -44,8 +44,8 @@ end
 ---@field Update fun(...)
 ---@field Field string
 ---@param root ExtuiStyledRenderable
----@param event string
 ---@param compute fun(computed: ComponentsComputed, ...: any): any
+---@param event string|nil
 ---@param field string|nil default "Label"
 ---@return ComponentsComputed
 function Components.Computed(root, compute, event, field)
@@ -67,13 +67,13 @@ function Components.Computed(root, compute, event, field)
             value = compute(root, ...)
         end
 
-        if type(value) == "table" then
-            xpcall(function()
-                value = table.concat(value, "	")
-            end, function() -- lazy fallback
-                value = Ext.Json.Stringify(value)
-            end)
-        end
+        -- if type(value) == "table" then
+        --     xpcall(function()
+        --         value = table.concat(value, "	")
+        --     end, function() -- lazy fallback
+        --         value = Ext.Json.Stringify(value)
+        --     end)
+        -- end
 
         if value ~= nil then
             root[field] = value
@@ -81,10 +81,10 @@ function Components.Computed(root, compute, event, field)
     end
 
     if event then
-        WindowEvent(event, o.Update)
+        Event.On(event, o.Update)
     end
 
-    return root
+    return o
 end
 
 ---@class ComponentsSelection
@@ -200,7 +200,7 @@ function Components.Conditional(root, create, event, destroy)
     end
 
     if event then
-        WindowEvent(event, o.Update)
+        Event.On(event, o.Update)
     end
 
     return o

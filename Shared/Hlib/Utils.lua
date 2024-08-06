@@ -382,7 +382,7 @@ end
 ---@return boolean|number
 function M.Table.Contains(t, v, count)
     local r = #M.Table.Filter(t, function(v2)
-        return v == v2
+        return M.Equals(v, v2, true)
     end)
     return count and r or r > 0
 end
@@ -511,7 +511,7 @@ end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                          DB                                          --
+--                                             DB                                              --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 

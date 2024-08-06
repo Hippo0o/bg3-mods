@@ -31,9 +31,21 @@ local NetEvent = Libs.Class({
 })
 
 function NetEvent:__tostring()
-    return Ext.Json.Stringify(Utils.Table.Filter(self, function(v)
-        return type(v) ~= "function"
-    end, true))
+    local function clean(tbl)
+        return Utils.Table.Map(tbl, function(v, k)
+            if type(v) == "function" then
+                return nil, k
+            end
+
+            if type(v) == "table" then
+                return clean(v), k
+            end
+
+            return v, k
+        end)
+    end
+
+    return Ext.Json.Stringify(clean(self))
 end
 
 Ext.Events.NetMessage:Subscribe(function(msg)
@@ -72,16 +84,21 @@ function M.Send(action, payload, responseAction, peerId)
         ResponseAction = responseAction or action,
     })
 
-    if Ext.IsServer() then
-        if event.PeerId == nil then
-            Ext.Net.BroadcastMessage(Mod.NetChannel, tostring(event))
-        else
-            Ext.Net.PostMessageToUser(event.PeerId, Mod.NetChannel, tostring(event))
+    xpcall(function()
+        if Ext.IsServer() then
+            if event.PeerId == nil then
+                Ext.Net.BroadcastMessage(Mod.NetChannel, tostring(event))
+            else
+                Ext.Net.PostMessageToUser(event.PeerId, Mod.NetChannel, tostring(event))
+            end
+            return
         end
-        return
-    end
 
-    Ext.Net.PostMessageToServer(Mod.NetChannel, tostring(event))
+        Ext.Net.PostMessageToServer(Mod.NetChannel, tostring(event))
+    end, function(err)
+        Utils.Log.Error(err)
+        Utils.Log.Debug(Ext.DumpExport(event))
+    end)
 end
 
 ---@param action string

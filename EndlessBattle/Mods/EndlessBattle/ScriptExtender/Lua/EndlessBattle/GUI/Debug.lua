@@ -9,7 +9,7 @@ function Debug.Main(tab)
     local root = tab:AddTabItem(__("Debug"))
 
     root:AddButton(__("Reload")).OnClick = function()
-        Net.Send("GetState")
+        Net.Send("SyncState")
         Net.Send("GetTemplates")
         Net.Send("GetItems")
     end
@@ -19,7 +19,7 @@ function Debug.Main(tab)
     state:AddSeparatorText(__("State"))
 
     local stateTree
-    WindowEvent("StateChange", function()
+    Event.On("StateChange", function()
         if stateTree then
             stateTree:Destroy()
         end
@@ -32,7 +32,7 @@ function Debug.Main(tab)
     templates:AddSeparatorText(__("Templates"))
 
     local templatesTree
-    WindowNet("GetTemplates", function(event)
+    Net.On("GetTemplates", function(event)
         if templatesTree then
             templatesTree:Destroy()
         end
@@ -55,7 +55,7 @@ function Debug.Enemies(root)
     grp:AddSeparatorText(__("Enemies"))
 
     local tree
-    WindowNet("GetEnemies", function(event)
+    Net.On("GetEnemies", function(event)
         if tree then
             tree:Destroy()
         end
@@ -83,7 +83,7 @@ function Debug.Items(root)
     grp:AddSeparatorText(__("Items"))
 
     local tree
-    WindowNet("GetItems", function(event)
+    Net.On("GetItems", function(event)
         if tree then
             tree:Destroy()
         end

@@ -196,7 +196,7 @@ function Object:Modify(keepFaction)
             expMod = expMod * 2
         end
 
-        if PersistentVars.Unlocks.ExpMultiplier then
+        if PersistentVars.Unlocked.ExpMultiplier then
             expMod = expMod * 2
         end
 
