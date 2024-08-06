@@ -61,12 +61,6 @@ The `Utils` module contains a lot of useful functions that can be used in your s
 ```lua
 ---@type Utils
 local Utils = Require("Hlib/Utils")
--- log functions with mod details and log level
-Utils.Log.Info("Hello World!")
-Utils.Log.Warn("Hello World!")
-Utils.Log.Error("Hello World!")
-Utils.Log.Debug("Hello World!")
-Utils.Log.Dump({ "Hello World!" })
 -- table functions
 Utils.Table.Merge({ a = 1 }, { b = 2 }) -- {a = 1, b = 2}
 Utils.Table.Combine({ 1, 2 }, { 1, 3 }) -- {1, 2, 1, 3}

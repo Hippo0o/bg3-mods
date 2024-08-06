@@ -584,44 +584,4 @@ function M.Osiris.On(name, arity, typeName, callback)
     }
 end
 
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                           Logging                                           --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
-M.Log = {}
-
-local function logPrefix()
-    local pre = Mod.Prefix .. " "
-    if Mod.Debug then
-        pre = pre .. (Ext.IsClient() and "[Client]" or "[Server]")
-    end
-    return pre
-end
-
-function M.Log.Info(...)
-    Ext.Utils.Print(logPrefix() .. "[Info]", ...)
-end
-
-function M.Log.Warn(...)
-    Ext.Utils.PrintWarning(logPrefix() .. "[Warning]", ...)
-end
-
-function M.Log.Debug(...)
-    if Mod.Debug then
-        Ext.Utils.Print(logPrefix() .. "[Debug]", ...)
-    end
-end
-
-function M.Log.Dump(...)
-    for i, v in pairs({ ... }) do
-        M.Log.Debug(i .. ":", Ext.DumpExport(v))
-    end
-end
-
-function M.Log.Error(...)
-    Ext.Utils.PrintError(logPrefix() .. "[Error]", ...)
-end
-
 return M

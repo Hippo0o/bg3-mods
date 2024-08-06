@@ -76,7 +76,7 @@ Ext.Osiris.RegisterListener(
     7,
     "before",
     function(defender, attackerOwner, attacker2, damageType, damageAmount, damageCause, storyActionID)
-        if Osi.IsPlayer(attackerOwner) ~= 1 then
+        if Osi.IsPlayer(attackerOwner) ~= 1 or Osi.IsPlayer(defender) == 1 then
             return
         end
 

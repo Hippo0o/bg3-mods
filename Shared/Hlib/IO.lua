@@ -4,6 +4,9 @@ local Mod = Require("Hlib/Mod")
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Log
+local Log = Require("Hlib/Log")
+
 ---@class IO
 local M = {}
 
@@ -34,7 +37,7 @@ function M.LoadJson(file)
 
     local ok, res = pcall(Ext.Json.Parse, data)
     if not ok then
-        Utils.Log.Error(debug.traceback(res))
+        Log.Error(debug.traceback(res))
         res = nil
     end
 

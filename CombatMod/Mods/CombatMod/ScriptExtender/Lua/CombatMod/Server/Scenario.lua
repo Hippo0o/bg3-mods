@@ -140,7 +140,7 @@ function Action.GiveReward()
     Event.Trigger("ScenarioLoot", Current(), loot)
 
     local reward = Current():KillScore()
-    Osi.AddGold(Player.Host(), reward)
+    Osi.AddGold(Player.Host(), math.min(reward * 10, 100))
     for _, p in pairs(GU.DB.GetPlayers()) do
         Osi.AddExplorationExperience(p, 100 + reward * 10)
     end
@@ -157,18 +157,11 @@ function Action.StartCombat()
     -- remove corpses from previous combat
     Enemy.Cleanup()
 
-    Schedule(function()
-        for _, p in pairs(GE.GetParty()) do
-            Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 0)
-        end
-    end)
-
     Current().Map:PingSpawns()
 
     Event.Trigger("ScenarioCombatStarted", Current())
 
     Player.Notify(__("Combat is Starting."), true)
-    -- Osi.ForceTurnBasedMode(Player.Host(), 1)
     Action.StartRound()
 end
 
@@ -246,28 +239,33 @@ function Action.MapEntered()
 
     Event.Trigger("ScenarioMapEntered", Current())
 
-    local x, y, z = Player.Pos()
+    for _, p in pairs(GE.GetParty()) do
+        Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
+    end
+
+    Player.Notify(__("Entered combat area."))
 
     local id = tostring(S)
-    RetryUntil(function(self, tries)
-        if tostring(S) ~= id then -- scenario stopped
-            self:Clear()
-            return
-        end
-        if tries % 10 == 0 then
-            Player.Notify(__("Move to start scenario."), true)
-        end
-        local x2, y2, z2 = Player.Pos()
-        return x ~= x2 or z ~= z2
-    end, {
-        retries = 120,
-        interval = 1000,
-    }).After(ifScenario(function()
-        Action.StartCombat()
-    end)).Catch(function(_, err)
-        L.Error(err)
-        Scenario.Stop()
-        Player.Notify(__("Scenario canceled due to timeout."))
+    Async.WaitTicks(33, function()
+        WaitUntil(function(self)
+            if tostring(S) ~= id then
+                self:Clear()
+                return
+            end
+
+            -- check if no character in forced turnbased anymore
+            return UT.Find(GE.GetParty(), function(e)
+                return e.PartyMember.IsPermanent == true
+                    and e.TurnBased.ActedThisRoundInCombat == false
+                    and e.TurnBased.RequestedEndTurn == false
+                    and e.TurnBased.IsInCombat_M == true
+            end) == nil
+        end, function()
+            if tostring(S) == id then
+                Current().Map:PingSpawns()
+                Action.StartCombat()
+            end
+        end)
     end)
 end
 
@@ -741,7 +739,7 @@ Event.On(
     ifScenario(function(target)
         if not S.OnMap and U.UUID.Equals(target, Player.Host()) then
             S.OnMap = true
-            Defer(2000).After(Action.MapEntered)
+            Defer(2000, Action.MapEntered)
         end
     end)
 )

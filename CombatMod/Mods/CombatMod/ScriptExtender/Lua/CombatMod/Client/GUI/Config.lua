@@ -8,30 +8,7 @@ function Config.Main(tab)
 
     Net.Send("Config")
 
-    root:AddSeparatorText(__("Window Settings"))
-
-    local c = root:AddCheckbox(__("Auto Hide"))
-    c.OnChange = function(ckb)
-        Settings.AutoHide = ckb.Checked
-    end
-    c.Checked = Settings.AutoHide
-    root:AddText(__("Hide this window when the native UI is focused."))
-
-    local k = root:AddInputText(__("Window toggle key"))
-    k.OnChange = function(input)
-        input.Text = input.Text:upper():sub(1, 1)
-        if not input.Text:match("[A-Z]") then
-            input.Text = "U"
-        end
-
-        Settings.ToggleKey = input.Text
-    end
-    k.Text = Settings.ToggleKey
-    k.CharsNoBlank = true
-    k.CharsUppercase = true
-    k.AutoSelectAll = true
-    k.AlwaysOverwrite = true
-    k.ItemWidth = 25
+    Config.Client(root)
 
     root:AddSeparatorText(__("Global Settings - Host only"))
 
@@ -67,6 +44,13 @@ function Config.Main(tab)
 
     local c9 =
         Config.Checkbox(root, "Turn Off Notifications", "don't show ingame notifications", "TurnOffNotifications")
+
+    local c10 = Config.Checkbox(
+        root,
+        "Only Host Can Buy Unlocks",
+        "restrict other players in multiplayer from buying unlocks",
+        "MulitplayerRestrictUnlocks"
+    )
 
     local c5 = Config.Slider(
         root,
@@ -165,6 +149,40 @@ function Config.Main(tab)
     root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true
 
     root:AddDummy(1, 2)
+end
+
+function Config.Client(root)
+    root:AddSeparatorText(__("Window Settings"))
+
+    local c = root:AddCheckbox(__("Auto Hide"))
+    c.OnChange = function(ckb)
+        Settings.AutoHide = ckb.Checked
+    end
+    c.Checked = Settings.AutoHide
+    root:AddText(__("Hide this window when the native UI is focused."))
+
+    local c = root:AddCheckbox(__("Auto Toggle"))
+    c.OnChange = function(ckb)
+        Settings.AutoOpen = ckb.Checked
+    end
+    c.Checked = Settings.AutoOpen
+    root:AddText(__("Hide this window when entering a map. Show this window when starting a scenario."))
+
+    local k = root:AddInputText(__("Window toggle key"))
+    k.OnChange = function(input)
+        input.Text = input.Text:upper():sub(1, 1)
+        if not input.Text:match("[A-Z]") then
+            input.Text = "U"
+        end
+
+        Settings.ToggleKey = input.Text
+    end
+    k.Text = Settings.ToggleKey
+    k.CharsNoBlank = true
+    k.CharsUppercase = true
+    k.AutoSelectAll = true
+    k.AlwaysOverwrite = true
+    k.ItemWidth = 25
 end
 
 function Config.Checkbox(root, label, desc, field, onChange)

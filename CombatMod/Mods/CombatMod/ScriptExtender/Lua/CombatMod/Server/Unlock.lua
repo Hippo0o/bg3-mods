@@ -209,7 +209,6 @@ Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)
 end)
 
-
 Net.On("BuyUnlock", function(event)
     local unlock = UT.Find(Unlock.Get(), function(u)
         return u.Id == event.Payload.Id
@@ -220,6 +219,12 @@ Net.On("BuyUnlock", function(event)
     end
     local function soundSuccess()
         Osi.PlaySoundResource(event:Character(), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
+    end
+
+    if Config.MulitplayerRestrictUnlocks and event:IsHost() == false then
+        Net.Respond(event, { false, __("Host has restricted buying unlocks.") })
+        soundFail()
+        return
     end
 
     Unlock.UpdateUnlocked()

@@ -1,6 +1,9 @@
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Log
+local Log = Require("Hlib/Log")
+
 ---@type Libs
 local Libs = Require("Hlib/Libs")
 
@@ -28,7 +31,7 @@ local EventListener = Libs.Struct({
         xpcall(function()
             self._Func(table.unpack(args))
         end, function(err)
-            Utils.Log.Error(err)
+            Log.Error(err)
         end)
 
         if self.Once then
@@ -43,7 +46,7 @@ local EventListener = Libs.Struct({
 
         for i = #eventListeners, 1, -1 do
             if eventListeners[i]._Id == self._Id then
-                Utils.Log.Debug("Event/Unregister", self._Event, self._Id)
+                Log.Debug("Event/Unregister", self._Event, self._Id)
                 table.remove(eventListeners, i)
             end
         end
@@ -111,7 +114,7 @@ end
 function M.Trigger(event, ...)
     local eventListeners = M.Listeners(event)
 
-    Utils.Log.Debug("Event/Trigger", #eventListeners, event, Mod.Dev and debug.traceback() or nil)
+    Log.Debug("Event/Trigger", #eventListeners, event, Mod.Dev and debug.traceback() or nil)
 
     for _, l in ipairs(Utils.Table.Values(eventListeners)) do
         l:Exec(...)

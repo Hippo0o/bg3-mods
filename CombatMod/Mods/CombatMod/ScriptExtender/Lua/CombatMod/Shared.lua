@@ -9,11 +9,14 @@ Mod.TableKey = "ToT"
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Log
+local Log = Require("Hlib/Log")
+
 ---@type GameUtils
 local GameUtils = Require("Hlib/GameUtils")
 
 U = Utils
-L = Utils.Log
+L = Log
 UT = Utils.Table
 US = Utils.String
 GU = GameUtils

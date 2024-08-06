@@ -4,6 +4,9 @@ local Libs = Require("Hlib/Libs")
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Log
+local Log = Require("Hlib/Log")
+
 ---@class Async
 local M = {}
 
@@ -47,7 +50,7 @@ local Loop = Libs.Struct({
     Start = function(self) ---@param self Loop
         assert(self.Handle == nil, "Loop already running.")
         if Mod.Dev then
-            Utils.Log.Debug("Loop/Start", self.Startable)
+            Log.Debug("Loop/Start", self.Startable)
         end
         if not self.Startable or self:IsEmpty() then
             return
@@ -64,9 +67,9 @@ local Loop = Libs.Struct({
 
             ticks = ticks + 1
             if ticks % 3000 == 0 then
-                Utils.Log.Debug("Loop is running for too long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
+                Log.Debug("Loop is running for too long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
                 if Mod.Dev then
-                    Utils.Log.Dump(self)
+                    Log.Dump(self)
                 end
             end
         end)
@@ -76,7 +79,7 @@ local Loop = Libs.Struct({
         Ext.Events.Tick:Unsubscribe(self.Handle)
         self.Handle = nil
         if Mod.Dev then
-            Utils.Log.Debug("Loop/Stop")
+            Log.Debug("Loop/Stop")
         end
     end,
     Tick = function(self, time) ---@param self Loop
@@ -96,7 +99,7 @@ local Loop = Libs.Struct({
                 end)
 
                 if not success then
-                    Utils.Log.Error("Async", result)
+                    Log.Error("Async", result)
                     runner:Clear()
                     return
                 end
@@ -131,7 +134,7 @@ local Queue = Libs.Struct({
         end
 
         if Mod.Dev then
-            Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx)
+            Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx)
         end
 
         return idx
@@ -143,7 +146,7 @@ local Queue = Libs.Struct({
                 self.Loop.Tasks:Dec()
 
                 if Mod.Dev then
-                    Utils.Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
+                    Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
                 end
 
                 return

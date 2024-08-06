@@ -31,7 +31,7 @@ function Extras.Main(tab)
         end)
     end)
 
-    root:AddSeparatorText("Recruit Origins")
+    root:AddSeparatorText("Recruit Origins (Experimental)")
     root:AddDummy(1, 1)
     for name, char in pairs(C.OriginCharacters) do
         local desc = ""
@@ -44,6 +44,8 @@ function Extras.Main(tab)
             true
     end
     root:AddText("Needs to be run multiple times in some cases. May not work in all cases.")
+    root:AddText("Halsin will be dead once entering Act 2 for the first time.")
+    root:AddText("Level will be reset. Inventory will be emptied.")
     root:AddSeparator()
 end
 

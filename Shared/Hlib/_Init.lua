@@ -23,6 +23,9 @@ local Mod = Require("Hlib/Mod")
 Require("Hlib/Constants")
 ---@type Utils
 local Utils = Require("Hlib/Utils")
+
+---@type Log
+local Log = Require("Hlib/Log")
 -- Require("Hlib/Libs")
 -- Require("Hlib/Event")
 -- Require("Hlib/GameState")
@@ -31,7 +34,7 @@ local Utils = Require("Hlib/Utils")
 -- Require("Hlib/OsirisEventDebug")
 
 Ext.Events.SessionLoaded:Subscribe(function()
-    Utils.Log.Info(
+    Log.Info(
         Mod.TableKey
             .. " Version: "
             .. Mod.Version.major

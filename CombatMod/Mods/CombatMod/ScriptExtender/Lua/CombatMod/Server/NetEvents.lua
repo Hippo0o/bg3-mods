@@ -173,6 +173,14 @@ Net.On("WindowClosed", function(event)
     PersistentVars.GUIOpen = false
 end)
 
+Event.On("ScenarioStarted", function()
+    Net.Send("OpenGUI", "Optional")
+end)
+Event.On("ScenarioMapEntered", function()
+    Net.Send("CloseGUI", "Optional")
+end)
+
+
 Net.On("KillSpawned", function(event)
     Enemy.KillSpawned()
 

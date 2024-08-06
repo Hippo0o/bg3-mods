@@ -4,6 +4,9 @@ local Mod = Require("Hlib/Mod")
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Log
+local Log = Require("Hlib/Log")
+
 ---@type Event
 local Event = Require("Hlib/Event")
 
@@ -92,8 +95,8 @@ function M.Send(action, payload, responseAction, peerId)
 
         Ext.Net.PostMessageToServer(Mod.NetChannel, tostring(event))
     end, function(err)
-        Utils.Log.Error(err)
-        Utils.Log.Debug(Ext.DumpExport(event))
+        Log.Error(err)
+        Log.Debug(Ext.DumpExport(event))
     end)
 end
 

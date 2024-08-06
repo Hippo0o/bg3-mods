@@ -495,6 +495,14 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
 
             if bonusCategory == "Object" then
                 items = Item.Objects(rarity, true)
+                if #items > 0 then
+                    local isPotion = U.Random() < 0.33
+                    if isPotion then
+                        items = UT.Filter(items, function(item)
+                            return item.Name:match("^OBJ_Potion_Healing")
+                        end)
+                    end
+                end
             elseif bonusCategory == "Weapon" then
                 items = Item.Weapons(rarity)
                 if #items > 0 then

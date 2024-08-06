@@ -1,4 +1,3 @@
---- Automatically generated from templates. Might need manual fixing.
 return {
     {
         AiHint = "00000000-0000-0000-0000-000000000000",
@@ -462,27 +461,27 @@ return {
         TemplateId = "d9ae21e7-edd4-4915-ad8d-ac904c4c2567",
         Tier = "low",
     },
-    {
-        AiHint = "00000000-0000-0000-0000-000000000000",
-        Archetype = "melee",
-        CharacterVisualResourceID = "8843ca9a-c471-eb17-58c0-ba93b6e951db",
-        Equipment = "",
-        Icon = "8843ca9a-c471-eb17-58c0-ba93b6e951db-_(Icon_Doppel)",
-        Info = {
-            AC = 14,
-            Level = 8,
-            Pwr = 68.0,
-            Stats = 9,
-            Vit = 52,
-        },
-        IsBoss = false,
-        LevelOverride = 8,
-        Name = "Doppelganger",
-        SpellSet = "CommonNPCActions_NoThrow",
-        Stats = "Doppelganger",
-        TemplateId = "5d9bb3fb-0202-4a1a-9611-ff063fc15850",
-        Tier = "high",
-    },
+    -- {
+    --     AiHint = "00000000-0000-0000-0000-000000000000",
+    --     Archetype = "melee",
+    --     CharacterVisualResourceID = "8843ca9a-c471-eb17-58c0-ba93b6e951db",
+    --     Equipment = "EQP_LOW_SerialKiller_DG_Figaros_2",
+    --     Icon = "8843ca9a-c471-eb17-58c0-ba93b6e951db-_(Icon_Doppel)",
+    --     Info = {
+    --         AC = 14,
+    --         Level = 8,
+    --         Pwr = 68.0,
+    --         Stats = 9,
+    --         Vit = 52,
+    --     },
+    --     IsBoss = false,
+    --     LevelOverride = 8,
+    --     Name = "Doppelganger",
+    --     SpellSet = "CommonNPCActions_NoThrow",
+    --     Stats = "Doppelganger",
+    --     TemplateId = "5d9bb3fb-0202-4a1a-9611-ff063fc15850",
+    --     Tier = "high",
+    -- },
     {
         AiHint = "00000000-0000-0000-0000-000000000000",
         Archetype = "mage",

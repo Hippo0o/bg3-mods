@@ -13,6 +13,14 @@ function GameMode.AskTutSkip()
                 return
             end
 
+            Schedule(function()
+                for _, entity in pairs(GE.GetParty()) do
+                    for _, item in pairs(entity.InventoryOwner.Inventories[1].InventoryContainer.Items) do
+                        GU.Object.Remove(item.Item.Uuid.EntityUuid)
+                    end
+                end
+            end)
+
             Osi.Use(Player.Host(), "S_TUT_Helm_ControlPanel_bcbba417-6403-40a6-aef6-6785d585df2a", "")
             return Defer(1000)
         end)
@@ -26,6 +34,12 @@ function GameMode.AskTutSkip()
                     -- Osi.TeleportTo(Player.Host(), C.NPCCharacters.Jergal, "", 1, 1, 1)
                     Osi.PROC_Camp_ForcePlayersToCamp()
                     Osi.AddGold(Player.Host(), 500)
+                    Osi.TemplateAddTo("efcb70b7-868b-4214-968a-e23f6ad586bc", Player.Host(), 1, 0) -- camp supply backpack
+                    Osi.TemplateAddTo("c1c3e4fb-d68c-4e10-afdc-d4550238d50e", Player.Host(), 4, 1) -- revify scrolls
+                    Osi.TemplateAddTo("d47006e9-8a51-453d-b200-9e0d42e9bbab", Player.Host(), 10, 1) -- health potions
+                    Osi.PROC_CAMP_GiveFreeSupplies()
+                    Osi.PROC_CAMP_GiveFreeSupplies()
+                    Osi.PROC_CAMP_GiveFreeSupplies()
 
                     External.LoadConfig()
 
@@ -391,12 +405,17 @@ function GameMode.StartNext()
         map = maps[U.Random(#maps)]
     end
 
-    Net.Send("OpenGUI")
     Scenario.Start(rogueTemp, map)
 end
 
+GameMode.DifficultyAppliedTo = {}
+
 ---@param enemy Enemy
 function GameMode.ApplyDifficulty(enemy)
+    if GameMode.DifficultyAppliedTo[enemy.GUID] then
+        return
+    end
+
     local function scale(i, h)
         local x = i / 200
         local max_value = 30
@@ -435,6 +454,8 @@ function GameMode.ApplyDifficulty(enemy)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
     end
+
+    GameMode.DifficultyAppliedTo[enemy.GUID] = true
 end
 
 U.Osiris.On(
@@ -457,7 +478,7 @@ Event.On("RogueModeChanged", function(bool)
     GameMode.StartNext()
 
     if not PersistentVars.GUIOpen then
-        Net.Send("OpenGUI", {})
+        Net.Send("OpenGUI")
     end
 end)
 
@@ -486,6 +507,8 @@ end)
 
 Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then
+        GameMode.DifficultyAppliedTo = {}
+
         GameMode.UpdateRogueScore(scenario)
 
         ifRogueLike(function()
@@ -601,14 +624,14 @@ function GameMode.RecruitOrigin(id)
         -- Osi.SetEntityEvent(character, "CampSwapped_WLDMAIN", 1)
         -- Osi.SetEntityEvent(character, "CAMP_CamperInCamp_WLDMAIN", 1)
 
-        Osi.PROC_GLO_InfernalBox_SetNewOwner(character)
+        Osi.PROC_GLO_InfernalBox_SetNewOwner(Player.Host())
         Osi.PROC_GLO_InfernalBox_AddToOwner()
 
         if dialog then
             Osi.QRY_StartDialog_Fixed(dialog, character, Player.Host())
         end
 
-        if U.UUID.Equals(Osi.GetFaction(character), C.CompanionFaction) then
+        if Osi.IsPartyMember(character, 0) == 1 then
             return
         end
 
@@ -619,8 +642,9 @@ function GameMode.RecruitOrigin(id)
         Osi.SetLevel(character, 1)
         Osi.RequestRespec(character)
 
-        Async.WaitTicks(9, function()
+        Async.WaitTicks(20, function()
             local entity = Ext.Entity.Get(character)
+
             if not entity.Experience then
                 entity:CreateComponent("Experience")
             end
@@ -640,6 +664,13 @@ function GameMode.RecruitOrigin(id)
             end
 
             Osi.AddExplorationExperience(character, teamExp)
+
+            for _, item in pairs(entity.InventoryOwner.Inventories[1].InventoryContainer.Items) do
+                GU.Object.Remove(item.Item.Uuid.EntityUuid)
+            end
+            entity:Replicate("InventoryOwner")
+
+            Osi.TemplateAddTo("efcb70b7-868b-4214-968a-e23f6ad586bc", character, 1, 0) -- camp supply backpack
         end)
     end
 
