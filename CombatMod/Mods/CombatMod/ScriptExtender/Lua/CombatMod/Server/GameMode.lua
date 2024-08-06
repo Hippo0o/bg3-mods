@@ -549,8 +549,8 @@ function GameMode.RecruitOrigin(id)
 
     ({
         Gale = function()
-            recruit(uuid)
-            fixGale()
+            recruit(uuid, "4b3ad930-fb84-09ff-eced-37265b7ba8c6")
+            -- fixGale()
         end,
         ShadowHeart = function()
             recruit(uuid) -- "0e3f617e-1e5a-838c-6e3f-5f36d0470699")
@@ -600,6 +600,10 @@ do -- EXP Lock
 
     local entityData = {}
     local function snapEntity(entity)
+        if entity.Experience == nil then
+            return
+        end
+
         entityData[entity.Uuid.EntityUuid] = {
             exp = UT.Clean(entity.Experience),
             level = entity.EocLevel.Level,
@@ -629,7 +633,7 @@ do -- EXP Lock
         if not entityListener then
             GameMode.ExpLock.SnapshotEntitiesExp()
             entityListener = Ext.Entity.Subscribe("Experience", function(e)
-                if paused then
+                if paused or not e.Experience then
                     return
                 end
 

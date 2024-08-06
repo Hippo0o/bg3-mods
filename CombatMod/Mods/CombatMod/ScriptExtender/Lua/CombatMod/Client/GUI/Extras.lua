@@ -17,11 +17,13 @@ function Extras.Main(tab)
         end
     )
 
+    root:AddSeparator()
     Extras.Button(root, "End Long Rest", "Use when stuck in night time.", function(btn)
         Net.Request("CancelLongRest").After(function(event)
             DisplayResponse(event.Payload)
         end)
     end)
+    root:AddSeparator()
 
     Extras.Button(root, "Cancel Dialog", "End the current dialog.", function(btn)
         Net.Request("CancelDialog").After(function(event)
@@ -30,30 +32,28 @@ function Extras.Main(tab)
     end)
 
     root:AddSeparatorText("Recruit Origins")
-    root:AddText("Needs to be run multiple times in some cases.")
+    root:AddDummy(1, 1)
     for name, char in pairs(C.OriginCharacters) do
         local desc = ""
-        if name == "Halsin" then
-            desc = "Be in Act 1 and needs Remove all Entities"
-        end
-        if name == "Gale" then
-            desc = "Be in Act 1. Don't use otherwise."
-        end
 
         Extras.Button(root, name, desc, function(btn)
             Net.Request("RecruitOrigin", name).After(function(event)
                 DisplayResponse(event.Payload)
             end)
-        end)
+        end).SameLine =
+            true
     end
+    root:AddText("Needs to be run multiple times in some cases. May not work in all cases.")
+    root:AddSeparator()
 end
 
 function Extras.Button(root, text, desc, callback)
-    root:AddSeparator()
+    local root = root:AddGroup("")
     local b = root:AddButton(text)
     b.IDContext = U.RandomId()
     b.OnClick = callback
     for i, s in ipairs(US.Split(desc, "\n")) do
         root:AddText(s).SameLine = i == 1
     end
+    return root
 end
