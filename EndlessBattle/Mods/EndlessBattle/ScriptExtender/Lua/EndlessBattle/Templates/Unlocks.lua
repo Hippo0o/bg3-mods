@@ -274,7 +274,7 @@ return {
     {
         Id = "BuyLootPlus",
         Name = "More Gamba\nRoll Loot 10x",
-        Icon = "Item_CONT_GEN_Chest_Jewel_B",
+        Icon = "Item_CONT_GEN_Chest_Jewel_A",
         Cost = 20,
         Amount = 10,
         Character = false,

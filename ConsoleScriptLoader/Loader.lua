@@ -26,7 +26,7 @@ local function newRequire(path, env)
 
         local result = Ext.Utils.Include(mod, filePath, env)
 
-        register[filePath] = result
+        register[filePath] = result or {}
 
         return result
     end
