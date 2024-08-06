@@ -52,7 +52,7 @@ local function toggle()
     end
 end
 
-Net.Request("SyncState")
+Net.Send("SyncState")
 
 do
     local errorBox = window:AddText("")

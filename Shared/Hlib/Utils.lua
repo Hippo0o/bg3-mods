@@ -444,11 +444,32 @@ end
 
 -- remove unserializeable values
 ---@param t table
+---@param maxEntityDepth number|nil default: 1
 ---@return table
-function M.Table.Clean(t)
+function M.Table.Clean(t, maxEntityDepth)
+    maxEntityDepth = maxEntityDepth or 1
+
     return M.Table.Map(t, function(v, k)
+        k = tonumber(k) or tostring(k)
+
         if type(v) == "userdata" then
-            v = Ext.Types.Serialize(v)
+            local ok, value = pcall(Ext.Types.Serialize, v)
+            if ok then
+                v = value
+            elseif getmetatable(v) == "EntityProxy" then
+                if maxEntityDepth <= 0 then
+                    return tostring(v), k
+                else
+                    v = M.Table.Clean(v:GetAllComponents(), maxEntityDepth - 1)
+                end
+            else
+                v = Ext.Json.Parse(Ext.Json.Stringify(v, {
+                    Beautify = false,
+                    StringifyInternalTypes = true,
+                    IterateUserdata = true,
+                    AvoidRecursion = true,
+                }))
+            end
         end
 
         if type(v) == "function" then
@@ -456,7 +477,7 @@ function M.Table.Clean(t)
         end
 
         if type(v) == "table" then
-            return M.Table.Clean(v), k
+            return M.Table.Clean(v, maxEntityDepth), k
         end
 
         return v, k
