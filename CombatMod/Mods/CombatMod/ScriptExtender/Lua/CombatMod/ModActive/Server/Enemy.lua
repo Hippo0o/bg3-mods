@@ -894,6 +894,7 @@ Ext.Osiris.RegisterListener("TurnStarted", 1, "after", function(character)
     end
 end)
 
+-- TODO check StartAttack
 U.Osiris.On("AttackedBy", 7, "after", function(defender, attackerOwner)
     if Osi.IsPlayer(defender) == 1 then
         return
@@ -905,5 +906,20 @@ U.Osiris.On("AttackedBy", 7, "after", function(defender, attackerOwner)
     local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(defender)]
     if getmetatable(enemy) then
         enemy:OnAttacked(attackerOwner)
+    end
+end)
+
+-- overwrite all templates before hand to avoid issues
+local overwritten = {}
+GameState.OnLoad(function()
+    local list = UT.Filter(Enemy.GetTemplates(), function(v)
+        return overwritten[v.TemplateId]
+    end)
+
+    for _, t in pairs(list) do
+        local enemy = Object.New(t)
+        enemy:ModifyTemplate()
+
+        overwritten[enemy.TemplateId] = true
     end
 end)

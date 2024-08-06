@@ -2,6 +2,10 @@ local maxValueDefault = Ext.Stats.GetStatsManager().ExtraData.AbilityMaxValue
 local isDirty = false
 
 local function modify()
+    if isDirty then
+        return
+    end
+
     L.Debug("Applying overwrites...")
 
     -- mod default values
@@ -31,8 +35,6 @@ local function restore()
     isDirty = false
 end
 
-GameState.OnUnload(restore)
-
 -- triggered on load and on mod activation
 GameState.OnLoad(function()
     if IsActive() then
@@ -41,9 +43,12 @@ GameState.OnLoad(function()
         restore()
     end
 end)
+
 GameState.OnLoadSession(function()
     modify()
 end)
+
+GameState.OnUnloadSession(restore)
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -67,9 +72,28 @@ if Ext.IsClient() then
     Net.On("TemplateOverwrite", function(event)
         Event.Trigger("TemplateOverwrite", table.unpack(event.Payload))
     end)
+
+    Net.Send("RequestTemplateOverwrites") -- if the client is joined after the server
 end
 
-GameState.OnUnload(function()
+if Ext.IsServer() then
+    local allOverwrites = {}
+
+    Event.On("TemplateOverwrite", function(templateId, prop, value)
+        allOverwrites[templateId] = allOverwrites[templateId] or {}
+        allOverwrites[templateId][prop] = value
+    end)
+
+    Net.On("RequestTemplateOverwrites", function(event)
+        for templateId, overwrites in pairs(allOverwrites) do
+            for prop, value in pairs(overwrites) do
+                Net.Respond("TemplateOverwrite", { templateId, prop, value })
+            end
+        end
+    end)
+end
+
+GameState.OnUnloadSession(function()
     for templateId, overwrites in pairs(templateIdsOverwritten) do
         L.Debug("Restoring template:", templateId)
 
