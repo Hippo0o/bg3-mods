@@ -103,7 +103,7 @@ Loot.Main(Tabs)
 
 Extras.Main(Tabs)
 
-Components.Conditional(_, function()
+Components.Conditional(nil, function()
     return { Creation.Main(Tabs), Debug.Main(Tabs) }
 end, "ToggleDebug")
 

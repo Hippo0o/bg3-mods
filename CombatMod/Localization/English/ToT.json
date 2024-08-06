@@ -83,6 +83,12 @@
 		"Text": "Bear the Absolute's Brand.",
 		"Version": 1
 	},
+	"Blacklisted mods will not have their items dropped.;1": {
+		"Handle": "h25b59712g70e0g4c24gb168g6a42134a4860",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua"],
+		"Text": "Blacklisted mods will not have their items dropped.",
+		"Version": 1
+	},
 	"Break/Restore Oath;1": {
 		"Handle": "h337385c4g6626g4d09g9004g0b6f7226294d",
 		"Stack": [],
@@ -111,6 +117,12 @@
 		"Handle": "h29375bf8g7c62g40eag91a0g468cb38264ae",
 		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "Bypass Story",
+		"Version": 1
+	},
+	"Cancel Dialog;1": {
+		"Handle": "h2f6f8b9cg7a3ag4decg91c5gcb8af3e7e9a8",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "Cancel Dialog",
 		"Version": 1
 	},
 	"Cannot buy while in combat.;1": {
@@ -257,6 +269,12 @@
 		"Text": "Destroyed %d items.",
 		"Version": 1
 	},
+	"Difficulty scaling modifier;1": {
+		"Handle": "h02b2e407g57e7g4b15ga318g1d73413a3f51",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
+		"Text": "Difficulty scaling modifier",
+		"Version": 1
+	},
 	"Drop Camp Clothes;1": {
 		"Handle": "h3e82a111g6bd7g4f44g80dbg192222f93b00",
 		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
@@ -273,6 +291,18 @@
 		"Handle": "h29620d0ag7c37g4585gb1a5g13e3938731c1",
 		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "Enable Debug",
+		"Version": 1
+	},
+	"End Long Rest;1": {
+		"Handle": "h2af0133ag7fa5g4466gb19cg320093be1022",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "End Long Rest",
+		"Version": 1
+	},
+	"End the current dialog.;1": {
+		"Handle": "h83573dd3gd602g4688gab06g40ee092462cc",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "End the current dialog.",
 		"Version": 1
 	},
 	"Enemies;1": {
@@ -315,6 +345,18 @@
 		"Handle": "h2c411dfcg7914g448ag91f7g22ecf3d500ce",
 		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "Exp Multiplier",
+		"Version": 1
+	},
+	"Extra features;1": {
+		"Handle": "h3550957ag6005g4c02gb066g3a6492441846",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "Extra features",
+		"Version": 1
+	},
+	"Extras;1": {
+		"Handle": "h20891676g75dcg4432gb13bga25453198076",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "Extras",
 		"Version": 1
 	},
 	"Failed to restore scenario.;1": {
@@ -395,6 +437,12 @@
 		"Text": "Hide this window when the native UI is focused.",
 		"Version": 1
 	},
+	"Highlight Spawns;1": {
+		"Handle": "h24936cf3g71c6g439aga17ag05fc035827de",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
+		"Text": "Highlight Spawns",
+		"Version": 1
+	},
 	"Host has restricted buying unlocks.;1": {
 		"Handle": "he8dbdedegbd8eg48b8gbdbeg8ededf9cacfc",
 		"Stack": [],
@@ -433,13 +481,13 @@
 	},
 	"Killed: %s;1": {
 		"Handle": "h2cb5c7a2g79e0g492fgb1f8g6f4913da4d6b",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
 		"Text": "Killed: %s",
 		"Version": 1
 	},
 	"Leave camp to join the battle.;1": {
 		"Handle": "h6119ae15g344cg4fb4g8522ga9d267008bf0",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Leave camp to join the battle.",
 		"Version": 1
 	},
@@ -447,6 +495,12 @@
 		"Handle": "h2795a4eeg72c0g4f1bgb14ag697dd3684b5f",
 		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua"],
 		"Text": "Legendary",
+		"Version": 1
+	},
+	"Level will be reset. Inventory will be emptied.;1": {
+		"Handle": "h5bd81560g0e8dg4403g968egb26534ac9047",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "Level will be reset. Inventory will be emptied.",
 		"Version": 1
 	},
 	"Logs;1": {
@@ -475,7 +529,7 @@
 	},
 	"Map: %s;1": {
 		"Handle": "h3cf1646eg69a4g4313gb0fcg2575d2de0757",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Components.lua"],
 		"Text": "Map: %s",
 		"Version": 1
 	},
@@ -485,10 +539,22 @@
 		"Text": "Maps",
 		"Version": 1
 	},
+	"Mod Item Blacklist;1": {
+		"Handle": "h230707dfg7652g4528ga103g434ec321616c",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua"],
+		"Text": "Mod Item Blacklist",
+		"Version": 1
+	},
 	"Needs to be a Paladin.;1": {
 		"Handle": "had299379gf87cg4c62g89e1gaa04abc38826",
 		"Stack": [],
 		"Text": "Needs to be a Paladin.",
+		"Version": 1
+	},
+	"Needs to be run multiple times in some cases. May not work in all cases.;1": {
+		"Handle": "h8810864dgdd45g4d31g8bb2g3b57e9901975",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "Needs to be run multiple times in some cases. May not work in all cases.",
 		"Version": 1
 	},
 	"Next Round;1": {
@@ -499,7 +565,7 @@
 	},
 	"Not enough currency.;1": {
 		"Handle": "h9cec8225gc9b9g4d77g8afdgfb1168dfd933",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Unlock.lua"],
 		"Text": "Not enough currency.",
 		"Version": 1
 	},
@@ -620,6 +686,12 @@
 		"Text": "Rarity",
 		"Version": 1
 	},
+	"Recruit Origins (Experimental);1": {
+		"Handle": "hfafd2f0cgafa8g47a5g9c9cge1c3febec3e1",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "Recruit Origins (Experimental)",
+		"Version": 1
+	},
 	"Recruiting %s.;1": {
 		"Handle": "h2e7ceb9cg7b29g4becg91d4gfd8af3f6dfa8",
 		"Stack": [],
@@ -700,19 +772,22 @@
 	},
 	"Round: %s;1": {
 		"Handle": "h3d5fde62g680ag48b3gb0e6gced512c4ecf7",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
 		"Text": "Round: %s",
 		"Version": 1
 	},
 	"Running;1": {
 		"Handle": "h21780c4eg742dg4591gb124gb3f7d30691d5",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
 		"Text": "Running",
 		"Version": 1
 	},
 	"Scenario %s started.;1": {
 		"Handle": "hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1",
-		"Stack": [],
+		"Stack": [
+			"CombatMod/CombatMod/ModActive/Server/Scenario.lua",
+			"CombatMod/CombatMod/ModActive/Server/NetEvents.lua"
+		],
 		"Text": "Scenario %s started.",
 		"Version": 1
 	},
@@ -742,7 +817,7 @@
 	},
 	"Scenario: %s;1": {
 		"Handle": "h218206b6g74d7g453egb12bg13585309317a",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
 		"Text": "Scenario: %s",
 		"Version": 1
 	},
@@ -892,7 +967,7 @@
 	},
 	"Total Rounds: %s;1": {
 		"Handle": "h33c0b3bcg6695g4e6eg900fg3808f22d1a2a",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
 		"Text": "Total Rounds: %s",
 		"Version": 1
 	},
@@ -910,13 +985,13 @@
 	},
 	"Unlock %s bought for %s.;1": {
 		"Handle": "hd0c773c3g8592g4269gae3fg440f0c1d662d",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Unlocks.lua"],
 		"Text": "Unlock %s bought for %s.",
 		"Version": 1
 	},
 	"Unlock %s bought.;1": {
 		"Handle": "h2308c823g765dg49d7ga103gbfb103219d93",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Unlocks.lua"],
 		"Text": "Unlock %s bought.",
 		"Version": 1
 	},
@@ -964,13 +1039,13 @@
 	},
 	"Upcoming Spawns: %s;1": {
 		"Handle": "h8528df02gd07dg48a5gbb61gbec319439ce1",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
 		"Text": "Upcoming Spawns: %s",
 		"Version": 1
 	},
 	"Updating config...;1": {
 		"Handle": "h2f0de7b4g7a58g4b2eg91c3ged4873e1cf6a",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "Updating config...",
 		"Version": 1
 	},
@@ -978,6 +1053,12 @@
 		"Handle": "he7764179gb223g4142g8d44g5724af667506",
 		"Stack": [],
 		"Text": "Use all Illithid Powers with Bonus Actions.",
+		"Version": 1
+	},
+	"Use when stuck in night time.;1": {
+		"Handle": "hf762a093ga237g4f5cgac45g193a0e673b18",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua"],
+		"Text": "Use when stuck in night time.",
 		"Version": 1
 	},
 	"VeryRare;1": {
@@ -1042,7 +1123,7 @@
 	},
 	"bought;1": {
 		"Handle": "h22c9bc4eg779cg4e91gb11fga8f7d33d8ad5",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Unlocks.lua"],
 		"Text": "bought",
 		"Version": 1
 	},
@@ -1062,6 +1143,12 @@
 		"Handle": "h00e41e74g55b1g44b2g933dg72d4711f50f6",
 		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport",
+		"Version": 1
+	},
+	"in roguelike, scale the stats of enemies based on this number;1": {
+		"Handle": "h523bc7a7g076eg492fga610g8f494432ad6b",
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
+		"Text": "in roguelike, scale the stats of enemies based on this number",
 		"Version": 1
 	},
 	"items will spawn at the current player's position instead the maps entry point;1": {

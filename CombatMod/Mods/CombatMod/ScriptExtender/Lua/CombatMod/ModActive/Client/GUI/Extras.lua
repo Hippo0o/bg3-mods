@@ -6,13 +6,29 @@ function Extras.Main(tab)
     root.PositionOffset = { 5, 5 }
     root:AddSeparatorText(__("Extra features"))
 
+    Components.Conditional(nil, function()
+        return {
+            Extras.Button(root, "Clean Ground", "", function(btn)
+                Net.Request("ClearSurfaces"):After(DisplayResponse)
+            end),
+            Extras.Button(
+                root,
+                "Remove all Entities",
+                "",
+                function(btn)
+                    Net.Request("RemoveAllEntities"):After(DisplayResponse)
+                end
+            ),
+        }
+    end, "ToggleDebug")
+
     root:AddSeparator()
-    Extras.Button(root, "End Long Rest", "Use when stuck in night time.", function(btn)
+    Extras.Button(root, __("End Long Rest"), __("Use when stuck in night time."), function(btn)
         Net.Request("CancelLongRest"):After(DisplayResponse)
     end)
     root:AddSeparator()
 
-    Extras.Button(root, "Cancel Dialog", "End the current dialog.", function(btn)
+    Extras.Button(root, __("Cancel Dialog"), __("End the current dialog."), function(btn)
         Net.Request("CancelDialog"):After(DisplayResponse)
     end)
 
@@ -35,11 +51,16 @@ end
 function Extras.Button(root, text, desc, callback)
     local root = root:AddGroup("")
 
-    local b = root:AddButton(__(text))
+    local b = root:AddButton(text)
     b.IDContext = U.RandomId()
     b.OnClick = callback
-    for i, s in ipairs(US.Split(desc, "\n")) do
-        root:AddText(__(s)).SameLine = i == 1
+
+    if desc then
+        for i, s in ipairs(US.Split(desc, "\n")) do
+            if s ~= "" then
+                root:AddText(s).SameLine = i == 1
+            end
+        end
     end
 
     return root
