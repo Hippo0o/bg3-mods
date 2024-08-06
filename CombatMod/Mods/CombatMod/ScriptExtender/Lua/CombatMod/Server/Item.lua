@@ -27,6 +27,7 @@ local itemBlacklist = {
     "CONS_FOOD_Soup_Tomato", -- invalid template
     "ARM_Vanity_Body_Shar", -- invalid template
     "WPN_LightCrossbow_Makeshift",
+    "MAG_TheClover_Scimitar", -- unfinished dupe of existing
     -- "_Myrmidon_ConjureElemental$",
     -- "_Myrmidon_WildShape$",
     -- "_Myrmidon_Wildshape$",
