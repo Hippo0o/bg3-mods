@@ -245,7 +245,7 @@ function M.Chainable(source)
         catch(Chainable.Source, err)
     end
 
-    local function start(...)
+    function Chainable.Begin(...)
         local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(Chainable._InitalInput))
 
         for i, chain in ipairs(Chainable._Chain) do
@@ -286,7 +286,7 @@ function M.Chainable(source)
         end
     end
 
-    return Chainable, start
+    return Chainable
 end
 
 return M

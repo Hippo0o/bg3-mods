@@ -87,52 +87,70 @@ function Components.Computed(root, compute, event, field)
     return root
 end
 
----@class ComponentsRadioList
----@field Selected number
+---@class ComponentsSelection
+---@field Selected table<number, number>
+---@field Values table<number, any>
 ---@field Value any
 ---@field Root ExtuiGroup
----@field RadioButtons table<number, ExtuiRadioButton>
+---@field Selectables table<number, ExtuiRadioButton>
 ---@field Reset fun()
----@field AddItem fun(label: string, value: number)
+---@field AddItem fun(label: string, value: any)
+---@param multiple boolean|nil
 ---@param root ExtuiTreeParent
----@return ComponentsRadioList
-function Components.RadioList(root)
+---@return ComponentsSelection
+function Components.Selection(root, multiple)
     local selection = {}
-    selection.Selected = 1
+    selection.Selected = { 1 }
+    selection.Values = {}
     selection.Value = nil
 
+    ---@type ExtuiGroup
     selection.Root = root:AddGroup(U.RandomId())
 
-    selection.RadioButtons = {}
+    selection.Selectables = {}
 
     function selection.Reset()
-        for _, radio in pairs(selection.RadioButtons) do
-            radio:Destroy()
+        for _, select in pairs(selection.Selectables) do
+            select:Destroy()
         end
 
-        selection.RadioButtons = {}
+        selection.Selectables = {}
     end
 
     function selection.AddItem(label, value)
-        local i = #selection.RadioButtons + 1
+        local i = #selection.Selectables + 1
 
-        local radio = selection.Root:AddRadioButton(value, i == selection.Selected)
+        local selected = UT.Contains(selection.Selected, i)
 
-        if i == selection.Selected then
+        local select = multiple and selection.Root:AddCheckbox(label, selected)
+            or selection.Root:AddRadioButton(label, selected)
+
+        if selected then
+            table.insert(selection.Values, value)
             selection.Value = value
         end
 
-        radio.OnChange = function()
-            for _, r in pairs(selection.RadioButtons) do
-                r.Active = false
+        select.OnChange = function()
+            if not multiple then
+                for _, r in pairs(selection.Selectables) do
+                    r.Active = false
+                end
+                select.Active = true
+                selection.Selected = { i }
+                selection.Values = { value }
+                selection.Value = value
+            else
+                if select.Checked then
+                    table.insert(selection.Selected, i)
+                    table.insert(selection.Values, value)
+                    selection.Value = value
+                else
+                    UT.Remove(selection.Selected, i)
+                    UT.Remove(selection.Values, value)
+                end
             end
-
-            radio.Active = true
-            selection.Selected = i
-            selection.Value = value
         end
-
-        table.insert(selection.RadioButtons, radio)
+        table.insert(selection.Selectables, select)
     end
 
     return selection
@@ -145,8 +163,9 @@ end
 ---@param root ExtuiTreeParent
 ---@param create fun(conditional: ComponentsConditional): table<number, ExtuiStyledRenderable>|ExtuiStyledRenderable
 ---@param event string|nil
+---@param destroy boolean|nil
 ---@return ComponentsConditional
-function Components.Conditional(root, create, event)
+function Components.Conditional(root, create, event, destroy)
     local o = {
         Created = {},
         Root = root,
@@ -163,10 +182,16 @@ function Components.Conditional(root, create, event)
                 for _, child in pairs(elements) do
                     table.insert(o.Created, child)
                 end
+            else
+                for _, child in pairs(o.Created) do
+                    child.Visible = true
+                end
             end
         else
-            if o.Created then
-                for i = #o.Created, 1, -1 do
+            for i = #o.Created, 1, -1 do
+                o.Created[i].Visible = false
+
+                if destroy then
                     o.Created[i]:Destroy()
                     table.remove(o.Created, i)
                 end

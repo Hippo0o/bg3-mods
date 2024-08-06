@@ -122,22 +122,18 @@ if Mod.EnableRCE then
     M.On("RCE", function(event)
         local code = event.Payload
 
-        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code), _G))
+        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code, _G)))
 
         M.Respond(event, res)
     end)
 
-    ---@param code string|table string or table with string.format arguments
-    ---@param callback fun(ok: boolean, ...)
-    ---@return EventListener
-    function M.RCE(code, callback)
-        if type(code) == "table" then
-            code = string.format(code[1], table.unpack(code, 2))
-        end
-        M.Request("RCE", code).After(function(event)
-            if callback then
-                callback(table.unpack(event.Payload))
-            end
+    ---@param code string
+    ---@vararg any for string.format
+    ---@return ChainableEvent
+    function M.RCE(code, ...)
+        code = string.format(code, ...)
+        return M.Request("RCE", code).After(function(event)
+            return table.unpack(event.Payload)
         end)
     end
 end

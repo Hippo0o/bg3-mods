@@ -219,9 +219,9 @@ end
 function Runner.Chainable(queue, func)
     local obj = Runner.New(queue, func)
 
-    local chainable, startChain = Libs.Chainable(obj)
+    local chainable = Libs.Chainable(obj)
     obj.Exec = function()
-        startChain()
+        chainable.Begin()
     end
 
     if func then
@@ -354,14 +354,14 @@ function M.RetryUntil(cond, options)
     local interval = options.interval or 1000
     local immediate = options.immediate or false
 
-    local chainable, startChain = Libs.Chainable()
+    local chainable = Libs.Chainable()
     chainable.Catch(function() end) -- ignore errors by default
 
     local runner = M.Interval(interval, function(self, time)
         local ok, result = pcall(cond, self, retries, time)
         if ok and result then
             self:Clear()
-            startChain(result)
+            chainable.Begin(result)
             return
         end
 

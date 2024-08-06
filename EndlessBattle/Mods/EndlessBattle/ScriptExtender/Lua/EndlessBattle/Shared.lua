@@ -2,7 +2,7 @@
 Mod = Require("Hlib/Mod")
 Mod.Debug = true
 Mod.Dev = true
-Mod.EnableRCE = false
+Mod.EnableRCE = true
 Mod.Prefix = "Endless Battle"
 
 ---@type Utils

@@ -96,8 +96,8 @@ function Control.StartPanel(root)
         startLayout.Cells[1][2]:AddText(__("Maps"))
         local listCols = startLayout.Cells[1]
 
-        local scenarioSelection = Components.RadioList(listCols[1])
-        local mapSelection = Components.RadioList(listCols[2])
+        local scenarioSelection = Components.Selection(listCols[1])
+        local mapSelection = Components.Selection(listCols[2])
 
         WindowNet("GetSelection", function(event)
             scenarioSelection.Reset()
