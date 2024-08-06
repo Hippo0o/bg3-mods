@@ -48,7 +48,7 @@ function StoryBypass.AllowRemoval(entity)
         and not U.UUID.Equals(C.NPCCharacters.Jergal, entity.Uuid.EntityUuid) -- No
         and not U.UUID.Equals(C.NPCCharacters.Emperor, entity.Uuid.EntityUuid) -- Gameover if dead
         and not U.UUID.Equals("4f6e63a1-b143-46b1-ac0e-834494dfdc6a", entity.Uuid.EntityUuid) -- Oliver quest endless loop
-        and not entity.ServerCharacter.Template.Name:match("Player")
+        and not (entity.ServerCharacter and entity.ServerCharacter.Template.Name:match("Player"))
 end
 
 function StoryBypass.RemoveAllEntities()
@@ -527,5 +527,7 @@ local function removeAllEntities()
     Player.Notify(__("Clearing all entities"), true)
 
     StoryBypass.RemoveAllEntities()
+
+    Osi.Resurrect(C.OriginCharacters.Halsin)
 end
 GameState.OnLoad(ifBypassStory(removeAllEntities))

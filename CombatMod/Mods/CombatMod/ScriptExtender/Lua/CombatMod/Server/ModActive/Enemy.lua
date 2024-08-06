@@ -17,6 +17,8 @@ L.Debug("Enemies loaded", #enemyTemplates)
 ---@field Info table
 ---@field GUID string
 ---@field Temporary boolean
+---@field HadTurn boolean
+---@field WasAttacked boolean
 -- potential overwrites
 ---@field LevelOverride integer
 ---@field Equipment string
@@ -34,6 +36,8 @@ local Object = Libs.Struct({
     Info = {},
     GUID = nil,
     IsBoss = false,
+    HadTurn = false,
+    WasAttacked = false,
     Temporary = false,
     -- not required
     Race = nil,
@@ -240,6 +244,29 @@ function Object:OnCombat()
     end
 end
 
+function Object:OnAttacked(attacker)
+    if Osi.IsInCombat(self.GUID) ~= 1 then
+        self:Combat(true)
+    end
+
+    if self.HadTurn or self.WasAttacked then
+        return
+    end
+    self.WasAttacked = true
+
+    local seenPlayer = UT.Find(GU.DB.TryGet("DB_Sees", 2, { nil, self.GUID }, 1), function(v)
+        return Player.IsPlayer(v)
+    end)
+
+    if not seenPlayer then
+        Osi.ApplyStatus(self.GUID, "SURPRISED", 1)
+    end
+end
+
+function Object:OnTurn()
+    self.HadTurn = true
+end
+
 function Object:Modify(keepFaction)
     if not self:IsSpawned() or Osi.IsDead(self.GUID) == 1 then
         return
@@ -345,11 +372,11 @@ function Object:Spawn(x, y, z, neutral)
         RetryUntil(function(runner)
             return self:Entity().StatusContainer
         end, { retries = 10, interval = 100 }):After(function()
+            self:Modify()
+
             if not neutral then
                 self:Combat()
             end
-
-            self:Modify()
 
             return self
         end)
@@ -825,8 +852,8 @@ U.Osiris.On("EnteredCombat", 2, "after", function(character, _)
     end
 
     local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(character)]
-    if enemy then
-        Object.Init(enemy):OnCombat()
+    if getmetatable(enemy) then
+        enemy:OnCombat()
     end
 end)
 
@@ -836,8 +863,19 @@ U.Osiris.On("LeftCombat", 2, "after", function(character, _)
     end
 
     local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(character)]
-    if enemy then
-        Object.Init(enemy):OnCombat()
+    if getmetatable(enemy) then
+        enemy:OnCombat()
+    end
+end)
+
+Ext.Osiris.RegisterListener("TurnStarted", 1, "after", function(character)
+    if Osi.IsPlayer(character) == 1 then
+        return
+    end
+
+    local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(character)]
+    if getmetatable(enemy) then
+        enemy:OnTurn()
     end
 end)
 
@@ -848,12 +886,9 @@ U.Osiris.On("AttackedBy", 7, "after", function(defender, attackerOwner)
     if Osi.IsPlayer(attackerOwner) ~= 1 then
         return
     end
-    if Osi.IsInCombat(defender) == 1 then
-        return
-    end
 
     local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(defender)]
-    if enemy then
-        Enemy.Combat(defender, true)
+    if getmetatable(enemy) then
+        enemy:OnAttacked(attackerOwner)
     end
 end)

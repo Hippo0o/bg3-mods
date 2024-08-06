@@ -24,7 +24,7 @@ window.OnClose = function()
     Event.Trigger("WindowClosed")
 end
 
-Event.Trigger("WindowOpened")
+window.Open = false
 
 local function open()
     window.Visible = true

@@ -37,7 +37,6 @@ local Object = Libs.Struct({
     RootTemplate = "",
     Rarity = C.ItemRarity[1],
     GUID = nil,
-    PingSpawn = true,
     Slot = nil,
     Tab = nil,
 })
@@ -403,6 +402,10 @@ function Item.SpawnLoot(loot, x, y, z, autoPickup)
         end
     end
 
+    if #pingedLoot == 0 then
+        return
+    end
+
     Async.Interval(300 - (#pingedLoot * 2), function(self)
         i = i + 1
 
@@ -430,12 +433,41 @@ function Item.SpawnLoot(loot, x, y, z, autoPickup)
     end)
 end
 
-function Item.GenerateLoot(rolls, lootRates, fixedRolls)
+function Item.GenerateSimpleLoot(rolls, chanceFood, lootRates)
     local loot = {}
 
-    if not fixedRolls then
-        fixedRolls = 1
+    if not lootRates then
+        lootRates = C.LootRates
     end
+
+    rolls = rolls or 1
+
+    chanceFood = chanceFood or 0.5
+
+    for i = 1, rolls do
+        local items = Item.Objects(nil, false)
+
+        local isFood = U.Random() < chanceFood
+
+        items = UT.Filter(items, function(item)
+            if isFood then
+                return item.Tab == "Consumable"
+            else
+                return item.Tab ~= "Consumable"
+            end
+        end)
+
+        L.Debug("Rolling kill loot items:", #items, "Object")
+        if #items > 0 then
+            table.insert(loot, UT.DeepClone(items[U.Random(#items)]))
+        end
+    end
+
+    return UT.DeepClone(loot)
+end
+
+function Item.GenerateLoot(rolls, lootRates)
+    local loot = {}
 
     -- each kill gets an object/weapon/armor roll
     if not lootRates then
@@ -448,36 +480,6 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
         end
 
         return t
-    end
-
-    local function addToLoot(item)
-        table.insert(loot, UT.DeepClone(item))
-    end
-
-    local chanceFood = 9
-    for i = 1, fixedRolls do
-        do
-            local items = Item.Objects(nil, false)
-
-            local isFood = U.Random() < chanceFood / 10
-
-            if isFood then
-                chanceFood = math.max(1, chanceFood - 1)
-            end
-
-            items = UT.Filter(items, function(item)
-                if isFood then
-                    return item.Tab == "Consumable"
-                else
-                    return item.Tab ~= "Consumable"
-                end
-            end)
-
-            L.Debug("Rolling fixed loot items:", #items, "Object")
-            if #items > 0 then
-                addToLoot(items[U.Random(#items)])
-            end
-        end
     end
 
     -- build rarity roll tables from template e.g. { "Common", "Common", "Uncommon", "Rare" }
@@ -552,7 +554,7 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
             end
             LogRandom("Items", random.Name, 100)
 
-            addToLoot(random)
+            table.insert(loot, UT.DeepClone(random))
         end
     end
 
@@ -589,3 +591,9 @@ U.Osiris.On(
         end
     )
 )
+
+U.Osiris.On("TeleportedToCamp", 1, "after", function(uuid)
+    if U.UUID.Equals(uuid, Player.Host()) then
+        Player.PickupAll()
+    end
+end)
