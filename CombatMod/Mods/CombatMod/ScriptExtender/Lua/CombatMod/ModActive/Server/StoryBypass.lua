@@ -318,7 +318,11 @@ do -- EXP Lock
             return
         end
 
-        StoryBypass.ExpLock.Resume()
+        if Player.InCamp() then
+            StoryBypass.ExpLock.Pause()
+        else
+            StoryBypass.ExpLock.Resume()
+        end
         WaitTicks(12, function()
             if Player.InCamp() then
                 StoryBypass.ExpLock.Pause()
@@ -331,17 +335,6 @@ do -- EXP Lock
     U.Osiris.On("TeleportedFromCamp", 1, "before", toggleCamp)
     U.Osiris.On("TeleportedToCamp", 1, "before", toggleCamp)
     GameState.OnLoad(toggleCamp)
-end
-
-function StoryBypass.DisableAutosave()
-    local templates = Ext.Template.GetAllLocalTemplates()
-    for _, t in pairs(templates) do
-        if t.TemplateType == "trigger" then
-            if t.Name:match("Autosave") then
-
-            end
-        end
-    end
 end
 
 -------------------------------------------------------------------------------------------------
@@ -599,5 +592,3 @@ local function removeAllEntities()
     Osi.Resurrect(C.OriginCharacters.Halsin) -- Halsin will be dead once entering Act 2 for the first time
 end
 GameState.OnLoad(ifBypassStory(removeAllEntities))
-
-GameState.OnLoad(ifBypassStory(StoryBypass.DisableAutosave))
