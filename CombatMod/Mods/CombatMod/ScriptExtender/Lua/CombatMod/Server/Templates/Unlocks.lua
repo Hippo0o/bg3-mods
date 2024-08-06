@@ -148,12 +148,10 @@ local ngPlus = {
         OnBuy = function(self, character)
             if self.Bought > 0 then
                 for _, u in pairs(getUnlocks()) do
-                    if
-                        US.Contains(u.Id, {
-                            "^Buy",
-                            "TadAwaken",
-                        })
-                    then
+                    if US.Contains(u.Id, {
+                        "^Buy",
+                        "TadAwaken",
+                    }) then
                         if u.Cost > 0 and u.Amount ~= nil and u.Amount > 0 then
                             L.Debug(u.Id)
                             u.Bought = 0
@@ -296,12 +294,13 @@ return UT.Combine({
         Amount = 1,
         Character = false,
         OnBuy = function(self, character)
-            -- TODO fix HEALTHBOOST_HARDCODE
-            local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 0, 1, "", 1)
-            Osi.SetFaction(guid, C.CompanionFaction)
-            Osi.SetTag(guid, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
-            Osi.AddPassive(guid, "ShortResting")
-            Osi.AddPartyFollower(guid, character)
+            Osi.UseSpell(character, "TOT_Summon_Emperor", character)
+            -- -- TODO fix HEALTHBOOST_HARDCODE
+            -- local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 0, 1, "", 1)
+            -- Osi.SetFaction(guid, C.CompanionFaction)
+            -- Osi.SetTag(guid, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
+            -- Osi.AddPassive(guid, "ShortResting")
+            -- Osi.AddPartyFollower(guid, character)
         end,
     },
     {
@@ -412,10 +411,7 @@ return UT.Combine({
         Id = "BuyGodBlessing",
         Name = Localization.Get("h86fef9afgeb0eg45e8g8388gd8e9f7c619b7"),
         Icon = "GenericIcon_Intent_Buff",
-        Description = Localization.Get(
-            "he4120ec1gc489g4f2fg947cgbe6449fed394",
-            Ext.Stats.Get("LOW_STORMSHORETABERNACLE_GODBLESSED").DescriptionParams
-        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",), --"Gain +2 bonus to all Saving throws.",
+        Description = Localization.Get("he4120ec1gc489g4f2fg947cgbe6449fed394", Ext.Stats.Get("LOW_STORMSHORETABERNACLE_GODBLESSED").DescriptionParams), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",), --"Gain +2 bonus to all Saving throws.",
         Cost = 60,
         Amount = nil,
         Character = true,
@@ -486,10 +482,7 @@ return UT.Combine({
     {
         Id = "BuyWakeTheDead",
         Name = Localization.Get("h107871e3gd9c6g4091g828fg3608cb2cb03f"),
-        Description = Localization.Get(
-            "h0d543bfeg7506g45e8g84fag0350fb67b494",
-            Ext.Stats.Get("Target_CursedTome_WakeTheDead").DescriptionParams
-        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
+        Description = Localization.Get("h0d543bfeg7506g45e8g84fag0350fb67b494", Ext.Stats.Get("Target_CursedTome_WakeTheDead").DescriptionParams), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Icon = "Spell_WakeTheDead",
         Cost = 80,
         Amount = 1,
@@ -502,10 +495,7 @@ return UT.Combine({
         Id = "BuyVampireAscendant",
         Name = Localization.Get("h7c8ce380g0d56g4807gb60cg58e283b4ecdb"),
         Icon = "Action_Monster_Bulette_Bite",
-        Description = Localization.Get(
-            "hf9a3c136gfa53g4170g9eeega20ced9c9111",
-            Ext.Stats.Get("LOW_Astarion_VampireAscendant").DescriptionParams
-        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
+        Description = Localization.Get("hf9a3c136gfa53g4170g9eeega20ced9c9111", Ext.Stats.Get("LOW_Astarion_VampireAscendant").DescriptionParams), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Cost = 300,
         Amount = 1,
         Character = true,

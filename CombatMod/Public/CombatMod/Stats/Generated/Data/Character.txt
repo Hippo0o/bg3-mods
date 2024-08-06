@@ -1,0 +1,5 @@
+new entry "TOT_Emperor"
+type "Character"
+using "INT_Emperor"
+data "DifficultyStatuses" ""
+data "Passives" "AttackOfOpportunity;DarknessRules;MagicResistance;ShortResting"

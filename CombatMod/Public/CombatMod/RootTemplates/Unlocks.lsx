@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<save>
+	<version major="4" minor="0" revision="9" build="0" />
+	<region id="Templates">
+		<node id="Templates">
+			<children>
+				<node id="GameObjects">
+					<attribute id="Flag" type="int32" value="1" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString"
+						value="1467fb3e-b769-41b1-8207-53e42b5b7aaf" />
+					<attribute id="Name" type="LSString" value="TOT_Emperor_Summon" />
+					<attribute id="Stats" type="FixedString" value="TOT_Emperor" />
+					<attribute id="DisableEquipping" type="bool" value="True" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="6efb2704-a025-49e0-ba9f-2b4f62dd2195" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<children>
+						<node id="Tags">
+							<children>
+								<node id="Tag">
+									<attribute id="Object" type="guid"
+										value="26c78224-a4c1-43e4-b943-75e7fa1bfa41" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+			</children>
+		</node>
+	</region>
+</save>
