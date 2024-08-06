@@ -55,11 +55,7 @@ function M.ColorText(text, color)
 end
 
 local function logPrefix()
-    local pre = M.RainbowText(Mod.Prefix) .. " "
-    if Mod.Debug then
-        pre = pre .. (Ext.IsClient() and "[Client]" or "[Server]")
-    end
-    return pre
+    return M.RainbowText(Mod.Prefix) .. " " .. (Ext.IsClient() and "[Client]" or "[Server]")
 end
 
 function M.Info(...)
