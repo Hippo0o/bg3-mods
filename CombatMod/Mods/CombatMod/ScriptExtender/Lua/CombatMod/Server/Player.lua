@@ -153,8 +153,6 @@ function Player.TeleportToAct(act)
     return WaitUntil(function()
         return not teleporting
     end):After(function()
-        return Defer(1000)
-    end):After(function()
         Event.Trigger("TeleportedToAct", act)
 
         return true
