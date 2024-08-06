@@ -282,7 +282,7 @@ function StoryBypass.ClearArea(character)
                             b.Entity.Health.MaxHp = 999
                             b.Entity:Replicate("Health")
                         end
-                    elseif b.Entity.Health then
+                    else -- if b.Entity.Health then
                         UE.Remove(b.Guid)
                     end
                 end
