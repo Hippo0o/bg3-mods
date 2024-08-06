@@ -74,6 +74,16 @@ function Control.Main(tab)
         end):Exec()
     end)
 
+    root:AddButton(__("Go to Camp")).OnClick = function(button)
+        Event.Trigger("ToCamp")
+    end
+
+    local btn = root:AddButton(__("Resume Combat"))
+    btn.SameLine = true
+    btn.OnClick = function(button)
+        Event.Trigger("ResumeCombat")
+    end
+
     root:AddSeparatorText(__("Logs"))
     Components.Layout(root, 1, 1, function(layout)
         layout.Table.ScrollY = true

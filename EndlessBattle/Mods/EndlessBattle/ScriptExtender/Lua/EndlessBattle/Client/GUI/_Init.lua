@@ -5,6 +5,7 @@ Require("EndlessBattle/Client/GUI/Unlocks")
 Require("EndlessBattle/Client/GUI/Creation")
 Require("EndlessBattle/Client/GUI/Config")
 Require("EndlessBattle/Client/GUI/Debug")
+Require("EndlessBattle/Client/GUI/Loot")
 
 Event.On("WindowClosed", function()
     Net.Send("WindowClosed")
@@ -82,6 +83,7 @@ end
 local tabs = window:AddTabBar(__("Main"))
 ClientUnlock.Main(tabs)
 Control.Main(tabs)
+Loot.Main(tabs)
 Config.Main(tabs)
 Components.Conditional(_, function()
     return { Creation.Main(tabs), Debug.Main(tabs) }

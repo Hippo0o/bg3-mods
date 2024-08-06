@@ -78,7 +78,7 @@ local Loop = Libs.Class({
         end
     end,
     Tick = function(self, time) ---@param self Loop
-        local ticks = 0
+        local startTime = Ext.Utils.MonotonicTime()
         for _, queue in ipairs(self.Queues) do
             for _, runner in queue:Iter() do
                 local success, result = pcall(function()
@@ -100,8 +100,7 @@ local Loop = Libs.Class({
                 end
 
                 if result == true then
-                    ticks = ticks + 1
-                    if ticks > self.Tasks.Count / 10 then
+                    if Ext.Utils.MonotonicTime() - startTime > 10 then
                         return
                     end
                 end

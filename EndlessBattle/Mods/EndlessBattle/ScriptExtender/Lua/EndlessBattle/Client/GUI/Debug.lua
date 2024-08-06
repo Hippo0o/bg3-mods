@@ -14,6 +14,18 @@ function Debug.Main(tab)
         Net.Send("GetItems")
     end
 
+    root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Async.Debounce(1000, function(input)
+        Net.RCE("PersistentVars.RogueScore = %d", input.Value[1]).After(function()
+            Net.Send("SyncState")
+        end)
+    end)
+
+    root:AddInputInt("Currency", State.Currency or 0).OnChange = Async.Debounce(1000, function(input)
+        Net.RCE("PersistentVars.Currency = %d", input.Value[1]).After(function()
+            Net.Send("SyncState")
+        end)
+    end)
+
     -- section State
     local state = root:AddGroup(__("State"))
     state:AddSeparatorText(__("State"))
@@ -84,13 +96,19 @@ function Debug.Items(root)
     local grp = root:AddGroup(__("Items"))
     grp:AddSeparatorText(__("Items"))
 
-    local tree
+    local netItems
     Net.On("GetItems", function(event)
+        netItems = event.Payload
+        Event.Trigger("ItemsChanged", netItems)
+    end)
+
+    local tree
+    Event.On("ItemsChanged", function(items)
         if tree then
             tree:Destroy()
         end
 
-        tree = Components.Tree(grp, event.Payload, nil, function(node, key, value)
+        tree = Components.Tree(grp, items, nil, function(node, key, value)
             if key == "RootTemplate" then
                 local nodeLoaded = false
 
@@ -101,7 +119,7 @@ function Debug.Items(root)
 
                     local temp = Ext.Template.GetTemplate(value)
                     if temp then
-                        Components.Tree(node, UT.Clean(temp), "   RootTemplate = " .. value)
+                        Components.Tree(node, UT.Clean(temp), "RootTemplate = " .. value)
 
                         node:AddText("   DisplayName = ")
                         node:AddText(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle)).SameLine = true
@@ -125,10 +143,30 @@ function Debug.Items(root)
         Net.Send("GetItems", { Rarity = combo.Options[combo.SelectedIndex + 1] })
     end
 
+    local search = grp:AddInputText(__("Search"))
+    search.IDContext = U.RandomId()
+    search.OnChange = Async.Debounce(100, function(input)
+        local itemList = {}
+        for k, items in pairs(netItems) do
+            itemList[k] = UT.Filter(items, function(item)
+                local temp = Ext.Template.GetTemplate(item.RootTemplate)
+                if not temp then
+                    L.Error("Template not found", item.RootTemplate, item.Name)
+                    return false
+                end
+                return item.Name:match(US.Escape(input.Text))
+                    or US.Contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
+            end)
+        end
+
+        Event.Trigger("ItemsChanged", itemList)
+    end)
+
     local btn = grp:AddButton(__("Reset"))
     btn.IDContext = U.RandomId()
     btn.OnClick = function()
         combo.SelectedIndex = -1
+        search.Text = ""
         Net.Send("GetItems")
     end
     btn.SameLine = true

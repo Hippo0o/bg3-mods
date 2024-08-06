@@ -211,9 +211,7 @@ function Object:Modify(keepFaction)
         Osi.SetFaction(self.GUID, C.NeutralFaction)
     end
 
-    WaitUntil(function()
-        return self:Entity():IsAlive()
-    end, function()
+    Defer(100, function()
         local entity = self:Entity()
 
         local expMod = Config.ExpMultiplier or 1

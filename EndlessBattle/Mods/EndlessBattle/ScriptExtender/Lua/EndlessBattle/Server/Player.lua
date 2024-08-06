@@ -35,8 +35,14 @@ function Player.InCombat()
     end)
 end
 
-function Player.PickupAll()
-    Item.PickupAll(Player.Host())
+function Player.PickupAll(character)
+    for type, data in pairs(PersistentVars.LootFilter) do
+        for rarity, pickup in pairs(data) do
+            if pickup then
+                Item.PickupAll(character or Player.Host(), rarity, type)
+            end
+        end
+    end
 end
 
 local buffering = false

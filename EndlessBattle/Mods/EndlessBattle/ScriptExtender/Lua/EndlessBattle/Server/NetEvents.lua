@@ -96,7 +96,7 @@ Net.On("Stop", function(event)
 end)
 
 Net.On("ToCamp", function(event)
-    if Player.InCombat() then
+    if Player.InCombat() and not Mod.Debug then
         Net.Respond(event, { false, "Cannot teleport while in combat." })
         return
     end
@@ -106,7 +106,7 @@ Net.On("ToCamp", function(event)
 end)
 
 Net.On("ResumeCombat", function(event)
-    if Player.InCombat() then
+    if Player.InCombat() and not Mod.Debug then
         Net.Respond(event, { false, "Cannot force next round while in combat." })
         return
     end
@@ -125,6 +125,11 @@ Net.On("Teleport", function(event)
 
     if map == nil then
         Net.Respond(event, { false, "Map not found." })
+        return
+    end
+
+    if event.Payload.Restrict and Player.InCombat() and not Mod.Debug then
+        Net.Respond(event, { false, "Cannot teleport while in combat." })
         return
     end
 
@@ -169,21 +174,19 @@ Net.On("SyncState", function(event)
     Net.Respond(event, PersistentVars)
 end)
 
-do
-    local function broadcastState()
-        Schedule(function()
-            Net.Send("SyncState", PersistentVars)
-        end)
-    end
-
-    Event.On("ScenarioStarted", broadcastState)
-    Event.On("ScenarioRoundStarted", broadcastState)
-    Event.On("ScenarioEnemyKilled", broadcastState)
-    Event.On("ScenarioCombatStarted", broadcastState)
-    Event.On("ScenarioEnded", broadcastState)
-    Event.On("ScenarioStopped", broadcastState)
-    Event.On("RogueScoreChanged", broadcastState)
+local function broadcastState()
+    Schedule(function()
+        Net.Send("SyncState", PersistentVars)
+    end)
 end
+
+Event.On("ScenarioStarted", broadcastState)
+Event.On("ScenarioRoundStarted", broadcastState)
+Event.On("ScenarioEnemyKilled", broadcastState)
+Event.On("ScenarioCombatStarted", broadcastState)
+Event.On("ScenarioEnded", broadcastState)
+Event.On("ScenarioStopped", broadcastState)
+Event.On("RogueScoreChanged", broadcastState)
 
 Net.On("Config", function(event)
     if event:IsHost() then
@@ -221,4 +224,25 @@ end)
 
 Net.On("KillNearby", function(event)
     StoryBypass.ClearArea(event:Character())
+end)
+
+Net.On("UpdateLootFilter", function(event)
+    local rarity, type, bool = table.unpack(event.Payload)
+    PersistentVars.LootFilter[type][rarity] = bool
+
+    broadcastState()
+end)
+
+Net.On("PickupAll", function(event)
+    Player.PickupAll(event:Character())
+end)
+
+Net.On("Pickup", function(event)
+    local rarity, type = table.unpack(event.Payload)
+    Item.PickupAll(event:Character(), rarity, type)
+end)
+
+Net.On("DestroyLoot", function(event)
+    local rarity, type = table.unpack(event.Payload)
+    Item.DestroyAll(rarity, type)
 end)

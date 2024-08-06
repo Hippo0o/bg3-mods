@@ -1,6 +1,9 @@
 ---@type Mod
 local Mod = Require("Hlib/Mod")
 
+---@type Utils
+local Utils = Require("Hlib/Utils")
+
 ---@class IO
 local M = {}
 
@@ -45,8 +48,8 @@ function M.SaveDump(file, data)
         file = file .. ".json"
     end
 
-    local data = Ext.Json.Parse(Ext.DumpExport(data))
-    M.Save(file, type(data) == "table" and Ext.Json.Stringify(data) or data)
+    Utils.Log.Dump(Utils.Table.Clean(data, 2))
+    M.Save(file, type(data) == "table" and Ext.Json.Stringify(Utils.Table.Clean(data, 2)) or data)
 end
 
 return M

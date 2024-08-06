@@ -156,6 +156,10 @@ function Action.StartCombat()
     -- remove all non-player characters
     Action.ClearArea()
 
+    for _, p in pairs(U.DB.GetPlayers()) do
+        Osi.ForceTurnBasedMode(p, 0)
+    end
+
     Current().Map:PingSpawns()
 
     Event.Trigger("ScenarioCombatStarted", Current())
@@ -262,7 +266,7 @@ function Action.MapEntered()
 end
 
 function Action.EnemyAdded(enemy)
-    if Player.InCombat() then
+    if Config.ForceEnterCombat or Player.InCombat() then
         Scenario.CombatSpawned(enemy)
     end
 end
@@ -517,6 +521,10 @@ function Scenario.ResumeCombat()
     local s = Current()
     if not s:IsRunning() then
         L.Error("Scenario has ended.")
+        return
+    end
+
+    if not s.OnMap then
         return
     end
 
