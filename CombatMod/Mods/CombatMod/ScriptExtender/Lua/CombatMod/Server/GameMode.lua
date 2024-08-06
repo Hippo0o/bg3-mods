@@ -143,7 +143,7 @@ Difficulty increases with the score.]]).After(function(confirmed)
 
         PersistentVars.RogueModeActive = confirmed
 
-        PersistentVars.RogueScore = (UE.GetHost().EocLevel.Level - 1) * 10 -- +10 per level
+        PersistentVars.RogueScore = (GE.GetHost().EocLevel.Level - 1) * 10 -- +10 per level
 
         Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
 

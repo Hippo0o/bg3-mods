@@ -22,7 +22,7 @@ function Creation.Main(tab)
         tp.SameLine = true
 
         pb.OnClick = function()
-            local host = UE.GetHost()
+            local host = GE.GetHost()
             local region = host.Level.LevelName
             L.Dump("Host", host.CustomName)
             Net.RCE("return Osi.GetPosition(RCE:Character())").After(function(ok, x, y, z)

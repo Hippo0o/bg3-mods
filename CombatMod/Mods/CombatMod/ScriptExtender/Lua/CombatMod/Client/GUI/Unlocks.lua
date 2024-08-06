@@ -204,7 +204,7 @@ function ClientUnlock.BuyChar(root, unlock)
         end
         list = {}
 
-        for i, u in ipairs(UE.GetParty()) do
+        for i, u in ipairs(GE.GetParty()) do
             local name
             if not u.CustomName then
                 name = Localization.Get(u.DisplayName.NameKey.Handle.Handle)

@@ -30,7 +30,7 @@ end
 
 ---@return string|nil GUID
 function Player.InCombat()
-    return UT.Find(U.DB.GetPlayers(), function(guid)
+    return UT.Find(GU.DB.GetPlayers(), function(guid)
         return Osi.IsInCombat(guid) == 1
     end)
 end
@@ -110,19 +110,19 @@ function Player.TeleportToRegion(region)
 end
 
 function Player.TeleportToCamp()
-    local activeCamp = U.DB.TryGet("DB_ActiveCamp", 1, nil, 1)[1]
+    local activeCamp = GU.DB.TryGet("DB_ActiveCamp", 1, nil, 1)[1]
     if activeCamp == nil then
         L.Error("No active camp found.")
         return
     end
 
-    local campEntry = U.DB.TryGet("DB_Camp", 4, { activeCamp }, 2)[1]
+    local campEntry = GU.DB.TryGet("DB_Camp", 4, { activeCamp }, 2)[1]
     if not campEntry then
         L.Error("No camp trigger found.")
         return
     end
 
-    for _, entity in pairs(UE.GetParty()) do
+    for _, entity in pairs(GE.GetParty()) do
         if not entity.CampPresence then
             Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntry)
 

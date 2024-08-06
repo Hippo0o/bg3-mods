@@ -85,7 +85,7 @@ return {
         Amount = 3,
         Character = false,
         OnBuy = function(self, character)
-            for _, p in pairs(U.DB.GetPlayers()) do
+            for _, p in pairs(GU.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
             end
         end,
@@ -139,7 +139,7 @@ return {
         Amount = 1,
         Character = false,
         OnBuy = function(self, character)
-            for _, p in pairs(UE.GetParty()) do
+            for _, p in pairs(GE.GetParty()) do
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
             end
         end,
@@ -230,7 +230,7 @@ return {
         Character = false,
         Requirement = "NEWGAME_PLUS",
         OnBuy = function(self, character)
-            for _, p in pairs(U.DB.GetPlayers()) do
+            for _, p in pairs(GU.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
             end
         end,
@@ -268,7 +268,7 @@ return {
         Requirement = "NEWGAME_PLUS",
         Character = false,
         OnBuy = function(self, character)
-            for _, p in pairs(UE.GetParty()) do
+            for _, p in pairs(GE.GetParty()) do
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "DEATH_WARD", -1)
             end
         end,

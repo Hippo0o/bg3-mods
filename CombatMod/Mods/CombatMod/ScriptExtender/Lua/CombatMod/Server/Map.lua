@@ -183,7 +183,7 @@ function Map.TeleportTo(map, character)
     if teleporting then
         Player.Notify(__("Teleporting to different ACT"))
         teleporting.After(function()
-            for _, character in pairs(U.DB.GetPlayers()) do
+            for _, character in pairs(GU.DB.GetPlayers()) do
                 Map.TeleportTo(map, character)
             end
         end)

@@ -112,7 +112,7 @@ function Object:Clear()
     self.GUID = nil
 
     RetryUntil(function()
-        UE.Remove(guid)
+        GU.Object.Remove(guid)
         return Osi.IsItem(guid) ~= 0
     end, { immediate = true }).After(function()
         PersistentVars.SpawnedItems[guid] = nil
@@ -280,7 +280,7 @@ end
 function Item.DestroyAll(rarity, type)
     for guid, item in pairs(PersistentVars.SpawnedItems) do
         if item.Rarity == rarity and not Item.IsOwned(item.GUID) and item.Type == type then
-            UE.Remove(guid)
+            GU.Object.Remove(guid)
             PersistentVars.SpawnedItems[guid] = nil
         end
     end
@@ -427,7 +427,7 @@ U.Osiris.On(
     Async.Throttle( -- avoid recursion
         10,
         IfActive(function(character, object, requestID)
-            if UE.IsNonPlayer(character, true) then
+            if GC.IsNonPlayer(character, true) then
                 return
             end
 

@@ -45,11 +45,11 @@ local function cancelDialog(dialog, instanceID)
         end
 
         local hasRemovable = UT.Filter(dialogActors, function(actor)
-            return UE.IsNonPlayer(actor) and Osi.IsAlly(Player.Host(), actor) ~= 1
+            return GC.IsNonPlayer(actor) and Osi.IsAlly(Player.Host(), actor) ~= 1
         end)
 
         local hasPlayable = UT.Filter(dialogActors, function(actor)
-            return UE.IsPlayable(actor)
+            return GC.IsPlayable(actor)
         end)
 
         if #hasPlayable == 0 then
@@ -59,7 +59,7 @@ local function cancelDialog(dialog, instanceID)
         L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
 
         if #hasRemovable > 0 then
-            for _, player in pairs(U.DB.GetPlayers()) do
+            for _, player in pairs(GU.DB.GetPlayers()) do
                 Osi.DialogRemoveActorFromDialog(instanceID, player)
                 Osi.DialogRequestStopForDialog(dialog, player)
             end
@@ -67,7 +67,7 @@ local function cancelDialog(dialog, instanceID)
 
         for _, actor in ipairs(hasRemovable) do
             L.Debug("Removing", actor)
-            -- UE.Remove(actor)
+            -- GU.Object.Remove(actor)
             Osi.DialogRemoveActorFromDialog(instanceID, actor)
             Osi.DialogRequestStopForDialog(dialog, actor)
 
@@ -123,7 +123,7 @@ U.Osiris.On(
     3,
     "before",
     ifBypassStory(function(character, item, sucess)
-        if UE.IsNonPlayer(character, true) then
+        if GC.IsNonPlayer(character, true) then
             return
         end
         if Osi.IsLocked(item) == 1 then
@@ -143,10 +143,10 @@ U.Osiris.On(
     2,
     "after",
     ifBypassStory(function(object, combatGuid)
-        if not Enemy.IsValid(object) and UE.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
+        if not Enemy.IsValid(object) and GC.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
             L.Debug("Removing", object)
             Osi.LeaveCombat(object)
-            UE.Remove(object)
+            GU.Object.Remove(object)
             Player.Notify(
                 __(
                     "Skipped combat with %s",
@@ -163,8 +163,8 @@ U.Osiris.On(
     1,
     "after",
     ifBypassStory(function(character)
-        if not S and UE.IsNonPlayer(character) and Osi.IsCharacter(character) == 1 then
-            UE.Remove(character)
+        if not S and GC.IsNonPlayer(character) and Osi.IsCharacter(character) == 1 then
+            GU.Object.Remove(character)
             Player.Notify(
                 __(
                     "Skipped combat with %s",
@@ -202,7 +202,7 @@ U.Osiris.On(
     1,
     "after",
     ifBypassStory(function(character)
-        if not UE.IsPlayable(character) then
+        if not GC.IsPlayable(character) then
             return
         end
 
@@ -255,19 +255,19 @@ function StoryBypass.UnblockTravel(entity)
 end
 
 function StoryBypass.ClearArea(character)
-    local nearby = UE.GetNearby(character, 100, true)
+    local nearby = GE.GetNearby(character, 100, true)
 
     local toRemove = UT.Filter(nearby, function(v)
-        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
+        return v.Entity.IsCharacter and GC.IsNonPlayer(v.Guid)
     end)
 
     for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
         Schedule(function()
             for _, b in pairs(batch) do
-                if UE.IsImportant(b.Guid) and not b.Entity.PartyMember then
+                if GC.IsImportant(b.Guid) and not b.Entity.PartyMember then
                     Osi.TeleportTo(b.Guid, C.NPCCharacters.Jergal, "", 1, 1, 1, 1, 0)
                 else
-                    UE.Remove(b.Guid)
+                    GU.Object.Remove(b.Guid)
                 end
             end
         end)
@@ -303,7 +303,7 @@ function StoryBypass.ClearArea(character)
                             b.Entity:Replicate("Resistances")
                         end
                     elseif b.Entity.Health or b.Entity.ServerItem.CanBePickedUp or b.Entity.ServerItem.CanUse then -- TODO remove more CanUse objects
-                        UE.Remove(b.Guid)
+                        GU.Object.Remove(b.Guid)
                     end
                 end
             end
