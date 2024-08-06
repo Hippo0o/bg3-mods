@@ -20,6 +20,11 @@ sync-files:
 copy:
 	rsync --verbose -avc --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/JustCombat/."
 
+copy-back:
+	cp $(MOUNT_DIR)/Temp/JustCombat.zip .
+	unzip JustCombat.zip JustCombat.pak
+	mv JustCombat.pak Releases/JustCombat.pak
+
 mounts: # dont forgor to pacman -S cifs-utils
 	mount -t cifs -o rw,username=user,uid=$(UID),file_mode=0777,dir_mode=0777 "//$(WIN_IP)/SE" $(MOUNT_DIR)/SE
 	mount -t cifs -o rw,username=user,uid=$(UID),file_mode=0777,dir_mode=0777 "//$(WIN_IP)/Mods" $(MOUNT_DIR)/Mods
