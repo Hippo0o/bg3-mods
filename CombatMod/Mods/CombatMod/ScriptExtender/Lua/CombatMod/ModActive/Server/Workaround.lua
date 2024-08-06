@@ -27,9 +27,9 @@ function Workaround.ResetApproval()
 end
 
 local function runAll()
-    Workaround.Tadpole()
-    Workaround.Tags()
-    Workaround.ResetApproval()
+    xpcall(Workaround.Tadpole, L.Error)
+    xpcall(Workaround.Tags, L.Error)
+    xpcall(Workaround.ResetApproval, L.Error)
 end
 
 GameState.OnLoad(runAll)

@@ -62,6 +62,7 @@ function Intro.AskTutSkip()
                         C.NPCCharacters.Jergal
                     )
 
+                    -- remove summon block
                     for _, p in pairs(GU.DB.GetPlayers()) do
                         Osi.RemoveStatus(p, "TUT_SUMMON_BLOCK")
                     end
@@ -79,6 +80,8 @@ function Intro.AskTutSkip()
 
             return WaitUntil(function()
                 return done
+            end):After(function()
+                return Defer(1000)
             end)
         end)
 end
@@ -98,6 +101,7 @@ function Intro.AskOnboarding()
             if Player.Region() == C.Regions.Act0 then
                 return Intro.AskTutSkip()
             end
+
             return true
         end)
         :After(function()
