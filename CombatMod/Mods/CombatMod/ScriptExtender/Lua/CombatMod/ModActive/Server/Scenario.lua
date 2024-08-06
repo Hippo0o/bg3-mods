@@ -621,12 +621,14 @@ end
 
 function Scenario.End()
     Action.RemoveHelper()
+
     Event.Trigger("ScenarioEnded", Current())
+    Player.Notify(__("Scenario ended."))
+
     Action.GiveReward()
 
     PersistentVars.LastScenario = S()
     PersistentVars.Scenario = nil
-    Player.Notify(__("Scenario ended."))
 end
 
 function Scenario.Stop()

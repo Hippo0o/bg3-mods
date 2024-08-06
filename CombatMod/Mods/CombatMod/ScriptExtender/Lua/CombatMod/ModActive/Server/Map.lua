@@ -136,15 +136,17 @@ function Object:SpawnIn(enemy, spawn, faceTowards)
         x, y, z = x2, y2, z2
     end
 
-    if not faceTowards then
-        faceTowards = Osi.GetClosestAlivePlayer(enemy.GUID)
-    end
+    Osi.SteerTo(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 1)
 
     return true,
         chainable:After(function()
             return enemy,
                 WaitTicks(6, function()
                     local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
+
+                    if not faceTowards then
+                        faceTowards = Osi.GetClosestAlivePlayer(enemy.GUID)
+                    end
 
                     Osi.SteerTo(enemy.GUID, faceTowards, 1)
                     -- Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
