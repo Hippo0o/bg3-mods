@@ -138,7 +138,7 @@ Net.On("Start", function(event)
         return
     end
 
-    Scenario.Start(template, map, event.UserId)
+    Scenario.Start(template, map, event:UserId())
     Net.Respond(event, { true })
 end)
 
@@ -154,7 +154,7 @@ Net.On("Teleport", function(event)
         return
     end
 
-    map:Teleport(Player.Host(event.UserId))
+    map:Teleport(Player.Host(event:UserId()))
     Net.Respond(event, { true })
 end)
 
