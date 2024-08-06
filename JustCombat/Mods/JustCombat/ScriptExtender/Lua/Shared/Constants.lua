@@ -22,31 +22,17 @@ local M = {
         "S_GLO_Gortash_b878a854-f790-4999-95c4-3f20f00f65ac",
     },
     Regions = {
-        Act0 = {
-            "TUT_Avernus_C",
-        },
-        Act1 = {
-            "WLD_Main_A",
-        },
-        Act1b = {
-            "CRE_Main_A",
-        },
-        Act2 = {
-            "SCL_Main_A",
-        },
-        Act2b = {
-            "INT_Main_A",
-        },
-        Act3 = {
-            "BGO_Main_A",
-            "CTY_Main_A",
-        },
-        Act3c = {
-            "END_Main",
-        },
+        Act0 = "TUT_Avernus_C",
+        Act1 = "WLD_Main_A",
+        Act1b = "CRE_Main_A",
+        Act2 = "SCL_Main_A",
+        Act2b = "INT_Main_A",
+        Act3 = "BGO_Main_A",
+        Act3b = "CTY_Main_A",
+        Act3c = "END_Main",
     },
     Waypoints = { -- BG3-Community-Library-Team/BG3-Community-Library
-        Act1 = {
+        Act1 = { -- WLD_Main_A
             OverGrownRuins = "S_CHA_WaypointTrigger_5e857e93-203a-4d4a-bd29-8e97eb34dec6",
             RoadsideCliffs = "S_CHA_WaypointTrigger_Top_4141c0a2-5ba9-42c0-ab18-082426df45e7",
             EmeraldGroveEnvirons = "S_DEN_WaypointPos_cdd91969-67d0-454e-b27b-cf34e542956b",
@@ -60,11 +46,13 @@ local M = {
             SussurTree = "S_UND_Sussur_WaypointTrigger_d24b2d8c-a4dc-4367-8da2-c6fa75baa61c",
             MyconidColony = "S_UND_Myconid_WaypointTrigger_b83f13a0-e988-48f1-9068-ea9be2adffb2",
             GrymForge = "S_UND_Duergar_WaypointTrigger_01d43e65-d370-46c6-9998-a9f7523221eb",
+        },
+        Act1b = { -- CRE_Main_A
             TrieltaCrags = "S_CRE_Exterior_Waypoint_Pos_00abc10c-921d-46f9-80e0-2b8f92f884c7",
             Monastery = "S_CRE_Monastery_Waypoint_Pos_6b587ee7-5767-4d3e-8ef4-270976e63ad5",
             Creche = "S_CRE_Creche_Waypoint_Pos_4324dbaf-6533-4b0f-8c99-de4e2adbd4ec",
         },
-        Act2 = {
+        Act2 = { -- SCL_Main_A
             LastLight = "S_HAV_Waypoint_Pos_94b462c2-9290-4d4d-8bf4-fbf559f03c3f",
             ShadowedBattlefield = "S_SCL_OliverHouse_Waypoint_Pos_7c083353-7e5c-4cb7-ac3e-42fc3a19807f",
             ReithwinTown = "S_TWN_Waypoint_Pos_488ce3e4-2239-4623-9aeb-d34cc18bec58",
@@ -74,9 +62,11 @@ local M = {
             NightsongPrison = "S_SHA_NightsongPrison_EntranceWaypoint_Pos_9b2081b4-d7dd-43ac-8ef0-4acda40379ae",
             RoadToBaldursGate = "S_SCL_RoadToBaldursGate_Waypoint_Pos_ef45338c-09c7-4904-998f-32c0ad1165b6",
         },
-        Act3 = {
+        Act3 = { -- BGO_Main_A
             Rivington = "S_WYR_Rivington_WaypointTrigger_016ac9ad-ac85-49a0-a6be-e24fdb0de2bb",
             SharessCaress = "S_WYR_SharessCaress_WaypointTrigger_5561c476-c82d-4239-b4a3-baaf2985ef71",
+        },
+        Act3b = { -- CTY_Main_A
             BasiliskGate = "S_LOW_Waypoint_HeapsideBarracksTrigger_f0a45122-eca3-4b8f-ad86-c429ca305b3d",
             Heapside = "S_LOW_Waypoint_CityBeachTrigger_f6611899-85b6-45e3-8c1e-3b61590a621f",
             LowerCity = "S_LOW_Waypoint_CentralWallTrigger_97bdf561-7f2b-4618-89ca-5cad0729bd01",

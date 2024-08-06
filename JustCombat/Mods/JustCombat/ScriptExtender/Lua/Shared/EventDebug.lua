@@ -1,79 +1,77 @@
+---@type Utils
 local Utils = Require("Shared/Utils")
 
 local M = {}
 
-local Events = {}
+local events = {}
 
 function M.Attach()
-    for name, func in pairs(Events) do
-        for i = 1, 10, 1 do
-            Ext.Osiris.RegisterListener(name, i, "after", function(...)
-                local log = {}
-                for i, v in ipairs({ ... }) do
-                    log[i] = v
-                end
-                Utils.Log.Dump(name, log)
-            end)
+    for name, params in pairs(events) do
+        params = Utils.String.Split(params, ",")
+        if params[1] == "" then
+            params = {}
         end
+        Ext.Osiris.RegisterListener(name, #params, "after", function(...)
+            local log = {}
+            for i, v in ipairs(params) do
+                v = Utils.String.Trim(v)
+                log[v] = select(i, ...)
+            end
+            Utils.Log.Dump(name, log)
+        end)
     end
 end
 
 -- copied from Osi.Events.lua
 
 ---@param object GUIDSTRING
-function Events.Activated(object) end
+events.Activated = "object"
 
 ---@param instanceID integer
 ---@param player GUIDSTRING
 ---@param oldIndex integer
 ---@param newIndex integer
-function Events.ActorSpeakerIndexChanged(instanceID, player, oldIndex, newIndex) end
+events.ActorSpeakerIndexChanged = "instanceID, player, oldIndex, newIndex"
 
 ---@param object GUIDSTRING
 ---@param inventoryHolder GUIDSTRING
 ---@param addType string
-function Events.AddedTo(object, inventoryHolder, addType) end
+events.AddedTo = "object, inventoryHolder, addType"
 
-function Events.AllLoadedFlagsInPresetReceivedEvent() end
+events.AllLoadedFlagsInPresetReceivedEvent = ""
 
 ---@param object GUIDSTRING
 ---@param eventName string
 ---@param wasFromLoad integer
-function Events.AnimationEvent(object, eventName, wasFromLoad) end
+events.AnimationEvent = "object, eventName, wasFromLoad"
 
 ---@param character CHARACTER
 ---@param appearEvent string
-function Events.AppearTeleportFailed(character, appearEvent) end
+events.AppearTeleportFailed = "character, appearEvent"
 
 ---@param ratingOwner CHARACTER
 ---@param ratedEntity CHARACTER
 ---@param attemptedApprovalChange integer
 ---@param clampedApprovalChange integer
 ---@param newApproval integer
-function Events.ApprovalRatingChangeAttempt(
-    ratingOwner,
-    ratedEntity,
-    attemptedApprovalChange,
-    clampedApprovalChange,
-    newApproval
-)
-end
+events.ApprovalRatingChangeAttempt =
+    "ratingOwner, ratedEntity, attemptedApprovalChange, clampedApprovalChange, newApproval"
 
 ---@param ratingOwner CHARACTER
 ---@param ratedEntity CHARACTER
 ---@param newApproval integer
-function Events.ApprovalRatingChanged(ratingOwner, ratedEntity, newApproval) end
+events.ApprovalRatingChanged = "ratingOwner, ratedEntity, newApproval"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.ArmedTrapUsed(character, item) end
+events.ArmedTrapUsed = "character, item"
 
 ---@param character CHARACTER
 ---@param eArmorSet ARMOURSET
-function Events.ArmorSetChanged(character, eArmorSet) end
+events.ArmorSetChanged = "character, eArmorSet"
 
 ---@param character CHARACTER
-function Events.AttachedToPartyGroup(character) end
+events.AttachedToPartyGroup = "character"
 
 ---@param defender GUIDSTRING
 ---@param attackerOwner GUIDSTRING
@@ -82,124 +80,124 @@ function Events.AttachedToPartyGroup(character) end
 ---@param damageAmount integer
 ---@param damageCause string
 ---@param storyActionID integer
-function Events.AttackedBy(defender, attackerOwner, attacker2, damageType, damageAmount, damageCause, storyActionID) end
+events.AttackedBy = "defender, attackerOwner, attacker2, damageType, damageAmount, damageCause, storyActionID"
 
 ---@param disarmableItem ITEM
 ---@param character CHARACTER
 ---@param itemUsedToDisarm ITEM
 ---@param bool integer
-function Events.AttemptedDisarm(disarmableItem, character, itemUsedToDisarm, bool) end
+events.AttemptedDisarm = "disarmableItem, character, itemUsedToDisarm, bool"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.AutomatedDialogEnded(dialog, instanceID) end
+events.AutomatedDialogEnded = "dialog, instanceID"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.AutomatedDialogForceStopping(dialog, instanceID) end
+events.AutomatedDialogForceStopping = "dialog, instanceID"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.AutomatedDialogRequestFailed(dialog, instanceID) end
+events.AutomatedDialogRequestFailed = "dialog, instanceID"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.AutomatedDialogStarted(dialog, instanceID) end
+events.AutomatedDialogStarted = "dialog, instanceID"
 
 ---@param character CHARACTER
 ---@param goal GUIDSTRING
-function Events.BackgroundGoalFailed(character, goal) end
+events.BackgroundGoalFailed = "character, goal"
 
 ---@param character CHARACTER
 ---@param goal GUIDSTRING
-function Events.BackgroundGoalRewarded(character, goal) end
+events.BackgroundGoalRewarded = "character, goal"
 
 ---@param target CHARACTER
 ---@param oldFaction FACTION
 ---@param newFaction FACTION
-function Events.BaseFactionChanged(target, oldFaction, newFaction) end
+events.BaseFactionChanged = "target, oldFaction, newFaction"
 
 ---@param spline SPLINE
 ---@param character CHARACTER
 ---@param event string
 ---@param index integer
 ---@param last integer
-function Events.CameraReachedNode(spline, character, event, index, last) end
+events.CameraReachedNode = "spline, character, event, index, last"
 
 ---@param lootingTarget GUIDSTRING
 ---@param canBeLooted integer
-function Events.CanBeLootedCapabilityChanged(lootingTarget, canBeLooted) end
+events.CanBeLootedCapabilityChanged = "lootingTarget, canBeLooted"
 
 ---@param caster GUIDSTRING
 ---@param spell string
 ---@param spellType string
 ---@param spellElement string
 ---@param storyActionID integer
-function Events.CastSpell(caster, spell, spellType, spellElement, storyActionID) end
+events.CastSpell = "caster, spell, spellType, spellElement, storyActionID"
 
 ---@param caster GUIDSTRING
 ---@param spell string
 ---@param spellType string
 ---@param spellElement string
 ---@param storyActionID integer
-function Events.CastSpellFailed(caster, spell, spellType, spellElement, storyActionID) end
+events.CastSpellFailed = "caster, spell, spellType, spellElement, storyActionID"
 
 ---@param caster GUIDSTRING
 ---@param spell string
 ---@param spellType string
 ---@param spellElement string
 ---@param storyActionID integer
-function Events.CastedSpell(caster, spell, spellType, spellElement, storyActionID) end
+events.CastedSpell = "caster, spell, spellType, spellElement, storyActionID"
 
 ---@param character CHARACTER
-function Events.ChangeAppearanceCancelled(character) end
+events.ChangeAppearanceCancelled = "character"
 
 ---@param character CHARACTER
-function Events.ChangeAppearanceCompleted(character) end
+events.ChangeAppearanceCompleted = "character"
 
-function Events.CharacterCreationFinished() end
+events.CharacterCreationFinished = ""
 
-function Events.CharacterCreationStarted() end
+events.CharacterCreationStarted = ""
 
 ---@param character CHARACTER
 ---@param item ITEM
 ---@param slotName EQUIPMENTSLOTNAME
-function Events.CharacterDisarmed(character, item, slotName) end
+events.CharacterDisarmed = "character, item, slotName"
 
 ---@param character CHARACTER
-function Events.CharacterJoinedParty(character) end
+events.CharacterJoinedParty = "character"
 
 ---@param character CHARACTER
-function Events.CharacterLeftParty(character) end
+events.CharacterLeftParty = "character"
 
 ---@param character CHARACTER
-function Events.CharacterLoadedInPreset(character) end
+events.CharacterLoadedInPreset = "character"
 
 ---@param player CHARACTER
 ---@param lootedCharacter CHARACTER
-function Events.CharacterLootedCharacter(player, lootedCharacter) end
+events.CharacterLootedCharacter = "player, lootedCharacter"
 
 ---@param character CHARACTER
-function Events.CharacterMadePlayer(character) end
+events.CharacterMadePlayer = "character"
 
 ---@param character CHARACTER
-function Events.CharacterMoveFailedUseJump(character) end
+events.CharacterMoveFailedUseJump = "character"
 
 ---@param character CHARACTER
 ---@param target GUIDSTRING
 ---@param moveID string
 ---@param failureReason string
-function Events.CharacterMoveToAndTalkFailed(character, target, moveID, failureReason) end
+events.CharacterMoveToAndTalkFailed = "character, target, moveID, failureReason"
 
 ---@param character CHARACTER
 ---@param target GUIDSTRING
 ---@param dialog DIALOGRESOURCE
 ---@param moveID string
-function Events.CharacterMoveToAndTalkRequestDialog(character, target, dialog, moveID) end
+events.CharacterMoveToAndTalkRequestDialog = "character, target, dialog, moveID"
 
 ---@param character CHARACTER
 ---@param moveID integer
-function Events.CharacterMoveToCancelled(character, moveID) end
+events.CharacterMoveToCancelled = "character, moveID"
 
 ---@param character CHARACTER
 ---@param crimeRegion string
@@ -211,23 +209,12 @@ function Events.CharacterMoveToCancelled(character, moveID) end
 ---@param criminal3 CHARACTER
 ---@param criminal4 CHARACTER
 ---@param isPrimary integer
-function Events.CharacterOnCrimeSensibleActionNotification(
-    character,
-    crimeRegion,
-    crimeID,
-    priortiyName,
-    primaryDialog,
-    criminal1,
-    criminal2,
-    criminal3,
-    criminal4,
-    isPrimary
-)
-end
+events.CharacterOnCrimeSensibleActionNotification =
+    "character, crimeRegion, crimeID, priortiyName, primaryDialog, criminal1, criminal2, criminal3, criminal4, isPrimary"
 
 ---@param player CHARACTER
 ---@param npc CHARACTER
-function Events.CharacterPickpocketFailed(player, npc) end
+events.CharacterPickpocketFailed = "player, npc"
 
 ---@param player CHARACTER
 ---@param npc CHARACTER
@@ -235,31 +222,25 @@ function Events.CharacterPickpocketFailed(player, npc) end
 ---@param itemTemplate GUIDSTRING
 ---@param amount integer
 ---@param goldValue integer
-function Events.CharacterPickpocketSuccess(player, npc, item, itemTemplate, amount, goldValue) end
+events.CharacterPickpocketSuccess = "player, npc, item, itemTemplate, amount, goldValue"
 
 ---@param character CHARACTER
 ---@param oldUserID integer
 ---@param newUserID integer
-function Events.CharacterReservedUserIDChanged(character, oldUserID, newUserID) end
+events.CharacterReservedUserIDChanged = "character, oldUserID, newUserID"
 
 ---@param character CHARACTER
 ---@param crimeRegion string
 ---@param unavailableForCrimeID integer
 ---@param busyCrimeID integer
-function Events.CharacterSelectedAsBestUnavailableFallbackLead(
-    character,
-    crimeRegion,
-    unavailableForCrimeID,
-    busyCrimeID
-)
-end
+events.CharacterSelectedAsBestUnavailableFallbackLead = "character, crimeRegion, unavailableForCrimeID, busyCrimeID"
 
 ---@param character CHARACTER
-function Events.CharacterSelectedClimbOn(character) end
+events.CharacterSelectedClimbOn = "character"
 
 ---@param character CHARACTER
 ---@param userID integer
-function Events.CharacterSelectedForUser(character, userID) end
+events.CharacterSelectedForUser = "character, userID"
 
 ---@param character CHARACTER
 ---@param item ITEM
@@ -271,43 +252,31 @@ function Events.CharacterSelectedForUser(character, userID) end
 ---@param srcContainer ITEM
 ---@param amount integer
 ---@param goldValue integer
-function Events.CharacterStoleItem(
-    character,
-    item,
-    itemRootTemplate,
-    x,
-    y,
-    z,
-    oldOwner,
-    srcContainer,
-    amount,
-    goldValue
-)
-end
+events.CharacterStoleItem = "character, item, itemRootTemplate, x, y, z, oldOwner, srcContainer, amount, goldValue"
 
 ---@param character CHARACTER
 ---@param tag TAG
 ---@param event string
-function Events.CharacterTagEvent(character, tag, event) end
+events.CharacterTagEvent = "character, tag, event"
 
 ---@param item ITEM
-function Events.Closed(item) end
+events.Closed = "item"
 
 ---@param combatGuid GUIDSTRING
-function Events.CombatEnded(combatGuid) end
+events.CombatEnded = "combatGuid"
 
 ---@param combatGuid GUIDSTRING
-function Events.CombatPaused(combatGuid) end
+events.CombatPaused = "combatGuid"
 
 ---@param combatGuid GUIDSTRING
-function Events.CombatResumed(combatGuid) end
+events.CombatResumed = "combatGuid"
 
 ---@param combatGuid GUIDSTRING
 ---@param round integer
-function Events.CombatRoundStarted(combatGuid, round) end
+events.CombatRoundStarted = "combatGuid, round"
 
 ---@param combatGuid GUIDSTRING
-function Events.CombatStarted(combatGuid) end
+events.CombatStarted = "combatGuid"
 
 ---@param item1 ITEM
 ---@param item2 ITEM
@@ -316,21 +285,21 @@ function Events.CombatStarted(combatGuid) end
 ---@param item5 ITEM
 ---@param character CHARACTER
 ---@param newItem ITEM
-function Events.Combined(item1, item2, item3, item4, item5, character, newItem) end
+events.Combined = "item1, item2, item3, item4, item5, character, newItem"
 
 ---@param character CHARACTER
 ---@param userID integer
-function Events.CompanionSelectedForUser(character, userID) end
+events.CompanionSelectedForUser = "character, userID"
 
-function Events.CreditsEnded() end
-
----@param character CHARACTER
----@param crime string
-function Events.CrimeDisabled(character, crime) end
+events.CreditsEnded = ""
 
 ---@param character CHARACTER
 ---@param crime string
-function Events.CrimeEnabled(character, crime) end
+events.CrimeDisabled = "character, crime"
+
+---@param character CHARACTER
+---@param crime string
+events.CrimeEnabled = "character, crime"
 
 ---@param victim CHARACTER
 ---@param crimeType string
@@ -340,137 +309,137 @@ function Events.CrimeEnabled(character, crime) end
 ---@param criminal2 CHARACTER
 ---@param criminal3 CHARACTER
 ---@param criminal4 CHARACTER
-function Events.CrimeIsRegistered(victim, crimeType, crimeID, evidence, criminal1, criminal2, criminal3, criminal4) end
+events.CrimeIsRegistered = "victim, crimeType, crimeID, evidence, criminal1, criminal2, criminal3, criminal4"
 
 ---@param crimeID integer
 ---@param actedOnImmediately integer
-function Events.CrimeProcessingStarted(crimeID, actedOnImmediately) end
+events.CrimeProcessingStarted = "crimeID, actedOnImmediately"
 
 ---@param defender CHARACTER
 ---@param attackOwner CHARACTER
 ---@param attacker CHARACTER
 ---@param storyActionID integer
-function Events.CriticalHitBy(defender, attackOwner, attacker, storyActionID) end
+events.CriticalHitBy = "defender, attackOwner, attacker, storyActionID"
 
 ---@param character CHARACTER
 ---@param bookName string
-function Events.CustomBookUIClosed(character, bookName) end
+events.CustomBookUIClosed = "character, bookName"
 
 ---@param dlc DLC
 ---@param userID integer
 ---@param installed integer
-function Events.DLCUpdated(dlc, userID, installed) end
+events.DLCUpdated = "dlc, userID, installed"
 
 ---@param object GUIDSTRING
-function Events.Deactivated(object) end
+events.Deactivated = "object"
 
 ---@param character CHARACTER
-function Events.DeathSaveStable(character) end
+events.DeathSaveStable = "character"
 
 ---@param item ITEM
 ---@param destroyer CHARACTER
 ---@param destroyerOwner CHARACTER
 ---@param storyActionID integer
-function Events.DestroyedBy(item, destroyer, destroyerOwner, storyActionID) end
+events.DestroyedBy = "item, destroyer, destroyerOwner, storyActionID"
 
 ---@param item ITEM
 ---@param destroyer CHARACTER
 ---@param destroyerOwner CHARACTER
 ---@param storyActionID integer
-function Events.DestroyingBy(item, destroyer, destroyerOwner, storyActionID) end
+events.DestroyingBy = "item, destroyer, destroyerOwner, storyActionID"
 
 ---@param character CHARACTER
-function Events.DetachedFromPartyGroup(character) end
+events.DetachedFromPartyGroup = "character"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
 ---@param actor GUIDSTRING
-function Events.DialogActorJoinFailed(dialog, instanceID, actor) end
+events.DialogActorJoinFailed = "dialog, instanceID, actor"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
 ---@param actor GUIDSTRING
 ---@param speakerIndex integer
-function Events.DialogActorJoined(dialog, instanceID, actor, speakerIndex) end
+events.DialogActorJoined = "dialog, instanceID, actor, speakerIndex"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
 ---@param actor GUIDSTRING
 ---@param instanceEnded integer
-function Events.DialogActorLeft(dialog, instanceID, actor, instanceEnded) end
+events.DialogActorLeft = "dialog, instanceID, actor, instanceEnded"
 
 ---@param target CHARACTER
 ---@param player CHARACTER
-function Events.DialogAttackRequested(target, player) end
+events.DialogAttackRequested = "target, player"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.DialogEnded(dialog, instanceID) end
+events.DialogEnded = "dialog, instanceID"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.DialogForceStopping(dialog, instanceID) end
+events.DialogForceStopping = "dialog, instanceID"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.DialogRequestFailed(dialog, instanceID) end
+events.DialogRequestFailed = "dialog, instanceID"
 
 ---@param character CHARACTER
 ---@param success integer
 ---@param dialog DIALOGRESOURCE
 ---@param isDetectThoughts integer
 ---@param criticality CRITICALITYTYPE
-function Events.DialogRollResult(character, success, dialog, isDetectThoughts, criticality) end
+events.DialogRollResult = "character, success, dialog, isDetectThoughts, criticality"
 
 ---@param target GUIDSTRING
 ---@param player GUIDSTRING
-function Events.DialogStartRequested(target, player) end
+events.DialogStartRequested = "target, player"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.DialogStarted(dialog, instanceID) end
+events.DialogStarted = "dialog, instanceID"
 
 ---@param character CHARACTER
 ---@param isEnabled integer
-function Events.DialogueCapabilityChanged(character, isEnabled) end
+events.DialogueCapabilityChanged = "character, isEnabled"
 
 ---@param character CHARACTER
-function Events.Died(character) end
+events.Died = "character"
 
 ---@param difficultyLevel integer
-function Events.DifficultyChanged(difficultyLevel) end
+events.DifficultyChanged = "difficultyLevel"
 
 ---@param character CHARACTER
 ---@param moveID integer
-function Events.DisappearOutOfSightToCancelled(character, moveID) end
+events.DisappearOutOfSightToCancelled = "character, moveID"
 
 ---@param itemTemplate ITEMROOT
 ---@param item2 ITEM
 ---@param character CHARACTER
-function Events.DoorTemplateClosing(itemTemplate, item2, character) end
+events.DoorTemplateClosing = "itemTemplate, item2, character"
 
 ---@param character CHARACTER
 ---@param isDowned integer
-function Events.DownedChanged(character, isDowned) end
+events.DownedChanged = "character, isDowned"
 
 ---@param object GUIDSTRING
 ---@param mover CHARACTER
-function Events.DroppedBy(object, mover) end
+events.DroppedBy = "object, mover"
 
 ---@param object1 GUIDSTRING
 ---@param object2 GUIDSTRING
 ---@param event string
-function Events.DualEntityEvent(object1, object2, event) end
+events.DualEntityEvent = "object1, object2, event"
 
 ---@param character CHARACTER
-function Events.Dying(character) end
+events.Dying = "character"
 
 ---@param character CHARACTER
-function Events.EndTheDayRequested(character) end
+events.EndTheDayRequested = "character"
 
 ---@param opponentLeft GUIDSTRING
 ---@param opponentRight GUIDSTRING
-function Events.EnterCombatFailed(opponentLeft, opponentRight) end
+events.EnterCombatFailed = "opponentLeft, opponentRight"
 
 ---@param object GUIDSTRING
 ---@param cause GUIDSTRING
@@ -478,171 +447,171 @@ function Events.EnterCombatFailed(opponentLeft, opponentRight) end
 ---@param fallbackPosX number
 ---@param fallbackPosY number
 ---@param fallbackPosZ number
-function Events.EnteredChasm(object, cause, chasm, fallbackPosX, fallbackPosY, fallbackPosZ) end
+events.EnteredChasm = "object, cause, chasm, fallbackPosX, fallbackPosY, fallbackPosZ"
 
 ---@param object GUIDSTRING
 ---@param combatGuid GUIDSTRING
-function Events.EnteredCombat(object, combatGuid) end
+events.EnteredCombat = "object, combatGuid"
 
 ---@param object GUIDSTRING
-function Events.EnteredForceTurnBased(object) end
+events.EnteredForceTurnBased = "object"
 
 ---@param object GUIDSTRING
 ---@param objectRootTemplate ROOT
 ---@param level string
-function Events.EnteredLevel(object, objectRootTemplate, level) end
+events.EnteredLevel = "object, objectRootTemplate, level"
 
 ---@param object GUIDSTRING
 ---@param zoneId GUIDSTRING
-function Events.EnteredSharedForceTurnBased(object, zoneId) end
+events.EnteredSharedForceTurnBased = "object, zoneId"
 
 ---@param character CHARACTER
 ---@param trigger TRIGGER
-function Events.EnteredTrigger(character, trigger) end
+events.EnteredTrigger = "character, trigger"
 
 ---@param object GUIDSTRING
 ---@param event string
-function Events.EntityEvent(object, event) end
+events.EntityEvent = "object, event"
 
 ---@param item ITEM
 ---@param character CHARACTER
-function Events.EquipFailed(item, character) end
+events.EquipFailed = "item, character"
 
 ---@param item ITEM
 ---@param character CHARACTER
-function Events.Equipped(item, character) end
+events.Equipped = "item, character"
 
 ---@param oldLeader GUIDSTRING
 ---@param newLeader GUIDSTRING
 ---@param group string
-function Events.EscortGroupLeaderChanged(oldLeader, newLeader, group) end
+events.EscortGroupLeaderChanged = "oldLeader, newLeader, group"
 
 ---@param character CHARACTER
 ---@param originalItem ITEM
 ---@param level string
 ---@param newItem ITEM
-function Events.FailedToLoadItemInPreset(character, originalItem, level, newItem) end
+events.FailedToLoadItemInPreset = "character, originalItem, level, newItem"
 
 ---@param entity GUIDSTRING
 ---@param cause GUIDSTRING
-function Events.Falling(entity, cause) end
+events.Falling = "entity, cause"
 
 ---@param entity GUIDSTRING
 ---@param cause GUIDSTRING
-function Events.Fell(entity, cause) end
+events.Fell = "entity, cause"
 
 ---@param flag FLAG
 ---@param speaker GUIDSTRING
 ---@param dialogInstance integer
-function Events.FlagCleared(flag, speaker, dialogInstance) end
+events.FlagCleared = "flag, speaker, dialogInstance"
 
 ---@param object GUIDSTRING
 ---@param flag FLAG
-function Events.FlagLoadedInPresetEvent(object, flag) end
+events.FlagLoadedInPresetEvent = "object, flag"
 
 ---@param flag FLAG
 ---@param speaker GUIDSTRING
 ---@param dialogInstance integer
-function Events.FlagSet(flag, speaker, dialogInstance) end
+events.FlagSet = "flag, speaker, dialogInstance"
 
 ---@param participant GUIDSTRING
 ---@param combatGuid GUIDSTRING
-function Events.FleeFromCombat(participant, combatGuid) end
+events.FleeFromCombat = "participant, combatGuid"
 
 ---@param character CHARACTER
-function Events.FollowerCantUseItem(character) end
+events.FollowerCantUseItem = "character"
 
 ---@param companion CHARACTER
-function Events.ForceDismissCompanion(companion) end
+events.ForceDismissCompanion = "companion"
 
 ---@param source GUIDSTRING
 ---@param target GUIDSTRING
 ---@param storyActionID integer
-function Events.ForceMoveEnded(source, target, storyActionID) end
+events.ForceMoveEnded = "source, target, storyActionID"
 
 ---@param source GUIDSTRING
 ---@param target GUIDSTRING
 ---@param storyActionID integer
-function Events.ForceMoveStarted(source, target, storyActionID) end
+events.ForceMoveStarted = "source, target, storyActionID"
 
 ---@param target CHARACTER
-function Events.GainedControl(target) end
+events.GainedControl = "target"
 
 ---@param item ITEM
 ---@param character CHARACTER
-function Events.GameBookInterfaceClosed(item, character) end
+events.GameBookInterfaceClosed = "item, character"
 
 ---@param gameMode string
 ---@param isEditorMode integer
 ---@param isStoryReload integer
-function Events.GameModeStarted(gameMode, isEditorMode, isStoryReload) end
+events.GameModeStarted = "gameMode, isEditorMode, isStoryReload"
 
 ---@param key string
 ---@param value string
-function Events.GameOption(key, value) end
+events.GameOption = "key, value"
 
 ---@param inventoryHolder GUIDSTRING
 ---@param changeAmount integer
-function Events.GoldChanged(inventoryHolder, changeAmount) end
+events.GoldChanged = "inventoryHolder, changeAmount"
 
 ---@param target CHARACTER
-function Events.GotUp(target) end
+events.GotUp = "target"
 
 ---@param character CHARACTER
 ---@param trader CHARACTER
 ---@param characterValue integer
 ---@param traderValue integer
-function Events.HappyWithDeal(character, trader, characterValue, traderValue) end
+events.HappyWithDeal = "character, trader, characterValue, traderValue"
 
 ---@param player CHARACTER
-function Events.HenchmanAborted(player) end
+events.HenchmanAborted = "player"
 
 ---@param player CHARACTER
 ---@param hireling CHARACTER
-function Events.HenchmanSelected(player, hireling) end
+events.HenchmanSelected = "player, hireling"
 
 ---@param proxy GUIDSTRING
 ---@param target GUIDSTRING
 ---@param attackerOwner GUIDSTRING
 ---@param attacker2 GUIDSTRING
 ---@param storyActionID integer
-function Events.HitProxy(proxy, target, attackerOwner, attacker2, storyActionID) end
+events.HitProxy = "proxy, target, attackerOwner, attacker2, storyActionID"
 
 ---@param entity GUIDSTRING
 ---@param percentage number
-function Events.HitpointsChanged(entity, percentage) end
+events.HitpointsChanged = "entity, percentage"
 
 ---@param instanceID integer
 ---@param oldDialog DIALOGRESOURCE
 ---@param newDialog DIALOGRESOURCE
 ---@param oldDialogStopping integer
-function Events.InstanceDialogChanged(instanceID, oldDialog, newDialog, oldDialogStopping) end
+events.InstanceDialogChanged = "instanceID, oldDialog, newDialog, oldDialogStopping"
 
 ---@param character CHARACTER
 ---@param isEnabled integer
-function Events.InteractionCapabilityChanged(character, isEnabled) end
+events.InteractionCapabilityChanged = "character, isEnabled"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.InteractionFallback(character, item) end
+events.InteractionFallback = "character, item"
 
 ---@param item ITEM
 ---@param isBoundToInventory integer
-function Events.InventoryBoundChanged(item, isBoundToInventory) end
+events.InventoryBoundChanged = "item, isBoundToInventory"
 
 ---@param character CHARACTER
 ---@param sharingEnabled integer
-function Events.InventorySharingChanged(character, sharingEnabled) end
+events.InventorySharingChanged = "character, sharingEnabled"
 
 ---@param item ITEM
 ---@param trigger TRIGGER
 ---@param mover GUIDSTRING
-function Events.ItemEnteredTrigger(item, trigger, mover) end
+events.ItemEnteredTrigger = "item, trigger, mover"
 
 ---@param item ITEM
 ---@param trigger TRIGGER
 ---@param mover GUIDSTRING
-function Events.ItemLeftTrigger(item, trigger, mover) end
+events.ItemLeftTrigger = "item, trigger, mover"
 
 ---@param target ITEM
 ---@param oldX number
@@ -651,135 +620,135 @@ function Events.ItemLeftTrigger(item, trigger, mover) end
 ---@param newX number
 ---@param newY number
 ---@param newZ number
-function Events.ItemTeleported(target, oldX, oldY, oldZ, newX, newY, newZ) end
+events.ItemTeleported = "target, oldX, oldY, oldZ, newX, newY, newZ"
 
 ---@param defender CHARACTER
 ---@param attackOwner GUIDSTRING
 ---@param attacker GUIDSTRING
 ---@param storyActionID integer
-function Events.KilledBy(defender, attackOwner, attacker, storyActionID) end
+events.KilledBy = "defender, attackOwner, attacker, storyActionID"
 
 ---@param character CHARACTER
 ---@param spell string
-function Events.LearnedSpell(character, spell) end
+events.LearnedSpell = "character, spell"
 
 ---@param object GUIDSTRING
 ---@param combatGuid GUIDSTRING
-function Events.LeftCombat(object, combatGuid) end
+events.LeftCombat = "object, combatGuid"
 
 ---@param object GUIDSTRING
-function Events.LeftForceTurnBased(object) end
+events.LeftForceTurnBased = "object"
 
 ---@param object GUIDSTRING
 ---@param level string
-function Events.LeftLevel(object, level) end
+events.LeftLevel = "object, level"
 
 ---@param character CHARACTER
 ---@param trigger TRIGGER
-function Events.LeftTrigger(character, trigger) end
+events.LeftTrigger = "character, trigger"
 
 ---@param levelName string
 ---@param isEditorMode integer
-function Events.LevelGameplayStarted(levelName, isEditorMode) end
+events.LevelGameplayStarted = "levelName, isEditorMode"
 
 ---@param newLevel string
-function Events.LevelLoaded(newLevel) end
+events.LevelLoaded = "newLevel"
 
 ---@param levelTemplate LEVELTEMPLATE
-function Events.LevelTemplateLoaded(levelTemplate) end
+events.LevelTemplateLoaded = "levelTemplate"
 
 ---@param level string
-function Events.LevelUnloading(level) end
+events.LevelUnloading = "level"
 
 ---@param character CHARACTER
-function Events.LeveledUp(character) end
+events.LeveledUp = "character"
 
-function Events.LongRestCancelled() end
+events.LongRestCancelled = ""
 
-function Events.LongRestFinished() end
+events.LongRestFinished = ""
 
-function Events.LongRestStartFailed() end
+events.LongRestStartFailed = ""
 
-function Events.LongRestStarted() end
+events.LongRestStarted = ""
 
 ---@param character CHARACTER
 ---@param targetCharacter CHARACTER
-function Events.LostSightOf(character, targetCharacter) end
+events.LostSightOf = "character, targetCharacter"
 
 ---@param character CHARACTER
 ---@param event string
-function Events.MainPerformerStarted(character, event) end
+events.MainPerformerStarted = "character, event"
 
 ---@param character CHARACTER
 ---@param message string
 ---@param resultChoice string
-function Events.MessageBoxChoiceClosed(character, message, resultChoice) end
+events.MessageBoxChoiceClosed = "character, message, resultChoice"
 
 ---@param character CHARACTER
 ---@param message string
-function Events.MessageBoxClosed(character, message) end
+events.MessageBoxClosed = "character, message"
 
 ---@param character CHARACTER
 ---@param message string
 ---@param result integer
-function Events.MessageBoxYesNoClosed(character, message, result) end
+events.MessageBoxYesNoClosed = "character, message, result"
 
 ---@param defender CHARACTER
 ---@param attackOwner CHARACTER
 ---@param attacker CHARACTER
 ---@param storyActionID integer
-function Events.MissedBy(defender, attackOwner, attacker, storyActionID) end
+events.MissedBy = "defender, attackOwner, attacker, storyActionID"
 
 ---@param name string
 ---@param major integer
 ---@param minor integer
 ---@param revision integer
 ---@param build integer
-function Events.ModuleLoadedinSavegame(name, major, minor, revision, build) end
+events.ModuleLoadedinSavegame = "name, major, minor, revision, build"
 
 ---@param character CHARACTER
 ---@param isEnabled integer
-function Events.MoveCapabilityChanged(character, isEnabled) end
+events.MoveCapabilityChanged = "character, isEnabled"
 
 ---@param item ITEM
-function Events.Moved(item) end
+events.Moved = "item"
 
 ---@param movedEntity GUIDSTRING
 ---@param character CHARACTER
-function Events.MovedBy(movedEntity, character) end
+events.MovedBy = "movedEntity, character"
 
 ---@param movedObject GUIDSTRING
 ---@param fromObject GUIDSTRING
 ---@param toObject GUIDSTRING
 ---@param isTrade integer
-function Events.MovedFromTo(movedObject, fromObject, toObject, isTrade) end
+events.MovedFromTo = "movedObject, fromObject, toObject, isTrade"
 
 ---@param movieName string
-function Events.MovieFinished(movieName) end
+events.MovieFinished = "movieName"
 
 ---@param movieName string
-function Events.MoviePlaylistFinished(movieName) end
+events.MoviePlaylistFinished = "movieName"
 
 ---@param dialog DIALOGRESOURCE
 ---@param instanceID integer
-function Events.NestedDialogPlayed(dialog, instanceID) end
+events.NestedDialogPlayed = "dialog, instanceID"
 
 ---@param character CHARACTER
 ---@param oldLevel integer
 ---@param newLevel integer
-function Events.ObjectAvailableLevelChanged(character, oldLevel, newLevel) end
+events.ObjectAvailableLevelChanged = "character, oldLevel, newLevel"
 
 ---@param object GUIDSTRING
 ---@param timer string
-function Events.ObjectTimerFinished(object, timer) end
+events.ObjectTimerFinished = "object, timer"
 
 ---@param object GUIDSTRING
 ---@param toTemplate GUIDSTRING
-function Events.ObjectTransformed(object, toTemplate) end
+events.ObjectTransformed = "object, toTemplate"
 
 ---@param object GUIDSTRING
 ---@param obscuredState string
-function Events.ObscuredStateChanged(object, obscuredState) end
+events.ObscuredStateChanged = "object, obscuredState"
 
 ---@param crimeID integer
 ---@param investigator CHARACTER
@@ -788,17 +757,17 @@ function Events.ObscuredStateChanged(object, obscuredState) end
 ---@param criminal2 CHARACTER
 ---@param criminal3 CHARACTER
 ---@param criminal4 CHARACTER
-function Events.OnCrimeConfrontationDone(crimeID, investigator, wasLead, criminal1, criminal2, criminal3, criminal4) end
+events.OnCrimeConfrontationDone = "crimeID, investigator, wasLead, criminal1, criminal2, criminal3, criminal4"
 
 ---@param crimeID integer
 ---@param investigator CHARACTER
 ---@param fromState string
 ---@param toState string
-function Events.OnCrimeInvestigatorSwitchedState(crimeID, investigator, fromState, toState) end
+events.OnCrimeInvestigatorSwitchedState = "crimeID, investigator, fromState, toState"
 
 ---@param oldCrimeID integer
 ---@param newCrimeID integer
-function Events.OnCrimeMergedWith(oldCrimeID, newCrimeID) end
+events.OnCrimeMergedWith = "oldCrimeID, newCrimeID"
 
 ---@param crimeID integer
 ---@param victim CHARACTER
@@ -806,11 +775,11 @@ function Events.OnCrimeMergedWith(oldCrimeID, newCrimeID) end
 ---@param criminal2 CHARACTER
 ---@param criminal3 CHARACTER
 ---@param criminal4 CHARACTER
-function Events.OnCrimeRemoved(crimeID, victim, criminal1, criminal2, criminal3, criminal4) end
+events.OnCrimeRemoved = "crimeID, victim, criminal1, criminal2, criminal3, criminal4"
 
 ---@param crimeID integer
 ---@param criminal CHARACTER
-function Events.OnCrimeResetInterrogationForCriminal(crimeID, criminal) end
+events.OnCrimeResetInterrogationForCriminal = "crimeID, criminal"
 
 ---@param crimeID integer
 ---@param victim CHARACTER
@@ -818,14 +787,14 @@ function Events.OnCrimeResetInterrogationForCriminal(crimeID, criminal) end
 ---@param criminal2 CHARACTER
 ---@param criminal3 CHARACTER
 ---@param criminal4 CHARACTER
-function Events.OnCrimeResolved(crimeID, victim, criminal1, criminal2, criminal3, criminal4) end
+events.OnCrimeResolved = "crimeID, victim, criminal1, criminal2, criminal3, criminal4"
 
 ---@param crimeID integer
 ---@param criminal CHARACTER
-function Events.OnCriminalMergedWithCrime(crimeID, criminal) end
+events.OnCriminalMergedWithCrime = "crimeID, criminal"
 
 ---@param isEditorMode integer
-function Events.OnShutdown(isEditorMode) end
+events.OnShutdown = "isEditorMode"
 
 ---@param carriedObject GUIDSTRING
 ---@param carriedObjectTemplate ROOT
@@ -834,19 +803,11 @@ function Events.OnShutdown(isEditorMode) end
 ---@param pickupPosX number
 ---@param pickupPosY number
 ---@param pickupPosZ number
-function Events.OnStartCarrying(
-    carriedObject,
-    carriedObjectTemplate,
-    carrier,
-    storyActionID,
-    pickupPosX,
-    pickupPosY,
-    pickupPosZ
-)
-end
+events.OnStartCarrying =
+    "carriedObject, carriedObjectTemplate, carrier, storyActionID, pickupPosX, pickupPosY, pickupPosZ"
 
 ---@param target CHARACTER
-function Events.OnStoryOverride(target) end
+events.OnStoryOverride = "target"
 
 ---@param thrownObject GUIDSTRING
 ---@param thrownObjectTemplate ROOT
@@ -855,115 +816,106 @@ function Events.OnStoryOverride(target) end
 ---@param throwPosX number
 ---@param throwPosY number
 ---@param throwPosZ number
-function Events.OnThrown(
-    thrownObject,
-    thrownObjectTemplate,
-    thrower,
-    storyActionID,
-    throwPosX,
-    throwPosY,
-    throwPosZ
-)
-end
+events.OnThrown = "thrownObject, thrownObjectTemplate, thrower, storyActionID, throwPosX, throwPosY, throwPosZ"
 
 ---@param item ITEM
-function Events.Opened(item) end
+events.Opened = "item"
 
 ---@param partyPreset string
 ---@param levelName string
-function Events.PartyPresetLoaded(partyPreset, levelName) end
+events.PartyPresetLoaded = "partyPreset, levelName"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.PickupFailed(character, item) end
+events.PickupFailed = "character, item"
 
 ---@param character CHARACTER
-function Events.PingRequested(character) end
+events.PingRequested = "character"
 
 ---@param object GUIDSTRING
-function Events.PlatformDestroyed(object) end
-
----@param object GUIDSTRING
----@param eventId string
-function Events.PlatformMovementCanceled(object, eventId) end
+events.PlatformDestroyed = "object"
 
 ---@param object GUIDSTRING
 ---@param eventId string
-function Events.PlatformMovementFinished(object, eventId) end
+events.PlatformMovementCanceled = "object, eventId"
+
+---@param object GUIDSTRING
+---@param eventId string
+events.PlatformMovementFinished = "object, eventId"
 
 ---@param item ITEM
 ---@param character CHARACTER
-function Events.PreMovedBy(item, character) end
+events.PreMovedBy = "item, character"
 
 ---@param character CHARACTER
 ---@param uIInstance string
 ---@param type integer
-function Events.PuzzleUIClosed(character, uIInstance, type) end
+events.PuzzleUIClosed = "character, uIInstance, type"
 
 ---@param character CHARACTER
 ---@param uIInstance string
 ---@param type integer
 ---@param command string
 ---@param elementId integer
-function Events.PuzzleUIUsed(character, uIInstance, type, command, elementId) end
+events.PuzzleUIUsed = "character, uIInstance, type, command, elementId"
 
 ---@param character CHARACTER
 ---@param questID string
-function Events.QuestAccepted(character, questID) end
+events.QuestAccepted = "character, questID"
 
 ---@param questID string
-function Events.QuestClosed(questID) end
+events.QuestClosed = "questID"
 
 ---@param character CHARACTER
 ---@param topLevelQuestID string
 ---@param stateID string
-function Events.QuestUpdateUnlocked(character, topLevelQuestID, stateID) end
+events.QuestUpdateUnlocked = "character, topLevelQuestID, stateID"
 
 ---@param object GUIDSTRING
-function Events.QueuePurged(object) end
+events.QueuePurged = "object"
 
 ---@param caster GUIDSTRING
 ---@param storyActionID integer
 ---@param spellID string
 ---@param rollResult integer
 ---@param randomCastDC integer
-function Events.RandomCastProcessed(caster, storyActionID, spellID, rollResult, randomCastDC) end
+events.RandomCastProcessed = "caster, storyActionID, spellID, rollResult, randomCastDC"
 
 ---@param object GUIDSTRING
-function Events.ReactionInterruptActionNeeded(object) end
+events.ReactionInterruptActionNeeded = "object"
 
 ---@param character CHARACTER
 ---@param reactionInterruptName string
-function Events.ReactionInterruptAdded(character, reactionInterruptName) end
+events.ReactionInterruptAdded = "character, reactionInterruptName"
 
 ---@param object GUIDSTRING
 ---@param reactionInterruptPrototypeId string
 ---@param isAutoTriggered integer
-function Events.ReactionInterruptUsed(object, reactionInterruptPrototypeId, isAutoTriggered) end
+events.ReactionInterruptUsed = "object, reactionInterruptPrototypeId, isAutoTriggered"
 
 ---@param id string
-function Events.ReadyCheckFailed(id) end
+events.ReadyCheckFailed = "id"
 
 ---@param id string
-function Events.ReadyCheckPassed(id) end
+events.ReadyCheckPassed = "id"
 
 ---@param sourceFaction FACTION
 ---@param targetFaction FACTION
 ---@param newRelation integer
 ---@param permanent integer
-function Events.RelationChanged(sourceFaction, targetFaction, newRelation, permanent) end
+events.RelationChanged = "sourceFaction, targetFaction, newRelation, permanent"
 
 ---@param object GUIDSTRING
 ---@param inventoryHolder GUIDSTRING
-function Events.RemovedFrom(object, inventoryHolder) end
+events.RemovedFrom = "object, inventoryHolder"
 
 ---@param entity GUIDSTRING
 ---@param onEntity GUIDSTRING
-function Events.ReposeAdded(entity, onEntity) end
+events.ReposeAdded = "entity, onEntity"
 
 ---@param entity GUIDSTRING
 ---@param onEntity GUIDSTRING
-function Events.ReposeRemoved(entity, onEntity) end
+events.ReposeRemoved = "entity, onEntity"
 
 ---@param character CHARACTER
 ---@param item1 ITEM
@@ -972,65 +924,65 @@ function Events.ReposeRemoved(entity, onEntity) end
 ---@param item4 ITEM
 ---@param item5 ITEM
 ---@param requestID integer
-function Events.RequestCanCombine(character, item1, item2, item3, item4, item5, requestID) end
+events.RequestCanCombine = "character, item1, item2, item3, item4, item5, requestID"
 
 ---@param character CHARACTER
 ---@param item ITEM
 ---@param requestID integer
-function Events.RequestCanDisarmTrap(character, item, requestID) end
+events.RequestCanDisarmTrap = "character, item, requestID"
 
 ---@param character CHARACTER
 ---@param item ITEM
 ---@param requestID integer
-function Events.RequestCanLockpick(character, item, requestID) end
+events.RequestCanLockpick = "character, item, requestID"
 
 ---@param looter CHARACTER
 ---@param target CHARACTER
-function Events.RequestCanLoot(looter, target) end
+events.RequestCanLoot = "looter, target"
 
 ---@param character CHARACTER
 ---@param item ITEM
 ---@param requestID integer
-function Events.RequestCanMove(character, item, requestID) end
+events.RequestCanMove = "character, item, requestID"
 
 ---@param character CHARACTER
 ---@param object GUIDSTRING
 ---@param requestID integer
-function Events.RequestCanPickup(character, object, requestID) end
+events.RequestCanPickup = "character, object, requestID"
 
 ---@param character CHARACTER
 ---@param item ITEM
 ---@param requestID integer
-function Events.RequestCanUse(character, item, requestID) end
+events.RequestCanUse = "character, item, requestID"
 
-function Events.RequestEndTheDayFail() end
+events.RequestEndTheDayFail = ""
 
-function Events.RequestEndTheDaySuccess() end
-
----@param character CHARACTER
-function Events.RequestGatherAtCampFail(character) end
+events.RequestEndTheDaySuccess = ""
 
 ---@param character CHARACTER
-function Events.RequestGatherAtCampSuccess(character) end
+events.RequestGatherAtCampFail = "character"
+
+---@param character CHARACTER
+events.RequestGatherAtCampSuccess = "character"
 
 ---@param player CHARACTER
 ---@param npc CHARACTER
-function Events.RequestPickpocket(player, npc) end
+events.RequestPickpocket = "player, npc"
 
 ---@param character CHARACTER
 ---@param trader CHARACTER
 ---@param tradeMode TRADEMODE
 ---@param itemsTagFilter string
-function Events.RequestTrade(character, trader, tradeMode, itemsTagFilter) end
+events.RequestTrade = "character, trader, tradeMode, itemsTagFilter"
 
 ---@param character CHARACTER
-function Events.RespecCancelled(character) end
+events.RespecCancelled = "character"
 
 ---@param character CHARACTER
-function Events.RespecCompleted(character) end
+events.RespecCompleted = "character"
 
 ---@param character CHARACTER
-function Events.Resurrected(character) end
+events.Resurrected = "character"
 
 ---@param eventName string
 ---@param roller CHARACTER
@@ -1038,87 +990,87 @@ function Events.Resurrected(character) end
 ---@param resultType integer
 ---@param isActiveRoll integer
 ---@param criticality CRITICALITYTYPE
-function Events.RollResult(eventName, roller, rollSubject, resultType, isActiveRoll, criticality) end
+events.RollResult = "eventName, roller, rollSubject, resultType, isActiveRoll, criticality"
 
 ---@param modifier RULESETMODIFIER
 ---@param old integer
 ---@param new integer
-function Events.RulesetModifierChangedBool(modifier, old, new) end
+events.RulesetModifierChangedBool = "modifier, old, new"
 
 ---@param modifier RULESETMODIFIER
 ---@param old number
 ---@param new number
-function Events.RulesetModifierChangedFloat(modifier, old, new) end
+events.RulesetModifierChangedFloat = "modifier, old, new"
 
 ---@param modifier RULESETMODIFIER
 ---@param old integer
 ---@param new integer
-function Events.RulesetModifierChangedInt(modifier, old, new) end
+events.RulesetModifierChangedInt = "modifier, old, new"
 
 ---@param modifier RULESETMODIFIER
 ---@param old string
 ---@param new string
-function Events.RulesetModifierChangedString(modifier, old, new) end
+events.RulesetModifierChangedString = "modifier, old, new"
 
 ---@param userID integer
 ---@param state integer
-function Events.SafeRomanceOptionChanged(userID, state) end
+events.SafeRomanceOptionChanged = "userID, state"
 
-function Events.SavegameLoadStarted() end
+events.SavegameLoadStarted = ""
 
-function Events.SavegameLoaded() end
+events.SavegameLoaded = ""
 
 ---@param character CHARACTER
 ---@param targetCharacter CHARACTER
 ---@param targetWasSneaking integer
-function Events.Saw(character, targetCharacter, targetWasSneaking) end
+events.Saw = "character, targetCharacter, targetWasSneaking"
 
 ---@param item ITEM
 ---@param x number
 ---@param y number
 ---@param z number
-function Events.ScatteredAt(item, x, y, z) end
+events.ScatteredAt = "item, x, y, z"
 
 ---@param userID integer
 ---@param fadeID string
-function Events.ScreenFadeCleared(userID, fadeID) end
+events.ScreenFadeCleared = "userID, fadeID"
 
 ---@param userID integer
 ---@param fadeID string
-function Events.ScreenFadeDone(userID, fadeID) end
+events.ScreenFadeDone = "userID, fadeID"
 
 ---@param character CHARACTER
 ---@param race string
 ---@param gender string
 ---@param shapeshiftStatus string
-function Events.ShapeshiftChanged(character, race, gender, shapeshiftStatus) end
+events.ShapeshiftChanged = "character, race, gender, shapeshiftStatus"
 
 ---@param entity GUIDSTRING
 ---@param percentage number
-function Events.ShapeshiftedHitpointsChanged(entity, percentage) end
+events.ShapeshiftedHitpointsChanged = "entity, percentage"
 
 ---@param object GUIDSTRING
-function Events.ShareInitiative(object) end
+events.ShareInitiative = "object"
 
 ---@param character CHARACTER
 ---@param capable integer
-function Events.ShortRestCapable(character, capable) end
+events.ShortRestCapable = "character, capable"
 
 ---@param character CHARACTER
-function Events.ShortRestProcessing(character) end
+events.ShortRestProcessing = "character"
 
 ---@param character CHARACTER
-function Events.ShortRested(character) end
+events.ShortRested = "character"
 
 ---@param item ITEM
 ---@param stackedWithItem ITEM
-function Events.StackedWith(item, stackedWithItem) end
+events.StackedWith = "item, stackedWithItem"
 
 ---@param defender GUIDSTRING
 ---@param attackOwner CHARACTER
 ---@param attacker GUIDSTRING
 ---@param storyActionID integer
-function Events.StartAttack(defender, attackOwner, attacker, storyActionID) end
+events.StartAttack = "defender, attackOwner, attacker, storyActionID"
 
 ---@param x number
 ---@param y number
@@ -1126,62 +1078,62 @@ function Events.StartAttack(defender, attackOwner, attacker, storyActionID) end
 ---@param attackOwner CHARACTER
 ---@param attacker GUIDSTRING
 ---@param storyActionID integer
-function Events.StartAttackPosition(x, y, z, attackOwner, attacker, storyActionID) end
+events.StartAttackPosition = "x, y, z, attackOwner, attacker, storyActionID"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.StartedDisarmingTrap(character, item) end
+events.StartedDisarmingTrap = "character, item"
 
 ---@param character CHARACTER
-function Events.StartedFleeing(character) end
+events.StartedFleeing = "character"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.StartedLockpicking(character, item) end
+events.StartedLockpicking = "character, item"
 
 ---@param caster GUIDSTRING
 ---@param spell string
 ---@param isMostPowerful integer
 ---@param hasMultipleLevels integer
-function Events.StartedPreviewingSpell(caster, spell, isMostPowerful, hasMultipleLevels) end
+events.StartedPreviewingSpell = "caster, spell, isMostPowerful, hasMultipleLevels"
 
 ---@param object GUIDSTRING
 ---@param status string
 ---@param causee GUIDSTRING
 ---@param storyActionID integer
-function Events.StatusApplied(object, status, causee, storyActionID) end
+events.StatusApplied = "object, status, causee, storyActionID"
 
 ---@param object GUIDSTRING
 ---@param status string
 ---@param causee GUIDSTRING
 ---@param storyActionID integer
-function Events.StatusAttempt(object, status, causee, storyActionID) end
+events.StatusAttempt = "object, status, causee, storyActionID"
 
 ---@param object GUIDSTRING
 ---@param status string
 ---@param causee GUIDSTRING
 ---@param storyActionID integer
-function Events.StatusAttemptFailed(object, status, causee, storyActionID) end
+events.StatusAttemptFailed = "object, status, causee, storyActionID"
 
 ---@param object GUIDSTRING
 ---@param status string
 ---@param causee GUIDSTRING
 ---@param applyStoryActionID integer
-function Events.StatusRemoved(object, status, causee, applyStoryActionID) end
+events.StatusRemoved = "object, status, causee, applyStoryActionID"
 
 ---@param target GUIDSTRING
 ---@param tag TAG
 ---@param sourceOwner GUIDSTRING
 ---@param source2 GUIDSTRING
 ---@param storyActionID integer
-function Events.StatusTagCleared(target, tag, sourceOwner, source2, storyActionID) end
+events.StatusTagCleared = "target, tag, sourceOwner, source2, storyActionID"
 
 ---@param target GUIDSTRING
 ---@param tag TAG
 ---@param sourceOwner GUIDSTRING
 ---@param source2 GUIDSTRING
 ---@param storyActionID integer
-function Events.StatusTagSet(target, tag, sourceOwner, source2, storyActionID) end
+events.StatusTagSet = "target, tag, sourceOwner, source2, storyActionID"
 
 ---@param character CHARACTER
 ---@param item1 ITEM
@@ -1189,67 +1141,67 @@ function Events.StatusTagSet(target, tag, sourceOwner, source2, storyActionID) e
 ---@param item3 ITEM
 ---@param item4 ITEM
 ---@param item5 ITEM
-function Events.StoppedCombining(character, item1, item2, item3, item4, item5) end
+events.StoppedCombining = "character, item1, item2, item3, item4, item5"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.StoppedDisarmingTrap(character, item) end
+events.StoppedDisarmingTrap = "character, item"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.StoppedLockpicking(character, item) end
+events.StoppedLockpicking = "character, item"
 
 ---@param character CHARACTER
-function Events.StoppedSneaking(character) end
+events.StoppedSneaking = "character"
 
 ---@param character CHARACTER
 ---@param subQuestID string
 ---@param stateID string
-function Events.SubQuestUpdateUnlocked(character, subQuestID, stateID) end
+events.SubQuestUpdateUnlocked = "character, subQuestID, stateID"
 
 ---@param templateId GUIDSTRING
 ---@param amount integer
-function Events.SupplyTemplateSpent(templateId, amount) end
+events.SupplyTemplateSpent = "templateId, amount"
 
 ---@param object GUIDSTRING
 ---@param group string
-function Events.SwarmAIGroupJoined(object, group) end
+events.SwarmAIGroupJoined = "object, group"
 
 ---@param object GUIDSTRING
 ---@param group string
-function Events.SwarmAIGroupLeft(object, group) end
+events.SwarmAIGroupLeft = "object, group"
 
 ---@param object GUIDSTRING
 ---@param oldCombatGuid GUIDSTRING
 ---@param newCombatGuid GUIDSTRING
-function Events.SwitchedCombat(object, oldCombatGuid, newCombatGuid) end
+events.SwitchedCombat = "object, oldCombatGuid, newCombatGuid"
 
 ---@param character CHARACTER
 ---@param power string
-function Events.TadpolePowerAssigned(character, power) end
+events.TadpolePowerAssigned = "character, power"
 
 ---@param target GUIDSTRING
 ---@param tag TAG
-function Events.TagCleared(target, tag) end
+events.TagCleared = "target, tag"
 
 ---@param tag TAG
 ---@param event string
-function Events.TagEvent(tag, event) end
+events.TagEvent = "tag, event"
 
 ---@param target GUIDSTRING
 ---@param tag TAG
-function Events.TagSet(target, tag) end
+events.TagSet = "target, tag"
 
 ---@param character CHARACTER
 ---@param trigger TRIGGER
-function Events.TeleportToFleeWaypoint(character, trigger) end
+events.TeleportToFleeWaypoint = "character, trigger"
 
 ---@param character CHARACTER
-function Events.TeleportToFromCamp(character) end
+events.TeleportToFromCamp = "character"
 
 ---@param character CHARACTER
 ---@param trigger TRIGGER
-function Events.TeleportToWaypoint(character, trigger) end
+events.TeleportToWaypoint = "character, trigger"
 
 ---@param target CHARACTER
 ---@param cause CHARACTER
@@ -1260,76 +1212,76 @@ function Events.TeleportToWaypoint(character, trigger) end
 ---@param newY number
 ---@param newZ number
 ---@param spell string
-function Events.Teleported(target, cause, oldX, oldY, oldZ, newX, newY, newZ, spell) end
+events.Teleported = "target, cause, oldX, oldY, oldZ, newX, newY, newZ, spell"
 
 ---@param character CHARACTER
-function Events.TeleportedFromCamp(character) end
+events.TeleportedFromCamp = "character"
 
 ---@param character CHARACTER
-function Events.TeleportedToCamp(character) end
+events.TeleportedToCamp = "character"
 
 ---@param objectTemplate ROOT
 ---@param object2 GUIDSTRING
 ---@param inventoryHolder GUIDSTRING
 ---@param addType string
-function Events.TemplateAddedTo(objectTemplate, object2, inventoryHolder, addType) end
+events.TemplateAddedTo = "objectTemplate, object2, inventoryHolder, addType"
 
 ---@param itemTemplate ITEMROOT
 ---@param item2 ITEM
 ---@param destroyer CHARACTER
 ---@param destroyerOwner CHARACTER
 ---@param storyActionID integer
-function Events.TemplateDestroyedBy(itemTemplate, item2, destroyer, destroyerOwner, storyActionID) end
+events.TemplateDestroyedBy = "itemTemplate, item2, destroyer, destroyerOwner, storyActionID"
 
 ---@param itemTemplate ITEMROOT
 ---@param item2 ITEM
 ---@param trigger TRIGGER
 ---@param owner CHARACTER
 ---@param mover GUIDSTRING
-function Events.TemplateEnteredTrigger(itemTemplate, item2, trigger, owner, mover) end
+events.TemplateEnteredTrigger = "itemTemplate, item2, trigger, owner, mover"
 
 ---@param itemTemplate ITEMROOT
 ---@param character CHARACTER
-function Events.TemplateEquipped(itemTemplate, character) end
+events.TemplateEquipped = "itemTemplate, character"
 
 ---@param characterTemplate CHARACTERROOT
 ---@param defender CHARACTER
 ---@param attackOwner GUIDSTRING
 ---@param attacker GUIDSTRING
 ---@param storyActionID integer
-function Events.TemplateKilledBy(characterTemplate, defender, attackOwner, attacker, storyActionID) end
+events.TemplateKilledBy = "characterTemplate, defender, attackOwner, attacker, storyActionID"
 
 ---@param itemTemplate ITEMROOT
 ---@param item2 ITEM
 ---@param trigger TRIGGER
 ---@param owner CHARACTER
 ---@param mover GUIDSTRING
-function Events.TemplateLeftTrigger(itemTemplate, item2, trigger, owner, mover) end
+events.TemplateLeftTrigger = "itemTemplate, item2, trigger, owner, mover"
 
 ---@param itemTemplate ITEMROOT
 ---@param item2 ITEM
 ---@param character CHARACTER
-function Events.TemplateOpening(itemTemplate, item2, character) end
+events.TemplateOpening = "itemTemplate, item2, character"
 
 ---@param objectTemplate ROOT
 ---@param object2 GUIDSTRING
 ---@param inventoryHolder GUIDSTRING
-function Events.TemplateRemovedFrom(objectTemplate, object2, inventoryHolder) end
+events.TemplateRemovedFrom = "objectTemplate, object2, inventoryHolder"
 
 ---@param itemTemplate ITEMROOT
 ---@param character CHARACTER
-function Events.TemplateUnequipped(itemTemplate, character) end
+events.TemplateUnequipped = "itemTemplate, character"
 
 ---@param character CHARACTER
 ---@param itemTemplate ITEMROOT
 ---@param item2 ITEM
 ---@param sucess integer
-function Events.TemplateUseFinished(character, itemTemplate, item2, sucess) end
+events.TemplateUseFinished = "character, itemTemplate, item2, sucess"
 
 ---@param character CHARACTER
 ---@param itemTemplate ITEMROOT
 ---@param item2 ITEM
-function Events.TemplateUseStarted(character, itemTemplate, item2) end
+events.TemplateUseStarted = "character, itemTemplate, item2"
 
 ---@param template1 ITEMROOT
 ---@param template2 ITEMROOT
@@ -1338,121 +1290,121 @@ function Events.TemplateUseStarted(character, itemTemplate, item2) end
 ---@param template5 ITEMROOT
 ---@param character CHARACTER
 ---@param newItem ITEM
-function Events.TemplatesCombined(template1, template2, template3, template4, template5, character, newItem) end
+events.TemplatesCombined = "template1, template2, template3, template4, template5, character, newItem"
 
 ---@param enemy CHARACTER
 ---@param sourceFaction FACTION
 ---@param targetFaction FACTION
-function Events.TemporaryHostileRelationRemoved(enemy, sourceFaction, targetFaction) end
+events.TemporaryHostileRelationRemoved = "enemy, sourceFaction, targetFaction"
 
 ---@param character1 CHARACTER
 ---@param character2 CHARACTER
 ---@param success integer
-function Events.TemporaryHostileRelationRequestHandled(character1, character2, success) end
+events.TemporaryHostileRelationRequestHandled = "character1, character2, success"
 
 ---@param event string
-function Events.TextEvent(event) end
+events.TextEvent = "event"
 
 ---@param userID integer
 ---@param dialogInstanceId integer
 ---@param dialog2 DIALOGRESOURCE
-function Events.TimelineScreenFadeStarted(userID, dialogInstanceId, dialog2) end
+events.TimelineScreenFadeStarted = "userID, dialogInstanceId, dialog2"
 
 ---@param timer string
-function Events.TimerFinished(timer) end
+events.TimerFinished = "timer"
 
 ---@param character CHARACTER
 ---@param trader CHARACTER
-function Events.TradeEnds(character, trader) end
+events.TradeEnds = "character, trader"
 
 ---@param trader CHARACTER
-function Events.TradeGenerationEnded(trader) end
+events.TradeGenerationEnded = "trader"
 
 ---@param trader CHARACTER
-function Events.TradeGenerationStarted(trader) end
+events.TradeGenerationStarted = "trader"
 
 ---@param object GUIDSTRING
-function Events.TurnEnded(object) end
+events.TurnEnded = "object"
 
 ---@param object GUIDSTRING
-function Events.TurnStarted(object) end
+events.TurnStarted = "object"
 
 ---@param character CHARACTER
 ---@param message string
-function Events.TutorialBoxClosed(character, message) end
+events.TutorialBoxClosed = "character, message"
 
 ---@param userId integer
 ---@param entryId GUIDSTRING
-function Events.TutorialClosed(userId, entryId) end
+events.TutorialClosed = "userId, entryId"
 
 ---@param entity CHARACTER
 ---@param event TUTORIALEVENT
-function Events.TutorialEvent(entity, event) end
+events.TutorialEvent = "entity, event"
 
 ---@param item ITEM
 ---@param character CHARACTER
-function Events.UnequipFailed(item, character) end
+events.UnequipFailed = "item, character"
 
 ---@param item ITEM
 ---@param character CHARACTER
-function Events.Unequipped(item, character) end
+events.Unequipped = "item, character"
 
 ---@param item ITEM
 ---@param character CHARACTER
 ---@param key ITEM
-function Events.Unlocked(item, character, key) end
+events.Unlocked = "item, character, key"
 
 ---@param character CHARACTER
 ---@param recipe string
-function Events.UnlockedRecipe(character, recipe) end
+events.UnlockedRecipe = "character, recipe"
 
 ---@param character CHARACTER
 ---@param item ITEM
 ---@param sucess integer
-function Events.UseFinished(character, item, sucess) end
+events.UseFinished = "character, item, sucess"
 
 ---@param character CHARACTER
 ---@param item ITEM
-function Events.UseStarted(character, item) end
+events.UseStarted = "character, item"
 
 ---@param userID integer
 ---@param avatar CHARACTER
 ---@param daisy CHARACTER
-function Events.UserAvatarCreated(userID, avatar, daisy) end
+events.UserAvatarCreated = "userID, avatar, daisy"
 
 ---@param userID integer
 ---@param chest ITEM
-function Events.UserCampChestChanged(userID, chest) end
+events.UserCampChestChanged = "userID, chest"
 
 ---@param character CHARACTER
 ---@param isFullRest integer
-function Events.UserCharacterLongRested(character, isFullRest) end
+events.UserCharacterLongRested = "character, isFullRest"
 
 ---@param userID integer
 ---@param userName string
 ---@param userProfileID string
-function Events.UserConnected(userID, userName, userProfileID) end
+events.UserConnected = "userID, userName, userProfileID"
 
 ---@param userID integer
 ---@param userName string
 ---@param userProfileID string
-function Events.UserDisconnected(userID, userName, userProfileID) end
+events.UserDisconnected = "userID, userName, userProfileID"
 
 ---@param userID integer
 ---@param userEvent string
-function Events.UserEvent(userID, userEvent) end
+events.UserEvent = "userID, userEvent"
 
 ---@param sourceUserID integer
 ---@param targetUserID integer
 ---@param war integer
-function Events.UserMakeWar(sourceUserID, targetUserID, war) end
+events.UserMakeWar = "sourceUserID, targetUserID, war"
 
 ---@param caster GUIDSTRING
 ---@param spell string
 ---@param spellType string
 ---@param spellElement string
 ---@param storyActionID integer
-function Events.UsingSpell(caster, spell, spellType, spellElement, storyActionID) end
+events.UsingSpell = "caster, spell, spellType, spellElement, storyActionID"
 
 ---@param caster GUIDSTRING
 ---@param x number
@@ -1462,7 +1414,7 @@ function Events.UsingSpell(caster, spell, spellType, spellElement, storyActionID
 ---@param spellType string
 ---@param spellElement string
 ---@param storyActionID integer
-function Events.UsingSpellAtPosition(caster, x, y, z, spell, spellType, spellElement, storyActionID) end
+events.UsingSpellAtPosition = "caster, x, y, z, spell, spellType, spellElement, storyActionID"
 
 ---@param caster GUIDSTRING
 ---@param spell string
@@ -1470,7 +1422,7 @@ function Events.UsingSpellAtPosition(caster, x, y, z, spell, spellType, spellEle
 ---@param spellElement string
 ---@param trigger TRIGGER
 ---@param storyActionID integer
-function Events.UsingSpellInTrigger(caster, spell, spellType, spellElement, trigger, storyActionID) end
+events.UsingSpellInTrigger = "caster, spell, spellType, spellElement, trigger, storyActionID"
 
 ---@param caster GUIDSTRING
 ---@param target GUIDSTRING
@@ -1478,7 +1430,7 @@ function Events.UsingSpellInTrigger(caster, spell, spellType, spellElement, trig
 ---@param spellType string
 ---@param spellElement string
 ---@param storyActionID integer
-function Events.UsingSpellOnTarget(caster, target, spell, spellType, spellElement, storyActionID) end
+events.UsingSpellOnTarget = "caster, target, spell, spellType, spellElement, storyActionID"
 
 ---@param caster GUIDSTRING
 ---@param target GUIDSTRING
@@ -1486,21 +1438,21 @@ function Events.UsingSpellOnTarget(caster, target, spell, spellType, spellElemen
 ---@param spellType string
 ---@param spellElement string
 ---@param storyActionID integer
-function Events.UsingSpellOnZoneWithTarget(caster, target, spell, spellType, spellElement, storyActionID) end
+events.UsingSpellOnZoneWithTarget = "caster, target, spell, spellType, spellElement, storyActionID"
 
 ---@param bark VOICEBARKRESOURCE
 ---@param instanceID integer
-function Events.VoiceBarkEnded(bark, instanceID) end
+events.VoiceBarkEnded = "bark, instanceID"
 
 ---@param bark VOICEBARKRESOURCE
-function Events.VoiceBarkFailed(bark) end
+events.VoiceBarkFailed = "bark"
 
 ---@param bark VOICEBARKRESOURCE
 ---@param instanceID integer
-function Events.VoiceBarkStarted(bark, instanceID) end
+events.VoiceBarkStarted = "bark, instanceID"
 
 ---@param object GUIDSTRING
 ---@param isOnStageNow integer
-function Events.WentOnStage(object, isOnStageNow) end
+events.WentOnStage = "object, isOnStageNow"
 
 return M

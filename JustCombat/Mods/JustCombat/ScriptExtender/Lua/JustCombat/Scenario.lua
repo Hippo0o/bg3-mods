@@ -202,14 +202,15 @@ function Action.EmptyArea()
         return
     end
 
-    local toRemove = UT.Filter(UE.GetNearby(Player.Host(), 30, true), function(v)
+    local toRemove = UT.Filter(UE.GetNearby(Player.Host(), 50, true), function(v)
         return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
     end)
 
-    -- TODO maybe only use Osi.SetOnStage
     for _, v in pairs(toRemove) do
         L.Debug("Removing entity.", v.Guid)
-        UE.Remove(v.Guid)
+        -- UE.Remove(v.Guid)
+        Osi.SetOnStage(v.Guid, 0)
+        Osi.DisappearOutOfSightTo(v.Guid, Player.Host(), "Run", 1, "")
     end
 end
 
