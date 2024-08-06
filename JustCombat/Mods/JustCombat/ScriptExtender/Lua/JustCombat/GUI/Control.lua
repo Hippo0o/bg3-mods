@@ -93,7 +93,7 @@ function Control.StartPanel(root)
         local scenarioSelection = Components.RadioList(listCols[1])
         local mapSelection = Components.RadioList(listCols[2])
 
-        WindowEvent(Net.EventName("LoadSelections"), function(event)
+        WindowEvent(Net.EventName("Selection"), function(event)
             scenarioSelection.Reset()
             mapSelection.Reset()
 
@@ -106,7 +106,7 @@ function Control.StartPanel(root)
             end
         end)
 
-        Net.Send("LoadSelections")
+        Net.Send("Selection")
 
         listCols[1]:AddButton("Start").OnClick = function(button)
             Event.Trigger("Start", scenarioSelection.Value, mapSelection.Value)

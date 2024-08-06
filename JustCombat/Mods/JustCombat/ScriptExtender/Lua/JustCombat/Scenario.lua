@@ -21,7 +21,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field LootWeapons table<string, number>
 ---@field OnMap boolean
 ---@field New fun(self): self
-local Object = Libs.Object({
+local Object = Libs.Class({
     Name = nil,
     Enemies = {},
     KilledEnemies = {},

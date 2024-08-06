@@ -37,6 +37,32 @@ Event.On("WindowClosed", function()
     listeners = {}
 end)
 
+function Debounced(func, delay)
+    local seconds = delay / 1000
+    local handlerId
+
+    return function(...)
+        if handlerId then
+            Ext.Events.Tick:Unsubscribe(handlerId)
+            handlerId = nil
+        end
+
+        local args = { ... }
+        local last = 0
+        handlerId = Ext.Events.Tick:Subscribe(function(e)
+            last = last + e.Time.DeltaTime
+            if last < seconds then
+                return
+            end
+
+            Ext.Events.Tick:Unsubscribe(handlerId)
+            handlerId = nil
+
+            func(table.unpack(args))
+        end)
+    end
+end
+
 local function openWindow()
     if window then
         if window.Open then
@@ -44,9 +70,12 @@ local function openWindow()
         end
         window:Destroy()
     end
-
     ---@type ExtuiWindow
     window = Ext.IMGUI.NewWindow("Just Combat")
+
+    window:AddButton("Debug").OnClick = Debounced(function()
+        L.Debug("Debug button clicked")
+    end, 500)
 
     window.Closeable = true
     window.OnClose = function()

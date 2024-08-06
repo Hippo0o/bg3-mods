@@ -1,5 +1,5 @@
----@type Constants
-local Constants = Require("Hlib/Constants")
+---@type Mod
+local Mod = Require("Hlib/Mod")
 
 ---@type Utils
 local Utils = Require("Hlib/Utils")
@@ -19,7 +19,7 @@ local M = {}
 ---@field PeerId number|nil
 ---@field ResponseAction string|nil
 ---@field UserId fun(self: NetEvent): number
-local NetEvent = Libs.Object({
+local NetEvent = Libs.Class({
     Action = nil,
     Payload = nil,
     PeerId = nil,
@@ -36,7 +36,7 @@ function NetEvent:__tostring()
 end
 
 Ext.Events.NetMessage:Subscribe(function(msg)
-    if Constants.NetChannel ~= msg.Channel then
+    if Mod.NetChannel ~= msg.Channel then
         return
     end
 
@@ -73,14 +73,14 @@ function M.Send(action, payload, responseAction, peerId)
 
     if Ext.IsServer() then
         if event.PeerId == nil then
-            Ext.Net.BroadcastMessage(Constants.NetChannel, tostring(event))
+            Ext.Net.BroadcastMessage(Mod.NetChannel, tostring(event))
         else
-            Ext.Net.PostMessageToUser(event.PeerId, Constants.NetChannel, tostring(event))
+            Ext.Net.PostMessageToUser(event.PeerId, Mod.NetChannel, tostring(event))
         end
         return
     end
 
-    Ext.Net.PostMessageToServer(Constants.NetChannel, tostring(event))
+    Ext.Net.PostMessageToServer(Mod.NetChannel, tostring(event))
 end
 
 ---@param action string
