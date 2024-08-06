@@ -47,8 +47,8 @@ end
 ---@param character string|nil GUID
 ---@return boolean
 function Player.IsPlayer(character)
-    return UT.Find(GU.DB.GetPlayers(), function(uuid)
-        return U.UUID.Equals(character, uuid)
+    return UT.Find(GE.GetParty(), function(entity)
+        return U.UUID.Equals(character, entity.Uuid.EntityUuid)
     end) ~= nil
 end
 
