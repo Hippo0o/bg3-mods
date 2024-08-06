@@ -196,7 +196,7 @@ function Action.SpawnHelper()
 
     local x, y, z = table.unpack(s.Map.Enter)
 
-    local helper = Osi.CreateAt(C.ScenarioHelper.TemplateId, x, y, z, 1, 1, "")
+    local helper = Osi.CreateAt(C.ScenarioHelper.TemplateId, x, y, z, 0, 1, "")
     if not helper then
         L.Error("Failed to create combat helper.")
         Scenario.Stop()

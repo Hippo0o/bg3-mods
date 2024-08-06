@@ -297,7 +297,7 @@ return UT.Combine({
         Character = false,
         OnBuy = function(self, character)
             -- TODO fix HEALTHBOOST_HARDCODE
-            local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
+            local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 0, 1, "", 1)
             Osi.SetFaction(guid, C.CompanionFaction)
             Osi.SetTag(guid, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
             Osi.AddPassive(guid, "ShortResting")

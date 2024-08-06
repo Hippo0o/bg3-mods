@@ -338,7 +338,7 @@ function Object:CreateAt(x, y, z)
 
     self:ModifyTemplate()
 
-    self.GUID = Osi.CreateAt(self:GetId(), x, y, z, 1, 1, "")
+    self.GUID = Osi.CreateAt(self:GetId(), x, y, z, 0, 1, "")
 
     if not self:IsSpawned() then
         return false
