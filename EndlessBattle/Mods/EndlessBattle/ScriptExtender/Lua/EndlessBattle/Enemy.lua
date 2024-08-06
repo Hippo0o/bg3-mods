@@ -190,7 +190,7 @@ function Object:Modify(keepFaction)
         return self:Entity():IsAlive()
     end, function()
         local entity = self:Entity()
-        local expMod = self.IsBoss and 10 or 3
+        local expMod = self.IsBoss and 10 or 5
         entity.ServerExperienceGaveOut.Experience = entity.BaseHp.Vitality
             * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
             * expMod

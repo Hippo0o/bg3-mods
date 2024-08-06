@@ -8,6 +8,7 @@ DefaultConfig = {
     LootIncludesCampSlot = false, -- include camp clothes in item lists
     Debug = false,
     RandomizeSpawnOffset = 3,
+    SpawnItemsAtPlayer = false,
 }
 Config = UT.DeepClone(DefaultConfig)
 
@@ -96,6 +97,24 @@ GameState.OnUnload(function()
     end
 end)
 
+Event.On("ModActive", function()
+    if not PersistentVars.Active then
+        Player.Notify(__("Endless Battle is now active."), true)
+    end
+    PersistentVars.Active = true
+end)
+
+Event.On("ModDeactive", function()
+    if PersistentVars.Active then
+        Player.Notify(__("Endless Battle is now inactive. Good bye!"), true)
+    end
+
+    PersistentVars.Active = false
+    if PersistentVars.GUIOpen then
+        Net.Send("CloseGUI")
+    end
+end)
+
 do
     local count = 0
     local reset = Async.Debounce(5000, function()
@@ -148,7 +167,27 @@ do
     -- end)
 
     function Commands.UI()
-        Net.Send("OpenGUI")
+        Event.Trigger("ModActive")
+        if PersistentVars.GUIOpen then
+            Net.Send("CloseGUI")
+        else
+            Net.Send("OpenGUI")
+        end
+    end
+
+    function Commands.Activate()
+        Event.Trigger("ModActive")
+    end
+
+    function Commands.Deactivate()
+        Event.Trigger("ModDeactive")
+    end
+
+    function Commands.Roguelike()
+        Event.Trigger("ModActive")
+        PersistentVars.RogueModeActive = not PersistentVars.RogueModeActive
+        L.Info(string.format("Roguelike mode is %s", PersistentVars.RogueModeActive and "active" or "inactive"))
+        Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
     end
 
     function Commands.Debug()
@@ -172,7 +211,7 @@ do
         Mod.Debug = true
         Config.Debug = true
 
-        _D(Ext.Template.GetRootTemplate(Item.Armor("Legendary")[1].RootTemplate))
+        -- _D(Ext.Template.GetRootTemplate(Item.Armor("Legendary")[1].RootTemplate))
         -- for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
         --     -- L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
         --     L.Dump(Ext.Loca.GetTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
@@ -188,7 +227,8 @@ do
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "EndlessBattle")
 
         -- GameMode.AskUnlockAll()
-        -- Require("Hlib/OsirisEventDebug").Attach()
+        Require("Hlib/OsirisEventDebug").Attach()
+            Osi.Use(GetHostCharacter(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
 
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100

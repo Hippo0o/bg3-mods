@@ -31,6 +31,7 @@ function OpenWindow()
             window.Open = true
             window.Visible = true
         end
+        Event.Trigger("WindowOpened")
         return
     end
 
@@ -48,6 +49,14 @@ function OpenWindow()
     window.OnClose = function()
         Event.Trigger("WindowClosed")
     end
+
+    Net.On(
+        "CloseGUI",
+        Async.Throttle(1000, function()
+            window.Open = false
+            Event.Trigger("WindowClosed")
+        end)
+    )
 
     Net.Send("GetState")
 
@@ -69,25 +78,25 @@ function OpenWindow()
     Debug.Main(tabs)
 
     do -- auto hide window
-        local windowVisible = Async.Debounce(500, function(bool)
+        local windowVisible = Async.Debounce(1000, function(bool)
             window.Visible = bool
         end)
-        local windowAlpha = Async.Debounce(100, function(bool)
-            if bool then
-                window:SetStyle("Alpha", 1)
-                window.Visible = bool
-            else
-                window:SetStyle("Alpha", 0.5)
-            end
-        end)
+        -- local windowAlpha = Async.Debounce(100, function(bool)
+        --     if bool then
+        --         window:SetStyle("Alpha", 1)
+        --         window.Visible = bool
+        --     else
+        --         window:SetStyle("Alpha", 0.5)
+        --     end
+        -- end)
 
         Ext.UI.GetRoot():Subscribe("MouseEnter", function()
             windowVisible(false)
-            windowAlpha(false)
+            -- windowAlpha(false)
         end)
         Ext.UI.GetRoot():Subscribe("MouseLeave", function()
             windowVisible(true)
-            windowAlpha(true)
+            -- windowAlpha(true)
         end)
     end
 

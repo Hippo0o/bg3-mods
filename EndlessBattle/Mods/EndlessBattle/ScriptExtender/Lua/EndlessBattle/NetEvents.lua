@@ -94,7 +94,7 @@ end)
 
 Net.On("WindowOpened", function(event)
     PersistentVars.GUIOpen = true
-    PersistentVars.Active = true
+    Event.Trigger("ModActive")
 end)
 Net.On("WindowClosed", function(event)
     PersistentVars.GUIOpen = false

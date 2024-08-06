@@ -316,10 +316,12 @@ function M.Chainable(source)
                 ---@type Chainable
                 local nested = state[1]
 
-                nested._Chain = Utils.Table.DeepClone(Chainable._Chain)
+                local addonChain = Utils.Table.DeepClone(Chainable._Chain)
                 for j = 1, i do
-                    table.remove(nested._Chain, 1)
+                    table.remove(addonChain, 1)
                 end
+
+                Utils.Table.Combine(nested._Chain, addonChain)
 
                 nested._InitalInput = state
                 table.remove(nested._InitalInput, 1)

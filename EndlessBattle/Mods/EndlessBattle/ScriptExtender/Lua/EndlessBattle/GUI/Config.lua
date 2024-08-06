@@ -45,6 +45,13 @@ function Config.Main(tab)
     end)
 
     root:AddSeparator()
+    local c6 = root:AddCheckbox(__("Spawn Items At Player"))
+    root:AddText(__("items will spawn at the current player's position instead the maps entry point"))
+    c6.OnChange = function(ckb)
+        Event.Trigger("UpdateConfig", { SpawnItemsAtPlayer = ckb.Checked })
+    end
+
+    root:AddSeparator()
 
     local status = root:AddText("")
     status:SetColor("Text", { 0.4, 1, 0.4, 1 })
@@ -110,6 +117,7 @@ function Config.Main(tab)
         c3.Checked = config.BypassStoryAlways
         c4.Checked = config.ForceEnterCombat
         c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
+        c6.Checked = config.SpawnItemsAtPlayer
     end)
 
     root:AddSeparator()
