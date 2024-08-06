@@ -124,14 +124,16 @@ function Player.TeleportToCamp()
     end
 
     for _, entity in pairs(GE.GetParty()) do
-        L.Debug("TeleportToCamp", entity.Uuid.EntityUuid, campEntry)
+        L.Debug("TeleportToCamp", entity.Uuid.EntityUuid, campEntry, campEntryFallback)
         if not entity.CampPresence then
-            Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntry)
-            Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntryFallback)
-
-            -- Schedule(function()
-            --     Osi.TeleportTo(entity.Uuid.EntityUuid, C.NPCCharacters.Jergal, "", 1, 1, 1, 1, 0)
-            -- end)
+            if campEntry then
+                Osi.TeleportTo(entity.Uuid.EntityUuid, campEntry, "", 1, 1, 1, 1, 1)
+                Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntry)
+            end
+            if campEntryFallback then
+                Osi.TeleportTo(entity.Uuid.EntityUuid, campEntryFallback, "", 1, 1, 1, 1,  1)
+                Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntryFallback)
+            end
         end
     end
 end

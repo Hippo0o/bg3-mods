@@ -15,21 +15,25 @@ end
 L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 
 local itemBlacklist = {
+    "^DLC_", -- DLC items
     "OBJ_FreezingSphere", -- explodes on pickup
+    "LOW_DeadMansSwitch_Shield", -- a bomb
     "MAG_OfTheShapeshifter_Mask", -- DLC mask
-    "ARM_Breastplate_Body_Githyanki", -- template invalid
+    "ARM_Breastplate_Body_Githyanki", -- invalid template
     "LOW_RamazithsTower_Nightsong_Silver_Shield", -- %%% in name
     "TWN_TollCollector_", -- useless
-    "WPN_KingsKnife", -- its common bro
+    "WPN_KingsKnife", -- its common bro, should be very rare
     "_Destroyed$", -- junk
     "_REF$", -- junk
-    "^Quest_",
+    "^Quest_", -- junk
     "CONS_FOOD_Soup_Tomato", -- invalid template
     "ARM_Vanity_Body_Shar", -- invalid template
-    "WPN_LightCrossbow_Makeshift",
+    "WPN_LightCrossbow_Makeshift", -- broken model
     "MAG_TheClover_Scimitar", -- unfinished dupe of existing
-    "DEN_VoloOperation_ErsatzEye", 
-    "SHA_SharSpear"
+    "DEN_VoloOperation_ErsatzEye", -- vololo
+    "SHA_SharSpear", -- shar does not give us permission
+    "MAG_Cunning_HandCrossbow", -- does not work
+
     -- "_Myrmidon_ConjureElemental$",
     -- "_Myrmidon_WildShape$",
     -- "_Myrmidon_Wildshape$",
@@ -139,7 +143,7 @@ function Item.Objects(rarity, forCombat)
         local stat = Ext.Stats.Get(name)
         local cat = stat.ObjectCategory
 
-        if name:match("^_") or name:match("^DLC_") then
+        if name:match("^_") then
             return false
         end
 
@@ -198,7 +202,7 @@ function Item.Armor(rarity)
         local stat = Ext.Stats.Get(name)
         local slot = stat.Slot
 
-        if name:match("^_") or name:match("^DLC_") then
+        if name:match("^_") then
             return false
         end
 
@@ -238,7 +242,7 @@ function Item.Weapons(rarity)
     local items = UT.Filter(weapons, function(name)
         local stat = Ext.Stats.Get(name)
 
-        if name:match("^_") or name:match("^DLC_") then
+        if name:match("^_") then
             return false
         end
 

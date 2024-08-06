@@ -10,14 +10,8 @@ function Debug.Main(tab)
     local root = tabRoot:AddChildWindow(""):AddGroup("")
     root.PositionOffset = { 5, 5 }
 
-    root:AddButton(__("Reload")).OnClick = function()
-        Net.Send("SyncState")
-        Net.Send("GetTemplates")
-        Net.Send("GetItems")
-    end
-
+    root:AddSeparatorText("Cheat")
     local ca = root:AddButton(__("Clear Area"))
-    ca.SameLine = true
     ca.OnClick = function()
         Net.Send("KillNearby")
     end
@@ -37,6 +31,11 @@ function Debug.Main(tab)
     -- section State
     local state = root:AddGroup(__("State"))
     state:AddSeparatorText(__("State"))
+    state:AddButton(__("Reload")).OnClick = function()
+        Net.Send("SyncState")
+        Net.Send("GetTemplates")
+        Net.Send("GetItems")
+    end
 
     local stateTree
     Event.On("StateChange", function()
@@ -88,7 +87,29 @@ function Debug.Enemies(root)
             tree:Destroy()
         end
 
-        tree = Components.Tree(grp, enemies)
+        tree = Components.Tree(grp, enemies, nil, function(node, key, value)
+            if key == "TemplateId" then
+                local nodeLoaded = false
+
+                node.OnClick = function(v)
+                    if nodeLoaded then
+                        return
+                    end
+
+                    local temp = Ext.Template.GetTemplate(value)
+                    if temp then
+                        Components.Tree(node, UT.Clean(temp), "TemplateId = " .. value)
+
+                        node:AddText("   DisplayName = ")
+                        node:AddText(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle)).SameLine = true
+                    end
+
+                    nodeLoaded = true
+                end
+
+                return true -- replace node
+            end
+        end)
     end)
 
     local search = grp:AddInputText(__("Search"))
