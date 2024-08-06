@@ -8,16 +8,19 @@ local Libs = Require("Shared/Libs")
 ---@class Net
 local M = {}
 
----@class NetMessage: LibsObject
+---@class NetEvent: LibsObject
 ---@field Action string
 ---@field Payload table
----@field UserID string|nil
-local NetMessage = Libs.Object({
+---@field UserId string|nil
+---@field ResponseAction string|nil
+local NetEvent = Libs.Object({
     Action = nil,
     Payload = nil,
-    UserID = nil,
+    UserId = nil,
+    ResponseAction = nil,
 })
-function NetMessage:__tostring()
+
+function NetEvent:__tostring()
     return Ext.Json.Stringify(self)
 end
 
@@ -25,24 +28,15 @@ local listeners = {}
 
 ---@class NetListener: LibsObject
 ---@field Action string
----@field Func fun(self: NetListener, message: NetMessage): void
+---@field Func fun(self: NetListener, event: NetEvent): void
 ---@field Once boolean
----@field Respond fun(self: NetListener, payload: any, userID: string|nil)
----@field Send fun(self: NetListener, payload: any, userID: string|nil)
 ---@field Unregister fun(self: NetListener)
----@field New fun(action: string, callback: fun(message: NetMessage): void, once: boolean): NetListener
+---@field New fun(action: string, callback: fun(self: NetListene, event: NetEvent): void, once: boolean): NetListener
 local NetListener = Libs.Object({
     Id = nil,
     Action = nil,
     Func = nil,
     Once = false,
-    Respond = function(self, payload, userID)
-        M.Send(self.Action, payload, userID)
-    end,
-    Send = function(self, payload, userID)
-        self.Once = true
-        M.Send(self.Action, payload, userID)
-    end,
     Unregister = function(self)
         listeners[self.Id] = nil
     end,
@@ -61,18 +55,19 @@ function NetListener.New(action, callback, once)
     return o
 end
 
-Ext.Events.NetMessage:Subscribe(function(msg)
+Ext.Events.NetEvent:Subscribe(function(msg)
     if Constants.NetChannel ~= msg.Channel then
         return
     end
 
-    local message = Ext.Json.Parse(msg.Payload)
+    local event = Ext.Json.Parse(msg.Payload)
 
-    -- TODO Validate message
-    local m = NetMessage.Init({
-        Action = message.Action,
-        Payload = message.Payload,
-        UserID = msg.UserID,
+    -- TODO Validate event
+    local m = NetEvent.Init({
+        Action = event.Action,
+        Payload = event.Payload,
+        UserId = msg.UserID,
+        ResponseAction = event.ResponseAction,
     })
 
     for _, listener in pairs(listeners) do
@@ -92,32 +87,50 @@ end)
 
 ---@param action string
 ---@param payload any
----@param userID string|nil
-function M.Send(action, payload, userID)
-    local message = NetMessage.Init({
+---@param userId string|nil
+---@param responseAction string|nil
+function M.Send(action, payload, userId, responseAction)
+    local event = NetEvent.Init({
         Action = action,
         Payload = payload,
-        UserID = userID,
+        UserId = userId,
+        ResponseAction = responseAction or action,
     })
 
     if Ext.IsServer() then
-        if message.UserID == nil then
-            Ext.Net.BroadcastMessage(Constants.NetChannel, tostring(message))
+        if event.UserId == nil then
+            Ext.Net.BroadcastMessage(Constants.NetChannel, tostring(event))
         else
-            Ext.Net.PostMessageToUser(message.UserID, Constants.NetChannel, tostring(message))
+            Ext.Net.PostMessageToUser(event.UserId, Constants.NetChannel, tostring(event))
         end
         return
     end
 
-    Ext.Net.PostMessageToServer(Constants.NetChannel, tostring(message))
+    Ext.Net.PostMessageToServer(Constants.NetChannel, tostring(event))
 end
 
 ---@param action string
----@param callback fun(self: NetListener, message: NetMessage): void
+---@param callback fun(self: NetListener, event: NetEvent): void
 ---@param once boolean|nil
 ---@return NetListener
 function M.On(action, callback, once)
     return NetListener.New(action, callback, once)
+end
+
+---@param action string
+---@param callback fun(self: NetListener, event: NetEvent): void
+---@param params table
+function M.Request(action, callback, params)
+    local responseAction = action .. tostring(callback):gsub("function: ", "")
+    local listener = M.On(responseAction, callback, true)
+
+    M.Send(action, params, nil, responseAction)
+end
+
+---@param event NetEvent
+---@param payload any
+function M.Respond(event, payload)
+    M.Send(event.ResponseAction, payload, event.UserId)
 end
 
 return M
