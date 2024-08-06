@@ -3,6 +3,10 @@ local function getUnlocks()
 end
 
 local function unlockTadpole(object)
+    if Osi.GetTadpolePowersCount(object) < 1 then
+        Osi.AddTadpole(object, 1)
+        Osi.AddTadpole(object, 1)
+    end
     Osi.SetTag(object, "089d4ca5-2cf0-4f54-84d9-1fdea055c93f")
     Osi.SetTag(object, "efedb058-d4f5-4ab8-8add-bd5e32cdd9cd")
     Osi.SetTag(object, "c15c2234-9b19-453e-99cc-00b7358b9fce")
@@ -21,10 +25,6 @@ return {
         Amount = nil,
         Character = true,
         OnBuy = function(self, character)
-            if Osi.GetTadpolePowersCount(character) < 1 then
-                Osi.AddTadpole(character, 1)
-                Osi.AddTadpole(character, 1)
-            end
             unlockTadpole(character)
         end,
     },

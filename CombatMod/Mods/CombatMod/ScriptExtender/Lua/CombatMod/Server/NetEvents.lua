@@ -1,3 +1,16 @@
+function SyncState()
+    Net.Send(
+        "SyncState",
+        UT.Filter(PersistentVars, function(v, k)
+            if k == "SpawnedEnemies" and UT.Size(v) > 200 then
+                return false
+            end
+            return k ~= "Stats"
+        end, true)
+    )
+end
+Net.On("SyncState", SyncState)
+
 Net.On("IsHost", function(event)
     Net.Respond(event, event:IsHost())
 end)
@@ -170,14 +183,8 @@ Net.On("PingSpawns", function(event)
     Net.Respond(event, { true })
 end)
 
-Net.On("SyncState", function(event)
-    Net.Respond(event, PersistentVars)
-end)
-
 local function broadcastState()
-    Schedule(function()
-        Net.Send("SyncState", PersistentVars)
-    end)
+    Schedule(SyncState)
 end
 
 local function broadcastConfig()

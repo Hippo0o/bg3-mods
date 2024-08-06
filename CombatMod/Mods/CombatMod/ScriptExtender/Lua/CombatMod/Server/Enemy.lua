@@ -61,7 +61,7 @@ function Object.New(data)
 end
 
 function Object:GetId()
-    return self.Name .. "_" .. self.TemplateId
+    return tostring(self.Name) .. "_" .. tostring(self.TemplateId)
 end
 
 function Object:GetTranslatedName()
@@ -242,14 +242,20 @@ end
 
 function Object:Sync()
     local entity = self:Entity()
-    if not entity.ServerCharacter then
+
+    local serverObject = entity.ServerCharacter or entity.ServerItem
+    if not serverObject then
         L.Debug("Entity not found", self.GUID)
         return
     end
 
-    local currentTemplate = entity.ServerCharacter.Template
+    local currentTemplate = serverObject.Template
     if self.TemplateId == nil then
         self.TemplateId = currentTemplate.Id
+    end
+
+    if not entity.ServerCharacter then
+        return
     end
 
     self.CharacterVisualResourceID = currentTemplate.CharacterVisualResourceID
@@ -398,10 +404,10 @@ function Enemy.CreateTemporary(object)
     local e = Object.New({ Name = "Temporary" })
     e.GUID = U.UUID.Extract(object)
 
+    PersistentVars.SpawnedEnemies[e.GUID] = e
+
     e:Sync()
     e:Modify(true)
-
-    PersistentVars.SpawnedEnemies[e.GUID] = e
 
     return e
 end

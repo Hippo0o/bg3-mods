@@ -122,11 +122,22 @@ function Control.StartPanel(root)
             mapSelPaged.UpdateItems(mapSelection.Selectables)
         end)
 
+        local startButton = listCols[1]:AddButton(__("Start"))
+        startButton.IDContext = U.RandomId()
+
+        local pressed = false
         Event.On("StateChange", function()
             Net.Send("GetSelection")
+            pressed = false
+            startButton:SetStyle("Alpha", 1)
         end)
 
-        listCols[1]:AddButton(__("Start")).OnClick = function(button)
+        startButton.OnClick = function(button)
+            if pressed then
+                return
+            end
+            pressed = true
+            startButton:SetStyle("Alpha", 0.5)
             Event.Trigger("Start", scenarioSelection.Value, mapSelection.Value)
         end
 
