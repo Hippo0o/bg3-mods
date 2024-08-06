@@ -87,6 +87,10 @@ end
 
 function Object:ModifyTemplate()
     local template = self:GetTemplate()
+    if template == nil then
+        L.Error("Template not found: ", self.TemplateId)
+        return
+    end
 
     -- only overwrite if different, and save the original value for restoration
     local overwrites = {}

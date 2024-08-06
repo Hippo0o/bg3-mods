@@ -78,6 +78,7 @@ local Loop = Libs.Class({
         end
     end,
     Tick = function(self, time) ---@param self Loop
+        local ticks = 0
         for _, queue in ipairs(self.Queues) do
             for _, runner in queue:Iter() do
                 local success, result = pcall(function()
@@ -98,8 +99,11 @@ local Loop = Libs.Class({
                     return
                 end
 
-                if result == true then -- only 1 task per tick
-                    return
+                if result == true then
+                    ticks = ticks + 1
+                    if ticks > self.Tasks.Count / 10 then
+                        return
+                    end
                 end
             end
         end
@@ -308,13 +312,22 @@ function M.WaitFor(cond, func)
     local chainable = Runner.Create(prio, func)
     local runner = chainable.Source
     local last = 0
+    local failsafe = 0
 
     runner.ExecCond = function(self, time)
+        failsafe = failsafe + time.DeltaTime
         last = last + time.DeltaTime
         if last < 0.1 then
             return false
         end
         last = 0
+
+        if failsafe > 30 then
+            self:Clear()
+            L.Warn("WaitFor failsafe triggered.")
+            return false
+        end
+
         return cond(self, time)
     end
 

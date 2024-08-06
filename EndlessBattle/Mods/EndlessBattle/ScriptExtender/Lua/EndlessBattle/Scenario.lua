@@ -184,7 +184,7 @@ function Action.SpawnLoot()
         i = i + 1
 
         if i > #loot then
-            self:Clear()
+            self.Source:Clear()
 
             return
         end
