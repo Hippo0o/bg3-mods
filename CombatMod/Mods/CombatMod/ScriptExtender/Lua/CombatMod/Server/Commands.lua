@@ -98,9 +98,9 @@ function Commands.Test()
     -- end
     -- start = new_start + j
     --
-    -- local enemies = Enemy.GetByTemplateId("0ea356fc-7a6f-4c60-8017-86349e2777ab")
-    --
-    -- Enemy.TestEnemies(enemies)
+    local enemies = Enemy.GetByTemplateId("867c3061-624e-4b02-babb-a23e743fb5d3")
+
+    Enemy.TestEnemies(enemies)
 
     -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
     -- Enemy.TestEnemies(enemies, false)
@@ -309,7 +309,10 @@ end
 
 Ext.RegisterConsoleCommand("TT", function(_, fn, ...)
     if fn == nil or Commands[fn] == nil then
-        L.Dump("Available Commands", UT.Keys(Commands))
+        L.Info("Available Commands:")
+        for i, _ in pairs(Commands) do
+            L.Info("!TT ".. i)
+        end
         return
     end
 

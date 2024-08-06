@@ -194,9 +194,8 @@ function Object:ModifyExperience()
 end
 
 function Object:OnCombat()
-    if self.Temporary then
-        return
-    end
+    Osi.SetTag(self.GUID, "9787450d-f34d-43bd-be88-d2bac00bb8ee") -- AI_UNPREFERRED_TARGET
+    Osi.ClearTag(self.GUID, "64bc9da1-9262-475a-a397-157600b7debd") -- AI_PREFERRED_TARGET
 
     -- if Osi.IsInCombat(self.GUID) ~= 1 then
     --     Osi.SetTag(self.GUID, C.ShadowCurseTag)
@@ -234,7 +233,7 @@ function Object:Modify(keepFaction)
     end
 
     Osi.SetCharacterLootable(self.GUID, 0)
-    Osi.SetCombatGroupID(self.GUID, "")
+    Osi.SetCombatGroupID(self.GUID, "a209e7e8-fece-4a68-b4cf-b3000159cf3d")
 
     if not keepFaction then
         Osi.SetFaction(self.GUID, C.NeutralFaction)
