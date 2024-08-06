@@ -206,9 +206,9 @@ function Object:OnCombat()
     Osi.SetTag(self.GUID, "b5825091-f2ed-4657-8d86-c0d020c358a0") -- PALADIN_BLOCK_OATHBREAK
 
     -- if Osi.IsInCombat(self.GUID) ~= 1 then
-    --     Osi.SetTag(self.GUID, "b47643e0-583c-4808-b108-f6d3b605b0a9") -- ACT2_SHADOW_CURSE_IMMUNE
+    --     Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
     -- else
-    --     Osi.ClearTag(self.GUID, "b47643e0-583c-4808-b108-f6d3b605b0a9")
+    --     Osi.ClearTag(self.GUID, C.ShadowCurseTag)
     -- end
 end
 

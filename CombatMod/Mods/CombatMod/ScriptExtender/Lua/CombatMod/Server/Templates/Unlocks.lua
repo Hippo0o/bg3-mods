@@ -384,6 +384,7 @@ return UT.Combine({
         OnBuy = function(self, character)
             for _, p in pairs(GE.GetParty()) do
                 Osi.ApplyStatus(p.Uuid.EntityUuid, "GLO_PIXIESHIELD", -1)
+                Osi.SetTag(p.Uuid.EntityUuid, C.ShadowCurseTag)
             end
         end,
         OnReapply = function(self) ---@param self Unlock

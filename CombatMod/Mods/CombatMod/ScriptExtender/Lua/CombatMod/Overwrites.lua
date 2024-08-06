@@ -33,13 +33,20 @@ end
 
 GameState.OnUnload(restore)
 
+-- triggered on load and on mod activation
 GameState.OnLoad(function()
-    if IsActive() then
+    if PersistentVars.Active then
         modify()
     else
         restore()
     end
 end)
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                    Template overwriting                                     --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
 
 local templateIdsOverwritten = {}
 Event.On("TemplateOverwrite", function(templateId, prop, value)
