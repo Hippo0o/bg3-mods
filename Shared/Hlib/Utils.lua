@@ -58,9 +58,9 @@ function M.RandomId(prefix)
     return tostring({}):gsub("table: ", prefix or "")
 end
 
----@param code string x, y => x + y
+---@param code string x, y -> x + y
 ---@vararg any injected arguments: x
----@return fun(...): any @function(y) -> x + y
+---@return fun(...): any @function(y) return x + y end
 function M.Lambda(code, ...)
     local argString, evalString = table.unpack(M.String.Split(code, "->"))
     assert(evalString, "Lambda code must contain '->'")
