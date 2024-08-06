@@ -5,11 +5,11 @@
 -------------------------------------------------------------------------------------------------
 
 local function ifRogueLike(func)
-    return IfActive(function(...)
+    return function(...)
         if PersistentVars.RogueModeActive then
             func(...)
         end
-    end)
+    end
 end
 
 function GameMode.StartRoguelike()
@@ -228,7 +228,9 @@ function GameMode.UpdateRogueScore(scenario)
 
         Event.Trigger("RogueScoreChanged", prev, score)
 
-        Player.Notify(__("Your RogueScore increased: %d -> %d!", prev, score))
+        Defer(1000, function()
+            Player.Notify(__("Your RogueScore increased: %d -> %d!", prev, score))
+        end)
     end
 
     local baseScore = 5

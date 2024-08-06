@@ -26,6 +26,7 @@ local items = {
 	"WPN_KingsKnife",
 	"OBJ_Bomb_Orthon",
 	"MAG_Hat_Circushat",
+	"UND_MonkAmulet_Amulet",
 
 	"OBJ_Scrolls_FindFamiliar",
 	-- "OBJ_Scroll_BestowCurse",

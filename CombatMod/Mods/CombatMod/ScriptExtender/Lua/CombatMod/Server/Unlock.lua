@@ -115,7 +115,9 @@ function Unlock.CalculateReward(scenario)
     local prev = PersistentVars.Currency or 0
     PersistentVars.Currency = prev + math.floor(gained)
 
-    Player.Notify(__("Your Currency increased: %d -> %d!", prev, PersistentVars.Currency))
+    Defer(2000, function()
+        Player.Notify(__("Your Currency increased: %d -> %d!", prev, PersistentVars.Currency))
+    end)
 end
 
 function Unlock.GetTemplates()
@@ -189,22 +191,18 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Event.On("ModActive", function()
-    Unlock.Sync()
-end)
+GameState.OnLoad(Unlock.Sync)
 
-GameState.OnLoad(IfActive(Unlock.Sync))
-
-GameState.OnSave(IfActive(function()
+GameState.OnSave(function()
     for i, u in ipairs(PersistentVars.Unlocks) do
         PersistentVars.Unlocks[i] = UT.Clean(u)
     end
-end))
+end)
 
 Event.On("ScenarioTeleporting", Unlock.UpdateUnlocked)
 Event.On("ScenarioStarted", Unlock.UpdateUnlocked)
 Event.On("RogueScoreChanged", Unlock.UpdateUnlocked)
-U.Osiris.On("LongRestFinished", 0, "after", IfActive(Unlock.UpdateUnlocked))
+U.Osiris.On("LongRestFinished", 0, "after", Unlock.UpdateUnlocked)
 
 Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)

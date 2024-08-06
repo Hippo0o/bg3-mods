@@ -2,7 +2,7 @@ ClientUnlock = {}
 
 ---@param tab ExtuiTabBar
 function ClientUnlock.Main(tab)
-    ---@type ExtuiTree
+    ---@type ExtuiTabItem
     local root = tab:AddTabItem(__("Unlocks"))
 
     Components.Computed(root:AddSeparatorText(__("Currency owned: %d   RogueScore: %d", 0, 0)), function(root, state)
@@ -29,6 +29,10 @@ function ClientUnlock.Main(tab)
             end
         end)
     end)
+
+    root.OnActivate = function()
+        ClientUnlock.GetCharacters(true)
+    end
 end
 
 function ClientUnlock.GetStock(unlock)
@@ -181,6 +185,19 @@ function ClientUnlock.Buy(root, unlock)
     return grp
 end
 
+local characters = {}
+function ClientUnlock.GetCharacters(refresh)
+    if refresh or #characters == 0 then
+        characters = UT.Filter(GE.GetParty(), "e -> e.PartyMember.IsPermanent")
+
+        table.sort(characters, function(a, b)
+            return a.Uuid.EntityUuid < b.Uuid.EntityUuid
+        end)
+    end
+
+    return characters
+end
+
 function ClientUnlock.BuyChar(root, unlock)
     local grp = root:AddGroup(U.RandomId())
 
@@ -201,7 +218,7 @@ function ClientUnlock.BuyChar(root, unlock)
         end
         list = {}
 
-        for i, u in ipairs(UT.Filter(GE.GetParty(), "e -> e.PartyMember.IsPermanent")) do
+        for i, u in ipairs(ClientUnlock.GetCharacters()) do
             local name
             if u.CustomName then
                 name = u.CustomName.Name

@@ -33,12 +33,12 @@ function Struct:GetDisplayName()
 end
 
 function Struct:GetIcon()
-    local override = GE.GetProperty(self.Source, "IconIdOverride")
+    local override = U.GetProperty(self.Source, "IconIdOverride")
     if override and override ~= "" then
         return override
     end
 
-    local visualResource = GE.GetProperty(self.Source, "VisualResource")
+    local visualResource = U.GetProperty(self.Source, "VisualResource")
     if not visualResource then
         return
     end
@@ -62,9 +62,9 @@ function Struct.New(data, type, uuid)
         Uuid = uuid,
         Type = type,
         SlotName = data.SlotName,
-        BodyType = GE.GetProperty(data, "BodyType"),
-        BodyShape = GE.GetProperty(data, "BodyShape"),
-        Race = GE.GetProperty(data, "RaceUUID"),
+        BodyType = U.GetProperty(data, "BodyType"),
+        BodyShape = U.GetProperty(data, "BodyShape"),
+        Race = U.GetProperty(data, "RaceUUID"),
         Source = data,
     })
 

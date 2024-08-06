@@ -6,11 +6,11 @@
 
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
-    return IfActive(function(...)
+    return function(...)
         if Config.BypassStory then
             func(...)
         end
-    end)
+    end
 end
 
 function StoryBypass.CancelDialog(dialog, instanceID)
@@ -228,7 +228,7 @@ do -- EXP Lock
         end
     end
 
-    Event.On("ModActive", subscribeEntitiesExp)
+    subscribeEntitiesExp()
 
     Event.On("ScenarioCombatStarted", StoryBypass.ExpLock.Pause)
     Event.On("ScenarioRestored", function(scenario)
@@ -407,25 +407,14 @@ U.Osiris.On(
     end)
 )
 
-local entityListener = nil
-GameState.OnLoad(function()
-    if not entityListener then
-        entityListener = Ext.Entity.Subscribe(
-            "CanTravel",
-            ifBypassStory(function(e)
-                if e.PartyMember then
-                    StoryBypass.UnblockTravel(e)
-                end
-            end)
-        )
-    end
-end)
-GameState.OnUnload(function()
-    if entityListener then
-        Ext.Entity.Unsubscribe(entityListener)
-        entityListener = nil
-    end
-end)
+Ext.Entity.Subscribe(
+    "CanTravel",
+    ifBypassStory(function(e)
+        if e.PartyMember then
+            StoryBypass.UnblockTravel(e)
+        end
+    end)
+)
 
 U.Osiris.On(
     "TeleportToFromCamp",
@@ -494,4 +483,3 @@ local function removeAllEntities()
     StoryBypass.RemoveAllEntities()
 end
 GameState.OnLoad(ifBypassStory(removeAllEntities))
-Event.On("ModActive", ifBypassStory(removeAllEntities))

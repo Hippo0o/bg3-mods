@@ -5,7 +5,7 @@ data "DisplayName" "hf1e0c115g6d6cg46efg8a89gcc641d501589;1"
 data "Description" "hf1e0c115g6d6cg46efg8a89gcc641d501589;1"
 data "StackId" "DamageCap_Status"
 data "Icon" "PassiveFeature_Parry"
-data "StatusPropertyFlags" "DisableCombatlog;DisablePortraitIndicator;ApplyToDead"
+data "StatusPropertyFlags" "DisablePortraitIndicator;ApplyToDead"
 
 new entry "DamageCap_Reached"
 type "StatusData"

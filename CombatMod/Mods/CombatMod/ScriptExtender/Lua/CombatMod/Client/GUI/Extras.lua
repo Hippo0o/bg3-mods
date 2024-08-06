@@ -18,6 +18,18 @@ function Extras.Main(tab)
     )
 
     root:AddSeparator()
+    Extras.Button(
+        root,
+        "Clean Ground",
+        "Clean the ground from blood and similar.\nWill also remove important map properties such as lava, swamp, water, etc.\nReload the save or switch act to restore them.",
+        function(btn)
+            Net.Request("ClearSurfaces").After(function(event)
+                DisplayResponse(event.Payload)
+            end)
+        end
+    )
+
+    root:AddSeparator()
     Extras.Button(root, "End Long Rest", "Use when stuck in night time.", function(btn)
         Net.Request("CancelLongRest").After(function(event)
             DisplayResponse(event.Payload)

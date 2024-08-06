@@ -97,20 +97,6 @@ function M.Entity.GetNearby(source, radius, ignoreHeight, withComponent)
     return nearby
 end
 
----@param entity EntityHandle
----@param property string
----@param default any|nil
----@return any
-function M.Entity.GetProperty(entity, property, default)
-    local ok, value = pcall(function()
-        return entity[property]
-    end)
-    if ok then
-        return value
-    end
-    return default
-end
-
 if Ext.IsClient() then
     return M
 end

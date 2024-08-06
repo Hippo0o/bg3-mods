@@ -86,7 +86,7 @@ function Player.Notify(message, instant, ...)
 
     RetryUntil(function()
         return buffering[1] == id
-    end, { retries = 10, interval = 1000 }).After(function()
+    end, { retries = 30, interval = 300 }).After(function()
         Net.Send("Notification", { Duration = 3, Text = message })
         Defer(1000, remove)
     end).Catch(remove)

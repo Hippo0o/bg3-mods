@@ -72,7 +72,7 @@ Net.On("ModActive", function(event)
     Net.On("Notification", function(event)
         local data = event.Payload
         WaitUntil(function()
-            return Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext.CurrentSubtitleDuration
+            return U.GetProperty(Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext, "CurrentSubtitle", false)
         end, function()
             local context = Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext
             context.CurrentSubtitleDuration = data.Duration or 3

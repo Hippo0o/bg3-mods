@@ -38,6 +38,7 @@ local Object = Libs.Struct({
     Rarity = C.ItemRarity[1],
     GUID = nil,
     Slot = nil,
+    Tab = nil,
 })
 
 ---@param name string
@@ -54,11 +55,13 @@ function Object.New(name, type, fake)
         local item = Ext.Stats.Get(name)
         o.RootTemplate = item.RootTemplate
         o.Rarity = item.Rarity
+        o.Tab = item.InventoryTab
+
         if type == "Armor" or type == "Weapon" then
             o.Slot = item.Slot
         end
         if type == "Object" then
-            o.Slot = item.InventoryTab
+            o.Slot = item.ItemUseType
         end
     end
 
@@ -106,7 +109,7 @@ function Object:Spawn(x, y, z)
 
     x, y, z = Osi.FindValidPosition(x, y, z, 20, Player.Host(), 1)
 
-    self.GUID = Osi.CreateAt(self.RootTemplate, x, y, z, 1, 1, "")
+    self.GUID = Osi.CreateAt(self.RootTemplate, x, y, z, 0, 1, "")
 
     if self:IsSpawned() then
         PersistentVars.SpawnedItems[self.GUID] = self
@@ -435,30 +438,31 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
         return t
     end
 
-    -- build rarity roll tables from template e.g. { "Common", "Common", "Uncommon", "Rare" }
-    -- if rarity is 0 it will be at least added once
-    -- if rarity is not defined it will not be added
-    local fixed = {}
-    local sum = 0
-    for _, r in ipairs(C.ItemRarity) do
-        if lootRates.Objects[r] then
-            local rate = lootRates.Objects[r]
-            sum = sum + rate
-            add(fixed, r, rate)
-        end
-    end
+    local gotFood = false
     for i = 1, fixedRolls do
         do
-            local rarity = fixed[U.Random(#fixed)]
-            local items = Item.Objects(rarity, false)
+            local items = Item.Objects(nil, false)
 
-            L.Debug("Rolling fixed loot items:", #items, "Object", rarity)
+            local isFood = U.Random() < (gotFood and 0.40 or 0.80)
+
+            if isFood then
+                gotFood = true
+            end
+
+            items = UT.Filter(items, function(item)
+                return isFood and item.Tab == "Consumable" or item.Tab ~= "Consumable"
+            end)
+
+            L.Debug("Rolling fixed loot items:", #items, "Object")
             if #items > 0 then
                 table.insert(loot, items[U.Random(#items)])
             end
         end
     end
 
+    -- build rarity roll tables from template e.g. { "Common", "Common", "Uncommon", "Rare" }
+    -- if rarity is 0 it will be at least added once
+    -- if rarity is not defined it will not be added
     local bonusRarities = {}
     for _, bonusCategory in ipairs({ "Object", "Weapon", "Armor" }) do
         local bonus = {}
@@ -484,7 +488,7 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
 
         local rarity = nil
         -- avoid 0 rolls e.g. legendary objects dont exist
-        while #items == 0 and fail < 3 do
+        while #items == 0 and fail < 5 do
             fail = fail + 1
 
             rarity = bonusRarities[bonusCategory][U.Random(#bonusRarities[bonusCategory])]
@@ -492,11 +496,17 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
             if bonusCategory == "Object" then
                 items = Item.Objects(rarity, true)
                 if #items > 0 then
-                    local isPotion = U.Random() < 0.20
-                    if isPotion then
+                    local bySlot = UT.GroupBy(items, "Slot")
+                    local slots = UT.Keys(bySlot)
+                    local randomSlot = slots[U.Random(#slots)]
+                    L.Debug("Rolling CombatObject loot slot:", randomSlot, rarity)
+
+                    if randomSlot == "Potion" and U.Random() < 0.40 then
                         items = UT.Filter(items, function(item)
                             return item.Name:match("^OBJ_Potion_Healing")
                         end)
+                    else
+                        items = UT.Values(bySlot[randomSlot])
                     end
                 end
             elseif bonusCategory == "Weapon" then
@@ -543,7 +553,7 @@ U.Osiris.On(
     "after",
     Async.Throttle( -- avoid recursion
         10,
-        IfActive(function(character, object, requestID)
+        function(character, object, requestID)
             if GC.IsNonPlayer(character, true) then
                 return
             end
@@ -556,6 +566,6 @@ U.Osiris.On(
                 L.Debug("Auto pickup:", object, character)
                 Item.PickupAll(character, item.Rarity)
             end
-        end)
+        end
     )
 )

@@ -104,12 +104,12 @@ local function Current()
 end
 
 local function ifScenario(func)
-    return IfActive(function(...)
+    return function(...)
         if S == nil then
             return
         end
         func(...)
-    end)
+    end
 end
 
 -------------------------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ function Action.SpawnRound()
         end, {
             immediate = true,
             retries = triesToSpawn,
-            interval = 500,
+            interval = 100,
         }).After(function()
             Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
             Event.Trigger("ScenarioEnemySpawned", Current(), e)
@@ -545,7 +545,7 @@ function Scenario.CheckEnded()
             Player.Notify(__("All enemies are dead."))
             Scenario.End()
         else
-            Player.Notify(__("%d enemies left.", #s.SpawnedEnemies), true)
+            Player.Notify(__("%d enemies left.", #s.SpawnedEnemies))
         end
     end
 end
@@ -658,22 +658,6 @@ U.Osiris.On(
         end
 
         Scenario.CombatSpawned()
-
-        -- this is just for fun and too hard to maintain
-        if Config.ForceCombatRestart then
-            -- TODO fails when enemies don't enter combat
-            if round > 1 then
-                for _, e in pairs(s.SpawnedEnemies) do
-                    -- should always be spawned
-                    if e:IsSpawned() then
-                        Osi.LeaveCombat(e.GUID)
-                        e:Combat(true)
-                    end
-                end
-                -- to not trigger this event again when still in combat
-                s.CombatId = nil
-            end
-        end
 
         -- first round is usually the manual start
         if round > 1 then
@@ -814,7 +798,7 @@ U.Osiris.On(
 
             if Osi.IsAlly(Player.Host(), guid) == 0 then
                 table.insert(s.SpawnedEnemies, e)
-                Player.Notify(__("Enemy %s joined.", e:GetTranslatedName()), true)
+                Player.Notify(__("Enemy %s joined.", e:GetTranslatedName()))
 
                 Event.Trigger("ScenarioEnemySpawned", Current(), e)
 
@@ -849,7 +833,7 @@ U.Osiris.On(
 
                 -- let it count twice for loot
                 table.insert(s.SpawnedEnemies, e)
-                Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()), true)
+                Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()))
                 -- table.remove(s.KilledEnemies, i)
 
                 Action.EnemyAdded(e)
@@ -882,7 +866,7 @@ U.Osiris.On(
                 table.remove(s.SpawnedEnemies, i)
 
                 -- might revive and rejoin battle
-                Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()), true)
+                Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()))
                 Event.Trigger("ScenarioEnemyKilled", Current(), e)
 
                 spawnedKilled = true
