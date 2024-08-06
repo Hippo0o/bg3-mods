@@ -88,11 +88,11 @@ local M = {
 }
 
 M.OriginCharacters = {}
-for _, v in pairs(M.OriginCharactersStarter) do
-    table.insert(M.OriginCharacters, v)
+for k, v in pairs(M.OriginCharactersStarter) do
+    M.OriginCharacters[k] = v
 end
-for _, v in pairs(M.OriginCharactersSpecial) do
-    table.insert(M.OriginCharacters, v)
+for k, v in pairs(M.OriginCharactersSpecial) do
+    M.OriginCharacters[k] = v
 end
 
 return M

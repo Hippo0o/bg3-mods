@@ -1,3 +1,5 @@
+-- Ext.Utils.Include(nil, "Mods/CombatMod/ScriptExtender/Lua/DebugEnemies.lua")
+
 Osi.SetImmortal(GetHostCharacter(), 1)
 Osi.SetHitpoints(GetHostCharacter(), 1000, "HEAL")
 Osi.SetHitpointsPercentage(GetHostCharacter(), 100, "HEAL")

@@ -4,6 +4,7 @@ Require("CombatMod/Client/GUI/Control")
 Require("CombatMod/Client/GUI/Unlocks")
 Require("CombatMod/Client/GUI/Creation")
 Require("CombatMod/Client/GUI/Config")
+Require("CombatMod/Client/GUI/Extras")
 Require("CombatMod/Client/GUI/Debug")
 
 ---@type ExtuiWindow
@@ -78,6 +79,14 @@ do
     end, "Success")
 
     successBox.SameLine = true
+
+    function DisplayResponse(payload)
+        if payload[1] then
+            Event.Trigger("Success", payload[2])
+        else
+            Event.Trigger("Error", payload[2])
+        end
+    end
 end
 
 local tabs = window:AddTabBar(U.RandomId())
@@ -87,6 +96,9 @@ Control.Main(tabs)
 ClientUnlock.Main(tabs)
 
 Config.Main(tabs)
+
+Extras.Main(tabs)
+
 Components.Conditional(_, function()
     return { Creation.Main(tabs), Debug.Main(tabs) }
 end, "ToggleDebug")

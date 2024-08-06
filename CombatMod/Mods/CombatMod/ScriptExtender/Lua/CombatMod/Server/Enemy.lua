@@ -216,9 +216,8 @@ function Object:Modify(keepFaction)
         return self:Entity():IsAlive()
     end).After(function()
         local entity = self:Entity()
-        L.Dump("Enemy modified: ", self:GetTranslatedName(), self.GUID)
 
-        local expMod = Config.ExpMultiplier or 1
+        local expMod = (Config.ExpMultiplier or 1) * 2
         if self.IsBoss then
             expMod = expMod * 2
         end
@@ -227,9 +226,21 @@ function Object:Modify(keepFaction)
             expMod = expMod * 2
         end
 
-        entity.ServerExperienceGaveOut.Experience = entity.BaseHp.Vitality
+        local devider = math.max(1, #GU.DB.GetPlayers())
+
+        local exp = entity.BaseHp.Vitality
             * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
             * expMod
+
+        entity.ServerExperienceGaveOut.Experience = math.floor(exp / devider)
+
+        L.Debug(
+            "Enemy modified: ",
+            self:GetTranslatedName(),
+            self.GUID,
+            "Experience: ",
+            entity.ServerExperienceGaveOut.Experience
+        )
 
         -- entity.ServerCharacter.Treasures = { "Empty" }
     end)

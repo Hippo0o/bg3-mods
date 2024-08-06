@@ -51,18 +51,10 @@ end
 function ClientUnlock.Tile(root, unlock)
     local grp = root:AddGroup(unlock.Id)
 
-    xpcall(function()
-        local icon = grp:AddImage(unlock.Icon)
-        if unlock.Description then
-            icon:Tooltip():AddText(unlock.Description)
-        end
-    end, function(err)
-        L.Error("I blame Norbyte for this: %s", err)
-        local icon = grp:AddIcon(unlock.Icon)
-        if unlock.Description then
-            icon:Tooltip():AddText(unlock.Description)
-        end
-    end)
+    local icon = grp:AddImage(unlock.Icon)
+    if unlock.Description then
+        icon:Tooltip():AddText(unlock.Description)
+    end
 
     local col2 = grp:AddGroup(unlock.Id)
     col2.SameLine = true

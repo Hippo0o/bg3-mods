@@ -1,4 +1,5 @@
 function SyncState()
+    PersistentVars.OldItems = Item.OldItems()
     Net.Send(
         "SyncState",
         UT.Filter(PersistentVars, function(v, k)
@@ -123,7 +124,10 @@ Net.On("ResumeCombat", function(event)
         Net.Respond(event, { false, __("Cannot force next round while in combat.") })
         return
     end
-
+    if not S or S.Round < 1 then
+        Net.Respond(event, { false, __("Scenario not started.") })
+        return
+    end
     Scenario.ResumeCombat()
 
     Net.Respond(event, { true })
@@ -261,6 +265,35 @@ end)
 
 Net.On("KillNearby", function(event)
     StoryBypass.ClearArea(event:Character())
+end)
+
+Net.On("RemoveAllEntities", function(event)
+    local count = #StoryBypass.RemoveAllEntities()
+    Net.Respond(event, { true, string.format("Removing %d entities.", count) })
+end)
+
+Net.On("RecruitOrigin", function(event)
+    local name = event.Payload
+    local char = UT.Find(C.OriginCharacters, function(v, k)
+        return k == name
+    end)
+    if char then
+        GameMode.RecruitOrigin(name)
+        Net.Respond(event, { true, string.format("Recruiting %s.", name) })
+    else
+        Net.Respond(event, { false, string.format("Origin %s not found.", name) })
+    end
+end)
+
+Net.On("CancelDialog", function(event)
+    local dialog, instance = Osi.SpeakerGetDialog(event:Character(), 1)
+
+    if dialog then
+        StoryBypass.CancelDialog(dialog, instance)
+        Net.Respond(event, { true, string.format("Dialog %s cancelled.", dialog) })
+    else
+        Net.Respond(event, { false, "No dialog found." })
+    end
 end)
 
 ---@deprecated
