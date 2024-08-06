@@ -95,6 +95,7 @@ External.Validators.Map = tt({
     Region = { "string" },
     Enter = { posType },
     Spawns = tt(posType, true),
+    Race = { "nil", U.UUID.IsValid, tt({ "nil", U.UUID.IsValid }, true) },
 })
 
 local function validateTimelineEntry(value)
@@ -109,11 +110,11 @@ External.Validators.Scenario = tt({
     Timeline = {
         "function",
         tt({
-            tt({
-                { "nil", C.EnemyTier, validateTimelineEntry },
-            }, true),
+            tt({ "nil", C.EnemyTier, validateTimelineEntry }, true),
         }, true),
     },
+    Positions = { "nil", tt({ "number" }, true) },
+    Map = { "nil", "string" },
     Loot = tt({
         Objects = tt({
             Common = { "nil", "number" },
@@ -196,10 +197,10 @@ function External.Templates.GetMaps()
         data = {}
     end
 
-    data = UT.Combine({},addedMaps, data)
+    data = UT.Combine({}, addedMaps, data)
 
     for k, map in pairs(data) do
-        if not validateAndError(External.Validators.Map, map) then
+        if not validateAndError(External.Validators.Map, map, k) then
             return {}
         end
     end
@@ -218,7 +219,7 @@ function External.Templates.GetScenarios()
         data = {}
     end
 
-    data = UT.Combine({},addedScenarios, data)
+    data = UT.Combine({}, addedScenarios, data)
 
     for k, scenario in pairs(data) do
         if not validateAndError(External.Validators.Scenario, scenario, k) then
@@ -240,7 +241,7 @@ function External.Templates.GetEnemies()
         data = {}
     end
 
-    data = UT.Combine({},addedEnemies, data)
+    data = UT.Combine({}, addedEnemies, data)
 
     for k, enemy in pairs(data) do
         if not validateAndError(External.Validators.Enemy, enemy, k) then

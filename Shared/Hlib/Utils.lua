@@ -175,10 +175,13 @@ if Ext.IsServer() then
 
     -- also works for items
     function M.Entity.Remove(guid)
+        Osi.PROC_RemoveAllPolymorphs(guid)
+        Osi.PROC_RemoveAllDialogEntriesForSpeaker(guid)
         Osi.SetOnStage(guid, 0)
         Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0) -- no blood
-        Osi.RequestDelete(guid)
         Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
+        Osi.RequestDelete(guid)
+        Osi.RequestDeleteTemporary(guid)
         Osi.UnloadItem(guid)
     end
 end
@@ -584,12 +587,12 @@ end
 M.UUID = {}
 
 function M.UUID.IsValid(str)
-    return M.UUID.Extract(str) ~= ""
+    return M.UUID.Extract(str) ~= nil
 end
 
 function M.UUID.Extract(str)
     if type(str) ~= "string" then
-        return ""
+        return nil
     end
 
     local x = "%x"
