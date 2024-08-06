@@ -10,6 +10,7 @@ Mod.PersistentVarsTemplate = {
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = {},
+    Config = {},
     LastScenario = nil,
     RogueScore = 0,
     HardMode = false, -- applies additional difficulty to the game
@@ -93,6 +94,7 @@ Require("CombatMod/Server/Unlock")
 
 GameState.OnSave(function()
     PersistentVars.Scenario = S
+    PersistentVars.Config = Config
 
     for obj, _ in pairs(PersistentVars.SpawnedEnemies) do
         if not Ext.Entity.Get(obj) then
@@ -123,7 +125,11 @@ GameState.OnLoad(function()
         Event.Trigger("ModActive")
     end
 
-    if not PersistentVars.Scenario.Name then
+    if not U.Equals(PersistentVars.Config, {}) then
+        External.ApplyConfig(PersistentVars.Config)
+    end
+
+    if U.Equals(PersistentVars.Scenario, {}) then
         PersistentVars.Scenario = nil
     end
 

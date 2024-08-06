@@ -420,8 +420,12 @@ function Item.SpawnLoot(loot, x, y, z, autoPickup)
     end)
 end
 
-function Item.GenerateLoot(rolls, lootRates)
+function Item.GenerateLoot(rolls, lootRates, fixedRolls)
     local loot = {}
+
+    if not fixedRolls then
+        fixedRolls = 1
+    end
 
     -- each kill gets an object/weapon/armor roll
     if not lootRates then
@@ -449,11 +453,21 @@ function Item.GenerateLoot(rolls, lootRates)
         end
         add(fixed, "Nothing", math.ceil(sum / 2)) -- make a chance to get nothing
     end
+    for i = 1, fixedRolls do
+        do
+            local rarity = fixed[U.Random(#fixed)]
+            local items = Item.Objects(rarity, false)
+
+            L.Debug("Rolling fixed loot items:", #items, "Object", rarity)
+            if #items > 0 then
+                table.insert(loot, items[U.Random(#items)])
+            end
+        end
+    end
 
     local bonusRarities = {}
     for _, bonusCategory in ipairs({ "Object", "Weapon", "Armor" }) do
         local bonus = {}
-        add(bonus, "Nothing", 10) -- make a chance to get nothing
 
         for _, r in ipairs(C.ItemRarity) do
             if bonusCategory == "Object" and lootRates.Objects[r] then
@@ -469,19 +483,12 @@ function Item.GenerateLoot(rolls, lootRates)
     end
 
     for i = 1, rolls do
-        do
-            local rarity = fixed[U.Random(#fixed)]
-            local items = Item.Objects(rarity, false)
-
-            L.Debug("Rolling fixed loot items:", #items, "Object", rarity)
-            if #items > 0 then
-                table.insert(loot, items[U.Random(#items)])
-            end
-        end
-
         local items = {}
         local fail = 0
-        local bonusCategory = ({ "Object", "Weapon", "Armor" })[U.Random(3)]
+
+        -- 1/7 chance for object
+        local bonusCategory = ({ "Object", "Weapon", "Armor", "Weapon", "Armor", "Weapon", "Armor" })[U.Random(7)]
+
         local rarity = nil
         -- avoid 0 rolls e.g. legendary objects dont exist
         while #items == 0 and fail < 3 do

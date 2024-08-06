@@ -148,14 +148,16 @@ local ngPlus = {
         OnBuy = function(self, character)
             if self.Bought > 0 then
                 for _, u in pairs(getUnlocks()) do
-                    if u.Id:match("^BuyHair") then
-                        u.Bought = 0
-                    end
-                    if u.Id == "TadAwaken" then
-                        u.Bought = 0
-                    end
-                    if u.Id == "BuyEmperor" then
-                        u.Bought = 0
+                    if
+                        US.Contains(u.Id, {
+                            "^Buy",
+                            "TadAwaken",
+                        })
+                    then
+                        if u.Cost > 0 and u.Amount ~= nil and u.Amount > 0 then
+                            L.Debug(u.Id)
+                            u.Bought = 0
+                        end
                     end
                 end
             end
@@ -273,7 +275,7 @@ return UT.Combine(
             Name = "1000 EXP",
             Icon = "Action_Dash_Bonus",
             Cost = 40,
-            Amount = nil,
+            Amount = 4,
             Character = false,
             OnBuy = function(self, character)
                 GameMode.ExpLock.Pause()
@@ -290,7 +292,7 @@ return UT.Combine(
             Name = __("Roll Loot %dx", 10),
             Icon = "Item_CONT_GEN_Chest_Jewel_B",
             Cost = 30,
-            Amount = nil,
+            Amount = 10,
             Character = false,
             OnBuy = function(self, character)
                 local loot = Item.GenerateLoot(10, C.LootRates)
@@ -304,7 +306,7 @@ return UT.Combine(
             Name = __("Buy 40 Camp Supplies"),
             Icon = "Item_CONT_GEN_CampSupplySack",
             Cost = 20,
-            Amount = nil,
+            Amount = 5,
             Character = false,
             OnBuy = function(self, character)
                 Osi.PROC_CAMP_GiveFreeSupplies()

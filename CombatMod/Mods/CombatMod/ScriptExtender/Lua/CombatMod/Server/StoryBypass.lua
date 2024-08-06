@@ -87,6 +87,7 @@ function StoryBypass.ClearArea(character)
     for _, batch in pairs(UT.Batch(objects, math.ceil(#objects / 5))) do
         Schedule(function()
             for _, b in pairs(batch) do
+                -- Osi.CreateSurface(b.Guid, "None", 10, -1)
                 if b.Entity.ServerItem then
                     if b.Entity.ServerItem.IsLadder or b.Entity.ServerItem.IsDoor or b.Entity.GameplayLight then
                         b.Entity.ServerItem.CanBePickedUp = false
@@ -118,7 +119,9 @@ function StoryBypass.ClearArea(character)
         end)
     end
 
-    Osi.CreateSurface(character, "None", 100, -1)
+    -- Osi.RemoveSurfaceLayer(character, "Cloud", 100)
+    -- Osi.RemoveSurfaceLayer(character, "Ground", 100)
+    -- Osi.CreateSurface(character, "None", 100, -1)
     -- Osi.ClearTag(v.Guid, "867f3a1e-1e4b-48c2-869e-343415231727")
     -- Osi.ClearTag(v.Guid, "f0020818-86f1-4ee9-a5a9-9ace9ecc9010")
     -- Osi.Resurrect(v.Guid)

@@ -142,14 +142,14 @@ function GameMode.GenerateScenario(score, cow)
         emptyRoundChance = 0
     end
 
-    -- Define tiers and their corresponding difficulty values
+    -- define tiers and their corresponding difficulty values
     local tiers = {
-        { name = C.EnemyTier[1], value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
-        { name = C.EnemyTier[2], value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
-        { name = C.EnemyTier[3], value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
-        { name = C.EnemyTier[4], value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
-        { name = C.EnemyTier[5], value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
-        { name = C.EnemyTier[6], value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
+        { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
+        { name = C.EnemyTier[2], min = 10, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+        { name = C.EnemyTier[3], min = 25, value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+        { name = C.EnemyTier[4], min = 35, value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
+        { name = C.EnemyTier[5], min = 50, value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+        { name = C.EnemyTier[6], min = 100, value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
 
     if PersistentVars.HardMode then
@@ -169,12 +169,12 @@ function GameMode.GenerateScenario(score, cow)
 
     score = score >= tiers[1].value and score or tiers[1].value
 
-    -- Weighted random function to bias towards a preferred number of rounds
+    -- weighted random function to bias towards a preferred number of rounds
     local function weightedRandom(maxValue)
         local weights = {}
         local totalWeight = 0
         for i = minRounds, maxRounds do
-            local weight = 1 / (math.abs(i - preferredRounds) + 1) -- Adjusted weight calculation
+            local weight = 1 / (math.abs(i - preferredRounds) + 1) -- adjusted weight calculation
             weights[i] = weight
             totalWeight = totalWeight + weight
         end
@@ -188,18 +188,20 @@ function GameMode.GenerateScenario(score, cow)
         return maxRounds
     end
 
-    -- Function to select a tier based on amount of enemies in tier
+    -- select a tier based on amount of enemies in tier
     local function selectTier(remainingValue)
         local validTiers = {}
         local totalWeight = 0
         for i, tier in ipairs(tiers) do
-            if remainingValue >= tier.value then
-                -- Bias towards tiers with more enemies
-                local weight = tier.amount / 100 * 0.7 + 0.1
-                L.Debug("Tier", tier.name, weight)
+            if score >= (tier.min or tier.value) then -- handle min score
+                if remainingValue >= tier.value then
+                    -- bias towards tiers with more enemies
+                    local weight = tier.amount / 100 * 0.7 + 0.1
+                    L.Debug("Tier", tier.name, weight)
 
-                table.insert(validTiers, { tier = tier, weight = weight })
-                totalWeight = totalWeight + weight
+                    table.insert(validTiers, { tier = tier, weight = weight })
+                    totalWeight = totalWeight + weight
+                end
             end
         end
         if #validTiers > 0 then
@@ -212,10 +214,10 @@ function GameMode.GenerateScenario(score, cow)
             end
         end
 
-        return tiers[1] -- Fallback to the lowest tier
+        return tiers[1] -- fallback to the lowest tier
     end
 
-    -- Function to generate a random timeline with bias and possible empty rounds
+    -- generate a random timeline with bias and possible empty rounds
     local function generateTimeline(maxValue, failed)
         failed = failed + 1
         if failed > 100 then
@@ -226,7 +228,7 @@ function GameMode.GenerateScenario(score, cow)
         local timeline = {}
         local numRounds = weightedRandom()
         local remainingValue = maxValue
-        -- Initialize rounds with empty tables
+        -- initialize rounds with empty tables
         for i = 1, numRounds do
             table.insert(timeline, {})
         end
@@ -243,13 +245,13 @@ function GameMode.GenerateScenario(score, cow)
                 return
             end
 
-            -- Add a chance for the round to remain empty, except for the first round
+            -- add a chance for the round to remain empty, except for the first round
             if
                 roundIndex > 1
                 and not roundsSkipped[roundIndex - 1]
                 and #timeline[roundIndex] == 0
                 and U.Random() < emptyRoundChance
-            then -- Chance to skip adding a tier
+            then -- chance to skip adding a tier
                 roundsSkipped[roundIndex] = true
                 remainingValue = remainingValue + maxValue * emptyRoundChance
                 return
@@ -263,7 +265,7 @@ function GameMode.GenerateScenario(score, cow)
             end
         end
 
-        -- Distribute the total value randomly across rounds
+        -- distribute the total value randomly across rounds
         local failsafe = 0
         while remainingValue > 0 do
             distribute()
@@ -282,7 +284,7 @@ function GameMode.GenerateScenario(score, cow)
             end
         end
 
-        -- Ensure the first round is not empty
+        -- ensure the first round is not empty
         if #timeline[1] == 0 then
             if Mod.Debug then
                 L.Error("Empty first round", remainingValue, maxValue)
@@ -290,7 +292,7 @@ function GameMode.GenerateScenario(score, cow)
             return generateTimeline(maxValue, failed)
         end
 
-        -- Ensure no two consecutive rounds exist
+        -- ensure no two consecutive rounds exist
         for i = 2, #timeline do
             if #timeline[i] == 0 and #timeline[i - 1] == 0 then
                 if Mod.Debug then
@@ -300,6 +302,7 @@ function GameMode.GenerateScenario(score, cow)
             end
         end
 
+        -- ensure the last round does not exceed the previous round
         if #timeline > 1 and #timeline[#timeline] > #timeline[#timeline - 1] then
             L.Error("Last round is too big", #timeline[#timeline], #timeline[#timeline - 1])
             return generateTimeline(maxValue, failed)

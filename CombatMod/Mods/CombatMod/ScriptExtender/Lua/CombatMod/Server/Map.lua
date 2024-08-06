@@ -119,6 +119,15 @@ function Object:PingSpawns()
     end
 end
 
+function Object:ClearSpawns()
+    for _, pos in pairs(UT.Combine({}, { self.Enter }, self.Spawns)) do
+        local x, y, z = table.unpack(pos)
+
+        Osi.CreateSurfaceAtPosition(x, y, z, "None", 100, -1)
+        Osi.RemoveSurfaceLayerAtPosition(x, y, z, "Ground", 100)
+    end
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                            Public                                           --
@@ -162,7 +171,7 @@ function Map.CorrectPosition(guid, x, y, z, offset)
         return
     end
 
-    if distance > offset * 1.5 or y2 < y - offset then
+    if distance > offset * 1.5 or y2 < y - 10 then
         L.Error(guid, "Spawned too far away.", distance)
         Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1)
     end
