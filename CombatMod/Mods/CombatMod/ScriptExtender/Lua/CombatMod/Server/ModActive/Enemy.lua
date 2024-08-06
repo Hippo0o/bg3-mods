@@ -465,7 +465,7 @@ function Enemy.Random(filter)
     if #list == 0 then
         return nil
     end
-    local enemy = list[U.Random(#list)]
+    local enemy = list[math.random(#list)]
     return Object.New(enemy)
 end
 

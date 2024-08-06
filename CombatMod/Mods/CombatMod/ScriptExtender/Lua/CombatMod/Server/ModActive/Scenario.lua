@@ -571,7 +571,7 @@ function Scenario.Start(template, map)
     end
 
     if map == nil then
-        map = maps[U.Random(#maps)]
+        map = maps[math.random(#maps)]
     end
 
     if type(timeline) == "function" then
@@ -621,7 +621,7 @@ function Scenario.Start(template, map)
 
     -- get spawn positions for every enemy
     while UT.Size(scenario.Positions) < enemyCount do
-        table.insert(scenario.Positions, U.Random(#map.Spawns))
+        table.insert(scenario.Positions, math.random(#map.Spawns))
     end
 
     Player.Notify(__("Scenario %s started.", template.Name))

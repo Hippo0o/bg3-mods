@@ -423,8 +423,8 @@ function Item.SpawnLoot(loot, x, y, z, autoPickup)
             return
         end
 
-        local x2 = x + U.Random() * U.Random(-1, 1)
-        local z2 = z + U.Random() * U.Random(-1, 1)
+        local x2 = x + math.random() * math.random(-1, 1)
+        local z2 = z + math.random() * math.random(-1, 1)
         local item = pingedLoot[i]
 
         if item:Spawn(x2, y, z2) then
@@ -447,7 +447,7 @@ function Item.GenerateSimpleLoot(rolls, chanceFood, lootRates)
     for i = 1, rolls do
         local items = Item.Objects(nil, false)
 
-        local isFood = U.Random() < chanceFood
+        local isFood = math.random() < chanceFood
 
         items = UT.Filter(items, function(item)
             if isFood then
@@ -459,7 +459,7 @@ function Item.GenerateSimpleLoot(rolls, chanceFood, lootRates)
 
         L.Debug("Rolling kill loot items:", #items, "Object")
         if #items > 0 then
-            table.insert(loot, UT.DeepClone(items[U.Random(#items)]))
+            table.insert(loot, UT.DeepClone(items[math.random(#items)]))
         end
     end
 
@@ -506,24 +506,24 @@ function Item.GenerateLoot(rolls, lootRates)
         local items = {}
         local fail = 0
 
-        local category = ({ "CombatObject", "Weapon", "Armor" })[U.Random(3)]
+        local category = ({ "CombatObject", "Weapon", "Armor" })[math.random(3)]
 
         local rarity = nil
         -- avoid 0 rolls e.g. legendary objects dont exist
         while #items == 0 and fail < 5 do
             fail = fail + 1
 
-            rarity = rarities[category][U.Random(#rarities[category])]
+            rarity = rarities[category][math.random(#rarities[category])]
 
             if category == "CombatObject" then
                 items = Item.Objects(rarity, true)
                 if #items > 0 then
                     local bySlot = UT.GroupBy(items, "Slot")
                     local slots = UT.Keys(bySlot)
-                    local randomSlot = slots[U.Random(#slots)]
+                    local randomSlot = slots[math.random(#slots)]
                     L.Debug("Rolling CombatObject loot slot:", randomSlot, rarity)
 
-                    if randomSlot == "Potion" and U.Random() < 0.40 then
+                    if randomSlot == "Potion" and math.random() < 0.40 then
                         items = UT.Filter(items, function(item)
                             return item.Name:match("^OBJ_Potion_Healing")
                         end)
@@ -538,7 +538,7 @@ function Item.GenerateLoot(rolls, lootRates)
                 if #items > 0 then
                     local bySlot = UT.GroupBy(items, "Slot")
                     local slots = UT.Keys(bySlot)
-                    local randomSlot = slots[U.Random(#slots)]
+                    local randomSlot = slots[math.random(#slots)]
                     L.Debug("Rolling Armor loot slot:", randomSlot, rarity)
                     items = UT.Values(bySlot[randomSlot])
                 end
@@ -547,10 +547,10 @@ function Item.GenerateLoot(rolls, lootRates)
 
         L.Debug("Rolling bonus loot items:", #items, category, rarity)
         if #items > 0 then
-            local random = items[U.Random(#items)]
+            local random = items[math.random(#items)]
 
             if UT.Contains(PersistentVars.RandomLog.Items, random.Name) then
-                random = items[U.Random(#items)]
+                random = items[math.random(#items)]
             end
             LogRandom("Items", random.Name, 100)
 

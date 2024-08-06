@@ -78,7 +78,7 @@ function GameMode.GenerateScenario(score, cow)
             weights[i] = weight
             totalWeight = totalWeight + weight
         end
-        local randomWeight = U.Random() * totalWeight
+        local randomWeight = math.random() * totalWeight
         for i = minRounds, maxRounds do
             randomWeight = randomWeight - weights[i]
             if randomWeight <= 0 then
@@ -103,7 +103,7 @@ function GameMode.GenerateScenario(score, cow)
             end
         end
         if #validTiers > 0 then
-            local randomWeight = U.Random() * totalWeight
+            local randomWeight = math.random() * totalWeight
             for _, entry in ipairs(validTiers) do
                 randomWeight = randomWeight - entry.weight
                 if randomWeight <= 0 then
@@ -133,7 +133,7 @@ function GameMode.GenerateScenario(score, cow)
 
         local roundsSkipped = {}
         local function distribute()
-            local roundIndex = U.Random(1, numRounds)
+            local roundIndex = math.random(1, numRounds)
 
             if #timeline[roundIndex] > 10 then
                 return
@@ -148,7 +148,7 @@ function GameMode.GenerateScenario(score, cow)
                 roundIndex > 1
                 and not roundsSkipped[roundIndex - 1]
                 and #timeline[roundIndex] == 0
-                and U.Random() < emptyRoundChance
+                and math.random() < emptyRoundChance
             then -- chance to skip adding a tier
                 roundsSkipped[roundIndex] = true
                 remainingValue = remainingValue + maxValue * emptyRoundChance
@@ -294,10 +294,10 @@ function GameMode.StartNext()
 
     local map = nil
     if #maps > 0 then
-        local random = U.Random(#maps)
+        local random = math.random(#maps)
 
         if UT.Contains(PersistentVars.RandomLog.Maps, random) then
-            random = U.Random(#maps)
+            random = math.random(#maps)
         end
         LogRandom("Maps", random, 30)
 
@@ -476,7 +476,7 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function()
-            local lolcow = U.Random() < 0.001
+            local lolcow = math.random() < 0.001
             if lolcow then
                 local hasOX = Enemy.Find("OX_A")
                 lolcow = hasOX and true or false
