@@ -305,7 +305,7 @@ do
         -- end)
     end
 
-    function Commands.Map(id)
+    function Commands.ToMap(id)
         local region = Osi.GetRegion(Player.Host())
         L.Info("Region", region)
 
