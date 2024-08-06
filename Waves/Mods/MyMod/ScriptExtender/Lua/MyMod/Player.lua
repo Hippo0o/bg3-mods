@@ -47,6 +47,6 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Ext.Osiris.RegisterListener("UsingSpell", 5, "before", function(caster, spell, spellType, spellElement, storyActionID)
-    L.Info("UsingSpell:", caster, spell, spellType, spellElement, storyActionID)
-end)
+-- Ext.Osiris.RegisterListener("UsingSpell", 5, "before", function(caster, spell, spellType, spellElement, storyActionID)
+--     L.Info("UsingSpell:", caster, spell, spellType, spellElement, storyActionID)
+-- end)
