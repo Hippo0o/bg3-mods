@@ -25,6 +25,7 @@
 ---@field CharacterVisualResourceID string
 ---@field Icon string
 local Object = Libs.Struct({
+    _Id = nil,
     Name = "Empty",
     TemplateId = nil,
     Tier = nil,
@@ -55,6 +56,7 @@ end
 function Object.New(data)
     local o = Object.Init(data)
 
+    o._Id = U.RandomId("Enemy_")
     o.LevelOverride = o.LevelOverride and tonumber(o.LevelOverride) or 0
     o.GUID = nil
 
@@ -428,14 +430,38 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
+function Enemy.RestoreFromSave(state)
+    xpcall(function()
+        PersistentVars.SpawnedEnemies = UT.Map(state, function(v, k)
+            return Enemy.Restore(v), k
+        end)
+    end, function(err)
+        L.Error(err)
+    end)
+end
+
+local enemies = {}
+Event.On("ScenarioStarted", function()
+    enemies = {}
+end)
+
 ---@param enemy Enemy
 ---@return Enemy
 function Enemy.Restore(enemy)
+    if enemy._Id and enemies[enemy._Id] then
+        return enemies[enemy._Id]
+    end
+
     local e = Object.Init(enemy)
+    if e._Id then
+        enemies[e._Id] = e
+    end
 
     if not e:IsSpawned() then
         return e
     end
+
+    PersistentVars.SpawnedEnemies[e.GUID] = e
 
     e:ModifyTemplate()
 

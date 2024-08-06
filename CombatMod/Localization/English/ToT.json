@@ -13,7 +13,7 @@
 	},
 	"%s is now active.;1": {
 		"Handle": "h3b8161bbg6ed4g434ega08bg252882a9070a",
-		"Stack": ["CombatMod/CombatMod/_Server.lua:98: in field '_Func'"],
+		"Stack": ["CombatMod/CombatMod/_Server.lua:100: in field '_Func'"],
 		"Text": "%s is now active.",
 		"Version": 1
 	},
@@ -459,14 +459,14 @@
 	},
 	"Killed: %s;1": {
 		"Handle": "h2cb5c7a2g79e0g492fgb1f8g6f4913da4d6b",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Control.lua:169: in upvalue 'compute'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua:169: in upvalue 'compute'"],
 		"Text": "Killed: %s",
 		"Version": 1
 	},
 	"Leave camp to join the battle.;1": {
 		"Handle": "h6119ae15g344cg4fb4g8522ga9d267008bf0",
 		"Stack": [
-			"CombatMod/CombatMod/Server/ModActive/Scenario.lua:352: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:343>"
+			"CombatMod/CombatMod/ModActive/Server/Scenario.lua:347: in function <CombatMod/CombatMod/ModActive/Server/Scenario.lua:338>"
 		],
 		"Text": "Leave camp to join the battle.",
 		"Version": 1
@@ -503,7 +503,7 @@
 	},
 	"Map: %s;1": {
 		"Handle": "h3cf1646eg69a4g4313gb0fcg2575d2de0757",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Components.lua:63: in field '_Func'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Components.lua:63: in field '_Func'"],
 		"Text": "Map: %s",
 		"Version": 1
 	},
@@ -748,19 +748,19 @@
 	},
 	"Round: %s;1": {
 		"Handle": "h3d5fde62g680ag48b3gb0e6gced512c4ecf7",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Control.lua:166: in upvalue 'compute'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua:166: in upvalue 'compute'"],
 		"Text": "Round: %s",
 		"Version": 1
 	},
 	"Running;1": {
 		"Handle": "h21780c4eg742dg4591gb124gb3f7d30691d5",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Control.lua:50: in field '_Func'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua:50: in field '_Func'"],
 		"Text": "Running",
 		"Version": 1
 	},
 	"Scenario %s started.;1": {
 		"Handle": "hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1",
-		"Stack": ["CombatMod/CombatMod/Server/ModActive/Scenario.lua:575: in field 'Start'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua:611: in field 'Start'"],
 		"Text": "Scenario %s started.",
 		"Version": 1
 	},
@@ -792,7 +792,7 @@
 	},
 	"Scenario: %s;1": {
 		"Handle": "h218206b6g74d7g453egb12bg13585309317a",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Control.lua:165: in upvalue 'compute'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua:165: in upvalue 'compute'"],
 		"Text": "Scenario: %s",
 		"Version": 1
 	},
@@ -956,7 +956,7 @@
 	},
 	"Total Rounds: %s;1": {
 		"Handle": "h33c0b3bcg6695g4e6eg900fg3808f22d1a2a",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Control.lua:167: in upvalue 'compute'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua:167: in upvalue 'compute'"],
 		"Text": "Total Rounds: %s",
 		"Version": 1
 	},
@@ -1031,7 +1031,7 @@
 	},
 	"Upcoming Spawns: %s;1": {
 		"Handle": "h8528df02gd07dg48a5gbb61gbec319439ce1",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Control.lua:168: in upvalue 'compute'"],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua:168: in upvalue 'compute'"],
 		"Text": "Upcoming Spawns: %s",
 		"Version": 1
 	},

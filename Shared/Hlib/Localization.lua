@@ -101,16 +101,16 @@ Net.On("_TranslationRequest", function(event)
     Utils.Table.Merge(M.Translations, event.Payload)
 end)
 
-Event.On("_TranslationChanged", function()
-    saveFile()
-
-    Net.Send("_TranslationRequest", M.Translations)
-end)
+Event.On(
+    "_TranslationChanged",
+    Async.Debounce(100, function()
+        Net.Send("_TranslationRequest", M.Translations)
+        saveFile()
+    end)
+)
 
 Net.On("_TranslationStack", function(event)
     extendStack(event.Payload.Key, event.Payload.Stack)
-
-    IO.SaveJson(M.FilePath .. "_stacks.json", stacks)
 end)
 
 GameState.OnLoadSession(function()

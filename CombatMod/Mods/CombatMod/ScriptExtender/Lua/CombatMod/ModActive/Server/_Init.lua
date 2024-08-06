@@ -21,21 +21,6 @@ function LogRandom(key, value, max)
     end
 end
 
-Require("CombatMod/ModActive/Server/Scenario")
-Require("CombatMod/ModActive/Server/Enemy")
-Require("CombatMod/ModActive/Server/Map")
-Require("CombatMod/ModActive/Server/Item")
-Require("CombatMod/ModActive/Server/StoryBypass")
-Require("CombatMod/ModActive/Server/GameMode")
-Require("CombatMod/ModActive/Server/NetEvents")
-Require("CombatMod/ModActive/Server/Unlock")
-
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                           Events                                            --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
 GameState.OnSave(function()
     PersistentVars.Config = Config
 
@@ -55,6 +40,27 @@ GameState.OnSave(function()
         end
     end
 end)
+
+GameState.OnLoad(function()
+    Enemy.RestoreFromSave(PersistentVars.SpawnedEnemies)
+
+    if U.Equals(PersistentVars.Scenario, {}) then
+        PersistentVars.Scenario = nil
+    end
+
+    if PersistentVars.Scenario ~= nil then
+        Scenario.RestoreFromSave(PersistentVars.Scenario)
+    end
+end, true)
+
+Require("CombatMod/ModActive/Server/Scenario")
+Require("CombatMod/ModActive/Server/Enemy")
+Require("CombatMod/ModActive/Server/Map")
+Require("CombatMod/ModActive/Server/Item")
+Require("CombatMod/ModActive/Server/StoryBypass")
+Require("CombatMod/ModActive/Server/GameMode")
+Require("CombatMod/ModActive/Server/NetEvents")
+Require("CombatMod/ModActive/Server/Unlock")
 
 -- collect stats
 Event.On("ScenarioEnded", function(scenario)

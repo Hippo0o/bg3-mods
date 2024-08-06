@@ -215,10 +215,10 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h2d5b4e72g780eg41b2gb1e6g87d413c4a5f6" version="1">Kill spawned</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h2cb5c7a2g79e0g492fgb1f8g6f4913da4d6b" version="1">Killed: %s</content>
 
-    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h6119ae15g344cg4fb4g8522ga9d267008bf0" version="1">Leave camp to join the battle.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua -->
@@ -236,7 +236,7 @@
     <!-- CombatMod/CombatMod/Server/NetEvents.lua -->
     <content contentuid="h2cb85222g79edg4077gb1f8gb61113da9433" version="1">Map not found.</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Components.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Components.lua -->
     <content contentuid="h3cf1646eg69a4g4313gb0fcg2575d2de0757" version="1">Map: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
@@ -351,13 +351,13 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua -->
     <content contentuid="h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1" version="1">Round %d</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h3d5fde62g680ag48b3gb0e6gced512c4ecf7" version="1">Round: %s</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h21780c4eg742dg4591gb124gb3f7d30691d5" version="1">Running</content>
 
-    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1" version="1">Scenario %s started.</content>
 
     <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua -->
@@ -372,7 +372,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua -->
     <content contentuid="h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed" version="1">Scenario stopped.</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h218206b6g74d7g453egb12bg13585309317a" version="1">Scenario: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
@@ -447,7 +447,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
     <content contentuid="he699ae7dgb3ccg4fb2g8d5aga9d4ef788bf6" version="1">To Camp After n Seconds</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h33c0b3bcg6695g4e6eg900fg3808f22d1a2a" version="1">Total Rounds: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -483,7 +483,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Unlocks.lua -->
     <content contentuid="h231a0e4eg764fg45b1gb102g93d7d320b1f5" version="1">Unlocks</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h8528df02gd07dg48a5gbb61gbec319439ce1" version="1">Upcoming Spawns: %s</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua -->

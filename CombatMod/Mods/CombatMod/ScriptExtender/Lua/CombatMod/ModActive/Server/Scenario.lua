@@ -376,6 +376,8 @@ function Action.MapEntered()
         end
 
         for _, player in pairs(GU.DB.GetPlayers()) do
+            Osi.RemoveStatus(player, "SNEAKING")
+
             Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), S().CombatHelper, player)
         end
 
@@ -470,7 +472,7 @@ function Scenario.Current()
 end
 
 ---@param state Scenario
-function Scenario.RestoreFromState(state)
+function Scenario.RestoreFromSave(state)
     xpcall(function()
         PersistentVars.Scenario = Scenario.Restore(state)
 
@@ -674,7 +676,7 @@ function Scenario.IsHelper(uuid)
 end
 
 function Scenario.HasStarted()
-    return S() and S():HasStarted()
+    return getmetatable(S()) and S():HasStarted()
 end
 
 function Scenario.ForwardCombat()
@@ -691,6 +693,8 @@ function Scenario.ForwardCombat()
     end
 
     Action.StartRound()
+
+    Osi.ResumeCombat(s.CombatId)
 end
 
 ---@param specific Enemy|nil
@@ -742,16 +746,6 @@ end
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
-
-GameState.OnLoad(function()
-    if U.Equals(PersistentVars.Scenario, {}) then
-        PersistentVars.Scenario = nil
-    end
-
-    if PersistentVars.Scenario ~= nil then
-        Scenario.RestoreFromState(PersistentVars.Scenario)
-    end
-end, true)
 
 U.Osiris.On(
     "TeleportedFromCamp",
@@ -828,10 +822,11 @@ U.Osiris.On(
         local guid = U.UUID.Extract(object)
 
         if not GC.IsNonPlayer(guid) then
+            Schedule(function()
+                Osi.ResumeCombat(combatGuid)
+            end)
             return
         end
-
-        Osi.ResumeCombat(combatGuid)
 
         if UT.Find(s.SpawnedEnemies, function(e)
             return U.UUID.Equals(e.GUID, guid)
@@ -942,11 +937,6 @@ U.Osiris.On(
     ifScenario(function(uuid)
         local s = Current()
 
-        if not Player.InCombat() and s.CombatId then
-            Osi.PauseCombat(s.CombatId)
-            return
-        end
-
         if U.UUID.Equals(uuid, s.CombatHelper) then
             L.Debug("Combat helper turn started.", uuid)
 
@@ -956,6 +946,9 @@ U.Osiris.On(
 
                 return
             end
+
+            s:DetectCombatId()
+            Osi.PauseCombat(s.CombatId)
 
             Action.StartRound()
                 :After(function()
@@ -972,10 +965,21 @@ U.Osiris.On(
                     return Defer(1000)
                 end)
                 :After(function()
-                    if not Player.InCombat() then
-                        Osi.PauseCombat(s.CombatId)
-                        return
+                    if Player.InCombat() then
+                        return true
                     end
+
+                    return WaitUntil(function(self)
+                        if S() ~= s then
+                            self:Clear()
+                            return
+                        end
+
+                        return Player.InCombat()
+                    end)
+                end)
+                :After(function()
+                    Osi.ResumeCombat(s.CombatId)
 
                     Osi.EndTurn(uuid)
                 end)

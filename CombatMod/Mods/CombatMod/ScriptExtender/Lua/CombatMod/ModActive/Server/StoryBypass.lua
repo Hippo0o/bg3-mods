@@ -565,9 +565,7 @@ Event.On(
 )
 
 local function removeAllEntities()
-    local s = Scenario.Current()
-
-    if (s and s:HasStarted()) or not Config.ClearAllEntities then
+    if Scenario.HasStarted() or not Config.ClearAllEntities then
         return
     end
 

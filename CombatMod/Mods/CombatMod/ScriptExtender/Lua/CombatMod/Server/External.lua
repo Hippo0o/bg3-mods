@@ -217,25 +217,25 @@ end
 
 local patchMaps = {}
 function External.Templates.PatchMaps(func)
-    assert(type(func) == "function", "PatchMaps needs to be a function.")
+    assert(type(func) == "function", "PatchMaps(func) needs to be a function.")
     table.insert(patchMaps, func)
 end
 
 local patchScenarios = {}
 function External.Templates.PatchScenarios(func)
-    assert(type(func) == "function", "PatchScenarios needs to be a function.")
+    assert(type(func) == "function", "PatchScenarios(func) needs to be a function.")
     table.insert(patchScenarios, func)
 end
 
 local patchEnemies = {}
 function External.Templates.PatchEnemies(func)
-    assert(type(func) == "function", "PatchEnemies needs to be a function.")
+    assert(type(func) == "function", "PatchEnemies(func) needs to be a function.")
     table.insert(patchEnemies, func)
 end
 
 local patchUnlocks = {}
 function External.Templates.PatchUnlocks(func)
-    assert(type(func) == "function", "PatchUnlocks needs to be a function.")
+    assert(type(func) == "function", "PatchUnlocks(func) needs to be a function.")
     table.insert(patchUnlocks, func)
 end
 
@@ -246,7 +246,11 @@ function External.Templates.GetMaps()
 
     for k, map in pairs(data) do
         for _, patch in ipairs(patchMaps) do
-            map = patch(map)
+            xpcall(function()
+                map = patch(map)
+            end, function(e)
+                L.Error("Failed to patch map.", Ext.DumpExport({ Map = map, Error = e }))
+            end)
         end
 
         if not map or not validateAndError(External.Validators.Map, map, k) then
@@ -264,7 +268,11 @@ function External.Templates.GetScenarios()
 
     for k, scenario in pairs(data) do
         for _, patch in ipairs(patchScenarios) do
-            scenario = patch(scenario)
+            xpcall(function()
+                scenario = patch(scenario)
+            end, function(e)
+                L.Error("Failed to patch scenario.", Ext.DumpExport({ Scenario = scenario, Error = e }))
+            end)
         end
 
         if not scenario or not validateAndError(External.Validators.Scenario, scenario, k) then
@@ -282,7 +290,11 @@ function External.Templates.GetEnemies()
 
     for k, enemy in pairs(data) do
         for _, patch in ipairs(patchEnemies) do
-            enemy = patch(enemy)
+            xpcall(function()
+                enemy = patch(enemy)
+            end, function(e)
+                L.Error("Failed to patch enemy.", Ext.DumpExport({ Enemy = enemy, Error = e }))
+            end)
         end
 
         if not enemy or not validateAndError(External.Validators.Enemy, enemy, k) then
@@ -298,7 +310,11 @@ function External.Templates.GetUnlocks()
 
     for k, unlock in pairs(data) do
         for _, patch in ipairs(patchUnlocks) do
-            unlock = patch(unlock)
+            xpcall(function()
+                unlock = patch(unlock)
+            end, function(e)
+                L.Error("Failed to patch unlock.", Ext.DumpExport({ Unlock = unlock, Error = e }))
+            end)
         end
 
         if not unlock or not validateAndError(External.Validators.Unlock, unlock, k) then
@@ -308,7 +324,6 @@ function External.Templates.GetUnlocks()
 
     return UT.Values(data)
 end
-
 
 function External.LoadLootRates()
     local data = External.File.Import("LootRates") or {}

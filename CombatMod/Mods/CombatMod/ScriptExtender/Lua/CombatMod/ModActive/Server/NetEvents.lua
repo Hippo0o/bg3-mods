@@ -266,6 +266,7 @@ end
 Event.On("RogueModeChanged", broadcastConfig)
 
 Event.On("ScenarioStarted", broadcastState)
+Event.On("ScenarioMapEntered", broadcastState)
 Event.On("ScenarioRoundStarted", broadcastState)
 Event.On("ScenarioEnemyKilled", broadcastState)
 Event.On("ScenarioCombatStarted", broadcastState)

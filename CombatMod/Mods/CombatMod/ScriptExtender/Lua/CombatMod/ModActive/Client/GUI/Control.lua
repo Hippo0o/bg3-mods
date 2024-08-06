@@ -192,8 +192,8 @@ function Control.RunningPanel(root)
             Event.Trigger("ToCamp")
         end
 
-        do
-            local btn = layout.Cells[1][1]:AddButton(__("Next Round"))
+        Components.Conditional(layout.Cells[1][1], function(cond)
+            local btn = cond.Root:AddButton(__("Next Round"))
 
             local t = btn:Tooltip()
             t:SetStyle("WindowPadding", 30, 10)
@@ -203,7 +203,13 @@ function Control.RunningPanel(root)
             btn.OnClick = function(button)
                 Event.Trigger("ForwardCombat")
             end
-        end
+
+            cond.OnEvent = function(state)
+                return state.Scenario and state.Scenario.OnMap
+            end
+
+            return btn
+        end, "StateChange")
 
         layout.Cells[1][2]:AddButton(__("Teleport")).OnClick = function()
             Event.Trigger("Teleport", { Map = State.Scenario.Map.Name, Restrict = true })
