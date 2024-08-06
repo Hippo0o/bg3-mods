@@ -39,8 +39,8 @@ function GameMode.GenerateScenario(score, cow)
     -- define tiers and their corresponding difficulty values
     local tiers = {
         { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
-        { name = C.EnemyTier[2], min = 20, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
-        { name = C.EnemyTier[3], min = 50, value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+        { name = C.EnemyTier[2], min = 40, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+        { name = C.EnemyTier[3], min = 60, value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
         { name = C.EnemyTier[4], min = 80, value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
         { name = C.EnemyTier[5], min = 100, value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
         { name = C.EnemyTier[6], min = 140, value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
@@ -312,7 +312,8 @@ end
 GameMode.DifficultyAppliedTo = {}
 
 ---@param enemy Enemy
-function GameMode.ApplyDifficulty(enemy)
+---@param score integer
+function GameMode.ApplyDifficulty(enemy, score)
     if GameMode.DifficultyAppliedTo[enemy.GUID] then
         return
     end
@@ -332,7 +333,7 @@ function GameMode.ApplyDifficulty(enemy)
         return math.floor(max_value * (1 - math.exp(-rate * x)) * partySizeMod)
     end
 
-    local mod = scale(PersistentVars.RogueScore, PersistentVars.HardMode)
+    local mod = scale(score, PersistentVars.HardMode)
     local mod2 = math.floor(mod / 2)
     local mod3 = math.floor(mod2 / 2)
 
@@ -439,7 +440,7 @@ Event.On("ScenarioEnemySpawned", function(scenario, enemy)
     if scenario.Name ~= C.RoguelikeScenario then
         return
     end
-    GameMode.ApplyDifficulty(enemy)
+    GameMode.ApplyDifficulty(enemy, PersistentVars.RogueScore)
 end)
 
 Event.On("ScenarioRestored", function(scenario)
@@ -447,7 +448,7 @@ Event.On("ScenarioRestored", function(scenario)
         return
     end
     for _, enemy in pairs(scenario.SpawnedEnemies) do
-        GameMode.ApplyDifficulty(enemy)
+        GameMode.ApplyDifficulty(enemy, PersistentVars.RogueScore)
     end
 end)
 

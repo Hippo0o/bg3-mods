@@ -74,7 +74,7 @@ Commands = {}
 Require("CombatMod/Server/Intro")
 Require("CombatMod/Server/Player")
 Require("CombatMod/Server/Commands")
-Require("CombatMod/Server/ModEvents")
+-- Require("CombatMod/Server/ModEvents")
 
 GameState.OnLoad(function()
     External.LoadConfig()
@@ -91,7 +91,7 @@ GameState.OnLoad(function()
     end
 end, true)
 
-ModEvent.Register("ModInit")
+-- ModEvent.Register("ModInit")
 
 local isActive = false
 function IsActive()

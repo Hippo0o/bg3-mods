@@ -134,56 +134,13 @@ end
 
 local Action = {}
 
-function Action.CalculateLoot()
-    local scenario = Current()
-
-    local lootMultiplier = 1
-    if PersistentVars.Unlocked.LootMultiplier then
-        lootMultiplier = 1.5
-    end
-
-    local rolls = scenario:KillScore() * lootMultiplier
-
-    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates)
-    L.Dump("Loot", loot, rolls, scenario.LootRates)
-    return loot
-end
-
-function Action.CalculateKillLoot()
-    local scenario = Current()
-
-    local nr = #scenario.KilledEnemies
-
-    local chanceFood = 1
-    if nr <= 6 then
-        chanceFood = 0.9
-    else
-        chanceFood = math.max(1, 10 - nr) / 10
-    end
-
-    if PersistentVars.Unlocked.LootMultiplier then
-        rolls = nr % 2 == 0 and 2 or 1
-    end
-
-    local loot = Item.GenerateSimpleLoot(rolls, chanceFood, scenario.LootRates)
-    L.Dump(L.ColorText("Kill loot", { 0, 255, 0 }), loot, rolls, chanceFood)
-    return loot
-end
-
 function Action.GiveReward()
-    Player.Notify(__("Dropping loot."))
-
-    local map = Current().Map
-    local loot = Action.CalculateLoot()
-    Event.Trigger("ScenarioLoot", Current(), loot)
-
     local reward = Current():KillScore()
+
     Osi.AddGold(Player.Host(), math.min(reward * 10, 100))
     for _, p in pairs(GU.DB.GetPlayers()) do
         Osi.AddExplorationExperience(p, 100 + reward * 10)
     end
-
-    map:SpawnLoot(loot)
 end
 
 function Action.SpawnHelper()
@@ -415,14 +372,6 @@ function Action.EnemyRemoved()
     Scenario.CheckEnded()
 end
 
-function Action.EnemyKilled(enemy)
-    local loot = Action.CalculateKillLoot()
-
-    local x, y, z = Osi.GetPosition(enemy.GUID)
-
-    Item.SpawnLoot(loot, x, y, z)
-end
-
 -- Enemy spawned but is out of bounds
 -- Player needs to be in combat for this to work
 function Action.Failsafe(enemy)
@@ -593,7 +542,7 @@ function Scenario.Start(template, map)
             local e
             if UT.Contains(C.EnemyTier, definition) then
                 e = Enemy.Random(function(e)
-                    return e.Tier == definition and Ext.Template.GetTemplate(e.TemplateId) ~= nil
+                    return e.Tier == definition
                 end)
             else
                 e = Enemy.Find(definition)
@@ -639,11 +588,11 @@ end
 function Scenario.End()
     Action.RemoveHelper()
 
-    Event.Trigger("ScenarioEnded", Current())
     Player.Notify(__("Scenario ended."))
     Current().Map:Clear()
-
     Action.GiveReward()
+
+    Event.Trigger("ScenarioEnded", Current())
 
     PersistentVars.LastScenario = S()
     PersistentVars.Scenario = nil
@@ -715,7 +664,7 @@ function Scenario.MarkSpawns(round)
         table.insert(spawns, posIndex)
     end
 
-    s.Map:VFXSpawns(spawns)
+    s.Map:VFXSpawns(spawns, 3)
 end
 
 function Scenario.ForwardCombat()
@@ -956,7 +905,6 @@ U.Osiris.On(
                 -- might revive and rejoin battle
                 Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()))
                 Event.Trigger("ScenarioEnemyKilled", Current(), e)
-                Action.EnemyKilled(e)
 
                 spawnedKilled = true
                 break

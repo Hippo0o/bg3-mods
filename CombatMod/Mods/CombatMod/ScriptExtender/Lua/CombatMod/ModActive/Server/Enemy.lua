@@ -523,7 +523,7 @@ function Enemy.GetByTemplateId(templateId)
 end
 
 local cache = nil
-local resetCache = Debounce(3000, function()
+local resetCache = Debounce(10000, function()
     cache = nil
 end)
 function Enemy.GetTemplates()
@@ -533,7 +533,14 @@ function Enemy.GetTemplates()
         return cache
     end
 
-    cache = External.Templates.GetEnemies()
+    cache = UT.Filter(External.Templates.GetEnemies(), function(v)
+        local template = Ext.Template.GetRootTemplate(v.TemplateId)
+        local keep = template and Ext.Template.GetRootTemplate(template.ParentTemplateId)
+        if not keep then
+            L.Debug("Template does not exist:", v.TemplateId)
+        end
+        return keep
+    end)
 
     return cache
 end
@@ -883,7 +890,7 @@ U.Osiris.On("LeftCombat", 2, "after", function(character, _)
     end
 end)
 
-Ext.Osiris.RegisterListener("TurnStarted", 1, "after", function(character)
+Ext.Osiris.RegisterListener("TurnStarted", 1, "before", function(character)
     if Osi.IsPlayer(character) == 1 then
         return
     end
@@ -894,8 +901,7 @@ Ext.Osiris.RegisterListener("TurnStarted", 1, "after", function(character)
     end
 end)
 
--- TODO check StartAttack
-U.Osiris.On("AttackedBy", 7, "after", function(defender, attackerOwner)
+U.Osiris.On("AttackedBy", 7, "before", function(defender, attackerOwner)
     if Osi.IsPlayer(defender) == 1 then
         return
     end

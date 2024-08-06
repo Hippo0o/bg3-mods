@@ -46,7 +46,7 @@ function Templates.GetItemBlacklist()
     return UT.DeepClone(itemBlacklist)
 end
 
-function Templats.GenerateEnemyLsx()
+function Templates.GenerateEnemyLsx()
     local wrap = [[
     <node id="GameObjects">
         <attribute id="LevelName" type="FixedString" value="" />
@@ -70,7 +70,6 @@ function Templats.GenerateEnemyLsx()
     local all = {}
     local new = {}
     for _, template in pairs(External.Templates.GetEnemies()) do
-        local add = {}
         local newId = U.UUID.Random()
         table.insert(add, string.format([[<attribute id="MapKey" type="FixedString" value="%s" />]], newId))
         table.insert(add, string.format([[<attribute id="ParentTemplateId" type="FixedString" value="%s" />]], template.TemplateId))

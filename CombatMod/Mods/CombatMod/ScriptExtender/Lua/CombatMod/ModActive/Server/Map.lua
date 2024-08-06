@@ -158,16 +158,6 @@ function Object:SpawnIn(enemy, spawn, faceTowards)
         end)
 end
 
----@param loot Item
-function Object:SpawnLoot(loot)
-    local x, y, z = self.Enter[1], self.Enter[2], self.Enter[3]
-    if Config.SpawnItemsAtPlayer then
-        x, y, z = Player.Pos()
-    end
-
-    Item.SpawnLoot(loot, x, y, z, true)
-end
-
 function Object:PingSpawns()
     for _, pos in pairs(self.Spawns) do
         local x, y, z = table.unpack(pos)
@@ -192,15 +182,17 @@ function Object:Prepare()
     return true
 end
 
-function Object:VFXSpawns(spawns)
+function Object:VFXSpawns(spawns, time)
     for _, guid in pairs(self.Helpers) do
+        -- LOW_CAZADORSPALACE_SARCOPHAGUS_BEAM_007
+        -- END_HIGHHALLINTERIOR_DROPPODTARGET_VFX
         Osi.RemoveStatus(guid, "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX")
     end
 
     for _, index in pairs(spawns) do
         local helperObject = self.Helpers[index + 1]
         if helperObject then
-            Osi.ApplyStatus(helperObject, "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX", -1)
+            Osi.ApplyStatus(helperObject, "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX", time or -1)
         end
     end
 end

@@ -599,3 +599,47 @@ U.Osiris.On("TeleportedToCamp", 1, "after", function(uuid)
         Player.PickupAll()
     end
 end)
+
+Event.On("ScenarioEnemyKilled", function(scenario, enemy)
+    local nr = #scenario.KilledEnemies
+
+    local chanceFood = 1
+    if nr <= 6 then
+        chanceFood = 0.9
+    else
+        chanceFood = math.max(1, 10 - nr) / 10
+    end
+
+    if PersistentVars.Unlocked.LootMultiplier then
+        rolls = nr % 2 == 0 and 2 or 1
+    end
+
+    local loot = Item.GenerateSimpleLoot(rolls, chanceFood, scenario.LootRates)
+
+    local x, y, z = Osi.GetPosition(enemy.GUID)
+
+    Item.SpawnLoot(loot, x, y, z)
+end)
+
+Event.On("ScenarioEnded", function(scenario)
+    Player.Notify(__("Dropping loot."))
+
+    local map = scenario.Map
+
+    local lootMultiplier = 1
+    if PersistentVars.Unlocked.LootMultiplier then
+        lootMultiplier = 1.5
+    end
+
+    local rolls = scenario:KillScore() * lootMultiplier
+
+    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates)
+    L.Dump("Loot", loot, rolls, scenario.LootRates)
+
+    local x, y, z = map.Enter[1], map.Enter[2], map.Enter[3]
+    if Config.SpawnItemsAtPlayer then
+        x, y, z = Player.Pos()
+    end
+
+    Item.SpawnLoot(loot, x, y, z, true)
+end)
