@@ -217,8 +217,10 @@ end
 ---@return LibsChainable
 function M.Chainable(source)
     ---@class LibsChainable
-    ---@field After fun(func: fun(...: any): any, continueOnNil: boolean|nil): LibsChainable
-    ---@field Catch fun(func: fun(source: any, err: string)): LibsChainable
+    ---@field After fun(func: fun(...: any): any, ...: any): LibsChainable
+    ---@overload fun(self: LibsChainable, func: fun(source: any, ...: any), ...: any): LibsChainable
+    ---@field Catch fun(func: fun(err: string), ...: any): LibsChainable
+    ---@overload fun(self: LibsChainable, func: fun(source: any, err: string), ...: any): LibsChainable
     ---@field Source any
     local Chainable = {
         _IsChainable = true,
@@ -227,46 +229,90 @@ function M.Chainable(source)
         _Chain = {},
     }
 
-    function Chainable.After(func, continueOnNil)
-        assert(type(func) == "function", "Chainable.After(func) - function expected, got " .. type(func))
-        table.insert(Chainable._Chain, { func, continueOnNil })
+    local function inputToFunc(arg1, arg2, ...)
+        local selfPassed = false
+        if type(arg1) == "table" then
+            selfPassed = arg1._IsChainable
+            if not selfPassed then
+                return
+            end
+        end
+
+        local func = selfPassed and arg2 or arg1
+        if type(func) ~= "function" then
+            return
+        end
+
+        local args = { ... }
+        if not selfPassed then
+            table.insert(args, 1, arg2)
+        end
+
+        return function(self, ...)
+            local funcArgs = Utils.Table.Combine({ ... }, args)
+
+            if selfPassed then
+                return func(self.Source, table.unpack(funcArgs))
+            end
+
+            return func(table.unpack(funcArgs))
+        end
+    end
+
+    function Chainable.After(arg1, arg2, ...)
+        local func = inputToFunc(arg1, arg2, ...)
+        assert(type(func) == "function", "Chainable.After(func) - function expected, got " .. type(arg1))
+
+        table.insert(Chainable._Chain, func)
+
         return Chainable
     end
 
     local catch = nil
-    function Chainable.Catch(func)
-        assert(type(func) == "function", "Chainable.Catch(func) - function expected, got " .. type(func))
+    function Chainable.Catch(arg1, arg2, ...)
+        local func = inputToFunc(arg1, arg2, ...)
+        assert(type(func) == "function", "Chainable.Catch(func) - function expected, got " .. type(arg1))
+
         catch = func
+
         return Chainable
     end
 
     function Chainable.Throw(err)
         assert(type(catch) == "function", err)
-        catch(Chainable.Source, err)
+
+        return catch(Chainable, err)
+    end
+
+    local function stateIsChainable(state)
+        return type(state[1]) == "table" and state[1]._IsChainable
     end
 
     function Chainable.Begin(...)
         local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(Chainable._InitalInput))
 
-        for i, chain in ipairs(Chainable._Chain) do
-            local func, continueOnNil = table.unpack(chain)
+        -- for when calling :Begin(), the source is passed as the first argument
+        if stateIsChainable(state) then
+            state[1] = state[1].Source
+        end
 
+        for i, func in ipairs(Chainable._Chain) do
             local ok = xpcall(function()
-                state = Utils.Table.Pack(func(table.unpack(state)))
+                state = Utils.Table.Pack(func(Chainable, table.unpack(state)))
             end, function(err)
-                Chainable.Throw(err)
+                state = Chainable.Throw(err)
             end)
 
             if not ok then
                 break
             end
 
-            if not continueOnNil and state[1] == nil then
+            if state[1] == nil then
                 break
             end
 
             -- interrupt chain if a nested chainable is returned
-            if type(state[1]) == "table" and state[1]._IsChainable then
+            if stateIsChainable(state) then
                 ---@type Chainable
                 local nested = state[1]
 
@@ -284,6 +330,8 @@ function M.Chainable(source)
                 break
             end
         end
+
+        return state
     end
 
     return Chainable

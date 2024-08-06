@@ -1,7 +1,7 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
 Mod.Debug = true
-Mod.Dev = true
+Mod.Dev = false
 Mod.EnableRCE = true
 Mod.Prefix = "Endless Battle"
 
@@ -21,9 +21,10 @@ IO = Require("Hlib/IO")
 S = nil
 
 ---@type Constants
-C = Require("Hlib/Constants")
+local Constants = Require("Hlib/Constants")
 
-UT.Merge(C, {
+---@class MyConstants : Constants
+C = {
     ModUUID = Mod.UUID,
     EnemyFaction = "64321d50-d516-b1b2-cfac-2eb773de1ff6",
     NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral
@@ -42,7 +43,9 @@ UT.Merge(C, {
         "epic",
         "legendary",
     },
-})
+    RoguelikeScenario = "roguelike",
+}
+C = UT.Merge(Constants, C)
 
 Mod.PersistentVarsTemplate = {
     Active = false,
@@ -50,6 +53,7 @@ Mod.PersistentVarsTemplate = {
     SpawnedItems = {},
     Scenario = S,
     RogueScore = 0,
+    GUIOpen = false,
 }
 
 ---@type GameState

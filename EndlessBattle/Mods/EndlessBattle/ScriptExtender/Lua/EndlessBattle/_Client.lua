@@ -9,12 +9,25 @@ Event.On("ToggleDebug", function(bool)
 end)
 
 State = {}
-Net.On("GetState", function(event)
-    State = event.Payload or {}
-    Event.Trigger("StateChange", State)
-end)
-Net.On("PlayerNotify", function()
-    Net.Send("GetState")
-end)
+Net.On(
+    "GetState",
+    Async.Debounce(10, function(event)
+        State = event.Payload or {}
+        Event.Trigger("StateChange", State)
+    end)
+)
+Net.On(
+    "PlayerNotify",
+    Async.Throttle(1000, function()
+        Net.Send("GetState")
+    end)
+)
 
-Require("EndlessBattle/GUI/_Init")
+Net.On(
+    "OpenGUI",
+    Async.Throttle(1000, function()
+        -- only load client code when needed
+        Require("EndlessBattle/GUI/_Init")
+        OpenWindow()
+    end)
+)

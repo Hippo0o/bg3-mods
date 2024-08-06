@@ -45,6 +45,7 @@ function Config.Main(tab)
     end)
 
     root:AddSeparator()
+
     local status = root:AddText("")
     status:SetColor("Text", { 0.4, 1, 0.4, 1 })
     local clearStatus = Async.Debounce(2000, function(text)
@@ -59,6 +60,7 @@ function Config.Main(tab)
         clearStatus()
     end
 
+    root:AddSeparator()
     local btn = root:AddButton(__("Persist Config"))
     btn.OnClick = function()
         showStatus("Persisting config...")
@@ -109,4 +111,17 @@ function Config.Main(tab)
         c4.Checked = config.ForceEnterCombat
         c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
     end)
+
+    root:AddSeparator()
+    local btn = root:AddButton(__("Reset Templates"))
+    btn.OnClick = function()
+        showStatus("Resetting templates...")
+        Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true }).After(function(event)
+            Net.Send("GetTemplates")
+            Net.Send("GetSelection")
+
+            showStatus("Templates reset", true)
+        end)
+    end
+    root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true
 end

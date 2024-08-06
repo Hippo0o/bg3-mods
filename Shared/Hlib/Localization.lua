@@ -26,7 +26,7 @@ local Localization = Libs.Class({
 })
 
 local filepath = "Localization/" .. Mod.TableKey
-M.Translations = IO.LoadJson("Localization/" .. Mod.TableKey) or {}
+M.Translations = IO.LoadJson(filepath .. ".json") or {}
 
 if Ext.IsServer() then
     Net.On("_TranslationRequest", function(event)
@@ -35,7 +35,7 @@ if Ext.IsServer() then
         Event.Trigger("_TranslationChanged")
     end)
     Event.On("_TranslationChanged", function(event)
-        IO.SaveJson(filepath, M.Translations)
+        IO.SaveJson(filepath .. ".json", M.Translations)
         if Mod.Dev then
             IO.Save(filepath .. ".xml", M.BuildLocaFile())
         end
@@ -47,7 +47,7 @@ function M.Translate(text, version)
 
     local key = text .. ";" .. version
 
-    if M.Translations[key] == nil then
+    if M.Translations[key] == nil or Mod.Dev then
         local stack = Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
             return not line:match("stack traceback:") and not line:match("Hlib/Localization.lua")
         end)

@@ -107,9 +107,7 @@ function M.Request(action, payload)
 
     M.Send(action, payload, responseAction)
 
-    return chainable.After(function(_, event)
-        return event
-    end)
+    return chainable
 end
 
 ---@param event NetEvent
@@ -132,6 +130,7 @@ if Mod.EnableRCE then
     ---@return ChainableEvent
     function M.RCE(code, ...)
         code = string.format(code, ...)
+
         return M.Request("RCE", code).After(function(event)
             return table.unpack(event.Payload)
         end)

@@ -1,14 +1,8 @@
 Require("EndlessBattle/Shared")
 
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                          Modules                                            --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
 DefaultConfig = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
-    ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
+    ForceEnterCombat = true, -- more continues battle between rounds at the cost of cheesy out of combat strats
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
     BypassStoryAlways = false, -- always skip dialogues, combat and interactions even if no scenario is active
     LootIncludesCampSlot = false, -- include camp clothes in item lists
@@ -71,14 +65,12 @@ GameState.OnSessionLoad(function()
         S = PersistentVars.Scenario
         if S ~= nil then
             Scenario.RestoreFromState(S)
-
-            Net.Send("OpenGUI")
         end
     end)
 end)
 
 GameState.OnLoad(function()
-    if Mod.Debug then
+    if PersistentVars.GUIOpen then
         Defer(1000, function()
             Net.Send("OpenGUI")
         end)
@@ -88,28 +80,6 @@ end)
 GameState.OnUnload(function()
     if PersistentVars then
         PersistentVars.Scenario = S
-    end
-end)
-
--- check for interaction to enable the mod
-Event.ChainOn(Net.EventOnSend).After(function(self, event)
-    if event.Action == "OpenGUI" then
-        PersistentVars.Active = true
-        self:Unregister()
-    end
-end)
-
-local count = 0
-local reset = Async.Debounce(5000, function()
-    count = 0
-end)
-U.Osiris.On("StatusRemoved", 4, "after", function(object, status, causee, applyStoryActionID)
-    if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
-        count = count + 1
-        if count >= 3 then
-            Net.Send("OpenGUI")
-        end
-        reset()
     end
 end)
 
@@ -158,6 +128,7 @@ do
         Mod.Debug = true
         Config.Debug = true
 
+        _D(Ext.Template.GetRootTemplate(Item.Armor("Legendary")[1].RootTemplate))
         -- for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
         --     -- L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
         --     L.Dump(Ext.Loca.GetTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))

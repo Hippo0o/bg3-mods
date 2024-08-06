@@ -39,18 +39,26 @@ function Creation.Main(tab)
 
         ping.OnClick = function()
             local x, y, z = table.unpack(US.Split(pi.Text, ","))
-            x = x:match("%d+")
-            y = y:match("%d+")
-            z = z:match("%d+")
-            Net.RCE('Osi.RequestPing(%d, %d, %d, "", "")', x, y, z)
+            x = x:match("[-]?%d+")
+            y = y:match("[-]?%d+")
+            z = z:match("[-]?%d+")
+            Net.RCE('Osi.RequestPing(%d, %d, %d, "", "")', x, y, z).After(function(ok, err)
+                if not ok then
+                    Event.Trigger("Error", err)
+                end
+            end)
         end
 
         tp.OnClick = function()
             local x, y, z = table.unpack(US.Split(pi.Text, ","))
-            x = x:match("%d+")
-            y = y:match("%d+")
-            z = z:match("%d+")
-            Net.RCE('Osi.TeleportToPosition(GetHostCharacter(), %d, %d, %d)', x, y, z)
+            x = x:match("[-]?%d+")
+            y = y:match("[-]?%d+")
+            z = z:match("[-]?%d+")
+            Net.RCE("Osi.TeleportToPosition(GetHostCharacter(), %d, %d, %d)", x, y, z).After(function(ok, err)
+                if not ok then
+                    Event.Trigger("Error", err)
+                end
+            end)
         end
     end
 
@@ -68,7 +76,11 @@ function Creation.Main(tab)
                     local label = waypoint:gsub(US.Escape(U.UUID.GetGUID(waypoint)), short)
                     local b = wp:AddButton(label)
                     b.OnClick = function()
-                        Net.RCE("TeleportToWaypoint(GetHostCharacter(), '%s')", waypoint)
+                        Net.RCE("TeleportToWaypoint(GetHostCharacter(), '%s')", waypoint).After(function(ok, err)
+                            if not ok then
+                                Event.Trigger("Error", err)
+                            end
+                        end)
                     end
                 end
             end
