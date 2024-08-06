@@ -664,7 +664,7 @@ function Scenario.MarkSpawns(round)
         table.insert(spawns, posIndex)
     end
 
-    s.Map:VFXSpawns(spawns, 3)
+    s.Map:VFXSpawns(spawns, 16)
 end
 
 function Scenario.ForwardCombat()

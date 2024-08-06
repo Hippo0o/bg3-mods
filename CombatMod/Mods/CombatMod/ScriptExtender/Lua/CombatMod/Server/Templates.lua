@@ -70,6 +70,7 @@ function Templates.GenerateEnemyLsx()
     local all = {}
     local new = {}
     for _, template in pairs(External.Templates.GetEnemies()) do
+        local add = {}
         local newId = U.UUID.Random()
         table.insert(add, string.format([[<attribute id="MapKey" type="FixedString" value="%s" />]], newId))
         table.insert(add, string.format([[<attribute id="ParentTemplateId" type="FixedString" value="%s" />]], template.TemplateId))

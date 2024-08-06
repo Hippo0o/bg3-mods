@@ -244,7 +244,7 @@ Net.On("PingSpawns", function(event)
         return
     end
 
-    map:VFXSpawns(UT.Keys(map.Spawns), 3)
+    map:VFXSpawns(UT.Keys(map.Spawns), 16)
 
     if Scenario.Current() then
         Scenario.MarkSpawns(Scenario.Current().Round + 1)

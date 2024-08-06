@@ -184,7 +184,7 @@ function StoryBypass.ClearSurfaces(guid, strength)
                 Osi.TeleportToPosition(guid, nx, y, nz)
                 Osi.UseSpell(guid, "TOT_Zone_Clear", guid)
                 -- Osi.RequestPing(nx, ny, nz, "", character)
-            end)
+            end):Catch(function() end)
         end
     end
 
