@@ -1,5 +1,5 @@
 Require("Shared/_Init")
-Require("MyMod/_Init")
+Require("JustCombat/_Init")
 
 Require("Shared/Mod").PreparePersistentVars()
 

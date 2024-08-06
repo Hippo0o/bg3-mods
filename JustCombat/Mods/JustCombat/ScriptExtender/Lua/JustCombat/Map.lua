@@ -1,6 +1,6 @@
 ---@diagnostic disable: undefined-global
 
-local maps = Require("MyMod/Templates/Maps.lua")
+local maps = Require("JustCombat/Templates/Maps.lua")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
