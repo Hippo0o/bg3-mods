@@ -62,6 +62,9 @@ Require("CombatMod/Server/External")
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)
 
+External.File.ExportIfNeeded("LootRates", C.LootRates)
+External.LoadLootRates()
+
 Intro = {}
 Player = {}
 
@@ -407,6 +410,10 @@ do
     function Commands.Reload()
         if External.LoadConfig() then
             L.Info("Config reloaded.")
+        end
+
+        if External.LoadLootRates() then
+            L.Info("Loot rates reloaded.")
         end
 
         local m = External.Templates.GetMaps()

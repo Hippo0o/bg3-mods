@@ -16,7 +16,7 @@ local function filePath(name, dir)
         name = name .. ".json"
     end
 
-    if US.Contains(name, { "Enemies", "Maps", "Scenarios" }) then
+    if US.Contains(name, { "Enemies", "Maps", "Scenarios", "LootRates" }) then
         name = string.format("v%d.%d/%s", Mod.Version.Major, Mod.Version.Minor, name)
     end
 
@@ -105,6 +105,32 @@ External.Validators.Map = tt({
     Author = { "nil", "string" },
 })
 
+local lootRatesType = tt({
+    Objects = tt({
+        Common = { "nil", "number" },
+        Uncommon = { "nil", "number" },
+        Rare = { "nil", "number" },
+        VeryRare = { "nil", "number" },
+        Legendary = { "nil", "number" },
+    }),
+    Armor = tt({
+        Common = { "nil", "number" },
+        Uncommon = { "nil", "number" },
+        Rare = { "nil", "number" },
+        VeryRare = { "nil", "number" },
+        Legendary = { "nil", "number" },
+    }),
+    Weapons = tt({
+        Common = { "nil", "number" },
+        Uncommon = { "nil", "number" },
+        Rare = { "nil", "number" },
+        VeryRare = { "nil", "number" },
+        Legendary = { "nil", "number" },
+    }),
+})
+
+External.Validators.LootRates = lootRatesType
+
 local function validateTimelineEntry(value)
     if type(value) == "string" and Enemy.Find(value) ~= nil then
         return true
@@ -124,29 +150,7 @@ External.Validators.Scenario = tt({
     Map = { "nil", "string" },
     Loot = {
         "nil",
-        tt({
-            Objects = tt({
-                Common = { "nil", "number" },
-                Uncommon = { "nil", "number" },
-                Rare = { "nil", "number" },
-                VeryRare = { "nil", "number" },
-                Legendary = { "nil", "number" },
-            }),
-            Armor = tt({
-                Common = { "nil", "number" },
-                Uncommon = { "nil", "number" },
-                Rare = { "nil", "number" },
-                VeryRare = { "nil", "number" },
-                Legendary = { "nil", "number" },
-            }),
-            Weapons = tt({
-                Common = { "nil", "number" },
-                Uncommon = { "nil", "number" },
-                Rare = { "nil", "number" },
-                VeryRare = { "nil", "number" },
-                Legendary = { "nil", "number" },
-            }),
-        }),
+        lootRatesType,
     },
 })
 External.Validators.Unlock = tt({
@@ -304,6 +308,27 @@ function External.Templates.GetUnlocks(defaults)
     end
 
     return UT.Values(data)
+end
+
+local originalLootRates = UT.DeepClone(C.LootRates)
+function External.ExportLootRates()
+    External.File.Export("LootRates", originalLootRates)
+end
+function External.LoadLootRates()
+    local data = External.File.Import("LootRates") or {}
+
+    if not validateAndError(External.Validators.LootRates, data, "LootRates") then
+        return
+    end
+
+    local orig = UT.DeepClone(C.LootRates)
+    local ok = xpcall(function()
+        C.LootRates = UT.Merge(C.LootRates, data)
+    end, function(e)
+        C.LootRates = originalLootRates
+    end)
+
+    return ok
 end
 
 function External.LoadConfig()

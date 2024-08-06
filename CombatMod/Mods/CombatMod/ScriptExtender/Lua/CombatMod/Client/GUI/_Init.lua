@@ -29,8 +29,11 @@ window.Open = false
 local function open()
     window.Visible = true
     if not window.Open then
+        L.Info("Window opened.")
         Event.Trigger("WindowOpened")
+        Net.Send("WindowOpened")
     end
+
     window.Open = true
 end
 
@@ -38,6 +41,7 @@ local function close()
     window.Visible = false
     if window.Open then
         Event.Trigger("WindowClosed")
+        Net.Send("WindowClosed")
     end
     window.Open = false
 end
@@ -108,17 +112,6 @@ end, "ToggleDebug")
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
-
-Event.On("WindowClosed", function()
-    window.Visible = false
-    Net.Send("WindowClosed")
-end)
-
-Event.On("WindowOpened", function()
-    window.Visible = true
-    Net.Send("WindowOpened")
-end)
-
 
 do -- auto hide window
     local windowVisible = Debounce(1000, function(bool)

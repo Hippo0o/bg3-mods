@@ -30,6 +30,8 @@ function Intro.AskTutSkip()
         end)
         :After(function()
             GameState.OnLoad(function()
+                Net.Send("OpenGUI")
+
                 Defer(3000, function()
                     Osi.PROC_GLO_Jergal_MoveToCamp()
 
@@ -82,7 +84,6 @@ function Intro.AskOnboarding()
             return Intro.AskEnableRogueMode()
         end)
         :After(function()
-            Net.Send("OpenGUI")
             if Player.Region() == C.Regions.Act0 then
                 Intro.AskTutSkip()
             end
