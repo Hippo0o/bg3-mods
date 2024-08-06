@@ -99,7 +99,7 @@ GameState.OnUnloading(function()
     end
 end)
 
-Net.On("GibList", function(self, event)
+Net.On("GibList", function(event)
     local list = {}
     if event.Payload.id == "scenarios" then
         list = UT.Map(Scenario.GetTemplates(), function(v)
