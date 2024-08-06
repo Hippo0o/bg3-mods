@@ -110,22 +110,10 @@ function Unlock.CalculateReward(scenario)
         rewardMulti = rewardMulti * 1.2
     end
 
-    local reward = 0
-    for _, e in pairs(scenario.KilledEnemies) do
-        local _, value = UT.Find(C.EnemyTier, function(tier)
-            return tier == e.Tier
-        end)
-        if value == nil then
-            L.Error("Invalid tier for enemy", e.Tier, e.Name)
-            value = 1
-        end
-        reward = reward + value
-    end
-    local gained = math.ceil(reward * rewardMulti)
+    local gained = math.floor(scenario:KillScore() * rewardMulti)
 
     local prev = PersistentVars.Currency or 0
     PersistentVars.Currency = prev + gained
-    Osi.AddGold(Player.Host(), gained * 10)
 
     Player.Notify(__("Your Currency increased: %d -> %d!", prev, PersistentVars.Currency))
 end

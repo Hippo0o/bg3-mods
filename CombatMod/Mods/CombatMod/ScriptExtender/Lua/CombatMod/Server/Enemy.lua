@@ -199,6 +199,27 @@ function Object:ModifyTemplate()
     end)
 end
 
+function Object:ModifyExperience(additonal)
+    local entity = self:Entity()
+
+    local expMod = (Config.ExpMultiplier or 1) * 2
+    if self.IsBoss then
+        expMod = expMod * 2
+    end
+
+    if PersistentVars.Unlocked.ExpMultiplier then
+        expMod = expMod * 2
+    end
+
+    local devider = math.max(1, #GU.DB.GetPlayers())
+
+    local exp = entity.BaseHp.Vitality
+        * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
+        * expMod
+
+    entity.ServerExperienceGaveOut.Experience = math.floor(exp / devider)
+end
+
 function Object:Modify(keepFaction)
     if not self:IsSpawned() or Osi.IsDead(self.GUID) == 1 then
         return
@@ -217,24 +238,7 @@ function Object:Modify(keepFaction)
     RetryUntil(function()
         return self:Entity():IsAlive()
     end).After(function()
-        local entity = self:Entity()
-
-        local expMod = (Config.ExpMultiplier or 1) * 2
-        if self.IsBoss then
-            expMod = expMod * 2
-        end
-
-        if PersistentVars.Unlocked.ExpMultiplier then
-            expMod = expMod * 2
-        end
-
-        local devider = math.max(1, #GU.DB.GetPlayers())
-
-        local exp = entity.BaseHp.Vitality
-            * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
-            * expMod
-
-        entity.ServerExperienceGaveOut.Experience = math.floor(exp / devider)
+        self:ModifyExperience()
 
         L.Debug(
             "Enemy modified: ",

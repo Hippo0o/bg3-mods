@@ -73,6 +73,24 @@ function Object:IsRunning()
     return #self.SpawnedEnemies > 0 or self:HasMoreRounds()
 end
 
+function Object:KillScore()
+    local score = 0
+    for _, e in pairs(self.KilledEnemies) do
+        local _, value = UT.Find(C.EnemyTier, function(tier)
+            return tier == e.Tier
+        end)
+
+        if value == nil then
+            L.Error("Invalid tier for enemy", e.Tier, e.Name)
+            value = 1
+        end
+
+        score = score + value
+    end
+
+    return score
+end
+
 ---@return Scenario
 local function Current()
     assert(S ~= nil, "Scenario not started.")
@@ -106,33 +124,26 @@ function Action.CalculateLoot()
         lootMultiplier = 1.5
     end
 
-    local rolls = 0
-    local fixedRolls = 0
-
-    for _, e in pairs(scenario.KilledEnemies) do
-        -- each kill gets an object/weapon/armor roll
-        fixedRolls = fixedRolls + 1 * lootMultiplier
-
-        for k, v in ipairs(C.EnemyTier) do
-            if e.Tier == v then
-                -- k is higher for higher tier
-                rolls = rolls + k * lootMultiplier
-                break
-            end
-        end
-    end
+    local rolls = scenario:KillScore() * lootMultiplier
+    local fixedRolls = UT.Size(scenario.KilledEnemies) * lootMultiplier
 
     local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates, math.floor(fixedRolls))
     L.Dump("Loot", loot, rolls, fixedRolls, scenario.LootRates)
     return loot
 end
 
-function Action.SpawnLoot()
+function Action.GiveReward()
     Player.Notify(__("Dropping loot."))
 
     local map = Current().Map
     local loot = Action.CalculateLoot()
     Event.Trigger("ScenarioLoot", Current(), loot)
+
+    local reward = Current():KillScore()
+    Osi.AddGold(Player.Host(), reward * 10)
+    for _, p in pairs(GU.DB.GetPlayers()) do
+        Osi.AddExplorationExperience(p, 100 + reward * 10)
+    end
 
     map:SpawnLoot(loot)
 end
@@ -270,7 +281,7 @@ end
 function Action.EnemyRemoved()
     local s = Current()
 
-    Action.CheckEnded()
+    Scenario.CheckEnded()
 
     if #s.SpawnedEnemies == 0 and s:HasMoreRounds() then
         Scenario.ResumeCombat()
@@ -322,18 +333,6 @@ function Action.Failsafe(enemy)
                     end
                 end)
             end
-        end
-    end
-end
-
-function Action.CheckEnded()
-    local s = Current()
-    if not s:HasMoreRounds() then
-        if #s.SpawnedEnemies == 0 then
-            Player.Notify(__("All enemies are dead."))
-            Scenario.End()
-        else
-            Player.Notify(__("%d enemies left.", #s.SpawnedEnemies), true)
         end
     end
 end
@@ -500,7 +499,8 @@ end
 function Scenario.End()
     local s = Current()
     Event.Trigger("ScenarioEnded", s)
-    Action.SpawnLoot()
+
+    Action.GiveReward()
 
     PersistentVars.LastScenario = S
     S = nil
@@ -523,6 +523,18 @@ Scenario.Teleport = Async.Throttle(3000, function()
         Map.TeleportTo(s.Map, character)
     end
 end)
+
+function Scenario.CheckEnded()
+    local s = Current()
+    if not s:HasMoreRounds() then
+        if #s.SpawnedEnemies == 0 then
+            Player.Notify(__("All enemies are dead."))
+            Scenario.End()
+        else
+            Player.Notify(__("%d enemies left.", #s.SpawnedEnemies), true)
+        end
+    end
+end
 
 function Scenario.ResumeCombat()
     local s = Current()

@@ -219,7 +219,6 @@ function Item.Objects(rarity, forCombat)
                     (cat:match("^Food") and name:match("^CONS_"))
                     -- or cat:match("^Drink")
                     or cat:match("^Ingredient")
-                    or cat == "PotionHealing"
                     -- alchemy items
                     -- or name:match("^OBJ_Crystal_")
                     or name:match("^CONS_Mushrooms_")
@@ -451,7 +450,6 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
             sum = sum + rate
             add(fixed, r, rate)
         end
-        add(fixed, "Nothing", math.ceil(sum / 2)) -- make a chance to get nothing
     end
     for i = 1, fixedRolls do
         do

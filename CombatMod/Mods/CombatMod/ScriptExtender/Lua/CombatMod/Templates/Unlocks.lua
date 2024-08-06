@@ -184,13 +184,13 @@ local ngPlus = {
         Character = false,
         Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
-            GameMode.ExpLock.Pause()
+            StoryBypass.ExpLock.Pause()
 
             for _, p in pairs(GU.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
             end
 
-            Defer(1000, GameMode.ExpLock.Resume)
+            Defer(1000, StoryBypass.ExpLock.Resume)
         end,
     },
     {
@@ -278,13 +278,13 @@ return UT.Combine(
             Amount = 4,
             Character = false,
             OnBuy = function(self, character)
-                GameMode.ExpLock.Pause()
+                StoryBypass.ExpLock.Pause()
 
                 for _, p in pairs(GU.DB.GetPlayers()) do
                     Osi.AddExplorationExperience(p, 1000)
                 end
 
-                Defer(1000, GameMode.ExpLock.Resume)
+                Defer(1000, StoryBypass.ExpLock.Resume)
             end,
         },
         {

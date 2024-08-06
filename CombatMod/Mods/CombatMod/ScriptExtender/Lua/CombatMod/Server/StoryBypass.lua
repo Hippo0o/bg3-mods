@@ -54,6 +54,8 @@ function StoryBypass.RemoveAllEntities()
     end
     L.Info("Clear All Entities", "Removed " .. tostring(#toRemove) .. " entities")
 
+    table.insert(PersistentVars.RegionsCleared, Player.Region())
+
     return toRemove
 end
 
@@ -127,6 +129,101 @@ function StoryBypass.ClearArea(character)
     -- Osi.Resurrect(v.Guid)
     -- Osi.SetHitpointsPercentage(v.Guid, 100)
     -- L.Dump(Osi.IsDestroyed(v.Guid))
+end
+
+do -- EXP Lock
+    StoryBypass.ExpLock = {}
+
+    local entityData = {}
+    local function snapEntity(entity)
+        if entity.Experience == nil then
+            return
+        end
+
+        entityData[entity.Uuid.EntityUuid] = {
+            exp = UT.Clean(entity.Experience),
+            level = entity.EocLevel.Level,
+            avail = entity.AvailableLevel.Level,
+        }
+    end
+
+    function StoryBypass.ExpLock.SnapshotEntitiesExp()
+        entityData = {}
+        for i, e in pairs(GE.GetParty()) do
+            snapEntity(e)
+        end
+    end
+
+    local paused = false
+    function StoryBypass.ExpLock.Pause()
+        paused = true
+    end
+    local debouncedSnap = Debounce(100, StoryBypass.ExpLock.SnapshotEntitiesExp)
+
+    function StoryBypass.ExpLock.Resume()
+        paused = false
+        StoryBypass.ExpLock.SnapshotEntitiesExp()
+    end
+
+    local entityListener = nil
+    local function subscribeEntitiesExp()
+        if not entityListener then
+            StoryBypass.ExpLock.SnapshotEntitiesExp()
+            entityListener = Ext.Entity.Subscribe(
+                "Experience",
+                ifBypassStory(function(e)
+                    if paused or not e.Experience then
+                        return
+                    end
+
+                    local data = entityData[e.Uuid.EntityUuid]
+
+                    if data then
+                        local exp = data.exp
+                        local level = data.level
+                        local avail = data.avail
+                        if e.Experience.CurrentLevelExperience == exp.CurrentLevelExperience then
+                            L.Debug("Experience unchanged", e.Uuid.EntityUuid)
+                            return
+                        end
+
+                        e.EocLevel.Level = level
+                        e.AvailableLevel.Level = avail
+
+                        e.Experience.CurrentLevelExperience = exp.CurrentLevelExperience
+                        e.Experience.TotalExperience = exp.TotalExperience
+                        e.Experience.NextLevelExperience = exp.NextLevelExperience
+                        e.Experience.field_28 = exp.field_28 -- dunno
+                        e.Experience.SomeExperience = exp.SomeExperience
+
+                        e:Replicate("EocLevel")
+                        e:Replicate("AvailableLevel")
+                        e:Replicate("Experience")
+                        L.Debug("Experience restored", e.Uuid.EntityUuid)
+                        return
+                    end
+
+                    debouncedSnap()
+                end)
+            )
+        end
+    end
+    local function unsubscribeEntitiesExp()
+        if entityListener then
+            Ext.Entity.Unsubscribe(entityListener)
+            entityListener = nil
+        end
+    end
+
+    Event.On("ModActive", subscribeEntitiesExp)
+    GameState.OnLoad(IfActive(subscribeEntitiesExp))
+    GameState.OnUnload(unsubscribeEntitiesExp)
+
+    Event.On("ScenarioCombatStarted", StoryBypass.ExpLock.Pause)
+    Event.On("ScenarioEnded", function()
+        Defer(1000, StoryBypass.ExpLock.Resume)
+    end)
+    Event.On("ScenarioStopped", StoryBypass.ExpLock.Resume)
 end
 
 -------------------------------------------------------------------------------------------------
@@ -383,7 +480,6 @@ GameState.OnLoad(ifBypassStory(function()
 
         Schedule(function()
             StoryBypass.RemoveAllEntities()
-            table.insert(PersistentVars.RegionsCleared, Player.Region())
         end)
     end)
 end))
