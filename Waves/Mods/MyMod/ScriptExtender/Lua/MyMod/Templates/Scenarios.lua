@@ -27,7 +27,19 @@ local defaultLoot = {
 
 return {
     {
-        Name = "Scenario 1",
+        Name = "level 1",
+
+        -- Spawns per Round
+        Timeline = {
+            { low },
+            { low },
+            { low },
+        },
+
+        Loot = defaultLoot,
+    },
+    {
+        Name = "level 1 - 3",
 
         -- Spawns per Round
         Timeline = {
@@ -38,11 +50,24 @@ return {
             { low },
         },
 
-        -- Amount of enemies decide the amount of loot
         Loot = defaultLoot,
     },
     {
-        Name = "Scenario 2",
+        Name = "level 3 - 5",
+
+        -- Spawns per Round
+        Timeline = {
+            { low, low },
+            { low, low },
+            {},
+            { low, low, low },
+            { low },
+        },
+
+        Loot = defaultLoot,
+    },
+    {
+        Name = "level 5 - 7",
 
         Timeline = {
             { low, low, low },

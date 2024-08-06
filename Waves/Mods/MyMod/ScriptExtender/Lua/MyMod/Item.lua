@@ -121,29 +121,38 @@ function Item.Create(name, type, fake)
     return Object.New(name, type, fake)
 end
 
-function Item.Objects(rarity)
+function Item.Objects(rarity, forCombat)
     local items = UT.Filter(objects, function(name)
         local stat = Ext.Stats.Get(name)
         local cat = stat.ObjectCategory
-        if
-            not (
-                cat:match("Arrow")
-                or cat:match("Food")
-                or cat:match("Drink")
-                or cat:match("MagicScroll")
-                or cat:match("Potion")
-                or cat:match("Poison")
-                or cat:match("Throwable")
-                or cat:match("Ingredient")
-                -- alchemy items
-                -- or name:match("^OBJ_Crystal_")
-                or name:match("^CONS_Mushrooms_")
-                or name:match("^CONS_Herbs_")
-                or name:match("^BOOK_Alchemy_") -- TODO add books and such
 
-            )
-        then
-            return false
+        if forCombat then
+            if
+                not (
+                    cat:match("Arrow")
+                    or cat:match("Potion")
+                    or cat:match("MagicScroll")
+                    or cat:match("Poison")
+                    or cat:match("Throwable")
+                )
+            then
+                return false
+            end
+        else
+            if
+                not (
+                    cat:match("Food")
+                    or cat:match("Drink")
+                    or cat:match("Ingredient")
+                    -- alchemy items
+                    -- or name:match("^OBJ_Crystal_")
+                    or name:match("^CONS_Mushrooms_")
+                    or name:match("^CONS_Herbs_")
+                    or name:match("^BOOK_Alchemy_") -- TODO add books and such
+                )
+            then
+                return false
+            end
         end
 
         if stat.Rarity == "" or stat.RootTemplate == "" then
@@ -236,7 +245,7 @@ function Item.Weapons(rarity)
 end
 
 function Item.IsOwned(obj)
-    return Osi.GetInventoryOwner(obj) ~= nil or Osi.GetFirstInventoryOwnerCharacter(obj) ~= nil 
+    return Osi.GetInventoryOwner(obj) ~= nil or Osi.GetFirstInventoryOwnerCharacter(obj) ~= nil
 end
 
 -- not used

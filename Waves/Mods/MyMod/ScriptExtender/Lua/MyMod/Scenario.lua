@@ -123,12 +123,14 @@ function Action.CalculateLoot()
         for i = 1, bonusRolls do
             do
                 local rarity = fixed[U.Random(#fixed)]
-                local items = Item.Objects(rarity)
+                local items = Item.Objects(rarity, false)
+
                 L.Debug("Rolling fixed loot items:", #items, "Object", rarity)
                 if #items > 0 then
                     table.insert(loot, items[U.Random(#items)])
                 end
             end
+
             local items = {}
             local fail = 0
             local bonusCategory = nil
@@ -152,13 +154,14 @@ function Action.CalculateLoot()
 
                 rarity = bonus[U.Random(#bonus)]
                 if bonusCategory == "Object" then
-                    items = Item.Objects(rarity)
+                    items = Item.Objects(rarity, true)
                 elseif bonusCategory == "Weapon" then
                     items = Item.Weapons(rarity)
                 elseif bonusCategory == "Armor" then
                     items = Item.Armor(rarity)
                 end
             end
+
             L.Debug("Rolling bonus loot items:", #items, bonusCategory, rarity)
             if #items > 0 then
                 table.insert(loot, items[U.Random(#items)])
@@ -221,7 +224,7 @@ function Action.SpawnRound()
                 retries = 3,
                 interval = 500,
                 success = function()
-                    if C.ForceEnterCombat then
+                    if C.ForceEnterCombat or Player.InCombat() then
                         Scenario.CombatSpawned(e)
                     end
                 end,

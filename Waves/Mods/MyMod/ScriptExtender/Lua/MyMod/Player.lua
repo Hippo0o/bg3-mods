@@ -16,7 +16,7 @@ function Player.Pos()
     return Osi.GetPosition(Player.Host())
 end
 
----@return string GUID
+---@return string|nil GUID
 function Player.InCombat()
     return UT.Find(UE.GetPlayers(), function(guid)
         return Osi.IsInCombat(guid) == 1

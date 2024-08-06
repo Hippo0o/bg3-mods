@@ -283,8 +283,7 @@ do
     function Commands.Spawn(guid)
         local x, y, z = Player.Pos()
 
-        local e = Enemy.SpawnNamed(guid, x, y, z)
-        -- local e = Enemy.SpawnTemplate(guid, x, y, z)
+        local e = Enemy.SpawnTemplate(guid, x, y, z)
         if e == nil then
             L.Error("Enemy not found.", guid)
             return
