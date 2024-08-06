@@ -1,0 +1,5 @@
+{
+    "RequiredVersion": 14,
+    "ModTable": "MyMod",
+    "FeatureFlags": ["Lua", "Osiris"]
+}
