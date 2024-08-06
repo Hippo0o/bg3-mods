@@ -94,7 +94,7 @@ end
 ---@param version number|nil
 ---@return string
 function M.GenerateHandle(str, version)
-    local handle = "h" .. Utils.UUID.FromString(str):gsub("-", "g") .. (version and ";" .. version or "")
+    local handle = "h" .. Utils.UUID.FromString(str, version):gsub("-", "g")
 
     if Mod.Dev and M.Get(handle) ~= "" and M.Get(handle) ~= str then
         Utils.Log.Debug("Handle translated: ", handle, str, M.Get(handle))
@@ -129,8 +129,8 @@ function M.BuildLocaFile()
 
     local entries = {}
     for text, translation in pairs(M.Translations) do
-        local handle = translation.Handle:gsub(";%d+$", "")
-        table.insert(entries, string.format(xmlEntry, translation.Stack, handle, translation.Version, translation.Text))
+        local handle = translation.Handle:gsub(";%d+$", "") -- handle should not have a version
+        table.insert(entries, string.format(xmlEntry, translation.Stack, handle, 1, translation.Text))
     end
 
     local loca = string.format(xmlWrap, table.concat(entries, "\n"))
