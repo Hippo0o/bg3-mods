@@ -261,9 +261,17 @@ Net.On("BuyUnlock", function(event)
         return
     end
 
-    unlock:Buy(event.Payload.Character or event:Character())
+    local character = event.Payload.Character or event:Character()
+
+    unlock:Buy(character)
     PersistentVars.Currency = PersistentVars.Currency - unlock.Cost
+
     soundSuccess()
+
+    Osi.ApplyStatus(event:Character(), "WAR_GODS_BLESSING", 1)
+    if unlock.Character then
+        Osi.ApplyStatus(character, "WAR_GODS_BLESSING", 1)
+    end
 
     Net.Respond(event, { true, PersistentVars.Currency })
 end)

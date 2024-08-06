@@ -348,8 +348,9 @@ function External.Templates.GetUnlocks()
     return UT.Values(data)
 end
 
-function External.Templates.GetItemFilters()
-    local data = Templates.GetItemFilters()
+function External.Templates.GetItemFilters(user)
+    local data = user and { Names = {}, Mods = {} } or Templates.GetItemFilters()
+
     local file = External.File.Import("ItemFilters")
 
     if file and validateAndError(External.Validators.ItemFilter, file, "LoadItemFilters") then
@@ -357,9 +358,11 @@ function External.Templates.GetItemFilters()
         UT.Combine(data.Mods, file.Mods)
     end
 
-    for _, added in ipairs(addedItemFilters) do
-        UT.Combine(data.Names, added.Names)
-        UT.Combine(data.Mods, added.Mods)
+    if not user then
+        for _, added in ipairs(addedItemFilters) do
+            UT.Combine(data.Names, added.Names)
+            UT.Combine(data.Mods, added.Mods)
+        end
     end
 
     return UT.DeepClone(data)

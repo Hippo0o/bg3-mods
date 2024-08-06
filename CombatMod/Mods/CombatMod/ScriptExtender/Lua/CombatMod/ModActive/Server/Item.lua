@@ -2,16 +2,9 @@ local weapons = nil
 local armor = nil
 local objects = nil
 local function loadItems()
-    if Ext.Mod.IsModLoaded(C.ModUUID) then
-        weapons = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Weapon")
-        armor = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Armor")
-        objects = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Object")
-    else
-        L.Debug("Mod not loaded. Using all items.")
-        weapons = Ext.Stats.GetStats("Weapon")
-        armor = Ext.Stats.GetStats("Armor")
-        objects = Ext.Stats.GetStats("Object")
-    end
+    weapons = Ext.Stats.GetStats("Weapon")
+    armor = Ext.Stats.GetStats("Armor")
+    objects = Ext.Stats.GetStats("Object")
 
     L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 end
@@ -161,6 +154,7 @@ local itemCache = {
     Armor = {},
     Weapons = {},
     CombatObjects = {},
+    ModList = nil,
 }
 
 function Item.ClearCache()
@@ -169,6 +163,7 @@ function Item.ClearCache()
         Armor = {},
         Weapons = {},
         CombatObjects = {},
+        ModList = nil,
     }
 end
 
@@ -592,6 +587,26 @@ function Item.GenerateLoot(rolls, lootRates)
     end
 
     return UT.DeepClone(loot)
+end
+
+function Item.GetModList()
+    if itemCache.ModList then
+        return itemCache.ModList
+    end
+
+    local mods = {}
+
+    for _, l in ipairs({ Item.Armor(), Item.Weapons(), Item.Objects(nil, false), Item.Objects(nil, true) }) do
+        for _, item in ipairs(l) do
+            if item.Mod[1] then
+                mods[item.Mod[1]] = item.Mod[2]
+            end
+        end
+    end
+
+    itemCache.ModList = mods
+
+    return mods
 end
 
 -------------------------------------------------------------------------------------------------

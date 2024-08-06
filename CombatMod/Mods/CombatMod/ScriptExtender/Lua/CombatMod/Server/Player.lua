@@ -28,6 +28,10 @@ function Player.Pos()
     return Osi.GetPosition(Player.Host())
 end
 
+function Player.Level()
+    return GE.GetHost().EocLevel.Level
+end
+
 ---@param character string|nil GUID
 ---@return string|nil GUID
 function Player.InCombat(character)

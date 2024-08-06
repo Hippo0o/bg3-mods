@@ -749,11 +749,7 @@ U.Osiris.On(
     1,
     "after",
     ifScenario(function(uuid)
-        local isPlayer = UT.Find(GU.DB.GetPlayers(), function(character)
-            return U.UUID.Equals(character, uuid)
-        end)
-
-        if not isPlayer then
+        if not Player.IsPlayer(uuid) then
             return
         end
 

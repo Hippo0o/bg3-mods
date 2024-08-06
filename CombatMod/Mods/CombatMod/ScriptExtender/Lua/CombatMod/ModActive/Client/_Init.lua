@@ -1,4 +1,4 @@
-IsHost = false
+IsHost = Ext.Net.IsHost()
 
 Settings = Libs.Proxy(
     UT.Merge({ AutoHide = false, ToggleKey = "U", AutoOpen = true }, IO.LoadJson("ClientConfig.json") or {}),
@@ -36,15 +36,4 @@ Net.On("Notification", function(event)
     end)
 end)
 
-local hostChecked = false
-Net.Request("IsHost"):After(function(event)
-    IsHost = event.Payload
-    L.Debug("IsHost", IsHost)
-    hostChecked = true
-end)
-
-WaitUntil(function()
-    return hostChecked
-end, function()
-    Require("CombatMod/ModActive/Client/GUI/_Init")
-end)
+Require("CombatMod/ModActive/Client/GUI/_Init")

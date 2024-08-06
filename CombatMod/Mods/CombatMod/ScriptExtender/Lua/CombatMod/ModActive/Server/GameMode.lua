@@ -244,7 +244,7 @@ end
 function GameMode.UpdateRogueScore(score)
     local prev = PersistentVars.RogueScore
 
-    local cap = math.min(100, (GE.GetHost().EocLevel.Level - 1) * 10) -- +10 per level, max 100
+    local cap = math.min(100, (Player.Level() - 1) * 10) -- +10 per level, max 100
     if score < cap then
         score = cap
     end
@@ -377,7 +377,12 @@ function GameMode.ApplyDifficulty(enemy, score)
         assert(entity, "ApplyDifficulty: entity not found")
 
         if mod2 > 0 then
-            local newLevel = math.max(entity.AvailableLevel.Level, math.min(12, mod2))
+            local maxLevel = 12
+            if Player.Level() > 12 then
+                maxLevel = Player.Level()
+            end
+
+            local newLevel = math.max(entity.AvailableLevel.Level, math.min(maxLevel, mod2))
             entity.EocLevel.Level = newLevel
             entity:Replicate("EocLevel")
         end
@@ -551,7 +556,7 @@ Schedule(function()
             GameMode.StartRoguelike(template)
         end,
 
-        Name = C.RoguelikeScenario .. " (bias balance)",
+        Name = C.RoguelikeScenario .. " (bias balanced)",
         Map = getMap,
 
         -- Spawns per Round

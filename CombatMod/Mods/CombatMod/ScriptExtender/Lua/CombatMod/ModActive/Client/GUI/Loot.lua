@@ -47,6 +47,22 @@ function Loot.Main(tab)
     end)
 
     local ckb = Config.Checkbox(root, "Drop Camp Clothes", "Include camp clothes in item drops", "LootIncludesCampSlot")
+
+    root:AddSeparatorText(__("Mod Item Blacklist"))
+    root:AddText(__("Blacklisted mods will not have their items dropped."))
+
+    Net.Request("GetFilterableModList"):After(function(event)
+        local list = UT.Values(event.Payload)
+
+        table.sort(list, function(a, b)
+            return a.Name < b.Name
+        end)
+        L.Dump(list)
+
+        for _, mod in pairs(list) do
+            Loot.BlacklistMod(root, mod)
+        end
+    end)
 end
 
 function Loot.Rarity(root, rarity, type)
@@ -79,4 +95,19 @@ function Loot.Rarity(root, rarity, type)
             Net.Request("DestroyLoot", { rarity, type }):After(DisplayResponse)
         end
     end)
+end
+
+function Loot.BlacklistMod(root, mod)
+    local checkbox = root:AddCheckbox(mod.Name .. " - " .. mod.Id)
+    checkbox.IDContext = U.RandomId()
+    checkbox.OnChange = function(ckb)
+        if not IsHost then
+            ckb.Checked = not ckb.Checked
+            return
+        end
+
+        Net.Request("UpdateModFilter", { mod.Id, ckb.Checked }):After(DisplayResponse)
+    end
+
+    checkbox.Checked = mod.Blacklist
 end

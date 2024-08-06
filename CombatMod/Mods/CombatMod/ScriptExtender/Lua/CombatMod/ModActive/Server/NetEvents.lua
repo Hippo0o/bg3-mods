@@ -88,7 +88,6 @@ Net.On("GetItems", function(event)
         CombatObjects = Item.Objects(rarity, true),
         Armor = Item.Armor(rarity),
         Weapons = Item.Weapons(rarity),
-        Filters = External.Templates.GetItemFilters(),
     })
 end)
 
@@ -422,4 +421,50 @@ Net.On("DestroyLoot", function(event)
     local count = Item.DestroyAll(rarity, type)
 
     Net.Respond(event, { true, __("Destroyed %d items.", count) })
+end)
+
+Net.On("GetFilterableModList", function(event)
+    local list = {}
+
+    local function t(modId, modName)
+        return { Id = modId, Name = modName, Blacklist = false }
+    end
+    for modId, modName in pairs(Item.GetModList()) do
+        if not US.Contains(modName, { "Gustav", "GustavDev", "Shared", "SharedDev", "Honour" }) then
+            list[modId] = t(modId, modName)
+        end
+    end
+
+    local filters = External.Templates.GetItemFilters()
+    for _, modId in pairs(filters.Mods) do
+        if not list[modId] then
+            local name = "Not loaded"
+            if Ext.Mod.GetMod(modId) then
+                name = Ext.Mod.GetMod(modId).Info.Directory
+            end
+
+            list[modId] = t(modId, name)
+        end
+
+        list[modId].Blacklist = true
+    end
+
+    Net.Respond(event, list)
+end)
+
+Net.On("UpdateModFilter", function(event)
+    local modId, bool = table.unpack(event.Payload)
+    local filters = External.Templates.GetItemFilters(true)
+
+    if bool then
+        table.insert(filters.Mods, modId)
+    else
+        UT.Remove(filters.Mods, modId)
+    end
+
+    External.File.Export("ItemFilters", filters)
+
+    Item.ClearCache()
+
+    Net.Respond(event, { true, "Mod filter updated" })
 end)
