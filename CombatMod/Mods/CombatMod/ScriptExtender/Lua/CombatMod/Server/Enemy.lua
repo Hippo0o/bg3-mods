@@ -212,10 +212,11 @@ function Object:Modify(keepFaction)
     end
 
     -- can fail
-    WaitUntil(function()
+    RetryUntil(function()
         return self:Entity():IsAlive()
-    end, function()
+    end).After(function()
         local entity = self:Entity()
+        L.Dump("Enemy modified: ", self:GetTranslatedName(), self.GUID)
 
         local expMod = Config.ExpMultiplier or 1
         if self.IsBoss then

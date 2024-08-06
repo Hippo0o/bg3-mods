@@ -6,7 +6,6 @@
 
 function GameMode.AskTutSkip()
     Config.BypassStory = true
-    Config.BypassStoryAlways = true
 
     return Player.AskConfirmation("Skip to Camp?")
         .After(function(confirmed)
@@ -237,16 +236,16 @@ function GameMode.GenerateScenario(score, cow)
 
     -- Define tiers and their corresponding difficulty values
     local tiers = {
-        { name = C.EnemyTier[1], value = 3, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
-        { name = C.EnemyTier[2], value = 9, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
-        { name = C.EnemyTier[3], value = 15, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
-        { name = C.EnemyTier[4], value = 22, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
-        { name = C.EnemyTier[5], value = 40, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+        { name = C.EnemyTier[1], value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
+        { name = C.EnemyTier[2], value = 8, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+        { name = C.EnemyTier[3], value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+        { name = C.EnemyTier[4], value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
+        { name = C.EnemyTier[5], value = 42, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
         { name = C.EnemyTier[6], value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
 
     if cow then
-        tiers = { { name = "OX_A", value = 3, amount = 100 } }
+        tiers = { { name = "OX_A", value = 4, amount = 100 } }
     end
 
     score = score >= tiers[1].value and score or tiers[1].value
@@ -443,7 +442,7 @@ function GameMode.StartNext()
     end
 
     local maps = UT.Filter(Map.Get(), function(v)
-        return PersistentVars.RogueScore > 20 or v.Region == Player.Region()
+        return PersistentVars.RogueScore > 20 or v.Region == C.Regions.Act1
     end)
 
     local map = nil

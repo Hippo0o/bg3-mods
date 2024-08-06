@@ -65,7 +65,6 @@ External.Validators.Config = tt({
     ExpMultiplier = { "nil", "number" },
     ForceEnterCombat = { "nil", "boolean" },
     BypassStory = { "nil", "boolean" },
-    BypassStoryAlways = { "nil", "boolean" },
     LootIncludesCampSlot = { "nil", "boolean" },
     SpawnItemsAtPlayer = { "nil", "boolean" },
     Debug = { "nil", "boolean" },
@@ -286,19 +285,6 @@ function External.ApplyConfig(config)
                 Mod.Debug = config[field]
             end
             Config[field] = config[field]
-        end
-    end
-
-    for key, value in pairs(config) do
-        if key == "BypassStory" then
-            if value == false then
-                Config.BypassStoryAlways = false
-            end
-        end
-        if key == "BypassStoryAlways" then
-            if value == true then
-                Config.BypassStory = true
-            end
         end
     end
 end

@@ -7,7 +7,7 @@
 -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
 local function ifBypassStory(func)
     return IfActive(function(...)
-        if Config.BypassStory and (Config.BypassStoryAlways or S ~= nil) then
+        if Config.BypassStory and S ~= nil then
             func(...)
         end
     end)
@@ -36,6 +36,7 @@ local function cancelDialog(dialog, instanceID)
             local paidActor = US.Contains(actor, {
                 "_Daisy_",
                 "Jergal",
+                "OathbreakerKnight",
                 -- "Orpheus",
                 -- "Volo"
             })
@@ -255,7 +256,7 @@ function StoryBypass.UnblockTravel(entity)
 end
 
 function StoryBypass.ClearArea(character)
-    local nearby = GE.GetNearby(character, 100, true)
+    local nearby = GE.GetNearby(character, 50, true)
 
     local toRemove = UT.Filter(nearby, function(v)
         return v.Entity.IsCharacter and GC.IsNonPlayer(v.Guid)
