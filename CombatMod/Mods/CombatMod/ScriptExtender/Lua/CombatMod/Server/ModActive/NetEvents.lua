@@ -108,6 +108,16 @@ Net.On("Start", function(event)
 end)
 
 Net.On("Stop", function(event)
+    if not S then
+        Net.Respond(event, { false, __("Scenario not started.") })
+        return
+    end
+
+    if S:HasStarted() and not Mod.Debug then
+        Net.Respond(event, { false, __("Cannot stop while in progress.") })
+        return
+    end
+
     Scenario.Stop()
     Net.Respond(event, { true, __("Scenario stopped.") })
 end)
@@ -300,7 +310,7 @@ Net.On("RecruitOrigin", function(event)
     end)
     if char then
         GameMode.RecruitOrigin(name)
-        Net.Respond(event, { true, string.format("Recruiting %s.", name) })
+        Net.Respond(event, { true, __("Recruiting %s.", name) })
     else
         Net.Respond(event, { false, string.format("Origin %s not found.", name) })
     end
@@ -327,26 +337,37 @@ Net.On("UpdateLootFilter", function(event)
     PersistentVars.LootFilter[type][rarity] = bool
 
     broadcastState()
+    Net.Respond(event, { true, __("Loot filter updated") })
 end)
 
 Net.On("PickupAll", function(event)
+    local count = 0
     for _, rarity in pairs(C.ItemRarity) do
-        Item.PickupAll(event:Character())
+        count = count + Item.PickupAll(event:Character())
     end
+
+    Net.Respond(event, { true, __("Picked up %d items.", count) })
 end)
 
 Net.On("Pickup", function(event)
     local rarity, type = table.unpack(event.Payload)
-    Item.PickupAll(event:Character(), rarity, type)
+    local count = Item.PickupAll(event:Character(), rarity, type)
+
+    Net.Respond(event, { true, __("Picked up %d items.", count) })
 end)
 
 Net.On("DestroyAll", function(event)
+    local count = 0
     for _, rarity in pairs(C.ItemRarity) do
-        Item.DestroyAll(rarity)
+        count = count + Item.DestroyAll(rarity)
     end
+
+    Net.Respond(event, { true, __("Destroyed %d items.", count) })
 end)
 
 Net.On("DestroyLoot", function(event)
     local rarity, type = table.unpack(event.Payload)
-    Item.DestroyAll(rarity, type)
+    local count = Item.DestroyAll(rarity, type)
+
+    Net.Respond(event, { true, __("Destroyed %d items.", count) })
 end)

@@ -9,12 +9,12 @@ function ClientUnlock.Main(tab)
         return __("Currency owned: %d   RogueScore: %d", state.Currency, state.RogueScore or 0)
     end, "StateChange")
 
-    Event.ChainOn("StateChange"):After(function(self, state)
+    Event.ChainOn("StateChange"):After(function(source, state)
         local unlocks = state.Unlocks
         if UT.Size(unlocks) == 0 then
             return
         end
-        self:Unregister()
+        source:Unregister()
 
         local cols = 3
         local nrows = math.ceil(UT.Size(unlocks) / cols)
@@ -28,7 +28,7 @@ function ClientUnlock.Main(tab)
                 ClientUnlock.Tile(cell, unlock)
             end
         end)
-    end)
+    end, true)
 
     root.OnActivate = function()
         ClientUnlock.GetCharacters(true)
@@ -166,7 +166,7 @@ function ClientUnlock.Buy(root, unlock)
 
     btn.OnClick = function()
         btn:SetStyle("Alpha", 0.2)
-        Net.Request("BuyUnlock", { Id = unlock.Id }).After(function(event)
+        Net.Request("BuyUnlock", { Id = unlock.Id }):After(function(event)
             local ok, res = table.unpack(event.Payload)
 
             if not ok then
@@ -254,7 +254,7 @@ function ClientUnlock.BuyChar(root, unlock)
 
             b.OnClick = function()
                 b:SetStyle("Alpha", 0.2)
-                Net.Request("BuyUnlock", { Id = unlock.Id, Character = uuid }).After(function(event)
+                Net.Request("BuyUnlock", { Id = unlock.Id, Character = uuid }):After(function(event)
                     local ok, res = table.unpack(event.Payload)
 
                     if not ok then

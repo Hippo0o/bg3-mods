@@ -130,9 +130,9 @@ function Object:Clear()
     RetryUntil(function()
         GU.Object.Remove(guid)
         return Osi.IsItem(guid) ~= 0
-    end, { immediate = true }).After(function()
+    end, { immediate = true }):After(function()
         PersistentVars.SpawnedItems[guid] = nil
-    end).Catch(function()
+    end):Catch(function()
         L.Error("Failed to delete item: ", guid, self.Name)
     end)
 end
@@ -359,15 +359,21 @@ function Item.Cleanup()
 end
 
 function Item.DestroyAll(rarity, type)
+    local count = 0
     for guid, item in pairs(PersistentVars.SpawnedItems) do
         if item.Rarity == rarity and not GU.Object.IsOwned(item.GUID) and (not type or item.Type == type) then
             GU.Object.Remove(guid)
             PersistentVars.SpawnedItems[guid] = nil
+            count = count + 1
         end
     end
+
+    return count
 end
 
 function Item.PickupAll(character, rarity, type)
+    local count = 0
+
     for _, item in pairs(PersistentVars.SpawnedItems) do
         if
             not GU.Object.IsOwned(item.GUID)
@@ -375,6 +381,7 @@ function Item.PickupAll(character, rarity, type)
             and (rarity == nil or item.Rarity == rarity)
         then
             Osi.ToInventory(item.GUID, character)
+            count = count + 1
             Schedule(function()
                 if GU.Object.IsOwned(item.GUID) then
                     PersistentVars.SpawnedItems[item.GUID] = nil
@@ -382,6 +389,8 @@ function Item.PickupAll(character, rarity, type)
             end)
         end
     end
+
+    return count
 end
 
 function Item.SpawnLoot(loot, x, y, z, autoPickup)
@@ -464,10 +473,7 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
             L.Debug("Rolling fixed loot items:", #items, "Object")
             if #items > 0 then
                 addToLoot(items[U.Random(#items)])
-
-                if isFood then
-                    addToLoot(items[U.Random(#items)])
-                end
+                addToLoot(items[U.Random(#items)])
             end
         end
     end

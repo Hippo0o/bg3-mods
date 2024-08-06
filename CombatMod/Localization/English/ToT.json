@@ -9,7 +9,7 @@
 	"%d enemies left.;1": {
 		"Handle": "h29013f4fg7c54g46a1ga1a3g20c7c38102e5",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:548: in field 'CheckEnded'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:616: in field 'CheckEnded'",
 		"Text": "%d enemies left.",
 		"Version": 1
 	},
@@ -132,10 +132,17 @@
 		"Text": "Cannot force next round while in combat.",
 		"Version": 1
 	},
+	"Cannot stop while in progress.;1": {
+		"Handle": "hf4935a60ga1c6g40f3g9c7ag06953e5824b7",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:117: in field '_Func'",
+		"Text": "Cannot stop while in progress.",
+		"Version": 1
+	},
 	"Cannot teleport while in combat.;1": {
 		"Handle": "he740f325gb215g4a67g8d47g3c016f651e23",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:117: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:127: in field '_Func'",
 		"Text": "Cannot teleport while in combat.",
 		"Version": 1
 	},
@@ -170,14 +177,14 @@
 	"Combat is Starting.;1": {
 		"Handle": "h44afa6c1g11fag4f39g8779gc95f255beb7d",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:166: in field 'StartCombat'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:167: in field 'SpawnHelper'",
 		"Text": "Combat is Starting.",
 		"Version": 1
 	},
 	"Combat started.;1": {
 		"Handle": "h2e517b01g7b04g42e5g81d6g248323f406a1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:704: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:763: in upvalue 'func'",
 		"Text": "Combat started.",
 		"Version": 1
 	},
@@ -258,6 +265,13 @@
 		"Text": "Destroy",
 		"Version": 1
 	},
+	"Destroyed %d items.;1": {
+		"Handle": "h42fa25a1g17afg470fg871cg9169253eb34b",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:365: in field '_Func'",
+		"Text": "Destroyed %d items.",
+		"Version": 1
+	},
 	"Drop Camp Clothes;1": {
 		"Handle": "h3e82a111g6bd7g4f44g80dbg192222f93b00",
 		"LocaText": "",
@@ -296,7 +310,7 @@
 	"Enemy %s killed.;1": {
 		"Handle": "h35d521a9g6080g474fg806eg6129a24c430b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:885: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:880: in upvalue 'func'",
 		"Text": "Enemy %s killed.",
 		"Version": 1
 	},
@@ -310,14 +324,14 @@
 	"Enemy %s spawned.;1": {
 		"Handle": "h37ed89a8g62b8g4dcfg904dgeba9b26fc98b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:200: in function <CombatMod/CombatMod/Server/Scenario.lua:199>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:254: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:253>",
 		"Text": "Enemy %s spawned.",
 		"Version": 1
 	},
 	"Entered combat area.;1": {
 		"Handle": "hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:261: in function <CombatMod/CombatMod/Server/Scenario.lua:247>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:325: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:316>",
 		"Text": "Entered combat area.",
 		"Version": 1
 	},
@@ -398,6 +412,13 @@
 		"Text": "Go to Camp",
 		"Version": 1
 	},
+	"Heal character and restore used spells.;1": {
+		"Handle": "h23173fb5g7642g46aeg8102g40c8632062ea",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:381: in main chunk",
+		"Text": "Heal character and restore used spells.",
+		"Version": 1
+	},
 	"Hide this window when entering a map. Show this window when starting a scenario.;1": {
 		"Handle": "hd9d18c01g8c84g4d95g8eaeg2bf32c8c09d1",
 		"LocaText": "",
@@ -443,7 +464,7 @@
 	"Kill Score: %s;1": {
 		"Handle": "h34873bdcg61d2g46e8g907bg408ef25962ac",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:191: in field 'UpdateHelperName'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:203: in field 'UpdateHelperName'",
 		"Text": "Kill Score: %s",
 		"Version": 1
 	},
@@ -464,7 +485,7 @@
 	"Leave camp to join the battle.;1": {
 		"Handle": "h6119ae15g344cg4fb4g8522ga9d267008bf0",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:236: in function <CombatMod/CombatMod/Server/Scenario.lua:227>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:305: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:296>",
 		"Text": "Leave camp to join the battle.",
 		"Version": 1
 	},
@@ -480,6 +501,13 @@
 		"LocaText": "",
 		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:71: in field 'Main'",
 		"Text": "Logs",
+		"Version": 1
+	},
+	"Loot filter updated;1": {
+		"Handle": "hb6e91cdbge3bcg4498ga85dga2fe8a7f80dc",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:340: in field '_Func'",
+		"Text": "Loot filter updated",
 		"Version": 1
 	},
 	"Loot;1": {
@@ -580,6 +608,13 @@
 		"Text": "Persisting config...",
 		"Version": 1
 	},
+	"Picked up %d items.;1": {
+		"Handle": "h410f889dg145ag4ddcg8723gcbbae501e998",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:356: in field '_Func'",
+		"Text": "Picked up %d items.",
+		"Version": 1
+	},
 	"Pickup All;1": {
 		"Handle": "h2dba28d2g78efg47d8gb1e8g91be13cab39c",
 		"LocaText": "",
@@ -618,7 +653,7 @@
 	"Play Roguelike mode?\nContinuously create new battles.\nYou will gain a higher score with every completed fight.\nDifficulty increases with the score.;1": {
 		"Handle": "hf44e063cga11bg4536g9c77gd350fe55f172",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Player.lua:196: in field 'AskConfirmation'",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation'",
 		"Text": "Play Roguelike mode?\nContinuously create new battles.\nYou will gain a higher score with every completed fight.\nDifficulty increases with the score.",
 		"Version": 1
 	},
@@ -716,7 +751,7 @@
 	"Returned to camp.;1": {
 		"Handle": "h2bc3faaag7e96g4affgb18fg0c9993ad2ebb",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:755: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:628: in field 'CheckShouldStop'",
 		"Text": "Returned to camp.",
 		"Version": 1
 	},
@@ -730,14 +765,14 @@
 	"Round %d;1": {
 		"Handle": "h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:217: in field 'StartRound'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:284: in field 'StartRound'",
 		"Text": "Round %d",
 		"Version": 1
 	},
 	"Round: %s;1": {
 		"Handle": "h3d5fde62g680ag48b3gb0e6gced512c4ecf7",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:178: in upvalue 'compute'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:200: in field 'UpdateHelperName'",
 		"Text": "Round: %s",
 		"Version": 1
 	},
@@ -751,7 +786,7 @@
 	"Scenario %s started.;1": {
 		"Handle": "hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:501: in field 'Start'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:107: in field '_Func'",
 		"Text": "Scenario %s started.",
 		"Version": 1
 	},
@@ -765,28 +800,28 @@
 	"Scenario not started.;1": {
 		"Handle": "hb72bdac5ge27eg48f9g8841g8e9f6a63acbd",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:131: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:137: in field '_Func'",
 		"Text": "Scenario not started.",
 		"Version": 1
 	},
 	"Scenario restored.;1": {
 		"Handle": "h2bed91d3g7eb8g4c48ga18dgea2e03afc80c",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:359: in function <CombatMod/CombatMod/Server/Scenario.lua:355>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:433: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:429>",
 		"Text": "Scenario restored.",
 		"Version": 1
 	},
 	"Scenario stopped.;1": {
 		"Handle": "h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/NetEvents.lua:112: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:596: in field 'Stop'",
 		"Text": "Scenario stopped.",
 		"Version": 1
 	},
 	"Scenario: %s;1": {
 		"Handle": "h218206b6g74d7g453egb12bg13585309317a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:177: in upvalue 'compute'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:199: in field 'UpdateHelperName'",
 		"Text": "Scenario: %s",
 		"Version": 1
 	},
@@ -807,7 +842,7 @@
 	"Skip to Camp?;1": {
 		"Handle": "h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation'",
 		"Text": "Skip to Camp?",
 		"Version": 1
 	},
@@ -863,7 +898,7 @@
 	"Starting items added. Hirelings unlocked.;1": {
 		"Handle": "hc1216d49g9474g4381g8f21g25e7ad0307c5",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Intro.lua:56: in function <CombatMod/CombatMod/Server/Intro.lua:36>",
+		"Stack": "CombatMod/CombatMod/Server/Intro.lua:64: in function <CombatMod/CombatMod/Server/Intro.lua:40>",
 		"Text": "Starting items added. Hirelings unlocked.",
 		"Version": 1
 	},
@@ -912,7 +947,7 @@
 	"Teleporting to different ACT;1": {
 		"Handle": "hc396e53dg96c3g4b06g8f0ag5d60ed287f42",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Map.lua:210: in field 'TeleportTo'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Map.lua:83: in method 'Teleport'",
 		"Text": "Teleporting to different ACT",
 		"Version": 1
 	},
@@ -954,7 +989,7 @@
 	"Total Rounds: %s;1": {
 		"Handle": "h33c0b3bcg6695g4e6eg900fg3808f22d1a2a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:179: in upvalue 'compute'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:201: in field 'UpdateHelperName'",
 		"Text": "Total Rounds: %s",
 		"Version": 1
 	},
@@ -1038,7 +1073,7 @@
 	"Upcoming Spawns: %s;1": {
 		"Handle": "h8528df02gd07dg48a5gbb61gbec319439ce1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Client/GUI/Control.lua:180: in upvalue 'compute'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:202: in field 'UpdateHelperName'",
 		"Text": "Upcoming Spawns: %s",
 		"Version": 1
 	},
@@ -1073,7 +1108,7 @@
 	"Welcome to %s! Start playing?;1": {
 		"Handle": "hfd862893ga8d3g47dcgacebg51ba0ec97398",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Player.lua:196: in field 'AskConfirmation'",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation'",
 		"Text": "Welcome to %s! Start playing?",
 		"Version": 1
 	},

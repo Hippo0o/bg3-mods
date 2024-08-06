@@ -11,9 +11,7 @@ function Extras.Main(tab)
         "Remove all Entities",
         "Runs automatically if config enabled.\nWill probably fix most issues with unexpected story triggers. Has to be run per region.",
         function(btn)
-            Net.Request("RemoveAllEntities").After(function(event)
-                DisplayResponse(event.Payload)
-            end)
+            Net.Request("RemoveAllEntities"):After(DisplayResponse)
         end
     )
 
@@ -23,24 +21,18 @@ function Extras.Main(tab)
         "Clean Ground",
         "Clean the ground from blood and similar.\nWill also remove important map properties such as lava, swamp, water, etc.\nReload the save or switch act to restore them.",
         function(btn)
-            Net.Request("ClearSurfaces").After(function(event)
-                DisplayResponse(event.Payload)
-            end)
+            Net.Request("ClearSurfaces"):After(DisplayResponse)
         end
     )
 
     root:AddSeparator()
     Extras.Button(root, "End Long Rest", "Use when stuck in night time.", function(btn)
-        Net.Request("CancelLongRest").After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        Net.Request("CancelLongRest"):After(DisplayResponse)
     end)
     root:AddSeparator()
 
     Extras.Button(root, "Cancel Dialog", "End the current dialog.", function(btn)
-        Net.Request("CancelDialog").After(function(event)
-            DisplayResponse(event.Payload)
-        end)
+        Net.Request("CancelDialog"):After(DisplayResponse)
     end)
 
     root:AddSeparatorText("Recruit Origins (Experimental)")
@@ -49,9 +41,7 @@ function Extras.Main(tab)
         local desc = ""
 
         Extras.Button(root, name, desc, function(btn)
-            Net.Request("RecruitOrigin", name).After(function(event)
-                DisplayResponse(event.Payload)
-            end)
+            Net.Request("RecruitOrigin", name):After(DisplayResponse)
         end).SameLine =
             true
     end

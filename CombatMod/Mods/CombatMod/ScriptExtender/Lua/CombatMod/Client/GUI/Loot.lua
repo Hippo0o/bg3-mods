@@ -9,14 +9,14 @@ function Loot.Main(tab)
         local btn = root:AddButton(__("Pickup All"))
         btn.IDContext = U.RandomId()
         btn.OnClick = function()
-            Net.Send("PickupAll")
+            Net.Request("PickupAll"):After(DisplayResponse)
         end
 
         local btn = root:AddButton(__("Destroy All"))
         btn.IDContext = U.RandomId()
         btn.SameLine = true
         btn.OnClick = function()
-            Net.Send("DestroyAll")
+            Net.Request("DestroyAll"):After(DisplayResponse)
         end
     else
         root:AddSeparatorText(__("Global Settings - Host only"))
@@ -58,20 +58,20 @@ function Loot.Rarity(root, rarity, type)
                 ckb.Checked = not ckb.Checked
                 return
             end
-            Net.Send("UpdateLootFilter", { rarity, type, ckb.Checked })
+            Net.Request("UpdateLootFilter", { rarity, type, ckb.Checked }):After(DisplayResponse)
         end
 
         local btn = layout.Cells[1][2]:AddButton(__("Pickup"))
         btn.IDContext = U.RandomId()
         btn.OnClick = function()
-            Net.Send("Pickup", { rarity, type })
+            Net.Request("Pickup", { rarity, type }):After(DisplayResponse)
         end
 
         local btn2 = layout.Cells[1][2]:AddButton(__("Destroy"))
         btn2.IDContext = U.RandomId()
         btn2.SameLine = true
         btn2.OnClick = function()
-            Net.Send("DestroyLoot", { rarity, type })
+            Net.Request("DestroyLoot", { rarity, type }):After(DisplayResponse)
         end
     end)
 end

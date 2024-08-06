@@ -265,7 +265,7 @@ function GameMode.UpdateRogueScore(scenario)
 
     if endRound <= scenario:TotalRounds() then
         Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", baseScore, baseScore * 2))
-            .After(function(confirmed)
+            :After(function(confirmed)
                 if confirmed then
                     updateScore(score + baseScore)
                 end
@@ -315,6 +315,8 @@ function GameMode.ApplyDifficulty(enemy)
         return
     end
 
+    local partySizeMod = math.exp((Player.PartySize() - 4) * 0.2)
+
     local function scale(i, h)
         local x = i / 200
         local max_value = 30
@@ -325,7 +327,7 @@ function GameMode.ApplyDifficulty(enemy)
         end
 
         local rate = i / 1000
-        return math.floor(max_value * (1 - math.exp(-rate * x)))
+        return math.floor(max_value * (1 - math.exp(-rate * x)) * partySizeMod)
     end
 
     local mod = scale(PersistentVars.RogueScore, PersistentVars.HardMode)
@@ -349,7 +351,7 @@ function GameMode.ApplyDifficulty(enemy)
     if mod2 > 0 then
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
-        Osi.AddBoosts(enemy.GUID, "AC(" .. math.min(6, math.ceil(mod2 / 2)) .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "AC(" .. math.ceil(mod2 / 2) .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
 
@@ -359,6 +361,16 @@ function GameMode.ApplyDifficulty(enemy)
 
             entity.EocLevel.Level = newLevel
             entity:Replicate("EocLevel")
+
+            local ac = entity.Resistances.AC
+            local acMax = math.max(25, mod)
+            while ac > acMax do
+                ac = ac - 4
+            end
+            ac = ac - entity.Resistances.AC
+            if ac < 0 then
+                Osi.AddBoosts(enemy.GUID, "AC(" .. ac .. ")", Mod.TableKey, Mod.TableKey)
+            end
         end)
     end
 

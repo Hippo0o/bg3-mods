@@ -94,7 +94,7 @@ local Async = Require("Hlib/Async")
 Async.Defer(1000, function()
     print("Hello World!")
 end)
-Async.Defer(1000).After(function()
+Async.Defer(1000):After(function()
     print("Hello World!")
 end)
 
@@ -108,10 +108,10 @@ handle:Unregister()
 -- run a function when a condition is met
 Async.WaitUntil(function()
     return var == true
-end).After(function()
+end):After(function()
     print("Hello World!")
     return Async.Defer(1000)
-end).After(function()
+end):After(function()
     print("Hello World! 1s later")
 end)
 
@@ -119,9 +119,9 @@ end)
 Async.RetryUntil(function(self, triesLeft, time)
     -- can be any code here
     return var == true
-end, { retries = 3, interval = 1000 }).After(function()
+end, { retries = 3, interval = 1000 }):After(function()
     print("Hello World!")
-end).Catch(function(_, err)
+end):Catch(function(_, err)
     print(var .. " is not true")
 end)
 ```
@@ -168,7 +168,7 @@ Net.On("RequestData", function(event) ---@type NetEvent
 end)
 
 -- request a network event (client-side only)
-Net.Request("RequestData",{ Entity = "..." }).After(function(event) ---@type NetEvent
+Net.Request("RequestData",{ Entity = "..." }):After(function(event) ---@type NetEvent
     print("Received RequestData response: " .. event.Payload)
 end)
 ```

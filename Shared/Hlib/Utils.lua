@@ -35,26 +35,7 @@ function M.Equals(v1, v2, ignoreMT)
         end
     end
 
-    v1 = M.Table.DeepClone(v1)
-    v2 = M.Table.DeepClone(v2)
-
-    local keySet = {}
-
-    for key1, value1 in pairs(v1) do
-        local value2 = v2[key1]
-        if value2 == nil or M.Equals(value1, value2, ignoreMT) == false then
-            return false
-        end
-        keySet[key1] = true
-    end
-
-    for key2, _ in pairs(v2) do
-        if not keySet[key2] then
-            return false
-        end
-    end
-
-    return true
+    return Ext.DumpExport(v1) == Ext.DumpExport(v2)
 end
 
 ---@param userdata userdata
@@ -353,9 +334,12 @@ end
 -- remove unserializeable values
 ---@param t table
 ---@param maxEntityDepth number|nil default: 0
+---@param seen table|nil used to prevent infinite recursion
 ---@return table
-function M.Table.Clean(t, maxEntityDepth)
+function M.Table.Clean(t, maxEntityDepth, seen)
     maxEntityDepth = maxEntityDepth or 0
+
+    seen = seen or {}
 
     return M.Table.Map(t, function(v, k)
         k = tonumber(k) or tostring(k)
@@ -381,7 +365,12 @@ function M.Table.Clean(t, maxEntityDepth)
         end
 
         if type(v) == "table" then
-            return M.Table.Clean(v, maxEntityDepth), k
+            if not seen[v] then
+                seen[v] = {}
+                M.Table.Merge(seen[v], M.Table.Clean(v, maxEntityDepth, seen))
+            end
+
+            return seen[v], k
         end
 
         return v, k

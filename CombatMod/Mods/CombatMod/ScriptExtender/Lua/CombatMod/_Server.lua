@@ -272,14 +272,15 @@ do
             return
         end
 
-        e:Spawn(x, y, z, neutral and true or false)
-
-        WaitUntil(function()
-            return e:IsSpawned() and e:Entity()
-        end, function()
-            L.Dump(e, e:Entity().ServerCharacter)
-            e:Combat()
-        end)
+        local ok, chainable = e:Spawn(x, y, z, neutral and true or false)
+        if ok then
+            chainable:After(function()
+                L.Dump(e, e:Entity().ServerCharacter)
+                e:Combat()
+            end)
+        else
+            L.Error("Failed to spawn enemy.")
+        end
 
         -- Defer(1000, function()
         --     Ext.IO.SaveFile("spawn-" .. e:GetId() .. ".json", Ext.DumpExport(e:Entity():GetAllComponents()))

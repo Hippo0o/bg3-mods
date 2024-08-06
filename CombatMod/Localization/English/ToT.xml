@@ -546,4 +546,19 @@
     <content contentuid="h34873bdcg61d2g46e8g907bg408ef25962ac" version="1">Kill Score: %s</content>
 
 
+    <content contentuid="hb6e91cdbge3bcg4498ga85dga2fe8a7f80dc" version="1">Loot filter updated</content>
+
+
+    <content contentuid="hf4935a60ga1c6g40f3g9c7ag06953e5824b7" version="1">Cannot stop while in progress.</content>
+
+
+    <content contentuid="h410f889dg145ag4ddcg8723gcbbae501e998" version="1">Picked up %d items.</content>
+
+
+    <content contentuid="h23173fb5g7642g46aeg8102g40c8632062ea" version="1">Heal character and restore used spells.</content>
+
+
+    <content contentuid="h42fa25a1g17afg470fg871cg9169253eb34b" version="1">Destroyed %d items.</content>
+
+
 </contentList>

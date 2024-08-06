@@ -215,100 +215,81 @@ end
 ---@return LibsChainable
 function M.Chainable(source)
     ---@class LibsChainable
-    ---@field After fun(func: fun(...: any): any, ...: any): LibsChainable
-    ---@overload fun(self: LibsChainable, func: fun(source: any, ...: any), ...: any): LibsChainable
-    ---@field Catch fun(func: fun(err: string), ...: any): LibsChainable
-    ---@overload fun(self: LibsChainable, func: fun(source: any, err: string), ...: any): LibsChainable
+    ---@field After fun(self: LibsChainable, func: fun(source: any|nil, ...: any), passSource: boolean|nil): LibsChainable
+    ---@field Catch fun(self: LibsChainable, func: fun(source: any|nil, err: string), passSource: boolean|nil): LibsChainable
     ---@field Source any
-    local Chainable = {
-        _IsChainable = Utils.RandomId("Chainable_"),
+    local Chainable = M.Struct({
+        _IsChainable = nil,
         _InitalInput = {},
-        Source = source,
+        Source = nil,
         _Chain = {},
-    }
+        _Catch = nil,
+    })
 
-    local function inputToFunc(arg1, arg2, ...)
-        local selfPassed = false
-        if type(arg1) == "table" then
-            selfPassed = arg1._IsChainable == Chainable._IsChainable
-            if not selfPassed then
-                return
-            end
-        end
+    function Chainable.New()
+        local obj = Chainable.Init()
+        obj._IsChainable = Utils.RandomId("Chainable_")
+        obj.Source = source
+        obj._InitalInput = {}
+        obj._Chain = {}
 
-        local func = selfPassed and arg2 or arg1
+        return obj
+    end
+
+    function Chainable:After(func, passSource)
         if type(func) ~= "function" then
-            return
+            error("Chainable:After(func) - function expected, got " .. type(func))
         end
 
-        local args = { ... }
-        if not selfPassed then
-            table.insert(args, 1, arg2)
-        end
-
-        return function(self, ...)
-            local funcArgs = Utils.Table.Combine({ ... }, args)
-
-            if selfPassed then
-                return func(self.Source, table.unpack(funcArgs))
+        table.insert(self._Chain, function(...)
+            if passSource then
+                return func(self.Source, ...)
             end
 
-            return func(table.unpack(funcArgs))
-        end
+            return func(...)
+        end)
+
+        return self
     end
 
-    function Chainable.After(arg1, arg2, ...)
-        local func = inputToFunc(arg1, arg2, ...)
+    function Chainable:Catch(func, passSource)
         if type(func) ~= "function" then
-            error("Chainable.After(func) - function expected, got " .. type(arg1))
+            error("Chainable:Catch(func) - function expected, got " .. type(func))
         end
 
-        table.insert(Chainable._Chain, func)
+        self._Catch = function(...)
+            if passSource then
+                return func(self.Source, ...)
+            end
 
-        return Chainable
-    end
-
-    local catch = nil
-    function Chainable.Catch(arg1, arg2, ...)
-        local func = inputToFunc(arg1, arg2, ...)
-        if type(func) ~= "function" then
-            error("Chainable.Catch(func) - function expected, got " .. type(arg1))
+            return func(...)
         end
 
-        catch = func
-
-        return Chainable
+        return self
     end
 
-    function Chainable.Throw(err)
-        if type(catch) ~= "function" then
+    function Chainable:Throw(err)
+        if type(self._Catch) ~= "function" then
             error(err)
         end
 
-        return catch(Chainable, err)
+        return self._Catch(err)
     end
 
     local function stateIsChainable(state)
         return type(state[1]) == "table" and state[1]._IsChainable
     end
 
-    function Chainable.Begin(...)
-        local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(Chainable._InitalInput))
+    function Chainable:Begin(...)
+        local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(self._InitalInput))
 
-        -- for when calling :Begin(), the source is passed as the first argument
-        if stateIsChainable(state) then
-            if state[1]._IsChainable == Chainable._IsChainable then
-                state[1] = state[1].Source
-            end
-        end
-
-        for i, func in ipairs(Chainable._Chain) do
+        for i, func in ipairs(self._Chain) do
             local ok, err = pcall(function()
-                state = Utils.Table.Pack(func(Chainable, table.unpack(state)))
+                state = Utils.Table.Pack(func(table.unpack(state)))
             end)
 
             if not ok then
-                state = Chainable.Throw(err)
+                state = self:Throw(err)
                 break
             end
 
@@ -321,7 +302,7 @@ function M.Chainable(source)
                 ---@type Chainable
                 local nested = state[1]
 
-                local addonChain = Utils.Table.DeepClone(Chainable._Chain)
+                local addonChain = Utils.Table.DeepClone(self._Chain)
                 for j = 1, i do
                     table.remove(addonChain, 1)
                 end
@@ -330,8 +311,8 @@ function M.Chainable(source)
 
                 nested._InitalInput = state
                 table.remove(nested._InitalInput, 1)
-                if catch then
-                    nested.Catch(catch)
+                if self._Catch then
+                    nested._Catch = self._Catch
                 end
 
                 break
@@ -341,7 +322,7 @@ function M.Chainable(source)
         return state
     end
 
-    return Chainable
+    return Chainable.New()
 end
 
 ---@param t table

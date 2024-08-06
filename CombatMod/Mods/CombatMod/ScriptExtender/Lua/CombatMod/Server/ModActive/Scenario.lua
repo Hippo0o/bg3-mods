@@ -236,6 +236,8 @@ function Action.SpawnRound()
     end
 
     for i, e in ipairs(toSpawn) do
+        table.insert(s.SpawnedEnemies, e)
+
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
         RetryUntil(function(_, triesLeft)
             local posIndex = s:GetPosition(i)
@@ -245,27 +247,34 @@ function Action.SpawnRound()
 
             L.Debug("Spawning enemy.", e:GetId(), posIndex)
 
-            return s.Map:SpawnIn(e, posIndex)
+            local ok, chainable = s.Map:SpawnIn(e, posIndex)
+
+            if not ok then
+                return false
+            end
+
+            return chainable
         end, {
             immediate = true,
             retries = triesToSpawn,
             interval = 100,
-        }).After(function(posCorrection)
-            Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
-            Event.Trigger("ScenarioEnemySpawned", Current(), e)
-            Action.EnemyAdded(e)
+        }):After(function(spawnedChainable)
+            spawnedChainable:After(function(e, posCorrectionChainable)
+                Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
+                Event.Trigger("ScenarioEnemySpawned", Current(), e)
+                Action.EnemyAdded(e)
 
-            posCorrection.After(function(_, corrected)
-                if corrected then
-                    Scenario.CombatSpawned(e)
-                end
+                posCorrectionChainable:After(function(e, corrected)
+                    if corrected then
+                        Scenario.CombatSpawned(e)
+                    end
+                end)
             end)
-        end).Catch(function()
+        end):Catch(function()
             L.Error("Spawn limit exceeded.", e:GetId())
             UT.Remove(s.SpawnedEnemies, e)
             Action.EnemyRemoved()
         end)
-        table.insert(s.SpawnedEnemies, e)
     end
 
     L.Debug("Enemies queued for spawning.", #toSpawn)
@@ -386,7 +395,7 @@ function Action.Failsafe(enemy)
 
                 e:Combat(true)
 
-                Defer(2000).After(function()
+                Defer(2000):After(function()
                     if Osi.IsInCombat(e.GUID) == 1 then
                         return
                     end
@@ -396,7 +405,7 @@ function Action.Failsafe(enemy)
                     e:Combat(true)
 
                     return Defer(3000)
-                end).After(function()
+                end):After(function()
                     if Osi.IsInCombat(e.GUID) ~= 1 then
                         L.Error("Failsafe 3 triggered.", e:GetId(), e.GUID)
 
@@ -618,6 +627,17 @@ function Scenario.CheckEnded()
     end
 end
 
+function Scenario.CheckShouldStop()
+    if not Current().OnMap then
+        return
+    end
+
+    if Player.InCamp() and not Player.InCombat() then
+        Scenario.Stop()
+        Player.Notify(__("Returned to camp."))
+    end
+end
+
 function Scenario.ForwardCombat()
     local s = Current()
     if not s:IsRunning() then
@@ -675,7 +695,7 @@ function Scenario.CombatSpawned(specific)
             immediate = true,
             retries = 5,
             interval = 1000,
-        }).Catch(ifScenario(function()
+        }):Catch(ifScenario(function()
             Action.Failsafe(enemy)
         end))
     end
@@ -730,12 +750,7 @@ U.Osiris.On(
     1,
     "after",
     ifScenario(function(uuid)
-        if S.OnMap and U.UUID.Equals(uuid, Player.Host()) then
-            if not Player.InCombat() then
-                Scenario.Stop()
-                Player.Notify(__("Returned to camp."))
-            end
-        end
+        Scenario.CheckShouldStop()
     end)
 )
 
@@ -750,7 +765,7 @@ U.Osiris.On(
             return
         end
 
-        L.Debug("Combat started.", combatGuid)
+        L.Debug("CombatStarted", combatGuid)
 
         s.CombatId = combatGuid
         if s.Round == 1 then
@@ -768,6 +783,8 @@ U.Osiris.On(
         if not s:HasStarted() then
             return
         end
+
+        L.Dump("EnteredCombat", object, Ext.Entity.Get(object).TurnBased)
 
         if s.CombatId ~= combatGuid then -- should not happen
             return
@@ -910,10 +927,10 @@ U.Osiris.On(
             end
 
             Action.StartRound()
-                .After(function()
+                :After(function()
                     return Defer(3000)
                 end)
-                .After(function()
+                :After(function()
                     Osi.EndTurn(uuid)
                 end)
         end
@@ -951,5 +968,7 @@ U.Osiris.On(
         end
 
         Scenario.CombatSpawned()
+
+        Scenario.CheckShouldStop()
     end)
 )

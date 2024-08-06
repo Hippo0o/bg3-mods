@@ -89,7 +89,9 @@ function EventListener.Chainable(event, once)
 
     local chainable = Libs.Chainable(obj)
 
-    obj._Func = chainable.Begin
+    obj._Func = function(...)
+        return chainable:Begin(...)
+    end
 
     return chainable
 end
