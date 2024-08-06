@@ -39,6 +39,11 @@ function Loot.Main(tab)
         for _, rarity in pairs(C.ItemRarity) do
             Loot.Rarity(root, rarity, "Object")
         end
+
+        root:AddSeparatorText(__("Auto-Pickup for Combat Objects"))
+        for _, rarity in pairs(C.ItemRarity) do
+            Loot.Rarity(root, rarity, "CombatObject")
+        end
     end)
 
     local ckb = Config.Checkbox(root, "Drop Camp Clothes", "Include camp clothes in item drops", "LootIncludesCampSlot")

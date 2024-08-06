@@ -9,7 +9,7 @@
 	"%d enemies left.;1": {
 		"Handle": "h29013f4fg7c54g46a1ga1a3g20c7c38102e5",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:616: in field 'CheckEnded'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:625: in field 'CheckEnded'",
 		"Text": "%d enemies left.",
 		"Version": 1
 	},
@@ -37,7 +37,7 @@
 	"All enemies are dead.;1": {
 		"Handle": "hb5676e2age032g43b7gb865g45d19a4767f3",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:545: in field 'CheckEnded'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:622: in field 'CheckEnded'",
 		"Text": "All enemies are dead.",
 		"Version": 1
 	},
@@ -60,6 +60,13 @@
 		"LocaText": "",
 		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:28: in local 'onCreated'",
 		"Text": "Auto-Pickup for Armor",
+		"Version": 1
+	},
+	"Auto-Pickup for Combat Objects;1": {
+		"Handle": "h91fd8555gc4a8g4d00g8a2cgeb66680ec944",
+		"LocaText": "",
+		"Stack": "CombatMod/CombatMod/Client/GUI/Loot.lua:43: in local 'onCreated'",
+		"Text": "Auto-Pickup for Combat Objects",
 		"Version": 1
 	},
 	"Auto-Pickup for Objects;1": {
@@ -184,7 +191,7 @@
 	"Combat started.;1": {
 		"Handle": "h2e517b01g7b04g42e5g81d6g248323f406a1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:763: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:772: in upvalue 'func'",
 		"Text": "Combat started.",
 		"Version": 1
 	},
@@ -268,7 +275,7 @@
 	"Destroyed %d items.;1": {
 		"Handle": "h42fa25a1g17afg470fg871cg9169253eb34b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:365: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:372: in field '_Func'",
 		"Text": "Destroyed %d items.",
 		"Version": 1
 	},
@@ -282,7 +289,7 @@
 	"Dropping loot.;1": {
 		"Handle": "h2a64adc6g7f31g4f89gb195g79ef53b75bcd",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:141: in field 'GiveReward'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:144: in field 'GiveReward'",
 		"Text": "Dropping loot.",
 		"Version": 1
 	},
@@ -310,7 +317,7 @@
 	"Enemy %s killed.;1": {
 		"Handle": "h35d521a9g6080g474fg806eg6129a24c430b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:880: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:889: in upvalue 'func'",
 		"Text": "Enemy %s killed.",
 		"Version": 1
 	},
@@ -324,14 +331,14 @@
 	"Enemy %s spawned.;1": {
 		"Handle": "h37ed89a8g62b8g4dcfg904dgeba9b26fc98b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:254: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:253>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:263: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:262>",
 		"Text": "Enemy %s spawned.",
 		"Version": 1
 	},
 	"Entered combat area.;1": {
 		"Handle": "hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:325: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:316>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:334: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:325>",
 		"Text": "Entered combat area.",
 		"Version": 1
 	},
@@ -485,7 +492,7 @@
 	"Leave camp to join the battle.;1": {
 		"Handle": "h6119ae15g344cg4fb4g8522ga9d267008bf0",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:305: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:296>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:314: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:305>",
 		"Text": "Leave camp to join the battle.",
 		"Version": 1
 	},
@@ -576,14 +583,14 @@
 	"Perfect Clear! Double your score from %d to %d?;1": {
 		"Handle": "h979a14b3gc2cfg441egaa4ag92780868b05a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:361: in field 'UpdateRogueScore'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/GameMode.lua:267: in field 'UpdateRogueScore'",
 		"Text": "Perfect Clear! Double your score from %d to %d?",
 		"Version": 1
 	},
 	"Perfect Clear! Double your score from 5 to 10?;1": {
 		"Handle": "h637ce98fg3629g4bcdga504gfdabc726df89",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:212: in field 'AskConfirmation'",
 		"Text": "Perfect Clear! Double your score from 5 to 10?",
 		"Version": 1
 	},
@@ -765,7 +772,7 @@
 	"Round %d;1": {
 		"Handle": "h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:284: in field 'StartRound'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:293: in field 'StartRound'",
 		"Text": "Round %d",
 		"Version": 1
 	},
@@ -793,7 +800,7 @@
 	"Scenario ended.;1": {
 		"Handle": "h28fa5cc5g7dafg4099g81bcg96ff639eb4dd",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Scenario.lua:520: in field 'End'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:595: in field 'End'",
 		"Text": "Scenario ended.",
 		"Version": 1
 	},
@@ -807,14 +814,14 @@
 	"Scenario restored.;1": {
 		"Handle": "h2bed91d3g7eb8g4c48ga18dgea2e03afc80c",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:433: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:429>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:442: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:438>",
 		"Text": "Scenario restored.",
 		"Version": 1
 	},
 	"Scenario stopped.;1": {
 		"Handle": "h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/ModActive/Scenario.lua:596: in field 'Stop'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/NetEvents.lua:122: in field '_Func'",
 		"Text": "Scenario stopped.",
 		"Version": 1
 	},
@@ -1129,14 +1136,14 @@
 	"Your Currency increased: %d -> %d!;1": {
 		"Handle": "hc327dd8cg9672g488dg9f01g4eebfd236cc9",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Unlock.lua:119: in function <CombatMod/CombatMod/Server/Unlock.lua:118>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/Unlock.lua:119: in function <CombatMod/CombatMod/Server/ModActive/Unlock.lua:118>",
 		"Text": "Your Currency increased: %d -> %d!",
 		"Version": 1
 	},
 	"Your RogueScore increased: %d -> %d!;1": {
 		"Handle": "hefbbbf98gbaeeg4eacg9dc8g88cabfeaaae8",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/GameMode.lua:232: in function <CombatMod/CombatMod/Server/GameMode.lua:231>",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/GameMode.lua:244: in function <CombatMod/CombatMod/Server/ModActive/GameMode.lua:243>",
 		"Text": "Your RogueScore increased: %d -> %d!",
 		"Version": 1
 	},

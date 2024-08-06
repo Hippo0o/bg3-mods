@@ -49,6 +49,9 @@ function Player.PickupAll(character)
         for rarity, pickup in pairs(data) do
             if pickup then
                 Item.PickupAll(character or Player.Host(), rarity, type)
+                if type == "Object" then
+                    Item.PickupAll(character or Player.Host(), rarity, "CombatObject")
+                end
             end
         end
     end
@@ -209,8 +212,11 @@ function Player.AskConfirmation(message, ...)
     message = __(message, ...)
     local msgId = U.RandomId("AskConfirmation_")
     Osi.ReadyCheckSpecific(msgId, message, 1, Player.Host(), "", "", "")
+
     local chainable = Libs.Chainable(message)
-    readyChecks[msgId] = chainable.Begin
+    readyChecks[msgId] = function(...)
+        chainable:Begin(...)
+    end
 
     return chainable
 end
