@@ -3,6 +3,7 @@ Useful for loading Lua code in Multiplayer while not having to share the same mo
 
 # Load scripts from SE Console
 
+Execute this code in Console to load the Loader.lua
 from `Data/Mods/` folder:
 
 ```lua
