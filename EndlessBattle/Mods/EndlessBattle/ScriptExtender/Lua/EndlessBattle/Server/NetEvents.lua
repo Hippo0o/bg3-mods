@@ -205,5 +205,14 @@ Net.On("KillNearby", function(event)
         if v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid) then
             UE.Remove(v.Guid)
         end
+
+        -- and v.Entity.ServerItem.CanUse
+        if v.Entity.ServerItem and not Item.IsOwned(v.Guid) then
+            if v.Entity.ServerItem.CanUse or v.Entity.ServerItem.CanBePickedUp then
+                UE.Remove(v.Guid)
+            end
+            -- UE.Remove(v.Guid)
+            IO.SaveDump("Dumps/" .. v.Guid, v.Entity.ServerItem)
+        end
     end
 end)

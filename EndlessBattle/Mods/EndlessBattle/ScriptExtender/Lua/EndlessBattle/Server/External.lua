@@ -84,7 +84,7 @@ External.Validators.Enemy = tt({
     Icon = { "nil", "string" },
 })
 
-local positionTimelineType = { "nil", tt({ "number" }, true) }
+local positionTimelineType = { "nil", tt({ "nil", "number" }, true) }
 
 local posType = tt({
     { "number" }, -- x

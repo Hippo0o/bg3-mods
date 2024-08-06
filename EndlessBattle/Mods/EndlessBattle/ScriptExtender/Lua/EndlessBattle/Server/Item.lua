@@ -245,6 +245,134 @@ function Item.Cleanup()
     end
 end
 
+function Item.PickupAll(character)
+    local items = UT.Map(PersistentVars.SpawnedItems, function(item)
+        return U.UUID.Extract(item.GUID)
+    end)
+
+    for _, item in ipairs(items) do
+        if not Item.IsOwned(item) then
+            Osi.ToInventory(item, character)
+            Schedule(function()
+                if Item.IsOwned(item) then
+                    PersistentVars.SpawnedItems[item] = nil
+                end
+            end)
+        end
+    end
+end
+
+function Item.SpawnLoot(loot, x, y, z)
+    local i = 0
+    Async.Interval(300 - (#loot * 2), function(self)
+        i = i + 1
+
+        if i > #loot then
+            self:Clear()
+
+            return
+        end
+
+        if loot[i] == nil then
+            L.Error("Loot was empty.", i, #loot)
+            return
+        end
+
+        local x2 = x + U.Random() * U.Random(-1, 1)
+        local z2 = z + U.Random() * U.Random(-1, 1)
+
+        loot[i]:Spawn(x2, y, z2)
+    end)
+end
+
+function Item.GenerateLoot(rolls, lootRates)
+    local loot = {}
+
+    -- each kill gets an object/weapon/armor roll
+    -- TODO drop gold
+    if not lootRates then
+        lootRates = C.LootRates
+    end
+
+    local function add(t, rarity, amount)
+        for i = 1, amount do
+            table.insert(t, rarity)
+        end
+
+        return t
+    end
+
+    -- build rarity roll tables from template e.g. { "Common", "Common", "Uncommon", "Rare" }
+    -- if rarity is 0 it will be at least added once
+    -- if rarity is not defined it will not be added
+    local fixed = {}
+    local sum = 0
+    for _, r in ipairs(C.ItemRarity) do
+        if lootRates.Objects[r] then
+            local rate = lootRates.Objects[r]
+            sum = sum + rate
+            add(fixed, r, rate)
+        end
+        add(fixed, "Nothing", math.ceil(sum / 2)) -- make a chance to get nothing
+    end
+
+    local bonusRarities = {}
+    for _, bonusCategory in ipairs({ "Object", "Weapon", "Armor" }) do
+        local bonus = {}
+        add(bonus, "Nothing", 10) -- make a chance to get nothing
+
+        for _, r in ipairs(C.ItemRarity) do
+            if bonusCategory == "Object" and lootRates.Objects[r] then
+                add(bonus, r, lootRates.Objects[r])
+            elseif bonusCategory == "Weapon" and lootRates.Weapons[r] then
+                add(bonus, r, lootRates.Weapons[r])
+            elseif bonusCategory == "Armor" and lootRates.Armor[r] then
+                add(bonus, r, lootRates.Armor[r])
+            end
+        end
+
+        bonusRarities[bonusCategory] = bonus
+    end
+
+    for i = 1, rolls do
+        do
+            local rarity = fixed[U.Random(#fixed)]
+            local items = Item.Objects(rarity, false)
+
+            L.Debug("Rolling fixed loot items:", #items, "Object", rarity)
+            if #items > 0 then
+                table.insert(loot, items[U.Random(#items)])
+            end
+        end
+
+        local items = {}
+        local fail = 0
+        local bonusCategory = ({ "Object", "Weapon", "Armor" })[U.Random(3)]
+        local rarity = nil
+        -- avoid 0 rolls e.g. legendary objects dont exist
+        while #items == 0 and fail < 3 do
+            fail = fail + 1
+
+            local rarity = bonusRarities[bonusCategory][U.Random(#bonusRarities[bonusCategory])]
+
+            if bonusCategory == "Object" then
+                items = Item.Objects(rarity, true)
+            elseif bonusCategory == "Weapon" then
+                items = Item.Weapons(rarity)
+            elseif bonusCategory == "Armor" then
+                items = Item.Armor(rarity)
+            end
+        end
+
+        L.Debug("Rolling bonus loot items:", #items, bonusCategory, rarity)
+        if #items > 0 then
+            table.insert(loot, items[U.Random(#items)])
+        end
+    end
+
+    return loot
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Events                                            --
@@ -268,16 +396,7 @@ U.Osiris.On(
 
             if UT.Contains(items, U.UUID.Extract(object)) then
                 L.Debug("Auto pickup:", object, character)
-                for _, item in ipairs(items) do
-                    if not Item.IsOwned(item) then
-                        Osi.ToInventory(item, character)
-                        Schedule(function()
-                            if Item.IsOwned(item) then
-                                PersistentVars.SpawnedItems[item] = nil
-                            end
-                        end)
-                    end
-                end
+                Item.PickupAll(character)
             end
         end)
     )
