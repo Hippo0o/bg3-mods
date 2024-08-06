@@ -13,6 +13,8 @@ local Libs = Require("Hlib/Libs")
 ---@class Net
 local M = {}
 
+M.EventOnSend = "_NetSend"
+
 -- exposed
 ---@class NetEvent : LibsClass
 ---@field Action string
@@ -71,6 +73,8 @@ function M.Send(action, payload, responseAction, peerId)
         PeerId = peerId,
         ResponseAction = responseAction or action,
     })
+
+    Event.Trigger(M.EventOnSend, event)
 
     if Ext.IsServer() then
         if event.PeerId == nil then

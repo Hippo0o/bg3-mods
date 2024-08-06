@@ -10,12 +10,12 @@ local Event = Require("Hlib/Event")
 ---@class GameState
 local M = {}
 
-M.EventSave = "GameStateSave"
-M.EventLoad = "GameStateLoad"
-M.EventLoadSession = "GameStateLoadSession"
-M.EventUnload = "GameStateUnload"
-M.EventUnloadLevel = "GameStateUnloadLevel"
-M.EventUnloadSession = "GameStateUnloadSession"
+M.EventSave = "_GameStateSave"
+M.EventLoad = "_GameStateLoad"
+M.EventLoadSession = "_GameStateLoadSession"
+M.EventUnload = "_GameStateUnload"
+M.EventUnloadLevel = "_GameStateUnloadLevel"
+M.EventUnloadSession = "_GameStateUnloadSession"
 
 Ext.Events.GameStateChanged:Subscribe(function(e)
     if Mod.Dev then

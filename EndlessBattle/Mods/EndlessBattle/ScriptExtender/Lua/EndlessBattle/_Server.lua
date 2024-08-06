@@ -91,9 +91,27 @@ GameState.OnUnload(function()
     end
 end)
 
-Ext.Events.ResetCompleted:Subscribe(function()
-    Event.Trigger(GameState.EventLoad, { FromState = "Sync", ToState = "Running" })
-end)
+-- Ext.Events.ResetCompleted:Subscribe(function()
+--     Event.Trigger(GameState.EventLoad, { FromState = "Sync", ToState = "Running" })
+-- end)
+
+do -- check for interaction to enable the mod
+    local checkActive
+    local onLoad
+    checkActive = Event.On(Net.EventSend, function(event)
+        if event.Action == "OpenGUI" then
+            PersistentVars.Active = true
+            onLoad:Unregister()
+            checkActive:Unregister()
+        end
+    end)
+    local onLoad = GameState.OnLoad(function()
+        if PersistentVars.Active then
+            checkActive:Unregister()
+            onLoad:Unregister()
+        end
+    end)
+end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
