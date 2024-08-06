@@ -528,7 +528,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town (Mason Guild)",
+        Name = "Reithwin Town (Mason Guild)",
         Region = "SCL_Main_A",
         Enter = { -113.0, 26.056640625, -6.0 },
         Author = "Chronos Perpetua",
@@ -635,7 +635,7 @@ return {
     --     },
     -- },
     {
-        Name = "Rethwin Town (large tree)",
+        Name = "Reithwin Town (large tree)",
         Region = "SCL_Main_A",
         Enter = { -151.0, 26.5947265625, -51.0 },
         Author = "Chronos Perpetua",
@@ -656,7 +656,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town (bar)",
+        Name = "Reithwin Town (bar)",
         Region = "SCL_Main_A",
         Enter = { -223.0, 15.3076171875, -77.0 },
         Author = "Chronos Perpetua",
@@ -680,7 +680,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town (road to Baldurs Gate barn)",
+        Name = "Reithwin Town (road to Baldurs Gate barn)",
         Region = "SCL_Main_A",
         Enter = { -246.0, 31.087890625, -5.0 },
         Author = "Chronos Perpetua",
@@ -701,7 +701,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town (House of Healing library)",
+        Name = "Reithwin Town (House of Healing library)",
         Region = "SCL_Main_A",
         Enter = { -194.0, 41.568359375, 47.0 },
         Author = "Chronos Perpetua",
@@ -731,7 +731,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town (graveyard mausoleum)",
+        Name = "Reithwin Town (graveyard mausoleum)",
         Region = "SCL_Main_A",
         Enter = { -155.0, 31.529296875, 65.0 },
         Author = "Chronos Perpetua",
@@ -752,7 +752,7 @@ return {
         },
     },
     {
-        Name = "Rethwin Town (Tollhouse roof party rager extravaganza)",
+        Name = "Reithwin Town (Tollhouse roof party rager extravaganza)",
         Region = "SCL_Main_A",
         Enter = { -108.0, 35.548828125, -71.0 },
         Author = "Chronos Perpetua",

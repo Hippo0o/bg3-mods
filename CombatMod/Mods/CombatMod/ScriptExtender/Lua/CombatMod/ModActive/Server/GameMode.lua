@@ -171,20 +171,24 @@ function GameMode.GenerateScenario(score, tiers)
                 table.insert(timeline[roundIndex], tier.name)
                 remainingValue = remainingValue - tier.value
 
-                -- too strong for single round
-                if score <= 500 and tier.name == C.EnemyTier[5] then
-                    if not timeline[roundIndex + 1] or numRounds < maxRounds then
-                        table.insert(timeline, roundIndex + 1, {})
-                        numRounds = numRounds + 1
-                    end
-                end
-                if score <= 1000 and tier.name == C.EnemyTier[6] then
-                    table.insert(timeline, {})
-                    numRounds = numRounds + 1
+                local max = math.ceil(maxValue / 100)
 
-                    if numRounds < maxRounds then
-                        table.insert(timeline, roundIndex + 1, {})
+                if #timeline[roundIndex] > max and numRounds < maxRounds then
+                    -- too strong for single round
+                    if tier.name == C.EnemyTier[5] then
+                        if not timeline[roundIndex + 1] then
+                            table.insert(timeline, roundIndex + 1, {})
+                            numRounds = numRounds + 1
+                        end
+                    end
+                    if tier.name == C.EnemyTier[6] then
+                        table.insert(timeline, {})
                         numRounds = numRounds + 1
+
+                        if not timeline[roundIndex + 1] then
+                            table.insert(timeline, roundIndex + 1, {})
+                            numRounds = numRounds + 1
+                        end
                     end
                 end
             end

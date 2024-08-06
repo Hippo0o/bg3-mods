@@ -57,7 +57,13 @@ function Object.New(name, type, fake)
             o.Slot = item.ItemUseType
         end
 
-        o.Mod = { item.ModId, Ext.Mod.GetMod(item.ModId).Info.Directory }
+        local mod = Ext.Mod.GetMod(item.ModId)
+        local modName = "Invalid Mod UUID"
+        if mod then
+            modName = mod.Info.Directory
+        end
+
+        o.Mod = { item.ModId, modName }
     end
 
     o.GUID = nil
