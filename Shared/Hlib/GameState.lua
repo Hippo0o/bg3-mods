@@ -12,7 +12,7 @@ local M = {}
 
 M.EventSave = "_GameStateSave"
 M.EventLoad = "_GameStateLoad"
-M.EventLoadSession = "_GameStateLoadSession"
+M.EventSessionLoaded = "_GameStateSessionLoaded"
 M.EventUnload = "_GameStateUnload"
 M.EventUnloadLevel = "_GameStateUnloadLevel"
 M.EventUnloadSession = "_GameStateUnloadSession"
@@ -22,21 +22,25 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
         Utils.Log.Debug("GameState", e.FromState, e.ToState)
     end
     if e.FromState == "LoadSession" and e.ToState == "LoadLevel" then
-        Event.Trigger(M.EventLoadSession, e)
+        Event.Trigger(M.EventSessionLoaded)
     elseif (e.FromState == "Sync" or e.FromState == "PrepareRunning") and e.ToState == "Running" then
-        Event.Trigger(M.EventLoad, e)
+        Event.Trigger(M.EventLoad)
     elseif e.FromState == "Running" and e.ToState == "Save" then
-        Event.Trigger(M.EventSave, e)
+        Event.Trigger(M.EventSave)
     elseif e.FromState == "Save" and e.ToState == "Running" then
-        Event.Trigger(M.EventLoad, e)
+        Event.Trigger(M.EventLoad)
     elseif (e.FromState == "Running" or e.FromState == "Idle") and e.ToState == "UnloadLevel" then
-        Event.Trigger(M.EventUnload, e)
+        Event.Trigger(M.EventUnload)
     elseif e.FromState == "UnloadSession" and e.ToState == "LoadSession" then
         -- only on server between bg3se::ExtensionStateBase::LuaResetInternal(): LUA VM reset
-        Event.Trigger(M.EventUnloadSession, e)
+        Event.Trigger(M.EventUnloadSession)
     elseif e.FromState == "UnloadLevel" and (e.ToState == "LoadLevel" or e.ToState == "Idle") then
-        Event.Trigger(M.EventUnloadLevel, e)
+        Event.Trigger(M.EventUnloadLevel)
     end
+end)
+
+Ext.Events.ResetCompleted:Subscribe(function()
+    Event.Trigger(GameState.EventLoad)
 end)
 
 ---@param callback fun()
@@ -60,11 +64,11 @@ function M.OnUnload(callback, once)
     return Event.On(M.EventUnload, callback, once)
 end
 
----@param callback fun()
+---@param callback funEventSessionLoaded
 ---@param once boolean|nil
 ---@return EventListener
-function M.OnLoadSession(callback, once)
-    return Event.On(M.EventLoadSession, callback, once)
+function M.OnSessionLoad(callback, once)
+    return Event.On(M.EventSessionLoaded, callback, once)
 end
 
 ---@param callback fun()

@@ -119,17 +119,21 @@ function Control.StartPanel(root)
         end
 
         Components.Conditional(listCols[2], function(cond)
-            local b1 = cond.Root:AddButton(__("Teleport"))
-            b1.OnClick = function(button)
+            local grp = cond.Root:AddGroup(__("Debug"))
+
+            grp:AddButton(__("Teleport")).OnClick = function(button)
                 Event.Trigger("Teleport", { Map = mapSelection.Value })
             end
 
-            local b2 = cond.Root:AddButton(__("Ping Spawns"))
-            b2.OnClick = function(button)
+            grp:AddButton(__("Ping Spawns")).OnClick = function(button)
                 Event.Trigger("PingSpawns", { Map = mapSelection.Value })
             end
 
-            return { b1, b2 }
+            grp:AddButton(__("Kill spawned")).OnClick = function()
+                Net.Send("KillSpawned")
+            end
+
+            return grp
         end, "ToggleDebug").Update(Mod.Debug)
     end)
 end

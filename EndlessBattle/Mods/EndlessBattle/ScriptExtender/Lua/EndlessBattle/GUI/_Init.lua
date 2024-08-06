@@ -1,12 +1,3 @@
-State = {}
-Net.On("GetState", function(event)
-    State = event.Payload or {}
-    Event.Trigger("StateChange", State)
-end)
-Net.On("PlayerNotify", function()
-    Net.Send("GetState")
-end)
-
 Require("EndlessBattle/GUI/Components")
 
 Require("EndlessBattle/GUI/Control")
@@ -25,6 +16,44 @@ GameState.OnLoad(function()
         window.Visible = true
     end
 end)
+
+do
+    local handles = {}
+    Event.On("WindowClosed", function()
+        for _, handle in ipairs(handles) do
+            Ext.UI.GetRoot():Unsubscribe(handle)
+        end
+    end)
+    Event.On("WindowOpened", function()
+        -- auto hide window
+        local windowVisible = Async.Debounce(1000, function(bool)
+            window.Visible = bool
+        end)
+        local windowAlpha = Async.Debounce(100, function(bool)
+            if bool then
+                window:SetStyle("Alpha", 1)
+                window.Visible = bool
+            else
+                window:SetStyle("Alpha", 0.5)
+            end
+        end)
+
+        handles[1] = Ext.UI.GetRoot():Subscribe("MouseEnter", function()
+            if not window then
+                return
+            end
+            windowVisible(false)
+            windowAlpha(false)
+        end)
+        handles[2] = Ext.UI.GetRoot():Subscribe("MouseLeave", function()
+            if not window then
+                return
+            end
+            windowVisible(true)
+            windowAlpha(true)
+        end)
+    end)
+end
 
 -- register window event listeners
 local listeners = {}
@@ -53,6 +82,8 @@ local function openWindow()
     end
     ---@type ExtuiWindow
     window = Ext.IMGUI.NewWindow("Endless Battle")
+    window.NoFocusOnAppearing = true
+    Event.Trigger("WindowOpened")
 
     L.Warn("Window opened.", "Support is currently in an experimental state.", "DX11 is known to cause issues.")
     L.Warn("If the window is not visible, make sure to update to the latest version of Script Extender.")
