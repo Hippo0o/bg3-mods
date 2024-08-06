@@ -179,13 +179,21 @@ function Action.SpawnLoot()
 
     local map = Current().Map
     local loot = Action.CalculateLoot()
-    local i = 1
+    local i = 0
     Async.Interval(300 - (#loot * 2), function(self)
         i = i + 1
-        map:SpawnLoot(loot[i])
-        if i == #loot then
+
+        if i > #loot then
             self:Clear()
+
+            return
         end
+
+        if loot[i] == nil then
+            L.Error("Loot was empty.", i, #loot)
+            return
+        end
+        map:SpawnLoot(loot[i])
     end)
 end
 
@@ -322,35 +330,42 @@ function Action.Failsafe()
 
     if #s.SpawnedEnemies > 0 and not s:HasMoreRounds() then
         L.Debug("Running failsafe.", #s.SpawnedEnemies)
+        local checkEnded = false
 
         for _, e in pairs(s.SpawnedEnemies) do
             L.Error("Failsafe triggered.", e:GetId(), e.GUID)
 
             if not e:IsSpawned() then
                 UT.Remove(s.SpawnedEnemies, e)
+                checkEnded = true
             elseif Osi.IsInCombat(e.GUID) == 0 then
-                Schedule(function() -- pyramid of please combat me daddy
-                    Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
+                Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
+                e:Combat(true)
+
+                Schedule(function()
+                    if Osi.IsInCombat(e.GUID) == 1 then
+                        return
+                    end
+
+                    s.Map:Teleport(e.GUID)
                     e:Combat(true)
 
                     Schedule(function()
-                        if Osi.IsInCombat(e.GUID) == 1 then
-                            return
+                        if Osi.IsInCombat(e.GUID) == 0 then
+                            UT.Remove(s.SpawnedEnemies, e)
+                            e:Clear()
+                            checkEnded = true
                         end
-
-                        s.Map:Teleport(e.GUID)
-                        e:Combat(true)
-
-                        Schedule(function()
-                            if Osi.IsInCombat(e.GUID) == 0 then
-                                UT.Remove(s.SpawnedEnemies, e)
-                                e:Clear()
-                            end
-                        end)
                     end)
                 end)
             end
         end
+
+        Defer(3000, function()
+            if checkEnded then
+                Action.CheckEnded()
+            end
+        end)
     end
 end
 
@@ -545,7 +560,9 @@ Ext.Osiris.RegisterListener(
 
         Scenario.CombatSpawned()
 
+        -- this is just for fun and too hard to maintain
         if Config.ForceCombatRestart then
+            -- TODO fails when enemies don't enter combat
             if round > 1 then
                 for _, e in pairs(s.SpawnedEnemies) do
                     -- should always be spawned
@@ -554,6 +571,7 @@ Ext.Osiris.RegisterListener(
                         e:Combat(true)
                     end
                 end
+                -- to not trigger this event again when still in combat
                 s.CombatId = nil
             end
         end
@@ -579,22 +597,24 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-        if not Enemy.IsValid(object) then
+        local guid = U.UUID.GetGUID(object)
+
+        if not Enemy.IsValid(guid) then
             return
         end
 
-        if UT.Contains(s.SpawnedEnemies, function(e)
-            return U.UUID.Equals(e.GUID, object)
+        if UT.Find(s.SpawnedEnemies, function(e)
+            return U.UUID.Equals(e.GUID, guid)
         end) then
             return
         end
 
-        if PersistentVars.SpawnedEnemies[object] then
+        if PersistentVars.SpawnedEnemies[guid] then
             return
         end
 
-        L.Debug("Entered combat.", object, combatGuid)
-        Enemy.CreateTemporary(object)
+        L.Debug("Entered combat.", guid, combatGuid)
+        Enemy.CreateTemporary(guid)
     end)
 )
 
@@ -631,7 +651,6 @@ Ext.Osiris.RegisterListener(
 
         local s = Current()
         if s.CombatId == combatGuid then
-            -- TODO failsafe interval
             s.CombatId = nil
             --- empty round wont progress the combat
             if s:HasMoreRounds() and #s:SpawnsForRound() == 0 then
@@ -639,10 +658,7 @@ Ext.Osiris.RegisterListener(
                 return
             end
 
-            Defer(1000, function()
-                ifScenario(Action.Failsafe)
-                ifScenario(Action.CheckEnded)
-            end)
+            Defer(3000, ifScenario(Action.Failsafe))
         end
     end)
 )
