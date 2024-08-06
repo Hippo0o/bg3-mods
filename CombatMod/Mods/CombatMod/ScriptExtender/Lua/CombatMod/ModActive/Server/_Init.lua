@@ -5,6 +5,7 @@ Item = {}
 GameMode = {}
 StoryBypass = {}
 Unlock = {}
+Workaround = {}
 
 function LogRandom(key, value, max)
     if not max then
@@ -61,6 +62,7 @@ Require("CombatMod/ModActive/Server/StoryBypass")
 Require("CombatMod/ModActive/Server/GameMode")
 Require("CombatMod/ModActive/Server/NetEvents")
 Require("CombatMod/ModActive/Server/Unlock")
+Require("CombatMod/ModActive/Server/Workaround")
 
 -- collect stats
 Event.On("ScenarioEnded", function(scenario)

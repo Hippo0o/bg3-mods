@@ -333,6 +333,17 @@ do -- EXP Lock
     GameState.OnLoad(toggleCamp)
 end
 
+function StoryBypass.DisableAutosave()
+    local templates = Ext.Template.GetAllLocalTemplates()
+    for _, t in pairs(templates) do
+        if t.TemplateType == "trigger" then
+            if t.Name:match("Autosave") then
+
+            end
+        end
+    end
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Events                                            --
@@ -565,6 +576,12 @@ Event.On(
         Osi.RemoveStatus(character, "SURPRISED", C.NullGuid)
     end)
 )
+Event.On(
+    "ScenarioCombatStarted",
+    ifBypassStory(function()
+        StoryBypass.ClearArea(Player.Host())
+    end)
+)
 
 local function removeAllEntities()
     if Scenario.HasStarted() or not Config.ClearAllEntities then
@@ -582,3 +599,5 @@ local function removeAllEntities()
     Osi.Resurrect(C.OriginCharacters.Halsin) -- Halsin will be dead once entering Act 2 for the first time
 end
 GameState.OnLoad(ifBypassStory(removeAllEntities))
+
+GameState.OnLoad(ifBypassStory(StoryBypass.DisableAutosave))

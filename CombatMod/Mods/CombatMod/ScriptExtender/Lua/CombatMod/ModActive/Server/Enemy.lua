@@ -201,10 +201,6 @@ function Object:ModifyExperience()
 end
 
 function Object:OnCombat()
-    Osi.SetTag(self.GUID, "9787450d-f34d-43bd-be88-d2bac00bb8ee") -- AI_UNPREFERRED_TARGET
-    Osi.ClearTag(self.GUID, "64bc9da1-9262-475a-a397-157600b7debd") -- AI_PREFERRED_TARGET
-    Osi.SetTag(self.GUID, "b5825091-f2ed-4657-8d86-c0d020c358a0") -- PALADIN_BLOCK_OATHBREAK
-
     -- if Osi.IsInCombat(self.GUID) ~= 1 then
     --     Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
     -- else
@@ -248,6 +244,11 @@ function Object:Modify(keepFaction)
     end
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
+
+    Osi.SetTag(self.GUID, "6d60bed7-10cc-4b52-8fb7-baa75181cd49") -- IGNORE_COMBAT_LATE_JOIN_PENALTY
+    Osi.SetTag(self.GUID, "9787450d-f34d-43bd-be88-d2bac00bb8ee") -- AI_UNPREFERRED_TARGET
+    Osi.SetTag(self.GUID, "b5825091-f2ed-4657-8d86-c0d020c358a0") -- PALADIN_BLOCK_OATHBREAK
+    Osi.ClearTag(self.GUID, "64bc9da1-9262-475a-a397-157600b7debd") -- AI_PREFERRED_TARGET
 
     self:ModifyExperience()
 

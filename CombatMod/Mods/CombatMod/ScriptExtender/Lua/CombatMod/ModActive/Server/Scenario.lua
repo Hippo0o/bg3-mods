@@ -161,6 +161,7 @@ function Action.SpawnHelper()
         return
     end
 
+    Osi.SetTag(helper, "9787450d-f34d-43bd-be88-d2bac00bb8ee") -- AI_UNPREFERRED_TARGET
     Osi.SetFaction(helper, C.ScenarioHelper.Faction)
     s.CombatHelper = helper
 

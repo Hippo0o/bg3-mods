@@ -215,13 +215,6 @@ return UT.Combine({
         Cost = 10,
         Amount = nil,
         Character = true,
-        OnReapply = function()
-            for _, p in pairs(GU.DB.GetPlayers()) do
-                if Osi.GetTadpolePowersCount(p) > 0 then
-                    Osi.SetTadpoleTreeState(p, 2)
-                end
-            end
-        end,
         OnBuy = function(self, character)
             unlockTadpole(character)
         end,
