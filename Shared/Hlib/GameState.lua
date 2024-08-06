@@ -22,26 +22,19 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
         Utils.Log.Debug("GameState", e.FromState, e.ToState)
     end
     if e.FromState == "LoadSession" and e.ToState == "LoadLevel" then
-        Utils.Log.Info("Session Loaded.")
         Event.Trigger(M.EventLoadSession, e)
     elseif (e.FromState == "Sync" or e.FromState == "PrepareRunning") and e.ToState == "Running" then
-        Utils.Log.Info("Game Loaded.")
         Event.Trigger(M.EventLoad, e)
     elseif e.FromState == "Running" and e.ToState == "Save" then
-        Utils.Log.Info("Saving started.")
         Event.Trigger(M.EventSave, e)
     elseif e.FromState == "Save" and e.ToState == "Running" then
-        Utils.Log.Info("Saving finished.")
         Event.Trigger(M.EventLoad, e)
     elseif (e.FromState == "Running" or e.FromState == "Idle") and e.ToState == "UnloadLevel" then
-        Utils.Log.Info("Level unloading.")
         Event.Trigger(M.EventUnload, e)
     elseif e.FromState == "UnloadSession" and e.ToState == "LoadSession" then
-        -- between bg3se::ExtensionStateBase::LuaResetInternal(): LUA VM reset
-        Utils.Log.Info("Loading another save.")
+        -- only on server between bg3se::ExtensionStateBase::LuaResetInternal(): LUA VM reset
         Event.Trigger(M.EventUnloadSession, e)
     elseif e.FromState == "UnloadLevel" and (e.ToState == "LoadLevel" or e.ToState == "Idle") then
-        Utils.Log.Info("Loading another level.")
         Event.Trigger(M.EventUnloadLevel, e)
     end
 end)

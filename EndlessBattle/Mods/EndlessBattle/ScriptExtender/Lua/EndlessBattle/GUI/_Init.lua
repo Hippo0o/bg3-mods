@@ -7,12 +7,12 @@ Net.On("PlayerNotify", function()
     Net.Send("GetState")
 end)
 
-Require("JustCombat/GUI/Components")
+Require("EndlessBattle/GUI/Components")
 
-Require("JustCombat/GUI/Control")
-Require("JustCombat/GUI/Creation")
-Require("JustCombat/GUI/Config")
-Require("JustCombat/GUI/Debug")
+Require("EndlessBattle/GUI/Control")
+Require("EndlessBattle/GUI/Creation")
+Require("EndlessBattle/GUI/Config")
+Require("EndlessBattle/GUI/Debug")
 
 local window
 GameState.OnUnload(function()
@@ -52,12 +52,13 @@ local function openWindow()
         window:Destroy()
     end
     ---@type ExtuiWindow
-    window = Ext.IMGUI.NewWindow("Just Combat")
+    window = Ext.IMGUI.NewWindow("Endless Battle")
 
-    L.Warn("Window opened.")
-    L.Warn("If the window is not visible, update to latest version of Script Extender.")
-    L.Warn("Furthermore try to use Vulkan and disable all overlays(Steam/Discord/AMD/NVIDIA/etc).")
+    L.Warn("Window opened.", "Support is currently in an experimental state.", "DX11 is known to cause issues.")
+    L.Warn("If the window is not visible, make sure to update to the latest version of Script Extender.")
+    L.Warn("Furthermore, try switching to Vulkan and disable all overlays (Steam, Discord, AMD, NVIDIA, etc.).")
 
+    window:SetSize({ 670, 550 })
     window.Closeable = true
     window.OnClose = function()
         Event.Trigger("WindowClosed")
@@ -67,7 +68,7 @@ local function openWindow()
 
     local tabs = window:AddTabBar(__("Main"))
     Control.Main(tabs)
-    Creation.Main(tabs)
+    -- Creation.Main(tabs)
     Config.Main(tabs)
     Debug.Main(tabs)
 end

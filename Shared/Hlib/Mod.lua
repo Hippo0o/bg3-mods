@@ -1,23 +1,23 @@
 ---@class Mod
 local M = {}
 
-M.ModUUID = ModuleUUID
-M.ModPrefix = ""
-M.ModTableKey = ""
-M.ModVersion = { major = 0, minor = 0, revision = 0 }
+M.UUID = ModuleUUID
+M.Prefix = ""
+M.TableKey = ""
+M.Version = { major = 0, minor = 0, revision = 0 }
 M.Debug = true
 M.Dev = false
 M.EnableRCE = false
-M.NetChannel = "Net_" .. M.ModUUID
+M.NetChannel = "Net_" .. M.UUID
 
 M.PersistentVarsTemplate = {}
 
-if Ext.Mod.IsModLoaded(M.ModUUID) then
-    local ModInfo = Ext.Mod.GetMod(M.ModUUID)["Info"]
+if Ext.Mod.IsModLoaded(M.UUID) then
+    local ModInfo = Ext.Mod.GetMod(M.UUID)["Info"]
 
-    M.ModTableKey = ModInfo.Name
-    M.ModPrefix = ModInfo.Name
-    M.ModVersion = { major = ModInfo.ModVersion[1], minor = ModInfo.ModVersion[2], revision = ModInfo.ModVersion[3] }
+    M.TableKey = ModInfo.Name
+    M.Prefix = ModInfo.Name
+    M.Version = { major = ModInfo.ModVersion[1], minor = ModInfo.ModVersion[2], revision = ModInfo.ModVersion[3] }
 end
 
 function M.PreparePersistentVars()

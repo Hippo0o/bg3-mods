@@ -48,6 +48,9 @@ local EventListener = Libs.Class({
     end,
     Unregister = function(self)
         local eventListeners = listeners[self._Event]
+        if not eventListeners then
+            return
+        end
 
         for i = #eventListeners, 1, -1 do
             if eventListeners[i]._Id == self._Id then

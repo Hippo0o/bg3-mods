@@ -12,7 +12,7 @@ local tt = Libs.TypedTable
 External.File = {}
 
 local function filePath(name)
-    return Mod.ModPrefix .. "/" .. name .. ".json"
+    return Mod.Prefix .. "/" .. name .. ".json"
 end
 
 function External.File.Exists(name)

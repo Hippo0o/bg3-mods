@@ -598,9 +598,9 @@ function M.UUID.FromString(str, iteration)
         return string.format("%08x%08x%08x%08x", hash, hash ~ 0x55555555, hash ~ 0x33333333, hash ~ 0x11111111)
     end
 
-    local prefix = Mod.ModUUID
+    local prefix = Mod.UUID
     for i = 1, (iteration or 0) do
-        prefix = prefix .. Mod.ModUUID
+        prefix = prefix .. Mod.UUID
     end
 
     local uuid = hashToUUID(simpleHash(prefix .. str))
@@ -647,7 +647,7 @@ end
 M.Log = {}
 
 local function logPrefix()
-    local pre = Mod.ModPrefix .. " "
+    local pre = Mod.Prefix .. " "
     if Mod.Debug then
         pre = pre .. (Ext.IsClient() and "[Client]" or "[Server]")
     end

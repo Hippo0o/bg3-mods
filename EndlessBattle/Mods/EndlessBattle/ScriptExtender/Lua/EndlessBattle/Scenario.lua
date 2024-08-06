@@ -1,4 +1,4 @@
-local scenarioTemplates = Require("JustCombat/Templates/Scenarios.lua")
+local scenarioTemplates = Require("EndlessBattle/Templates/Scenarios.lua")
 External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 
 -------------------------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 {
     "RequiredVersion": 14,
-    "ModTable": "JustCombat",
+    "ModTable": "EndlessBattle",
     "FeatureFlags": ["Lua", "Osiris"]
 }
