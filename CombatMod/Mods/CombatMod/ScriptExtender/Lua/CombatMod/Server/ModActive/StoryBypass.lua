@@ -418,7 +418,7 @@ U.Osiris.On(
     2,
     "after",
     ifBypassStory(function(object, combatGuid)
-        if not S and GC.IsNonPlayer(object) and GC.IsValid(object) then
+        if not Scenario.Current() and GC.IsNonPlayer(object) and GC.IsValid(object) then
             Osi.LeaveCombat(object)
             GU.Object.Remove(object)
             Player.Notify(
@@ -437,7 +437,7 @@ U.Osiris.On(
     1,
     "after",
     ifBypassStory(function(character)
-        if not S and GC.IsNonPlayer(character) and GC.IsValid(character) then
+        if not Scenario.Current() and GC.IsNonPlayer(character) and GC.IsValid(character) then
             GU.Object.Remove(character)
             Player.Notify(
                 __(
@@ -477,13 +477,13 @@ U.Osiris.On(
         -- workaround for blocked travel
         -- TODO fix this
         -- Defer(1000, function()
-        --     if S and not S.OnMap then
+        --     if Scenario.Current() and not S.OnMap then
         --         L.Error("Teleport workaround", character)
         --         -- Scenario.Teleport(character)
         --     end
         -- end)
 
-        if not Ext.Entity.Get(character).CampPresence or not S then
+        if not Ext.Entity.Get(character).CampPresence or not Scenario.Current() then
             L.Debug("ReturnToCamp", character)
             -- need ~2 ticks for changing CampPresence
             Async.WaitTicks(3, function()
@@ -514,7 +514,9 @@ Event.On(
 )
 
 local function removeAllEntities()
-    if (S and S:HasStarted()) or not Config.ClearAllEntities then
+    local s = Scenario.Current()
+
+    if (s and s:HasStarted()) or not Config.ClearAllEntities then
         return
     end
 

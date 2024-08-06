@@ -98,16 +98,21 @@ function Object:KillScore()
     return score
 end
 
+---@return Scenario|nil
+local function S()
+    return PersistentVars.Scenario
+end
+
 ---@return Scenario
 local function Current()
-    assert(S ~= nil, "Scenario not started.")
+    assert(S() ~= nil, "Scenario not started.")
 
-    return S
+    return S()
 end
 
 local function ifScenario(func)
     return function(...)
-        if S == nil then
+        if S() == nil then
             return
         end
         func(...)
@@ -300,14 +305,14 @@ function Action.StartRound()
 end
 
 function Action.NotifyStarted()
-    local id = tostring(S)
+    local id = tostring(S())
 
     return RetryUntil(function(self)
-        if tostring(S) ~= id then
+        if tostring(S()) ~= id then
             self:Clear()
             return
         end
-        if S.OnMap then
+        if S().OnMap then
             return true
         end
 
@@ -337,10 +342,10 @@ function Action.MapEntered()
         Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
     end
 
-    local id = tostring(S)
+    local id = tostring(S())
     Async.WaitTicks(33, function()
         WaitUntil(function(self)
-            if tostring(S) ~= id then
+            if tostring(S()) ~= id then
                 self:Clear()
                 return
             end
@@ -353,7 +358,7 @@ function Action.MapEntered()
                     and e.TurnBased.IsInCombat_M == true
             end) == nil
         end, function()
-            if tostring(S) == id then
+            if tostring(S()) == id then
                 Action.StartCombat()
             end
         end)
@@ -433,32 +438,35 @@ function Scenario.ExportTemplates()
     External.File.Export("Scenarios", scenarioTemplates)
 end
 
+---@return Scenario|nil
+function Scenario.Current()
+    return S()
+end
+
 ---@param state Scenario
 function Scenario.RestoreFromState(state)
     xpcall(function()
-        S = Scenario.Restore(state)
-        PersistentVars.Scenario = S
+        PersistentVars.Scenario = Scenario.Restore(state)
 
         Player.Notify(__("Scenario restored."))
 
-        if not S:HasStarted() then
-            if S.OnMap then
+        if not S():HasStarted() then
+            if S().OnMap then
                 Action.MapEntered()
             else
                 Action.NotifyStarted()
             end
         else
             -- to not break older saves, will add a filler turn
-            if not S.CombatHelper then
+            if not S().CombatHelper then
                 Action.SpawnHelper()
             end
         end
 
-        Event.Trigger("ScenarioRestored", S)
+        Event.Trigger("ScenarioRestored", S())
     end, function(err)
         L.Error(err)
         Enemy.Cleanup()
-        S = nil
         PersistentVars.Scenario = nil
         Player.Notify(__("Failed to restore scenario."))
     end)
@@ -493,7 +501,7 @@ end
 ---@param template table
 ---@param map Map|nil
 function Scenario.Start(template, map)
-    if S ~= nil then
+    if S() ~= nil then
         L.Error("Scenario already started.")
         return
     end
@@ -573,8 +581,7 @@ function Scenario.Start(template, map)
     end
 
     Player.Notify(__("Scenario %s started.", template.Name))
-    S = scenario
-    PersistentVars.Scenario = S
+    PersistentVars.Scenario = scenario
 
     Action.NotifyStarted()
 
@@ -589,8 +596,7 @@ function Scenario.End()
     Event.Trigger("ScenarioEnded", Current())
     Action.GiveReward()
 
-    PersistentVars.LastScenario = S
-    S = nil
+    PersistentVars.LastScenario = S()
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario ended."))
 end
@@ -600,7 +606,6 @@ function Scenario.Stop()
     Event.Trigger("ScenarioStopped", Current())
     Enemy.Cleanup()
 
-    S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario stopped."))
 end
@@ -671,7 +676,7 @@ function Scenario.CombatSpawned(specific)
 
     for _, enemy in ipairs(enemies) do
         RetryUntil(function()
-            if not S then
+            if not S() then
                 return true
             end
 
@@ -686,8 +691,8 @@ function Scenario.CombatSpawned(specific)
             Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, C.EnemyFaction, s.CombatHelper, enemy.GUID)
 
             enemy:Combat(true)
-            if S.CombatId then -- TODO check if works
-                Osi.PROC_EnterCombatByID(enemy.GUID, S.CombatId)
+            if S().CombatId then -- TODO check if works
+                Osi.PROC_EnterCombatByID(enemy.GUID, S().CombatId)
             end
 
             return Osi.IsInCombat(enemy.GUID) == 1
@@ -706,6 +711,16 @@ end
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
+
+GameState.OnLoad(function()
+    if U.Equals(PersistentVars.Scenario, {}) then
+        PersistentVars.Scenario = nil
+    end
+
+    if PersistentVars.Scenario ~= nil then
+        Scenario.RestoreFromState(PersistentVars.Scenario)
+    end
+end, true)
 
 U.Osiris.On(
     "TeleportedFromCamp",
@@ -734,9 +749,9 @@ U.Osiris.On(
 Event.On(
     "MapTeleported",
     ifScenario(function(map, character)
-        if map.Name == S.Map.Name then
-            if not S.OnMap and U.UUID.Equals(character, Player.Host()) then
-                S.OnMap = true
+        if map.Name == S().Map.Name then
+            if not S().OnMap and U.UUID.Equals(character, Player.Host()) then
+                S().OnMap = true
                 Defer(2000, Action.MapEntered)
             end
 

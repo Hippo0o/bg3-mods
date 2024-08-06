@@ -1,8 +1,5 @@
 Require("CombatMod/Shared")
 
----@type Scenario|nil
-S = nil
-
 Mod.PersistentVarsTemplate = {
     Asked = false,
     Active = false,
@@ -291,8 +288,10 @@ do
     end
 
     function Commands.ToMap(id)
-        if not id and S then
-            S.Map:Teleport(Player.Host())
+        local s = Scenario.Current()
+
+        if not id and s then
+            s.Map:Teleport(Player.Host())
             return
         end
 

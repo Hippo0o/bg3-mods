@@ -38,7 +38,6 @@ Require("CombatMod/Server/ModActive/Overwrites")
 -------------------------------------------------------------------------------------------------
 
 GameState.OnSave(function()
-    PersistentVars.Scenario = S
     PersistentVars.Config = Config
 
     for obj, _ in pairs(PersistentVars.SpawnedEnemies) do
@@ -59,27 +58,10 @@ GameState.OnSave(function()
 end)
 
 GameState.OnLoad(function()
-    if U.Equals(PersistentVars.Scenario, {}) then
-        PersistentVars.Scenario = nil
-    end
-
-    S = PersistentVars.Scenario
-    if S ~= nil then
-        Scenario.RestoreFromState(S)
-    end
-end, true)
-
-GameState.OnLoad(function()
     if PersistentVars.GUIOpen then
         Defer(1000, function()
             Net.Send("OpenGUI")
         end)
-    end
-end)
-
-GameState.OnUnload(function()
-    if PersistentVars then
-        PersistentVars.Scenario = S
     end
 end)
 

@@ -524,7 +524,7 @@ function Enemy.IsValid(object)
         and not GU.Object.IsOwned(object)
         and (
             Osi.IsSummon(object) == 1
-            or (S and UT.Find(S.SpawnedEnemies, function(v)
+            or (Scenario.Current() and UT.Find(Scenario.Current().SpawnedEnemies, function(v)
                 return U.UUID.Equals(v.GUID, object)
             end) ~= nil)
             or (UT.Find(PersistentVars.SpawnedEnemies, function(v)
