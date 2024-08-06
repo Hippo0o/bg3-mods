@@ -98,10 +98,10 @@ GameState.OnSave(function()
     end
 end)
 
-GameState.OnSessionLoad(function()
+GameState.OnSessionLoaded(function()
     External.LoadConfig()
 
-    Async.Run(function() -- runs on OnLoad instead of OnSessionLoad
+    Async.Run(function() -- runs on OnLoad instead of OnSessionLoaded
         if PersistentVars.Active == nil then
             GameMode.AskOnboarding()
         end

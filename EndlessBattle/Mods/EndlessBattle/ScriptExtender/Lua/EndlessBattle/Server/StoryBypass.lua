@@ -36,8 +36,8 @@ local function cancelDialog(dialog, instanceID)
             local paidActor = US.Contains(actor, {
                 "_Daisy_",
                 "Jergal",
-                "Orpheus",
-                --"Volo"
+                -- "Orpheus",
+                -- "Volo"
             })
             if paidActor then
                 return
