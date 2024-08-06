@@ -129,9 +129,7 @@ local Queue = Libs.Class({
             self.Loop:Start()
         end
 
-        if Mod.Dev then
-            Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx, debug.traceback())
-        end
+        Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx, Mod.Dev and debug.traceback())
 
         return idx
     end,
@@ -141,9 +139,7 @@ local Queue = Libs.Class({
                 table.remove(self.Tasks, i)
                 self.Loop.Tasks:Dec()
 
-                if Mod.Dev then
-                    Utils.Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
-                end
+                Utils.Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
 
                 return
             end

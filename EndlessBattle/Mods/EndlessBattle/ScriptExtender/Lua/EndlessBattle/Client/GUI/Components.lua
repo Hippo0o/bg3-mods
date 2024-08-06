@@ -67,14 +67,6 @@ function Components.Computed(root, compute, event, field)
             value = compute(root, ...)
         end
 
-        -- if type(value) == "table" then
-        --     xpcall(function()
-        --         value = table.concat(value, "	")
-        --     end, function() -- lazy fallback
-        --         value = Ext.Json.Stringify(value)
-        --     end)
-        -- end
-
         if value ~= nil then
             root[field] = value
         end
