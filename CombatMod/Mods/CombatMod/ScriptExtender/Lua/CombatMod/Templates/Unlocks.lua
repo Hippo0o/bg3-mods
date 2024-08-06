@@ -367,8 +367,8 @@ return UT.Combine({
         Id = "BuySupplies",
         Name = __("Buy 40 Camp Supplies"),
         Icon = "Item_CONT_GEN_CampSupplySack",
-        Cost = 20,
-        Amount = 5,
+        Cost = 40,
+        Amount = nil,
         Character = false,
         OnBuy = function(self, character)
             Osi.PROC_CAMP_GiveFreeSupplies()
@@ -387,8 +387,8 @@ return UT.Combine({
             --     Osi.PROC_CharacterFullRestore(p.Uuid.EntityUuid)
             --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
             -- end
-            Osi.PROC_GLO_PartyMembers_TempRestore(character)
-            Osi.PROC_CharacterFullRestore(character)
+            -- Osi.PROC_GLO_PartyMembers_TempRestore(character)
+            -- Osi.PROC_CharacterFullRestore(character)
             Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
         end,
     },

@@ -460,12 +460,13 @@ U.Osiris.On(
 )
 
 Event.On(
-    "ScenarioMapEntered",
-    ifBypassStory(function()
-        StoryBypass.ClearArea(Player.Host())
-        for _, player in pairs(GU.DB.GetPlayers()) do
-            Osi.RemoveStatus(player, "SURPRISED", C.NullGuid)
+    "MapTeleported",
+    ifBypassStory(function(_, character)
+        if U.UUID.Equals(Player.Host(), character) then
+            StoryBypass.ClearArea(Player.Host())
         end
+
+        Osi.RemoveStatus(character, "SURPRISED", C.NullGuid)
     end)
 )
 

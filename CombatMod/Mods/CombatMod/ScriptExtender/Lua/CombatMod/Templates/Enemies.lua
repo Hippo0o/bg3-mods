@@ -521,7 +521,7 @@ return {
         Name = "BIRD_BlueJay",
         SpellSet = "CommonBeastActions",
         Stats = "BlueJay",
-        TemplateId = "e32a1c7a-93db-4a3d-b21f-ca9cbff85190",
+        TemplateId = "758e59f2-ecee-47c6-ba77-6e2df034b39c", -- changed from "e32a1c7a-93db-4a3d-b21f-ca9cbff85190",
         Tier = "low",
     },
     {

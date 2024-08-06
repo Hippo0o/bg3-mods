@@ -60,10 +60,8 @@ end
 External.Validators = {}
 
 External.Validators.Config = tt({
-    -- ForceCombatRestart = { "nil", "boolean" },
     RandomizeSpawnOffset = { "nil", "number" },
     ExpMultiplier = { "nil", "number" },
-    ForceEnterCombat = { "nil", "boolean" },
     BypassStory = { "nil", "boolean" },
     LootIncludesCampSlot = { "nil", "boolean" },
     SpawnItemsAtPlayer = { "nil", "boolean" },
