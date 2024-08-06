@@ -207,7 +207,7 @@ function Control.RunningPanel(root)
         end
 
         layout.Cells[1][2]:AddButton(__("Teleport")).OnClick = function()
-            Event.Trigger("Teleport", { Map = State.Scenario.Map.Name })
+            Event.Trigger("Teleport", { Map = State.Scenario.Map.Name, Restrict = true })
         end
 
         layout.Cells[1][2]:AddButton(__("Ping Spawns")).OnClick = function()

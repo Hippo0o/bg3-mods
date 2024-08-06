@@ -7,15 +7,26 @@ Require("CombatMod/Client/GUI/Config")
 Require("CombatMod/Client/GUI/Debug")
 Require("CombatMod/Client/GUI/Loot")
 
+---@type ExtuiWindow
+local window = Ext.IMGUI.NewWindow(Mod.Prefix)
+
+Event.On("ToggleKey", function(key)
+    PersistentVars.ToggleKey = key
+    window.Label = Mod.Prefix .. " - " .. __("Press %s to toggle window.", PersistentVars.ToggleKey)
+end)
+
+GameState.OnLoad(function()
+    Event.Trigger("ToggleKey", PersistentVars.ToggleKey)
+end)
+
 Event.On("WindowClosed", function()
+    window.Visible = false
     Net.Send("WindowClosed")
 end)
 Event.On("WindowOpened", function()
+    window.Visible = true
     Net.Send("WindowOpened")
 end)
-
----@type ExtuiWindow
-local window = Ext.IMGUI.NewWindow(Mod.Prefix .. " - " .. __("Press %s to toggle window.", "U"))
 
 L.Warn("Window opened.", "Support is currently in an experimental state.", "DX11 is known to cause issues.")
 L.Warn("If the window is not visible, make sure to update to the latest version of Script Extender.")
@@ -33,7 +44,6 @@ Event.Trigger("WindowOpened")
 local function open()
     if not window.Open then
         window.Open = true
-        window.Visible = true
         Event.Trigger("WindowOpened")
     end
 end
@@ -95,28 +105,30 @@ Components.Conditional(_, function()
     return { Creation.Main(tabs), Debug.Main(tabs) }
 end, "ToggleDebug")
 
--- do -- auto hide window
---     local windowVisible = Async.Debounce(1000, function(bool)
---         window.Visible = bool
---     end)
---     -- local windowAlpha = Async.Debounce(100, function(bool)
---     --     if bool then
---     --         window:SetStyle("Alpha", 1)
---     --         window.Visible = bool
---     --     else
---     --         window:SetStyle("Alpha", 0.5)
---     --     end
---     -- end)
---
---     Ext.UI.GetRoot():Subscribe("MouseEnter", function()
---         windowVisible(false)
---         -- windowAlpha(false)
---     end)
---     Ext.UI.GetRoot():Subscribe("MouseLeave", function()
---         windowVisible(true)
---         -- windowAlpha(true)
---     end)
--- end
+do -- auto hide window
+    local windowVisible = Async.Debounce(1000, function(bool)
+        if PersistentVars.AutoHide then
+            window.Visible = bool
+        end
+    end)
+    -- local windowAlpha = Async.Debounce(100, function(bool)
+    --     if bool then
+    --         window:SetStyle("Alpha", 1)
+    --         window.Visible = bool
+    --     else
+    --         window:SetStyle("Alpha", 0.5)
+    --     end
+    -- end)
+
+    Ext.UI.GetRoot():Subscribe("MouseEnter", function()
+        windowVisible(false)
+        -- windowAlpha(false)
+    end)
+    Ext.UI.GetRoot():Subscribe("MouseLeave", function()
+        windowVisible(true)
+        -- windowAlpha(true)
+    end)
+end
 
 GameState.OnUnload(function()
     window.Visible = false

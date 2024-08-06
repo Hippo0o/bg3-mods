@@ -1,16 +1,16 @@
 local weapons = nil
 local armor = nil
 local objects = nil
--- if Ext.Mod.IsModLoaded(C.ModUUID) then
---     weapons = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Weapon")
---     armor = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Armor")
---     objects = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Object")
--- else
+if Ext.Mod.IsModLoaded(C.ModUUID) then
+    weapons = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Weapon")
+    armor = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Armor")
+    objects = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Object")
+else
     L.Debug("Mod not loaded. Using all items.")
     weapons = Ext.Stats.GetStats("Weapon")
     armor = Ext.Stats.GetStats("Armor")
     objects = Ext.Stats.GetStats("Object")
--- end
+end
 
 L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 
@@ -25,6 +25,11 @@ local itemBlacklist = {
     "_REF$", -- junk
     "CONS_FOOD_Soup_Tomato", -- invalid template
     "ARM_Vanity_Body_Shar", -- invalid template
+    "WPN_LightCrossbow_Makeshift",
+    "_Myrmidon_ConjureElemental$",
+    "_Myrmidon_WildShape$",
+    "_Myrmidon_Wildshape$",
+    -- "WPN_Shortbow_Makeshift"
 }
 
 -------------------------------------------------------------------------------------------------

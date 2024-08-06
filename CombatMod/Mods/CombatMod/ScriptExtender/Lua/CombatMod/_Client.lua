@@ -4,6 +4,11 @@ if Ext.IMGUI == nil then
     return
 end
 
+Mod.PersistentVarsTemplate = {
+    AutoHide = true,
+    ToggleKey = "U",
+}
+
 Event.On("ToggleDebug", function(bool)
     Mod.Debug = bool
 end)
@@ -39,8 +44,7 @@ Net.On("ModActive", function(event)
         local toggleWindow = Async.Throttle(100, toggle)
 
         Ext.Events.KeyInput:Subscribe(function(e)
-            -- TODO Add keybinds to config
-            if e.Event == "KeyDown" and e.Repeat == false and e.Key == "U" then
+            if e.Event == "KeyDown" and e.Repeat == false and e.Key == PersistentVars.ToggleKey then
                 toggleWindow()
             end
         end)

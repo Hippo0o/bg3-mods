@@ -122,7 +122,10 @@ function Unlock.CalculateReward(scenario)
         reward = reward + value
     end
 
-    PersistentVars.Currency = (PersistentVars.Currency or 0) + math.ceil(reward * rewardMulti)
+    local prev = PersistentVars.Currency or 0
+    PersistentVars.Currency = prev + math.ceil(reward * rewardMulti)
+
+    Player.Notify(__("Your Currency increased: %d -> %d!", prev, PersistentVars.Currency))
 end
 
 function Unlock.GetTemplates()
@@ -166,7 +169,6 @@ function Unlock.Sync()
         PersistentVars.Unlocks[i] = Unlock.Restore(u)
 
         if existing then
-            -- TODO check makes sense to call this here
             PersistentVars.Unlocks[i]:OnLoad()
         end
     end
