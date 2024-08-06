@@ -57,17 +57,17 @@ C = {
         },
         Armor = {
             Common = 0, -- has only junk or invalid items
-            Uncommon = 85,
-            Rare = 10,
-            VeryRare = 5,
-            Legendary = 1,
+            Uncommon = 80,
+            Rare = 20,
+            VeryRare = 10,
+            Legendary = 2,
         },
         Weapons = {
             Common = 0, -- has only junk or invalid items
             Uncommon = 85,
-            Rare = 10,
-            VeryRare = 5,
-            Legendary = 1,
+            Rare = 20,
+            VeryRare = 10,
+            Legendary = 2,
         },
     },
 }

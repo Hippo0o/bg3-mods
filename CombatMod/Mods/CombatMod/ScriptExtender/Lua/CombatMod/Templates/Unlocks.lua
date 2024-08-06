@@ -159,10 +159,10 @@ return {
         Amount = nil,
         Character = true,
         OnBuy = function(self, character)
-            Osi.PROC_GLO_PaladinOathbreaker_BrokeOath(character)
+            -- Osi.PROC_GLO_PaladinOathbreaker_BrokeOath(character)
             Osi.PROC_GLO_PaladinOathbreaker_BecomesOathbreaker(character)
-            Osi.StartRespecToOathbreaker(character)
             Osi.PROC_GLO_PaladinOathbreaker_RedemptionObtained(character)
+            Osi.StartRespecToOathbreaker(character)
         end,
     },
     {

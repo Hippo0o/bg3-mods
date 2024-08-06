@@ -436,7 +436,7 @@ function GameMode.StartNext()
     end
 
     local maps = UT.Filter(Map.Get(), function(v)
-        return PersistentVars.RogueScore > 20 or v.Region == C.Regions.Act1
+        return PersistentVars.RogueScore > 40 or v.Region == C.Regions.Act1
     end)
 
     local map = nil
