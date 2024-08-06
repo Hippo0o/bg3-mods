@@ -62,6 +62,10 @@ function Intro.AskTutSkip()
                         C.NPCCharacters.Jergal
                     )
 
+                    for _, p in pairs(GU.DB.GetPlayers()) do
+                        Osi.RemoveStatus(p, "TUT_SUMMON_BLOCK")
+                    end
+
                     -- maybe fix random cutscene at goblin camp related to Shadowheart
                     Osi.PROC_GLO_InfernalBox_SetNewOwner(Player.Host())
                     Osi.PROC_GLO_InfernalBox_AddToOwner()

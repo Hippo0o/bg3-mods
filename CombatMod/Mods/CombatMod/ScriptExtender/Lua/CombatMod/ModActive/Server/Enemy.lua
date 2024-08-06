@@ -209,9 +209,11 @@ function Object:OnCombat()
 end
 
 function Object:OnAttacked(attacker)
-    if Osi.IsInCombat(self.GUID) ~= 1 then
-        self:Combat(true)
-    end
+    Schedule(function()
+        if Osi.IsInCombat(self.GUID) ~= 1 then
+            self:Combat(true)
+        end
+    end)
 
     if self.HadTurn or self.WasAttacked then
         return
@@ -613,8 +615,8 @@ function Enemy.Combat(object, force)
 
     if force then
         for _, player in pairs(GU.DB.GetPlayers()) do
-            Osi.EnterCombat(object, player)
             Osi.EnterCombat(player, object)
+            Osi.EnterCombat(object, player)
         end
     end
 end

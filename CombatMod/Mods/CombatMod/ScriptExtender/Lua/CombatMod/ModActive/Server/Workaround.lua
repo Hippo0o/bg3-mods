@@ -13,10 +13,23 @@ function Workaround.Tags()
     end
 end
 
+function Workaround.ResetApproval()
+    for _, p in pairs(GU.Entity.GetParty()) do
+        if p.ApprovalRatings then
+            for k, v in pairs(p.ApprovalRatings.Ratings) do
+                if v < 30 then
+                    p.ApprovalRatings.Ratings[k] = 30
+                    p:Replicate("ApprovalRatings")
+                end
+            end
+        end
+    end
+end
 
 local function runAll()
     Workaround.Tadpole()
     Workaround.Tags()
+    Workaround.ResetApproval()
 end
 
 GameState.OnLoad(runAll)
