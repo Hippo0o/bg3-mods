@@ -50,8 +50,8 @@ local readyChecks = {}
 ---@param message string
 ---@param callback fun(result: boolean)
 function Player.AskConfirmation(message, callback)
-    local msgId = tostring(callback):gsub("function: 0x", "")
-    Osi.ReadyCheckSpecific(msgId, message, 1, nil, nil, nil, nil)
+    local msgId = tostring(callback):gsub("function: ", "jc_")
+    Osi.ReadyCheckSpecific(msgId, message, 1, Player.Host(), "", "", "")
     readyChecks[msgId] = callback
 end
 
