@@ -86,8 +86,6 @@ local function init()
     end
     isActive = true
 
-    Require("CombatMod/ModActive/Overwrites")
-
     Require("CombatMod/ModActive/Server/_Init")
 
     Event.Trigger(GameState.EventLoad)
@@ -107,7 +105,7 @@ end, true)
 
 Event.On("ModActive", function()
     -- client only listens once for this event
-    Net.Send("ModInactive")
+    Net.Send("ModActive")
 end)
 
 GameState.OnLoad(function()
@@ -125,8 +123,4 @@ GameState.OnLoad(function()
     end
 end, true)
 
-GameState.OnLoad(function()
-    if PersistentVars.Active then
-        Event.Trigger("ModActive")
-    end
-end)
+Require("CombatMod/Overwrites")

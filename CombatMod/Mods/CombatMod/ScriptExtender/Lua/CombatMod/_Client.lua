@@ -16,11 +16,11 @@ local function init()
     end
     isActive = true
 
-    Require("CombatMod/ModActive/Overwrites")
-
     Require("CombatMod/ModActive/Client/_Init")
 
     Event.Trigger(GameState.EventLoad)
 end
+
+Require("CombatMod/Overwrites")
 
 Net.On("ModActive", init, true)
