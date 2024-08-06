@@ -86,27 +86,36 @@ function M.RandomId(prefix)
 end
 
 ---@param code string x, y => x + y
----@vararg any input for code, e.g. 1, 2
----@return any
+---@vararg any injected arguments: x
+---@return fun(...): any @function(y) -> x + y
 function M.Lambda(code, ...)
     local argString, evalString = table.unpack(M.String.Split(code, "=>"))
 
-    local args = M.String.Split(argString, ",")
-
-    local env = { _G = _G }
-
-    for i, arg in ipairs(args) do
-        env[M.String.Trim(arg)] = select(i, ...)
-    end
+    local args = M.Table.Map(M.String.Split(argString, ","), M.String.Trim)
 
     code = "return " .. M.String.Trim(evalString)
 
-    local ok, res = pcall(Ext.Utils.LoadString(code, env))
-    if not ok then
-        error('\n[Lambda]: "' .. code .. '"\n' .. res)
+    local env = {}
+
+    for i, arg in ipairs(M.Table.Values(args)) do
+        env[arg] = select(i, ...)
+        if select("#", ...) < i then
+            table.remove(args, 1)
+        end
     end
 
-    return res
+    return function(...)
+        for i, arg in ipairs(args) do
+            env[arg] = select(i, ...)
+        end
+
+        local ok, res = pcall(Ext.Utils.LoadString(code, env))
+        if not ok then
+            error('\n[Lambda]: "' .. code .. '"\n' .. res)
+        end
+
+        return res
+    end
 end
 
 -------------------------------------------------------------------------------------------------
@@ -118,20 +127,6 @@ end
 M.Entity = {}
 
 if Ext.IsServer() then
-    ---@return string[] list of avatar characters
-    function M.Entity.GetAvatars()
-        return M.Table.Map(M.Protected.TryGetDB("DB_Avatars", 1), function(v)
-            return v[1]
-        end)
-    end
-
-    ---@return string[] list of playable characters
-    function M.Entity.GetPlayers()
-        return M.Table.Map(M.Protected.TryGetDB("DB_Players", 1), function(v)
-            return v[1]
-        end)
-    end
-
     ---@param character string GUID
     ---@return boolean
     function M.Entity.IsHireling(character)
@@ -170,7 +165,7 @@ if Ext.IsServer() then
             or M.Entity.IsHireling(character)
             or Osi.IsPlayer(character) == 1
             or (
-                M.Table.Find(M.Entity.GetAvatars(), function(v)
+                M.Table.Find(M.DB.GetAvatars(), function(v)
                     return M.UUID.Equals(v, character)
                 end) ~= nil
             )
@@ -184,6 +179,11 @@ if Ext.IsServer() then
         Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
         Osi.UnloadItem(guid)
     end
+end
+
+---@return EntityHandle[]
+function M.Entity.GetParty()
+    return Ext.Entity.GetAllEntitiesWithComponent("PartyMember")
 end
 
 ---@return EntityHandle
@@ -511,17 +511,17 @@ end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                          Protected                                          --
+--                                          DB                                          --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
 if Ext.IsServer() then
-    M.Protected = {}
+    M.DB = {}
 
     ---@param query string
     ---@param arity number
     ---@return table
-    function M.Protected.TryGetDB(query, arity)
+    function M.DB.TryGet(query, arity)
         local success, result = pcall(function()
             local db = Osi[query]
             if db and db.Get then
@@ -536,6 +536,20 @@ if Ext.IsServer() then
             return {}
         end
     end
+
+    ---@return string[] list of avatar characters
+    function M.DB.GetAvatars()
+        return M.Table.Map(M.DB.TryGet("DB_Avatars", 1), function(v)
+            return v[1]
+        end)
+    end
+
+    ---@return string[] list of playable characters
+    function M.DB.GetPlayers()
+        return M.Table.Map(M.DB.TryGet("DB_Players", 1), function(v)
+            return v[1]
+        end)
+    end
 end
 
 -------------------------------------------------------------------------------------------------
@@ -546,7 +560,15 @@ end
 
 M.UUID = {}
 
-function M.UUID.IsGUID(str)
+function M.UUID.IsValid(str)
+    return M.UUID.Extract(str) ~= ""
+end
+
+function M.UUID.Extract(str)
+    if type(str) ~= "string" then
+        return ""
+    end
+
     local x = "%x"
     local t = { x:rep(8), x:rep(4), x:rep(4), x:rep(4), x:rep(12) }
     local pattern = table.concat(t, "%-")
@@ -554,16 +576,9 @@ function M.UUID.IsGUID(str)
     return str:match(pattern)
 end
 
-function M.UUID.GetGUID(str)
-    if str ~= nil and type(str) == "string" then
-        return string.sub(str, (string.find(str, "_[^_]*$") ~= nil and (string.find(str, "_[^_]*$") + 1) or 0), nil)
-    end
-    return ""
-end
-
 function M.UUID.Equals(item1, item2)
     if type(item1) == "string" and type(item2) == "string" then
-        return (M.UUID.GetGUID(item1) == M.UUID.GetGUID(item2))
+        return (M.UUID.Extract(item1) == M.UUID.Extract(item2))
     end
 
     return false

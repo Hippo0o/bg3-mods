@@ -1,6 +1,7 @@
 Require("EndlessBattle/GUI/Components")
 
 Require("EndlessBattle/GUI/Control")
+Require("EndlessBattle/GUI/Unlocks")
 Require("EndlessBattle/GUI/Creation")
 Require("EndlessBattle/GUI/Config")
 Require("EndlessBattle/GUI/Debug")
@@ -69,9 +70,11 @@ function OpenWindow()
 
     local tabs = window:AddTabBar(__("Main"))
     Control.Main(tabs)
-    Creation.Main(tabs)
+    Unlocks.Main(tabs)
     Config.Main(tabs)
-    Debug.Main(tabs)
+    Components.Conditional(_, function()
+        return { Creation.Main(tabs), Debug.Main(tabs) }
+    end, "ToggleDebug")
 
     do -- auto hide window
         local windowVisible = Async.Debounce(1000, function(bool)

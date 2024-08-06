@@ -71,16 +71,16 @@ External.Validators.Config = tt({
 
 External.Validators.Enemy = tt({
     Name = { "string" },
-    TemplateId = { U.UUID.IsGUID },
+    TemplateId = { U.UUID.IsValid },
     Tier = { C.EnemyTier },
     IsBoss = { "nil", "boolean" },
     LevelOverride = { "nil", "number" },
     Equipment = { "nil", "string" },
     Stats = { "nil", "string" },
     SpellSet = { "nil", "string" },
-    AiHint = { "nil", U.UUID.IsGUID },
+    AiHint = { "nil", U.UUID.IsValid },
     Archetype = { "nil", "string" },
-    CharacterVisualResourceID = { "nil", U.UUID.IsGUID },
+    CharacterVisualResourceID = { "nil", U.UUID.IsValid },
     Icon = { "nil", "string" },
 })
 

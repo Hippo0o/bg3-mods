@@ -1,7 +1,7 @@
 Components = {}
 
 ---@class ComponentsLayout
----@field Root ExtuiTable
+---@field Table ExtuiTable
 ---@field Rows table<number, ExtuiTableRow>
 ---@field Cells table<number, table<number, ExtuiTableCell>>
 ---@param root ExtuiTreeParent
@@ -27,7 +27,7 @@ function Components.Layout(root, cols, rows, onCreated)
     end
 
     local o = {
-        Root = t,
+        Table = t,
         Rows = lrows,
         Cells = cells,
     }

@@ -8,7 +8,7 @@
 ---@return string GUID of the host character
 function Player.Host(userId)
     if userId then
-        local player = UT.Find(UE.GetPlayers(), function(guid)
+        local player = UT.Find(U.DB.GetPlayers(), function(guid)
             if Ext.Entity.Get(guid).ServerCharacter.UserID == userId then
                 return guid
             end
@@ -33,7 +33,7 @@ end
 
 ---@return string|nil GUID
 function Player.InCombat()
-    return UT.Find(UE.GetPlayers(), function(guid)
+    return UT.Find(U.DB.GetPlayers(), function(guid)
         return Osi.IsInCombat(guid) == 1
     end)
 end

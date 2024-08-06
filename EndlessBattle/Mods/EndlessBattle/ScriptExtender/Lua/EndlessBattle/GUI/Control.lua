@@ -51,12 +51,12 @@ function Control.Main(tab)
 
         WindowEvent("StateChange", function(state)
             if state and state.Scenario then
-                startLayout.Root.Visible = false
-                stopLayout.Root.Visible = true
+                startLayout.Table.Visible = false
+                stopLayout.Table.Visible = true
                 header.Label = __("Running")
             else
-                startLayout.Root.Visible = true
-                stopLayout.Root.Visible = false
+                startLayout.Table.Visible = true
+                stopLayout.Table.Visible = false
                 header.Label = __("Start Menu")
             end
         end):Exec()
@@ -64,7 +64,7 @@ function Control.Main(tab)
 
     root:AddSeparatorText(__("Logs"))
     Components.Layout(root, 1, 1, function(layout)
-        layout.Root.ScrollY = true
+        layout.Table.ScrollY = true
         local scrollable = layout.Cells
 
         ---@type ExtuiInputText

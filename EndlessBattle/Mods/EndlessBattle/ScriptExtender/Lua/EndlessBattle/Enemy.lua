@@ -196,6 +196,10 @@ function Object:Modify(keepFaction)
             expMod = expMod * 2
         end
 
+        if PersistentVars.Unlocks.ExpMultiplier then
+            expMod = expMod * 2
+        end
+
         entity.ServerExperienceGaveOut.Experience = entity.BaseHp.Vitality
             * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
             * expMod
@@ -298,7 +302,7 @@ function Object:Combat(force)
     Osi.SetCanFight(enemy, 1)
 
     if force then
-        for _, player in pairs(UE.GetPlayers()) do
+        for _, player in pairs(U.DB.GetPlayers()) do
             Osi.EnterCombat(enemy, player)
             Osi.EnterCombat(player, enemy)
         end
@@ -357,7 +361,7 @@ end
 -- mostly for tracking summons
 function Enemy.CreateTemporary(object)
     local e = Object.New({ Name = "Temporary" })
-    e.GUID = U.UUID.GetGUID(object)
+    e.GUID = U.UUID.Extract(object)
 
     e:Sync()
     e:Modify(true)
@@ -428,10 +432,7 @@ function Enemy.Iter(filter)
         i = i + 1
         j = j + 1
         if filter then
-            while
-                templates[j]
-                and not filter(templates[j])
-            do
+            while templates[j] and not filter(templates[j]) do
                 j = j + 1
             end
         end
