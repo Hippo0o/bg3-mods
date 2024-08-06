@@ -68,6 +68,8 @@ function Intro.AskTutSkip()
 
                     Player.Notify(__("Starting items added. Hirelings unlocked."))
                     done = true
+
+                    Osi.AutoSave()
                 end)
             end, true)
 

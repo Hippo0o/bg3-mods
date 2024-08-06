@@ -474,6 +474,10 @@ Event.On("ScenarioEnded", function(scenario)
     end
 end)
 
+Event.On("ScenarioStarted", function(scenario)
+    Osi.AutoSave()
+end)
+
 Schedule(function()
     External.Templates.AddScenario({
         Name = C.RoguelikeScenario,

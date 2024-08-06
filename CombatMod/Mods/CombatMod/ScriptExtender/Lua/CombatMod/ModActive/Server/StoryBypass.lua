@@ -51,6 +51,15 @@ function StoryBypass.AllowRemoval(entity)
         and not (entity.ServerCharacter and entity.ServerCharacter.Template.Name:match("Player"))
 end
 
+function StoryBypass.RemoveAutosave()
+    L.Info("Removing autosave triggers")
+    L.Dump(Osi.DB_AutosaveTrigger:Get(nil))
+    L.Dump(Osi.DB_AutoSaveGroup:Get(nil, nil))
+
+    Osi.DB_AutoSaveGroup:Delete(nil, nil)
+    Osi.DB_AutosaveTrigger:Delete(nil)
+end
+
 function StoryBypass.RemoveAllEntities()
     StoryBypass.ExpLock.ResumeTemporary()
 
@@ -592,3 +601,5 @@ local function removeAllEntities()
     Osi.Resurrect(C.OriginCharacters.Halsin) -- Halsin will be dead once entering Act 2 for the first time
 end
 GameState.OnLoad(ifBypassStory(removeAllEntities))
+
+GameState.OnLoad(ifBypassStory(StoryBypass.RemoveAutosave))

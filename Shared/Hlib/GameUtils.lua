@@ -5,6 +5,9 @@ local Mod = Require("Hlib/Mod")
 local Constants = Require("Hlib/Constants")
 
 ---@type Utils
+local Log = Require("Hlib/Log")
+
+---@type Utils
 local Utils = Require("Hlib/Utils")
 
 ---@class GameUtils
