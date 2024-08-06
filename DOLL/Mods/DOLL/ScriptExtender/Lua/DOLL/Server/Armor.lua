@@ -1,11 +1,14 @@
+---@class Armor
+Armor = {}
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Structures                                         --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class ArmorEntry
-local ArmorEntry = Libs.Class({
+---@class ArmorStruct
+local Struct = Libs.Class({
     Uuid = nil,
     Slot = nil,
     DisplayName = nil,
@@ -13,7 +16,7 @@ local ArmorEntry = Libs.Class({
     Icon = nil,
 })
 
-function ArmorEntry:Equip(character)
+function Struct:Equip(character)
     Osi.TemplateAddTo(self.Uuid, character, 1)
 
     Async.WaitTicks(6, function()
@@ -27,9 +30,6 @@ end
 --                                            Public                                           --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
-
----@class VisualsArmor
-Armor = {}
 
 local cached
 
@@ -47,7 +47,7 @@ function Armor.LoadCache()
 
         local displayName = Ext.Loca.GetTranslatedString(template.DisplayName.Handle.Handle)
 
-        return ArmorEntry.Init({
+        return Struct.Init({
             Uuid = template.Id,
             Slot = stats.Slot,
             DisplayName = displayName,

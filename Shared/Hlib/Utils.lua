@@ -89,17 +89,23 @@ end
 ---@vararg any injected arguments: x
 ---@return fun(...): any @function(y) -> x + y
 function M.Lambda(code, ...)
-    local argString, evalString = table.unpack(M.String.Split(code, "=>"))
+    local argString, evalString = table.unpack(M.String.Split(code, "->"))
+    assert(evalString, "Lambda code must contain '->'")
 
     local args = M.Table.Map(M.String.Split(argString, ","), M.String.Trim)
 
     code = "return " .. M.String.Trim(evalString)
 
-    local env = { _G = _G }
+    local env = {}
+    setmetatable(env, { __index = _G })
 
     -- Add vararg values to env with keys from args
     -- Remove from args those that are injected via vararg
     for i, arg in ipairs(M.Table.Values(args)) do
+        if select("#", ...) == 0 then
+            break
+        end
+
         env[arg] = select(i, ...)
         if select("#", ...) < i then
             table.remove(args, 1)
@@ -274,6 +280,20 @@ function M.Entity.GetNearby(source, radius, ignoreHeight, withComponent)
     return nearby
 end
 
+---@param entity EntityHandle
+---@param property string
+---@param default any|nil
+---@return any
+function M.Entity.GetProperty(entity, property, default)
+    local ok, value = pcall(function()
+        return entity[property]
+    end)
+    if ok then
+        return value
+    end
+    return default
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Table                                             --
@@ -362,8 +382,11 @@ end
 ---@param func function
 ---@return table
 function M.Table.Each(t, func)
-    local r = {}
+    if type(func) == "string" then
+        func = M.Lambda(func)
+    end
 
+    local r = {}
     for k, v in pairs(t) do
         func(v, k)
     end
@@ -373,6 +396,10 @@ end
 ---@param func fun(value, key): value: any|nil, key: any|nil
 ---@return table
 function M.Table.Map(t, func)
+    if type(func) == "string" then
+        func = M.Lambda(func)
+    end
+
     local r = {}
     for k, v in pairs(t) do
         local value, key = func(v, k)
@@ -391,6 +418,10 @@ end
 ---@param func fun(value, key): boolean
 ---@return table
 function M.Table.Filter(t, func, keepKeys)
+    if type(func) == "string" then
+        func = M.Lambda(func)
+    end
+
     return M.Table.Map(t, function(v, k)
         if func(v, k) then
             if keepKeys then
@@ -417,6 +448,10 @@ end
 ---@param func fun(value, key): boolean
 ---@return any|nil, string|number|nil @value, key
 function M.Table.Find(t, func)
+    if type(func) == "string" then
+        func = M.Lambda(func)
+    end
+
     for k, v in pairs(t) do
         if func(v, k) then
             return v, k
