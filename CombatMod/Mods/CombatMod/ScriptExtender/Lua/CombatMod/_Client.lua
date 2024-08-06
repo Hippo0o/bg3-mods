@@ -5,7 +5,7 @@ if Ext.IMGUI == nil then
 end
 
 Mod.PersistentVarsTemplate = {
-    AutoHide = true,
+    AutoHide = false,
     ToggleKey = "U",
 }
 

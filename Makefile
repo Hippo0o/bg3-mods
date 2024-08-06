@@ -1,7 +1,7 @@
 .PHONY: clrf-to-lf lf-to-clrf fix-permissions sync-files copy
 
 UID=1000
-MOD?=CombatMod
+MOD=CombatMod
 # MOD=DOLL
 MOD_SUBDIR=$(MOD_DIR)/$(MOD)/Mods/$(MOD)
 
@@ -23,7 +23,7 @@ sync-files:
 	done
 
 copy:
-	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/." "$(MOUNT_DIR)/Temp/$(MOD)/."
+	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/$(MOD)/." "$(MOUNT_DIR)/Temp/$(MOD)/."
 
 copy-back:
 	cp $(MOUNT_DIR)/Temp/$(MOD).zip .
