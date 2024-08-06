@@ -78,7 +78,7 @@ function Object:GetTranslatedName()
 end
 
 function Object:IsSpawned()
-    return self.GUID ~= nil
+    return self.GUID ~= nil and self:Entity() ~= nil
 end
 
 ---@return table<ExtComponentType, any>
@@ -324,6 +324,15 @@ function Object:Sync()
     self.Race = currentTemplate.Race
 end
 
+function Object:Replicate()
+    xpcall(function()
+        local entity = self:Entity()
+        entity:Replicate("GameObjectVisual")
+    end, function(err)
+        L.Error("Replication failed: ", self.GUID, err)
+    end)
+end
+
 ---@param x number
 ---@param y number
 ---@param z number
@@ -374,6 +383,7 @@ function Object:Spawn(x, y, z, neutral)
             return self:Entity().ServerReplicationDependencyOwner -- goal: a component that loads later and always exists
         end, { retries = 30, interval = 100 }):After(function()
             self:Modify()
+            self:Replicate()
 
             if not neutral then
                 self:Combat()
