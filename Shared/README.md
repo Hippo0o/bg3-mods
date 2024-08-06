@@ -70,15 +70,31 @@ Utils.Table.DeepClone({ a = { b = 1 } }) -- {a = {b = 1}}
 -- string functions
 Utils.String.Split("Hello World!", " ") -- {'Hello', 'World!'}
 Utils.String.Contains('Hello World!', {'Hi', 'Hello', 'Bye'}) -- true
--- entity functions
-Utils.Entity.GetNearby(Osi.GetHostCharacter(), 10) -- {{Entity, Guid, Distance}, ...}
-Utils.Entity.IsOrigin(Osi.GetHostCharacter()) -- true
 -- some more functions
 Utils.Equals({ a = 1 }, { a = 1 }) -- true
 Utils.UUID.Equals('Foo_00000000-0000-0000-0000-000000000000', 'Bar_00000000-0000-0000-0000-000000000000') -- true
 ```
 
 More functions can be found in the `Utils` module.
+
+### GameUtils
+
+The `GameUtils` module contains some useful functions for interacting with the game.
+
+```lua
+---@type GameUtils
+local GameUtils = Require("Hlib/GameUtils")
+
+GameUtils.Entity.GetNearby(Osi.GetHostCharacter(), 10) -- {{Entity, Guid, Distance}, ...}
+
+GameUtils.Character.IsOrigin(Osi.GetHostCharacter()) -- true
+GameUtils.Character.RemoveSpell(character, learnedSpell, sourceType, class)
+
+-- db with 2 columns, query 2nd column value, take 1st column, returns table of values
+GameUtils.DB.TryGet("DB_Sees", 2, { nil, Osi.GetHostCharacter() }, 1) -- {"xxxx-xx", ...}
+```
+
+More functions can be found in the `GameUtils` module.
 
 ## Optional Modules
 
@@ -168,7 +184,7 @@ Net.On("RequestData", function(event) ---@type NetEvent
 end)
 
 -- request a network event (client-side only)
-Net.Request("RequestData",{ Entity = "..." }):After(function(event) ---@type NetEvent
+Net.Request("RequestData", { Entity = "..." }):After(function(event) ---@type NetEvent
     print("Received RequestData response: " .. event.Payload)
 end)
 ```
@@ -255,7 +271,7 @@ Ext.Require('MyMod/_Server.lua')
 ```lua
 Require('MyMod/Shared.lua')
 
-Utils.Log.Info("Hello World!")
+Log.Info("Hello World!")
 -- your server code here
 ```
 
@@ -268,6 +284,8 @@ Mod = Require('Hlib/Mod')
 Constants = Require('Hlib/Constants')
 ---@type Utils
 Utils = Require('Hlib/Utils')
+---@type Utils
+Log = Require('Hlib/Log')
 ---@type Event
 Event = Require('Hlib/Event')
 ---@type GameState
