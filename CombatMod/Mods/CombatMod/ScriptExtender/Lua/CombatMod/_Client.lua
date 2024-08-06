@@ -4,6 +4,8 @@ if Ext.IMGUI == nil then
     return
 end
 
+IsHost = false
+
 Settings = Libs.Proxy(
     UT.Merge({ AutoHide = false, ToggleKey = "U", AutoOpen = true }, IO.LoadJson("ClientConfig.json") or {}),
     function(value, _, raw)
@@ -29,54 +31,17 @@ Net.On(
     end)
 )
 
-IsHost = false
-local hostChecked = false
-GameState.OnLoad(function()
-    Net.Request("IsHost").After(function(event)
-        IsHost = event.Payload
-        L.Debug("IsHost", IsHost)
-        hostChecked = true
-    end)
-end, true)
-
-Net.On("ModActive", function(event)
+Net.On("Notification", function(event)
+    local data = event.Payload
     WaitUntil(function()
-        return hostChecked
+        return U.GetProperty(Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext, "CurrentSubtitle", false)
     end, function()
-        local _, toggle, open, close = table.unpack(Require("CombatMod/Client/GUI/_Init"))
-
-        Net.On("OpenGUI", function(event)
-            if Settings.AutoOpen == false and event.Payload == "Optional" then
-                return
-            end
-
-            open()
-        end)
-        Net.On("CloseGUI", function(event)
-            if Settings.AutoOpen == false and event.Payload == "Optional" then
-                return
-            end
-
-            close()
-        end)
-
-        local toggleWindow = Async.Throttle(100, toggle)
-
-        Ext.Events.KeyInput:Subscribe(function(e)
-            if e.Event == "KeyDown" and e.Repeat == false and e.Key == Settings.ToggleKey then
-                toggleWindow()
-            end
-        end)
+        local context = Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext
+        context.CurrentSubtitleDuration = data.Duration or 3
+        context.CurrentSubtitle = data.Text
     end)
+end)
 
-    Net.On("Notification", function(event)
-        local data = event.Payload
-        WaitUntil(function()
-            return U.GetProperty(Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext, "CurrentSubtitle", false)
-        end, function()
-            local context = Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext
-            context.CurrentSubtitleDuration = data.Duration or 3
-            context.CurrentSubtitle = data.Text
-        end)
-    end)
+Net.On("ModActive", function()
+    Require("CombatMod/Client/_Init")
 end, true)
