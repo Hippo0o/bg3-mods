@@ -137,14 +137,6 @@ function Action.SpawnLoot()
     map:SpawnLoot(loot)
 end
 
-function Action.ClearArea()
-    if not Config.BypassStory then
-        return
-    end
-
-    StoryBypass.ClearArea(Player.Host())
-end
-
 function Action.StartCombat()
     if Current().CombatId ~= nil then
         L.Error("Combat already started.")
@@ -153,8 +145,6 @@ function Action.StartCombat()
 
     -- remove corpses from previous combat
     Enemy.Cleanup()
-    -- remove all non-player characters
-    Action.ClearArea()
 
     Schedule(function()
         for _, p in pairs(UE.GetParty()) do
@@ -246,7 +236,6 @@ function Action.MapEntered()
     Event.Trigger("ScenarioMapEntered", Current())
 
     local x, y, z = Player.Pos()
-    Action.ClearArea()
 
     local id = tostring(S)
     RetryUntil(function(self, tries)
@@ -606,6 +595,10 @@ end
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
+
+Event.On("ScenarioStarted", function()
+    Player.ReturnToCamp()
+end)
 
 U.Osiris.On(
     "CombatRoundStarted",

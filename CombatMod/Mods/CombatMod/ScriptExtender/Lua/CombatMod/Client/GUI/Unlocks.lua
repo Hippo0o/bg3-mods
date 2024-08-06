@@ -217,6 +217,7 @@ function ClientUnlock.BuyChar(root, unlock)
 
             ---@type ExtuiButton
             local b = popup:AddButton("")
+            b.IDContext = U.RandomId()
             b.Label = string.format("%s", name)
             table.insert(list, b)
             b.Size = { 200, 0 }

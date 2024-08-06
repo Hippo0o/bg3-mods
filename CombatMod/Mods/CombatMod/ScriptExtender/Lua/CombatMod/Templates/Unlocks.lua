@@ -7,7 +7,6 @@ local function unlockTadpole(object)
     Osi.SetTag(object, "efedb058-d4f5-4ab8-8add-bd5e32cdd9cd")
     Osi.SetTag(object, "c15c2234-9b19-453e-99cc-00b7358b9fce")
     Osi.SetTadpoleTreeState(object, 2)
-    Osi.AddTadpole(object, 1)
     Osi.AddTadpolePower(object, "TAD_IllithidPersuasion", 1)
     Osi.SetFlag("GLO_Daisy_State_AstralIndividualAccepted_9c5367df-18c8-4450-9156-b818b9b94975", object)
 end
@@ -23,6 +22,9 @@ return {
         Character = true,
         OnBuy = function(self, character)
             unlockTadpole(character)
+            if Osi.GetTadpolePowersCount(character) < 1 then
+                Osi.AddTadpole(character, 1)
+            end
         end,
     },
     {

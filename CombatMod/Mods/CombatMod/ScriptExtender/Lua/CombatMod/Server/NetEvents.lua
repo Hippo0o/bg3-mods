@@ -234,6 +234,7 @@ Net.On("KillNearby", function(event)
     StoryBypass.ClearArea(event:Character())
 end)
 
+---@deprecated
 Net.On("UpdateLootFilter", function(event)
     local rarity, type, bool = table.unpack(event.Payload)
     PersistentVars.LootFilter[type][rarity] = bool
@@ -245,11 +246,13 @@ Net.On("PickupAll", function(event)
     Player.PickupAll(event:Character())
 end)
 
+---@deprecated
 Net.On("Pickup", function(event)
     local rarity, type = table.unpack(event.Payload)
     Item.PickupAll(event:Character(), rarity, type)
 end)
 
+---@deprecated
 Net.On("DestroyLoot", function(event)
     local rarity, type = table.unpack(event.Payload)
     Item.DestroyAll(rarity, type)

@@ -23,6 +23,7 @@ local itemBlacklist = {
     "WPN_KingsKnife", -- its common bro
     "_Destroyed$", -- junk
     "_REF$", -- junk
+    "^Quest_",
     "CONS_FOOD_Soup_Tomato", -- invalid template
     "ARM_Vanity_Body_Shar", -- invalid template
     "WPN_LightCrossbow_Makeshift",
@@ -139,7 +140,7 @@ function Item.Objects(rarity, forCombat)
             return false
         end
 
-        if US.Contains(name, itemBlacklist) then
+        if US.Contains(name, itemBlacklist, true) then
             return false
         end
 
@@ -198,7 +199,7 @@ function Item.Armor(rarity)
             return false
         end
 
-        if US.Contains(name, itemBlacklist) then
+        if US.Contains(name, itemBlacklist, true) then
             return false
         end
 
@@ -238,7 +239,7 @@ function Item.Weapons(rarity)
             return false
         end
 
-        if US.Contains(name, itemBlacklist) then
+        if US.Contains(name, itemBlacklist, true) then
             return false
         end
 
@@ -436,7 +437,7 @@ U.Osiris.On(
 
             if item then
                 L.Debug("Auto pickup:", object, character)
-                Player.PickupAll()
+                Item.PickupAll(character, item.Rarity)
             end
         end)
     )
