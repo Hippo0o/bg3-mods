@@ -173,6 +173,23 @@ function Debug.Items(root)
                 local t = node:AddInputText("")
                 t.SameLine = true
                 t.Text = value
+
+                node:AddButton("Spawn").OnClick = function()
+                    local rt = nil
+                    for _, catItems in pairs(items) do
+                        for _, item in pairs(catItems) do
+                            if item.Name == value then
+                                rt = item.RootTemplate
+                                break
+                            end
+                        end
+                    end
+                    Net.RCE("Item.Create('%s', '', '%s'):Spawn(Osi.GetPosition(RCE:Character()))", value, rt)
+                        .After(function(_, err)
+                            L.Dump(err)
+                        end)
+                end
+
                 return true
             end
             if key == "RootTemplate" then
@@ -192,13 +209,6 @@ function Debug.Items(root)
 
                         node:AddText("   Icon = ")
                         node:AddImage(temp.Icon).SameLine = true
-
-                        node:AddButton("Spawn").OnClick = function()
-                            Net.RCE("Item.Create('', '', '%s'):Spawn(Osi.GetPosition(RCE:Character()))", value)
-                                .After(function(_, err)
-                                    L.Dump(err)
-                                end)
-                        end
                     end
 
                     nodeLoaded = true

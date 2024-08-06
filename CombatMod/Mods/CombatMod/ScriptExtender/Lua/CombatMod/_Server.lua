@@ -15,6 +15,17 @@ Mod.PersistentVarsTemplate = {
     HardMode = false, -- applies additional difficulty to the game
     GUIOpen = false,
     History = {},
+    LootFilter = {
+        Object = UT.Map(C.ItemRarity, function(v, k)
+            return true, v
+        end),
+        Armor = UT.Map(C.ItemRarity, function(v, k)
+            return v ~= "Common", v
+        end),
+        Weapon = UT.Map(C.ItemRarity, function(v, k)
+            return v ~= "Common", v
+        end),
+    },
     Currency = 0,
     RegionsCleared = {},
     Unlocked = {

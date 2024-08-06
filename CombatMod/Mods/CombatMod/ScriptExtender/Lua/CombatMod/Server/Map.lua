@@ -11,12 +11,12 @@ External.File.ExportIfNeeded("Maps", mapTemplates)
 ---@field x number
 ---@field y number
 ---@field z number
----@class Map : LibsClass
+---@class Map : LibsStruct
 ---@field Region string
 ---@field Enter Pos
 ---@field Spawns Pos[]
 ---@field Timeline number[]
-local Object = Libs.Class({
+local Object = Libs.Struct({
     Region = nil,
     Enter = nil,
     Spawns = nil,
@@ -158,6 +158,10 @@ end
 function Map.CorrectPosition(guid, x, y, z, offset)
     local distance = Osi.GetDistanceToPosition(guid, x, y, z)
     local _, y2, _ = Osi.GetPosition(guid)
+    if not y2 then
+        return
+    end
+
     if distance > offset * 1.5 or y2 < y - offset then
         L.Error(guid, "Spawned too far away.", distance)
         Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1)
@@ -171,7 +175,7 @@ function Map.TeleportTo(map, character)
     if map.Region == Osi.GetRegion(Player.Host()) then
         Object.Init(map):Teleport(character, true)
 
-        if S and U.Equals(map.Enter, S.Map.Enter) then
+        if S and map.Name == S.Map.Name then
             Event.Trigger("ScenarioTeleport", character)
         end
 

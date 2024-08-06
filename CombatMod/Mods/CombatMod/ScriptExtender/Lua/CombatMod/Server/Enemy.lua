@@ -9,7 +9,7 @@ L.Debug("Enemies loaded", #enemyTemplates)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Enemy : LibsClass
+---@class Enemy : LibsStruct
 ---@field Name string
 ---@field TemplateId string
 ---@field IsBoss boolean
@@ -26,7 +26,7 @@ L.Debug("Enemies loaded", #enemyTemplates)
 ---@field Archetype string
 ---@field CharacterVisualResourceID string
 ---@field Icon string
-local Object = Libs.Class({
+local Object = Libs.Struct({
     Name = "Empty",
     TemplateId = nil,
     Tier = nil,
@@ -321,7 +321,7 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 1) -- avoiding dangerous surfaces
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, Player.Host(), 1) -- avoiding dangerous surfaces
 
     local success = self:CreateAt(x, y, z)
 

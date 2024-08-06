@@ -7,7 +7,7 @@ Visual = {}
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class VisualStruct : LibsClass
+---@class VisualStruct : LibsStruct
 ---@field Uuid string
 ---@field SlotName VisualSlots
 ---@field Type VisualTypes
@@ -16,7 +16,7 @@ Visual = {}
 ---@field BodyShape number|nil
 ---@field Race string|nil
 ---@field Icon string|nil
-local Struct = Libs.Class({
+local Struct = Libs.Struct({
     Uuid = nil,
     SlotName = nil,
     Type = nil,

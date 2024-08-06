@@ -7,7 +7,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Scenario: LibsClass
+---@class Scenario: LibsStruct
 ---@field Name string
 ---@field Enemies table<number, Enemy[]>
 ---@field KilledEnemies Enemy[]
@@ -20,7 +20,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field LootRates table<string, table<string, number>>
 ---@field OnMap boolean
 ---@field New fun(self): self
-local Object = Libs.Class({
+local Object = Libs.Struct({
     Name = nil,
     Enemies = {},
     KilledEnemies = {},

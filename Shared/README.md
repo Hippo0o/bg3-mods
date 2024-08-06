@@ -231,20 +231,20 @@ The `Libs` module contains a class implementation.
 ---@type Libs
 local Libs = Require("Hlib/Libs")
 
-local MyClass = Libs.Class({
+local MyStruct = Libs.Struct({
     MyVar = 0,
     MyFunction = function(self)
         print(self.MyVar)
     end
 })
 
-local myObject = MyClass.New()
+local myObject = MyStruct.New()
 myObject:MyFunction() -- 0
 myObject.MyVar = 1
 myObject:MyFunction() -- 1
 
 -- restore existing tables to class (useful for PersistentVars)
-local myObject2 = MyClass.Init({ MyVar = 3 })
+local myObject2 = MyStruct.Init({ MyVar = 3 })
 ```
 
 # Example Setup

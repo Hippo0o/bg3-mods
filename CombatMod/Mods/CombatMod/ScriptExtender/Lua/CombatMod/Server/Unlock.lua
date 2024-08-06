@@ -13,7 +13,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Unlock : LibsClass
+---@class Unlock : LibsStruct
 ---@field Id string
 ---@field Name string
 ---@field Icon string
@@ -28,7 +28,7 @@ end
 ---@field OnBuy fun(self: Unlock)
 ---@field OnReapply fun(self: Unlock)
 ---@field Buy fun(self: Unlock)
-local Object = Libs.Class({
+local Object = Libs.Struct({
     Id = nil,
     Name = nil,
     Icon = nil,

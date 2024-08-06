@@ -22,8 +22,8 @@ local M = {}
 M.Translations = {}
 M.UseLoca = true
 
----@class LocalizationClass
-local Localization = Libs.Class({
+---@class LocalizationStruct
+local Localization = Libs.Struct({
     Version = nil,
     Text = nil,
     Handle = nil,

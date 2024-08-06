@@ -378,6 +378,48 @@ function GameMode.StartNext()
     Scenario.Start(rogueTemp, map)
 end
 
+---@param enemy Enemy
+function GameMode.ApplyDifficulty(enemy)
+    local function scale(i, h)
+        local x = i / 200
+        local max_value = 30
+
+        if h then
+            x = x * 2
+            max_value = 50
+        end
+
+        local rate = i / 1000
+        return math.floor(max_value * (1 - math.exp(-rate * x)))
+    end
+
+    local mod = scale(PersistentVars.RogueScore, PersistentVars.HardMode)
+    local mod2 = math.floor(mod / 2)
+
+    local map = {}
+    local abilties = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" }
+    for i, v in pairs(enemy:Entity().Stats.Abilities) do
+        if i > 1 and v then
+            table.insert(map, { abilties[i - 1], v })
+        end
+    end
+    table.sort(map, function(left, right)
+        return left[2] > right[2]
+    end)
+
+    if mod > 0 then
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[1][1] .. ",+" .. mod .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[2][1] .. ",+" .. mod .. ")", Mod.TableKey, Mod.TableKey)
+    end
+    if mod2 > 0 then
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "AC(" .. math.ceil(mod2 / 2) .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
+    end
+end
+
 U.Osiris.On(
     "TeleportedToCamp",
     1,
@@ -408,6 +450,13 @@ Event.On(
         Schedule(GameMode.StartNext)
     end)
 )
+
+Event.On("ScenarioEnemySpawned", function(scenario, enemy)
+    if scenario.Name ~= C.RoguelikeScenario then
+        return
+    end
+    GameMode.ApplyDifficulty(enemy)
+end)
 
 Event.On("ScenarioEnded", function(scenario)
     if scenario.Name == C.RoguelikeScenario then

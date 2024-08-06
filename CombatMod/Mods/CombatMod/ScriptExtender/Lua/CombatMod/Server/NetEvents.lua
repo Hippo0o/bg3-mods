@@ -300,7 +300,6 @@ Net.On("CancelDialog", function(event)
     end
 end)
 
----@deprecated
 Net.On("UpdateLootFilter", function(event)
     local rarity, type, bool = table.unpack(event.Payload)
     PersistentVars.LootFilter[type][rarity] = bool
@@ -309,16 +308,24 @@ Net.On("UpdateLootFilter", function(event)
 end)
 
 Net.On("PickupAll", function(event)
-    Player.PickupAll(event:Character())
+    for _, rarity in pairs(C.ItemRarity) do
+        Item.PickupAll(event:Character())
+    end
 end)
 
----@deprecated
 Net.On("Pickup", function(event)
     local rarity, type = table.unpack(event.Payload)
     Item.PickupAll(event:Character(), rarity, type)
 end)
 
----@deprecated
+Net.On("DestroyAll", function(event)
+    for _, rarity in pairs(C.ItemRarity) do
+        Item.DestroyAll(rarity, "Armor")
+        Item.DestroyAll(rarity, "Weapon")
+        Item.DestroyAll(rarity, "Object")
+    end
+end)
+
 Net.On("DestroyLoot", function(event)
     local rarity, type = table.unpack(event.Payload)
     Item.DestroyAll(rarity, type)

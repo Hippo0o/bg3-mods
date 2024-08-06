@@ -3,18 +3,20 @@ local itemBlacklist = Require("CombatMod/Templates/ItemBlacklist.lua")
 local weapons = nil
 local armor = nil
 local objects = nil
-if Ext.Mod.IsModLoaded(C.ModUUID) then
-    weapons = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Weapon")
-    armor = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Armor")
-    objects = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Object")
-else
-    L.Debug("Mod not loaded. Using all items.")
-    weapons = Ext.Stats.GetStats("Weapon")
-    armor = Ext.Stats.GetStats("Armor")
-    objects = Ext.Stats.GetStats("Object")
-end
+local function loadItems()
+    if Ext.Mod.IsModLoaded(C.ModUUID) then
+        weapons = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Weapon")
+        armor = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Armor")
+        objects = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Object")
+    else
+        L.Debug("Mod not loaded. Using all items.")
+        weapons = Ext.Stats.GetStats("Weapon")
+        armor = Ext.Stats.GetStats("Armor")
+        objects = Ext.Stats.GetStats("Object")
+    end
 
-L.Debug("Item lists loaded.", #objects, #armor, #weapons)
+    L.Debug("Item lists loaded.", #objects, #armor, #weapons)
+end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -22,14 +24,14 @@ L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Item : LibsClass
+---@class Item : LibsStruct
 ---@field Name string
 ---@field Type string
 ---@field RootTemplate string
 ---@field Rarity string
 ---@field GUID string|nil
 ---@field Slot string|nil
-local Object = Libs.Class({
+local Object = Libs.Struct({
     Name = nil,
     Type = nil,
     RootTemplate = "",
@@ -58,8 +60,6 @@ function Object.New(name, type, fake)
         if type == "Object" then
             o.Slot = item.InventoryTab
         end
-
-        o:ModifyTemplate()
     end
 
     o.GUID = nil
@@ -70,23 +70,9 @@ end
 function Object:ModifyTemplate()
     local template = self:GetTemplate()
 
-    -- only overwrite if different, and save the original value for restoration
-    local overwrites = {}
-
     if template.Stats ~= self.Name then
-        overwrites.Stats = template.Stats
         template.Stats = self.Name
     end
-
-    -- restore template
-    -- maybe not needed but template overwrites seem to be global
-    GameState.OnUnload(function()
-        L.Debug("Restoring template:", self.RootTemplate)
-        local template = self:GetTemplate()
-        for i, v in pairs(overwrites) do
-            template[i] = v
-        end
-    end)
 end
 
 function Object:IsSpawned()
@@ -116,7 +102,9 @@ function Object:Spawn(x, y, z)
         return false
     end
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 10, "", 1)
+    self:ModifyTemplate()
+
+    x, y, z = Osi.FindValidPosition(x, y, z, 20, Player.Host(), 1)
 
     self.GUID = Osi.CreateAt(self.RootTemplate, x, y, z, 1, 1, "")
 
@@ -171,12 +159,29 @@ local itemCache = {
     CombatObjects = {},
 }
 
+function Item.ClearCache()
+    itemCache = {
+        Objects = {},
+        Armor = {},
+        Weapons = {},
+        CombatObjects = {},
+    }
+end
+
 function Item.Objects(rarity, forCombat)
     local cacheKey = forCombat and "CombatObjects" or "Objects"
     if #itemCache[cacheKey] > 0 then
-        return UT.Filter(itemCache[cacheKey], function(item)
-            return rarity == nil or item.Rarity == rarity
+        return UT.Map(itemCache[cacheKey], function(name)
+            local item = Object.New(name, "Object")
+
+            if rarity == nil or item.Rarity == rarity then
+                return item
+            end
         end)
+    end
+
+    if objects == nil then
+        loadItems()
     end
 
     local items = UT.Filter(objects, function(name)
@@ -243,18 +248,24 @@ function Item.Objects(rarity, forCombat)
         return true
     end)
 
-    itemCache[cacheKey] = UT.Map(items, function(name)
-        return Object.New(name, "Object")
-    end)
+    itemCache[cacheKey] = items
 
     return Item.Objects(rarity, forCombat)
 end
 
 function Item.Armor(rarity)
     if #itemCache.Armor > 0 then
-        return UT.Filter(itemCache.Armor, function(item)
-            return rarity == nil or item.Rarity == rarity
+        return UT.Map(itemCache.Armor, function(name)
+            local item = Object.New(name, "Armor")
+
+            if rarity == nil or item.Rarity == rarity then
+                return item
+            end
         end)
+    end
+
+    if armor == nil then
+        loadItems()
     end
 
     local items = UT.Filter(armor, function(name)
@@ -300,18 +311,24 @@ function Item.Armor(rarity)
         return true
     end)
 
-    itemCache.Armor = UT.Map(items, function(name)
-        return Object.New(name, "Armor")
-    end)
+    itemCache.Armor = items
 
     return Item.Armor(rarity)
 end
 
 function Item.Weapons(rarity)
     if #itemCache.Weapons > 0 then
-        return UT.Filter(itemCache.Weapons, function(item)
-            return rarity == nil or item.Rarity == rarity
+        return UT.Map(itemCache.Weapons, function(name)
+            local item = Object.New(name, "Weapon")
+
+            if rarity == nil or item.Rarity == rarity then
+                return item
+            end
         end)
+    end
+
+    if weapons == nil then
+        loadItems()
     end
 
     local items = UT.Filter(weapons, function(name)
@@ -349,9 +366,7 @@ function Item.Weapons(rarity)
         return true
     end)
 
-    itemCache.Weapons = UT.Map(items, function(name)
-        return Object.New(name, "Weapon")
-    end)
+    itemCache.Weapons = items
 
     return Item.Weapons(rarity)
 end
@@ -371,7 +386,7 @@ end
 
 function Item.DestroyAll(rarity, type)
     for guid, item in pairs(PersistentVars.SpawnedItems) do
-        if item.Rarity == rarity and not Item.IsOwned(item.GUID) and item.Type == type then
+        if item.Rarity == rarity and not Item.IsOwned(item.GUID) and (not type or item.Type == type) then
             GU.Object.Remove(guid)
             PersistentVars.SpawnedItems[guid] = nil
         end
@@ -527,6 +542,8 @@ end
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
+
+GameState.OnUnload(Item.ClearCache)
 
 U.Osiris.On(
     "RequestCanPickup",

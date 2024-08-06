@@ -217,7 +217,7 @@ U.Osiris.On(
             or dialog:match("InParty")
             or dialog:match("^BHVR_WRLD")
             or dialog:match("^GLO_Avatar")
-            or dialog:match("^UNI_MagicMirror")
+            or dialog:match("^GLO_MagicMirror")
         then
             return
         end
