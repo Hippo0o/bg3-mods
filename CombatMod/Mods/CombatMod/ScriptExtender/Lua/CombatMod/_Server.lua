@@ -123,4 +123,11 @@ GameState.OnLoad(function()
     end
 end, true)
 
+GameState.OnLoad(function()
+    L.Dump("Check if mod is active", PersistentVars.Active)
+    if PersistentVars.Active then
+        Event.Trigger("ModActive")
+    end
+end)
+
 Require("CombatMod/Overwrites")
