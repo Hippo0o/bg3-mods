@@ -51,10 +51,11 @@ External.Validators = {}
 
 External.Validators.Config = tt({
     -- ForceCombatRestart = { "nil", "boolean" },
+    RandomizeSpawnOffset = { "nil", "number" },
     ForceEnterCombat = { "nil", "boolean" },
     BypassStory = { "nil", "boolean" },
     BypassStoryAlways = { "nil", "boolean" },
-    LootItemsIncludeClothes = { "nil", "boolean" },
+    LootIncludesCampSlot = { "nil", "boolean" },
     Debug = { "nil", "boolean" },
 })
 
@@ -230,5 +231,8 @@ function External.SaveConfig()
         return
     end
 
-    External.File.Export("Config", Config)
+    local config = UT.Filter(Config, function(value, key)
+        return UT.Contains(External.Validators.Config:GetFields(), key)
+    end, true)
+    External.File.Export("Config", config)
 end

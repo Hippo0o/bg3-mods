@@ -70,8 +70,9 @@ Config = {
     ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
     BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
     BypassStoryAlways = false, -- always skip dialogues, combat and interactions even if no scenario is active
-    LootItemsIncludeClothes = false, -- include clothes in item lists
+    LootIncludesCampSlot = false, -- include camp clothes in item lists
     Debug = false,
+    RandomizeSpawnOffset = 3,
 }
 External = {}
 Require("JustCombat/External")
@@ -313,6 +314,11 @@ do
         local region = Player.Region()
         L.Info("Region", region)
 
+        if not id and S then
+            S.Map:Teleport(Player.Host())
+            return
+        end
+
         local maps = Map.Get(region)
         id = tonumber(id or 1)
         if maps == nil then
@@ -348,7 +354,7 @@ do
 
             Map.Get()[tonumber(mapId)]:PingSpawns()
         end, {
-            retries = tonumber(repeats) or 1,
+            retries = tonumber(repeats) or 3,
         })
     end
 

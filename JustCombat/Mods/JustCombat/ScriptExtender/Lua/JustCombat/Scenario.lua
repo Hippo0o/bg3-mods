@@ -302,7 +302,7 @@ end
 
 function Action.MapEntered()
     local x, y, z = Player.Pos()
-    RetryFor(function(_, tries)
+    RetryFor(function(self, tries)
         if S == nil then -- scenario stopped
             self:Clear()
             return
@@ -325,20 +325,19 @@ function Action.MapEntered()
     })
 end
 
-function Action.Failsafe()
+function Action.Failsafe(enemy)
     local s = Current()
 
-    if #s.SpawnedEnemies > 0 and not s:HasMoreRounds() then
-        L.Debug("Running failsafe.", #s.SpawnedEnemies)
-        local checkEnded = false
+    local list = enemy and { enemy } or s.SpawnedEnemies
+    if #list > 0 then
+        L.Dump("Running failsafe.", list)
 
-        for _, e in pairs(s.SpawnedEnemies) do
-            L.Error("Failsafe triggered.", e:GetId(), e.GUID)
-
+        for _, e in pairs(list) do
             if not e:IsSpawned() then
+                L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 UT.Remove(s.SpawnedEnemies, e)
-                checkEnded = true
-            elseif Osi.IsInCombat(e.GUID) == 0 then
+            elseif Osi.IsDead(e.GUID) == 0 and Osi.IsInCombat(e.GUID) == 0 then
+                L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
                 e:Combat(true)
 
@@ -350,22 +349,15 @@ function Action.Failsafe()
                     s.Map:Teleport(e.GUID)
                     e:Combat(true)
 
-                    Schedule(function()
+                    Defer(1000, function()
                         if Osi.IsInCombat(e.GUID) == 0 then
                             UT.Remove(s.SpawnedEnemies, e)
                             e:Clear()
-                            checkEnded = true
                         end
                     end)
                 end)
             end
         end
-
-        Defer(3000, function()
-            if checkEnded then
-                Action.CheckEnded()
-            end
-        end)
     end
 end
 
@@ -376,7 +368,7 @@ function Action.CheckEnded()
             Player.Notify("All enemies are dead.")
             Scenario.End()
         else
-            Player.Notify(#s.SpawnedEnemies .. " enemies left.")
+            Player.Notify(#s.SpawnedEnemies .. " enemies left.", true)
         end
     end
 end
@@ -516,11 +508,24 @@ function Scenario.CombatSpawned(specific)
                 return false
             end
 
+            if Osi.IsDead(enemy.GUID) == 1 then
+                return true
+            end
+
             enemy:Combat(Config.ForceEnterCombat)
             Osi.EnterCombat(enemy.GUID, target)
 
             return Osi.IsInCombat(enemy.GUID) == 1
-        end, { immediate = true, retries = 5, interval = 500 })
+        end, {
+            immediate = true,
+            retries = 5,
+            interval = 1000,
+            failed = ifScenario(function()
+                if Player.InCombat() or Config.ForceEnterCombat then
+                    Action.Failsafe(enemy)
+                end
+            end),
+        })
     end
 end
 
@@ -657,8 +662,6 @@ Ext.Osiris.RegisterListener(
                 Action.ResumeCombat()
                 return
             end
-
-            Defer(3000, ifScenario(Action.Failsafe))
         end
     end)
 )
@@ -673,7 +676,7 @@ Ext.Osiris.RegisterListener(
         end
 
         S.OnMap = true
-        Scenario.Teleport(uuid)
+        Scenario.Teleport(uuid, true)
     end)
 )
 
@@ -683,7 +686,7 @@ Ext.Osiris.RegisterListener(
     "after",
     ifScenario(function(uuid)
         if S.OnMap and U.UUID.Equals(uuid, Player.Host()) then
-            Action.MapEntered()
+            Defer(1000, Action.MapEntered)
         end
     end)
 )
