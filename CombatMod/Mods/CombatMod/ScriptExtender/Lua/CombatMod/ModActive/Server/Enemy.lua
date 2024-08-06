@@ -215,11 +215,11 @@ function Object:OnAttacked(attacker)
     end
     self.WasAttacked = true
 
-    local seenPlayer = UT.Find(GU.DB.TryGet("DB_Sees", 2, { nil, self.GUID }, 1), function(v)
-        return Player.IsPlayer(v)
+    local seenEnemy = UT.Find(GU.DB.TryGet("DB_Sees", 2, { nil, self.GUID }, 1), function(v)
+        return Osi.IsEnemy(self.GUID, v) == 1
     end)
 
-    if not seenPlayer then
+    if not seenEnemy then
         Osi.ApplyStatus(self.GUID, "SURPRISED", 1)
     end
 end
