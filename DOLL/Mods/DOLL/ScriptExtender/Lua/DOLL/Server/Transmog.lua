@@ -1,5 +1,5 @@
----@class Armor
-Armor = {}
+---@class Transmog
+Transmog = {}
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -7,7 +7,7 @@ Armor = {}
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class ArmorStruct
+---@class TransmogStruct
 local Struct = Libs.Class({
     Uuid = nil,
     Slot = nil,
@@ -33,11 +33,11 @@ end
 
 local cached
 
-function Armor.ClearCache()
+function Transmog.ClearCache()
     cached = nil
 end
 
-function Armor.LoadCache()
+function Transmog.LoadCache()
     local eq = UT.Map(Ext.Stats.GetStats("Armor"), function(name)
         local stats = Ext.Stats.Get(name)
         local template = Ext.Template.GetRootTemplate(stats.RootTemplate)
@@ -60,17 +60,17 @@ function Armor.LoadCache()
     cached = UT.GroupBy(eq, "Slot")
 end
 
-function Armor.GetSlots()
+function Transmog.GetSlots()
     if not cached then
-        Armor.LoadCache()
+        Transmog.LoadCache()
     end
 
     return UT.Keys(cached)
 end
 
-function Armor.GetArmor(slot)
+function Transmog.GetArmor(slot)
     if not cached then
-        Armor.LoadCache()
+        Transmog.LoadCache()
     end
 
     return slot and cached[slot] or cached
