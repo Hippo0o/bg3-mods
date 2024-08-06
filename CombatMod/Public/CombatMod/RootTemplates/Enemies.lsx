@@ -6014,7 +6014,7 @@
 					<attribute id="MapKey" type="FixedString"
 						value="37f257f9-cb02-4cf8-85fe-86e9fb1d8996" />
 					<attribute id="ParentTemplateId" type="FixedString"
-						value="dcbaa902-e45c-41fa-b238-19541402961e" />
+						value="1ec072e4-9e76-4a3c-8fe5-7f26bf5ec974" />
 					<attribute id="Name" type="LSString" value="TOT_DarkVine_Tentacle_GraspingVine" />
 					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="beast" />
