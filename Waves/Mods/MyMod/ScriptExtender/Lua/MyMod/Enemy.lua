@@ -120,7 +120,7 @@ function Object:ModifyTemplate()
     end
 
     if self.CharacterVisualResourceID ~= nil then
-        -- might not apply when to many enemies are spawned at once
+        -- might not apply when too many enemies are spawned at once
         templateOverwrite("CharacterVisualResourceID", self.CharacterVisualResourceID)
     end
 
@@ -394,7 +394,7 @@ end
 ---@param object string GUID
 ---@return boolean
 function Enemy.IsValid(object)
-    return UE.IsNonPlayer(object, true)
+    return UE.IsNonPlayer(object)
         and (
             Osi.IsSummon(object) == 1
             or (S and UT.Find(S.SpawnedEnemies, function(v)

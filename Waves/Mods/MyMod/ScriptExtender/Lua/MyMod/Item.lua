@@ -245,7 +245,9 @@ function Item.Weapons(rarity)
 end
 
 function Item.IsOwned(obj)
-    return Osi.GetInventoryOwner(obj) ~= nil or Osi.GetFirstInventoryOwnerCharacter(obj) ~= nil
+    return Osi.IsInInventory(obj) == 1
+        or Osi.GetInventoryOwner(obj) ~= nil
+        or Osi.GetFirstInventoryOwnerCharacter(obj) ~= nil
 end
 
 -- not used
@@ -266,7 +268,7 @@ Ext.Osiris.RegisterListener(
     3,
     "before",
     Async.Throttle(1000, function(object, inventoryHolder, addType) -- avoid recursion
-        if addType ~= "Regular" or UE.IsNonPlayer(inventoryHolder) then
+        if addType ~= "Regular" or UE.IsNonPlayer(inventoryHolder, true) then
             return
         end
 

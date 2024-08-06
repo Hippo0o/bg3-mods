@@ -128,10 +128,10 @@ function M.Entity.IsOrigin(character)
 end
 
 ---@param character string GUID
----@param ignoreParty boolean|nil Summons or QuestNPCs might be considered party members
+---@param includeParty boolean|nil Summons or QuestNPCs might be considered party members
 ---@return boolean
-function M.Entity.IsNonPlayer(character, ignoreParty)
-    if ignoreParty and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
+function M.Entity.IsNonPlayer(character, includeParty)
+    if not includeParty and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
         return false
     end
     return not M.Entity.IsOrigin(character) and not M.Entity.IsHireling(character) and Osi.IsPlayer(character) == 0
@@ -148,6 +148,67 @@ function M.Entity.IsPlayable(character)
                 return M.UUID.Equals(v, character)
             end) ~= nil
         )
+end
+
+---@class EntityDistance
+---@field Entity EntityHandle
+---@field Guid string GUID
+---@field Distance number
+---@param source string GUID
+---@param radius number|nil
+---@param ignoreHeight boolean|nil
+---@return EntityDistance[]
+-- thanks to AtilioA/BG3-volition-cabinet
+function M.Entity.GetNearby(source, radius, ignoreHeight)
+    radius = radius or 1
+
+    ---@param entity string|EntityHandle GUID
+    ---@return number[]|nil {x, y, z}
+    local function entityPos(entity)
+        entity = type(entity) == "string" and Ext.Entity.Get(entity) or entity
+        local ok, pos = pcall(function()
+            return entity.Transform.Transform.Translate
+        end)
+        if ok then
+            return { pos[1], pos[2], pos[3] }
+        end
+        return nil
+    end
+
+    local sourcePos = entityPos(source)
+    if not sourcePos then
+        return {}
+    end
+
+    ---@param target number[] {x, y, z}
+    ---@return number
+    local function calcDisance(target)
+        return math.sqrt(
+            (sourcePos[1] - target[1]) ^ 2
+                + (not ignoreHeight and (sourcePos[2] - target[2]) ^ 2 or 0)
+                + (sourcePos[3] - target[3]) ^ 2
+        )
+    end
+
+    local nearby = {}
+    for _, entity in ipairs(Ext.Entity.GetAllEntitiesWithComponent("Uuid")) do
+        local pos = entityPos(entity)
+        if pos then
+            local distance = calcDisance(pos)
+            if distance <= radius then
+                table.insert(nearby, {
+                    Entity = entity,
+                    Guid = entity.Uuid.EntityUuid,
+                    Distance = distance,
+                })
+            end
+        end
+    end
+
+    table.sort(nearby, function(a, b)
+        return a.Distance < b.Distance
+    end)
+    return nearby
 end
 
 -- also works for items
@@ -358,6 +419,23 @@ function M.String.Contains(s, patterns, ignoreCase)
         return string.match(s, pattern) ~= nil
     end
     return false
+end
+
+---@param s string
+---@return string
+function M.String.Trim(s)
+    return s:match("^%s*(.-)%s*$")
+end
+
+---@param s string
+---@param sep string
+---@return string[]
+function M.String.Split(s, sep)
+    local r = {}
+    for match in (s .. sep):gmatch("(.-)" .. sep) do
+        table.insert(r, match)
+    end
+    return r
 end
 
 -------------------------------------------------------------------------------------------------
