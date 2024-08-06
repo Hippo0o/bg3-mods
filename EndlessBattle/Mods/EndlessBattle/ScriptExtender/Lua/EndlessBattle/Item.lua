@@ -137,8 +137,9 @@ function Item.Objects(rarity, forCombat)
             if
                 not (
                     cat:match("^Food")
-                    or cat:match("^Drink")
+                    -- or cat:match("^Drink")
                     or cat:match("^Ingredient")
+                    or cat:match("Potion")
                     -- alchemy items
                     -- or name:match("^OBJ_Crystal_")
                     or name:match("^CONS_Mushrooms_")

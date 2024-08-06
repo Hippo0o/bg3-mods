@@ -18,6 +18,7 @@ function GameMode.AskTutSkip()
         end)
         .After(function()
             Osi.PROC_GLO_Jergal_MoveToCamp()
+            Osi.AddGold(Player.Host(), 1000)
             return Defer(2000)
         end)
         .After(function()
@@ -110,11 +111,10 @@ end
 
 function GameMode.AskEnableRogueMode()
     return Player.AskConfirmation([[
-        Play Roguelike mode?
-        Continuely creates new battles.
-        You will gain a higher score with every completed Fight.
-        Difficulty increases with higher score.
-        ]]).After(function(confirmed)
+Play Roguelike mode?
+Continuously create new battles.
+You will gain a higher score with every completed fight.
+Difficulty increases with the score.]]).After(function(confirmed)
         L.Debug("RogueMode", confirmed)
         PersistentVars.RogueModeActive = confirmed
         Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)

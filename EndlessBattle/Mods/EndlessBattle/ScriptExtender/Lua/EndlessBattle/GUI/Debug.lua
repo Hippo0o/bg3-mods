@@ -42,6 +42,9 @@ function Debug.Main(tab)
         end):Exec({ Payload = {} })
         Net.Send("GetTemplates")
 
+        -- section Enemies
+        Debug.Enemies(root)
+
         -- section Items
         Debug.Items(root)
 
@@ -49,6 +52,34 @@ function Debug.Main(tab)
     end, "ToggleDebug")
 end
 
+function Debug.Enemies(root)
+    local grp = root:AddGroup(__("Enemies"))
+    grp:AddSeparatorText(__("Enemies"))
+
+    local tree
+    WindowNet("GetEnemies", function(event)
+        if tree then
+            tree:Destroy()
+        end
+
+        tree = Components.Tree(grp, event.Payload)
+    end):Exec({ Payload = {} })
+
+    local combo = grp:AddCombo(__("Tier"))
+    combo.Options = C.EnemyTier
+    combo.OnChange = function()
+        Net.Send("GetEnemies", { Tier = combo.Options[combo.SelectedIndex + 1] })
+    end
+
+    local btn = grp:AddButton(__("Reset"))
+    btn.OnClick = function()
+        combo.SelectedIndex = -1
+        Net.Send("GetEnemies")
+    end
+    btn.SameLine = true
+
+    Net.Send("GetEnemies")
+end
 function Debug.Items(root)
     local grp = root:AddGroup(__("Items"))
     grp:AddSeparatorText(__("Items"))

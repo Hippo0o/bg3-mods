@@ -13,7 +13,7 @@ Net.On("GetTemplates", function(event)
     Net.Respond(event, {
         Scenarios = Scenario.GetTemplates(),
         Maps = Map.GetTemplates(),
-        Enemies = Enemy.GetTemplates(),
+        -- Enemies = Enemy.GetTemplates(),
     })
 end)
 
@@ -29,6 +29,22 @@ Net.On("ResetTemplates", function(event)
     end
 
     Net.Respond(event, { true })
+end)
+
+Net.On("GetEnemies", function(event)
+    local tier = event.Payload and event.Payload.Tier
+
+    local grouped = {}
+    for _, v in ipairs(Enemy.GetTemplates()) do
+        if not tier or v.Tier == tier then
+            if not grouped[v.Tier] then
+                grouped[v.Tier] = {}
+            end
+            table.insert(grouped[v.Tier], v)
+        end
+    end
+
+    Net.Respond(event, grouped)
 end)
 
 Net.On("GetItems", function(event)
