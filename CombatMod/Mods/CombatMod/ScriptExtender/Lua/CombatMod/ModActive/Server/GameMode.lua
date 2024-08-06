@@ -338,6 +338,10 @@ function GameMode.ApplyDifficulty(enemy, score)
     end
 
     local mod = scale(score, GameMode.IsHardMode())
+    if mod == 0 then
+        return
+    end
+
     local mod2 = math.floor(mod / 2)
     local mod3 = math.floor(mod2 / 2)
 
