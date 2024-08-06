@@ -43,7 +43,7 @@ end
 
 function External.File.ExportIfNeeded(name, data)
     name = filePath(name)
-    assert(External.File.Exists(name), name)
+
     if not External.File.Exists(name) then
         External.File.Export(name, data)
     end
@@ -103,11 +103,14 @@ local function validateTimelineEntry(value)
 end
 External.Validators.Scenario = tt({
     Name = { "string" },
-    Timeline = tt({
+    Timeline = {
+        { "roguelike" },
         tt({
-            { "nil", C.EnemyTier, validateTimelineEntry },
+            tt({
+                { "nil", C.EnemyTier, validateTimelineEntry },
+            }, true),
         }, true),
-    }, true),
+    },
     Loot = tt({
         Objects = tt({
             Common = { "nil", "number" },

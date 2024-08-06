@@ -27,6 +27,14 @@ local defaultLoot = {
 
 return {
     {
+        Name = "Auto Generated",
+
+        -- Spawns per Round
+        Timeline = "roguelike",
+
+        Loot = defaultLoot,
+    },
+    {
         Name = "level 1",
 
         -- Spawns per Round

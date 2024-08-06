@@ -49,6 +49,7 @@ Mod.PersistentVarsTemplate = {
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = S,
+    RogueScore = 0,
 }
 
 ---@type GameState
