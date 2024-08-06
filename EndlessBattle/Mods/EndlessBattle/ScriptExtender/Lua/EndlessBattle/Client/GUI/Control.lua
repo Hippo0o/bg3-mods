@@ -1,18 +1,20 @@
 Control = {}
 
----@param tab ExtuiTabBar
-function Control.Main(tab)
-    local root = tab:AddTabItem(__("Play"))
+function Control.Events()
+    local function handleResponse(payload)
+        if payload[1] then
+            Event.Trigger("Success", payload[2])
+        else
+            Event.Trigger("Error", payload[2])
+        end
+    end
 
     Event.On("Start", function(scenarioName, mapName)
         Net.Request("Start", {
             Scenario = scenarioName,
             Map = mapName,
         }).After(function(event)
-            local success, err = table.unpack(event.Payload)
-            if not success then
-                Event.Trigger("Error", err)
-            end
+            handleResponse(event.Payload)
         end)
     end)
 
@@ -20,23 +22,36 @@ function Control.Main(tab)
         Net.Request("Stop")
     end)
 
-    Event.On("Teleport", function(data)
-        Net.Request("Teleport", data).After(function(event)
-            local success, err = table.unpack(event.Payload)
-            if not success then
-                Event.Trigger("Error", err)
-            end
+    Event.On("PingSpawns", function(data)
+        Net.Request("PingSpawns", data).After(function(event)
+            handleResponse(event.Payload)
         end)
     end)
 
-    Event.On("PingSpawns", function(data)
-        Net.Request("PingSpawns", data).After(function(event)
-            local success, err = table.unpack(event.Payload)
-            if not success then
-                Event.Trigger("Error", err)
-            end
+    Event.On("Teleport", function(data)
+        Net.Request("Teleport", data).After(function(event)
+            handleResponse(event.Payload)
         end)
     end)
+
+    Event.On("ToCamp", function()
+        Net.Request("ToCamp").After(function(event)
+            handleResponse(event.Payload)
+        end)
+    end)
+
+    Event.On("ResumeCombat", function()
+        Net.Request("ResumeCombat").After(function(event)
+            handleResponse(event.Payload)
+        end)
+    end)
+end
+
+---@param tab ExtuiTabBar
+function Control.Main(tab)
+    Control.Events()
+
+    local root = tab:AddTabItem(__("Play"))
 
     local header = root:AddSeparatorText("")
     Components.Layout(root, 1, 2, function(layout)
