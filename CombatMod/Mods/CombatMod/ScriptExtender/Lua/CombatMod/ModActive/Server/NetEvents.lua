@@ -81,6 +81,7 @@ Net.On("GetItems", function(event)
         CombatObjects = Item.Objects(rarity, true),
         Armor = Item.Armor(rarity),
         Weapons = Item.Weapons(rarity),
+        Filters = External.Templates.GetItemFilters(),
     })
 end)
 

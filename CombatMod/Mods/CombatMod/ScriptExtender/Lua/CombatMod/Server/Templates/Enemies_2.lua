@@ -8,7 +8,7 @@ return {
 			Vit = 22,
 		},
 		Name = "TOT_LOW_KurwinCoffin_Kobolds_Melee",
-		TemplateId = "d743f1ac-0934-4bf1-88a8-56aeb062ca2d",
+		TemplateId = "dfa2b5d1-ff7d-41e7-8876-6792d31abef4",
 		Tier = "mid",
 	},
 	{
@@ -20,7 +20,7 @@ return {
 			Vit = 76,
 		},
 		Name = "TOT_Githyanki_Female_Gishra_Melee",
-		TemplateId = "4c6748c9-e362-46d7-9ba1-1461be83cbf8",
+		TemplateId = "0938fe9c-b83f-46bf-8180-90d765ba3138",
 		Tier = "ultra",
 	},
 	{
@@ -32,7 +32,7 @@ return {
 			Vit = 48,
 		},
 		Name = "TOT_LOW_OskarsBeloved_Nurse",
-		TemplateId = "741be379-40f0-42b2-8b7c-da0915add8dd",
+		TemplateId = "fe25e055-7d91-467c-9eb6-a73f64a4f8ec",
 		Tier = "high",
 	},
 	{
@@ -44,7 +44,7 @@ return {
 			Vit = 75,
 		},
 		Name = "TOT_HookHorror_A",
-		TemplateId = "f3b6500b-0053-47c0-b062-4b67228ec34a",
+		TemplateId = "a39c5ff7-c428-434a-b470-f4828abcdd10",
 		Tier = "high",
 	},
 	{
@@ -56,7 +56,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Dwarves_Male_Hill_FlamingFist_Melee_Attacker",
-		TemplateId = "67cdfec3-0c6f-4533-bdf3-ef252b5142b9",
+		TemplateId = "4226fce8-b5df-4f84-8544-b4cf7cf1a5b6",
 		Tier = "high",
 	},
 	{
@@ -68,7 +68,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Humans_Female_FlamingFist_Ranger_B",
-		TemplateId = "37664a06-f53f-4458-a613-4776d0fb031a",
+		TemplateId = "856f65cd-06ac-46bd-af26-a90f9ee671f9",
 		Tier = "high",
 	},
 	{
@@ -80,7 +80,7 @@ return {
 			Vit = 67,
 		},
 		Name = "TOT_Shadow_Wraith_A",
-		TemplateId = "9a5d6e4f-707e-4091-831c-8dc819550805",
+		TemplateId = "668e9f84-d2c1-4d7f-b37e-ea2150d7caaa",
 		Tier = "ultra",
 	},
 	{
@@ -92,7 +92,7 @@ return {
 			Vit = 29,
 		},
 		Name = "TOT_Undead_Skeleton_Blood",
-		TemplateId = "95048801-bbad-429d-bf84-4ecb9e4b0d29",
+		TemplateId = "449fa38f-c083-48fe-8e7a-989a49c76893",
 		Tier = "mid",
 	},
 	{
@@ -104,7 +104,7 @@ return {
 			Vit = 21,
 		},
 		Name = "TOT_Intellect_Devourer",
-		TemplateId = "79a71c7c-5381-45fd-abe5-fc22f4667c3e",
+		TemplateId = "3e62045f-48ab-49d0-885a-42498be00eb2",
 		Tier = "mid",
 	},
 	{
@@ -116,7 +116,7 @@ return {
 			Vit = 114,
 		},
 		Name = "TOT_Elemental_Water_ConjureElemental",
-		TemplateId = "046e20d0-8775-40d5-a19b-a64d684d1f3c",
+		TemplateId = "17ae8a45-5183-4350-9dbc-afa1c04281bf",
 		Tier = "epic",
 	},
 	{
@@ -128,7 +128,7 @@ return {
 			Vit = 6,
 		},
 		Name = "TOT_FOR_PhaseSpider_Spawn",
-		TemplateId = "c1477e50-0395-4794-bc71-2fd5a4dffeb3",
+		TemplateId = "932a2484-8732-42fe-a550-bbab0efd2f16",
 		Tier = "low",
 	},
 	{
@@ -140,7 +140,7 @@ return {
 			Vit = 8,
 		},
 		Name = "TOT_Dwarves_Female_Hill_FlamingFist_Cleric",
-		TemplateId = "374535ec-df6a-49f0-8212-9e42dc6fa112",
+		TemplateId = "400a2363-4708-4039-a092-fddf711d8c2a",
 		Tier = "high",
 	},
 	{
@@ -152,7 +152,7 @@ return {
 			Vit = 26,
 		},
 		Name = "TOT_Imp_Raphael",
-		TemplateId = "9123a836-698a-45a3-be1e-d7e5c3e1a55f",
+		TemplateId = "dd246134-bf8e-4d4b-affe-22a7cedb65cb",
 		Tier = "high",
 	},
 	{
@@ -164,7 +164,7 @@ return {
 			Vit = 117,
 		},
 		Name = "TOT_Myrmidon_Air",
-		TemplateId = "bd08bf83-7d6d-4953-875f-a14b37dfc6a6",
+		TemplateId = "4fdcb048-de98-4372-b0af-7717942de22d",
 		Tier = "epic",
 	},
 	{
@@ -176,7 +176,7 @@ return {
 			Vit = 12,
 		},
 		Name = "TOT_Hyena_A_Black",
-		TemplateId = "e2a53f2c-2e2b-4fa2-a9b2-cee2c5e0578c",
+		TemplateId = "0c1d08b4-2556-4964-af89-68f7bbeedcb9",
 		Tier = "low",
 	},
 	{
@@ -188,7 +188,7 @@ return {
 			Vit = 84,
 		},
 		Name = "TOT_LOW_OskarsBeloved_MonstrousSpirit",
-		TemplateId = "08fe6015-a6e6-4370-9944-6f8ca8fe6f7b",
+		TemplateId = "99e103ee-fc8c-4839-b63d-eabc9740801b",
 		Tier = "epic",
 	},
 	{
@@ -200,7 +200,7 @@ return {
 			Vit = 5,
 		},
 		Name = "TOT_BIRD_BlueJay",
-		TemplateId = "7249b7f2-5d91-4bd3-9b45-04195ce3a69f",
+		TemplateId = "7823b759-75bb-4d73-99a9-044837208e79",
 		Tier = "low",
 	},
 	{
@@ -212,7 +212,7 @@ return {
 			Vit = 82,
 		},
 		Name = "TOT_Humans_Female_Cultist_Bane_BlackGauntlet",
-		TemplateId = "ba92fd55-cb2e-4969-9fc8-284afe9458bc",
+		TemplateId = "1212d523-d12b-4fbd-b359-b028cdee77a0",
 		Tier = "epic",
 	},
 	{
@@ -224,7 +224,7 @@ return {
 			Vit = 91,
 		},
 		Name = "TOT_LOW_BasiliskGate_WolfCompanion_Summon_Final",
-		TemplateId = "91c18a76-bae6-4431-a7f4-c056252715dd",
+		TemplateId = "26c7d177-2db5-4d87-81fc-cc3f162a1b41",
 		Tier = "epic",
 	},
 	{
@@ -236,7 +236,7 @@ return {
 			Vit = 9,
 		},
 		Name = "TOT_Goblins_Female_Ranger",
-		TemplateId = "19dd77de-5643-455c-80c0-c0b981259e66",
+		TemplateId = "52754984-fef4-45e6-b76f-3159312d7988",
 		Tier = "low",
 	},
 	{
@@ -248,7 +248,7 @@ return {
 			Vit = 238,
 		},
 		Name = "TOT_DeathKnight",
-		TemplateId = "37125077-5065-4616-b570-537bdea88d23",
+		TemplateId = "4b55ca65-02e8-48a6-8fdf-2225a63bc96c",
 		Tier = "legendary",
 	},
 	{
@@ -260,7 +260,7 @@ return {
 			Vit = 32,
 		},
 		Name = "TOT_Githyanki_Female_Raider",
-		TemplateId = "2e706cbe-c2a8-4218-bf29-2f66c89aaf06",
+		TemplateId = "aa6de779-9079-45d1-99a0-9f075f416397",
 		Tier = "high",
 	},
 	{
@@ -272,7 +272,7 @@ return {
 			Vit = 18,
 		},
 		Name = "TOT_Undead_Skeleton_Necromite",
-		TemplateId = "f361890f-135e-4d33-a100-5c144ece65b9",
+		TemplateId = "a5fd6033-199e-465a-b8f1-457e682f2ccc",
 		Tier = "mid",
 	},
 	{
@@ -284,7 +284,7 @@ return {
 			Vit = 206,
 		},
 		Name = "TOT_SteelWatcher_Biped_A_Ranged",
-		TemplateId = "00a9c1d8-302f-452b-b444-bcffe3f6098b",
+		TemplateId = "316869bc-3678-4b3a-aade-639730327212",
 		Tier = "epic",
 	},
 	{
@@ -296,7 +296,7 @@ return {
 			Vit = 84,
 		},
 		Name = "TOT_LOW_OskarsBeloved_KerriSpirit",
-		TemplateId = "165534e4-433f-4757-9795-817c1ce38f0a",
+		TemplateId = "849b1c05-4127-440a-b2b9-9ff4871b0c82",
 		Tier = "epic",
 	},
 	{
@@ -308,7 +308,7 @@ return {
 			Vit = 85,
 		},
 		Name = "TOT_Githyanki_Female_Gish_Strong",
-		TemplateId = "efe33532-dfc1-407b-8948-2ca89cbfc405",
+		TemplateId = "06969af9-4ab3-4180-a5e1-fffe4ab61958",
 		Tier = "epic",
 	},
 	{
@@ -320,7 +320,7 @@ return {
 			Vit = 46,
 		},
 		Name = "TOT_LOW_Thay_Undead_Ghoul",
-		TemplateId = "e8069aea-1930-49b2-b6a4-5b27d85ad9b8",
+		TemplateId = "c786fc4b-4c08-4415-9a1d-0e2b28740960",
 		Tier = "mid",
 	},
 	{
@@ -332,7 +332,7 @@ return {
 			Vit = 38,
 		},
 		Name = "TOT_Sharran_Cultist_Human_Male_A",
-		TemplateId = "8e36ff7f-c13a-457c-8d6b-37851f5c3534",
+		TemplateId = "41df4a94-3c4f-4674-8c16-a32e5be6ff9e",
 		Tier = "high",
 	},
 	{
@@ -344,7 +344,7 @@ return {
 			Vit = 29,
 		},
 		Name = "TOT_WYR_Wyrmsway_Skeleton_Ranged",
-		TemplateId = "fd422aa6-6f22-4f82-8a2b-1a2beaea2562",
+		TemplateId = "aa360dc0-8fcc-4492-a5cb-ed11c16ea40b",
 		Tier = "mid",
 	},
 	{
@@ -356,7 +356,7 @@ return {
 			Vit = 76,
 		},
 		Name = "TOT_Tieflings_Male_Mephistopheles_Cultist_Bhaal_DeathsHead",
-		TemplateId = "d7fb5d3c-fd6e-49d4-a0fd-122f81ae324d",
+		TemplateId = "644a2a0f-b41b-4c8d-b26b-e4f27aea54d7",
 		Tier = "epic",
 	},
 	{
@@ -368,7 +368,7 @@ return {
 			Vit = 24,
 		},
 		Name = "TOT_Shadow_A_Summon",
-		TemplateId = "3a9a0e80-8da4-49b1-91f4-a90c4fbec84a",
+		TemplateId = "4831a62e-495a-4327-aea5-58a0d387122a",
 		Tier = "mid",
 	},
 	{
@@ -380,7 +380,7 @@ return {
 			Vit = 41,
 		},
 		Name = "TOT_Githyanki_Male_Warrior",
-		TemplateId = "ac7e71a0-fee4-4e35-adaa-d509a8dfbcb9",
+		TemplateId = "f07b7612-b778-40d0-abcf-8678c9730f5c",
 		Tier = "high",
 	},
 	{
@@ -392,7 +392,7 @@ return {
 			Vit = 85,
 		},
 		Name = "TOT_Redcap_Pirate_Melee",
-		TemplateId = "0fe83837-ee44-468c-aace-3f74830329a8",
+		TemplateId = "ab11ba93-cb74-4039-b198-6a505d644fcf",
 		Tier = "ultra",
 	},
 	{
@@ -404,7 +404,7 @@ return {
 			Vit = 8,
 		},
 		Name = "TOT_Dwarves_Male_Hill_FlamingFist_Cleric",
-		TemplateId = "07e193b9-e9b2-4328-8427-e09d8389c9cc",
+		TemplateId = "4de3468e-dc1a-4f9b-b2d4-642dd87d2d42",
 		Tier = "high",
 	},
 	{
@@ -416,7 +416,7 @@ return {
 			Vit = 127,
 		},
 		Name = "TOT_Myrmidon_Water",
-		TemplateId = "dbe13a26-b5fa-4d81-8cac-1615e8835cb1",
+		TemplateId = "88024a28-27f2-4e42-8c3e-8c33adcced37",
 		Tier = "epic",
 	},
 	{
@@ -428,7 +428,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Humans_Male_FlamingFist_Melee_Attacker",
-		TemplateId = "04556132-60a8-4de5-8115-675c0053d897",
+		TemplateId = "ce55284d-9e8a-4564-ba38-956c751adf99",
 		Tier = "high",
 	},
 	{
@@ -440,7 +440,7 @@ return {
 			Vit = 82,
 		},
 		Name = "TOT_Dwarves_Male_Cultist_Bane_BlackGauntlet",
-		TemplateId = "e008d8eb-ccf9-44bd-b4cb-e55dfc6e9ee2",
+		TemplateId = "58b77ca1-a0a2-4801-89ac-eee925ca591a",
 		Tier = "epic",
 	},
 	{
@@ -452,7 +452,7 @@ return {
 			Vit = 369,
 		},
 		Name = "TOT_SteelWatcher_Quadruped_B",
-		TemplateId = "cff36b0c-bd37-478c-831c-875c0c6f7dfd",
+		TemplateId = "0d304aa9-2e82-4142-a74b-2246c736108c",
 		Tier = "legendary",
 	},
 	{
@@ -464,7 +464,7 @@ return {
 			Vit = 126,
 		},
 		Name = "TOT_Elemental_Earth_ConjureElemental",
-		TemplateId = "d7d00e85-41d7-43b8-927b-47cd536a4fdb",
+		TemplateId = "19c544fe-38c3-4a2f-b6a2-9a35c024094c",
 		Tier = "epic",
 	},
 	{
@@ -476,7 +476,7 @@ return {
 			Vit = 8,
 		},
 		Name = "TOT_Necromancer_A",
-		TemplateId = "f7ffd336-3158-4a60-921f-2692664adf62",
+		TemplateId = "c8742ec9-b6ea-4cc4-aa66-419ad9dc4269",
 		Tier = "low",
 	},
 	{
@@ -488,7 +488,7 @@ return {
 			Vit = 62,
 		},
 		Name = "TOT_Humans_Male_Cultist_Bane_Fist",
-		TemplateId = "eb647b05-477b-4c68-92b8-be875b656319",
+		TemplateId = "5fc3daa3-4abe-4206-8d95-2f55330ae631",
 		Tier = "ultra",
 	},
 	{
@@ -500,7 +500,7 @@ return {
 			Vit = 93,
 		},
 		Name = "TOT_Undead_Mummy_CreateUndead",
-		TemplateId = "7a3c3f58-66b4-47de-9ef1-9335039c1ed1",
+		TemplateId = "8f3e0ab0-6958-45fc-a21e-8d85a1c76af2",
 		Tier = "epic",
 	},
 	{
@@ -512,7 +512,7 @@ return {
 			Vit = 19,
 		},
 		Name = "TOT_LOW_DevilsFee_Boar",
-		TemplateId = "6b280049-558c-473f-8506-1f1444e95c86",
+		TemplateId = "645a4d51-d416-428d-aea2-3e2a926f53a7",
 		Tier = "high",
 	},
 	{
@@ -524,7 +524,7 @@ return {
 			Vit = 136,
 		},
 		Name = "TOT_Deva_Male_CursedTome",
-		TemplateId = "ac1795fc-cd91-472f-992c-9ff277de532c",
+		TemplateId = "60d639c4-fd22-4a6f-8c3e-96ebd8fd9c3a",
 		Tier = "epic",
 	},
 	{
@@ -536,7 +536,7 @@ return {
 			Vit = 12,
 		},
 		Name = "TOT_MEPHIT_Magma_A",
-		TemplateId = "a2fcb46b-8c8c-45d2-8bcb-004c17215ad5",
+		TemplateId = "8ee735fd-07e5-4b87-baa0-10ea9ec515b4",
 		Tier = "low",
 	},
 	{
@@ -548,7 +548,7 @@ return {
 			Vit = 15,
 		},
 		Name = "TOT_Dwarves_Male_Hill_FlamingFist_Melee_Defender",
-		TemplateId = "5c38bdf9-e8a9-4a47-965d-2fe56c30d24b",
+		TemplateId = "95a43d5d-527f-4c18-9e0b-df482bb47645",
 		Tier = "high",
 	},
 	{
@@ -560,7 +560,7 @@ return {
 			Vit = 42,
 		},
 		Name = "TOT_WoodWoad_Dryad_ConjureWoodlandBeings",
-		TemplateId = "cd9d7499-adcb-440b-b05f-7f6141862645",
+		TemplateId = "08be13d8-f9fe-4d7c-9958-a5a0dcedc61a",
 		Tier = "mid",
 	},
 	{
@@ -572,7 +572,7 @@ return {
 			Vit = 100,
 		},
 		Name = "TOT_AdamantineGolem_A",
-		TemplateId = "21232d04-dd83-46ea-96f6-b5dc2428cb9c",
+		TemplateId = "58c76163-96d4-41d3-9409-be795331db45",
 		Tier = "legendary",
 	},
 	{
@@ -584,7 +584,7 @@ return {
 			Vit = 93,
 		},
 		Name = "TOT_HalfElves_Female_Wood_Cultist_Bane_IronConsul",
-		TemplateId = "8b79861d-7dd9-49dd-9e7f-9aa19f5f1322",
+		TemplateId = "7b3b88e8-cbe2-4a9a-9d45-fbc6bed47f58",
 		Tier = "epic",
 	},
 	{
@@ -596,7 +596,7 @@ return {
 			Vit = 67,
 		},
 		Name = "TOT_UNI_TWN_LiftingTheCurse_MomShadow",
-		TemplateId = "2ce33bbe-e6f2-4219-a6b4-d53829707a16",
+		TemplateId = "d3117bb0-3268-4597-8922-52a5bc40d0e6",
 		Tier = "ultra",
 	},
 	{
@@ -608,7 +608,7 @@ return {
 			Vit = 206,
 		},
 		Name = "TOT_SteelWatcher_Biped_B",
-		TemplateId = "3fde5190-6901-43ff-8740-1c1f1b445ed0",
+		TemplateId = "f0ed83e6-5b86-4d6d-8a91-7d18920e05ac",
 		Tier = "legendary",
 	},
 	{
@@ -620,7 +620,7 @@ return {
 			Vit = 369,
 		},
 		Name = "TOT_SteelWatcher_Quadruped_A",
-		TemplateId = "011210c0-744d-413f-beaf-a0d31d9fcf99",
+		TemplateId = "c01d0b86-b590-47a0-974a-764ca692ddc2",
 		Tier = "legendary",
 	},
 	{
@@ -632,7 +632,7 @@ return {
 			Vit = 22,
 		},
 		Name = "TOT_Undead_Ghoul_Clothing",
-		TemplateId = "cf48a924-53ef-490f-bd96-f79ada85e664",
+		TemplateId = "da2b963f-4f0b-42d3-8efe-88d55adbff14",
 		Tier = "mid",
 	},
 	{
@@ -644,7 +644,7 @@ return {
 			Vit = 8,
 		},
 		Name = "TOT_VINE_Tentacle_Dark_A",
-		TemplateId = "581bf35c-e495-473b-9d56-512abdf6756c",
+		TemplateId = "81e45063-71b5-4e01-9619-dbe6d68f7a39",
 		Tier = "low",
 	},
 	{
@@ -656,7 +656,7 @@ return {
 			Vit = 53,
 		},
 		Name = "TOT_Githyanki_Female_GateMaster",
-		TemplateId = "b220aa01-8eed-4752-b839-264b02941985",
+		TemplateId = "7e900f4d-ac7a-4a3e-bd62-6e981aa8c166",
 		Tier = "ultra",
 	},
 	{
@@ -668,7 +668,7 @@ return {
 			Vit = 42,
 		},
 		Name = "TOT_Undead_Skeleton_Giant_Myrkul",
-		TemplateId = "40b04927-50fe-44c1-84a8-c3ad847f6d78",
+		TemplateId = "bb621d29-af51-4c77-a53c-35ba7f958cb8",
 		Tier = "high",
 	},
 	{
@@ -680,7 +680,7 @@ return {
 			Vit = 90,
 		},
 		Name = "TOT_Elemental_Air_ConjureElemental",
-		TemplateId = "ef0578b5-ac1e-460f-9dd2-a1d455a9e36d",
+		TemplateId = "2dda665f-583f-44ce-aaed-c8a387b6224e",
 		Tier = "ultra",
 	},
 	{
@@ -692,7 +692,7 @@ return {
 			Vit = 24,
 		},
 		Name = "TOT_Shadow_A",
-		TemplateId = "db37013f-eddc-4a77-a754-78498cb3853c",
+		TemplateId = "8a51c0c1-359b-4870-b0f5-e24b0e906c1d",
 		Tier = "mid",
 	},
 	{
@@ -704,7 +704,7 @@ return {
 			Vit = 71,
 		},
 		Name = "TOT_Mindflayer",
-		TemplateId = "1667ae07-e4ca-44d4-8d82-5e2f26e08aeb",
+		TemplateId = "0d2713b6-ad88-4333-87c3-8fd8f8a42e11",
 		Tier = "ultra",
 	},
 	{
@@ -716,7 +716,7 @@ return {
 			Vit = 85,
 		},
 		Name = "TOT_Humans_Female_CountingHouseGuard_Melee",
-		TemplateId = "749a88a1-5e26-4ddd-bd2b-650000148230",
+		TemplateId = "05eef63c-45bc-487c-809f-a4053ff0e540",
 		Tier = "epic",
 	},
 	{
@@ -728,7 +728,7 @@ return {
 			Vit = 136,
 		},
 		Name = "TOT_Deva_Male_PlanarAlly_Banite",
-		TemplateId = "5c4de267-050b-4d4e-8ad0-1b7602d4b8a6",
+		TemplateId = "439a061e-e9bd-4a4e-8ce8-998d1cbd59ce",
 		Tier = "epic",
 	},
 	{
@@ -740,7 +740,7 @@ return {
 			Vit = 17,
 		},
 		Name = "TOT_LOW_Cemetery_Kobolds_Inventor",
-		TemplateId = "6bbdc782-e8e6-4bc4-a713-62fd1c3c7e22",
+		TemplateId = "a9a69778-baf0-4dbf-bdcc-25f3a971efb2",
 		Tier = "low",
 	},
 	{
@@ -752,7 +752,7 @@ return {
 			Vit = 16,
 		},
 		Name = "TOT_Goblins_Female_Warlock",
-		TemplateId = "c3c62c25-310e-4126-9614-7f468acc1a28",
+		TemplateId = "95ab2c53-98db-4f6a-8e71-83a2d3380ded",
 		Tier = "mid",
 	},
 	{
@@ -764,7 +764,7 @@ return {
 			Vit = 38,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Melee_Scimitar_DW_Summon",
-		TemplateId = "b362e794-fb2a-4dd6-97c9-8b253a62e436",
+		TemplateId = "f22dc952-9d17-4724-80d0-4ced0b8392a8",
 		Tier = "high",
 	},
 	{
@@ -776,7 +776,7 @@ return {
 			Vit = 96,
 		},
 		Name = "TOT_LOW_HouseOfHope_Cambion_Male_Hellfire",
-		TemplateId = "8b0951b3-e77c-44ce-831b-3a85b6f51c85",
+		TemplateId = "2c5b22ca-ec45-4c76-9f2d-5b476cf7e615",
 		Tier = "epic",
 	},
 	{
@@ -788,7 +788,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Humans_Male_FlamingFist_Ranger_B",
-		TemplateId = "0624d186-08fa-4fbf-8c66-e59e5c77de48",
+		TemplateId = "e313956b-d756-4d29-a2bc-06c0f7a2e81c",
 		Tier = "high",
 	},
 	{
@@ -800,7 +800,7 @@ return {
 			Vit = 27,
 		},
 		Name = "TOT_Redcap_Caster_A",
-		TemplateId = "0a5f2e95-f372-4a1f-b409-f17fb24c37ba",
+		TemplateId = "163433c6-b2a8-44b9-adff-95dcc4221314",
 		Tier = "mid",
 	},
 	{
@@ -812,7 +812,7 @@ return {
 			Vit = 27,
 		},
 		Name = "TOT_Bugbears_Male_Civil",
-		TemplateId = "547f11e9-db80-4476-9fe4-e10c5867773b",
+		TemplateId = "560650cc-4463-44d5-a56b-d04d33950024",
 		Tier = "mid",
 	},
 	{
@@ -824,7 +824,7 @@ return {
 			Vit = 12,
 		},
 		Name = "TOT_Hyena_A",
-		TemplateId = "2058acef-d9af-4f47-8b89-266e1b0e6b8d",
+		TemplateId = "4a2286f3-b44f-4287-aed7-8928ac4fdd0e",
 		Tier = "low",
 	},
 	{
@@ -836,7 +836,7 @@ return {
 			Vit = 38,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Melee",
-		TemplateId = "ea3860ad-a859-4ff7-9609-79b1551aeb4f",
+		TemplateId = "7edefb34-e7d4-4b3a-b732-36cbcbd2a58a",
 		Tier = "high",
 	},
 	{
@@ -848,7 +848,7 @@ return {
 			Vit = 29,
 		},
 		Name = "TOT_Intellect_Devourer_Explosive",
-		TemplateId = "ea24ec68-2ae1-447c-80a5-350ee32de6d8",
+		TemplateId = "0b45165b-e6ca-4b23-9a19-e87c551c0cbc",
 		Tier = "mid",
 	},
 	{
@@ -860,7 +860,7 @@ return {
 			Vit = 15,
 		},
 		Name = "TOT_Dwarves_Female_Hill_FlamingFist_Melee_Defender",
-		TemplateId = "da285291-1a57-4bc2-be08-e58100d9ea66",
+		TemplateId = "c030d1ee-22c6-4912-9659-46789811f472",
 		Tier = "high",
 	},
 	{
@@ -872,7 +872,7 @@ return {
 			Vit = 59,
 		},
 		Name = "TOT_Ogres_Female_A_NotMessingAround",
-		TemplateId = "52abf690-4823-46ff-b499-36a6436434e1",
+		TemplateId = "3f392316-77ef-44c9-a873-b46111279b58",
 		Tier = "high",
 	},
 	{
@@ -884,7 +884,7 @@ return {
 			Vit = 57,
 		},
 		Name = "TOT_Githyanki_Female_Raider_Strong",
-		TemplateId = "9aad468e-7131-438b-98c0-6e3e8aa99cc3",
+		TemplateId = "98ed6cce-635e-44cc-81cb-0ea09cbcf74a",
 		Tier = "ultra",
 	},
 	{
@@ -896,7 +896,7 @@ return {
 			Vit = 14,
 		},
 		Name = "TOT_Mephit_Grease",
-		TemplateId = "0de5a933-f9bb-4ed3-afd7-2d5700d347e4",
+		TemplateId = "cb17a5f8-2a6c-473f-b81e-125773b677ef",
 		Tier = "mid",
 	},
 	{
@@ -908,7 +908,7 @@ return {
 			Vit = 10,
 		},
 		Name = "TOT_LOW_DevilsFee_Imp_Ranged",
-		TemplateId = "cbc6e851-19b9-480c-8184-b3ef468c99b1",
+		TemplateId = "0c2819c3-2a56-49b4-a6c3-798b2ebe788b",
 		Tier = "high",
 	},
 	{
@@ -920,7 +920,7 @@ return {
 			Vit = 18,
 		},
 		Name = "TOT_Goblins_Female_Melee_Tier2",
-		TemplateId = "369d8792-c70f-440f-8675-c3517a4d1b92",
+		TemplateId = "70b33657-23ba-4e2c-80a5-53c459487d34",
 		Tier = "mid",
 	},
 	{
@@ -932,7 +932,7 @@ return {
 			Vit = 48,
 		},
 		Name = "TOT_LOW_OskarsBeloved_Mummy",
-		TemplateId = "2336e3fa-e28d-4f0d-8045-dc89a7080161",
+		TemplateId = "30cf9923-9eae-402b-bcb6-1570b7e826b7",
 		Tier = "high",
 	},
 	{
@@ -944,7 +944,7 @@ return {
 			Vit = 15,
 		},
 		Name = "TOT_OX_A",
-		TemplateId = "1cdbd013-e977-4f8c-864c-630356da0772",
+		TemplateId = "13697f6b-0ec3-4258-95f5-cda239acdaa4",
 		Tier = "low",
 	},
 	{
@@ -956,7 +956,7 @@ return {
 			Vit = 38,
 		},
 		Name = "TOT_Sharran_Cultist_Elf_Female_A",
-		TemplateId = "7ab7aa67-d7c8-4366-aa53-26b65da04482",
+		TemplateId = "3f30ab7e-8c43-4d38-b13a-8ebd448f7cad",
 		Tier = "high",
 	},
 	{
@@ -968,7 +968,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Dwarves_Female_Hill_Cultist_Bhaal_Reaper",
-		TemplateId = "8140a8e9-d3ed-40cb-9d28-73008b209108",
+		TemplateId = "e853005f-34d6-46aa-81a3-b553d3827079",
 		Tier = "ultra",
 	},
 	{
@@ -980,7 +980,7 @@ return {
 			Vit = 8,
 		},
 		Name = "TOT_Humans_Female_FlamingFist_Cleric",
-		TemplateId = "b6033940-18c9-4bdc-bfe1-4f90f13402d2",
+		TemplateId = "036de153-1e0d-4ca2-bfbc-427dad7501e5",
 		Tier = "high",
 	},
 	{
@@ -992,7 +992,7 @@ return {
 			Vit = 53,
 		},
 		Name = "TOT_Githyanki_Male_Gish",
-		TemplateId = "a1e235d1-7a95-40c0-b2a4-823397a61057",
+		TemplateId = "72f0af68-1719-48b9-ad31-60ed5b28fae1",
 		Tier = "ultra",
 	},
 	{
@@ -1004,7 +1004,7 @@ return {
 			Vit = 34,
 		},
 		Name = "TOT_Boar_Raphael_BossFight",
-		TemplateId = "7d4089b2-62d0-4852-95c0-fa99921daa19",
+		TemplateId = "12ee51e5-005e-47a2-a3b1-10d7880dcb6e",
 		Tier = "mid",
 	},
 	{
@@ -1016,7 +1016,7 @@ return {
 			Vit = 28,
 		},
 		Name = "TOT_Humans_Male_Cultist_Bhaal_NightBlade",
-		TemplateId = "ff851e85-4992-4ef8-8dd3-2b07be8f34dd",
+		TemplateId = "30e46d35-48d4-4ec5-bc0c-8a7905ba4b9f",
 		Tier = "mid",
 	},
 	{
@@ -1028,7 +1028,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Humans_Female_Cultist_Bhaal_Reaper",
-		TemplateId = "2eb03c5d-3bd7-4156-a14c-eb5b0743d627",
+		TemplateId = "c2e60164-5d46-4b29-9c8c-6d7013fb37d8",
 		Tier = "ultra",
 	},
 	{
@@ -1040,7 +1040,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Tieflings_Female_Mephistopheles_Cultist_Bhaal_Reaper",
-		TemplateId = "b82ab26d-b6fe-46df-b354-ad8e63407fa4",
+		TemplateId = "85efc2d2-fd8c-44c6-9c71-4bfd01d90027",
 		Tier = "ultra",
 	},
 	{
@@ -1052,7 +1052,7 @@ return {
 			Vit = 95,
 		},
 		Name = "TOT_LOW_GreaseWizard_FireElemental",
-		TemplateId = "344345b4-5f7d-4116-8570-9bbfd7320d70",
+		TemplateId = "fed3d4c1-094d-423c-b446-dc1438b73985",
 		Tier = "ultra",
 	},
 	{
@@ -1064,7 +1064,7 @@ return {
 			Vit = 18,
 		},
 		Name = "TOT_MEPHIT_Mud_A_ConjureElementals_Summon",
-		TemplateId = "df06f3ce-5d8e-4881-9f0b-24a4060e6771",
+		TemplateId = "5fa0254b-7401-4380-9d95-d2ad376f5184",
 		Tier = "mid",
 	},
 	{
@@ -1076,7 +1076,7 @@ return {
 			Vit = 102,
 		},
 		Name = "TOT_Elemental_Fire_ConjureElemental",
-		TemplateId = "3084e5b8-e5a8-4b5a-bfbc-6603bff52176",
+		TemplateId = "3fb14a36-1948-465b-87d4-5f9071a0aa79",
 		Tier = "ultra",
 	},
 	{
@@ -1088,7 +1088,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_LOW_AbandonedCistern_Doppelganger_Cultist_Bhaal_Reaper_01",
-		TemplateId = "d97aee1c-79fb-4dbd-a6df-4f154c903cea",
+		TemplateId = "c440d11b-595c-4eb0-99df-4f2c094bb22b",
 		Tier = "high",
 	},
 	{
@@ -1100,7 +1100,7 @@ return {
 			Vit = 127,
 		},
 		Name = "TOT_TWN_VlaakithAttack_VlaakithForm",
-		TemplateId = "23059ca9-414d-42f1-bd2c-be14b36adaf6",
+		TemplateId = "466612a8-7c3e-4530-8aa4-5baad888729c",
 		Tier = "epic",
 	},
 	{
@@ -1112,7 +1112,7 @@ return {
 			Vit = 112,
 		},
 		Name = "TOT_Hag_Green_Act3Hag_Double",
-		TemplateId = "97da09b4-ed8e-4513-8bc4-32dedd5128ca",
+		TemplateId = "a75632aa-4ae7-4431-8648-0c96f32769b0",
 		Tier = "epic",
 	},
 	{
@@ -1124,7 +1124,7 @@ return {
 			Vit = 19,
 		},
 		Name = "TOT_Boar_Devil",
-		TemplateId = "a93759f7-7413-40e4-ad53-be2c99052cb7",
+		TemplateId = "c780e449-9098-4608-9db3-efbf5d4c5522",
 		Tier = "mid",
 	},
 	{
@@ -1136,7 +1136,7 @@ return {
 			Vit = 206,
 		},
 		Name = "TOT_SteelWatcher_Biped_C",
-		TemplateId = "34dbd9ad-95ee-482d-8fe8-e5ff1358e1e7",
+		TemplateId = "24ba9fe4-86b2-4afe-8ebe-4e84590665cf",
 		Tier = "legendary",
 	},
 	{
@@ -1148,7 +1148,7 @@ return {
 			Vit = 73,
 		},
 		Name = "TOT_Githyanki_Female_Warrior_Strong",
-		TemplateId = "85de6d4c-ce26-43dc-9c60-e2d10f3047db",
+		TemplateId = "295028cf-ccbb-4123-992a-149d590ecada",
 		Tier = "ultra",
 	},
 	{
@@ -1160,7 +1160,7 @@ return {
 			Vit = 34,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Ranger_Summon",
-		TemplateId = "c61dd73f-1dea-4bc3-8b7c-adc9106869db",
+		TemplateId = "27aa8be7-48de-45bf-9321-08a174076eae",
 		Tier = "high",
 	},
 	{
@@ -1172,7 +1172,7 @@ return {
 			Vit = 67,
 		},
 		Name = "TOT_Redcap_Pirate_Caster",
-		TemplateId = "4d71b61c-595a-4309-b6f4-e8a510e7ba31",
+		TemplateId = "8995984d-ba4d-470f-b946-452430bf12f5",
 		Tier = "ultra",
 	},
 	{
@@ -1184,7 +1184,7 @@ return {
 			Vit = 41,
 		},
 		Name = "TOT_Githyanki_Female_Warrior",
-		TemplateId = "9b6d4500-8998-45c1-9cdf-f26cf47eac8b",
+		TemplateId = "6247131b-b9df-4426-9615-a1feff5ccee5",
 		Tier = "high",
 	},
 	{
@@ -1196,7 +1196,7 @@ return {
 			Vit = 15,
 		},
 		Name = "TOT_Humans_Female_FlamingFist_Melee_Defender",
-		TemplateId = "f6529fc3-5583-434f-b108-cf56e84b06ae",
+		TemplateId = "adcbef23-a021-4830-bf3b-93a9b9d579ad",
 		Tier = "high",
 	},
 	{
@@ -1208,7 +1208,7 @@ return {
 			Vit = 400,
 		},
 		Name = "TOT_Dragon_Red",
-		TemplateId = "8c9216a1-c2e6-42ea-8fe5-2ce658706ad6",
+		TemplateId = "776163df-56fd-4c97-bbfb-f0c7dbd11063",
 		Tier = "legendary",
 	},
 	{
@@ -1220,7 +1220,7 @@ return {
 			Vit = 11,
 		},
 		Name = "TOT_Goblins_Male_Melee",
-		TemplateId = "d7ee76e7-89da-46bc-a886-95d7e85b4c09",
+		TemplateId = "f92f5c1e-e9ea-4013-acac-c546e31fd60d",
 		Tier = "low",
 	},
 	{
@@ -1232,7 +1232,7 @@ return {
 			Vit = 7,
 		},
 		Name = "TOT_Humans_Male_FlamingFist_Caster_B",
-		TemplateId = "72035343-ae9e-4160-9ff7-6e797c6fa997",
+		TemplateId = "b3c8803e-5568-4aec-b81f-934513a00373",
 		Tier = "high",
 	},
 	{
@@ -1244,7 +1244,7 @@ return {
 			Vit = 162,
 		},
 		Name = "TOT_LOW_Deva_Male_StormshoreTabernacle_Curse",
-		TemplateId = "73ef0f34-765a-4156-842a-c04b8955f3c7",
+		TemplateId = "2e031e31-3c86-4fee-82fb-20cc93eb1ee1",
 		Tier = "legendary",
 	},
 	{
@@ -1256,7 +1256,7 @@ return {
 			Vit = 8,
 		},
 		Name = "TOT_Humans_Male_FlamingFist_Cleric",
-		TemplateId = "ac3228f8-93f5-4eb5-be40-61bdc71865ec",
+		TemplateId = "31382674-2fd6-4fcd-90b1-7228ba7a9972",
 		Tier = "high",
 	},
 	{
@@ -1268,7 +1268,7 @@ return {
 			Vit = 62,
 		},
 		Name = "TOT_Humans_Female_Cultist_Bane_Fist",
-		TemplateId = "7c67672c-9575-49cc-8fd3-7d8cda0e6666",
+		TemplateId = "bc901957-2b18-44b4-a1e2-4aa8bcaf2856",
 		Tier = "ultra",
 	},
 	{
@@ -1280,7 +1280,7 @@ return {
 			Vit = 15,
 		},
 		Name = "TOT_Goblins_Male_Ranger_Tier2",
-		TemplateId = "00138069-acf3-4a5e-833d-f9232d41f503",
+		TemplateId = "f918362d-08fd-4d9e-8633-420718265f8a",
 		Tier = "mid",
 	},
 	{
@@ -1292,7 +1292,7 @@ return {
 			Vit = 85,
 		},
 		Name = "TOT_Undead_Mummy",
-		TemplateId = "4256b8e0-8e15-4985-bae2-0f8408c69010",
+		TemplateId = "469076fd-71d2-4e77-8929-3c68c80374bb",
 		Tier = "ultra",
 	},
 	{
@@ -1304,7 +1304,7 @@ return {
 			Vit = 34,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Ranger",
-		TemplateId = "da90a182-b525-421e-aa8b-1491308e2b13",
+		TemplateId = "25e63001-d319-4e02-b25e-5b6bf83b34da",
 		Tier = "high",
 	},
 	{
@@ -1316,7 +1316,7 @@ return {
 			Vit = 62,
 		},
 		Name = "TOT_HalfOrcs_Male_Cultist_Bane_Fist",
-		TemplateId = "7f34cbad-8a5c-44fc-98ab-dda93d73bf45",
+		TemplateId = "7930d969-0779-4606-8aed-31729684a069",
 		Tier = "ultra",
 	},
 	{
@@ -1328,7 +1328,7 @@ return {
 			Vit = 12,
 		},
 		Name = "TOT_Kobolds_Melee_Drunk",
-		TemplateId = "e3db5c82-fdd9-491f-ba2c-b1192cb9b0a7",
+		TemplateId = "4e52b38c-e31f-4b90-99a0-4b1e8730d386",
 		Tier = "mid",
 	},
 	{
@@ -1340,7 +1340,7 @@ return {
 			Vit = 19,
 		},
 		Name = "TOT_LOW_KurwinCoffin_Kobolds_Ranger",
-		TemplateId = "dbce02d1-f74c-4dc7-bfb3-101009dfb458",
+		TemplateId = "917e1c6b-6840-4219-a9c7-23c896829224",
 		Tier = "mid",
 	},
 	{
@@ -1352,7 +1352,7 @@ return {
 			Vit = 162,
 		},
 		Name = "TOT_DeathKnight_Weak",
-		TemplateId = "67b06b4b-5620-4abb-b4cf-bce1579eeca9",
+		TemplateId = "4c326c73-c0f6-49c9-9da2-e7fc66eb4427",
 		Tier = "epic",
 	},
 	{
@@ -1364,7 +1364,7 @@ return {
 			Vit = 58,
 		},
 		Name = "TOT_Werewolf",
-		TemplateId = "2f2aac10-bc02-4d24-be43-2b43d402e4e4",
+		TemplateId = "b1c79fa2-7343-4e07-aea4-ebc635059a88",
 		Tier = "ultra",
 	},
 	{
@@ -1376,7 +1376,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Tieflings_Male_Mephistopheles_Cultist_Bhaal_Reaper",
-		TemplateId = "cdd42324-dd87-4795-b4cb-b4d25c3951b9",
+		TemplateId = "25caa9c0-561c-4ce5-b93b-53ceaae4fd59",
 		Tier = "ultra",
 	},
 	{
@@ -1388,7 +1388,7 @@ return {
 			Vit = 76,
 		},
 		Name = "TOT_Humans_Male_Cultist_Bhaal_DeathsHead",
-		TemplateId = "05fc343a-d114-4dde-bc50-320a50da2976",
+		TemplateId = "2c602003-61eb-4119-a953-f210a719de3c",
 		Tier = "epic",
 	},
 	{
@@ -1400,7 +1400,7 @@ return {
 			Vit = 26,
 		},
 		Name = "TOT_WYR_Wyrmsway_Skeleton_Mage",
-		TemplateId = "bc312ce8-1abb-49a8-8448-6b5a88c86a35",
+		TemplateId = "a33255f6-748c-48ee-82bc-3141a8ce18d6",
 		Tier = "mid",
 	},
 	{
@@ -1412,7 +1412,7 @@ return {
 			Vit = 75,
 		},
 		Name = "TOT_Ogres_Female_A",
-		TemplateId = "9f2869cb-936a-4830-8884-090d56b21beb",
+		TemplateId = "17685669-a946-45bc-9496-94b2da999f7b",
 		Tier = "ultra",
 	},
 	{
@@ -1424,7 +1424,7 @@ return {
 			Vit = 56,
 		},
 		Name = "TOT_BLIGHT_VineBlight_Dark_A",
-		TemplateId = "fc8a7c6a-663d-45a1-8e89-c2670c514730",
+		TemplateId = "67ba5338-af76-47e6-90f4-0dba1546ce1f",
 		Tier = "high",
 	},
 	{
@@ -1436,7 +1436,7 @@ return {
 			Vit = 18,
 		},
 		Name = "TOT_Kuotoa",
-		TemplateId = "59fb2e1d-2872-4386-a7ad-48697e164db0",
+		TemplateId = "ca64e992-2e24-4169-b1cd-dec3eb7aaa03",
 		Tier = "mid",
 	},
 	{
@@ -1448,7 +1448,7 @@ return {
 			Vit = 136,
 		},
 		Name = "TOT_Deva_Male_PlanarAlly",
-		TemplateId = "a6ffd848-1c86-46ec-91e0-30d4e30212f9",
+		TemplateId = "3082a0af-dd43-4a84-b434-7c6fb7882886",
 		Tier = "epic",
 	},
 	{
@@ -1460,7 +1460,7 @@ return {
 			Vit = 48,
 		},
 		Name = "TOT_LOW_Ghost_A",
-		TemplateId = "d0927393-ae34-412e-bf74-4125e4834a39",
+		TemplateId = "77911b49-bfbc-4a47-b7be-fb11c22d7de7",
 		Tier = "high",
 	},
 	{
@@ -1472,7 +1472,7 @@ return {
 			Vit = 91,
 		},
 		Name = "TOT_Owlbear_Dad",
-		TemplateId = "f2d065e9-b779-4fe5-9a23-4cca8faae822",
+		TemplateId = "febc5244-ed26-4a44-86ee-94b009c16ce8",
 		Tier = "high",
 	},
 	{
@@ -1484,7 +1484,7 @@ return {
 			Vit = 55,
 		},
 		Name = "TOT_MindFlayer_Caster",
-		TemplateId = "cd6c6aef-d182-427b-b21f-1c5c1e38c3be",
+		TemplateId = "81d19591-f4e9-451e-a9ab-bbfc7d7930c7",
 		Tier = "ultra",
 	},
 	{
@@ -1496,7 +1496,7 @@ return {
 			Vit = 76,
 		},
 		Name = "TOT_Dwarves_Female_Hill_Cultist_Bhaal_DeathsHead",
-		TemplateId = "dd85b08a-7cbc-46b5-9a1b-f77305e34e71",
+		TemplateId = "62da4c4e-4dac-4543-a63f-f2a6daeff803",
 		Tier = "epic",
 	},
 	{
@@ -1508,7 +1508,7 @@ return {
 			Vit = 262,
 		},
 		Name = "TOT_S_LOW_MurderTribunal_Sarevok",
-		TemplateId = "bb6e7858-fc25-4f0e-b10c-80e1deba0a12",
+		TemplateId = "4907dcf9-b87a-476e-ae85-bab2743ad488",
 		Tier = "legendary",
 	},
 	{
@@ -1520,7 +1520,7 @@ return {
 			Vit = 68,
 		},
 		Name = "TOT_Githyanki_Male_Gishra_Caster",
-		TemplateId = "0cfbaf99-37c6-4a50-9709-ebe4c015b0fa",
+		TemplateId = "6cbb7639-f5a2-4e4b-ac65-2b56dd579b3d",
 		Tier = "ultra",
 	},
 	{
@@ -1532,7 +1532,7 @@ return {
 			Vit = 59,
 		},
 		Name = "TOT_Ogres_Male_A_NotMessingAround",
-		TemplateId = "4fef0aa6-bdd7-4279-8194-d2a407fa8388",
+		TemplateId = "24d35503-4f7d-40f5-bc9f-314c48d1e41f",
 		Tier = "high",
 	},
 	{
@@ -1544,7 +1544,7 @@ return {
 			Vit = 56,
 		},
 		Name = "TOT_Humans_Male_Cultist_Bhaal_Invoker",
-		TemplateId = "dd4c9000-f021-4f37-89ca-7befae8748b8",
+		TemplateId = "e2eab71a-2b8b-436e-8392-34c524aea065",
 		Tier = "ultra",
 	},
 	{
@@ -1556,7 +1556,7 @@ return {
 			Vit = 11,
 		},
 		Name = "TOT_Goblins_Female_Melee",
-		TemplateId = "48fc3243-28fd-40a1-a38b-d904ff4ea2df",
+		TemplateId = "a2020320-f768-41ff-a8e5-b0c92104d4ba",
 		Tier = "low",
 	},
 	{
@@ -1568,7 +1568,7 @@ return {
 			Vit = 33,
 		},
 		Name = "TOT_AnimatedArmor",
-		TemplateId = "9e5f9fb3-db18-4a19-96e6-3af22c188337",
+		TemplateId = "12d15307-30e3-4ca3-9faa-25fe093aa816",
 		Tier = "mid",
 	},
 	{
@@ -1580,7 +1580,7 @@ return {
 			Vit = 85,
 		},
 		Name = "TOT_Githyanki_Male_Gish_Strong",
-		TemplateId = "543adbde-c8b7-48dd-962f-9faffa36da3c",
+		TemplateId = "7e763e4a-62bd-4047-89f5-af7c6ac5469d",
 		Tier = "epic",
 	},
 	{
@@ -1592,7 +1592,7 @@ return {
 			Vit = 12,
 		},
 		Name = "TOT_LOW_GreaseWizard_FireMephit",
-		TemplateId = "2c79bae7-9350-4482-960f-0c84c2bfb7fd",
+		TemplateId = "1136a3ff-47fe-4dc9-b9a6-7e9180b3726a",
 		Tier = "mid",
 	},
 	{
@@ -1604,7 +1604,7 @@ return {
 			Vit = 7,
 		},
 		Name = "TOT_Humans_Female_FlamingFist_Caster_B",
-		TemplateId = "d2a59739-a6b2-4527-8e5d-0f974d7c68e4",
+		TemplateId = "04d8a88b-ab02-4862-9259-fcce230578da",
 		Tier = "high",
 	},
 	{
@@ -1616,7 +1616,7 @@ return {
 			Vit = 206,
 		},
 		Name = "TOT_SteelWatcher_Biped_A",
-		TemplateId = "fcbe353e-198c-4fa6-b45b-300ff0e8e3cf",
+		TemplateId = "c67b993a-72ef-4cfa-8eb8-fafb485c10b2",
 		Tier = "epic",
 	},
 	{
@@ -1628,7 +1628,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Dwarves_Male_Hill_Cultist_Bhaal_Reaper",
-		TemplateId = "1dd82bc3-8f1c-404a-b8c6-18126f094304",
+		TemplateId = "cd73965c-6dad-4088-8ec5-65dc77f4e7c2",
 		Tier = "ultra",
 	},
 	{
@@ -1640,7 +1640,7 @@ return {
 			Vit = 185,
 		},
 		Name = "TOT_S_GLO_Elminster",
-		TemplateId = "52eb0a9e-f706-4e2c-9174-4da6c77f789f",
+		TemplateId = "777da88b-2ab1-402f-8473-7a8da0370b60",
 		Tier = "legendary",
 	},
 	{
@@ -1652,7 +1652,7 @@ return {
 			Vit = 24,
 		},
 		Name = "TOT_Goblins_Male_Boss",
-		TemplateId = "a664ae38-c3c4-45eb-8657-c94dd5817a1a",
+		TemplateId = "c65ab9b3-8774-46a3-92e2-8644343da987",
 		Tier = "mid",
 	},
 	{
@@ -1664,7 +1664,7 @@ return {
 			Vit = 32,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Caster",
-		TemplateId = "ecf29f3a-77cc-4a06-80ac-054ff84460f3",
+		TemplateId = "47dc2cf9-235f-452c-82da-c2d82d5101e6",
 		Tier = "high",
 	},
 	{
@@ -1676,7 +1676,7 @@ return {
 			Vit = 76,
 		},
 		Name = "TOT_Humans_Male_CountingHouseGuard_Ranged",
-		TemplateId = "292092e8-d244-475f-b46e-0e85e0d37a63",
+		TemplateId = "edbe585d-6ca0-4810-a087-8cb20d4ad550",
 		Tier = "ultra",
 	},
 	{
@@ -1688,7 +1688,7 @@ return {
 			Vit = 56,
 		},
 		Name = "TOT_Cloaker_Phantasm",
-		TemplateId = "fdf734fe-7bce-4a07-a84c-b7f2502ec6c0",
+		TemplateId = "5c2cc3ea-5881-4107-b13a-534d753988c6",
 		Tier = "ultra",
 	},
 	{
@@ -1700,7 +1700,7 @@ return {
 			Vit = 76,
 		},
 		Name = "TOT_Humans_Female_CountingHouseGuard_Ranged",
-		TemplateId = "d4635f8b-e535-461f-8964-bd62f4ab58a6",
+		TemplateId = "11dcb7f8-748e-44c2-8f3d-0313f8e22f18",
 		Tier = "ultra",
 	},
 	{
@@ -1712,7 +1712,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Hobgoblins_Male_Devastator",
-		TemplateId = "b4980397-be53-49f7-a18c-8ae380d32f45",
+		TemplateId = "833734c0-9dad-48c8-b5af-ca070abea65a",
 		Tier = "high",
 	},
 	{
@@ -1724,7 +1724,7 @@ return {
 			Vit = 32,
 		},
 		Name = "TOT_Undead_Ghoul_Flying",
-		TemplateId = "6024b5b0-c254-4f9a-9a9b-d4c16fd462f2",
+		TemplateId = "a08768ed-b6c4-48cf-9d66-22f6bf4b998d",
 		Tier = "mid",
 	},
 	{
@@ -1736,7 +1736,7 @@ return {
 			Vit = 145,
 		},
 		Name = "TOT_MOO_Ketheric",
-		TemplateId = "307d5a85-aa03-42ab-afba-2832300d3041",
+		TemplateId = "220f2486-6a31-4c82-b4fb-b03b0590d67f",
 		Tier = "legendary",
 	},
 	{
@@ -1748,7 +1748,7 @@ return {
 			Vit = 48,
 		},
 		Name = "TOT_VINE_Tentacle_Dark_Giant_A",
-		TemplateId = "22f1e223-bc15-4de4-b57d-17624e204085",
+		TemplateId = "87d0ca41-5758-4a9b-b29f-6944f6b75f64",
 		Tier = "high",
 	},
 	{
@@ -1760,7 +1760,7 @@ return {
 			Vit = 53,
 		},
 		Name = "TOT_Undead_Ghast",
-		TemplateId = "50efed0c-393c-4745-b487-e87742a7e719",
+		TemplateId = "9d112928-c7e1-4f35-966e-8e7a1cb99ce0",
 		Tier = "high",
 	},
 	{
@@ -1772,7 +1772,7 @@ return {
 			Vit = 16,
 		},
 		Name = "TOT_Goblins_Male_Warlock",
-		TemplateId = "024d1cae-737a-4381-b5d3-3faea40f1de8",
+		TemplateId = "972c3c50-4a0c-433e-87ad-080605def564",
 		Tier = "low",
 	},
 	{
@@ -1784,7 +1784,7 @@ return {
 			Vit = 21,
 		},
 		Name = "TOT_MEPHIT_Ice_A_Summon",
-		TemplateId = "e76dfdfd-66f1-4ea5-96c2-4b7e979f29e1",
+		TemplateId = "f6b8f7c7-8bc1-4de8-8f29-c31f61e8e9e2",
 		Tier = "mid",
 	},
 	{
@@ -1796,7 +1796,7 @@ return {
 			Vit = 143,
 		},
 		Name = "TOT_LOW_Undead_Mummy_FatherCarrion",
-		TemplateId = "d18bc581-008f-499a-a54f-32d4a05ab956",
+		TemplateId = "e022af52-24de-4556-a241-0fa4fde41622",
 		Tier = "epic",
 	},
 	{
@@ -1808,7 +1808,7 @@ return {
 			Vit = 93,
 		},
 		Name = "TOT_Humans_Female_Cultist_Bane_IronConsul",
-		TemplateId = "7bf97a9f-3f60-4f7f-8465-dace413c464c",
+		TemplateId = "a225863d-82d0-49f9-ab24-7da35b645888",
 		Tier = "epic",
 	},
 	{
@@ -1820,7 +1820,7 @@ return {
 			Vit = 44,
 		},
 		Name = "TOT_S_GLO_Desire_Hooded",
-		TemplateId = "bee463e5-69ff-4426-9dc9-6d5f49b596d4",
+		TemplateId = "61bc22f3-6d3d-46d7-92d1-9cce79cd2855",
 		Tier = "high",
 	},
 	{
@@ -1832,7 +1832,7 @@ return {
 			Vit = 26,
 		},
 		Name = "TOT_Worg_White_A",
-		TemplateId = "e7befe3d-8fbd-4dad-8e13-2ddef67e6889",
+		TemplateId = "e03a6e31-c782-498c-a3c8-6d4cd49ce873",
 		Tier = "mid",
 	},
 	{
@@ -1844,7 +1844,7 @@ return {
 			Vit = 82,
 		},
 		Name = "TOT_S_LOW_CazadorsPalace_Cells_Prisoner_003",
-		TemplateId = "9b5d887c-319a-4f8c-b0fa-c99de76a3543",
+		TemplateId = "40584cc0-d079-4873-ab15-b4a2c24ca60c",
 		Tier = "ultra",
 	},
 	{
@@ -1856,7 +1856,7 @@ return {
 			Vit = 47,
 		},
 		Name = "TOT_Undead_Hound_A",
-		TemplateId = "72cd2811-0c8b-4889-a547-7605251720d9",
+		TemplateId = "fd497ff5-d35f-495f-a8c9-ab62236cce2f",
 		Tier = "high",
 	},
 	{
@@ -1868,7 +1868,7 @@ return {
 			Vit = 66,
 		},
 		Name = "TOT_LOW_Dog_Ghost_Houndmasters",
-		TemplateId = "85278bd9-b87a-4303-a285-7344e15cb450",
+		TemplateId = "f9d7d6fd-6c15-4339-b86a-9bc0824df973",
 		Tier = "ultra",
 	},
 	{
@@ -1880,7 +1880,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Dwarves_Female_Hill_FlamingFist_Ranger_B",
-		TemplateId = "5bbfa271-fae5-4b66-86d8-a93fdb8bc7b0",
+		TemplateId = "99e8f314-c541-457a-b081-b414fac5ccc8",
 		Tier = "high",
 	},
 	{
@@ -1892,7 +1892,7 @@ return {
 			Vit = 57,
 		},
 		Name = "TOT_Githyanki_Male_Raider_Strong",
-		TemplateId = "31691536-78d3-4c3e-9ac8-3d1c71ab8cc0",
+		TemplateId = "99cf9a86-5f54-4bc4-8b82-23b6c098d684",
 		Tier = "ultra",
 	},
 	{
@@ -1904,7 +1904,7 @@ return {
 			Vit = 38,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Melee_Scimitar_Shield_Summon",
-		TemplateId = "429fdd08-70c4-4197-b0f0-9ad26b7b5b9c",
+		TemplateId = "dd6793bb-9ee0-4889-9ddc-192f020d549a",
 		Tier = "high",
 	},
 	{
@@ -1916,7 +1916,7 @@ return {
 			Vit = 53,
 		},
 		Name = "TOT_Githyanki_Female_Gish",
-		TemplateId = "fe18b71c-7932-46dc-8a57-bcd59d1169ad",
+		TemplateId = "fde0ef14-09ea-405f-8d59-af573d34f7cc",
 		Tier = "ultra",
 	},
 	{
@@ -1928,7 +1928,7 @@ return {
 			Vit = 9,
 		},
 		Name = "TOT_Goblins_Male_Ranger",
-		TemplateId = "9932727e-b841-4044-9594-d0d5128852ce",
+		TemplateId = "4bd0323e-de2d-4b57-9a98-91936fe2229c",
 		Tier = "low",
 	},
 	{
@@ -1940,7 +1940,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Dwarves_Female_Hill_FlamingFist_Melee_Attacker",
-		TemplateId = "04a57ca2-b5f7-48b0-a5ec-596a5bf4cabb",
+		TemplateId = "30ee466d-ffa5-487f-b6ed-619a9c74757e",
 		Tier = "high",
 	},
 	{
@@ -1952,7 +1952,7 @@ return {
 			Vit = 74,
 		},
 		Name = "TOT_Sharran_Cultist_Human_Male_Caster_A",
-		TemplateId = "4bed4a1d-6963-43e2-ae6d-0d14f7c39faa",
+		TemplateId = "1f85e559-0b75-4d02-bb88-7fc048d3caba",
 		Tier = "epic",
 	},
 	{
@@ -1964,7 +1964,7 @@ return {
 			Vit = 52,
 		},
 		Name = "TOT_Ooze_Grease",
-		TemplateId = "3145d0d8-8a55-46e0-ba89-585e68aeb7d9",
+		TemplateId = "27d33577-3b8c-4ddc-b939-e357467a7fc6",
 		Tier = "mid",
 	},
 	{
@@ -1976,7 +1976,7 @@ return {
 			Vit = 28,
 		},
 		Name = "TOT_Tieflings_Male_Mephistopheles_Cultist_Bhaal_NightBlade",
-		TemplateId = "33d06509-5d36-4e83-9757-2e33b1e18c67",
+		TemplateId = "1058a0f2-16c7-4f88-ac81-82bdb721581c",
 		Tier = "mid",
 	},
 	{
@@ -1988,7 +1988,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Merregon",
-		TemplateId = "bc0c426c-30d8-4036-911e-1b5d758add0f",
+		TemplateId = "219ac8e0-0599-4dfb-bcd9-5902bec3b0de",
 		Tier = "mid",
 	},
 	{
@@ -2000,7 +2000,7 @@ return {
 			Vit = 19,
 		},
 		Name = "TOT_LOW_BhaalCultist_Crow",
-		TemplateId = "2502e69f-2126-4a2c-a865-1b3af903ceef",
+		TemplateId = "4b63f226-5c41-477b-ad4f-df7cd40aaa6a",
 		Tier = "mid",
 	},
 	{
@@ -2012,7 +2012,7 @@ return {
 			Vit = 29,
 		},
 		Name = "TOT_Intellect_Detonator",
-		TemplateId = "33cdf021-a6fa-4b56-980c-1bd6f1d33c09",
+		TemplateId = "1692db03-c9a7-4280-a1b5-f532c641e33c",
 		Tier = "mid",
 	},
 	{
@@ -2024,7 +2024,7 @@ return {
 			Vit = 91,
 		},
 		Name = "TOT_LOW_HouseOfGrief_Wolf_Viconia",
-		TemplateId = "f451bac0-1523-41fa-a811-5a617a3382bc",
+		TemplateId = "aedda713-1457-4a37-8a65-34d8df8125a5",
 		Tier = "ultra",
 	},
 	{
@@ -2036,7 +2036,7 @@ return {
 			Vit = 96,
 		},
 		Name = "TOT_LOW_HouseOfHope_Cambion_Female_Hellfire",
-		TemplateId = "9fcd7d18-8870-4196-be4c-3d57431cfb4a",
+		TemplateId = "01dc6fa2-4454-429d-93ca-d2b44bc8df3e",
 		Tier = "epic",
 	},
 	{
@@ -2048,7 +2048,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Humans_Female_FlamingFist_Melee_Attacker",
-		TemplateId = "241fb7f8-1b9e-4b23-bf1f-61de7bc79fa0",
+		TemplateId = "f43363f3-53b7-4248-a126-72eb33cdd26e",
 		Tier = "high",
 	},
 	{
@@ -2060,7 +2060,7 @@ return {
 			Vit = 7,
 		},
 		Name = "TOT_Dwarves_Male_Hill_FlamingFist_Caster_B",
-		TemplateId = "ede23eec-0c6b-4b3b-bc4b-7115991d7d58",
+		TemplateId = "2d5425bd-c701-4da0-8147-c2487df31a2c",
 		Tier = "high",
 	},
 	{
@@ -2072,7 +2072,7 @@ return {
 			Vit = 200,
 		},
 		Name = "TOT_LOW_RamazithsTower_Nightsong_Deva",
-		TemplateId = "c74a5a8d-97a6-41c5-ab95-a2e664fc9eda",
+		TemplateId = "b3008650-845d-4be6-ae01-e32e7a0dc3bd",
 		Tier = "legendary",
 	},
 	{
@@ -2084,7 +2084,7 @@ return {
 			Vit = 33,
 		},
 		Name = "TOT_Shadow_Dog_DevilishOx",
-		TemplateId = "ed0d2bea-f5ed-4985-b13e-6f4105f49f44",
+		TemplateId = "0c89c76a-f131-4a1d-bfa9-48ce46b6e3af",
 		Tier = "high",
 	},
 	{
@@ -2096,7 +2096,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_Dwarves_Male_Hill_FlamingFist_Ranger_B",
-		TemplateId = "0da8462d-fd23-408c-b962-22468c3d9e30",
+		TemplateId = "499e74ce-437b-4abc-bf95-2ff9c331157a",
 		Tier = "high",
 	},
 	{
@@ -2108,7 +2108,7 @@ return {
 			Vit = 135,
 		},
 		Name = "TOT_GLO_GithKnight_Act3",
-		TemplateId = "a7c21f62-2b3f-4ef5-9090-a89bc0dd987c",
+		TemplateId = "8612b6d2-1944-4dde-ab40-77912dc9982c",
 		Tier = "legendary",
 	},
 	{
@@ -2120,7 +2120,7 @@ return {
 			Vit = 15,
 		},
 		Name = "TOT_Humans_Male_FlamingFist_Melee_Defender",
-		TemplateId = "df4d2913-0ac6-4897-ae44-74aab55f584e",
+		TemplateId = "503a3df1-b184-4a3c-b5e9-3a9ea2fc3686",
 		Tier = "high",
 	},
 	{
@@ -2132,7 +2132,7 @@ return {
 			Vit = 20,
 		},
 		Name = "TOT_DarkVine_Tentacle_GraspingVine",
-		TemplateId = "37f257f9-cb02-4cf8-85fe-86e9fb1d8996",
+		TemplateId = "67053472-0ab9-4fca-a5ba-e9b1f04364dc",
 		Tier = "mid",
 	},
 	{
@@ -2144,7 +2144,7 @@ return {
 			Vit = 32,
 		},
 		Name = "TOT_Githyanki_Male_Raider",
-		TemplateId = "060ab468-ceb8-4dae-8f95-933dcd55e002",
+		TemplateId = "12968818-cf30-437d-8bf7-32109a131ef4",
 		Tier = "high",
 	},
 	{
@@ -2156,7 +2156,7 @@ return {
 			Vit = 46,
 		},
 		Name = "TOT_Fey_Dog_A",
-		TemplateId = "7df2970a-a779-4009-8914-9955055359f7",
+		TemplateId = "135f6263-9807-4b1c-956d-3a95132e952f",
 		Tier = "high",
 	},
 	{
@@ -2168,7 +2168,7 @@ return {
 			Vit = 16,
 		},
 		Name = "TOT_Goblins_Male_Caster",
-		TemplateId = "5b723963-36c5-4d2c-8303-9df658d0e269",
+		TemplateId = "830ab5e9-8d37-4795-ab79-e2c70ab1792c",
 		Tier = "low",
 	},
 	{
@@ -2180,7 +2180,7 @@ return {
 			Vit = 62,
 		},
 		Name = "TOT_Dwarves_Duergar_Female_Cultist_Bane_Fist",
-		TemplateId = "54270769-fb55-468d-a08d-b71a543c6723",
+		TemplateId = "5d7b81e5-d85f-4613-8e48-c231d079c886",
 		Tier = "ultra",
 	},
 	{
@@ -2192,7 +2192,7 @@ return {
 			Vit = 67,
 		},
 		Name = "TOT_UNI_TWN_LiftingTheCurse_DadShadow",
-		TemplateId = "169a5f8f-6632-4825-8c08-7f7fe96dee49",
+		TemplateId = "ed29b9bd-2da1-48ce-899f-d8531c44f24c",
 		Tier = "ultra",
 	},
 	{
@@ -2204,7 +2204,7 @@ return {
 			Vit = 44,
 		},
 		Name = "TOT_Shadow_Dog_Alpha",
-		TemplateId = "1429d267-aa32-4f2d-899a-2438bc1d2fce",
+		TemplateId = "085b035d-cda4-47a5-adc7-f5048c4a726b",
 		Tier = "high",
 	},
 	{
@@ -2216,7 +2216,7 @@ return {
 			Vit = 31,
 		},
 		Name = "TOT_SPIDER_Sword_A",
-		TemplateId = "ae0fc264-4074-411e-9b05-c4f4ab2acaf7",
+		TemplateId = "1b5b9a11-266c-4c44-bac3-61d1ede3472d",
 		Tier = "high",
 	},
 	{
@@ -2228,7 +2228,7 @@ return {
 			Vit = 105,
 		},
 		Name = "TOT_Cloaker",
-		TemplateId = "c1cdbc8f-7adf-4b35-8449-968be8c72c92",
+		TemplateId = "20defb75-a5ae-4b28-b299-3a17bb2accc6",
 		Tier = "ultra",
 	},
 	{
@@ -2240,7 +2240,7 @@ return {
 			Vit = 27,
 		},
 		Name = "TOT_Bugbears_Male",
-		TemplateId = "f73b7050-8af6-40ee-ab08-b5b971a4c83d",
+		TemplateId = "bfeb9bf6-b590-4f08-ae97-ef730a29642c",
 		Tier = "mid",
 	},
 	{
@@ -2252,7 +2252,7 @@ return {
 			Vit = 22,
 		},
 		Name = "TOT_Undead_Ghoul",
-		TemplateId = "a7b69d67-6f58-4b0f-ad1f-c94789032ee1",
+		TemplateId = "a69d069d-e344-4b99-a00e-96abf406597e",
 		Tier = "mid",
 	},
 	{
@@ -2264,7 +2264,7 @@ return {
 			Vit = 82,
 		},
 		Name = "TOT_S_LOW_CazadorsPalace_Cells_Prisoner_001",
-		TemplateId = "12916d23-c5fb-407e-b835-91063a0cf16c",
+		TemplateId = "7daec59e-02ee-4eae-9a4b-3fdb7830f679",
 		Tier = "ultra",
 	},
 	{
@@ -2276,7 +2276,7 @@ return {
 			Vit = 400,
 		},
 		Name = "TOT_Dragon_Skeletal",
-		TemplateId = "a75d3784-2973-4440-917d-963ce49d9b1c",
+		TemplateId = "2d14792e-dfa9-4fdf-b5d8-df67a8f08ce2",
 		Tier = "legendary",
 	},
 	{
@@ -2288,7 +2288,7 @@ return {
 			Vit = 66,
 		},
 		Name = "TOT_Dog_Ghost",
-		TemplateId = "010c8451-9fec-4ccd-b979-8363ddd5d1a5",
+		TemplateId = "5700bc5e-60c4-47e5-903b-0ba00a9733e1",
 		Tier = "ultra",
 	},
 	{
@@ -2300,7 +2300,7 @@ return {
 			Vit = 93,
 		},
 		Name = "TOT_HalfOrcs_Male_Cultist_Bane_IronConsul",
-		TemplateId = "41023d7c-6d3f-4dca-a886-bb3cf81796fd",
+		TemplateId = "6ecb51d1-5666-4203-89e7-c8c24269e8bc",
 		Tier = "epic",
 	},
 	{
@@ -2312,7 +2312,7 @@ return {
 			Vit = 79,
 		},
 		Name = "TOT_WYR_Wyrmsway_Skeleton_Hero",
-		TemplateId = "2cda8448-f136-4a6c-88bc-c0bf58d3e977",
+		TemplateId = "45bfe2a8-5870-4ada-93a9-958a66ede326",
 		Tier = "epic",
 	},
 	{
@@ -2324,7 +2324,7 @@ return {
 			Vit = 76,
 		},
 		Name = "TOT_Githyanki_Male_Gishra_Melee",
-		TemplateId = "7c5151fa-8bb5-473f-a89d-fc48cf1a1eda",
+		TemplateId = "833a92d6-e2d7-44fb-a473-bcd170ffe8ae",
 		Tier = "ultra",
 	},
 	{
@@ -2336,7 +2336,7 @@ return {
 			Vit = 33,
 		},
 		Name = "TOT_Shadow_Dog_A",
-		TemplateId = "b3bae5a3-1f56-48a5-b3b2-2e55bc7b12eb",
+		TemplateId = "15f9234d-e94e-430a-b8ea-6307e807ed37",
 		Tier = "high",
 	},
 	{
@@ -2348,7 +2348,7 @@ return {
 			Vit = 96,
 		},
 		Name = "TOT_LOW_HouseOfHope_Cambion_Female",
-		TemplateId = "c95bfd06-2786-4b60-aae9-9ca3b5182a59",
+		TemplateId = "ab282787-de81-4110-82df-ee36e1a9872f",
 		Tier = "epic",
 	},
 	{
@@ -2360,7 +2360,7 @@ return {
 			Vit = 16,
 		},
 		Name = "TOT_Goblins_Female_Caster",
-		TemplateId = "4d5ad91f-708a-4ab5-803e-dfe1060af166",
+		TemplateId = "77a3a34e-b71e-4d05-a9dc-180bcb8df265",
 		Tier = "low",
 	},
 	{
@@ -2372,7 +2372,7 @@ return {
 			Vit = 26,
 		},
 		Name = "TOT_Worg_A",
-		TemplateId = "fe070c15-7084-45a6-a65e-719f5adfe008",
+		TemplateId = "4951b6ac-93eb-4bd5-a19b-a46c7daac271",
 		Tier = "mid",
 	},
 	{
@@ -2384,7 +2384,7 @@ return {
 			Vit = 15,
 		},
 		Name = "TOT_Goblins_Female_Ranger_Tier2",
-		TemplateId = "efccedcd-1a42-4276-a21a-421e2132d790",
+		TemplateId = "688ed283-bd72-4c59-9461-48796009dad4",
 		Tier = "mid",
 	},
 	{
@@ -2396,7 +2396,7 @@ return {
 			Vit = 9,
 		},
 		Name = "TOT_LOW_Cemetery_Kobolds_Ranger",
-		TemplateId = "03e70894-c74d-4826-a32e-b471b5a415b1",
+		TemplateId = "862439b8-c63b-4ca0-b884-84b6695a7a43",
 		Tier = "low",
 	},
 	{
@@ -2408,7 +2408,7 @@ return {
 			Vit = 17,
 		},
 		Name = "TOT_Goblins_Male_Devout",
-		TemplateId = "248b7033-e47f-4c55-acdc-6d0ee96668d2",
+		TemplateId = "e361bcb4-7f5d-42d8-86ba-7212c391a6c4",
 		Tier = "mid",
 	},
 	{
@@ -2420,7 +2420,7 @@ return {
 			Vit = 10,
 		},
 		Name = "TOT_LOW_DevilsFee_Imp_Melee",
-		TemplateId = "d0fa33da-af36-4562-87d2-5b08ee6b3c3b",
+		TemplateId = "4128b829-bd09-4ed2-a4fa-ccf7ba2960af",
 		Tier = "ultra",
 	},
 	{
@@ -2432,7 +2432,7 @@ return {
 			Vit = 27,
 		},
 		Name = "TOT_LOW_KurwinCoffin_Kobolds_Inventor",
-		TemplateId = "51831a83-e0c9-40bc-bc15-b557e3bcd45a",
+		TemplateId = "5816f7ca-3332-420e-b85a-f7e0dc139c7f",
 		Tier = "mid",
 	},
 	{
@@ -2444,7 +2444,7 @@ return {
 			Vit = 150,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Boss",
-		TemplateId = "5beabcd8-d82c-4fc4-b131-d118dd032f75",
+		TemplateId = "f13aeeaa-5fd5-4836-bba6-fa455bef9cea",
 		Tier = "epic",
 	},
 	{
@@ -2456,7 +2456,7 @@ return {
 			Vit = 38,
 		},
 		Name = "TOT_Undead_DarkJusticiar_Melee_Mace_Shield_Summon",
-		TemplateId = "8bde5b9c-7c76-40ec-af91-e11b70ff32e4",
+		TemplateId = "4d32fa85-f5be-429d-82bf-bfbd2d924c3f",
 		Tier = "ultra",
 	},
 	{
@@ -2468,7 +2468,7 @@ return {
 			Vit = 182,
 		},
 		Name = "TOT_Construct_FleshGolem",
-		TemplateId = "12086578-3e2e-4817-8ead-cb37bbf2fea9",
+		TemplateId = "592481c0-ec55-4302-a6bc-2aca980daaa2",
 		Tier = "epic",
 	},
 	{
@@ -2480,7 +2480,7 @@ return {
 			Vit = 58,
 		},
 		Name = "TOT_Monstrosity_Mimic",
-		TemplateId = "94d23d3b-7af2-4059-8570-e8d22194e607",
+		TemplateId = "41b45330-1d49-411c-b35c-ac28c11aa106",
 		Tier = "high",
 	},
 	{
@@ -2492,7 +2492,7 @@ return {
 			Vit = 74,
 		},
 		Name = "TOT_Sharran_Cultist_Elf_Female_Caster_A",
-		TemplateId = "f864facf-37ff-441d-b69e-507130ca97d0",
+		TemplateId = "c8a823ec-4114-4432-969c-58a6c84417b7",
 		Tier = "epic",
 	},
 	{
@@ -2504,7 +2504,7 @@ return {
 			Vit = 123,
 		},
 		Name = "TOT_Myrmidon_Fire",
-		TemplateId = "0f8b7ae3-15e9-43bc-99a2-04837c629a27",
+		TemplateId = "a339a357-e562-41a1-b2f6-9068492fa876",
 		Tier = "epic",
 	},
 	{
@@ -2516,7 +2516,7 @@ return {
 			Vit = 93,
 		},
 		Name = "TOT_Humans_Male_Cultist_Bane_IronConsul",
-		TemplateId = "0005222b-128c-4b02-8045-525d79b5307e",
+		TemplateId = "ca258db4-2ad3-4862-9298-572a1c30b88d",
 		Tier = "epic",
 	},
 	{
@@ -2528,7 +2528,7 @@ return {
 			Vit = 12,
 		},
 		Name = "TOT_LOW_Cemetery_Kobolds_Melee",
-		TemplateId = "16b5f2f8-278a-44da-8621-88c8dbb9ee7f",
+		TemplateId = "e971a890-5d83-489a-9cdc-4849439cd6b2",
 		Tier = "low",
 	},
 	{
@@ -2540,7 +2540,7 @@ return {
 			Vit = 82,
 		},
 		Name = "TOT_Humans_Male_Cultist_Bane_BlackGauntlet",
-		TemplateId = "26c8fe68-d252-43b6-88e1-15fa6cd62b1d",
+		TemplateId = "ae33e2aa-ab13-49ec-896c-4e72b2b86f19",
 		Tier = "epic",
 	},
 	{
@@ -2552,7 +2552,7 @@ return {
 			Vit = 7,
 		},
 		Name = "TOT_Dwarves_Female_Hill_FlamingFist_Caster_B",
-		TemplateId = "1576feb8-ba00-4ca5-85dc-b65c86f17602",
+		TemplateId = "4f0ce8af-ece5-4b76-bc45-73e3fa62f625",
 		Tier = "high",
 	},
 	{
@@ -2564,7 +2564,7 @@ return {
 			Vit = 73,
 		},
 		Name = "TOT_Githyanki_Male_Warrior_Strong",
-		TemplateId = "eab6a810-4693-432f-a1a7-e8876b31acd7",
+		TemplateId = "da6d0fba-98ca-4fdf-9bc6-0c59d3cf21c3",
 		Tier = "ultra",
 	},
 	{
@@ -2576,7 +2576,7 @@ return {
 			Vit = 45,
 		},
 		Name = "TOT_Merregon_Raphael",
-		TemplateId = "9fa1b15b-b6d6-4c55-8693-947433d3514e",
+		TemplateId = "3049b129-d2a2-4989-b8ce-6a8cf0385bb8",
 		Tier = "high",
 	},
 	{
@@ -2588,7 +2588,7 @@ return {
 			Vit = 127,
 		},
 		Name = "TOT_Myrmidon_Earth",
-		TemplateId = "01ac5949-4d57-4f13-b84d-5b008f3ffa49",
+		TemplateId = "e16be901-e9f1-452a-8ac3-85796ac469f1",
 		Tier = "epic",
 	},
 	{
@@ -2600,7 +2600,7 @@ return {
 			Vit = 18,
 		},
 		Name = "TOT_Goblins_Male_Melee_Tier2",
-		TemplateId = "fd78d37c-7fd0-4e71-ac85-bac113040a39",
+		TemplateId = "c7b110df-be52-468d-8ff5-85c8e7306358",
 		Tier = "mid",
 	},
 	{
@@ -2612,7 +2612,7 @@ return {
 			Vit = 67,
 		},
 		Name = "TOT_Ogres_Male_A",
-		TemplateId = "9bb85fbc-445c-415f-a761-94d81ead0b66",
+		TemplateId = "71468855-a282-4040-a0ba-b34f41e24668",
 		Tier = "ultra",
 	},
 	{
@@ -2624,7 +2624,7 @@ return {
 			Vit = 31,
 		},
 		Name = "TOT_LOW_HouseOfGrief_Wolf",
-		TemplateId = "c074cfcb-8cbd-446d-a6fc-629647ee6b3a",
+		TemplateId = "2245d744-79e0-4e2f-b46e-b7f7c12f865d",
 		Tier = "mid",
 	},
 	{
@@ -2636,7 +2636,7 @@ return {
 			Vit = 122,
 		},
 		Name = "TOT_Elemental_Grease",
-		TemplateId = "8b597b49-d42e-45e5-8312-145ac5d68b3b",
+		TemplateId = "76d0edc9-529e-4318-a339-de9d477c0565",
 		Tier = "ultra",
 	},
 	{
@@ -2648,7 +2648,7 @@ return {
 			Vit = 36,
 		},
 		Name = "TOT_WYR_Wyrmsway_Skeleton_Melee",
-		TemplateId = "4f64e2cb-5bcc-4393-a86f-c082647cce49",
+		TemplateId = "2034ebf8-cbc0-4fcf-9c9f-332551940fd7",
 		Tier = "mid",
 	},
 	{
@@ -2660,7 +2660,7 @@ return {
 			Vit = 17,
 		},
 		Name = "TOT_Goblins_Female_Devout",
-		TemplateId = "795d9555-e04d-4423-ba6d-2e8ad35594c2",
+		TemplateId = "29c68aec-b6ca-4ed7-8e55-5a4fd88acbb9",
 		Tier = "mid",
 	},
 	{
@@ -2672,7 +2672,7 @@ return {
 			Vit = 95,
 		},
 		Name = "TOT_Elemental_Lava",
-		TemplateId = "1c0ab642-a9e6-4fa6-a7c2-b07eef286d45",
+		TemplateId = "8d06c803-8077-43a0-98d8-f955201ff5eb",
 		Tier = "ultra",
 	},
 	{
@@ -2684,7 +2684,7 @@ return {
 			Vit = 96,
 		},
 		Name = "TOT_LOW_HouseOfHope_Cambion_Male",
-		TemplateId = "0c773710-b795-4395-a4e8-b71b48db0e15",
+		TemplateId = "ebaebc28-9240-43e4-99af-79ed961a1923",
 		Tier = "epic",
 	},
 	{
@@ -2696,7 +2696,7 @@ return {
 			Vit = 93,
 		},
 		Name = "TOT_Dwarves_Male_Cultist_Bane_IronConsul",
-		TemplateId = "842ea79f-e941-4ab4-a22c-f41214ee9ff8",
+		TemplateId = "03c12000-86d7-4e9d-a2c9-3ee9965df1b9",
 		Tier = "epic",
 	},
 	{
@@ -2708,7 +2708,7 @@ return {
 			Vit = 13,
 		},
 		Name = "TOT_BADGER",
-		TemplateId = "496ace27-fedc-4740-86a2-da4a40f3c88f",
+		TemplateId = "9a914169-2a4c-4fa2-aae2-027b6bf43706",
 		Tier = "low",
 	},
 	{
@@ -2720,7 +2720,7 @@ return {
 			Vit = 206,
 		},
 		Name = "TOT_SteelWatcher_Biped_B_Ranged",
-		TemplateId = "a6f89469-6e38-4374-82ca-6f97d46c7b38",
+		TemplateId = "33707e0a-e0b3-4d4c-85bd-656124769c60",
 		Tier = "legendary",
 	},
 	{
@@ -2732,7 +2732,7 @@ return {
 			Vit = 85,
 		},
 		Name = "TOT_Humans_Male_CountingHouseGuard_Melee",
-		TemplateId = "c22cf66b-1b83-4a44-a283-8aa6be5e83c2",
+		TemplateId = "c6818b68-9429-41e4-b9dd-337fd3b6f41f",
 		Tier = "epic",
 	},
 	{
@@ -2744,7 +2744,7 @@ return {
 			Vit = 105,
 		},
 		Name = "TOT_Orthon_A",
-		TemplateId = "ba981e3b-5284-483d-9978-fcf12c13d708",
+		TemplateId = "92085539-2c06-4ca3-b205-82b4d9db9940",
 		Tier = "epic",
 	},
 	{
@@ -2756,7 +2756,7 @@ return {
 			Vit = 6,
 		},
 		Name = "TOT_Imp_Weak",
-		TemplateId = "45e0ac63-42ce-453b-a731-191a640e71b7",
+		TemplateId = "9336adb4-283d-47fb-bed3-737118afc4d8",
 		Tier = "low",
 	},
 	{
@@ -2768,7 +2768,7 @@ return {
 			Vit = 68,
 		},
 		Name = "TOT_Meazel",
-		TemplateId = "339defbb-7f0c-412c-9113-f6eba8198275",
+		TemplateId = "019baf0f-6fdc-4311-98ba-3922eca28f39",
 		Tier = "ultra",
 	},
 	{
@@ -2780,7 +2780,7 @@ return {
 			Vit = 125,
 		},
 		Name = "TOT_S_UND_Bulette",
-		TemplateId = "91eb79c2-c3d3-4b74-a1c0-c2d6675a8192",
+		TemplateId = "6de680f4-1b9c-46e0-b84a-b8d954044266",
 		Tier = "epic",
 	},
 	{
@@ -2792,7 +2792,7 @@ return {
 			Vit = 136,
 		},
 		Name = "TOT_Beholder_Spectator",
-		TemplateId = "6372af7a-392b-49a4-8d5f-8676c9a4f29d",
+		TemplateId = "a1014f11-1ea9-4806-b8de-784cd4a98859",
 		Tier = "epic",
 	},
 	{
@@ -2804,7 +2804,7 @@ return {
 			Vit = 84,
 		},
 		Name = "TOT_Minotaur",
-		TemplateId = "30d80d13-aebe-495a-88cc-ee58f58f99ca",
+		TemplateId = "da65245f-06d7-4d7e-9997-61ff66c5a960",
 		Tier = "ultra",
 	},
 }

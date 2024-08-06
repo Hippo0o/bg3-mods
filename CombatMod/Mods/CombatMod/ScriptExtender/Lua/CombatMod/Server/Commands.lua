@@ -132,6 +132,10 @@ function Commands.Test()
 end
 
 function Commands.Spawn(search, neutral)
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
     local x, y, z = Player.Pos()
 
     local e = Enemy.Find(search)
@@ -156,6 +160,10 @@ function Commands.Spawn(search, neutral)
 end
 
 function Commands.ToMap(id)
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
     local s = Scenario.Current()
 
     if not id and s then
@@ -180,10 +188,19 @@ function Commands.ToMap(id)
 end
 
 function Commands.Kill(guid)
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
     Enemy.KillSpawned(guid)
 end
 
 function Commands.Clear()
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
+
     Enemy.Cleanup()
 end
 
@@ -213,6 +230,11 @@ function Commands.Scenarios(id)
 end
 
 function Commands.Start(scenarioId, mapId)
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
+
     L.Info("!TT Scenarios", "List scenarios")
     L.Info("!TT Maps", "List maps")
     L.Info("!TT Start [scenarioId] [mapId]")
@@ -242,10 +264,20 @@ function Commands.Start(scenarioId, mapId)
 end
 
 function Commands.Stop()
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
+
     Scenario.Stop()
 end
 
 function Commands.Dump(file)
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
+
     for i, v in pairs(Scenario.Current().SpawnedEnemies) do
         if v:IsSpawned() then
             L.Dump(UT.Filter(v:Entity().ServerCharacter, function(v, k)
@@ -266,6 +298,11 @@ function Commands.Pos()
 end
 
 function Commands.Reload()
+    if not IsActive() then
+        L.Error("Mod is not active.")
+        return
+    end
+
     if External.LoadConfig() then
         L.Info("Config reloaded.")
     end
@@ -294,6 +331,8 @@ function Commands.Reload()
     else
         Templates.ExportEnemies()
     end
+
+    Item.ClearCache()
 end
 
 function Commands.StoryBypass(flag)
@@ -311,7 +350,7 @@ Ext.RegisterConsoleCommand("TT", function(_, fn, ...)
     if fn == nil or Commands[fn] == nil then
         L.Info("Available Commands:")
         for i, _ in pairs(Commands) do
-            L.Info("!TT ".. i)
+            L.Info("!TT " .. i)
         end
         return
     end

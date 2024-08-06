@@ -12,6 +12,10 @@ local function ifRogueLike(func)
     end
 end
 
+function GameMode.IsHardMode()
+    return PersistentVars.HardMode
+end
+
 function GameMode.StartRoguelike()
     PersistentVars.RogueModeActive = true
     Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
@@ -46,7 +50,7 @@ function GameMode.GenerateScenario(score, cow)
         { name = C.EnemyTier[6], min = 140, value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
 
-    if PersistentVars.HardMode then
+    if GameMode.IsHardMode() then
         tiers = {
             { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
             { name = C.EnemyTier[2], min = 20, value = 8, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
@@ -254,7 +258,7 @@ function GameMode.UpdateRogueScore(scenario)
     local endRound = scenario.Round - 1
 
     -- If not hard mode, give a bonus for perfect clear
-    if not PersistentVars.HardMode then
+    if not GameMode.IsHardMode() then
         endRound = endRound - 1
     end
 
@@ -288,7 +292,7 @@ function GameMode.StartNext()
         return
     end
 
-    local threshold = PersistentVars.HardMode and 20 or 40
+    local threshold = GameMode.IsHardMode() and 20 or 40
 
     local maps = UT.Filter(Map.Get(), function(v)
         return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
@@ -301,7 +305,7 @@ function GameMode.StartNext()
         if UT.Contains(PersistentVars.RandomLog.Maps, random) then
             random = math.random(#maps)
         end
-        LogRandom("Maps", random, 30)
+        LogRandom("Maps", random, 10)
 
         map = maps[random]
     end
@@ -322,18 +326,18 @@ function GameMode.ApplyDifficulty(enemy, score)
 
     local function scale(i, h)
         local x = i / 200
-        local max_value = 30
+        local max_value = Config.ScalingModifier
 
         if h then
             x = x * 2
-            max_value = 50
+            max_value = Config.ScalingModifier + 20
         end
 
         local rate = i / 1000
         return math.floor(max_value * (1 - math.exp(-rate * x)) * partySizeMod)
     end
 
-    local mod = scale(score, PersistentVars.HardMode)
+    local mod = scale(score, GameMode.IsHardMode())
     local mod2 = math.floor(mod / 2)
     local mod3 = math.floor(mod2 / 2)
 
@@ -348,19 +352,21 @@ function GameMode.ApplyDifficulty(enemy, score)
         return left[2] > right[2]
     end)
 
-    if mod > 0 then
-        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[1][1] .. ",+" .. mod .. ")", Mod.TableKey, Mod.TableKey)
-        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[2][1] .. ",+" .. mod .. ")", Mod.TableKey, Mod.TableKey)
+    if mod ~= 0 then
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[1][1] .. "," .. mod .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[2][1] .. "," .. mod .. ")", Mod.TableKey, Mod.TableKey)
     end
-    if mod2 > 0 then
-        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
-        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. ",+" .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
+    if mod2 ~= 0 then
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. "," .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. "," .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
-        Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
+        if mod2 > 0 then
+            Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
+        end
     end
-    if mod3 > 0 then
-        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[5][1] .. ",+" .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
-        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[6][1] .. ",+" .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
+    if mod3 ~= 0 then
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[5][1] .. "," .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
+        Osi.AddBoosts(enemy.GUID, "Ability(" .. map[6][1] .. "," .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "AC(" .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
     end
 

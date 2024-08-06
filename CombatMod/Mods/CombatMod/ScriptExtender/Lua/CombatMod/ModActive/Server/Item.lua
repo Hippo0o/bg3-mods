@@ -29,6 +29,7 @@ end
 ---@field Rarity string
 ---@field GUID string|nil
 ---@field Slot string|nil
+---@field Mod table
 local Object = Libs.Struct({
     Name = nil,
     Type = nil,
@@ -37,6 +38,7 @@ local Object = Libs.Struct({
     GUID = nil,
     Slot = nil,
     Tab = nil,
+    Mod = {},
 })
 
 ---@param name string
@@ -61,6 +63,8 @@ function Object.New(name, type, fake)
         if type == "Object" or type == "CombatObject" then
             o.Slot = item.ItemUseType
         end
+
+        o.Mod = { item.ModId, Ext.Mod.GetMod(item.ModId).Info.Directory }
     end
 
     o.GUID = nil
@@ -190,6 +194,8 @@ function Item.Objects(rarity, forCombat)
         loadItems()
     end
 
+    local itemFilters = External.Templates.GetItemFilters()
+
     local items = UT.Filter(objects, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
@@ -199,7 +205,11 @@ function Item.Objects(rarity, forCombat)
         local tab = stat.InventoryTab
         local type = stat.ItemUseType
 
-        if US.Contains(name, Templates.GetItemBlacklist(), true) then
+        if US.Contains(stat.ModId, itemFilters.Mods, true, true) then
+            return false
+        end
+
+        if US.Contains(name, itemFilters.Names, true) then
             return false
         end
 
@@ -263,6 +273,8 @@ function Item.Armor(rarity)
         loadItems()
     end
 
+    local itemFilters = External.Templates.GetItemFilters()
+
     local items = UT.Filter(armor, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
@@ -270,7 +282,11 @@ function Item.Armor(rarity)
         end
         local slot = stat.Slot
 
-        if US.Contains(name, Templates.GetItemBlacklist(), true) then
+        if US.Contains(stat.ModId, itemFilters.Mods, true, true) then
+            return false
+        end
+
+        if US.Contains(name, itemFilters.Names, true) then
             return false
         end
 
@@ -316,13 +332,19 @@ function Item.Weapons(rarity)
         loadItems()
     end
 
+    local itemFilters = External.Templates.GetItemFilters()
+
     local items = UT.Filter(weapons, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
             return false
         end
 
-        if US.Contains(name, Templates.GetItemBlacklist(), true) then
+        if US.Contains(stat.ModId, itemFilters.Mods, true, true) then
+            return false
+        end
+
+        if US.Contains(name, itemFilters.Names, true) then
             return false
         end
 

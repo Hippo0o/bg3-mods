@@ -58,6 +58,8 @@ function Config.Main(tab)
         120
     )
 
+    local c2 = Config.Slider(root, "Difficulty scaling modifier", "", "ScalingModifier", -50, 100)
+
     local c5 = Config.Slider(
         root,
         "Randomize Spawn Offset",
@@ -206,10 +208,11 @@ function Config.Checkbox(root, label, desc, field, onChange)
             return
         end
 
-        Event.Trigger("UpdateConfig", { [field] = ckb.Checked })
         if onChange then
             onChange(ckb)
         end
+
+        Event.Trigger("UpdateConfig", { [field] = ckb.Checked })
     end
 
     Event.On("ConfigChange", function(config)
@@ -231,6 +234,10 @@ function Config.Slider(root, label, desc, field, min, max, onChange)
         if not IsHost then
             sld.Value = { hostValue, 0, 0, 0 }
             return
+        end
+
+        if onChange then
+            onChange(sld)
         end
 
         Event.Trigger("UpdateConfig", { [field] = sld.Value[1] })

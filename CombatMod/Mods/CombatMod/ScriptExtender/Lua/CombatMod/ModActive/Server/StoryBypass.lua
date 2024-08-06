@@ -38,6 +38,8 @@ function StoryBypass.UnblockTravel(entity)
     entity.CanTravel.ErrorFlags = {}
     entity.CanTravel.field_2 = 0
     entity:Replicate("CanTravel")
+
+    Osi.UnblockFlee(entity.Uuid.EntityUuid)
 end
 
 function StoryBypass.AllowRemoval(entity)

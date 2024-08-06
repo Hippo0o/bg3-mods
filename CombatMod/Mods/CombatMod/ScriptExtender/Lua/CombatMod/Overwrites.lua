@@ -6,7 +6,7 @@ local function modify()
         return
     end
 
-    L.Debug("Applying overwrites...")
+    L.Debug("Overwrites modify")
 
     -- mod default values
     if maxValueDefault < 60 then
@@ -23,7 +23,7 @@ local function restore()
         return
     end
 
-    L.Debug("Restoring overwrites...")
+    L.Debug("Overwrites restore")
 
     Ext.Stats.GetStatsManager().ExtraData.AbilityMaxValue = maxValueDefault
     Ext.StaticData.Get("e6e0499b-c7b7-4f4a-b286-ecede5225ca1", "ShapeshiftRule").BlockLevelUp = true

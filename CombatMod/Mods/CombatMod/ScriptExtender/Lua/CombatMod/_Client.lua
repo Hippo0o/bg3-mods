@@ -5,7 +5,7 @@ end
 
 Require("CombatMod/Shared")
 
--- ModEvent.Register("ModInit")
+ModEvent.Register("ModInit")
 
 local isActive = false
 function IsActive()

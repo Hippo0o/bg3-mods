@@ -68,8 +68,10 @@ External.Validators.Config = tt({
     Debug = { "nil", "boolean" },
     TurnOffNotifications = { "nil", "boolean" },
     ClearAllEntities = { "nil", "boolean" },
+    AutoResurrect = { "nil", "boolean" },
     MulitplayerRestrictUnlocks = { "nil", "boolean" },
     AutoTeleport = { "nil", "number" },
+    ScalingModifier = { "nil", "number" },
 })
 
 External.Validators.Enemy = tt({
@@ -130,6 +132,11 @@ local lootRatesType = tt({
 })
 
 External.Validators.LootRates = lootRatesType
+
+External.Validators.ItemFilter = tt({
+    Mods = tt({ "nil", U.UUID.IsValid }, true),
+    Names = tt({ "nil", "string" }, true),
+})
 
 local function validateTimelineEntry(value)
     if type(value) == "string" and Enemy.Find(value) ~= nil then
@@ -213,6 +220,20 @@ local addedUnlocks = {}
 function External.Templates.AddUnlock(data)
     if validateAndError(External.Validators.Unlock, data, "AddUnlock") then
         table.insert(addedUnlocks, data)
+    end
+end
+
+local addedUnlocks = {}
+function External.Templates.AddUnlock(data)
+    if validateAndError(External.Validators.Unlock, data, "AddUnlock") then
+        table.insert(addedUnlocks, data)
+    end
+end
+
+local addedItemFilters = {}
+function External.Templates.AddItemFilter(data)
+    if validateAndError(External.Validators.ItemFilter, data, "AddItemFilter") then
+        table.insert(addedItemFilters, data)
     end
 end
 
@@ -326,6 +347,23 @@ function External.Templates.GetUnlocks()
     return UT.Values(data)
 end
 
+function External.Templates.GetItemFilters()
+    local data = Templates.GetItemFilters()
+    local file = External.File.Import("ItemFilters")
+
+    if file and validateAndError(External.Validators.ItemFilter, file, "LoadItemFilters") then
+        UT.Combine(data.Names, file.Names)
+        UT.Combine(data.Mods, file.Mods)
+    end
+
+    for _, added in ipairs(addedItemFilters) do
+        UT.Combine(data.Names, added.Names)
+        UT.Combine(data.Mods, added.Mods)
+    end
+
+    return UT.DeepClone(data)
+end
+
 function External.LoadLootRates()
     local data = External.File.Import("LootRates") or {}
 
@@ -366,6 +404,10 @@ function External.ApplyConfig(config)
         if config[field] ~= nil then
             if field == "Debug" then
                 Mod.Debug = config[field]
+            end
+
+            if field == "StatsCap" then
+                Event.Trigger("ChangeStatsCap", config[field])
             end
 
             Config[field] = config[field]

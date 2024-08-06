@@ -51,8 +51,10 @@ DefaultConfig = {
     SpawnItemsAtPlayer = false,
     TurnOffNotifications = false,
     ClearAllEntities = true,
+    AutoResurrect = true,
     MulitplayerRestrictUnlocks = false,
     AutoTeleport = 30,
+    ScalingModifier = 30,
 }
 Config = UT.DeepClone(DefaultConfig)
 
@@ -74,7 +76,7 @@ Commands = {}
 Require("CombatMod/Server/Intro")
 Require("CombatMod/Server/Player")
 Require("CombatMod/Server/Commands")
--- Require("CombatMod/Server/ModEvents")
+Require("CombatMod/Server/ModEvents")
 
 GameState.OnLoad(function()
     External.LoadConfig()
@@ -91,7 +93,7 @@ GameState.OnLoad(function()
     end
 end, true)
 
--- ModEvent.Register("ModInit")
+ModEvent.Register("ModInit")
 
 local isActive = false
 function IsActive()
