@@ -106,7 +106,7 @@ end
 External.Validators.Scenario = tt({
     Name = { "string" },
     Timeline = {
-        { "roguelike" },
+        { C.RoguelikeScenario },
         tt({
             tt({
                 { "nil", C.EnemyTier, validateTimelineEntry },
@@ -146,6 +146,44 @@ External.Validators.Scenario = tt({
 
 External.Templates = {}
 
+local function validateAndError(validator, data)
+    local ok, error = validator:Validate(data)
+    if not ok then
+        L.Error("Invalid data.", Ext.DumpExport({ Data = data, Error = { [tostring(k)] = error } }))
+        return false
+    end
+
+    return true
+end
+
+local addedMaps = {}
+function External.Templates.AddMap(data)
+    if validateAndError(External.Validators.Map, data) then
+        table.insert(addedMaps, data)
+    end
+end
+
+local addedEnemies = {}
+function External.Templates.AddEnemy(data)
+    if validateAndError(External.Validators.Enemy, data) then
+        table.insert(addedMaps, data)
+    end
+end
+
+local addedScenarios = {}
+function External.Templates.AddScenario(data)
+    if validateAndError(External.Validators.Scenario, data) then
+        table.insert(addedScenarios, data)
+    end
+end
+
+local addedUnlocks = {}
+function External.Templates.AddUnlock(data)
+    if validateAndError(External.Validators.Unlock, data) then
+        table.insert(addedUnlocks, data)
+    end
+end
+
 function External.Templates.GetMaps()
     local exists = External.File.Exists("Maps")
     if not exists then
@@ -154,13 +192,15 @@ function External.Templates.GetMaps()
 
     local data = External.File.Import("Maps")
     if data == nil then
-        return {}
+        data = {}
+    end
+
+    for _, map in ipairs(addedMaps) do
+        table.insert(data, map)
     end
 
     for k, map in pairs(data) do
-        local ok, error = External.Validators.Map:Validate(map)
-        if not ok then
-            L.Error("Invalid map data.", Ext.DumpExport({ Data = map, Error = { [tostring(k)] = error } }))
+        if not validateAndError(External.Validators.Map, map) then
             return {}
         end
     end
@@ -176,13 +216,15 @@ function External.Templates.GetScenarios()
 
     local data = External.File.Import("Scenarios")
     if data == nil then
-        return {}
+        data = {}
+    end
+
+    for _, scenario in ipairs(addedScenarios) do
+        table.insert(data, scenario)
     end
 
     for k, scenario in pairs(data) do
-        local ok, error = External.Validators.Scenario:Validate(scenario)
-        if not ok then
-            L.Error("Invalid scenario data.", Ext.DumpExport({ Data = scenario, Error = { [tostring(k)] = error } }))
+        if not validateAndError(External.Validators.Scenario, scenario) then
             return {}
         end
     end
@@ -198,18 +240,24 @@ function External.Templates.GetEnemies()
 
     local data = External.File.Import("Enemies")
     if data == nil then
-        return {}
+        data = {}
+    end
+
+    for _, enemy in ipairs(addedEnemies) do
+        table.insert(data, enemy)
     end
 
     for k, enemy in pairs(data) do
-        local ok, error = External.Validators.Enemy:Validate(enemy)
-        if not ok then
-            L.Error("Invalid enemy data.", Ext.DumpExport({ Data = enemy, Error = { [tostring(k)] = error } }))
+        if not validateAndError(External.Validators.Enemy, enemy) then
             return {}
         end
     end
 
     return data
+end
+
+function External.Templates.GetUnlocks()
+    return addedUnlocks
 end
 
 function External.LoadConfig()

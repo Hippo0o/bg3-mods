@@ -76,11 +76,22 @@ function Unlock.CalculateReward(scenario)
 end
 
 function Unlock.GetTemplates()
-    return unlocks
+    return UT.Combine({}, unlocks, External.Unlocks.GetUnlocks())
 end
 
 function Unlock.Get()
-    return PersistentVars.Unlocks
+    local unlocks = {}
+
+    local templates = Unlock.GetTemplates()
+    for _, u in pairs(PersistentVars.Unlocks) do
+        if UT.Find(templates, function(t)
+            return t.Id == u.Id
+        end) then
+            table.insert(unlocks, Object.Init(u))
+        end
+    end
+
+    return unlocks
 end
 
 -------------------------------------------------------------------------------------------------
@@ -90,16 +101,15 @@ end
 -------------------------------------------------------------------------------------------------
 
 GameState.OnLoad(function()
-    local unlocks = PersistentVars.Unlocks or {}
     for _, unlock in ipairs(Unlock.GetTemplates()) do
-        local found = UT.Find(unlocks, function(u)
+        local found = UT.Find(PersistentVars.Unlocks, function(u)
             return u.Id == unlock.Id
         end)
 
-        table.insert(unlocks, Unlock.Restore(found or unlock))
+        if not found then
+            table.insert(PersistentVars.Unlocks, unlock)
+        end
     end
-    L.Dump("Unlocks", unlocks)
-    PersistentVars.Unlocks = unlocks
 end)
 
 Event.On("ScenarioEnded", function(scenario)
@@ -107,7 +117,7 @@ Event.On("ScenarioEnded", function(scenario)
 end)
 
 Net.On("BuyUnlock", function(event)
-    local unlock = UT.Find(PersistentVars.Unlocks, function(u)
+    local unlock = UT.Find(Unlock.Get(), function(u)
         return u.Id == event.Payload.Id
     end)
 
