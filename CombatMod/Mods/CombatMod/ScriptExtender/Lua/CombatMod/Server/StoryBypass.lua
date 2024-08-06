@@ -252,6 +252,25 @@ function StoryBypass.UnblockTravel(entity)
     entity:Replicate("CanTravel")
 end
 
+function StoryBypass.RemoveEveryone()
+    local toRemove = UT.Filter(Ext.Entity.GetAllEntitiesWithUuid(), function(v)
+        return v.IsCharacter
+            and not v.PartyMember
+            and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Uuid.EntityUuid)
+            and not U.UUID.Equals(C.NPCCharacters.Emperor, v.Uuid.EntityUuid)
+            and not GC.IsPlayable(v.Uuid.EntityUuid)
+    end)
+    for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
+        Schedule(function()
+            for _, b in pairs(batch) do
+                L.Debug("Removing", b.Uuid.EntityUuid, b.ServerCharacter.Template.Name)
+
+                GU.Object.Remove(b.Uuid.EntityUuid)
+            end
+        end)
+    end
+end
+
 function StoryBypass.ClearArea(character)
     if Ext.Entity.Get(character).CampPresence then
         L.Error("ClearArea", "Cannot clear area while in camp.")
@@ -261,16 +280,17 @@ function StoryBypass.ClearArea(character)
     local nearby = GE.GetNearby(character, 100, true)
 
     local toRemove = UT.Filter(nearby, function(v)
-        return v.Entity.IsCharacter
-            and GC.IsNonPlayer(v.Guid)
-            and not v.Entity.PartyMember
-            and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Guid)
+        return v.Entity.IsCharacter and not v.Entity.PartyMember and not U.UUID.Equals(C.NPCCharacters.Jergal, v.Guid)
     end)
 
     for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
         Schedule(function()
             for _, b in pairs(batch) do
-                GU.Object.Remove(b.Guid)
+                if GC.IsPlayable(b.Guid) then
+                    Osi.TeleportTo(b.Guid, C.NPCCharacters.Jergal, "", 1, 1, 1)
+                else
+                    GU.Object.Remove(b.Guid)
+                end
             end
         end)
     end

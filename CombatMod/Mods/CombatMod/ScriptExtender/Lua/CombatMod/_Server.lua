@@ -110,6 +110,10 @@ GameState.OnLoad(function()
         Event.Trigger("ModActive")
     end
 
+    if not PersistentVars.Scenario.Name then
+        PersistentVars.Scenario = nil
+    end
+
     S = PersistentVars.Scenario
     if S ~= nil then
         Scenario.RestoreFromState(S)
