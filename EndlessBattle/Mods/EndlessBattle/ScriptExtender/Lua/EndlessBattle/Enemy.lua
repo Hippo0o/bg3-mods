@@ -309,7 +309,7 @@ function Object:Clear(keepCorpse)
         end
 
         return Osi.IsDead(guid) == 1 or not entity:IsAlive()
-    end, { retries = 3, interval = 300, immediate = true }).Then(function()
+    end, { retries = 3, interval = 300, immediate = true }).After(function()
         if not keepCorpse then
             PersistentVars.SpawnedEnemies[guid] = nil
         end
@@ -692,7 +692,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
             L.Error(err)
             error(err)
         end)
-    end, { retries = -1, interval = 1 }).Then(function()
+    end, { retries = -1, interval = 1 }).After(function()
         Ext.IO.SaveFile(Require("Hlib/Mod").TableKey .. "/Enemies.json", Ext.Json.Stringify(dump))
     end).Catch(function(err)
         L.Error(err)

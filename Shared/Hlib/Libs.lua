@@ -217,7 +217,7 @@ end
 ---@return Chainable
 function M.Chainable(source)
     ---@class Chainable
-    ---@field Then fun(func: fun(...: any): any): Chainable
+    ---@field After fun(func: fun(self: Chainable, ...: any): any): Chainable
     ---@field Catch fun(func: fun(self: Chainable, err: string)): Chainable
     ---@field List table<number, fun(...: any): any>
     ---@field Source any
@@ -228,10 +228,14 @@ function M.Chainable(source)
         List = {},
     }
 
-    function Chainable.Then(func)
-        assert(type(func) == "function", "Chainable.Then(func) - function expected, got " .. type(func))
+    function Chainable.After(func)
+        assert(type(func) == "function", "Chainable.After(func) - function expected, got " .. type(func))
         table.insert(Chainable.List, func)
         return Chainable
+    end
+
+    function Chainable.Stop()
+        return { _IsChainable = true }
     end
 
     local catch = nil
@@ -254,7 +258,7 @@ function M.Chainable(source)
 
         for i, func in ipairs(Chainable.List) do
             local ok = xpcall(function()
-                state = Utils.Table.Pack(func(table.unpack(state)))
+                state = Utils.Table.Pack(func(Chainable, table.unpack(state)))
             end, function(err)
                 Chainable.Throw(err)
             end)

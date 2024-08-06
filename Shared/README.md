@@ -98,31 +98,39 @@ local Async = Require("Hlib/Async")
 Async.Defer(1000, function()
     print("Hello World!")
 end)
+Async.Defer(1000).After(function()
+    print("Hello World!")
+end)
 
 -- run function every 1 second (indefinitly)
 local handle = Async.Interval(1000, function()
     print("Hello World!")
 end)
+local handle = Async.Interval(1000).After(function()
+    print("Hello World!")
+end)
 -- can be stopped manually
-handle:Unregister()
+handle.Source:Unregister()
 
 -- run a function when a condition is met
 Async.WaitFor(function()
     return var == true
-end, function()
+end).After(function()
     print("Hello World!")
+    return Async.Defer(1000)
+end).After(function()
+    print("Hello World! 1s later")
 end)
 
 -- run a function every x second until a condition is met or tries are over
-Async.RetryFor(function(self, triesLeft, time)
+Async.RetryUntil(function(self, triesLeft, time)
     -- can be any code here
     return var == true
-end, {
-    retries = 3,
-    interval = 1000,
-    success = function(result) end,
-    failed = function(error) end,
-})
+end, retries = 3, interval = 1000).After(function()
+    print("Hello World!")
+end).Catch(function(_, err)
+    print(var .. " is not true")
+end)
 ```
 
 ### Event

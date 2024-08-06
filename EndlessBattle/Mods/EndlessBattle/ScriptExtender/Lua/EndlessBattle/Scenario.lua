@@ -250,7 +250,7 @@ function Action.SpawnRound()
             immediate = true,
             retries = #Current().Map.Spawns,
             interval = 500,
-        }).Then(function()
+        }).After(function()
             Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
             if Config.ForceEnterCombat or Player.InCombat() then
                 Scenario.CombatSpawned(e)
@@ -305,7 +305,7 @@ function Action.MapEntered()
     local x, y, z = Player.Pos()
     RetryUntil(function(self, tries)
         if S == nil then -- scenario stopped
-            self:Clear()
+            self.Source:Clear()
             return
         end
         if tries % 10 == 0 then
@@ -316,9 +316,10 @@ function Action.MapEntered()
     end, {
         retries = 120,
         interval = 1000,
-    }).Then(ifScenario(function()
+    }).After(ifScenario(function()
         Action.StartCombat()
     end)).Catch(function(_, err)
+        L.Error(err)
         Scenario.Stop()
         Player.Notify(__("Scenario canceled due to timeout."))
     end)
@@ -349,7 +350,7 @@ function Action.Failsafe(enemy)
                     e:Combat(true)
 
                     return Defer(1000)
-                end).Then(function()
+                end).After(function()
                     if Osi.IsInCombat(e.GUID) == 0 then
                         UT.Remove(s.SpawnedEnemies, e)
                         e:Clear()
@@ -690,7 +691,7 @@ Event.On(
     ifScenario(function(target)
         if not S.OnMap and U.UUID.Equals(target, Player.Host()) then
             S.OnMap = true
-            Defer(2000).Then(Action.MapEntered)
+            Defer(2000).After(Action.MapEntered)
         end
     end)
 )
