@@ -330,7 +330,7 @@ function GameMode.ApplyDifficulty(enemy, score)
 
         if h then
             x = x * 2
-            max_value = Config.ScalingModifier + 20
+            max_value = Config.ScalingModifier * 1.6666667
         end
 
         local rate = i / 1000

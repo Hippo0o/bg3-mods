@@ -235,7 +235,7 @@ Net.On("Ping", function(event)
     Net.Respond(event, { true })
 end)
 
-Net.On("PingSpawns", function(event)
+Net.On("MarkSpawns", function(event)
     local mapName = event.Payload.Map
     local map = UT.Find(Map.Get(), function(v)
         return v.Name == mapName
@@ -248,8 +248,23 @@ Net.On("PingSpawns", function(event)
     map:VFXSpawns(UT.Keys(map.Spawns), 16)
 
     if Scenario.Current() then
-        Scenario.MarkSpawns(Scenario.Current().Round + 1)
+        Scenario.MarkSpawns(Scenario.Current().Round + 1, 16)
     end
+
+    Net.Respond(event, { true })
+end)
+
+Net.On("PingSpawns", function(event)
+    local mapName = event.Payload.Map
+    local map = UT.Find(Map.Get(), function(v)
+        return v.Name == mapName
+    end)
+    if map == nil then
+        Net.Respond(event, { false, __("Map not found.") })
+        return
+    end
+
+    map:PingSpawns()
 
     Net.Respond(event, { true })
 end)

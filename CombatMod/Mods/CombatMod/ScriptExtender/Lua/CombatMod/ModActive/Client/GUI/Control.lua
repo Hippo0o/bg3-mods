@@ -12,6 +12,10 @@ function Control.Events()
         Net.Request("Stop"):After(DisplayResponse)
     end)
 
+    Event.On("MarkSpawns", function(data)
+        Net.Request("MarkSpawns", data):After(DisplayResponse)
+    end)
+
     Event.On("PingSpawns", function(data)
         Net.Request("PingSpawns", data):After(DisplayResponse)
     end)
@@ -215,8 +219,12 @@ function Control.RunningPanel(root)
             Event.Trigger("Teleport", { Map = State.Scenario.Map.Name, Restrict = true })
         end
 
-        layout.Cells[1][2]:AddButton(__("Ping Spawns")).OnClick = function()
-            Event.Trigger("PingSpawns", { Map = State.Scenario.Map.Name })
+        -- layout.Cells[1][2]:AddButton(__("Ping Spawns")).OnClick = function()
+        --     Event.Trigger("PingSpawns", { Map = State.Scenario.Map.Name })
+        -- end
+
+        layout.Cells[1][2]:AddButton(__("Highlight Spawns")).OnClick = function()
+            Event.Trigger("MarkSpawns", { Map = State.Scenario.Map.Name })
         end
 
         Components.Conditional(layout.Cells[1][2], function(cond)

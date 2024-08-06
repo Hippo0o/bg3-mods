@@ -29,16 +29,24 @@ M.InitStateEnum = {
 }
 M.InitState = 0
 
+local isLoading = true
+function M.IsLoading()
+    return isLoading
+end
+
 Ext.Events.GameStateChanged:Subscribe(function(e)
     if Mod.Dev then
         Log.Debug("GameState", e.FromState, e.ToState)
     end
+    isLoading = true
+
     if e.FromState == "LoadSession" and e.ToState == "LoadLevel" then
         Event.Trigger(M.EventLoadSession)
         M.InitState = M.InitStateEnum.SessionLoaded
     elseif (e.FromState == "Sync" or e.FromState == "PrepareRunning") and e.ToState == "Running" then
         Event.Trigger(M.EventLoad)
         M.InitState = M.InitStateEnum.Running
+        isLoading = false
     elseif e.FromState == "Running" and e.ToState == "Save" then
         Event.Trigger(M.EventSave)
     elseif e.FromState == "Save" and e.ToState == "Running" then

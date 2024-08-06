@@ -270,6 +270,7 @@ return UT.Combine({
     {
         Id = "BuyTadInstinct",
         Name = Localization.Get("ha5b687efgdea0g441bg9b23gea473a021ef3"),
+        Description = Localization.Get("hcf1ccad1gddf7g447agaf91gf473f16583a0"),
         Icon = "TadpoleSuperPower_SurvivalInstinct",
         Cost = 40,
         Amount = 1,

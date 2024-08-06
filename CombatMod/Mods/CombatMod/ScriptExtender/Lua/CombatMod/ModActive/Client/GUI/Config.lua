@@ -12,11 +12,11 @@ function Config.Main(tab)
 
     root:AddSeparatorText(__("Global Settings - Host only"))
 
-    local c8 = Config.Checkbox(root, "Play Roguelike Mode", "get continuously harder battles", "RoguelikeMode")
+    Config.Checkbox(root, "Play Roguelike Mode", "get continuously harder battles", "RoguelikeMode")
 
-    local c3 = Config.Checkbox(root, "Challenge Mode", "apparently it was too easy", "HardMode")
+    Config.Checkbox(root, "Challenge Mode", "apparently it was too easy", "HardMode")
 
-    local c6 = Config.Checkbox(
+    Config.Checkbox(
         root,
         "Spawn Items At Player",
         "items will spawn at the current player's position instead the maps entry point",
@@ -24,7 +24,7 @@ function Config.Main(tab)
     )
 
     ---@type ExtuiCheckbox
-    local c2 = Config.Checkbox(
+    Config.Checkbox(
         root,
         "Bypass Story",
         "skip dialogues, combat and interactions that aren't related to a scenario",
@@ -32,24 +32,23 @@ function Config.Main(tab)
     )
 
     ---@type ExtuiCheckbox
-    local c2 = Config.Checkbox(
+    Config.Checkbox(
         root,
         "Clear All Entities",
         "will remove all entities from the map automatically and fix most issues with unexpected story triggers",
         "ClearAllEntities"
     )
 
-    local c9 =
-        Config.Checkbox(root, "Turn Off Notifications", "don't show ingame notifications", "TurnOffNotifications")
+    Config.Checkbox(root, "Turn Off Notifications", "don't show ingame notifications", "TurnOffNotifications")
 
-    local c10 = Config.Checkbox(
+    Config.Checkbox(
         root,
         "Only Host Can Buy Unlocks",
         "restrict other players in multiplayer from buying unlocks",
         "MulitplayerRestrictUnlocks"
     )
 
-    local c2 = Config.Slider(
+    Config.Slider(
         root,
         "To Camp After n Seconds",
         "in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport",
@@ -58,9 +57,9 @@ function Config.Main(tab)
         120
     )
 
-    local c2 = Config.Slider(root, "Difficulty scaling modifier", "", "ScalingModifier", -50, 100)
+    Config.Slider(root, "Difficulty scaling modifier", "in roguelike, scale the stats of enemies based on this number", "ScalingModifier", -50, 100)
 
-    local c5 = Config.Slider(
+    Config.Slider(
         root,
         "Randomize Spawn Offset",
         "randomize spawn position for more varied encounters (too high may cause issues)",
@@ -69,14 +68,7 @@ function Config.Main(tab)
         30
     )
 
-    local c7 = Config.Slider(
-        root,
-        "Exp Multiplier",
-        "multiplies the experience gained by killing enemies",
-        "ExpMultiplier",
-        1,
-        10
-    )
+    Config.Slider(root, "Exp Multiplier", "multiplies the experience gained by killing enemies", "ExpMultiplier", 1, 10)
 
     local c1 = Config.Checkbox(root, "Enable Debug", "some more info in the console and other debug features", "Debug")
     c1.Checked = Mod.Debug

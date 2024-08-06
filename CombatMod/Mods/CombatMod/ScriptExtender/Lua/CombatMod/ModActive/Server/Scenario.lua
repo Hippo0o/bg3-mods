@@ -650,7 +650,7 @@ function Scenario.HasStarted()
     return getmetatable(S()) and S():HasStarted()
 end
 
-function Scenario.MarkSpawns(round)
+function Scenario.MarkSpawns(round, duration)
     local s = Current()
 
     local toSpawn = s.Enemies[round]
@@ -665,7 +665,7 @@ function Scenario.MarkSpawns(round)
         table.insert(spawns, posIndex)
     end
 
-    s.Map:VFXSpawns(spawns, 16)
+    s.Map:VFXSpawns(spawns, duration or 6)
 end
 
 function Scenario.ForwardCombat()
@@ -765,7 +765,7 @@ Event.On(
     "MapTeleported",
     ifScenario(function(map, character)
         local s = Current()
-        if map.Name == s.Map.Name then
+        if map.Name == s.Map.Name and not GameState.IsLoading() then
             if not s.OnMap and U.UUID.Equals(character, Player.Host()) then
                 s.OnMap = true
                 WaitTicks(33, Action.MapEntered)

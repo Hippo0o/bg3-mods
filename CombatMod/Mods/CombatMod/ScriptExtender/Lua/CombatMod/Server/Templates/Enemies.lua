@@ -909,7 +909,7 @@ return {
 		},
 		Name = "TOT_LOW_DevilsFee_Imp_Ranged",
 		TemplateId = "cbc6e851-19b9-480c-8184-b3ef468c99b1",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		Info = {

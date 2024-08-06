@@ -117,7 +117,7 @@ end
 
 ---@param act string
 ---@return ChainableRunner|nil
-local teleporting = nil
+local teleporting = false
 function Player.TeleportToAct(act)
     if teleporting then
         return
