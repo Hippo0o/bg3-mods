@@ -1,5 +1,7 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
+Mod.Debug = true
+Mod.EnableRCE = true
 
 ---@type Utils
 local Utils = Require("Hlib/Utils")

@@ -1,41 +1,52 @@
 Debug = {}
 
-function Debug.Main(root)
-    root:AddButton("Reload").OnClick = function()
-        Net.Send("State")
-        Net.Send("Templates")
-        Net.Send("Items")
-    end
+---@param tab ExtuiTabBar
+function Debug.Main(tab)
+    Schedule(function()
+        Event.Trigger("ToggleDebug", Mod.Debug)
+    end)
 
-    -- section State 
-    local state = root:AddGroup("State")
-    state:AddSeparatorText("State")
+    Components.Conditional(root, function()
+        local root = tab:AddTabItem("Debug")
 
-    local stateTree
-    WindowEvent("StateChange", function()
-        if stateTree then
-            stateTree:Destroy()
+        root:AddButton("Reload").OnClick = function()
+            Net.Send("GetState")
+            Net.Send("GetTemplates")
+            Net.Send("GetItems")
         end
 
-        stateTree = Components.Tree(state, State)
-    end):Exec()
+        -- section State
+        local state = root:AddGroup("State")
+        state:AddSeparatorText("State")
 
-    -- section Templates 
-    local templates = root:AddGroup("Templates")
-    templates:AddSeparatorText("Templates")
+        local stateTree
+        WindowEvent("StateChange", function()
+            if stateTree then
+                stateTree:Destroy()
+            end
 
-    local templatesTree
-    WindowNet("Templates", function(event)
-        if templatesTree then
-            templatesTree:Destroy()
-        end
+            stateTree = Components.Tree(state, State)
+        end):Exec()
 
-        templatesTree = Components.Tree(templates, event.Payload)
-    end):Exec({ Payload = {} })
-    Net.Send("Templates")
+        -- section Templates
+        local templates = root:AddGroup("Templates")
+        templates:AddSeparatorText("Templates")
 
-    -- section Items
-    Debug.Items(root)
+        local templatesTree
+        WindowNet("GetTemplates", function(event)
+            if templatesTree then
+                templatesTree:Destroy()
+            end
+
+            templatesTree = Components.Tree(templates, event.Payload)
+        end):Exec({ Payload = {} })
+        Net.Send("GetTemplates")
+
+        -- section Items
+        Debug.Items(root)
+
+        return root
+    end, "ToggleDebug")
 end
 
 function Debug.Items(root)
@@ -43,7 +54,7 @@ function Debug.Items(root)
     grp:AddSeparatorText("Items")
 
     local tree
-    WindowNet("Items", function(event)
+    WindowNet("GetItems", function(event)
         if tree then
             tree:Destroy()
         end
@@ -54,15 +65,15 @@ function Debug.Items(root)
     local combo = grp:AddCombo("Rarity")
     combo.Options = C.ItemRarity
     combo.OnChange = function()
-        Net.Send("Items", { Rarity = combo.Options[combo.SelectedIndex + 1] })
+        Net.Send("GetItems", { Rarity = combo.Options[combo.SelectedIndex + 1] })
     end
 
     local btn = grp:AddButton("Reset")
     btn.OnClick = function()
         combo.SelectedIndex = -1
-        Net.Send("Items")
+        Net.Send("GetItems")
     end
     btn.SameLine = true
 
-    Net.Send("Items")
+    Net.Send("GetItems")
 end

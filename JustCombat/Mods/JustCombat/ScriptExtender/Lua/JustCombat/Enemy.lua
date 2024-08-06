@@ -9,7 +9,7 @@ L.Debug("Enemies loaded", #enemyTemplates)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Enemy : LibsObject
+---@class Enemy : LibsClass
 ---@field Name string
 ---@field TemplateId string
 ---@field IsBoss boolean

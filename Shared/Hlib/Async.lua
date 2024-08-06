@@ -7,7 +7,7 @@ local Utils = Require("Hlib/Utils")
 ---@class Async
 local M = {}
 
----@class Loop : LibsObject
+---@class Loop : LibsClass
 ---@field Startable boolean
 ---@field Queues Queue[]
 ---@field Handle number|nil
@@ -100,7 +100,7 @@ local Loop = Libs.Class({
     end,
 })
 
----@class Queue : LibsObject
+---@class Queue : LibsClass
 ---@field Loop Loop
 ---@field Tasks table<number, { idx: number, item: Runner }>
 ---@field Enqueue fun(self: Queue, item: Runner): string
@@ -154,7 +154,7 @@ function Queue.New(loop)
     return obj
 end
 
----@class Runner : LibsObject
+---@class Runner : LibsClass
 ---@field Cleared boolean
 ---@field ExecCond fun(self: Runner, time: GameTime): boolean
 ---@field Exec fun(self: Runner, time: GameTime)

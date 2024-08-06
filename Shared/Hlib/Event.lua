@@ -9,18 +9,20 @@ local M = {}
 
 local listeners = {}
 
----@class EventListener : LibsObject
+---@class EventListener : LibsClass
 ---@field private Id string
 ---@field private Event string
 ---@field private Func fun(...: any)
+---@field UnregisterOnError boolean
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
 ---@field New fun(event: string, callback: fun(event: table), once: boolean|nil): EventListener
 local EventListener = Libs.Class({
     Id = nil,
-    Once = false,
     Event = nil,
+    Once = false,
+    UnregisterOnError = false,
     Func = function() end,
     Exec = function(self, ...)
         local args = { ... }
@@ -28,7 +30,15 @@ local EventListener = Libs.Class({
         xpcall(function()
             self.Func(table.unpack(args))
         end, function(err)
-            Utils.Log.Error(err)
+            if self.UnregisterOnError then
+                if Mod.Debug then
+                    Utils.Log.Debug(err)
+                end
+
+                self:Unregister()
+            else
+                Utils.Log.Error(err)
+            end
         end)
 
         if self.Once then
@@ -37,6 +47,7 @@ local EventListener = Libs.Class({
     end,
     Unregister = function(self)
         local eventListeners = listeners[self.Event]
+
         for i = #eventListeners, 1, -1 do
             if eventListeners[i].Id == self.Id then
                 Utils.Log.Debug("Event/Unregister", self.Event, self.Id)
@@ -56,6 +67,7 @@ function EventListener.New(event, callback, once)
         Once = once and true or false,
         Event = event,
     })
+
     o.Id = Utils.RandomId(event .. "_")
 
     if not listeners[event] then
@@ -74,8 +86,11 @@ function M.On(event, callback, once)
     return EventListener.New(event, callback, once)
 end
 
+---@param event string
+---@param ... any
 function M.Trigger(event, ...)
     Utils.Log.Debug("Event/Trigger", listeners[event] and #listeners[event] or 0, event)
+
     if listeners[event] then
         for _, l in ipairs(Utils.Table.Values(listeners[event])) do
             l:Exec(...)

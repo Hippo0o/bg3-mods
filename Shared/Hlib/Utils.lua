@@ -93,65 +93,85 @@ end
 
 M.Entity = {}
 
----@return string[] list of avatar characters
-function M.Entity.GetAvatars()
-    return M.Table.Map(M.Protected.TryGetDB("DB_Avatars", 1), function(v)
-        return v[1]
-    end)
-end
-
----@return string[] list of playable characters
-function M.Entity.GetPlayers()
-    return M.Table.Map(M.Protected.TryGetDB("DB_Players", 1), function(v)
-        return v[1]
-    end)
-end
-
----@param character string GUID
----@return boolean
-function M.Entity.IsHireling(character)
-    local faction = Osi.GetFaction(character)
-
-    return faction:match("^Hireling") ~= nil
-end
-
----@param character string GUID
----@return boolean
-function M.Entity.IsOrigin(character)
-    local faction = Osi.GetFaction(character)
-
-    local UUIDChar = M.UUID.GetGUID(character)
-
-    return faction:match("^Origin") ~= nil
-        or faction:match("^Companion") ~= nil
-        or (
-            #M.Table.Filter(Constants.OriginCharacters, function(v)
-                return M.UUID.Equals(v, UUIDChar)
-            end) > 0
-        )
-end
-
----@param character string GUID
----@param includeParty boolean|nil Summons or QuestNPCs might be considered party members
----@return boolean
-function M.Entity.IsNonPlayer(character, includeParty)
-    if not includeParty and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
-        return false
+if Ext.IsServer() then
+    ---@return string[] list of avatar characters
+    function M.Entity.GetAvatars()
+        return M.Table.Map(M.Protected.TryGetDB("DB_Avatars", 1), function(v)
+            return v[1]
+        end)
     end
-    return not M.Entity.IsOrigin(character) and not M.Entity.IsHireling(character) and Osi.IsPlayer(character) == 0
+
+    ---@return string[] list of playable characters
+    function M.Entity.GetPlayers()
+        return M.Table.Map(M.Protected.TryGetDB("DB_Players", 1), function(v)
+            return v[1]
+        end)
+    end
+
+    ---@param character string GUID
+    ---@return boolean
+    function M.Entity.IsHireling(character)
+        local faction = Osi.GetFaction(character)
+
+        return faction:match("^Hireling") ~= nil
+    end
+
+    ---@param character string GUID
+    ---@return boolean
+    function M.Entity.IsOrigin(character)
+        local faction = Osi.GetFaction(character)
+
+        local UUIDChar = M.UUID.GetGUID(character)
+
+        return faction:match("^Origin") ~= nil
+            or faction:match("^Companion") ~= nil
+            or (
+                #M.Table.Filter(Constants.OriginCharacters, function(v)
+                    return M.UUID.Equals(v, UUIDChar)
+                end) > 0
+            )
+    end
+
+    ---@param character string GUID
+    ---@param includeParty boolean|nil Summons or QuestNPCs might be considered party members
+    ---@return boolean
+    function M.Entity.IsNonPlayer(character, includeParty)
+        if not includeParty and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
+            return false
+        end
+        return not M.Entity.IsOrigin(character) and not M.Entity.IsHireling(character) and Osi.IsPlayer(character) == 0
+    end
+
+    ---@param character string GUID
+    ---@return boolean
+    function M.Entity.IsPlayable(character)
+        return M.Entity.IsOrigin(character)
+            or M.Entity.IsHireling(character)
+            or Osi.IsPlayer(character) == 1
+            or (
+                M.Table.Find(M.Entity.GetAvatars(), function(v)
+                    return M.UUID.Equals(v, character)
+                end) ~= nil
+            )
+    end
+
+    -- also works for items
+    function M.Entity.Remove(guid)
+        Osi.SetOnStage(guid, 0)
+        Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0) -- no blood
+        Osi.RequestDelete(guid)
+        Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
+        Osi.UnloadItem(guid)
+    end
 end
 
----@param character string GUID
----@return boolean
-function M.Entity.IsPlayable(character)
-    return M.Entity.IsOrigin(character)
-        or M.Entity.IsHireling(character)
-        or Osi.IsPlayer(character) == 1
-        or (
-            M.Table.Find(M.Entity.GetAvatars(), function(v)
-                return M.UUID.Equals(v, character)
-            end) ~= nil
-        )
+---@return EntityHandle
+function M.Entity.GetHost()
+    if Ext.IsClient() then
+        return Ext.Entity.GetAllEntitiesWithComponent("PartyMember")[1]
+    end
+
+    return Ext.Entity.Get(Osi.GetHostCharacter())
 end
 
 ---@class EntityDistance
@@ -216,15 +236,6 @@ function M.Entity.GetNearby(source, radius, ignoreHeight, withComponent)
     end)
 
     return nearby
-end
-
--- also works for items
-function M.Entity.Remove(guid)
-    Osi.SetOnStage(guid, 0)
-    Osi.TeleportToPosition(guid, 0, 0, 0, "", 1, 1, 1, 1, 0) -- no blood
-    Osi.RequestDelete(guid)
-    Osi.Die(guid, 2, Constants.NullGuid, 0, 1)
-    Osi.UnloadItem(guid)
 end
 
 -------------------------------------------------------------------------------------------------
@@ -483,24 +494,26 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-M.Protected = {}
+if Ext.IsServer() then
+    M.Protected = {}
 
----@param query string
----@param arity number
----@return table
-function M.Protected.TryGetDB(query, arity)
-    local success, result = pcall(function()
-        local db = Osi[query]
-        if db and db.Get then
-            return db:Get(table.unpack({}, 1, arity))
+    ---@param query string
+    ---@param arity number
+    ---@return table
+    function M.Protected.TryGetDB(query, arity)
+        local success, result = pcall(function()
+            local db = Osi[query]
+            if db and db.Get then
+                return db:Get(table.unpack({}, 1, arity))
+            end
+        end)
+
+        if success then
+            return result
+        else
+            M.Log.Error("Failed to get DB", query, result)
+            return {}
         end
-    end)
-
-    if success then
-        return result
-    else
-        M.Log.Error("Failed to get DB", query, result)
-        return {}
     end
 end
 

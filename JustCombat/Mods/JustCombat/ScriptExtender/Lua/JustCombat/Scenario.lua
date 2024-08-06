@@ -7,7 +7,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Scenario: LibsObject
+---@class Scenario: LibsClass
 ---@field Name string
 ---@field Enemies table<number, Enemy[]>
 ---@field KilledEnemies Enemy[]
