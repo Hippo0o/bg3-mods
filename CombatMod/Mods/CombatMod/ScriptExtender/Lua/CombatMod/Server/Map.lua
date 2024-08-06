@@ -48,6 +48,7 @@ function Object:Teleport(character, withOffset)
     end
 
     Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
+    -- Osi.PROC_Foop(character)
 
     local x, y, z = table.unpack(self.Enter)
     Async.WaitTicks(10, function()
@@ -90,6 +91,7 @@ function Object:SpawnIn(enemy, spawn)
     if not success then
         return false
     end
+    Osi.PROC_Foop(enemy.GUID)
 
     local x, y, z = self:GetSpawn(spawn)
     Async.WaitTicks(10, function()
@@ -174,6 +176,7 @@ function Map.CorrectPosition(guid, x, y, z, offset)
     if distance > offset * 1.5 or y2 < y - 5 or y2 > y + 5 then
         L.Error(guid, "Spawned too far away.", distance)
         Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1)
+        Osi.PROC_Foop(guid)
     end
 end
 

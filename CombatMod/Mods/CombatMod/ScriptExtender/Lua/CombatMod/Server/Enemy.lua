@@ -549,7 +549,11 @@ end
 
 function Enemy.Cleanup()
     for guid, enemy in pairs(PersistentVars.SpawnedEnemies) do
-        Object.Init(enemy):Clear()
+        if Item.IsOwned(guid) or Osi.IsAlly(guid, Player.Host()) == 1 then
+            PersistentVars.SpawnedEnemies[guid] = nil
+        else
+            Object.Init(enemy):Clear()
+        end
     end
 end
 

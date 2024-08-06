@@ -255,7 +255,7 @@ function Action.MapEntered()
 
             -- check if no character in forced turnbased anymore
             return UT.Find(GE.GetParty(), function(e)
-                return e.PartyMember.IsPermanent == true
+                return e.TurnBased
                     and e.TurnBased.ActedThisRoundInCombat == false
                     and e.TurnBased.RequestedEndTurn == false
                     and e.TurnBased.IsInCombat_M == true
@@ -826,6 +826,11 @@ U.Osiris.On(
                     -- manually killed on resurrection
                     return
                 end
+                if Osi.IsAlly(e.GUID, Player.Host()) == 1 then
+                    -- resurrected enemy as ally
+                    return
+                end
+
                 -- let it count twice for loot
                 table.insert(s.SpawnedEnemies, e)
                 Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()), true)

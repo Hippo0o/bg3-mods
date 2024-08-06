@@ -213,8 +213,11 @@ function Control.RunningPanel(root)
         end
 
         local btn = layout.Cells[1][1]:AddButton(__("Next Round"))
-        btn:Tooltip()
-            :AddText("Will forward 1 round. Use when fight gets stuck or you want to fight more enemies at once.")
+
+        local t = btn:Tooltip()
+        t:SetStyle("WindowPadding", 30, 10)
+        t:AddText("Will forward 1 round. Use when fight gets stuck or you want to fight more enemies at once.")
+
         btn.SameLine = true
         btn.OnClick = function(button)
             Event.Trigger("ResumeCombat")

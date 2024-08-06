@@ -53,7 +53,10 @@ function ClientUnlock.Tile(root, unlock)
 
     local icon = grp:AddImage(unlock.Icon)
     if unlock.Description then
-        icon:Tooltip():AddText(unlock.Description)
+        ---@type ExtuiTooltip
+        local t = icon:Tooltip()
+        t:SetStyle("WindowPadding", 30, 10)
+        t:AddText(unlock.Description)
     end
 
     local col2 = grp:AddGroup(unlock.Id)
@@ -81,7 +84,9 @@ function ClientUnlock.Tile(root, unlock)
 
     local text = grp:AddText(unlock.Name)
     if unlock.Description then
-        text:Tooltip():AddText(unlock.Description)
+        local t = text:Tooltip()
+        t:SetStyle("WindowPadding", 30, 10)
+        t:AddText(unlock.Description)
     end
 
     grp:AddSeparator()

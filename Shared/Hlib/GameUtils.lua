@@ -220,6 +220,126 @@ function M.Character.IsValid(character)
     return Osi.IsCharacter(character) == 1 and Osi.IsOnStage(character) == 1
 end
 
+---@param character string GUID
+---@param learnedSpell string
+---@param sourceType string|nil
+---@param class string|nil
+-- thanks to AtilioA/BG3-volition-cabinet
+function M.Character.RemoveSpell(character, learnedSpell, sourceType, class)
+    local entity = Ext.Entity.Get(character)
+    if entity == nil then
+        return
+    end
+
+    if entity.HotbarContainer ~= nil then
+        local hotbar = entity.HotbarContainer
+        local editedHotbar = false
+
+        for containerName, container in pairs(hotbar.Containers) do
+            for i, subContainer in ipairs(container) do
+                for j, spell in ipairs(subContainer.Elements) do
+                    if
+                        spell.SpellId.OriginatorPrototype == learnedSpell
+                        and (sourceType == nil or spell.SpellId.SourceType == sourceType)
+                    then
+                        hotbar.Containers[containerName][i].Elements[j] = nil
+                        editedHotbar = true
+                    end
+                end
+            end
+        end
+
+        if editedHotbar then
+            entity:Replicate("HotbarContainer")
+        end
+    end
+
+    if entity.LearnedSpells ~= nil and class ~= nil then
+        local learnedSpells = entity.LearnedSpells
+        local editedLearnedSpells = false
+        for i, spell in ipairs(learnedSpells.field_18[class]) do
+            if spell == learnedSpell then
+                learnedSpells.field_18[class][i] = nil
+                editedLearnedSpells = true
+                break
+            end
+        end
+
+        if editedLearnedSpells then
+            entity:Replicate("LearnedSpells")
+        end
+    end
+
+    if entity.SpellBook ~= nil then
+        local spellBook = entity.SpellBook
+        local editedSpellBook = false
+        for i, spell in ipairs(spellBook.Spells) do
+            if
+                spell.Id.OriginatorPrototype == learnedSpell
+                and (sourceType == nil or spell.Id.SourceType == sourceType)
+            then
+                spellBook.Spells[i] = nil
+                editedSpellBook = true
+                break
+            end
+        end
+
+        if editedSpellBook then
+            entity:Replicate("SpellBook")
+        end
+    end
+
+    if entity.PlayerPrepareSpell ~= nil then
+        local playerPrepareSpell = entity.PlayerPrepareSpell
+        local editedPlayerPrepareSpell = false
+        for i, spell in ipairs(playerPrepareSpell.Spells) do
+            if spell.OriginatorPrototype == learnedSpell and (sourceType == nil or spell.SourceType == sourceType) then
+                playerPrepareSpell.Spells[i] = nil
+                editedPlayerPrepareSpell = true
+                break
+            end
+        end
+        if editedPlayerPrepareSpell then
+            entity:Replicate("PlayerPrepareSpell")
+        end
+    end
+
+    if entity.SpellBookPrepares ~= nil then
+        local spellBookPrepares = entity.SpellBookPrepares
+        local editedSpellBookPrepares = false
+        for i, spell in ipairs(spellBookPrepares.PreparedSpells) do
+            if spell.OriginatorPrototype == learnedSpell and (sourceType == nil or spell.SourceType == sourceType) then
+                spellBookPrepares.PreparedSpells[i] = nil
+                editedSpellBookPrepares = true
+                break
+            end
+        end
+
+        if editedSpellBookPrepares then
+            entity:Replicate("SpellBookPrepares")
+        end
+    end
+
+    if entity.SpellContainer ~= nil then
+        local spellContainer = entity.SpellContainer
+        local editedSpellContainer = false
+        for i, spell in ipairs(spellContainer.Spells) do
+            if
+                spell.SpellId.OriginatorPrototype == learnedSpell
+                and (sourceType == nil or spell.SpellId.SourceType == sourceType)
+            then
+                spellContainer.Spells[i] = nil
+                editedSpellContainer = true
+                break
+            end
+        end
+
+        if editedSpellContainer then
+            entity:Replicate("SpellContainer")
+        end
+    end
+end
+
 M.Object = {}
 
 -- also works for items

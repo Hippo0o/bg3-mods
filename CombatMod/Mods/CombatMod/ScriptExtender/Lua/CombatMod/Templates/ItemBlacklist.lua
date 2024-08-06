@@ -25,7 +25,15 @@ local items = {
 	"LOW_RamazithsTower_Nightsong_Silver_Shield",
 	"WPN_KingsKnife",
 	"OBJ_Bomb_Orthon",
+
 	"OBJ_Scrolls_FindFamiliar",
+	-- "OBJ_Scroll_BestowCurse",
+	-- "OBJ_Scroll_AnimateDead",
+	"OBJ_Scroll_Aid",
+	"OBJ_Scroll_AnimalFriendship",
+	"OBJ_Scroll_FlameBlade",
+	"OBJ_Scroll_Goodberry",
+
 	"WPN_LightCrossbow_Makeshift",
 	"MAG_TheClover_Scimitar",
 	"DEN_VoloOperation_ErsatzEye",

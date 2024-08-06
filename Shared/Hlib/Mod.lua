@@ -4,7 +4,7 @@ local M = {}
 M.UUID = ModuleUUID
 M.Prefix = ""
 M.TableKey = ""
-M.Version = { major = 0, minor = 0, revision = 0 }
+M.Version = { Major = 0, Minor = 0, Revision = 0, Full = "0.0.0" }
 M.Debug = true
 M.Dev = false
 M.EnableRCE = false
@@ -15,7 +15,13 @@ if Ext.Mod.IsModLoaded(M.UUID) then
 
     M.TableKey = modInfo.Directory
     M.Prefix = modInfo.Name
-    M.Version = { major = modInfo.ModVersion[1], minor = modInfo.ModVersion[2], revision = modInfo.ModVersion[3] }
+    M.Version = {
+        Major = modInfo.ModVersion[1],
+        Minor = modInfo.ModVersion[2],
+        Revision = modInfo.ModVersion[3],
+        Build = modInfo.ModVersion[4],
+        Full = tonumber(table.concat(modInfo.ModVersion, "")),
+    }
 end
 
 local function applyTemplate(vars, template)

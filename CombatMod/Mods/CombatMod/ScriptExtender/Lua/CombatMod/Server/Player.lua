@@ -59,7 +59,7 @@ function Player.DisplayName(character)
     return Localization.Get(p.DisplayName.NameKey.Handle.Handle)
 end
 
-local buffering = false
+local buffering = {}
 function Player.Notify(message, instant, ...)
     L.Info("Notify:", message, ...)
     Net.Send("PlayerNotify", { message, ... })
@@ -68,19 +68,28 @@ function Player.Notify(message, instant, ...)
         return
     end
 
-    WaitUntil(function()
-        return not buffering or instant
-    end).After(function()
-        Osi.ShowNotification(Player.Host(), message)
-        if instant then
-            return
-        end
+    local id = U.RandomId("Notify_")
 
-        buffering = true
-        return Defer(1000)
-    end).After(function()
-        buffering = false
-    end)
+    if instant then
+        table.insert(buffering, 1, id)
+    else
+        table.insert(buffering, id)
+    end
+    local function remove()
+        for i, v in ipairs(buffering) do
+            if v == id then
+                table.remove(buffering, i)
+                break
+            end
+        end
+    end
+
+    RetryUntil(function()
+        return buffering[1] == id
+    end, { retries = 10, interval = 500 }).After(function()
+        Net.Send("Notification", { Duration = 3, Text = message })
+        Defer(1000, remove)
+    end).Catch(remove)
 end
 
 ---@param act string

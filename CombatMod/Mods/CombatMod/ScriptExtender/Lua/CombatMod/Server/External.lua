@@ -17,7 +17,7 @@ local function filePath(name, dir)
     end
 
     if US.Contains(name, { "Enemies", "Maps", "Scenarios" }) then
-        name = string.format("v%d.%d/%s", Mod.Version.major, Mod.Version.minor, name)
+        name = string.format("v%d.%d/%s", Mod.Version.Major, Mod.Version.Minor, name)
     end
 
     return name
@@ -71,6 +71,7 @@ External.Validators.Config = tt({
     TurnOffNotifications = { "nil", "boolean" },
     ClearAllEntities = { "nil", "boolean" },
     MulitplayerRestrictUnlocks = { "nil", "boolean" },
+    AutoTeleport = { "nil", "number" },
 })
 
 External.Validators.Enemy = tt({
@@ -122,29 +123,32 @@ External.Validators.Scenario = tt({
     },
     Positions = positionTimelineType,
     Map = { "nil", "string" },
-    Loot = tt({
-        Objects = tt({
-            Common = { "nil", "number" },
-            Uncommon = { "nil", "number" },
-            Rare = { "nil", "number" },
-            VeryRare = { "nil", "number" },
-            Legendary = { "nil", "number" },
+    Loot = {
+        "nil",
+        tt({
+            Objects = tt({
+                Common = { "nil", "number" },
+                Uncommon = { "nil", "number" },
+                Rare = { "nil", "number" },
+                VeryRare = { "nil", "number" },
+                Legendary = { "nil", "number" },
+            }),
+            Armor = tt({
+                Common = { "nil", "number" },
+                Uncommon = { "nil", "number" },
+                Rare = { "nil", "number" },
+                VeryRare = { "nil", "number" },
+                Legendary = { "nil", "number" },
+            }),
+            Weapons = tt({
+                Common = { "nil", "number" },
+                Uncommon = { "nil", "number" },
+                Rare = { "nil", "number" },
+                VeryRare = { "nil", "number" },
+                Legendary = { "nil", "number" },
+            }),
         }),
-        Armor = tt({
-            Common = { "nil", "number" },
-            Uncommon = { "nil", "number" },
-            Rare = { "nil", "number" },
-            VeryRare = { "nil", "number" },
-            Legendary = { "nil", "number" },
-        }),
-        Weapons = tt({
-            Common = { "nil", "number" },
-            Uncommon = { "nil", "number" },
-            Rare = { "nil", "number" },
-            VeryRare = { "nil", "number" },
-            Legendary = { "nil", "number" },
-        }),
-    }),
+    },
 })
 
 -------------------------------------------------------------------------------------------------
@@ -175,7 +179,7 @@ end
 local addedEnemies = {}
 function External.Templates.AddEnemy(data)
     if validateAndError(External.Validators.Enemy, data, "AddEnemy") then
-        table.insert(addedMaps, data)
+        table.insert(addedEnemies, data)
     end
 end
 

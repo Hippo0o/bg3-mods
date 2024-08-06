@@ -110,7 +110,7 @@ function Unlock.CalculateReward(scenario)
         rewardMulti = rewardMulti * 1.2
     end
 
-    local gained = math.floor(scenario:KillScore() * rewardMulti)
+    local gained = math.floor(math.max(PersistentVars.RogueScore / 2, scenario:KillScore() * rewardMulti))
 
     local prev = PersistentVars.Currency or 0
     PersistentVars.Currency = prev + gained
@@ -247,7 +247,7 @@ Net.On("BuyUnlock", function(event)
         return
     end
 
-    if unlock.Character and (not event.Payload.Character or Osi.IsPlayer(event.Payload.Character) ~= 1) then
+    if unlock.Character and not event.Payload.Character then
         Net.Respond(event, { false, __("Unlock needs a character.") })
         soundFail()
         return

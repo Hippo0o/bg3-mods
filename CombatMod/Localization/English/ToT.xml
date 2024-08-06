@@ -519,4 +519,22 @@
     <content contentuid="h34411c36g6114g4496gb077g22f0525500d2" version="1">Auto Toggle</content>
 
 
+    <content contentuid="h2771ca17g7224g49f4ga144g2f9243660db0" version="1">Templates reset</content>
+
+
+    <content contentuid="h8bfedf62gdeabg48a3gbb8cgdec519aefce7" version="1">Unlock out of stock.</content>
+
+
+    <content contentuid="h00e41e74g55b1g44b2g933dg72d4711f50f6" version="1">in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport</content>
+
+
+    <content contentuid="hd490c7efg81c5g492bgae7ag3f4dcc581d6f" version="1">Unlock needs a character.</content>
+
+
+    <content contentuid="he699ae7dgb3ccg4fb2g8d5aga9d4ef788bf6" version="1">To Camp After n Seconds</content>
+
+
+    <content contentuid="h8ccc2af7gd999g47fagabffgf19c49ddd3be" version="1">Resetting templates...</content>
+
+
 </contentList>

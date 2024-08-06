@@ -37,11 +37,11 @@ Ext.Events.SessionLoaded:Subscribe(function()
     Log.Info(
         Mod.TableKey
             .. " Version: "
-            .. Mod.Version.major
+            .. Mod.Version.Major
             .. "."
-            .. Mod.Version.minor
+            .. Mod.Version.Minor
             .. "."
-            .. Mod.Version.revision
+            .. Mod.Version.Revision
             .. " Loaded"
     )
 
