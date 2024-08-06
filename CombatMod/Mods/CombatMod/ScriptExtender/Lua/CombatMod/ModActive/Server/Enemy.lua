@@ -542,6 +542,12 @@ function Enemy.GetTemplates()
         if not keep then
             L.Debug("Template does not exist:", v.TemplateId)
         end
+
+        if (v.Stats and not Ext.Stats.Get(v.Stats)) or not Ext.Stats.Get(template.Stats) then
+            L.Debug("Template Stats does not exist:", v.TemplateId)
+            keep = false
+        end
+
         return keep
     end)
 

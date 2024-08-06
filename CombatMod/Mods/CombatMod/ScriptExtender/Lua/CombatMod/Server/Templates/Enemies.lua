@@ -189,7 +189,7 @@ return {
 		},
 		Name = "TOT_LOW_OskarsBeloved_MonstrousSpirit",
 		TemplateId = "08fe6015-a6e6-4370-9944-6f8ca8fe6f7b",
-		Tier = "epic",
+		Tier = "legendary",
 	},
 	{
 		Info = {
@@ -1103,18 +1103,30 @@ return {
 		TemplateId = "23059ca9-414d-42f1-bd2c-be14b36adaf6",
 		Tier = "epic",
 	},
-	{
-		Info = {
-			AC = 17,
-			Level = 11,
-			Pwr = 115.0,
-			Stats = 16,
-			Vit = 112,
-		},
-		Name = "TOT_Hag_Green_Act3Hag_Double",
-		TemplateId = "97da09b4-ed8e-4513-8bc4-32dedd5128ca",
-		Tier = "epic",
-	},
+	-- {
+	-- 	Info = {
+	-- 		AC = 17,
+	-- 		Level = 11,
+	-- 		Pwr = 115.0,
+	-- 		Stats = 16,
+	-- 		Vit = 112,
+	-- 	},
+	-- 	Name = "TOT_Hag_Green_Act3Hag",
+	-- 	TemplateId = "7cd8949a-989a-4e2e-99af-0bffbb1d7a02",
+	-- 	Tier = "epic",
+	-- },
+	-- {
+	-- 	Info = {
+	-- 		AC = 17,
+	-- 		Level = 11,
+	-- 		Pwr = 115.0,
+	-- 		Stats = 16,
+	-- 		Vit = 112,
+	-- 	},
+	-- 	Name = "TOT_Hag_Green_Act3Hag_Double",
+	-- 	TemplateId = "97da09b4-ed8e-4513-8bc4-32dedd5128ca",
+	-- 	Tier = "epic",
+	-- },
 	{
 		Info = {
 			AC = 11,
@@ -1473,7 +1485,7 @@ return {
 		},
 		Name = "TOT_Owlbear_Dad",
 		TemplateId = "f2d065e9-b779-4fe5-9a23-4cca8faae822",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		Info = {

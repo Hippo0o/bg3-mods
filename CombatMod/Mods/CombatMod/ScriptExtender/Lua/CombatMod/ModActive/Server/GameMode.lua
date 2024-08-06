@@ -29,25 +29,7 @@ function GameMode.StartRoguelike(template)
     PersistentVars.RogueScenario = template.Name
 end
 
-function GameMode.GenerateScenario(score, cow)
-    -- ChatGPT made this ................................ i made this
-    L.Debug("Generate Scenario", score)
-
-    local minRounds = 1
-    local maxRounds = 10
-    local preferredRounds = 3
-    local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
-    if score > 1000 then
-        maxRounds = 20
-        preferredRounds = 5
-        emptyRoundChance = 0.1
-    end
-    if score > 3000 then
-        maxRounds = math.ceil(score / 100)
-        preferredRounds = math.ceil(score / 300)
-        emptyRoundChance = 0
-    end
-
+function GameMode.GetTiers(cow)
     -- define tiers and their corresponding difficulty values
     local tiers = {
         { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
@@ -73,10 +55,26 @@ function GameMode.GenerateScenario(score, cow)
         tiers = { { name = "TOT_OX_A", value = 4, amount = 100 } }
     end
 
-    for i, tier in ipairs(tiers) do
-        local weight = tier.amount / 100 * 0.9 -- bias towards tiers with more enemies
-        tier.weight = weight + (1 / (i + 1) / 2) -- bias towards lower tiers
-        L.Debug("Tier", tier.name, tier.weight)
+    return tiers
+end
+
+function GameMode.GenerateScenario(score, tiers)
+    -- ChatGPT made this ................................ i made this
+    L.Debug("Generate Scenario", score)
+
+    local minRounds = 1
+    local maxRounds = 10
+    local preferredRounds = 3
+    local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
+    if score > 1000 then
+        maxRounds = 20
+        preferredRounds = 5
+        emptyRoundChance = 0.1
+    end
+    if score > 3000 then
+        maxRounds = math.ceil(score / 100)
+        preferredRounds = math.ceil(score / 300)
+        emptyRoundChance = 0
     end
 
     score = score >= tiers[1].value and score or tiers[1].value
@@ -441,16 +439,15 @@ end)
 Event.On(
     "ScenarioStopped",
     ifRogueLike(function(scenario)
-        GameMode.UpdateRogueScore(PersistentVars.RogueScore - 10)
+        if scenario.OnMap then
+            GameMode.UpdateRogueScore(PersistentVars.RogueScore - 10)
+        end
     end)
 )
 
 Event.On(
     "ScenarioEnemySpawned",
     ifRogueLike(function(scenario, enemy)
-        if not scenario.RogueLike then
-            return
-        end
         GameMode.ApplyDifficulty(enemy, PersistentVars.RogueScore)
     end)
 )
@@ -530,17 +527,72 @@ Schedule(function()
             GameMode.StartRoguelike(template)
         end,
 
-        Name = C.RoguelikeScenario,
+        Name = C.RoguelikeScenario .. " (bias lower tier)",
         Map = getMap,
 
         -- Spawns per Round
         Timeline = function(template)
-            return GameMode.GenerateScenario(PersistentVars.RogueScore, makeItCow())
+            local tiers = GameMode.GetTiers(makeItCow())
+
+            for i, tier in ipairs(tiers) do
+                local weight = tier.amount / 100 * 0.7 -- bias towards tiers with more enemies
+                tier.weight = weight + (1 / (i + 1)) -- bias towards lower tiers
+                L.Debug("Tier", tier.name, tier.weight)
+            end
+
+            return GameMode.GenerateScenario(PersistentVars.RogueScore, tiers)
         end,
 
         Loot = C.LootRates,
     })
+    External.Templates.AddScenario({
+        RogueLike = true,
+        OnStart = function(template)
+            GameMode.StartRoguelike(template)
+        end,
 
+        Name = C.RoguelikeScenario .. " (bias balance)",
+        Map = getMap,
+
+        -- Spawns per Round
+        Timeline = function(template)
+            local tiers = GameMode.GetTiers(makeItCow())
+
+            for i, tier in ipairs(tiers) do
+                local weight = tier.amount / 100 * 0.9 -- bias towards tiers with more enemies
+                tier.weight = weight + (1 / (i + 1) / 2) -- bias towards lower tiers
+                L.Debug("Tier", tier.name, tier.weight)
+            end
+
+            return GameMode.GenerateScenario(PersistentVars.RogueScore, tiers)
+        end,
+
+        Loot = C.LootRates,
+    })
+    External.Templates.AddScenario({
+        RogueLike = true,
+        OnStart = function(template)
+            GameMode.StartRoguelike(template)
+        end,
+
+        Name = C.RoguelikeScenario .. " (bias higher tier)",
+        Map = getMap,
+
+        -- Spawns per Round
+        Timeline = function(template)
+            local tiers = GameMode.GetTiers(makeItCow())
+
+            for i, tier in ipairs(tiers) do
+                local weight = tier.amount / 100 * 0.7 -- bias towards tiers with more enemies
+                tier.weight = weight + (1 / (#tiers + 1 - i)) -- bias towards higher tiers
+                L.Debug("Tier", tier.name, tier.weight)
+            end
+
+            return GameMode.GenerateScenario(PersistentVars.RogueScore, tiers)
+        end,
+
+        Loot = C.LootRates,
+    })
 end)
 
 -------------------------------------------------------------------------------------------------

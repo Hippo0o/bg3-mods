@@ -3016,6 +3016,38 @@
 					<attribute id="Name" type="LSString" value="TOT_Hag_Green_Act3Hag_Double" />
 					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
 					<attribute id="Archetype" type="FixedString" value="hag_green" />
+					<attribute id="Stats" type="FixedString" value="HAG_AuntieEthel_Double" />
+					<attribute id="CharacterVisualResourceID" type="FixedString"
+						value="be6efede-b3ee-88db-45f6-52fe03be836b" />
+					<attribute id="Icon" type="FixedString"
+						value="be6efede-b3ee-88db-45f6-52fe03be836b-_(Icon_Hag)" />
+					<attribute id="Equipment" type="FixedString" value="" />
+					<attribute id="SpellSet" type="FixedString" value="CommonBeastActions" />
+					<attribute id="LevelOverride" type="int32" value="11" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+
+				<node id="GameObjects">
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="MapKey" type="FixedString"
+						value="7cd8949a-989a-4e2e-99af-0bffbb1d7a02" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="d4edf374-6efe-463f-8899-889db26dee4e" />
+					<attribute id="Name" type="LSString" value="TOT_Hag_Green_Act3Hag" />
+					<attribute id="AiHint" type="guid" value="1902723d-dd16-4e7a-87d6-7b07f63add79" />
+					<attribute id="Archetype" type="FixedString" value="hag_green" />
 					<attribute id="Stats" type="FixedString" value="HAG_AuntieEthel" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
 						value="be6efede-b3ee-88db-45f6-52fe03be836b" />
@@ -3999,6 +4031,38 @@
 						value="27a13f64-a4e1-98a3-d063-14b276cba870" />
 					<attribute id="Icon" type="FixedString"
 						value="df9bc282-a830-241a-150c-35cde655606a-_(Icon_Owlbear)" />
+					<attribute id="Equipment" type="FixedString" value="" />
+					<attribute id="SpellSet" type="FixedString" value="CommonBeastActions" />
+					<attribute id="LevelOverride" type="int32" value="3" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+
+				<node id="GameObjects">
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="MapKey" type="FixedString"
+						value="b326b13c-6764-4174-bfdf-32a0ba426df2" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="6cd57ec0-7f04-452c-8fb9-31cae384b916" />
+					<attribute id="Name" type="LSString" value="TOT_Owlbear" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
+					<attribute id="Archetype" type="FixedString" value="owlbear" />
+					<attribute id="Stats" type="FixedString" value="FOR_Owlbear" />
+					<attribute id="CharacterVisualResourceID" type="FixedString"
+						value="8e0be4df-0e27-883c-01cc-de128882f941" />
+					<attribute id="Icon" type="FixedString"
+						value="8e0be4df-0e27-883c-01cc-de128882f941-EQP_Unarmed_(Icon_Owlbear)" />
 					<attribute id="Equipment" type="FixedString" value="" />
 					<attribute id="SpellSet" type="FixedString" value="CommonBeastActions" />
 					<attribute id="LevelOverride" type="int32" value="3" />
