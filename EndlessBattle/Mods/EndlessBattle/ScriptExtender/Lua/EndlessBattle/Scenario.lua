@@ -74,12 +74,12 @@ local function Current()
 end
 
 local function ifScenario(func)
-    return function(...)
+    return IfActive(function(...)
         if S == nil then
             return
         end
         func(...)
-    end
+    end)
 end
 
 -------------------------------------------------------------------------------------------------

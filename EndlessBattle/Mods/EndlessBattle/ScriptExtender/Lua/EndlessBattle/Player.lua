@@ -111,7 +111,8 @@ local readyChecks = {}
 ---@field After fun(func: fun(result: boolean): any): LibsChainable
 ---@param message string
 ---@return ChainableConfirmation
-function Player.AskConfirmation(message)
+function Player.AskConfirmation(message, ...)
+    message = __(message, ...)
     local msgId = U.RandomId("AskConfirmation_")
     Osi.ReadyCheckSpecific(msgId, message, 1, Player.Host(), "", "", "")
     local chainable = Libs.Chainable(message)

@@ -11,7 +11,7 @@ if not Require then
         end
 
         local result = Ext.Utils.Include(ModuleUUID, module, _G)
-        register[module] = result
+        register[module] = result or {}
 
         return result
     end

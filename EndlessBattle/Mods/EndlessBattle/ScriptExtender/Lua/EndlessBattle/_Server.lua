@@ -24,6 +24,15 @@ Map = {}
 Item = {}
 GameMode = {}
 
+-- wrap event handlers in IfActive to prevent them from running when the mod is not active
+function IfActive(func)
+    return function(...)
+        if PersistentVars.Active then
+            func(...)
+        end
+    end
+end
+
 Require("EndlessBattle/Player")
 Require("EndlessBattle/Scenario")
 Require("EndlessBattle/Enemy")
@@ -62,6 +71,10 @@ GameState.OnSessionLoad(function()
     External.LoadConfig()
 
     Async.Run(function() -- runs on OnLoad instead of OnSessionLoad
+        if PersistentVars.Active == nil then
+            GameMode.AskOnboarding()
+        end
+
         S = PersistentVars.Scenario
         if S ~= nil then
             Scenario.RestoreFromState(S)
@@ -69,19 +82,50 @@ GameState.OnSessionLoad(function()
     end)
 end)
 
-GameState.OnLoad(function()
+GameState.OnLoad(IfActive(function()
     if PersistentVars.GUIOpen then
         Defer(1000, function()
             Net.Send("OpenGUI")
         end)
     end
-end)
+end))
 
 GameState.OnUnload(function()
     if PersistentVars then
         PersistentVars.Scenario = S
     end
 end)
+
+do
+    local count = 0
+    local reset = Async.Debounce(5000, function()
+        count = 0
+    end)
+    U.Osiris.On(
+        "StatusApplied",
+        4,
+        "after",
+        IfActive(function(object, status, causee, applyStoryActionID)
+            if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
+                --- deactivate automated rogue mode
+            end
+        end)
+    )
+    U.Osiris.On(
+        "StatusRemoved",
+        4,
+        "after",
+        IfActive(function(object, status, causee, applyStoryActionID)
+            if status == "NON_LETHAL" and U.UUID.Equals(Player.Host(), object) then
+                count = count + 1
+                if count >= 3 then
+                    Net.Send("OpenGUI")
+                end
+                reset()
+            end
+        end)
+    )
+end
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
