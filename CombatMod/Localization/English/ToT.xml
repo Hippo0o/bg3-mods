@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <contentList>
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:113: in field 'Tile' -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:109: in field 'Tile' -->
     <content contentuid="h8c0d708fgd958g425dgabf3ge43bc9d1c619" version="1">%d RogueScore required</content>
 
     <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:625: in field 'CheckEnded' -->
@@ -9,7 +9,7 @@
     <!-- CombatMod/CombatMod/_Server.lua:113: in field '_Func' -->
     <content contentuid="h3b8161bbg6ed4g434ega08bg252882a9070a" version="1">%s is now active.</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:119: in field 'Tile' -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:115: in field 'Tile' -->
     <content contentuid="h28bc4630g7de9g4136g91b8gf750339ad572" version="1">%s required</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Components.lua:63: in field 'Update' -->
@@ -48,13 +48,13 @@
     <!-- CombatMod/CombatMod/Templates/Unlocks.lua:366: in main chunk -->
     <content contentuid="hab83587fgfed6g40d2ga98bg06b4cba92496" version="1">Buy 40 Camp Supplies</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:212: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:201> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:205: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:194> -->
     <content contentuid="h2cb33b1dg79e6g46e4g81f8g0082e3da22a0" version="1">Buy for character</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:205: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:201> -->
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:207: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:201> -->
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:152: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:148> -->
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:154: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:148> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:198: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:194> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:200: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:194> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:148: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:144> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:150: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:144> -->
     <content contentuid="h322023aeg6775g476fgb011g3109d233132b" version="1">Buy</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
@@ -81,7 +81,7 @@
     <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:14: in field 'Main' -->
     <content contentuid="h31b7af7eg64e2g4fa2gb028g49c4d20a6be6" version="1">Clear Area</content>
 
-    <!-- CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:524: in upvalue 'func' -->
+    <!-- CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:532: in upvalue 'func' -->
     <content contentuid="h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68" version="1">Clearing all entities</content>
 
     <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:167: in field 'SpawnHelper' -->
@@ -99,7 +99,7 @@
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua:6: in field 'Main' -->
     <content contentuid="h23c73e06g7692g46b5gb10fg40d3532d62f1" version="1">Config</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:68: in field 'Tile' -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:64: in field 'Tile' -->
     <content contentuid="h38df043eg6d8ag4516gb0begc370d29ce152" version="1">Cost: %s</content>
 
     <!-- CombatMod/CombatMod/Templates/Unlocks.lua:396: in main chunk -->
@@ -224,7 +224,7 @@
     <!-- CombatMod/CombatMod/Client/GUI/Control.lua:169: in upvalue 'compute' -->
     <content contentuid="h2cb5c7a2g79e0g492fgb1f8g6f4913da4d6b" version="1">Killed: %s</content>
 
-    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:314: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:305> -->
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:361: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:352> -->
     <content contentuid="h6119ae15g344cg4fb4g8522ga9d267008bf0" version="1">Leave camp to join the battle.</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated' -->
@@ -269,7 +269,7 @@
     <!-- CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation' -->
     <content contentuid="h637ce98fg3629g4bcdga504gfdabc726df89" version="1">Perfect Clear! Double your score from 5 to 10?</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:44: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:38> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:40: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34> -->
     <content contentuid="h255ed026g700bg4857gb166gde315344fc13" version="1">Permanent</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua:100: in field 'Main' -->
@@ -290,8 +290,7 @@
     <!-- CombatMod/CombatMod/Client/GUI/Control.lua:137: in upvalue 'create' -->
     <content contentuid="h315e322eg640bg4677gb026gd011d204f233" version="1">Ping Spawns</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Creation.lua:19: in field 'Main' -->
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:240: in upvalue 'createPopup' -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:233: in upvalue 'createPopup' -->
     <content contentuid="h37333c06g6266g4695gb040g00f3526222d1" version="1">Ping</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
@@ -391,7 +390,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:222: in field 'Items' -->
     <content contentuid="h243816eeg716dg443bgb170gb25dd352907f" version="1">Search</content>
 
-    <!-- CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation' -->
+    <!-- CombatMod/CombatMod/Server/Player.lua:218: in field 'AskConfirmation' -->
     <content contentuid="h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6" version="1">Skip to Camp?</content>
 
     <!-- CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:424: in upvalue 'func' -->
@@ -418,14 +417,14 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Client/GUI/Control.lua:123: in local 'onCreated' -->
     <content contentuid="h323096eeg6765g4c3bgb010g3a5dd232187f" version="1">Start</content>
 
-    <!-- CombatMod/CombatMod/Server/Intro.lua:64: in function <CombatMod/CombatMod/Server/Intro.lua:40> -->
+    <!-- CombatMod/CombatMod/Server/Intro.lua:64: in upvalue 'func' -->
     <content contentuid="hc1216d49g9474g4381g8f21g25e7ad0307c5" version="1">Starting items added. Hirelings unlocked.</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:32: in field 'Main' -->
     <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:33: in field 'Main' -->
     <content contentuid="h32391aeeg676cg44fbgb010ga29dd23280bf" version="1">State</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:41: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:38> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:37: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34> -->
     <content contentuid="h3e9c6432g6bc9g4316gb0dagf57012f8d752" version="1">Stock: %s</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Control.lua:200: in upvalue 'create' -->
@@ -471,7 +470,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:241: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:235> -->
     <content contentuid="hd0c773c3g8592g4269gae3fg440f0c1d662d" version="1">Unlock %s bought for %s.</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:166: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:160> -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:171: in upvalue 'func' -->
     <content contentuid="h2308c823g765dg49d7ga103gbfb103219d93" version="1">Unlock %s bought.</content>
 
     <!-- CombatMod/CombatMod/Templates/Unlocks.lua:70: in main chunk -->
@@ -511,7 +510,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Client/GUI/Creation.lua:69: in field 'Main' -->
     <content contentuid="h273eb1cag726bg4e49gb140gd82f9362fa0d" version="1">Waypoints</content>
 
-    <!-- CombatMod/CombatMod/Server/Player.lua:217: in field 'AskConfirmation' -->
+    <!-- CombatMod/CombatMod/Server/Player.lua:218: in field 'AskConfirmation' -->
     <content contentuid="hfd862893ga8d3g47dcgacebg51ba0ec97398" version="1">Welcome to %s! Start playing?</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua:148: in field 'Client' -->
@@ -535,7 +534,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
     <content contentuid="he3a5992cgb6f0g4cc7g9d09g6aa1ff2b4883" version="1">automatically starts combat between rounds</content>
 
-    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:248: in upvalue 'createPopup' -->
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:241: in upvalue 'createPopup' -->
     <content contentuid="h22c9bc4eg779cg4e91gb11fga8f7d33d8ad5" version="1">bought</content>
 
     <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->

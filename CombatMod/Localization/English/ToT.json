@@ -2,7 +2,7 @@
 	"%d RogueScore required;1": {
 		"Handle": "h8c0d708fgd958g425dgabf3ge43bc9d1c619",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:113: in field 'Tile'"],
+		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:109: in field 'Tile'"],
 		"Text": "%d RogueScore required",
 		"Version": 1
 	},
@@ -23,7 +23,7 @@
 	"%s required;1": {
 		"Handle": "h28bc4630g7de9g4136g91b8gf750339ad572",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:119: in field 'Tile'"],
+		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:115: in field 'Tile'"],
 		"Text": "%s required",
 		"Version": 1
 	},
@@ -115,7 +115,7 @@
 		"Handle": "h2cb33b1dg79e6g46e4g81f8g0082e3da22a0",
 		"LocaText": "",
 		"Stack": [
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:212: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:201>"
+			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:205: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:194>"
 		],
 		"Text": "Buy for character",
 		"Version": 1
@@ -124,10 +124,10 @@
 		"Handle": "h322023aeg6775g476fgb011g3109d233132b",
 		"LocaText": "",
 		"Stack": [
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:205: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:201>",
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:207: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:201>",
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:152: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:148>",
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:154: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:148>"
+			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:198: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:194>",
+			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:200: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:194>",
+			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:148: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:144>",
+			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:150: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:144>"
 		],
 		"Text": "Buy",
 		"Version": 1
@@ -191,7 +191,7 @@
 	"Clearing all entities;1": {
 		"Handle": "h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:524: in upvalue 'func'"],
+		"Stack": ["CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:532: in upvalue 'func'"],
 		"Text": "Clearing all entities",
 		"Version": 1
 	},
@@ -233,7 +233,7 @@
 	"Cost: %s;1": {
 		"Handle": "h38df043eg6d8ag4516gb0begc370d29ce152",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:68: in field 'Tile'"],
+		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:64: in field 'Tile'"],
 		"Text": "Cost: %s",
 		"Version": 1
 	},
@@ -537,7 +537,7 @@
 		"Handle": "h6119ae15g344cg4fb4g8522ga9d267008bf0",
 		"LocaText": "",
 		"Stack": [
-			"CombatMod/CombatMod/Server/ModActive/Scenario.lua:314: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:305>"
+			"CombatMod/CombatMod/Server/ModActive/Scenario.lua:361: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:352>"
 		],
 		"Text": "Leave camp to join the battle.",
 		"Version": 1
@@ -644,7 +644,7 @@
 		"Handle": "h255ed026g700bg4857gb166gde315344fc13",
 		"LocaText": "",
 		"Stack": [
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:44: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:38>"
+			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:40: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34>"
 		],
 		"Text": "Permanent",
 		"Version": 1
@@ -696,10 +696,7 @@
 	"Ping;1": {
 		"Handle": "h37333c06g6266g4695gb040g00f3526222d1",
 		"LocaText": "",
-		"Stack": [
-			"CombatMod/CombatMod/Client/GUI/Creation.lua:19: in field 'Main'",
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:240: in upvalue 'createPopup'"
-		],
+		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:233: in upvalue 'createPopup'"],
 		"Text": "Ping",
 		"Version": 1
 	},
@@ -934,7 +931,7 @@
 	"Skip to Camp?;1": {
 		"Handle": "h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation'"],
+		"Stack": ["CombatMod/CombatMod/Server/Player.lua:218: in field 'AskConfirmation'"],
 		"Text": "Skip to Camp?",
 		"Version": 1
 	},
@@ -997,7 +994,7 @@
 	"Starting items added. Hirelings unlocked.;1": {
 		"Handle": "hc1216d49g9474g4381g8f21g25e7ad0307c5",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Server/Intro.lua:64: in function <CombatMod/CombatMod/Server/Intro.lua:40>"],
+		"Stack": ["CombatMod/CombatMod/Server/Intro.lua:64: in upvalue 'func'"],
 		"Text": "Starting items added. Hirelings unlocked.",
 		"Version": 1
 	},
@@ -1015,7 +1012,7 @@
 		"Handle": "h3e9c6432g6bc9g4316gb0dagf57012f8d752",
 		"LocaText": "",
 		"Stack": [
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:41: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:38>"
+			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:37: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34>"
 		],
 		"Text": "Stock: %s",
 		"Version": 1
@@ -1128,9 +1125,7 @@
 	"Unlock %s bought.;1": {
 		"Handle": "h2308c823g765dg49d7ga103gbfb103219d93",
 		"LocaText": "",
-		"Stack": [
-			"CombatMod/CombatMod/Client/GUI/Unlocks.lua:166: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:160>"
-		],
+		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:171: in upvalue 'func'"],
 		"Text": "Unlock %s bought.",
 		"Version": 1
 	},
@@ -1224,7 +1219,7 @@
 	"Welcome to %s! Start playing?;1": {
 		"Handle": "hfd862893ga8d3g47dcgacebg51ba0ec97398",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Server/Player.lua:217: in field 'AskConfirmation'"],
+		"Stack": ["CombatMod/CombatMod/Server/Player.lua:218: in field 'AskConfirmation'"],
 		"Text": "Welcome to %s! Start playing?",
 		"Version": 1
 	},
@@ -1286,7 +1281,7 @@
 	"bought;1": {
 		"Handle": "h22c9bc4eg779cg4e91gb11fga8f7d33d8ad5",
 		"LocaText": "",
-		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:248: in upvalue 'createPopup'"],
+		"Stack": ["CombatMod/CombatMod/Client/GUI/Unlocks.lua:241: in upvalue 'createPopup'"],
 		"Text": "bought",
 		"Version": 1
 	},

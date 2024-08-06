@@ -183,7 +183,12 @@ do
     end
 
     function Commands.Test()
-
+        -- Enemy.TestEnemies(
+        --     Enemy.GenerateEnemyList({
+        --         Ext.Template.GetTemplate("319efbbe-f9f3-4584-804e-3e17d47d1136"),
+        --     }),
+        --     true
+        -- )
         -- local temps = Ext.Template.GetAllRootTemplates()
         -- L.Dump(UT.Map(
         --     UT.Filter(temps, function(v)
