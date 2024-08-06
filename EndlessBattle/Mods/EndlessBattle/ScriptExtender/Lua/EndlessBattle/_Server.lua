@@ -8,6 +8,7 @@ DefaultConfig = {
     LootIncludesCampSlot = false, -- include camp clothes in item lists
     Debug = false,
     RandomizeSpawnOffset = 3,
+    ExpMultiplier = 3,
     SpawnItemsAtPlayer = false,
 }
 Config = UT.DeepClone(DefaultConfig)
@@ -227,25 +228,26 @@ do
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "EndlessBattle")
 
         -- GameMode.AskUnlockAll()
-        Require("Hlib/OsirisEventDebug").Attach()
-            Osi.Use(GetHostCharacter(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
+        -- Require("Hlib/OsirisEventDebug").Attach()
+        -- Osi.Use(GetHostCharacter(), "S_CHA_WaypointShrine_Top_PreRecruitment_b3c94e77-15ab-404c-b215-0340e398dac0", "")
 
-        -- new_start = tonumber(new_start) or start
-        -- amount = tonumber(amount) or 100
-        --
-        -- local j = 0
-        -- local templates = {}
-        -- for i, v in Enemy.Iter() do
-        --     if i > new_start and (i - new_start) <= amount then
-        --         table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-        --         j = j + 1
-        --     end
-        -- end
-        -- start = new_start + j
-        --
-        -- local enemies = Enemy.GenerateEnemyList(templates)
-        --
-        -- Enemy.TestEnemies(enemies)
+        new_start = tonumber(new_start) or start
+        amount = tonumber(amount) or 100
+
+        local j = 0
+        local templates = {}
+        for i, v in Enemy.Iter() do
+            if i > new_start and (i - new_start) <= amount then
+                table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+                j = j + 1
+            end
+        end
+        start = new_start + j
+
+        local enemies = Enemy.GenerateEnemyList(templates)
+
+        Enemy.TestEnemies(enemies, true)
+
         -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
         -- Enemy.TestEnemies(enemies, false)
         -- local templates = {}

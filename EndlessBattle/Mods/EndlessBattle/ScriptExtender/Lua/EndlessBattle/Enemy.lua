@@ -190,7 +190,12 @@ function Object:Modify(keepFaction)
         return self:Entity():IsAlive()
     end, function()
         local entity = self:Entity()
-        local expMod = self.IsBoss and 10 or 5
+
+        local expMod = Config.ExpMultiplier or 1
+        if self.IsBoss then
+            expMod = expMod * 2
+        end
+
         entity.ServerExperienceGaveOut.Experience = entity.BaseHp.Vitality
             * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
             * expMod
@@ -574,9 +579,9 @@ function Enemy.GenerateEnemyList(templates)
             return
         end
 
-        if template.LevelOverride < 0 then
-            return
-        end
+        -- if template.LevelOverride < 0 then
+        --     return
+        -- end
 
         if template.CombatComponent.Archetype == "base" then
             L.Debug(template.CombatComponent.Archetype)
@@ -596,6 +601,7 @@ function Enemy.GenerateEnemyList(templates)
             "donotuse",
             "_Hireling",
             "_Guild",
+            "Helper",
         }
         local startswith = {
             "^_",
@@ -706,8 +712,6 @@ function Enemy.TestEnemies(enemies, keepAlive)
             error(err)
         end)
     end, { retries = -1, interval = 1 }).After(function()
-        IO.SaveJson("Enemies.json", dump)
-    end).Catch(function(err)
-        L.Error(err)
+        IO.SaveJson("RatedEnemies.json", dump)
     end)
 end

@@ -88,7 +88,7 @@ end
 ---@param code string x, y => x + y
 ---@vararg any input for code, e.g. 1, 2
 ---@return any
-function M.Lamda(code, ...)
+function M.Lambda(code, ...)
     local argString, evalString = table.unpack(M.String.Split(code, "=>"))
 
     local args = M.String.Split(argString, ",")
@@ -103,7 +103,7 @@ function M.Lamda(code, ...)
 
     local ok, res = pcall(Ext.Utils.LoadString(code, env))
     if not ok then
-        error('\n[Lamda]: "' .. code .. '"\n' .. res)
+        error('\n[Lambda]: "' .. code .. '"\n' .. res)
     end
 
     return res

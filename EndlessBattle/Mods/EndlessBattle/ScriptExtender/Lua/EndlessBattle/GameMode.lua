@@ -280,22 +280,43 @@ function GameMode.GenerateScenario(score)
 
     -- Function to select a tier based on remaining value
     local function selectTier(remainingValue)
+        local validTiers = {}
         local totalWeight = 0
-        local weights = {}
         for i, tier in ipairs(tiers) do
-            local weight = tier.value / remainingValue -- Higher bias towards higher tiers
-            weights[i] = weight
-            totalWeight = totalWeight + weight
-        end
-        local randomWeight = math.random() * totalWeight
-        for i, weight in ipairs(weights) do
-            randomWeight = randomWeight - weight
-            if randomWeight <= 0 then
-                return tiers[i]
+            if remainingValue >= tier.value then
+                local weight = 1 / (i + 1) -- Higher bias towards lower tiers
+                table.insert(validTiers, { tier = tier, weight = weight })
+                totalWeight = totalWeight + weight
             end
         end
-        return tiers[#tiers] -- Fallback to the highest tier
+        if #validTiers > 0 then
+            local randomWeight = U.Random() * totalWeight
+            for _, entry in ipairs(validTiers) do
+                randomWeight = randomWeight - entry.weight
+                if randomWeight <= 0 then
+                    return entry.tier
+                end
+            end
+        end
+        return tiers[1] -- Fallback to the lowest tier
     end
+    -- local function selectTier(remainingValue)
+    --     local totalWeight = 0
+    --     local weights = {}
+    --     for i, tier in ipairs(tiers) do
+    --         local weight = tier.value / remainingValue -- Higher bias towards higher tiers
+    --         weights[i] = weight
+    --         totalWeight = totalWeight + weight
+    --     end
+    --     local randomWeight = U.Random() * totalWeight
+    --     for i, weight in ipairs(weights) do
+    --         randomWeight = randomWeight - weight
+    --         if randomWeight <= 0 then
+    --             return tiers[i]
+    --         end
+    --     end
+    --     return tiers[#tiers] -- Fallback to the highest tier
+    -- end
 
     -- Function to generate a random timeline with bias and possible empty rounds
     local function generateTimeline(maxValue)
@@ -547,6 +568,26 @@ U.Osiris.On(
         cancelDialog(dialog, instanceID)
     end)
 )
+U.Osiris.On("EnteredForceTurnBased", 1, "before", function(object)
+    if Osi.IsCharacter(object) ~= 1 then
+        return
+    end
+
+    if not UE.IsNonPlayer(object) then
+        Osi.ForceTurnBasedMode(object, 0)
+        return
+    end
+
+    UE.Remove(object)
+    Player.Notify(
+        __(
+            "Skipped event with %s",
+            Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle)
+        ),
+        true
+    )
+end)
+
 U.Osiris.On(
     "UseFinished",
     3,
@@ -575,7 +616,7 @@ U.Osiris.On(
     "after",
     ifBypassStory(function(object, combatGuid)
         Schedule(function()
-            if not Enemy.IsValid(object) and UE.IsNonPlayer(object) then
+            if not Enemy.IsValid(object) and UE.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
                 L.Debug("Removing", object)
                 Osi.LeaveCombat(object)
                 UE.Remove(object)

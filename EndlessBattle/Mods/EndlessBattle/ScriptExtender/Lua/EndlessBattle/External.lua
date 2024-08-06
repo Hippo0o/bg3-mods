@@ -60,6 +60,7 @@ External.Validators = {}
 External.Validators.Config = tt({
     -- ForceCombatRestart = { "nil", "boolean" },
     RandomizeSpawnOffset = { "nil", "number" },
+    ExpMultiplier = { "nil", "number" },
     ForceEnterCombat = { "nil", "boolean" },
     BypassStory = { "nil", "boolean" },
     BypassStoryAlways = { "nil", "boolean" },
@@ -239,10 +240,15 @@ function External.ApplyConfig(config)
         end
     end
 
-    for key, value in pairs(Config) do
+    for key, value in pairs(config) do
         if key == "BypassStory" then
             if value == false then
                 Config.BypassStoryAlways = false
+            end
+        end
+        if key == "BypassStoryAlways" then
+            if value == true then
+                Config.BypassStory = true
             end
         end
     end
