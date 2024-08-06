@@ -38,7 +38,7 @@ function Config.Main(tab)
     end
 
     root:AddSeparator()
-    local c5 = root:AddSliderInt(__("Randomize Spawn Offset"), 0, 0, 50)
+    local c5 = root:AddSliderInt(__("Randomize Spawn Offset"), 0, 0, 20)
     root:AddText(__("randomize spawn position for more varied encounters (too high may cause issues)"))
     c5.OnChange = Async.Debounce(500, function(sld)
         Event.Trigger("UpdateConfig", { RandomizeSpawnOffset = sld.Value[1] })
