@@ -1,39 +1,9 @@
 local low, medium, high, ultra, epic, legendary =
     C.EnemyTier[1], C.EnemyTier[2], C.EnemyTier[3], C.EnemyTier[4], C.EnemyTier[5], C.EnemyTier[6]
 
-local defaultLoot = {
-    Objects = {
-        Common = 60,
-        Uncommon = 30,
-        Rare = 20,
-        VeryRare = 5,
-        Legendary = 0,
-    },
-    Armor = {
-        Common = 60,
-        Uncommon = 30,
-        Rare = 20,
-        VeryRare = 5,
-        Legendary = 1,
-    },
-    Weapons = {
-        Common = 60,
-        Uncommon = 30,
-        Rare = 20,
-        VeryRare = 5,
-        Legendary = 1,
-    },
-}
+local defaultLoot = C.LootRates
 
 return {
-    {
-        Name = "Roguelike",
-
-        -- Spawns per Round
-        Timeline = "roguelike",
-
-        Loot = defaultLoot,
-    },
     {
         Name = "level 1",
 

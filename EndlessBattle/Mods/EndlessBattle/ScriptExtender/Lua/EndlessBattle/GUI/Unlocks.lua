@@ -5,13 +5,13 @@ function ClientUnlock.Main(tab)
     ---@type ExtuiTree
     local root = tab:AddTabItem(__("Unlocks"))
 
-    Components.Computed(root:AddSeparatorText(__("Currency owned: %d", 0)), function(root, currency)
-        return __("Currency owned: %d", currency)
-    end, "CurrencyChanged")
+    Components.Computed(root:AddSeparatorText(__("Currency owned: %d   RogueScore: %d", 0, 0)), function(root, state)
+        return __("Currency owned: %d   RogueScore: %d", state.Currency, state.RogueScore or 0)
+    end, "StateChange")
 
     Event.On("StateChange", function(state)
         Event.Trigger("CurrencyChanged", state.Currency or 0)
-    end)
+    end):Exec(State)
 
     Event.ChainOn("StateChange"):After(function(self, state)
         local unlocks = state.Unlocks
@@ -21,10 +21,10 @@ function ClientUnlock.Main(tab)
         self:Unregister()
 
         local cols = 3
-        local nrows = math.ceil(#unlocks / cols)
+        local nrows = math.ceil(UT.Size(unlocks) / cols)
         Components.Layout(root, cols, nrows, function(layout)
             layout.Table.Borders = true
-            for i, unlock in ipairs(unlocks) do
+            for i, unlock in ipairs(UT.Values(unlocks)) do
                 local c = (i - 1) % cols
                 local r = math.ceil(i / cols)
                 local cell = layout.Cells[r][c + 1]
@@ -50,15 +50,34 @@ function ClientUnlock.Tile(root, unlock)
 
     local text = grp:AddText(unlock.Name)
     grp:AddSeparator()
-
     local cost = grp:AddText(__("Cost: %s", unlock.Cost))
+    if unlock.Persistent then
+        cost.Label = cost.Label .. string.format(" (%s)", __("Permanent"))
+    end
     grp:AddSeparator()
 
     do
         local unlock = unlock
 
-        local notUnlocked = grp:AddText(__("Not unlocked"))
+        local notUnlocked = grp:AddText("")
         notUnlocked.Visible = not unlock.Unlocked
+
+        if unlock.Requirement then
+            if type(unlock.Requirement) ~= "table" then
+                unlock.Requirement = { unlock.Requirement }
+            end
+
+            for _, req in pairs(unlock.Requirement) do
+                if type(req) == "number" then
+                    notUnlocked.Label = notUnlocked.Label .. __("%d RogueScore required", req) .. "\n"
+                elseif type(req) == "string" then
+                    local u = UT.Find(State.Unlocks, function(u)
+                        return u.Id == req
+                    end)
+                    notUnlocked.Label = notUnlocked.Label .. __("%s required", u.Name) .. "\n"
+                end
+            end
+        end
 
         local cond = Components.Conditional(grp, function()
             if unlock.Character then
@@ -77,7 +96,7 @@ function ClientUnlock.Tile(root, unlock)
                     notUnlocked.Visible = not unlock.Unlocked
                 end
             end
-        end)
+        end):Exec(State)
     end
 end
 
@@ -85,7 +104,6 @@ function ClientUnlock.Buy(root, unlock)
     local grp = root:AddGroup(U.RandomId())
 
     local buyLabel = grp:AddText("")
-    grp:AddSeparator()
     local btn = grp:AddButton(__("Buy"))
 
     if unlock.Amount ~= nil then
@@ -101,7 +119,7 @@ function ClientUnlock.Buy(root, unlock)
                     btn.Visible = new.Bought < new.Amount
                 end
             end
-        end)
+        end):Exec(State)
     else
         buyLabel.Label = __("Infinite")
     end
@@ -115,7 +133,6 @@ function ClientUnlock.Buy(root, unlock)
                 Event.Trigger("Error", res)
             else
                 Event.Trigger("Success", __("Unlock %s bought.", unlock.Name))
-                Event.Trigger("CurrencyChanged", res)
             end
         end)
     end
@@ -127,12 +144,10 @@ function ClientUnlock.BuyChar(root, unlock)
     local grp = root:AddGroup(U.RandomId())
 
     local buyLabel = grp:AddText("")
-    grp:AddSeparator()
 
     ---@type ExtuiCombo
     local combo = grp:AddCombo("")
     combo.IDContext = U.RandomId()
-    combo.SameLine = true
     combo.SelectedIndex = 0
     ---@type ExtuiButton
     local btn = grp:AddButton(__("Buy"))
@@ -154,7 +169,7 @@ function ClientUnlock.BuyChar(root, unlock)
                     combo.Visible = buyable
                 end
             end
-        end)
+        end):Exec(State)
     else
         buyLabel.Label = ""
     end
@@ -178,7 +193,6 @@ function ClientUnlock.BuyChar(root, unlock)
             else
                 local name = list[uuid]:match("^(.-) %(")
                 Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, name))
-                Event.Trigger("CurrencyChanged", res)
             end
         end)
     end
@@ -196,7 +210,7 @@ function ClientUnlock.BuyChar(root, unlock)
         end
 
         return UT.Values(options)
-    end, "StateChange", "Options").Update({})
+    end, "StateChange", "Options").Update(State)
 
     return grp
 end

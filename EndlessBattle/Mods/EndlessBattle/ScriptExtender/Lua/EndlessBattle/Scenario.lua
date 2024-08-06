@@ -420,20 +420,7 @@ end
 
 ---@return table
 function Scenario.GetTemplates()
-    local templates = External.Templates.GetScenarios() or scenarioTemplates
-
-    -- ensure roguelike always exists
-    local hasRoguelike = UT.Find(templates, function(v)
-        return v.Timeline == C.RoguelikeScenario
-    end) ~= nil
-    if not hasRoguelike then
-        local roguetemp = UT.Find(scenarioTemplates, function(v)
-            return v.Timeline == C.RoguelikeScenario
-        end)
-        table.insert(templates, 1, roguetemp)
-    end
-
-    return templates
+    return External.Templates.GetScenarios() or scenarioTemplates
 end
 
 function Scenario.ExportTemplates()
@@ -505,15 +492,14 @@ function Scenario.Start(template, map)
     local scenario = Object.New()
 
     local timeline = template.Timeline
-    scenario.RogueMode = timeline == C.RoguelikeScenario
 
-    if scenario.RogueMode then
-        timeline = GameMode.GenerateScenario(PersistentVars.RogueScore)
-    end
-
-    if map == nil or scenario.RogueMode then
+    if map == nil then
         local maps = Map.Get()
         map = maps[U.Random(#maps)]
+    end
+
+    if type(timeline) == "function" then
+        timeline = timeline(template, map)
     end
 
     scenario.Name = template.Name
@@ -557,10 +543,6 @@ function Scenario.End()
     local s = Current()
     Event.Trigger("ScenarioEnded", s)
     Action.SpawnLoot()
-
-    if s.RogueMode then
-        GameMode.UpdateRogueScore(s)
-    end
 
     S = nil
     PersistentVars.Scenario = nil

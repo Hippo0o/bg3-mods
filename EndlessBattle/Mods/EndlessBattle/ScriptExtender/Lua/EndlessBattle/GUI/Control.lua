@@ -94,7 +94,7 @@ function Control.StartPanel(root)
 
             for i, item in ipairs(event.Payload.Scenarios) do
                 local label = item.Name
-                if item.Roguelike then
+                if item.Name == C.RoguelikeScenario then
                     label = label .. " (Score: " .. tostring(State.RogueScore) .. ")"
                 end
                 scenarioSelection.AddItem(label, item.Name)

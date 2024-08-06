@@ -16,6 +16,8 @@ local unlocks = Require("EndlessBattle/Templates/Unlocks.lua")
 ---@field BoughtBy table<string, bool> -- Character GUID
 ---@field Character boolean
 ---@field Unlocked boolean
+---@field Requirement string|nil
+---@field Persistent boolean
 ---@field OnActivate fun(self: Unlock)
 ---@field Buy fun(self: Unlock)
 local Object = Libs.Class({
@@ -24,10 +26,12 @@ local Object = Libs.Class({
     Icon = nil,
     Cost = 0,
     Amount = nil,
-    Bought = 0,
     Character = false,
+    Bought = 0,
     BoughtBy = {},
     Unlocked = false,
+    Requirement = nil,
+    Persistent = false,
     OnActivate = function() end,
 })
 
@@ -39,6 +43,39 @@ end
 
 function Object:Buyable()
     return self.Unlocked and (self.Amount == nil or self.Bought < self.Amount)
+end
+
+function Object:UpdateUnlocked()
+    if self.Requirement == nil then
+        self.Unlocked = true
+        return
+    end
+
+    local function unlockByScore(requirement)
+        if type(requirement) == "number" then
+            return PersistentVars.RogueScore >= requirement
+        end
+    end
+    local function unlockByBought(requirement)
+        if type(requirement) == "string" then
+            local u = UT.Find(Unlock.Get(), function(u)
+                return u.Id == requirement
+            end)
+            return u and u.Bought > 0
+        end
+    end
+
+    local requirement = self.Requirement
+    if type(requirement) ~= "table" then
+        requirement = { requirement }
+    end
+
+    local unlocked = true
+    for _, r in pairs(requirement) do
+        unlocked = unlocked and (unlockByScore(r) or unlockByBought(r))
+    end
+
+    self.Unlocked = unlocked and true or false
 end
 
 -------------------------------------------------------------------------------------------------
@@ -76,22 +113,38 @@ function Unlock.CalculateReward(scenario)
 end
 
 function Unlock.GetTemplates()
-    return UT.Combine({}, unlocks, External.Unlocks.GetUnlocks())
+    return UT.Combine({}, unlocks, External.Templates.GetUnlocks())
 end
 
 function Unlock.Get()
-    local unlocks = {}
+    return PersistentVars.Unlocks
+end
 
-    local templates = Unlock.GetTemplates()
-    for _, u in pairs(PersistentVars.Unlocks) do
-        if UT.Find(templates, function(t)
-            return t.Id == u.Id
-        end) then
-            table.insert(unlocks, Object.Init(u))
+function Unlock.Sync()
+    for _, unlockTemplate in pairs(Unlock.GetTemplates()) do
+        local existing = UT.Find(PersistentVars.Unlocks, function(p)
+            return p.Id == unlockTemplate.Id
+        end)
+
+        if not existing then
+            table.insert(PersistentVars.Unlocks, unlockTemplate)
+        else
+            -- update keys from template that aren't stateful
+            UT.Merge(existing, unlockTemplate)
         end
     end
 
-    return unlocks
+    for i, u in pairs(PersistentVars.Unlocks) do
+        PersistentVars.Unlocks[i] = Unlock.Restore(u)
+    end
+
+    Unlock.UpdateUnlocked()
+end
+
+function Unlock.UpdateUnlocked()
+    for _, u in pairs(Unlock.Get()) do
+        u:UpdateUnlocked()
+    end
 end
 
 -------------------------------------------------------------------------------------------------
@@ -101,19 +154,21 @@ end
 -------------------------------------------------------------------------------------------------
 
 GameState.OnLoad(function()
-    for _, unlock in ipairs(Unlock.GetTemplates()) do
-        local found = UT.Find(PersistentVars.Unlocks, function(u)
-            return u.Id == unlock.Id
-        end)
-
-        if not found then
-            table.insert(PersistentVars.Unlocks, unlock)
-        end
+    Unlock.Sync()
+    Unlock.UpdateUnlocked()
+end)
+GameState.OnSave(function()
+    for i, u in ipairs(PersistentVars.Unlocks) do
+        PersistentVars.Unlocks[i] = UT.Clean(u)
     end
 end)
 
 Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)
+end)
+
+Event.On("RogueScoreChanged", function()
+    Unlock.UpdateUnlocked()
 end)
 
 Net.On("BuyUnlock", function(event)
@@ -147,5 +202,7 @@ Net.On("BuyUnlock", function(event)
     PersistentVars.Currency = PersistentVars.Currency - unlock.Cost
 
     Net.Respond(event, { true, PersistentVars.Currency })
+    Unlock.UpdateUnlocked()
+
     Net.Send("SyncState", PersistentVars)
 end)

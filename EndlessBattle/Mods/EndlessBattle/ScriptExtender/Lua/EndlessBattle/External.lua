@@ -81,6 +81,7 @@ External.Validators.Enemy = tt({
     AiHint = { "nil", U.UUID.IsValid },
     Archetype = { "nil", "string" },
     CharacterVisualResourceID = { "nil", U.UUID.IsValid },
+    Race = { "nil", U.UUID.IsValid },
     Icon = { "nil", "string" },
 })
 
@@ -106,7 +107,7 @@ end
 External.Validators.Scenario = tt({
     Name = { "string" },
     Timeline = {
-        { C.RoguelikeScenario },
+        "function",
         tt({
             tt({
                 { "nil", C.EnemyTier, validateTimelineEntry },
@@ -195,9 +196,7 @@ function External.Templates.GetMaps()
         data = {}
     end
 
-    for _, map in ipairs(addedMaps) do
-        table.insert(data, map)
-    end
+    data = UT.Combine({},addedMaps, data)
 
     for k, map in pairs(data) do
         if not validateAndError(External.Validators.Map, map) then
@@ -219,9 +218,7 @@ function External.Templates.GetScenarios()
         data = {}
     end
 
-    for _, scenario in ipairs(addedScenarios) do
-        table.insert(data, scenario)
-    end
+    data = UT.Combine({},addedScenarios, data)
 
     for k, scenario in pairs(data) do
         if not validateAndError(External.Validators.Scenario, scenario) then
@@ -243,9 +240,7 @@ function External.Templates.GetEnemies()
         data = {}
     end
 
-    for _, enemy in ipairs(addedEnemies) do
-        table.insert(data, enemy)
-    end
+    data = UT.Combine({},addedEnemies, data)
 
     for k, enemy in pairs(data) do
         if not validateAndError(External.Validators.Enemy, enemy) then

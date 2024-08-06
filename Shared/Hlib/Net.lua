@@ -31,21 +31,7 @@ local NetEvent = Libs.Class({
 })
 
 function NetEvent:__tostring()
-    local function clean(tbl)
-        return Utils.Table.Map(tbl, function(v, k)
-            if type(v) == "function" then
-                return nil, k
-            end
-
-            if type(v) == "table" then
-                return clean(v), k
-            end
-
-            return v, k
-        end)
-    end
-
-    return Ext.Json.Stringify(clean(self))
+    return Ext.Json.Stringify(Utils.Table.Clean(self))
 end
 
 Ext.Events.NetMessage:Subscribe(function(msg)
