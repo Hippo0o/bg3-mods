@@ -69,6 +69,7 @@ External.Validators.Config = tt({
     SpawnItemsAtPlayer = { "nil", "boolean" },
     Debug = { "nil", "boolean" },
     TurnOffNotifications = { "nil", "boolean" },
+    ClearAllEntities = { "nil", "boolean" },
 })
 
 External.Validators.Enemy = tt({

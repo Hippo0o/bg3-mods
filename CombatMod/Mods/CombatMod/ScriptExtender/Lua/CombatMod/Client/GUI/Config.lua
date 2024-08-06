@@ -54,6 +54,14 @@ function Config.Main(tab)
         "BypassStory"
     )
 
+    ---@type ExtuiCheckbox
+    local c2 = Config.Checkbox(
+        root,
+        "Clear All Entities",
+        "will remove all entities from the map automatically and fix most issues with unexpected story triggers",
+        "ClearAllEntities"
+    )
+
     local c4 =
         Config.Checkbox(root, "Force Enter Combat", "automatically starts combat between rounds", "ForceEnterCombat")
 
@@ -194,7 +202,7 @@ function Config.Slider(root, label, desc, field, min, max, onChange)
 
     local hostValue
 
-    slider.OnChange = Async.Debounce(500, function(sld)
+    slider.OnChange = Debounce(500, function(sld)
         if not IsHost then
             sld.Value = { hostValue, 0, 0, 0 }
             return

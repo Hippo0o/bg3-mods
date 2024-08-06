@@ -211,6 +211,8 @@ function Object:Modify(keepFaction)
         Osi.SetFaction(self.GUID, C.NeutralFaction)
     end
 
+    Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
+
     -- can fail
     RetryUntil(function()
         return self:Entity():IsAlive()
@@ -469,7 +471,7 @@ function Enemy.GetByTemplateId(templateId)
 end
 
 local cache = nil
-local resetCache = Async.Debounce(3000, function()
+local resetCache = Debounce(3000, function()
     cache = nil
 end)
 function Enemy.GetTemplates()

@@ -13,227 +13,6 @@ local function ifBypassStory(func)
     end)
 end
 
-local actors = {}
-local handlers = {}
-local function cancelDialog(dialog, instanceID)
-    if handlers[instanceID] then
-        handlers[instanceID](dialog, instanceID)
-        return
-    end
-
-    handlers[instanceID] = Async.Debounce(10, function(dialog, instanceID)
-        Schedule(function()
-            actors[instanceID] = nil
-            handlers[instanceID] = nil
-        end)
-        local dialogActors = actors[instanceID]
-
-        if UT.Find(dialogActors, Enemy.IsValid) then
-            return
-        end
-
-        for _, actor in ipairs(dialogActors) do
-            local paidActor = US.Contains(actor, {
-                "_Daisy_",
-                "Jergal",
-                -- "OathbreakerKnight",
-                -- "Orpheus",
-                -- "Volo",
-            })
-            if paidActor then
-                return
-            end
-        end
-
-        local hasRemovable = UT.Filter(dialogActors, function(actor)
-            return GC.IsNonPlayer(actor) and Osi.IsAlly(Player.Host(), actor) ~= 1
-        end)
-
-        local hasPlayable = UT.Filter(dialogActors, function(actor)
-            return GC.IsPlayable(actor)
-        end)
-
-        if #hasPlayable == 0 then
-            return
-        end
-
-        L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
-
-        if #hasRemovable > 0 then
-            StoryBypass.CancelDialog(dialog, instanceID)
-        end
-
-        for _, actor in ipairs(hasRemovable) do
-            L.Debug("Removing", actor)
-            Osi.DialogRemoveActorFromDialog(instanceID, actor)
-            Osi.DialogRequestStopForDialog(dialog, actor)
-
-            Player.Notify(
-                __(
-                    "Skipped interaction with %s",
-                    Osi.ResolveTranslatedString(Ext.Entity.Get(actor).DisplayName.NameKey.Handle.Handle)
-                ),
-                true
-            )
-        end
-
-        if #hasPlayable == #dialogActors then
-            Osi.DialogRequestStopForDialog(dialog, dialogActors[1])
-        end
-    end)
-
-    handlers[instanceID](dialog, instanceID)
-end
-
-U.Osiris.On(
-    "DialogActorJoined",
-    4,
-    "after",
-    ifBypassStory(function(dialog, instanceID, actor, speakerIndex)
-        if
-            dialog:match("CAMP_")
-            or dialog:match("Tadpole")
-            or dialog:match("Recruitment")
-            or dialog:match("InParty")
-            or dialog:match("^BHVR_WRLD")
-            or dialog:match("^GLO_Avatar")
-            or dialog:match("^UNI_MagicMirror")
-        then
-            return
-        end
-
-        if Osi.DialogIsCrimeDialog(instanceID) == 1 then
-            Osi.CrimeClearAll()
-        end
-
-        actors[instanceID] = actors[instanceID] or {}
-        table.insert(actors[instanceID], actor)
-        cancelDialog(dialog, instanceID)
-    end)
-)
-
-U.Osiris.On(
-    "UseFinished",
-    3,
-    "before",
-    ifBypassStory(function(character, item, sucess)
-        if GC.IsNonPlayer(character, true) then
-            return
-        end
-        if Osi.IsLocked(item) == 1 then
-            L.Debug("Auto unlocking", item)
-            Player.Notify(__("Auto unlocking"), true)
-            Osi.Unlock(item, character)
-        end
-        if Osi.IsTrapArmed(item) == 1 then
-            L.Debug("Auto disarming", item)
-            Player.Notify(__("Auto disarming"), true)
-            Osi.SetTrapArmed(item, 0)
-        end
-    end)
-)
-U.Osiris.On(
-    "EnteredCombat",
-    2,
-    "after",
-    ifBypassStory(function(object, combatGuid)
-        if not S and GC.IsNonPlayer(object) and Osi.IsCharacter(object) == 1 then
-            L.Debug("Removing", object)
-            Osi.LeaveCombat(object)
-            GU.Object.Remove(object)
-            Player.Notify(
-                __(
-                    "Skipped combat with %s",
-                    Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle)
-                ),
-                true
-            )
-        end
-    end)
-)
-
-U.Osiris.On(
-    "Resurrected",
-    1,
-    "after",
-    ifBypassStory(function(character)
-        if not S and GC.IsNonPlayer(character) and Osi.IsCharacter(character) == 1 then
-            GU.Object.Remove(character)
-            Player.Notify(
-                __(
-                    "Skipped combat with %s",
-                    Osi.ResolveTranslatedString(Ext.Entity.Get(character).DisplayName.NameKey.Handle.Handle)
-                ),
-                true
-            )
-        end
-    end)
-)
-
-local entityListener = nil
-GameState.OnLoad(function()
-    if not entityListener then
-        entityListener = Ext.Entity.Subscribe(
-            "CanTravel",
-            ifBypassStory(function(e)
-                if e.PartyMember then
-                    L.Debug("UnblockTravel", e.Uuid.EntityUuid)
-                    StoryBypass.UnblockTravel(e)
-                end
-            end)
-        )
-    end
-end)
-GameState.OnUnload(function()
-    if entityListener then
-        Ext.Entity.Unsubscribe(entityListener)
-        entityListener = nil
-    end
-end)
-
-U.Osiris.On(
-    "TeleportToFromCamp",
-    1,
-    "after",
-    ifBypassStory(function(character)
-        if not GC.IsPlayable(character) then
-            return
-        end
-
-        Schedule(function()
-            if not Ext.Entity.Get(C.NPCCharacters.Jergal).CampPresence then
-                Osi.PROC_GLO_Jergal_MoveToCamp()
-            end
-        end)
-
-        -- workaround for blocked travel
-        -- TODO fix this
-        -- Defer(1000, function()
-        --     if S and not S.OnMap then
-        --         L.Error("Teleport workaround", character)
-        --         -- Scenario.Teleport(character)
-        --     end
-        -- end)
-
-        if not Ext.Entity.Get(character).CampPresence or not S then
-            L.Debug("ReturnToCamp", character)
-            -- need ~2 ticks for changing CampPresence
-            Schedule().After(Schedule).After(function()
-                Player.ReturnToCamp()
-            end)
-        end
-    end)
-)
-
-U.Osiris.On(
-    "LongRestStarted",
-    0,
-    "after",
-    ifBypassStory(function()
-        StoryBypass.EndLongRest()
-    end)
-)
-
 function StoryBypass.CancelDialog(dialog, instanceID)
     for _, player in pairs(GU.DB.GetPlayers()) do
         Osi.DialogRemoveActorFromDialog(instanceID, player)
@@ -269,23 +48,11 @@ function StoryBypass.RemoveAllEntities()
             and not v.ServerCharacter.Template.Name:match("Player")
     end)
 
-    local bypassConfig = Config.BypassStory
-    Config.BypassStory = false
-
-    for i, batch in ipairs(UT.Batch(toRemove, math.ceil(#toRemove / 10))) do
-        Schedule(function()
-            for _, b in pairs(batch) do
-                L.Debug("Removing", b.Uuid.EntityUuid, b.ServerCharacter.Template.Name)
-                GU.Object.Remove(b.Uuid.EntityUuid)
-            end
-
-            if i == 10 then
-                Defer(1000, function()
-                    Config.BypassStory = bypassConfig
-                end)
-            end
-        end)
+    for i, e in ipairs(toRemove) do
+        L.Debug("Removing", e.Uuid.EntityUuid, e.ServerCharacter.Template.Name)
+        GU.Object.Remove(e.Uuid.EntityUuid)
     end
+    L.Info("Clear All Entities", "Removed " .. tostring(#toRemove) .. " entities")
 
     return toRemove
 end
@@ -358,6 +125,232 @@ function StoryBypass.ClearArea(character)
     -- L.Dump(Osi.IsDestroyed(v.Guid))
 end
 
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+local actors = {}
+local handlers = {}
+local function cancelDialog(dialog, instanceID)
+    if handlers[instanceID] then
+        handlers[instanceID](dialog, instanceID)
+        return
+    end
+
+    handlers[instanceID] = Debounce(10, function(dialog, instanceID)
+        Schedule(function()
+            actors[instanceID] = nil
+            handlers[instanceID] = nil
+        end)
+        local dialogActors = actors[instanceID]
+
+        if UT.Find(dialogActors, Enemy.IsValid) then
+            return
+        end
+
+        for _, actor in ipairs(dialogActors) do
+            local paidActor = US.Contains(actor, {
+                "_Daisy_",
+                "Jergal",
+                -- "OathbreakerKnight",
+                -- "Orpheus",
+                -- "Volo",
+            })
+            if paidActor then
+                return
+            end
+        end
+
+        local hasRemovable = UT.Filter(dialogActors, function(actor)
+            return GC.IsNonPlayer(actor) and Osi.IsAlly(Player.Host(), actor) ~= 1
+        end)
+
+        local hasPlayable = UT.Filter(dialogActors, function(actor)
+            return GC.IsPlayable(actor)
+        end)
+
+        if #hasPlayable == 0 then
+            return
+        end
+
+        L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
+
+        if #hasRemovable > 0 then
+            StoryBypass.CancelDialog(dialog, instanceID)
+        end
+
+        for _, actor in ipairs(hasRemovable) do
+            L.Debug("Removing", actor)
+            Osi.DialogRemoveActorFromDialog(instanceID, actor)
+            Osi.DialogRequestStopForDialog(dialog, actor)
+
+            Player.Notify(
+                __(
+                    "Skipped interaction with %s",
+                    Osi.ResolveTranslatedString(Ext.Entity.Get(actor).DisplayName.NameKey.Handle.Handle)
+                ),
+                true
+            )
+            L.Info("Bypass Story", "Dialog cancelled " .. dialog)
+        end
+
+        if #hasPlayable == #dialogActors then
+            Osi.DialogRequestStopForDialog(dialog, dialogActors[1])
+        end
+    end)
+
+    handlers[instanceID](dialog, instanceID)
+end
+
+U.Osiris.On(
+    "DialogActorJoined",
+    4,
+    "after",
+    ifBypassStory(function(dialog, instanceID, actor, speakerIndex)
+        if
+            dialog:match("CAMP_")
+            or dialog:match("Tadpole")
+            or dialog:match("Recruitment")
+            or dialog:match("InParty")
+            or dialog:match("^BHVR_WRLD")
+            or dialog:match("^GLO_Avatar")
+            or dialog:match("^UNI_MagicMirror")
+        then
+            return
+        end
+
+        if Osi.DialogIsCrimeDialog(instanceID) == 1 then
+            Osi.CrimeClearAll()
+        end
+
+        actors[instanceID] = actors[instanceID] or {}
+        table.insert(actors[instanceID], actor)
+        cancelDialog(dialog, instanceID)
+    end)
+)
+
+U.Osiris.On(
+    "UseFinished",
+    3,
+    "before",
+    ifBypassStory(function(character, item, sucess)
+        if GC.IsNonPlayer(character, true) then
+            return
+        end
+        if Osi.IsLocked(item) == 1 then
+            L.Debug("Auto unlocking", item)
+            Player.Notify(__("Auto unlocking"), true)
+            Osi.Unlock(item, character)
+        end
+        if Osi.IsTrapArmed(item) == 1 then
+            L.Debug("Auto disarming", item)
+            Player.Notify(__("Auto disarming"), true)
+            Osi.SetTrapArmed(item, 0)
+        end
+    end)
+)
+U.Osiris.On(
+    "EnteredCombat",
+    2,
+    "after",
+    ifBypassStory(function(object, combatGuid)
+        if not S and GC.IsNonPlayer(object) and GC.IsValid(object) then
+            Osi.LeaveCombat(object)
+            GU.Object.Remove(object)
+            Player.Notify(
+                __(
+                    "Skipped combat with %s",
+                    Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle)
+                ),
+                true
+            )
+        end
+    end)
+)
+
+U.Osiris.On(
+    "Resurrected",
+    1,
+    "after",
+    ifBypassStory(function(character)
+        if not S and GC.IsNonPlayer(character) and GC.IsValid(character) then
+            GU.Object.Remove(character)
+            Player.Notify(
+                __(
+                    "Skipped combat with %s",
+                    Osi.ResolveTranslatedString(Ext.Entity.Get(character).DisplayName.NameKey.Handle.Handle)
+                ),
+                true
+            )
+        end
+    end)
+)
+
+local entityListener = nil
+GameState.OnLoad(function()
+    if not entityListener then
+        entityListener = Ext.Entity.Subscribe(
+            "CanTravel",
+            ifBypassStory(function(e)
+                if e.PartyMember then
+                    StoryBypass.UnblockTravel(e)
+                end
+            end)
+        )
+    end
+end)
+GameState.OnUnload(function()
+    if entityListener then
+        Ext.Entity.Unsubscribe(entityListener)
+        entityListener = nil
+    end
+end)
+
+U.Osiris.On(
+    "TeleportToFromCamp",
+    1,
+    "after",
+    ifBypassStory(function(character)
+        if not GC.IsPlayable(character) then
+            return
+        end
+
+        Schedule(function()
+            if not Ext.Entity.Get(C.NPCCharacters.Jergal).CampPresence then
+                Osi.PROC_GLO_Jergal_MoveToCamp()
+            end
+        end)
+
+        -- workaround for blocked travel
+        -- TODO fix this
+        -- Defer(1000, function()
+        --     if S and not S.OnMap then
+        --         L.Error("Teleport workaround", character)
+        --         -- Scenario.Teleport(character)
+        --     end
+        -- end)
+
+        if not Ext.Entity.Get(character).CampPresence or not S then
+            L.Debug("ReturnToCamp", character)
+            -- need ~2 ticks for changing CampPresence
+            Schedule().After(Schedule).After(function()
+                Player.ReturnToCamp()
+            end)
+        end
+    end)
+)
+
+U.Osiris.On(
+    "LongRestStarted",
+    0,
+    "after",
+    ifBypassStory(function()
+        StoryBypass.EndLongRest()
+    end)
+)
+
 Event.On(
     "ScenarioCombatStarted",
     ifBypassStory(function()
@@ -374,3 +367,17 @@ Event.On(
         StoryBypass.ClearArea(Player.Host())
     end)
 )
+
+GameState.OnLoad(ifBypassStory(function()
+    if not Config.ClearAllEntities then
+        return
+    end
+    if UT.Contains(PersistentVars.RegionsCleared, Player.Region()) then
+        return
+    end
+
+    Schedule(function()
+        StoryBypass.RemoveAllEntities()
+        table.insert(PersistentVars.RegionsCleared, Player.Region())
+    end)
+end))

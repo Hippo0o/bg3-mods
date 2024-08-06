@@ -16,6 +16,7 @@ Mod.PersistentVarsTemplate = {
     GUIOpen = false,
     History = {},
     Currency = 0,
+    RegionsCleared = {},
     Unlocked = {
         ExpMultiplier = false,
         LootMultiplier = false,
@@ -35,6 +36,7 @@ DefaultConfig = {
     ExpMultiplier = 3,
     SpawnItemsAtPlayer = false,
     TurnOffNotifications = false,
+    ClearAllEntities = true,
 }
 Config = UT.DeepClone(DefaultConfig)
 

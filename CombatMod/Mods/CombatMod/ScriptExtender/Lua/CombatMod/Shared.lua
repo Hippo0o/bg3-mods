@@ -82,6 +82,7 @@ WaitUntil = Async.WaitUntil
 RetryUntil = Async.RetryUntil
 Schedule = Async.Schedule
 Defer = Async.Defer
+Debounce = Async.Debounce
 
 ---@type Libs
 Libs = Require("Hlib/Libs")

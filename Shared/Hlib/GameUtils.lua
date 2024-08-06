@@ -216,6 +216,10 @@ function M.Character.IsImportant(character)
         )
 end
 
+function M.Character.IsValid(character)
+    return Osi.IsCharacter(character) == 1 and Osi.IsOnStage(character) == 1
+end
+
 M.Object = {}
 
 -- also works for items
