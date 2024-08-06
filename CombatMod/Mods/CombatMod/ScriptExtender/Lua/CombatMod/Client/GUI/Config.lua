@@ -52,7 +52,10 @@ function Config.Main(tab)
         "BypassStory"
     )
 
+    local c3 = Config.Checkbox(root, "Challenge Mode", "apparently it was too easy", "HardMode")
+
     local c4 = Config.Checkbox(root, "Force Enter Combat", "automatically starts combat between rounds", "ForceEnterCombat")
+
 
     local c5 = Config.Slider(
         root,
@@ -93,7 +96,7 @@ function Config.Main(tab)
     end)
 
     Event.On("ConfigChange", function(config)
-        showStatus("Config updated", true)
+        showStatus(__("Config updated"), true)
 
         Mod.Debug = config.Debug
 
@@ -108,11 +111,12 @@ function Config.Main(tab)
     root:AddSeparator()
     local btn = root:AddButton(__("Persist Config"))
     btn.OnClick = function()
-        showStatus("Persisting config...")
+        showStatus(__("Persisting config..."))
 
         Net.Send("Config", {
             Debug = c1.Checked,
             BypassStory = c2.Checked,
+            HardMode = c3.Checked,
             ForceEnterCombat = c4.Checked,
             RandomizeSpawnOffset = c5.Value[1],
             SpawnItemsAtPlayer = c6.Checked,
@@ -125,7 +129,7 @@ function Config.Main(tab)
     local btn = root:AddButton(__("Reset Config"))
     btn.SameLine = true
     btn.OnClick = function()
-        showStatus("Resetting config...")
+        showStatus(__("Resetting config..."))
 
         Net.Send("Config", { Reset = true })
     end
@@ -133,7 +137,7 @@ function Config.Main(tab)
     local btn = root:AddButton(__("Default Config"))
     btn.SameLine = true
     btn.OnClick = function()
-        showStatus("Default config...")
+        showStatus(__("Default config..."))
 
         Net.Send("Config", { Default = true })
     end
@@ -141,18 +145,18 @@ function Config.Main(tab)
     Event.On("UpdateConfig", function(config)
         Net.Send("Config", config)
 
-        showStatus("Updating config...")
+        showStatus(__("Updating config..."))
     end)
 
     root:AddSeparator()
     local btn = root:AddButton(__("Reset Templates"))
     btn.OnClick = function()
-        showStatus("Resetting templates...")
+        showStatus(__("Resetting templates..."))
         Net.Request("ResetTemplates", { Maps = true, Scenarios = true, Enemies = true }).After(function(event)
             Net.Send("GetTemplates")
             Net.Send("GetSelection")
 
-            showStatus("Templates reset", true)
+            showStatus(__("Templates reset"), true)
         end)
     end
     root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true

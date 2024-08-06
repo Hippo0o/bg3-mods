@@ -64,6 +64,7 @@ External.Validators.Config = tt({
     RandomizeSpawnOffset = { "nil", "number" },
     ExpMultiplier = { "nil", "number" },
     ForceEnterCombat = { "nil", "boolean" },
+    HardMode = { "nil", "boolean" },
     BypassStory = { "nil", "boolean" },
     LootIncludesCampSlot = { "nil", "boolean" },
     SpawnItemsAtPlayer = { "nil", "boolean" },
@@ -287,6 +288,8 @@ function External.ApplyConfig(config)
             Config[field] = config[field]
         end
     end
+
+    Event.Trigger("ConfigChanged", Config)
 end
 
 function External.SaveConfig()
