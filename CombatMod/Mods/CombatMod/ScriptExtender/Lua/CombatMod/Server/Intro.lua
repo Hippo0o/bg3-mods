@@ -62,6 +62,10 @@ function Intro.AskTutSkip()
                         C.NPCCharacters.Jergal
                     )
 
+                    -- maybe fix random cutscene at goblin camp related to Shadowheart
+                    Osi.PROC_GLO_InfernalBox_SetNewOwner(Player.Host())
+                    Osi.PROC_GLO_InfernalBox_AddToOwner()
+
                     Player.Notify(__("Starting items added. Hirelings unlocked."))
                     done = true
                 end)
