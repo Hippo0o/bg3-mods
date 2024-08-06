@@ -1,7 +1,5 @@
 ---@type Mod
 Mod = Require("Hlib/Mod")
-Mod.Debug = false
-Mod.Dev = false
 Mod.EnableRCE = true
 Mod.Prefix = "Trials of Tav"
 Mod.TableKey = "ToT"
