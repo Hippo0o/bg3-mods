@@ -50,10 +50,9 @@ function Object:Teleport(character, withOffset)
     Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1)
 end
 
----@param enemy Enemy
 ---@param spawn number Index of Spawns or -1 for random
----@return boolean
-function Object:SpawnIn(enemy, spawn)
+---@return number x, number y, number z
+function Object:GetSpawn(spawn)
     local pos = nil
 
     if spawn == -1 then
@@ -75,6 +74,15 @@ function Object:SpawnIn(enemy, spawn)
             z = z + U.Random() * U.Random(-offset, offset)
         end
     end)
+
+    return x, y, z
+end
+
+---@param enemy Enemy
+---@param spawn number Index of Spawns or -1 for random
+---@return boolean
+function Object:SpawnIn(enemy, spawn)
+    local x, y, z = self:GetSpawn(spawn)
 
     -- spawned is combat ready
     local success = enemy:Spawn(x, y, z)

@@ -359,7 +359,7 @@ function M.Table.DeepClone(t, seen)
 end
 
 ---@param t table
----@param func function 
+---@param func function
 ---@return table
 function M.Table.Each(t, func)
     local r = {}
@@ -455,10 +455,10 @@ end
 
 -- remove unserializeable values
 ---@param t table
----@param maxEntityDepth number|nil default: 1
+---@param maxEntityDepth number|nil default: 0
 ---@return table
 function M.Table.Clean(t, maxEntityDepth)
-    maxEntityDepth = maxEntityDepth or 1
+    maxEntityDepth = maxEntityDepth or 0
 
     return M.Table.Map(t, function(v, k)
         k = tonumber(k) or tostring(k)
@@ -467,19 +467,16 @@ function M.Table.Clean(t, maxEntityDepth)
             local ok, value = pcall(Ext.Types.Serialize, v)
             if ok then
                 v = value
-            elseif getmetatable(v) == "EntityProxy" then
-                if maxEntityDepth <= 0 then
-                    return tostring(v), k
-                else
-                    v = M.Table.Clean(v:GetAllComponents(), maxEntityDepth - 1)
-                end
+            elseif getmetatable(v) == "EntityProxy" and maxEntityDepth <= 0 then
+                v = M.Table.Clean(v:GetAllComponents(), maxEntityDepth - 1)
             else
-                v = Ext.Json.Parse(Ext.Json.Stringify(v, {
-                    Beautify = false,
-                    StringifyInternalTypes = true,
-                    IterateUserdata = true,
-                    AvoidRecursion = true,
-                }))
+                v = tostring(v)
+                -- v = Ext.Json.Parse(Ext.Json.Stringify(v, {
+                --     Beautify = false,
+                --     StringifyInternalTypes = true,
+                --     IterateUserdata = true,
+                --     AvoidRecursion = true,
+                -- }))
             end
         end
 

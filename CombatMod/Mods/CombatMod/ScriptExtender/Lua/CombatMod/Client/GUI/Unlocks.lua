@@ -195,7 +195,7 @@ function ClientUnlock.BuyChar(root, unlock)
     ---@type ExtuiPopup
     local popup = grp:AddPopup("")
     popup.IDContext = U.RandomId()
-    popup:AddSeparatorText(__("Select character"))
+    popup:AddSeparatorText(__("Buy for character"))
 
     local list = {}
     local function createPopup(unlock)
@@ -216,9 +216,10 @@ function ClientUnlock.BuyChar(root, unlock)
             local uuid = u.Uuid.EntityUuid
 
             ---@type ExtuiButton
-            local b = popup:AddButton(unlock.Id .. "_" .. i)
+            local b = popup:AddButton("")
             b.Label = string.format("%s", name)
             table.insert(list, b)
+            b.Size = { 200, 0 }
 
             if unlock.BoughtBy[uuid] then
                 b.Label = string.format("%s (%s)", name, __("bought"))

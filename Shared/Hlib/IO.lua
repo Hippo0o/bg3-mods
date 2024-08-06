@@ -40,7 +40,7 @@ function M.SaveJson(file, data)
         file = file .. ".json"
     end
 
-    M.Save(file, Ext.Json.Stringify(type(data) == "table" and Utils.Table.Clean(data, 2) or data))
+    M.Save(file, Ext.Json.Stringify(type(data) == "table" and Utils.Table.Clean(data, 0) or data))
 end
 
 return M

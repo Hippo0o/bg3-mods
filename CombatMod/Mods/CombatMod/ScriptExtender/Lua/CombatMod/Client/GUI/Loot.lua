@@ -18,21 +18,21 @@ function Loot.Main(tab)
         root:AddSeparatorText(__("Auto-Pickup for Armor"))
         for _, rarity in pairs(C.ItemRarity) do
             Loot.Rarity(root, rarity, "Armor")
-            root:AddSeparator()
         end
 
         root:AddSeparatorText(__("Auto-Pickup for Weapons"))
         for _, rarity in pairs(C.ItemRarity) do
             Loot.Rarity(root, rarity, "Weapon")
-            root:AddSeparator()
         end
 
         root:AddSeparatorText(__("Auto-Pickup for Objects"))
         for _, rarity in pairs(C.ItemRarity) do
             Loot.Rarity(root, rarity, "Object")
-            root:AddSeparator()
         end
     end)
+
+    local ckb = Config.Checkbox(root, "Drop Camp Clothes", "Include camp clothes in item drops", "LootIncludesCampSlot")
+    ckb.PositionOffset = { 5, 5 }
 end
 
 function Loot.Rarity(root, rarity, type)

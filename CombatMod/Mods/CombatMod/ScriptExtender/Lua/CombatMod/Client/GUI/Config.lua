@@ -91,14 +91,6 @@ function Config.Main(tab)
             showStatus("Config updated", true)
 
             Mod.Debug = config.Debug
-            c1.Checked = config.Debug
-            c2.Checked = config.BypassStory
-            c3.Checked = config.BypassStoryAlways
-            c4.Checked = config.ForceEnterCombat
-            c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
-            c6.Checked = config.SpawnItemsAtPlayer
-            c7.Value = { config.ExpMultiplier, 0, 0, 0 }
-            c8.Checked = config.RoguelikeMode
 
             Event.Trigger("ToggleDebug", config.Debug)
         end)
@@ -177,6 +169,10 @@ function Config.Checkbox(root, label, desc, field, onChange)
         end
     end
 
+    Event.On("ConfigChange", function(config)
+        checkbox.Checked = config[field]
+    end)
+
     return checkbox
 end
 
@@ -187,6 +183,10 @@ function Config.Slider(root, label, desc, field, min, max, onChange)
 
     slider.OnChange = Async.Debounce(500, function(sld)
         Event.Trigger("UpdateConfig", { [field] = sld.Value[1] })
+    end)
+
+    Event.On("ConfigChange", function(config)
+        slider.Value = { config[field], 0, 0, 0 }
     end)
 
     return slider

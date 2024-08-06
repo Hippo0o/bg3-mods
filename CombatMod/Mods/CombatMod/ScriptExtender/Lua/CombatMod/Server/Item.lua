@@ -1,16 +1,16 @@
 local weapons = nil
 local armor = nil
 local objects = nil
-if Ext.Mod.IsModLoaded(C.ModUUID) then
-    weapons = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Weapon")
-    armor = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Armor")
-    objects = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Object")
-else
+-- if Ext.Mod.IsModLoaded(C.ModUUID) then
+--     weapons = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Weapon")
+--     armor = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Armor")
+--     objects = Ext.Stats.GetStatsLoadedBefore(C.ModUUID, "Object")
+-- else
     L.Debug("Mod not loaded. Using all items.")
     weapons = Ext.Stats.GetStats("Weapon")
     armor = Ext.Stats.GetStats("Armor")
     objects = Ext.Stats.GetStats("Object")
-end
+-- end
 
 L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 
@@ -23,6 +23,8 @@ local itemBlacklist = {
     "WPN_KingsKnife", -- its common bro
     "_Destroyed$", -- junk
     "_REF$", -- junk
+    "CONS_FOOD_Soup_Tomato", -- invalid template
+    "ARM_Vanity_Body_Shar", -- invalid template
 }
 
 -------------------------------------------------------------------------------------------------
@@ -159,7 +161,7 @@ function Item.Objects(rarity, forCombat)
         else
             if
                 not (
-                    (cat:match("^Food") and name:match("^CONS_") and not name:match("Soup"))
+                    (cat:match("^Food") and name:match("^CONS_"))
                     -- or cat:match("^Drink")
                     or cat:match("^Ingredient")
                     or cat:match("Potion")

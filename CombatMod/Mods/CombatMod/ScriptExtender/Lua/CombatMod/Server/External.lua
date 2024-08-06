@@ -101,7 +101,6 @@ External.Validators.Map = tt({
     Region = { "string" },
     Enter = { posType },
     Spawns = tt(posType, true),
-    Race = { "nil", U.UUID.IsValid, tt({ "nil", U.UUID.IsValid }, true) },
     Timeline = positionTimelineType,
 })
 
