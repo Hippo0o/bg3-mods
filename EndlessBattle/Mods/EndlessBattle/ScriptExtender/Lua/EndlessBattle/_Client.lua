@@ -28,7 +28,7 @@ GameState.OnLoad(function()
 end, true)
 
 Net.On("ModActive", function(event)
-    WaitFor(function()
+    WaitUntil(function()
         return hostChecked
     end, function()
         local _, toggle, open, close = table.unpack(Require("EndlessBattle/Client/GUI/_Init"))
