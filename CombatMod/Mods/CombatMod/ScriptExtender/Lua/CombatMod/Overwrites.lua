@@ -1,4 +1,3 @@
-local maxValueDefault = Ext.Stats.GetStatsManager().ExtraData.AbilityMaxValue
 local isDirty = false
 
 local function modify()
@@ -7,11 +6,6 @@ local function modify()
     end
 
     L.Debug("Overwrites modify")
-
-    -- mod default values
-    if maxValueDefault < 60 then
-        Ext.Stats.GetStatsManager().ExtraData.AbilityMaxValue = 60
-    end
 
     -- Mindflayer form can't level up
     Ext.StaticData.Get("e6e0499b-c7b7-4f4a-b286-ecede5225ca1", "ShapeshiftRule").BlockLevelUp = false
@@ -25,7 +19,6 @@ local function restore()
 
     L.Debug("Overwrites restore")
 
-    Ext.Stats.GetStatsManager().ExtraData.AbilityMaxValue = maxValueDefault
     Ext.StaticData.Get("e6e0499b-c7b7-4f4a-b286-ecede5225ca1", "ShapeshiftRule").BlockLevelUp = true
 
     isDirty = false
