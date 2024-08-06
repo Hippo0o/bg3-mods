@@ -13,8 +13,12 @@ function ClientUnlock.Main(tab)
         Event.Trigger("CurrencyChanged", state.Currency or 0)
     end)
 
-    Net.Request("GetUnlocks").After(function(event)
-        local unlocks = event.Payload
+    Event.ChainOn("StateChange"):After(function(self, state)
+        local unlocks = state.Unlocks
+        if UT.Size(unlocks) == 0 then
+            return
+        end
+        self:Unregister()
 
         local cols = 3
         local nrows = math.ceil(#unlocks / cols)
@@ -31,6 +35,7 @@ function ClientUnlock.Main(tab)
 end
 
 function ClientUnlock.GetStock(unlock)
+    L.Dump("Unlock", unlock)
     local stock = unlock.Amount - unlock.Bought
     if stock > 0 then
         return __("Stock: %s", unlock.Amount - unlock.Bought .. "/" .. unlock.Amount)

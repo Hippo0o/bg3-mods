@@ -58,7 +58,7 @@ Net.On("GetItems", function(event)
 end)
 
 Net.On("GetUnlocks", function(event)
-    Net.Respond(event, Unlock.GetAll())
+    Net.Respond(event, Unlock.Get())
 end)
 
 Net.On("Start", function(event)
