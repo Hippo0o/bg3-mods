@@ -527,14 +527,17 @@ function Item.GenerateLoot(rolls, lootRates)
     end
 
     local lastCategory = nil
+    local function rollCategory()
+        return ({ "CombatObject", "CombatObject", "Weapon", "Armor", "Weapon", "Armor", "Armor" })[math.random(7)]
+    end
 
     for i = 1, rolls do
         local items = {}
         local fail = 0
 
-        local category = ({ "CombatObject", "Weapon", "Armor" })[math.random(3)]
+        local category = rollCategory()
         if category == lastCategory then
-            category = ({ "CombatObject", "Weapon", "Armor" })[math.random(3)]
+            category = rollCategory()
         end
         lastCategory = category
 
