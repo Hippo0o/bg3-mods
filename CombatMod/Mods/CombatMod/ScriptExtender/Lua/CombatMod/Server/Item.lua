@@ -218,12 +218,8 @@ function Item.Objects(rarity, forCombat)
                 not (
                     (cat:match("^Food") and name:match("^CONS_"))
                     -- or cat:match("^Drink")
-                    or cat:match("^Ingredient")
                     -- alchemy items
-                    -- or name:match("^OBJ_Crystal_")
-                    or name:match("^CONS_Mushrooms_")
-                    or name:match("^CONS_Herbs_")
-                    or name:match("^BOOK_Alchemy_") -- TODO add books and such
+                    or name:match("^ALCH_Ingredient")
                 )
             then
                 return false
@@ -496,7 +492,7 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
             if bonusCategory == "Object" then
                 items = Item.Objects(rarity, true)
                 if #items > 0 then
-                    local isPotion = U.Random() < 0.33
+                    local isPotion = U.Random() < 0.20
                     if isPotion then
                         items = UT.Filter(items, function(item)
                             return item.Name:match("^OBJ_Potion_Healing")
@@ -505,13 +501,6 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
                 end
             elseif bonusCategory == "Weapon" then
                 items = Item.Weapons(rarity)
-                if #items > 0 then
-                    local bySlot = UT.GroupBy(items, "Slot")
-                    local slots = UT.Keys(bySlot)
-                    local randomSlot = slots[U.Random(#slots)]
-                    L.Debug("Rolling Weapon loot slot:", randomSlot, rarity)
-                    items = UT.Values(bySlot[randomSlot])
-                end
             elseif bonusCategory == "Armor" then
                 items = Item.Armor(rarity)
                 if #items > 0 then

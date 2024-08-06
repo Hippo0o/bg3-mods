@@ -387,6 +387,7 @@ return UT.Combine({
             --     Osi.PROC_CharacterFullRestore(p.Uuid.EntityUuid)
             --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
             -- end
+            Osi.PROC_GLO_PartyMembers_TempRestore(character)
             Osi.PROC_CharacterFullRestore(character)
             Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
         end,
@@ -463,7 +464,7 @@ return UT.Combine({
     {
         Id = "BuyBrand",
         Name = Localization.Get("h7cc7adeag848fg491cga683g0faeaea082c3"),
-        Icon = "Item_UNI_Gob_Priest_Shield",
+        Icon = "Item_TOOL_GOB_Branding_Tool_A",
         Description = "Bear the Absolute's Brand.",
         Cost = 20,
         Amount = 2,
@@ -528,11 +529,11 @@ return UT.Combine({
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
-            if Osi.HasActiveStatus(character, "END_ALLYABILITIES_BHAALBUFF") ~= 1 then
+            if Osi.HasAppliedStatus(character, "END_ALLYABILITIES_BHAALBUFF") ~= 1 then
                 Osi.ApplyStatus(character, "END_ALLYABILITIES_BHAALBUFF", -1)
             end
         end,
-        OnReapply = Async.Throttle(1000, function(self) ---@param self Unlock
+        OnReapply = Async.Debounce(100, function(self) ---@param self Unlock
             for uuid, _ in pairs(self.BoughtBy) do
                 self:OnBuy(uuid)
             end
@@ -547,6 +548,7 @@ return UT.Combine({
         Character = true,
         OnBuy = function(self, character)
             Osi.AddSpell(character, "Shout_DarkUrge_Slayer", 1)
+            Osi.SetTag(character, "f09707c1-7c58-4611-a06b-ce34dd2826c6")
         end,
     },
 }, multis, hagHair(), ngPlus)

@@ -37,7 +37,12 @@ local Object = Libs.Struct({
 ---@param round number
 ---@param enemy Enemy
 function Object:AddEnemy(round, enemy)
-    self.Enemies[round] = self.Enemies[round] or {}
+    for i = 1, round do
+        if self.Enemies[i] == nil then
+            self.Enemies[i] = {}
+        end
+    end
+
     table.insert(self.Enemies[round], enemy)
 end
 
@@ -154,9 +159,6 @@ function Action.StartCombat()
         return
     end
 
-    -- remove corpses from previous combat
-    Enemy.Cleanup()
-
     Current().Map:PingSpawns()
 
     Event.Trigger("ScenarioCombatStarted", Current())
@@ -174,15 +176,25 @@ function Action.SpawnRound()
         return
     end
 
+    local triesToSpawn = #s.Map.Spawns
+    if triesToSpawn < 5 then
+        triesToSpawn = 5
+    end
+
     for i, e in pairs(toSpawn) do
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
-        RetryUntil(function()
+        RetryUntil(function(_, triesLeft)
             local posIndex = s:GetPosition(i)
+            if triesLeft < triesToSpawn / 2 then
+                posIndex = -1
+            end
+
             L.Debug("Spawning enemy.", e:GetId(), posIndex)
+
             return s.Map:SpawnIn(e, posIndex)
         end, {
             immediate = true,
-            retries = #s.Map.Spawns,
+            retries = triesToSpawn,
             interval = 500,
         }).After(function()
             Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
@@ -237,6 +249,9 @@ function Action.MapEntered()
         return
     end
 
+    -- remove corpses from previous combat
+    Enemy.Cleanup()
+
     Event.Trigger("ScenarioMapEntered", Current())
 
     for _, p in pairs(GE.GetParty()) do
@@ -262,7 +277,6 @@ function Action.MapEntered()
             end) == nil
         end, function()
             if tostring(S) == id then
-                Current().Map:PingSpawns()
                 Action.StartCombat()
             end
         end)
@@ -520,6 +534,8 @@ Scenario.Teleport = Async.Throttle(3000, function()
     for _, character in pairs(GU.DB.GetPlayers()) do
         Map.TeleportTo(s.Map, character)
     end
+
+    Event.Trigger("ScenarioTeleporting", s)
 end)
 
 function Scenario.CheckEnded()
@@ -735,7 +751,7 @@ U.Osiris.On(
 )
 
 Event.On(
-    "ScenarioTeleport",
+    "ScenarioTeleported",
     ifScenario(function(target)
         if not S.OnMap and U.UUID.Equals(target, Player.Host()) then
             S.OnMap = true
@@ -858,7 +874,11 @@ U.Osiris.On(
         local spawnedKilled = false
         for i, e in ipairs(s.SpawnedEnemies) do
             if U.UUID.Equals(e.GUID, uuid) then
-                table.insert(s.KilledEnemies, e)
+                -- avoid rewarding summons
+                if Osi.IsSummon(e.GUID) ~= 1 then
+                    table.insert(s.KilledEnemies, e)
+                end
+
                 table.remove(s.SpawnedEnemies, i)
 
                 -- might revive and rejoin battle

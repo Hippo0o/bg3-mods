@@ -86,7 +86,7 @@ function Player.Notify(message, instant, ...)
 
     RetryUntil(function()
         return buffering[1] == id
-    end, { retries = 10, interval = 500 }).After(function()
+    end, { retries = 10, interval = 1000 }).After(function()
         Net.Send("Notification", { Duration = 3, Text = message })
         Defer(1000, remove)
     end).Catch(remove)
@@ -164,6 +164,10 @@ function Player.TeleportToCamp()
             if campEntryFallback then
                 Osi.TeleportTo(entity.Uuid.EntityUuid, campEntryFallback, "", 1, 1, 1, 1, 1)
                 Osi.PROC_Camp_TeleportToCamp(entity.Uuid.EntityUuid, campEntryFallback)
+            end
+
+            if Osi.IsDead(entity.Uuid.EntityUuid) == 1 then
+                Osi.SetHitpoints(entity.Uuid.EntityUuid, 20)
             end
         end
     end
