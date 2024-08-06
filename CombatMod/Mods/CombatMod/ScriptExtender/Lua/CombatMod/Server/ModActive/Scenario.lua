@@ -189,7 +189,6 @@ function Action.SpawnHelper()
     local s = Current()
 
     if s.CombatHelper then
-        L.Error("Combat helper already spawned.")
         return
     end
 
@@ -206,10 +205,6 @@ function Action.SpawnHelper()
 
     Osi.SetFaction(helper, C.ScenarioHelper.Faction)
     s.CombatHelper = helper
-
-    for _, player in pairs(GU.DB.GetPlayers()) do
-        Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), s.CombatHelper, player)
-    end
 
     L.Debug("Combat helper spawned.", helper)
 end
@@ -236,15 +231,19 @@ function Action.UpdateHelperName()
 end
 
 function Action.StartCombat()
-    if Current().CombatId ~= nil then
+    local s = Current()
+    if s.CombatId ~= nil then
         L.Error("Combat already started.")
         return
     end
 
-    Current().Map:PingSpawns()
+    s.Map:PingSpawns()
     Action.SpawnHelper()
+    for _, player in pairs(GU.DB.GetPlayers()) do
+        Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), s.CombatHelper, player)
+    end
 
-    Event.Trigger("ScenarioCombatStarted", Current())
+    Event.Trigger("ScenarioCombatStarted", s)
     Action.StartRound()
 end
 
@@ -359,6 +358,7 @@ function Action.MapEntered()
     if Current():HasStarted() then
         return
     end
+    Action.SpawnHelper()
 
     Schedule(function()
         -- remove corpses from previous combat
@@ -367,6 +367,10 @@ function Action.MapEntered()
         Event.Trigger("ScenarioMapEntered", Current())
         Player.Notify(__("Entered combat area."))
     end)
+
+    for _, p in pairs(GE.GetParty()) do
+        Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
+    end
 
     local id = tostring(S())
     WaitTicks(33, function()
@@ -377,24 +381,41 @@ function Action.MapEntered()
                     return
                 end
 
-                -- check if no character in forced turnbased anymore
+                -- check if no character in forced turnbased anymore or all ended turn
                 return UT.Find(GE.GetParty(), function(e)
-                    return e.TurnBased
+                    return e.IsInTurnBasedMode
                         and e.TurnBased.ActedThisRoundInCombat == false
                         and e.TurnBased.RequestedEndTurn == false
                         and e.TurnBased.IsInCombat_M == true
                 end) == nil
             end,
-            function() -- TODO need to find the right timing or actions might not refresh because round never ended for that character
+            function()
                 if tostring(S()) == id then
-                    for _, p in pairs(GE.GetParty()) do
-                        -- Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 0)
-                        Osi.EndTurn(p.Uuid.EntityUuid)
-                    end
-
                     WaitTicks(6, function()
-                        Action.StartCombat()
-                    end)
+                        local count = 0
+
+                        for _, p in pairs(GE.GetParty()) do
+                            -- if still in turn based, return early
+                            if p.IsInTurnBasedMode then
+                                return true
+                            end
+
+                            Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
+                            count = count + 1
+                        end
+
+                        return WaitUntil(function(self)
+                            if tostring(S()) ~= id then
+                                self:Clear()
+                                return
+                            end
+
+                            -- check if party in forced turnbased again
+                            return #UT.Filter(GE.GetParty(), function(e)
+                                return e.IsInTurnBasedMode
+                            end) == count
+                        end)
+                    end):After(Action.StartCombat)
                 end
             end
         )
@@ -661,8 +682,8 @@ end
 Scenario.Teleport = Async.Throttle(3000, function()
     local s = Current()
 
-    for _, character in pairs(GU.DB.GetPlayers()) do
-        s.Map:Teleport(character)
+    for _, p in pairs(GE.GetParty()) do
+        s.Map:Teleport(p.Uuid.EntityUuid)
     end
 
     Event.Trigger("ScenarioTeleporting", s)
@@ -802,7 +823,7 @@ Event.On(
         if map.Name == s.Map.Name then
             if not s.OnMap and U.UUID.Equals(character, Player.Host()) then
                 s.OnMap = true
-                WaitTicks(20, Action.MapEntered)
+                WaitTicks(33, Action.MapEntered)
             end
 
             Event.Trigger("ScenarioTeleported", character)

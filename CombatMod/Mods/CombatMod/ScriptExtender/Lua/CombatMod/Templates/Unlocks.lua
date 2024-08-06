@@ -304,21 +304,9 @@ return UT.Combine({
             Osi.SetFaction(guid, C.CompanionFaction)
             Osi.SetTag(guid, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
             Osi.AddPassive(guid, "ShortResting")
-            Osi.ApplyStatus(guid, "DISINTEGRATE_DEATH", -1)
             Osi.AddPartyFollower(guid, character)
 
             -- Osi.Follow(guid, character)
-        end,
-        OnReapply = function(self) ---@param self Unlock
-            if self.Bought > 0 then
-                for _, p in pairs(GE.GetParty()) do
-                    if p.ServerCharacter.Template.Id == "6efb2704-a025-49e0-ba9f-2b4f62dd2195" then
-                        if p.Death then
-                            GU.Object.Remove(p.Uuid.EntityUuid)
-                        end
-                    end
-                end
-            end
         end,
     },
     {
@@ -428,7 +416,10 @@ return UT.Combine({
         Id = "BuyGodBlessing",
         Name = Localization.Get("h86fef9afgeb0eg45e8g8388gd8e9f7c619b7"),
         Icon = "GenericIcon_Intent_Buff",
-        Description = "Gain +2 bonus to all Saving throws.",
+        Description = Localization.Get(
+            "he4120ec1gc489g4f2fg947cgbe6449fed394",
+            Ext.Stats.Get("LOW_STORMSHORETABERNACLE_GODBLESSED").DescriptionParams
+        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",), --"Gain +2 bonus to all Saving throws.",
         Cost = 60,
         Amount = nil,
         Character = true,
@@ -439,6 +430,7 @@ return UT.Combine({
     {
         Id = "BuyLoviatar",
         Name = Localization.Get("h80729873g86d9g4ddbga01egeebe788f1733"),
+        Description = Localization.Get("hef31fe63ga576g45c0ga580gf2b0d8fa0b35"),
         Icon = "statIcons_GOB_CalmnessInPain",
         Cost = 40,
         Amount = nil,
@@ -450,7 +442,7 @@ return UT.Combine({
     {
         Id = "BuyVoloErsatz",
         Name = Localization.Get("h232cc24ega0f9g4f4dgb5d3g46ab59579d4b"),
-        Description = "Grants See Invisibility.",
+        Description = Localization.Get("h9d8550edg6d54g4113gbbdcge6d99b8b2a2f"),
         Icon = "Item_DEN_VoloOperation_ErsatzEye",
         Cost = 10,
         Amount = 1,
@@ -463,7 +455,7 @@ return UT.Combine({
         Id = "BuyBrand",
         Name = Localization.Get("h7cc7adeag848fg491cga683g0faeaea082c3"),
         Icon = "Item_TOOL_GOB_Branding_Tool_A",
-        Description = "Bear the Absolute's Brand.",
+        Description = __("Bear the Absolute's Brand."),
         Cost = 20,
         Amount = 2,
         Character = true,
@@ -475,7 +467,7 @@ return UT.Combine({
         Id = "BuyBOOOALBlessing",
         Name = Localization.Get("hc6ac3045g2c16g4d9dgb178gfa9c8c0928b6"),
         Icon = "statIcons_BoooalsBenediction",
-        Description = "Advantage on Attack rolls against Bleeding cratures.",
+        Description = Localization.Get("hf9325d87g8da3g4472g9791gdd55a4bad685"), --"Advantage on Attack rolls against Bleeding cratures.",
         Cost = 50,
         Amount = 1,
         Character = true,
@@ -487,7 +479,7 @@ return UT.Combine({
         Id = "BuyFalseLife",
         Name = Localization.Get("hcb11494cg5afbg4068g8de7g50ccdae27cfe"),
         Icon = "GenericIcon_Intent_Healing",
-        Description = "Grants 20 Temporary HP after Long Rest.",
+        Description = Localization.Get("hce17bfdcg2d30g4a97g9850g0219c6a5116a", 20), --"Grants 20 Temporary HP after Long Rest.",
         Cost = 80,
         Amount = 1,
         Character = true,
@@ -498,6 +490,10 @@ return UT.Combine({
     {
         Id = "BuyWakeTheDead",
         Name = Localization.Get("h107871e3gd9c6g4091g828fg3608cb2cb03f"),
+        Description = Localization.Get(
+            "h0d543bfeg7506g45e8g84fag0350fb67b494",
+            Ext.Stats.Get("Target_CursedTome_WakeTheDead").DescriptionParams
+        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Icon = "Spell_WakeTheDead",
         Cost = 80,
         Amount = 1,
@@ -510,7 +506,10 @@ return UT.Combine({
         Id = "BuyVampireAscendant",
         Name = Localization.Get("h7c8ce380g0d56g4807gb60cg58e283b4ecdb"),
         Icon = "Action_Monster_Bulette_Bite",
-        Description = "Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
+        Description = Localization.Get(
+            "hf9a3c136gfa53g4170g9eeega20ced9c9111",
+            Ext.Stats.Get("LOW_Astarion_VampireAscendant").DescriptionParams
+        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Cost = 300,
         Amount = 1,
         Character = true,
@@ -522,7 +521,7 @@ return UT.Combine({
         Id = "BuyBloodyInheritance",
         Name = Localization.Get("hc4d08908g6040g4e50g889cg0ef6e267b6e0"),
         Icon = "PassiveFeature_Generic_Blood",
-        Description = "Gain Stunning Gaze and Critical Hit requirement reduced by 2.",
+        Description = Localization.Get("h473ffdccgc70fg4761gaa67gbf0fb07d475f"), --"Gain Stunning Gaze and Critical Hit requirement reduced by 2.",
         Cost = 80,
         Amount = 1,
         Character = true,
@@ -540,6 +539,7 @@ return UT.Combine({
     {
         Id = "BuySlayer",
         Name = Localization.Get("h7ee059fega56bg48d4g99abg0a1ee50238d1"),
+        Description = Localization.Get("h67dd3fb6ge300g42f0gaea3g0ecb374132c7", 10),
         Icon = "Action_DarkUrge",
         Cost = 100,
         Amount = 1,

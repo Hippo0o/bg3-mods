@@ -55,7 +55,13 @@ function Localization.New(text, version, handle)
 
     return obj
 end
+local stackNew = {}
 function Localization:ExtendStack(stack)
+    if not stackNew[self] then
+        self.Stack = {}
+        stackNew[self] = true
+    end
+
     if stack == "" then -- should not happen
         return
     end
@@ -76,6 +82,11 @@ GameState.OnLoadSession(function()
     local cached = IO.LoadJson(M.FilePath .. ".json") or {}
     for k, v in pairs(cached) do
         M.Translations[k] = Localization.New(v.Text, v.Version, v.Handle)
+        if type(v.Stack) ~= "table" then
+            v.Stack = { v.Stack }
+        end
+
+        M.Translations[k].Stack = v.Stack
     end
 end)
 
@@ -106,7 +117,7 @@ function M.Translate(text, version)
             M.Translations[key] = Localization.New(text, version)
         end
 
-        M.Translations[key]:ExtendStack(stack)
+        Localization.ExtendStack(M.Translations[key], stack)
 
         if Ext.IsClient() then
             Net.Request("_TranslationRequest", M.Translations):After(function(event)
@@ -124,9 +135,15 @@ function M.Translate(text, version)
 end
 
 ---@param handle string
+---@vararg any
 ---@return string
-function M.Get(handle)
-    return Ext.Loca.GetTranslatedString(handle)
+function M.Get(handle, ...)
+    local str = Ext.Loca.GetTranslatedString(handle):gsub("<LSTag .->(.-)</LSTag>", "%1"):gsub("<br>", "\n")
+    for i, v in pairs({ ... }) do
+        str = str:gsub("%[" .. i .. "%]", v)
+    end
+
+    return str
 end
 
 ---@param strict boolean
@@ -171,12 +188,12 @@ function M.BuildLocaFile()
 
         local handle = translation.Handle:gsub(";%d+$", "") -- handle should not have a version
 
-        local stack = ""
-        for _, v in ipairs(translation.Stack) do
-            stack = stack .. string.format("<!-- %s -->\n", v)
+        local stack = {}
+        for i, v in ipairs(translation.Stack) do
+            table.insert(stack, string.format("    <!-- %s -->", v))
         end
 
-        table.insert(entries, string.format(xmlEntry, stack, handle, 1, translation.Text))
+        table.insert(entries, string.format(xmlEntry, table.concat(stack, "\n"), handle, 1, translation.Text))
     end
 
     local loca = string.format(xmlWrap, table.concat(entries, "\n"))
