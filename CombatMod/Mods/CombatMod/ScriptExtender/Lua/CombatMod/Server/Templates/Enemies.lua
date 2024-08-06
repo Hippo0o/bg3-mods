@@ -2937,7 +2937,7 @@ return {
         LevelOverride = 11,
         Name = "Hag_Green_Act3Hag_Double",
         SpellSet = "CommonBeastActions",
-        Stats = "HAG_AuntieEthel_Double",
+        Stats = "HAG_AuntieEthel",
         TemplateId = "2a9aa281-93fd-4bda-8c41-59006f57ff94",
         Tier = "epic",
     },
