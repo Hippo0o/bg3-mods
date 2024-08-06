@@ -239,8 +239,8 @@ function External.Templates.PatchUnlocks(func)
     table.insert(patchUnlocks, func)
 end
 
-function External.Templates.GetMaps(defaults)
-    local data = External.File.Import("Maps") or defaults or {}
+function External.Templates.GetMaps()
+    local data = External.File.Import("Maps") or Templates.GetMaps()
 
     data = UT.Combine({}, addedMaps, data)
 
@@ -257,8 +257,8 @@ function External.Templates.GetMaps(defaults)
     return UT.Values(data)
 end
 
-function External.Templates.GetScenarios(defaults)
-    local data = External.File.Import("Scenarios") or defaults or {}
+function External.Templates.GetScenarios()
+    local data = External.File.Import("Scenarios") or Templates.GetScenarios()
 
     data = UT.Combine({}, addedScenarios, data)
 
@@ -275,8 +275,8 @@ function External.Templates.GetScenarios(defaults)
     return UT.Values(data)
 end
 
-function External.Templates.GetEnemies(defaults)
-    local data = External.File.Import("Enemies") or defaults or {}
+function External.Templates.GetEnemies()
+    local data = External.File.Import("Enemies") or Templates.GetEnemies()
 
     data = UT.Combine({}, addedEnemies, data)
 
@@ -293,8 +293,8 @@ function External.Templates.GetEnemies(defaults)
     return UT.Values(data)
 end
 
-function External.Templates.GetUnlocks(defaults)
-    local data = UT.Combine({}, addedUnlocks, defaults)
+function External.Templates.GetUnlocks()
+    local data = UT.Combine({}, addedUnlocks, Templates.GetUnlocks())
 
     for k, unlock in pairs(data) do
         for _, patch in ipairs(patchUnlocks) do
@@ -309,10 +309,7 @@ function External.Templates.GetUnlocks(defaults)
     return UT.Values(data)
 end
 
-local originalLootRates = UT.DeepClone(C.LootRates)
-function External.ExportLootRates()
-    External.File.Export("LootRates", originalLootRates)
-end
+
 function External.LoadLootRates()
     local data = External.File.Import("LootRates") or {}
 
@@ -324,7 +321,7 @@ function External.LoadLootRates()
     local ok = xpcall(function()
         C.LootRates = UT.Merge(C.LootRates, data)
     end, function(e)
-        C.LootRates = originalLootRates
+        C.LootRates = orig
     end)
 
     return ok

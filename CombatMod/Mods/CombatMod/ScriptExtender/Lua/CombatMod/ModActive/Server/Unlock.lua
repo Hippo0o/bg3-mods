@@ -1,5 +1,3 @@
-local unlocks = Require("CombatMod/Templates/Unlocks.lua")
-
 local persistentUnlocks = IO.LoadJson("Save/Unlocks.json") or {}
 local function persistUnlock(unlock)
     persistentUnlocks[unlock.Id] = unlock.Bought
@@ -121,7 +119,7 @@ function Unlock.CalculateReward(scenario)
 end
 
 function Unlock.GetTemplates()
-    return External.Templates.GetUnlocks(UT.DeepClone(unlocks))
+    return External.Templates.GetUnlocks()
 end
 
 function Unlock.Get()

@@ -1,6 +1,3 @@
-local scenarioTemplates = Require("CombatMod/Templates/Scenarios.lua")
-External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
-
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Structures                                         --
@@ -464,11 +461,7 @@ end
 
 ---@return table
 function Scenario.GetTemplates()
-    return External.Templates.GetScenarios(scenarioTemplates)
-end
-
-function Scenario.ExportTemplates()
-    External.File.Export("Scenarios", scenarioTemplates)
+    return External.Templates.GetScenarios()
 end
 
 ---@return Scenario|nil
@@ -725,9 +718,10 @@ function Scenario.CombatSpawned(specific)
                 return true
             end
 
+            enemy:Combat(true)
+
             Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, C.EnemyFaction, s.CombatHelper, enemy.GUID)
 
-            enemy:Combat(true)
             if S().CombatId then -- TODO check if works
                 Osi.PROC_EnterCombatByID(enemy.GUID, S().CombatId)
             end
@@ -827,8 +821,6 @@ U.Osiris.On(
             return
         end
 
-        Osi.ResumeCombat(combatGuid)
-
         if Osi.IsCharacter(object) ~= 1 then
             return
         end
@@ -838,6 +830,8 @@ U.Osiris.On(
         if not GC.IsNonPlayer(guid) then
             return
         end
+
+        Osi.ResumeCombat(combatGuid)
 
         if UT.Find(s.SpawnedEnemies, function(e)
             return U.UUID.Equals(e.GUID, guid)
@@ -978,6 +972,11 @@ U.Osiris.On(
                     return Defer(1000)
                 end)
                 :After(function()
+                    if not Player.InCombat() then
+                        Osi.PauseCombat(s.CombatId)
+                        return
+                    end
+
                     Osi.EndTurn(uuid)
                 end)
         end

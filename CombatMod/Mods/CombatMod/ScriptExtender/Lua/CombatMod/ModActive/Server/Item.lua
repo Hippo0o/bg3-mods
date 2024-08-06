@@ -1,5 +1,3 @@
-local itemBlacklist = Require("CombatMod/Templates/ItemBlacklist.lua")
-
 local weapons = nil
 local armor = nil
 local objects = nil
@@ -201,7 +199,7 @@ function Item.Objects(rarity, forCombat)
         local tab = stat.InventoryTab
         local type = stat.ItemUseType
 
-        if US.Contains(name, itemBlacklist, true) then
+        if US.Contains(name, Templates.GetItemBlacklist(), true) then
             return false
         end
 
@@ -272,7 +270,7 @@ function Item.Armor(rarity)
         end
         local slot = stat.Slot
 
-        if US.Contains(name, itemBlacklist, true) then
+        if US.Contains(name, Templates.GetItemBlacklist(), true) then
             return false
         end
 
@@ -324,7 +322,7 @@ function Item.Weapons(rarity)
             return false
         end
 
-        if US.Contains(name, itemBlacklist, true) then
+        if US.Contains(name, Templates.GetItemBlacklist(), true) then
             return false
         end
 

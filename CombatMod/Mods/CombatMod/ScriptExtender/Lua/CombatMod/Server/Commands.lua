@@ -278,21 +278,21 @@ function Commands.Reload()
     if m then
         L.Info(#m, "Maps loaded.")
     else
-        Map.ExportTemplates()
+        Templates.ExportMaps()
     end
 
     local s = External.Templates.GetScenarios()
     if s then
         L.Info(#s, "Scenarios loaded.")
     else
-        Scenario.ExportTemplates()
+        Templates.ExportScenarios()
     end
 
     local e = External.Templates.GetEnemies()
     if e then
         L.Info(#e, "Enemies loaded.")
     else
-        Enemy.ExportTemplates()
+        Templates.ExportEnemies()
     end
 end
 

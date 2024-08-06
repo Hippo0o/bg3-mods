@@ -43,16 +43,16 @@ end)
 
 Net.On("ResetTemplates", function(event)
     if event.Payload.Scenarios then
-        Scenario.ExportTemplates()
+        Templates.ExportScenarios()
     end
     if event.Payload.Maps then
-        Map.ExportTemplates()
+        Templates.ExportMaps()
     end
     if event.Payload.Enemies then
-        Enemy.ExportTemplates()
+        Templates.ExportEnemies()
     end
     if event.Payload.LootRates then
-        External.ExportLootRates()
+        Templates.ExportLootRates()
     end
 
     Net.Respond(event, { true })

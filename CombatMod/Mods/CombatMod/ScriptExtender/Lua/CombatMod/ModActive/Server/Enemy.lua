@@ -1,8 +1,3 @@
-local enemyTemplates = Require("CombatMod/Templates/Enemies.lua")
-External.File.ExportIfNeeded("Enemies", enemyTemplates)
-
-L.Debug("Enemies loaded", #enemyTemplates)
-
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Structures                                         --
@@ -530,7 +525,7 @@ function Enemy.GetTemplates()
         return cache
     end
 
-    cache = External.Templates.GetEnemies(enemyTemplates)
+    cache = External.Templates.GetEnemies()
 
     return cache
 end
@@ -553,10 +548,6 @@ function Enemy.Iter(filter)
             return i, Object.New(templates[j])
         end
     end
-end
-
-function Enemy.ExportTemplates()
-    External.File.Export("Enemies", enemyTemplates)
 end
 
 ---@param object string GUID

@@ -57,12 +57,14 @@ DefaultConfig = {
 Config = UT.DeepClone(DefaultConfig)
 
 External = {}
+Templates = {}
+
 Require("CombatMod/Server/External")
+Require("CombatMod/Server/Templates")
 
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)
 
-External.File.ExportIfNeeded("LootRates", C.LootRates)
 External.LoadLootRates()
 
 Intro = {}

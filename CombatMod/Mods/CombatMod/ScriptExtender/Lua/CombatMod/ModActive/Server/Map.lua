@@ -1,6 +1,3 @@
-local mapTemplates = Require("CombatMod/Templates/Maps.lua")
-External.File.ExportIfNeeded("Maps", mapTemplates)
-
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Structures                                         --
@@ -189,17 +186,13 @@ end
 function Map.GetTemplates(region)
     local r = {}
 
-    for _, m in ipairs(External.Templates.GetMaps(mapTemplates)) do
+    for _, m in ipairs(External.Templates.GetMaps()) do
         if region == nil or m.Region == region then
             table.insert(r, m)
         end
     end
 
     return r
-end
-
-function Map.ExportTemplates()
-    External.File.Export("Maps", mapTemplates)
 end
 
 ---@param region string|nil
@@ -218,11 +211,17 @@ function Map.Restore(map)
     return Object.Init(map)
 end
 
+---@param guid string GUID
+---@param x number
+---@param y number
+---@param z number
+---@param offset number
+---@return boolean
 function Map.CorrectPosition(guid, x, y, z, offset)
     local distance = Osi.GetDistanceToPosition(guid, x, y, z)
     local _, y2, _ = Osi.GetPosition(guid)
     if not y2 then
-        return
+        return false
     end
 
     if distance > offset * 1.5 or y2 < y - 5 or y2 > y + 5 then
@@ -231,4 +230,6 @@ function Map.CorrectPosition(guid, x, y, z, offset)
         Osi.PROC_Foop(guid)
         return true
     end
+
+    return false
 end
