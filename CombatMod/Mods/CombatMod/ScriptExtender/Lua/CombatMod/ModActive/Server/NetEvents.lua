@@ -1,4 +1,4 @@
-SyncState = Debounce(300, function()
+function SyncState(peerId)
     Net.Send(
         "SyncState",
         UT.Filter(PersistentVars, function(v, k)
@@ -6,11 +6,15 @@ SyncState = Debounce(300, function()
                 return false
             end
             return true
-        end, true)
+        end, true),
+        nil,
+        peerId
     )
-end)
+end
 
-Net.On("SyncState", SyncState)
+Net.On("SyncState", function(event)
+    SyncState(event.PeerId)
+end)
 
 Net.On("IsHost", function(event)
     Net.Respond(event, event:IsHost())
@@ -25,6 +29,9 @@ end)
 Net.On("GetSelection", function(event)
     Net.Respond(event, {
         Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
+            if PersistentVars.RogueModeActive and not v.RogueLike then
+                return nil
+            end
             return { Id = k, Name = v.Name }
         end),
         Maps = UT.Map(Map.GetTemplates(), function(v, k)
@@ -85,10 +92,6 @@ Net.On("GetItems", function(event)
     })
 end)
 
-Net.On("GetUnlocks", function(event)
-    Net.Respond(event, Unlock.Get())
-end)
-
 Net.On("Start", function(event)
     local scenarioName = event.Payload.Scenario
     local mapName = event.Payload.Map
@@ -109,11 +112,7 @@ Net.On("Start", function(event)
         Net.Respond(event, { false, "Map error" })
         return
     end
-    if template.Name == C.RoguelikeScenario and not Mod.Debug then
-        GameMode.StartRoguelike()
-    else
-        Scenario.Start(template, map)
-    end
+    Scenario.Start(template, map)
 
     Net.Respond(event, { true, __("Scenario %s started.", template.Name) })
 end)
@@ -201,6 +200,7 @@ end)
 Net.On("WindowOpened", function(event)
     PersistentVars.GUIOpen = true
     Event.Trigger("ModActive")
+    SyncState(event.PeerId)
 end)
 Net.On("WindowClosed", function(event)
     PersistentVars.GUIOpen = false
@@ -286,6 +286,7 @@ end
 
 Event.On("RogueModeChanged", broadcastConfig)
 
+Event.On("RogueModeChanged", broadcastState)
 Event.On("ScenarioStarted", broadcastState)
 Event.On("ScenarioMapEntered", broadcastState)
 Event.On("ScenarioRoundStarted", broadcastState)

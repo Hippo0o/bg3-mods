@@ -139,7 +139,7 @@ External.Validators.ItemFilter = tt({
 })
 
 local function validateTimelineEntry(value)
-    if type(value) == "string" and Enemy.Find(value) ~= nil then
+    if type(value) == "string" and (not Enemy or Enemy.Find(value) ~= nil) then
         return true
     end
 
@@ -154,7 +154,8 @@ External.Validators.Scenario = tt({
         }, true),
     },
     Positions = positionTimelineType,
-    Map = { "nil", "string" },
+    OnStart = { "nil", "function" },
+    Map = { "nil", "string", "function" },
     Loot = {
         "nil",
         lootRatesType,
@@ -404,10 +405,6 @@ function External.ApplyConfig(config)
         if config[field] ~= nil then
             if field == "Debug" then
                 Mod.Debug = config[field]
-            end
-
-            if field == "StatsCap" then
-                Event.Trigger("ChangeStatsCap", config[field])
             end
 
             Config[field] = config[field]

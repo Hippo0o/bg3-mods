@@ -38,35 +38,42 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
     if Mod.Dev then
         Log.Debug("GameState", e.FromState, e.ToState)
     end
-    isLoading = true
+    isLoading = false
 
     if e.FromState == "LoadSession" and e.ToState == "LoadLevel" then
+        isLoading = true
         Event.Trigger(M.EventLoadSession)
         M.InitState = M.InitStateEnum.SessionLoaded
     elseif (e.FromState == "Sync" or e.FromState == "PrepareRunning") and e.ToState == "Running" then
         Event.Trigger(M.EventLoad)
         M.InitState = M.InitStateEnum.Running
-        isLoading = false
     elseif e.FromState == "Running" and e.ToState == "Save" then
+        isLoading = true
         Event.Trigger(M.EventSave)
     elseif e.FromState == "Save" and e.ToState == "Running" then
         Event.Trigger(M.EventLoad)
     elseif (e.FromState == "StartLoading" or e.FromState == "Running") and e.ToState == "Disconnect" then
+        isLoading = true
         Event.Trigger(M.EventUnload)
     elseif (e.FromState == "Running" or e.FromState == "Idle") and e.ToState == "UnloadLevel" then
+        isLoading = true
         Event.Trigger(M.EventUnload)
     elseif e.FromState == "UnloadSession" and e.ToState == "LoadSession" then
+        isLoading = true
         Event.Trigger(M.EventUnloadSession)
     elseif e.FromState == "Disconnect" and e.ToState == "UnloadLevel" then
+        isLoading = true
         Event.Trigger(M.EventUnloadSession)
     elseif e.FromState == "StopLoading" and e.ToState == "Menu" then
         Event.Trigger(M.EventClientMenuLoad)
     elseif e.FromState == "Menu" and e.ToState == "StartLoading" then
+        isLoading = true
         Event.Trigger(M.EventClientMenuUnload)
     end
 end)
 
 Ext.Events.ResetCompleted:Subscribe(function()
+    isLoading = false
     Event.Trigger(M.EventLoadSession)
     M.InitState = M.InitStateEnum.SessionLoaded
     Event.Trigger(M.EventLoad)

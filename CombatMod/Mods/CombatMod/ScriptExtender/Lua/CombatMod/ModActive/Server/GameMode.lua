@@ -1,3 +1,7 @@
+Event.On("ScenarioStarted", function(scenario)
+    Osi.AutoSave()
+end)
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                       Rogue-like mode                                       --
@@ -16,9 +20,13 @@ function GameMode.IsHardMode()
     return PersistentVars.HardMode
 end
 
-function GameMode.StartRoguelike()
-    PersistentVars.RogueModeActive = true
-    Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
+function GameMode.StartRoguelike(template)
+    if not PersistentVars.RogueModeActive then
+        PersistentVars.RogueModeActive = true
+        Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
+    end
+
+    PersistentVars.RogueScenario = template.Name
 end
 
 function GameMode.GenerateScenario(score, cow)
@@ -62,7 +70,7 @@ function GameMode.GenerateScenario(score, cow)
     end
 
     if cow then
-        tiers = { { name = "OX_A", value = 4, amount = 100 } }
+        tiers = { { name = "TOT_OX_A", value = 4, amount = 100 } }
     end
 
     for i, tier in ipairs(tiers) do
@@ -235,19 +243,29 @@ function GameMode.GenerateScenario(score, cow)
     return generateTimeline(score, 0)
 end
 
-function GameMode.UpdateRogueScore(scenario)
-    local score = PersistentVars.RogueScore
-    local prev = score
+function GameMode.UpdateRogueScore(score)
+    local prev = PersistentVars.RogueScore
 
-    local function updateScore(score)
-        PersistentVars.RogueScore = score
-
-        Event.Trigger("RogueScoreChanged", prev, score)
-
-        Defer(1000, function()
-            Player.Notify(__("Your RogueScore increased: %d -> %d!", prev, score))
-        end)
+    local cap = math.min(100, (GE.GetHost().EocLevel.Level - 1) * 10) -- +10 per level, max 100
+    if score < cap then
+        score = cap
     end
+
+    if prev == score then
+        return
+    end
+
+    PersistentVars.RogueScore = score
+
+    Event.Trigger("RogueScoreChanged", prev, score)
+
+    Defer(1000, function()
+        Player.Notify(__("Your RogueScore changed: %d -> %d!", prev, score))
+    end)
+end
+
+function GameMode.RewardRogueScore(scenario)
+    local score = PersistentVars.RogueScore
 
     local baseScore = 5
     if PersistentVars.Unlocked.RogueScoreMultiplier then
@@ -265,7 +283,7 @@ function GameMode.UpdateRogueScore(scenario)
     local diff = math.max(0, endRound - scenario:TotalRounds())
 
     score = score + math.max(baseScore - diff, 1)
-    updateScore(score)
+    GameMode.UpdateRogueScore(score)
 
     if endRound <= scenario:TotalRounds() then
         Event.Trigger("ScenarioPerfectClear", scenario)
@@ -273,7 +291,7 @@ function GameMode.UpdateRogueScore(scenario)
         Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", baseScore, baseScore * 2))
             :After(function(confirmed)
                 if confirmed then
-                    updateScore(score + baseScore)
+                    GameMode.UpdateRogueScore(score + baseScore)
                 end
             end)
     end
@@ -285,32 +303,14 @@ function GameMode.StartNext()
     end
 
     local rogueTemp = UT.Find(Scenario.GetTemplates(), function(v)
-        return v.Name == C.RoguelikeScenario
+        return v.Name == PersistentVars.RogueScenario
     end)
 
     if not rogueTemp then
         return
     end
 
-    local threshold = GameMode.IsHardMode() and 20 or 40
-
-    local maps = UT.Filter(Map.Get(), function(v)
-        return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
-    end)
-
-    local map = nil
-    if #maps > 0 then
-        local random = math.random(#maps)
-
-        if UT.Contains(PersistentVars.RandomLog.Maps, random) then
-            random = math.random(#maps)
-        end
-        LogRandom("Maps", random, 10)
-
-        map = maps[random]
-    end
-
-    Scenario.Start(rogueTemp, map)
+    Scenario.Start(rogueTemp)
 end
 
 GameMode.DifficultyAppliedTo = {}
@@ -432,7 +432,6 @@ Event.On("RogueModeChanged", function(bool)
     if not bool then
         return
     end
-    GameMode.StartNext()
 
     if not PersistentVars.GUIOpen then
         Net.Send("OpenGUI")
@@ -442,75 +441,106 @@ end)
 Event.On(
     "ScenarioStopped",
     ifRogueLike(function(scenario)
-        Schedule(GameMode.StartNext)
+        GameMode.UpdateRogueScore(PersistentVars.RogueScore - 10)
     end)
 )
 
-Event.On("ScenarioEnemySpawned", function(scenario, enemy)
-    if scenario.Name ~= C.RoguelikeScenario then
-        return
-    end
-    GameMode.ApplyDifficulty(enemy, PersistentVars.RogueScore)
-end)
-
-Event.On("ScenarioRestored", function(scenario)
-    if scenario.Name ~= C.RoguelikeScenario then
-        return
-    end
-    for _, enemy in pairs(scenario.SpawnedEnemies) do
+Event.On(
+    "ScenarioEnemySpawned",
+    ifRogueLike(function(scenario, enemy)
+        if not scenario.RogueLike then
+            return
+        end
         GameMode.ApplyDifficulty(enemy, PersistentVars.RogueScore)
-    end
-end)
+    end)
+)
 
-Event.On("ScenarioEnded", function(scenario)
-    if scenario.Name == C.RoguelikeScenario then
+Event.On(
+    "ScenarioRestored",
+    ifRogueLike(function(scenario)
+        for _, enemy in pairs(scenario.SpawnedEnemies) do
+            GameMode.ApplyDifficulty(enemy, PersistentVars.RogueScore)
+        end
+    end)
+)
+
+Event.On(
+    "ScenarioEnded",
+    ifRogueLike(function(scenario)
         GameMode.DifficultyAppliedTo = {}
 
-        GameMode.UpdateRogueScore(scenario)
+        GameMode.RewardRogueScore(scenario)
 
-        ifRogueLike(function()
-            if Config.AutoTeleport > 0 then
-                Player.Notify(__("Teleporting back to camp in %d seconds.", Config.AutoTeleport), true)
-                local timer = Defer(Config.AutoTeleport * 1000, function()
-                    Player.PickupAll()
-                    Player.ReturnToCamp()
-                end)
+        if Config.AutoTeleport > 0 then
+            Player.Notify(__("Teleporting back to camp in %d seconds.", Config.AutoTeleport), true)
+            local timer = Defer(Config.AutoTeleport * 1000, function()
+                Player.PickupAll()
+                Player.ReturnToCamp()
+            end)
 
-                Event.On("ScenarioStarted", function(scenario)
-                    timer.Source:Clear()
-                end, true)
-            end
-        end)()
+            Event.On("ScenarioStarted", function(scenario)
+                timer.Source:Clear()
+            end, true)
+        end
+    end)
+)
+
+local function getMap(template)
+    local threshold = GameMode.IsHardMode() and 20 or 40
+
+    local maps = UT.Filter(Map.Get(), function(v)
+        return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
+    end)
+
+    local map = nil
+    if #maps > 0 then
+        local random = math.random(#maps)
+
+        if UT.Contains(PersistentVars.RandomLog.Maps, random) then
+            random = math.random(#maps)
+        end
+        LogRandom("Maps", random, 10)
+
+        map = maps[random]
     end
-end)
 
-Event.On("ScenarioStarted", function(scenario)
-    Osi.AutoSave()
-end)
+    return map
+end
+
+local function makeItCow()
+    local lolcow = math.random() < 0.001
+    if lolcow then
+        local hasOX = Enemy.Find("TOT_OX_A")
+        lolcow = hasOX and true or false
+    end
+
+    if lolcow then
+        Defer(1000, function()
+            Player.Notify(__("You found the secret cow level!"))
+        end)
+    end
+
+    return lolcow
+end
 
 Schedule(function()
     External.Templates.AddScenario({
+        RogueLike = true,
+        OnStart = function(template)
+            GameMode.StartRoguelike(template)
+        end,
+
         Name = C.RoguelikeScenario,
+        Map = getMap,
 
         -- Spawns per Round
-        Timeline = function()
-            local lolcow = math.random() < 0.001
-            if lolcow then
-                local hasOX = Enemy.Find("OX_A")
-                lolcow = hasOX and true or false
-            end
-
-            if lolcow then
-                Defer(1000, function()
-                    Player.Notify(__("You found the secret cow level!"))
-                end)
-            end
-
-            return GameMode.GenerateScenario(PersistentVars.RogueScore, lolcow)
+        Timeline = function(template)
+            return GameMode.GenerateScenario(PersistentVars.RogueScore, makeItCow())
         end,
 
         Loot = C.LootRates,
     })
+
 end)
 
 -------------------------------------------------------------------------------------------------

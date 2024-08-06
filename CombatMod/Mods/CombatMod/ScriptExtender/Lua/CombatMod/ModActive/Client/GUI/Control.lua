@@ -57,6 +57,10 @@ function Control.Main(tab)
                 stopLayout.Table.Visible = false
                 header.Label = __("Start Menu")
             end
+
+            if state and state.RogueModeActive then
+                header.Label = header.Label .. " - RogueScore: " .. tostring(state.RogueScore)
+            end
         end):Exec()
     end)
 
@@ -92,13 +96,7 @@ function Control.StartPanel(root)
 
             for i, item in ipairs(event.Payload.Scenarios) do
                 local label = item.Name
-                if item.Name == C.RoguelikeScenario then
-                    label = label .. " (RogueScore: " .. tostring(State.RogueScore) .. ")"
-                end
-
-                if not State.RogueModeActive or item.Name == C.RoguelikeScenario then
-                    scenarioSelection.AddItem(label, item.Name)
-                end
+                scenarioSelection.AddItem(label, item.Name)
             end
             scenarioSelPaged.UpdateItems(scenarioSelection.Selectables)
 
@@ -172,9 +170,6 @@ function Control.RunningPanel(root)
                     __("Upcoming Spawns: %s", tostring(#(state.Scenario.Enemies[state.Scenario.Round + 1] or {}))),
                     __("Killed: %s", tostring(#state.Scenario.KilledEnemies)),
                 }
-                if state.Scenario.Name == C.RoguelikeScenario then
-                    table.insert(text, 2, "RogueScore: " .. tostring(state.RogueScore))
-                end
                 return table.concat(text, "\n")
             end
         end, "StateChange")

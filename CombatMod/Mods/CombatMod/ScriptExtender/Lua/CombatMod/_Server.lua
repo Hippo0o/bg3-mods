@@ -4,6 +4,7 @@ Mod.PersistentVarsTemplate = {
     Asked = false,
     Active = false,
     RogueModeActive = false,
+    RogueScenario = "",
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = {},

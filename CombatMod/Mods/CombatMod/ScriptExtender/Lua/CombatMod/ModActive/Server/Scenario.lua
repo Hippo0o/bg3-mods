@@ -507,23 +507,31 @@ function Scenario.Start(template, map)
     ---@type Scenario
     local scenario = Object.New()
 
-    local timeline = template.Timeline
-
     local maps = Map.Get()
     if #maps == 0 then
         L.Error("Starting scenario failed.", "No maps found.")
         return
     end
 
+    if type(template.OnStart) == "function" then
+        template:OnStart()
+    end
+
     if template.Map ~= nil then
-        map = UT.Find(maps, function(m)
-            return m.Name == template.Map
-        end) or map
+        if type(template.Map) == "function" then
+            map = template:Map()
+        else
+            map = UT.Find(maps, function(m)
+                return m.Name == template.Map
+            end) or map
+        end
     end
 
     if map == nil then
         map = maps[math.random(#maps)]
     end
+
+    local timeline = template.Timeline
 
     if type(timeline) == "function" then
         timeline = timeline(template, map)

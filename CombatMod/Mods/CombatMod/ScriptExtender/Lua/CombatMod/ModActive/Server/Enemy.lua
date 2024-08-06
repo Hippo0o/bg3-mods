@@ -494,7 +494,7 @@ end
 ---@return Enemy|nil
 function Enemy.Find(search)
     for _, enemy in Enemy.Iter() do
-        if US.Contains(search, { enemy.TemplateId, enemy.Name, enemy:GetId() }, false, true) then
+        if US.Contains(search, { enemy.TemplateId, enemy.Name }, false, true) then
             return enemy
         end
     end
