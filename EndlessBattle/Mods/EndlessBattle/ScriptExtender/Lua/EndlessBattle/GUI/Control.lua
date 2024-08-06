@@ -8,7 +8,7 @@ function Control.Main(tab)
         Net.Request("Start", {
             Scenario = scenarioName,
             Map = mapName,
-        }).After(function(_, event)
+        }).After(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
@@ -24,7 +24,7 @@ function Control.Main(tab)
     end)
 
     WindowEvent("Teleport", function(data)
-        Net.Request("Teleport", data).After(function(_, event)
+        Net.Request("Teleport", data).After(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
@@ -33,7 +33,7 @@ function Control.Main(tab)
     end)
 
     WindowEvent("PingSpawns", function(data)
-        Net.Request("PingSpawns", data).After(function(_, event)
+        Net.Request("PingSpawns", data).After(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
@@ -167,6 +167,16 @@ function Control.RunningPanel(root)
         layout.Cells[1][2]:AddButton(__("Ping Spawns")).OnClick = function()
             Event.Trigger("PingSpawns", { Map = State.Scenario.Map.Name })
         end
+
+        Components.Conditional(layout.Cells[1][2], function(cond)
+            local grp = cond.Root:AddGroup(__("Debug"))
+
+            grp:AddButton(__("Kill spawned")).OnClick = function()
+                Net.Send("KillSpawned")
+            end
+
+            return grp
+        end, "ToggleDebug").Update(Mod.Debug)
 
         layout.Cells[1][1]:AddButton(__("Stop")).OnClick = function()
             Event.Trigger("Stop")

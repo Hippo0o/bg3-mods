@@ -3,7 +3,6 @@ Mod = Require("Hlib/Mod")
 Mod.Debug = true
 Mod.Dev = true
 Mod.EnableRCE = false
-Mod.TableKey = "EndlessBattle"
 Mod.Prefix = "Endless Battle"
 
 ---@type Utils
@@ -14,6 +13,9 @@ UT = Utils.Table
 UE = Utils.Entity
 US = Utils.String
 L = Utils.Log
+
+---@type IO
+IO = Require("Hlib/IO")
 
 ---@type Scenario|nil
 S = nil

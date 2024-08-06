@@ -13,8 +13,8 @@ function Creation.Main(tab)
         posLabel.Label = string.format("Pos: %s, %s, %s", x, y, z)
     end
 
-    root:AddButton(__("Kill spawned")).OnClick = function()
-        Net.Send("KillSpawned")
+    root:AddButton(__("Clear Area")).OnClick = function()
+        Net.Send("KillNearby")
     end
 end
 

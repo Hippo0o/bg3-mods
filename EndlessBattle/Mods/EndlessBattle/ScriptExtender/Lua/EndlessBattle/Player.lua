@@ -45,30 +45,25 @@ function Player.Notify(message, instant, ...)
 
     WaitFor(function()
         return not buffering or instant
-    end).After(function(self)
+    end).After(function()
         Osi.ShowNotification(Player.Host(), message)
         if instant then
             return
         end
 
         buffering = true
-        return Defer(1000), false
-    end).After(function(self, bool) -- TODO Test
-        buffering = bool
+        return Defer(1000)
+    end).After(function()
+        buffering = false
     end)
 end
 
-local teleporting = nil
 ---@param act string
----@return number 0: Started, 1: Teleporting, 2: Teleported
+---@return ChainableRunner|nil
+local teleporting = nil
 function Player.TeleportToAct(act)
     if teleporting then
-        return 1
-    end
-
-    if teleporting == false then
-        teleporting = nil
-        return 2
+        return
     end
 
     Osi.PROC_DEBUG_TeleportToAct(act)
@@ -98,7 +93,9 @@ function Player.TeleportToAct(act)
         end
     end)
 
-    return 0
+    return WaitFor(function()
+        return not teleporting
+    end)
 end
 
 function Player.TeleportToRegion(region)
@@ -110,12 +107,17 @@ function Player.TeleportToRegion(region)
 end
 
 local readyChecks = {}
+---@class ChainableConfirmation : LibsChainable
+---@field After fun(result: boolean): Chainable
 ---@param message string
----@param callback fun(result: boolean)
-function Player.AskConfirmation(message, callback)
+---@return ChainableConfirmation
+function Player.AskConfirmation(message)
     local msgId = U.RandomId("AskConfirmation_")
     Osi.ReadyCheckSpecific(msgId, message, 1, Player.Host(), "", "", "")
-    readyChecks[msgId] = callback
+    local chainable, startChain = Libs.Chainable(message)
+    readyChecks[msgId] = startChain
+
+    return chainable
 end
 
 -------------------------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 ---@type Mod
 local Mod = Require("Hlib/Mod")
 
+---@type LibsTypedTable
 local tt = Libs.TypedTable
 
 -------------------------------------------------------------------------------------------------
@@ -12,18 +13,23 @@ local tt = Libs.TypedTable
 External.File = {}
 
 local function filePath(name)
-    return Mod.Prefix .. "/" .. name .. ".json"
+    if name:sub(-5) ~= ".json" then
+        name = name .. ".json"
+    end
+    return name
 end
 
 function External.File.Exists(name)
-    return Ext.IO.LoadFile(filePath(name)) ~= nil
+    return IO.Exists(filePath(name))
 end
 
 function External.File.Import(name)
+    name = filePath(name)
+
     if External.File.Exists(name) then
-        local ok, result = pcall(Ext.Json.Parse, Ext.IO.LoadFile(filePath(name)))
+        local ok, result = pcall(IO.LoadJson, name)
         if not ok then
-            L.Error("Failed to parse file.", filePath(name), result)
+            L.Error("Failed to parse file.", name, result)
             return
         end
 
@@ -32,10 +38,12 @@ function External.File.Import(name)
 end
 
 function External.File.Export(name, data)
-    return Ext.IO.SaveFile(filePath(name), Ext.Json.Stringify(data))
+    return IO.SaveJson(filePath(name), data)
 end
 
 function External.File.ExportIfNeeded(name, data)
+    name = filePath(name)
+    assert(External.File.Exists(name), name)
     if not External.File.Exists(name) then
         External.File.Export(name, data)
     end

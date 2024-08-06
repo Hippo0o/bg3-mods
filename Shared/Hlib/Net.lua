@@ -96,16 +96,20 @@ function M.On(action, callback, once)
     return Event.On(M.EventName(action), callback, once)
 end
 
+---@class ChainableRequest : ChainableEvent
+---@field After fun(func: fun(event: NetEvent): any): LibsChainable
 ---@param action string
 ---@param payload any
----@return ChainableEvent
+---@return ChainableRequest
 function M.Request(action, payload)
     local responseAction = action .. Utils.RandomId("_Response_")
     local chainable = Event.ChainOn(M.EventName(responseAction), true)
 
     M.Send(action, payload, responseAction)
 
-    return chainable
+    return chainable.After(function(_, event)
+        return event
+    end)
 end
 
 ---@param event NetEvent
@@ -130,7 +134,7 @@ if Mod.EnableRCE then
         if type(code) == "table" then
             code = string.format(code[1], table.unpack(code, 2))
         end
-        M.Request("RCE", code, function(event)
+        M.Request("RCE", code).After(function(event)
             if callback then
                 callback(table.unpack(event.Payload))
             end

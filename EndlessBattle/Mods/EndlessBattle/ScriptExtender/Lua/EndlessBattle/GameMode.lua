@@ -5,25 +5,25 @@
 -------------------------------------------------------------------------------------------------
 
 function GameMode.AskTutSkip()
-    Player.AskConfirmation("Skip to Camp?", function(confirmed)
-        if not confirmed then
-            return
-        end
+    Player.AskConfirmation("Skip to Camp?")
+        .After(function(confirmed)
+            if not confirmed then
+                return
+            end
 
-        WaitFor(function()
-            return Player.TeleportToAct("Act1") == 2
-        end, function()
+            return Player.TeleportToAct("Act1")
+        end)
+        .After(function()
             Osi.PROC_GLO_Jergal_MoveToCamp()
             Defer(3000, function()
                 Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
                 GameMode.AskRecruitStarters()
             end)
         end)
-    end)
 end
 
 function GameMode.AskRecruitStarters()
-    Player.AskConfirmation("Recruit Origin characters?", function(confirmed)
+    Player.AskConfirmation("Recruit Origin characters?").After(function(confirmed)
         if not confirmed then
             return
         end
@@ -53,7 +53,7 @@ end
 
 -- TODO
 function GameMode.AskUnlockAll()
-    Player.AskConfirmation("Unlock all?", function(confirmed)
+    Player.AskConfirmation("Unlock all?").After(function(confirmed)
         if not confirmed then
             return
         end
@@ -102,14 +102,6 @@ function GameMode.AskUnlockAll()
         end
         fixHalsin()
         fixMinthara()
-    end)
-end
-
-function GameMode.AskBeginCombat()
-    Player.AskConfirmation("Begin combat?", function(confirmed)
-        if not confirmed then
-            return
-        end
     end)
 end
 
@@ -165,7 +157,7 @@ local function cancelDialog(dialog, instanceID)
         end
 
         local hasRemovable = UT.Filter(dialogActors, function(actor)
-            return UE.IsNonPlayer(actor) and Osi.IsAlly(Player.Host(), actor) == 0
+            return UE.IsNonPlayer(actor) and Osi.IsAlly(Player.Host(), actor) ~= 1
         end)
 
         local hasPlayable = UT.Filter(dialogActors, function(actor)
@@ -201,7 +193,7 @@ local function cancelDialog(dialog, instanceID)
         end
 
         if #hasPlayable == #dialogActors then
-            L.Info(__("To disable story bypass, use !JC DisableStoryBypass"))
+            L.Info(__("To disable story bypass, use !EB DisableStoryBypass"))
             Osi.DialogRequestStopForDialog(dialog, dialogActors[1])
         end
     end)
@@ -256,13 +248,13 @@ U.Osiris.On(
         end
         if Osi.IsLocked(item) == 1 then
             L.Debug("Auto unlocking", item)
-            L.Info(__("To disable story bypass, use !JC DisableStoryBypass"))
+            L.Info(__("To disable story bypass, use !EB DisableStoryBypass"))
             Player.Notify(__("Auto unlocking"), true)
             Osi.Unlock(item, character)
         end
         if Osi.IsTrapArmed(item) == 1 then
             L.Debug("Auto disarming", item)
-            L.Info(__("To disable story bypass, use !JC DisableStoryBypass"))
+            L.Info(__("To disable story bypass, use !EB DisableStoryBypass"))
             Player.Notify(__("Auto disarming"), true)
             Osi.SetTrapArmed(item, 0)
         end
