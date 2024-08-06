@@ -301,7 +301,7 @@ function Object:Clear(keepCorpse)
     local id = self:GetId()
     local entity = self:Entity()
 
-    RetryFor(function()
+    RetryUntil(function()
         if keepCorpse then
             Osi.Die(guid, 0, C.NullGuid, 0, 0)
         else
@@ -309,18 +309,13 @@ function Object:Clear(keepCorpse)
         end
 
         return Osi.IsDead(guid) == 1 or not entity:IsAlive()
-    end, {
-        interval = 300,
-        immediate = true,
-        success = function()
-            if not keepCorpse then
-                PersistentVars.SpawnedEnemies[guid] = nil
-            end
-        end,
-        failed = function()
-            L.Error("Failed to kill: ", guid, id)
-        end,
-    })
+    end, { retries = 3, interval = 300, immediate = true }).Then(function()
+        if not keepCorpse then
+            PersistentVars.SpawnedEnemies[guid] = nil
+        end
+    end).Catch(function()
+        L.Error("Failed to kill: ", guid, id)
+    end)
 end
 
 -------------------------------------------------------------------------------------------------
@@ -644,7 +639,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
     local i = 0
     local pause = false
     local dump = {}
-    RetryFor(function(handle)
+    RetryUntil(function(handle)
         if pause then
             return
         end
@@ -697,14 +692,9 @@ function Enemy.TestEnemies(enemies, keepAlive)
             L.Error(err)
             error(err)
         end)
-    end, {
-        interval = 1,
-        retries = -1,
-        success = function()
-            Ext.IO.SaveFile(Require("Hlib/Mod").TableKey .. "/Enemies.json", Ext.Json.Stringify(dump))
-        end,
-        failed = function(err)
-            L.Error(err)
-        end,
-    })
+    end, { retries = -1, interval = 1 }).Then(function()
+        Ext.IO.SaveFile(Require("Hlib/Mod").TableKey .. "/Enemies.json", Ext.Json.Stringify(dump))
+    end).Catch(function(err)
+        L.Error(err)
+    end)
 end

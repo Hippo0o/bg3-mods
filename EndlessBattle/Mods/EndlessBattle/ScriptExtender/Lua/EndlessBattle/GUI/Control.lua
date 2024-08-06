@@ -5,40 +5,40 @@ function Control.Main(tab)
     local root = tab:AddTabItem(__("Main"))
 
     WindowEvent("Start", function(scenarioName, mapName)
-        Net.Request("Start", function(event)
+        Net.Request("Start", {
+            Scenario = scenarioName,
+            Map = mapName,
+        }).Then(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
             end
             Net.Send("GetState")
-        end, {
-            Scenario = scenarioName,
-            Map = mapName,
-        })
+        end)
     end)
 
     WindowEvent("Stop", function()
-        Net.Request("Stop", function()
+        Net.Request("Stop").Then(function()
             Net.Send("GetState")
         end)
     end)
 
     WindowEvent("Teleport", function(data)
-        Net.Request("Teleport", function(event)
+        Net.Request("Teleport", data).Then(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
             end
-        end, data)
+        end)
     end)
 
     WindowEvent("PingSpawns", function(data)
-        Net.Request("PingSpawns", function(event)
+        Net.Request("PingSpawns", data).Then(function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
                 Event.Trigger("Error", err)
             end
-        end, data)
+        end)
     end)
 
     local errorBox = root:AddText("")

@@ -57,11 +57,14 @@ end
 
 -- register window event listeners
 local listeners = {}
+---@return EventListener
 function WindowEvent(event, callback, ...)
-    local listener = Event.On(event, callback, ...)
-    listener.UnregisterOnError = true
-    table.insert(listeners, listener)
-    return listener
+    local chain = Event.On(event, callback, ...).Catch(function(self, err)
+        L.Debug("WindowEvent", event, err)
+        self.Source:Unregister()
+    end)
+    table.insert(listeners, chain.Source)
+    return chain.Source
 end
 function WindowNet(event, callback, ...)
     return WindowEvent(Net.EventName(event), callback, ...)
@@ -82,7 +85,6 @@ local function openWindow()
     end
     ---@type ExtuiWindow
     window = Ext.IMGUI.NewWindow("Endless Battle")
-    window.NoFocusOnAppearing = true
     Event.Trigger("WindowOpened")
 
     L.Warn("Window opened.", "Support is currently in an experimental state.", "DX11 is known to cause issues.")
@@ -91,6 +93,7 @@ local function openWindow()
 
     window:SetSize({ 670, 550 })
     window.Closeable = true
+    window.NoFocusOnAppearing = true
     window.OnClose = function()
         Event.Trigger("WindowClosed")
     end
@@ -99,7 +102,7 @@ local function openWindow()
 
     local tabs = window:AddTabBar(__("Main"))
     Control.Main(tabs)
-    -- Creation.Main(tabs)
+    Creation.Main(tabs)
     Config.Main(tabs)
     Debug.Main(tabs)
 end

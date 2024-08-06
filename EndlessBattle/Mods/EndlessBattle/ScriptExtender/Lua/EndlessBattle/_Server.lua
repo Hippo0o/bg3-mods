@@ -96,7 +96,7 @@ do -- check for interaction to enable the mod
     checkActive = Event.On(Net.EventOnSend, function(event)
         if event.Action == "OpenGUI" then
             PersistentVars.Active = true
-            checkActive:Unregister()
+            checkActive.Source:Unregister()
         end
     end)
 end
@@ -273,7 +273,7 @@ do
     end
 
     function Commands.Spawns(mapId, repeats)
-        RetryFor(function()
+        RetryUntil(function()
             L.Info("Pinging spawns.")
             local mapId = tonumber(mapId)
             if not mapId then
@@ -282,9 +282,7 @@ do
             end
 
             Map.Get()[tonumber(mapId)]:PingSpawns()
-        end, {
-            retries = tonumber(repeats) or 3,
-        })
+        end, { retries = tonumber(repeats) or 3 })
     end
 
     function Commands.Maps(id)

@@ -243,25 +243,21 @@ function Action.SpawnRound()
 
     for i, e in pairs(toSpawn) do
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
-        Async.Run(function()
-            RetryFor(function()
-                L.Debug("Spawning enemy.", e:GetId())
-                return s.Map:SpawnIn(e, -1)
-            end, {
-                immediate = true,
-                retries = #Current().Map.Spawns,
-                interval = 500,
-                success = function()
-                    Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
-                    if Config.ForceEnterCombat or Player.InCombat() then
-                        Scenario.CombatSpawned(e)
-                    end
-                end,
-                failed = function()
-                    L.Error("Spawn limit exceeded.", e:GetId())
-                    UT.Remove(s.SpawnedEnemies, e)
-                end,
-            })
+        RetryUntil(function()
+            L.Debug("Spawning enemy.", e:GetId())
+            return s.Map:SpawnIn(e, -1)
+        end, {
+            immediate = true,
+            retries = #Current().Map.Spawns,
+            interval = 500,
+        }).Then(function()
+            Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
+            if Config.ForceEnterCombat or Player.InCombat() then
+                Scenario.CombatSpawned(e)
+            end
+        end).Catch(function()
+            L.Error("Spawn limit exceeded.", e:GetId())
+            UT.Remove(s.SpawnedEnemies, e)
         end)
         table.insert(s.SpawnedEnemies, e)
     end
@@ -307,7 +303,7 @@ function Action.MapEntered()
     end
 
     local x, y, z = Player.Pos()
-    RetryFor(function(self, tries)
+    RetryUntil(function(self, tries)
         if S == nil then -- scenario stopped
             self:Clear()
             return
@@ -320,14 +316,12 @@ function Action.MapEntered()
     end, {
         retries = 120,
         interval = 1000,
-        success = ifScenario(function()
-            Action.StartCombat()
-        end),
-        failed = function()
-            Scenario.Stop()
-            Player.Notify(__("Scenario canceled due to timeout."))
-        end,
-    })
+    }).Then(ifScenario(function()
+        Action.StartCombat()
+    end)).Catch(function(_, err)
+        Scenario.Stop()
+        Player.Notify(__("Scenario canceled due to timeout."))
+    end)
 end
 
 function Action.Failsafe(enemy)
@@ -354,12 +348,12 @@ function Action.Failsafe(enemy)
                     s.Map:Teleport(e.GUID)
                     e:Combat(true)
 
-                    Defer(1000, function()
-                        if Osi.IsInCombat(e.GUID) == 0 then
-                            UT.Remove(s.SpawnedEnemies, e)
-                            e:Clear()
-                        end
-                    end)
+                    return Defer(1000)
+                end).Then(function()
+                    if Osi.IsInCombat(e.GUID) == 0 then
+                        UT.Remove(s.SpawnedEnemies, e)
+                        e:Clear()
+                    end
                 end)
             end
         end
@@ -516,7 +510,7 @@ function Scenario.CombatSpawned(specific)
 
     local target = Player.InCombat() or Player.Host()
     for _, enemy in ipairs(enemies) do
-        RetryFor(function()
+        RetryUntil(function()
             if not enemy:IsSpawned() then
                 return false
             end
@@ -533,12 +527,11 @@ function Scenario.CombatSpawned(specific)
             immediate = true,
             retries = 5,
             interval = 1000,
-            failed = ifScenario(function()
-                if Player.InCombat() or Config.ForceEnterCombat then
-                    Action.Failsafe(enemy)
-                end
-            end),
-        })
+        }).Catch(ifScenario(function()
+            if Player.InCombat() or Config.ForceEnterCombat then
+                Action.Failsafe(enemy)
+            end
+        end))
     end
 end
 
@@ -697,7 +690,7 @@ Event.On(
     ifScenario(function(target)
         if not S.OnMap and U.UUID.Equals(target, Player.Host()) then
             S.OnMap = true
-            Defer(2000, Action.MapEntered)
+            Defer(2000).Then(Action.MapEntered)
         end
     end)
 )
