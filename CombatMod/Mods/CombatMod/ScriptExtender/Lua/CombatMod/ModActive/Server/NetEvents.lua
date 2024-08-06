@@ -1,4 +1,4 @@
-SyncState = Debounce(100, function()
+SyncState = Debounce(300, function()
     Net.Send(
         "SyncState",
         UT.Filter(PersistentVars, function(v, k)

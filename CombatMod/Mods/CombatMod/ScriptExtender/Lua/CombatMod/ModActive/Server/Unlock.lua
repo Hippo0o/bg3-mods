@@ -266,6 +266,4 @@ Net.On("BuyUnlock", function(event)
     soundSuccess()
 
     Net.Respond(event, { true, PersistentVars.Currency })
-
-    SyncState()
 end)
