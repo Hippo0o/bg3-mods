@@ -57,8 +57,10 @@ function Object:SpawnIn(enemy, spawn)
         return false
     end
 
-    Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
-    -- Osi.SetAmbushing(enemy.GUID, 1) -- makes tactical cam outline disappear
+    Schedule(function()
+        Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
+        -- Osi.SetAmbushing(enemy.GUID, 1) -- makes tactical cam outline disappear
+    end)
 
     return true
 end
