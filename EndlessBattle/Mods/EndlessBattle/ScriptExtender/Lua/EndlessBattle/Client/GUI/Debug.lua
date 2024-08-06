@@ -90,24 +90,28 @@ function Debug.Items(root)
 
         tree = Components.Tree(grp, event.Payload, nil, function(node, key, value)
             if key == "RootTemplate" then
-                local imageLoaded = false
+                local nodeLoaded = false
 
                 node.OnClick = function(v)
-                    if imageLoaded then
+                    if nodeLoaded then
                         return
                     end
+
                     local temp = Ext.Template.GetTemplate(value)
                     if temp then
+                        Components.Tree(node, UT.Clean(temp), "   RootTemplate = " .. value)
+
                         node:AddText("   DisplayName = ")
                         node:AddText(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle)).SameLine = true
+
                         node:AddText("   Icon = ")
                         node:AddImage(temp.Icon).SameLine = true
-                        node:AddText("   Dump = ")
-                        Components.Tree(node, UT.Clean(temp), value)
                     end
 
-                    imageLoaded = true
+                    nodeLoaded = true
                 end
+
+                return true -- replace node
             end
         end)
     end)

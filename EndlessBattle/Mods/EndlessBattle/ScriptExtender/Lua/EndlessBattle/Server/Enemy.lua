@@ -303,7 +303,7 @@ function Object:Spawn(x, y, z, neutral)
     x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 0)
 
     -- snap to ground can put enemies under the map
-    y = y + 1
+    y = y + 10
 
     local success = self:CreateAt(x, y, z)
 
@@ -452,13 +452,16 @@ function Enemy.GetByTemplateId(templateId)
 end
 
 local cache = nil
+local resetCache = Async.Debounce(3000, function()
+    cache = nil
+end)
 function Enemy.GetTemplates()
+    resetCache()
+
     if cache then
         return cache
     end
-    Defer(3000, function()
-        cache = nil
-    end)
+
     cache = External.Templates.GetEnemies(enemyTemplates)
 
     return cache

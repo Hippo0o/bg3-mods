@@ -237,9 +237,12 @@ function Components.Tree(root, tbl, label, onText)
                 local label = k .. " (" .. UT.Size(v) .. ")"
                 addNode(node:AddTree(label), v)
             else
-                node:AddText("   " .. k .. " = " .. tostring(v))
+                local replaceNode = false
                 if onText then
-                    onText(node, k, v)
+                    replaceNode = onText(node, k, v)
+                end
+                if not replaceNode then
+                    node:AddText("   " .. k .. " = " .. tostring(v))
                 end
             end
         end

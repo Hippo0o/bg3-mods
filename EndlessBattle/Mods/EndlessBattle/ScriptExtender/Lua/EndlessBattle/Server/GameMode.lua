@@ -442,7 +442,7 @@ U.Osiris.On(
     ifRogueLike(function(uuid)
         if U.UUID.Equals(uuid, Player.Host()) then
             GameMode.StartNext()
-            Item.PickupAll(Player.Host())
+            Player.PickupAll()
             Osi.PROC_LockAllUnlockedWaypoints()
         end
     end)
@@ -468,7 +468,7 @@ Event.On("ScenarioEnded", function(scenario)
             Player.Notify(__("Teleporting back to camp in %d seconds.", 10, true))
         end)
         local d2 = Defer(20000, function()
-            Item.PickupAll(Player.Host())
+            Player.PickupAll()
             Player.ReturnToCamp()
         end)
 
