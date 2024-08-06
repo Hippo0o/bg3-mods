@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 local weapons = nil
 local armor = nil
 local objects = nil

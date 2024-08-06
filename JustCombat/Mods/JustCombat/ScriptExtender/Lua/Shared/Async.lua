@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 ---@type Libs
 local Libs = Require("Shared/Libs")
 
@@ -20,7 +18,7 @@ local M = {}
 ---@field Stop fun(self: Loop)
 ---@field Tick fun(self: Loop, time: GameTime)
 local Loop = Libs.Object({
-    Startable = false,
+    Startable = true,
     Queues = {},
     Tasks = {
         Count = 0,
@@ -48,9 +46,10 @@ local Loop = Libs.Object({
     end,
     Start = function(self) ---@param self Loop
         assert(self.Handle == nil, "Loop already running.")
-        if not self.Startable then
+        if not self.Startable or self:IsEmpty() then
             return
         end
+
         local ticks = 0
         self.Handle = Ext.Events.Tick:Subscribe(function(e)
             if self:IsEmpty() then
@@ -360,7 +359,7 @@ function M.Debounce(ms, func)
         end
 
         local args = { ... }
-        runner = Defer(ms, function()
+        runner = M.Defer(ms, function()
             func(table.unpack(args))
         end)
     end

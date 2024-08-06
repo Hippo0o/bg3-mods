@@ -1,5 +1,3 @@
----@diagnostic disable: undefined-global
-
 ---@type Mod
 local Mod = Require("Shared/Mod")
 
@@ -163,10 +161,12 @@ end
 ---@param source string GUID
 ---@param radius number|nil
 ---@param ignoreHeight boolean|nil
+---@param withComponent ExtComponentType|nil
 ---@return EntityDistance[]
 -- thanks to AtilioA/BG3-volition-cabinet
-function M.Entity.GetNearby(source, radius, ignoreHeight)
+function M.Entity.GetNearby(source, radius, ignoreHeight, withComponent)
     radius = radius or 1
+    withComponent = withComponent or "Uuid"
 
     ---@param entity string|EntityHandle GUID
     ---@return number[]|nil {x, y, z}
@@ -197,14 +197,14 @@ function M.Entity.GetNearby(source, radius, ignoreHeight)
     end
 
     local nearby = {}
-    for guid, entity in ipairs(Ext.Entity.GetAllEntitiesWithUuid()) do
+    for _, entity in ipairs(Ext.Entity.GetAllEntitiesWithComponent(withComponent)) do
         local pos = entityPos(entity)
         if pos then
             local distance = calcDisance(pos)
             if distance <= radius then
                 table.insert(nearby, {
                     Entity = entity,
-                    Guid = guid,
+                    Guid = entity.Uuid and entity.Uuid.EntityUuid,
                     Distance = distance,
                 })
             end
@@ -236,7 +236,7 @@ M.Table = {}
 
 ---@param t1 table
 ---@vararg table
----@return table<string, any>
+---@return table<string, any> t1
 function M.Table.Merge(t1, ...)
     for _, t2 in ipairs({ ... }) do
         for k, v in pairs(t2) do
@@ -248,15 +248,14 @@ end
 
 ---@param t1 table<number, any>
 ---@vararg table
----@return table<number, any>
+---@return table<number, any> t1
 function M.Table.Combine(t1, ...)
-    local r = {}
-    for _, t in ipairs({ t1, ... }) do
+    for _, t in ipairs({ ... }) do
         for _, v in pairs(t) do
-            table.insert(r, v)
+            table.insert(t1, v)
         end
     end
-    return r
+    return t1
 end
 
 function M.Table.Size(t)
@@ -399,6 +398,25 @@ end
 
 M.String = {}
 
+function M.String.Escape(s)
+    local matches = {
+        ["^"] = "%^",
+        ["$"] = "%$",
+        ["("] = "%(",
+        [")"] = "%)",
+        ["%"] = "%%",
+        ["."] = "%.",
+        ["["] = "%[",
+        ["]"] = "%]",
+        ["*"] = "%*",
+        ["+"] = "%+",
+        ["-"] = "%-",
+        ["?"] = "%?",
+        ["\0"] = "%z",
+    }
+    return (s:gsub(".", matches))
+end
+
 -- same as string.match but case insensitive
 function M.String.IMatch(s, pattern, init)
     s = string.lower(s)
@@ -414,11 +432,15 @@ end
 ---@param patterns string[]|string
 ---@param ignoreCase boolean|nil
 ---@return boolean
-function M.String.Contains(s, patterns, ignoreCase)
+function M.String.Contains(s, patterns, ignoreCase, escape)
     if type(patterns) == "string" then
         patterns = { patterns }
     end
     for _, pattern in ipairs(patterns) do
+        if escape then
+            pattern = M.String.Escape(pattern)
+        end
+
         if ignoreCase then
             if M.String.IMatch(s, pattern) ~= nil then
                 return true
@@ -456,14 +478,6 @@ end
 -------------------------------------------------------------------------------------------------
 
 M.Protected = {}
-
-function M.Protected.TryGetProxy(entity, proxy)
-    if entity[proxy] ~= nil then
-        return entity[proxy]
-    else
-        error("Not a valid proxy")
-    end
-end
 
 ---@param query string
 ---@param arity number
@@ -559,7 +573,8 @@ function M.Osiris.On(name, arity, typeName, callback)
         SubscriberId = id,
         Params = { name, arity, typeName, callback },
         Unregister = function(self)
-            return Ext.Osiris.UnregisterListener(self.SubscriberId)
+            L.Warn("Can lock up the game, so its disabled.")
+            -- return Ext.Osiris.UnregisterListener(self.SubscriberId)
         end,
     }
 end

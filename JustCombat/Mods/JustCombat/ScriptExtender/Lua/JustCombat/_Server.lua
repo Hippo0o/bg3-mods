@@ -1,4 +1,3 @@
----@diagnostic disable: undefined-global
 Require("JustCombat/Shared")
 
 -------------------------------------------------------------------------------------------------
@@ -189,21 +188,39 @@ do
     local Commands = {}
     Api = Commands -- Mods.JustCombat.Api
 
-    Net.On("Api", function(event)
-        local fn = event.Payload.Command
-        if fn == nil or Commands[fn] == nil then
-            Net.Respond(event, { "Available Commands: ", UT.Keys(Commands) })
-            return
-        end
+    -- Net.On("Api", function(event)
+    --     local fn = event.Payload.Command
+    --     if fn == nil or Commands[fn] == nil then
+    --         Net.Respond(event, { "Available Commands: ", UT.Keys(Commands) })
+    --         return
+    --     end
+    --
+    --     Net.Respond(event, Commands[fn](table.unpack(event.Payload.Args or {})))
+    -- end)
 
-        Net.Respond(event, Commands[fn](table.unpack(event.Payload.Args or {})))
-    end)
+    function Commands.UI()
+        Net.Send("OpenGUI")
+    end
+
+    function Commands.Debug()
+        local oed = Require("Shared/OsirisEventDebug")
+
+        if #oed.Listeners > 0 then
+            oed.Detach()
+        else
+            oed.Attach()
+        end
+    end
 
     local start = 0
     function Commands.Dev(new_start, amount)
         L.Info(":)")
 
-        Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
+        for _, e in ipairs(UE.GetNearby(Player.Host(), 10, true, "DisplayName")) do
+            L.Dump(Osi.ResolveTranslatedString(e.Entity.DisplayName.NameKey.Handle.Handle))
+        end
+
+        -- Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
 
         -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
         -- local parts = US.Split(dump, "\n")
@@ -212,10 +229,6 @@ do
         -- end
         -- Osi.OpenCustomBookUI(GetHostCharacter(), "JustCombat")
 
-        -- if start == 0 then
-        --     start = 1
-        --     Require("Shared/OsirisEventDebug").Attach()
-        -- end
         -- GameMode.AskUnlockAll()
 
         -- new_start = tonumber(new_start) or start

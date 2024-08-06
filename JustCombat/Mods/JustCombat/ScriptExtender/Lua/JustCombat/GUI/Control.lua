@@ -1,5 +1,7 @@
-function Control.Main(window)
-    Event.On("Start", function(scenarioName, mapName)
+Control = {}
+
+function Control.Main(root)
+    WindowEvent("Start", function(scenarioName, mapName)
         Net.Request("Start", function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
@@ -12,13 +14,13 @@ function Control.Main(window)
         })
     end)
 
-    Event.On("Stop", function()
+    WindowEvent("Stop", function()
         Net.Request("Stop", function()
             Net.Send("State")
         end)
     end)
 
-    Event.On("Teleport", function(data)
+    WindowEvent("Teleport", function(data)
         Net.Request("Teleport", function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
@@ -27,7 +29,7 @@ function Control.Main(window)
         end, data)
     end)
 
-    Event.On("PingSpawns", function(data)
+    WindowEvent("PingSpawns", function(data)
         Net.Request("PingSpawns", function(event)
             local success, err = table.unpack(event.Payload)
             if not success then
@@ -36,22 +38,49 @@ function Control.Main(window)
         end, data)
     end)
 
-    Components.Layout(window, 1, 2, function(layout)
+    local errorBox = root:AddText("")
+    errorBox:SetColor("Text", { 1, 0.4, 0.4, 1 })
+
+    Components.Computed(errorBox, function(box, result)
+        Defer(3000, function()
+            box.Label = ""
+        end)
+
+        return result
+    end, "Error")
+
+    local header = root:AddSeparatorText("")
+    Components.Layout(root, 1, 2, function(layout)
         local cellStart, cellStop = layout.Cells[1][1], layout.Cells[2][1]
 
         local startLayout = Control.StartPanel(cellStart)
 
         local stopLayout = Control.RunningPanel(cellStop)
 
-        Event.On("StateChange", function(state)
+        WindowEvent("StateChange", function(state)
             if state and state.Scenario then
                 startLayout.Root.Visible = false
                 stopLayout.Root.Visible = true
+                header.Label = "Running"
             else
                 startLayout.Root.Visible = true
                 stopLayout.Root.Visible = false
+                header.Label = "Start Menu"
             end
         end):Exec()
+    end)
+
+    root:AddSeparatorText("Logs")
+    Components.Layout(root, 1, 1, function(layout)
+        layout.Root.ScrollY = true
+        local scrollable = layout.Cells
+
+        ---@type ExtuiInputText
+        local textBox = scrollable[1][1]:AddText("")
+
+        Components.Computed(textBox, function(_, event)
+            return textBox.Label .. event.Payload[1] .. "\n"
+        end, Net.EventName("PlayerNotify"), "Label")
     end)
 end
 
@@ -63,7 +92,8 @@ function Control.StartPanel(root)
 
         local scenarioSelection = Components.RadioList(listCols[1])
         local mapSelection = Components.RadioList(listCols[2])
-        Net.On("LoadSelections", function(event)
+
+        WindowEvent(Net.EventName("LoadSelections"), function(event)
             scenarioSelection.Reset()
             mapSelection.Reset()
 
@@ -103,17 +133,22 @@ function Control.RunningPanel(root)
         local scenarioName = layout.Cells[1][1]:AddText("")
         local mapName = layout.Cells[1][2]:AddText("")
 
-        Components.Computed(scenarioName, "StateChange", function(box, state)
+        Components.Computed(scenarioName, function(box, state)
             if state.Scenario then
-                return "Scenario: " .. tostring(state.Scenario.Name)
+                return table.concat({
+                    "Scenario: " .. tostring(state.Scenario.Name),
+                    "Round: " .. tostring(state.Scenario.Round),
+                    "Killed: " .. tostring(#state.Scenario.KilledEnemies),
+                    -- "Next: " .. tostring(#state.Scenario.Enemies[state.Scenario.Round + 1] or 0),
+                }, "\n")
             end
-        end)
+        end, "StateChange")
 
-        Components.Computed(mapName, "StateChange", function(box, state)
+        Components.Computed(mapName, function(box, state)
             if state.Scenario then
                 return "Map: " .. tostring(state.Scenario.Map.Name)
             end
-        end)
+        end, "StateChange")
 
         layout.Cells[1][2]:AddButton("Teleport").OnClick = function()
             Event.Trigger("Teleport", { Map = State.Scenario.Map.Name })

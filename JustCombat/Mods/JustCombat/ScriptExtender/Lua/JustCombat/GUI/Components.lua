@@ -1,3 +1,5 @@
+Components = {}
+
 ---@class ComponentsLayout
 ---@field Root ExtuiTable
 ---@field Rows table<number, ExtuiTableRow>
@@ -37,23 +39,32 @@ function Components.Layout(root, cols, rows, onCreated)
     return o
 end
 
+---@class ComponentsComputed
+---@field Root ExtuiStyledRenderable
+---@field Update fun(...)
+---@field Field string
 ---@param root ExtuiStyledRenderable
 ---@param event string
----@param onEvent fun(root: ExtuiStyledRenderable, ...: any): any
+---@param compute fun(computed: ComponentsComputed, ...: any): any
 ---@param field string|nil default "Label"
----@return ExtuiStyledRenderable
-function Components.Computed(root, event, onEvent, field)
+---@return ComponentsComputed
+function Components.Computed(root, compute, event, field)
     field = field or "Label"
 
-    Event.On(event, function(...)
+    local o = {
+        Root = root,
+        Field = field,
+    }
+
+    function o.Update(...)
         local value = { ... }
 
         if #value == 1 then
             value = value[1]
         end
 
-        if onEvent then
-            value = onEvent(root, ...)
+        if compute then
+            value = compute(root, ...)
         end
 
         if type(value) == "table" then
@@ -67,7 +78,11 @@ function Components.Computed(root, event, onEvent, field)
         if value ~= nil then
             root[field] = value
         end
-    end)
+    end
+
+    if event then
+        WindowEvent(event, o.Update)
+    end
 
     return root
 end
@@ -132,11 +147,9 @@ end
 ---@param event string|nil
 ---@return ComponentsConditional
 function Components.Conditional(root, create, event)
-    local group = root:AddGroup(U.RandomId())
-
     local o = {
-        Root = group,
         Created = {},
+        Root = root,
     }
 
     function o.Update(bool)
@@ -162,8 +175,30 @@ function Components.Conditional(root, create, event)
     end
 
     if event then
-        Event.On(event, o.Update)
+        WindowEvent(event, o.Update)
     end
 
     return o
+end
+
+---@param root ExtuiTreeParent
+---@param tbl table
+---@param label string|nil
+---@return ExtuiTree
+function Components.Tree(root, tbl, label)
+    local tree = root:AddTree(U.RandomId())
+    tree.Label = label or "Root"
+
+    local function addNode(node, data)
+        for k, v in pairs(data) do
+            if type(v) == "table" then
+                addNode(node:AddTree(k), v)
+            else
+                node:AddText("   " .. k .. " = " .. tostring(v))
+            end
+        end
+    end
+    addNode(tree, tbl)
+
+    return tree
 end

@@ -1,2 +1,7 @@
 Require("JustCombat/Shared")
+if Ext.IMGUI == nil then
+    L.Warn("IMGUI not available.", "Update to Script Extender v16.")
+    return
+end
+
 Require("JustCombat/GUI/_Init")
