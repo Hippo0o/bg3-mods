@@ -74,6 +74,24 @@ Commands = {}
 Require("CombatMod/Server/Intro")
 Require("CombatMod/Server/Player")
 Require("CombatMod/Server/Commands")
+Require("CombatMod/Server/ModEvents")
+
+GameState.OnLoad(function()
+    External.LoadConfig()
+
+    PersistentVars.Asked = PersistentVars.Active
+    if PersistentVars.Asked == false then
+        Intro.AskOnboarding()
+    end
+
+    if not U.Equals(PersistentVars.Config, {}) then
+        External.ApplyConfig(UT.Filter(PersistentVars.Config, function(v, k)
+            return k ~= "Dev" and k ~= "Debug"
+        end, true))
+    end
+end, true)
+
+ModEvent.Register("ModInit")
 
 local isActive = false
 function IsActive()
@@ -91,6 +109,8 @@ local function init()
     Event.Trigger(GameState.EventLoad)
 
     L.Info(L.RainbowText(Mod.Prefix .. " is now active. Have fun!"))
+
+    Event.Trigger("ModInit")
 end
 
 Event.On("ModActive", function()
@@ -107,21 +127,6 @@ Event.On("ModActive", function()
     -- client only listens once for this event
     Net.Send("ModActive")
 end)
-
-GameState.OnLoad(function()
-    External.LoadConfig()
-
-    PersistentVars.Asked = PersistentVars.Active
-    if PersistentVars.Asked == false then
-        Intro.AskOnboarding()
-    end
-
-    if not U.Equals(PersistentVars.Config, {}) then
-        External.ApplyConfig(UT.Filter(PersistentVars.Config, function(v, k)
-            return k ~= "Dev" and k ~= "Debug"
-        end, true))
-    end
-end, true)
 
 GameState.OnLoad(function()
     L.Debug("Check if mod is active", PersistentVars.Active)

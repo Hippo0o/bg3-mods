@@ -1,6 +1,3 @@
----@type ModEvent
-local ModEvent = Require("Hlib/ModEvent")
-
 ModEvent.Register("ScenarioCombatStarted")
 ModEvent.Register("ScenarioRoundStarted")
 ModEvent.Register("ScenarioEnemySpawned")

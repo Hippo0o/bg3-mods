@@ -87,6 +87,9 @@ C = UT.Merge(Constants, C)
 ---@type GameState
 GameState = Require("Hlib/GameState")
 
+---@type ModEvent
+ModEvent = Require("Hlib/ModEvent")
+
 ---@type Async
 Async = Require("Hlib/Async")
 WaitUntil = Async.WaitUntil

@@ -5,6 +5,8 @@ end
 
 Require("CombatMod/Shared")
 
+ModEvent.Register("ModInit")
+
 local isActive = false
 function IsActive()
     return isActive
@@ -19,6 +21,8 @@ local function init()
     Require("CombatMod/ModActive/Client/_Init")
 
     Event.Trigger(GameState.EventLoad)
+
+    Event.Trigger("ModInit")
 end
 
 Require("CombatMod/Overwrites")
