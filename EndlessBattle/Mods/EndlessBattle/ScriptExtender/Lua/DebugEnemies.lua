@@ -1,6 +1,7 @@
 
 Osi.SetImmortal(GetHostCharacter(), 1)
-Osi.SetHitpoints(GetHostCharacter(), 1000)
+Osi.SetHitpoints(GetHostCharacter(), 1000, "HEAL")
+Osi.SetHitpointsPercentage(GetHostCharacter(), 100, "HEAL")
 
 if DEBUG_ENEMIES then
     return

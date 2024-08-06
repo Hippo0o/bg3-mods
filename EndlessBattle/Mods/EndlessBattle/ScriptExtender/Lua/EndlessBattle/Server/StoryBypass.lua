@@ -180,3 +180,25 @@ U.Osiris.On(
         end)
     end)
 )
+
+function StoryBypass.ClearArea(character)
+    local toRemove = UT.Filter(UE.GetNearby(character, 50, true), function(v)
+        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
+            or (
+                v.Entity.ServerItem
+                and not Item.IsOwned(v.Guid)
+                and (v.Entity.ServerItem.CanUse or v.Entity.ServerItem.CanBePickedUp)
+            )
+    end)
+
+    for _, batch in pairs(UT.Batch(toRemove, 20)) do
+        Schedule(function()
+            for _, b in pairs(batch) do
+                L.Debug("Removing entity.", b.Guid)
+                UE.Remove(b.Guid)
+                -- Osi.SetOnStage(v.Guid, 0)
+                -- Osi.DisappearOutOfSightTo(v.Guid, Player.Host(), "Run", 1, "")
+            end
+        end)
+    end
+end

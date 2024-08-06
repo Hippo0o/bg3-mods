@@ -142,16 +142,7 @@ function Action.ClearArea()
         return
     end
 
-    local toRemove = UT.Filter(UE.GetNearby(Player.Host(), 50, true), function(v)
-        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
-    end)
-
-    for _, v in pairs(toRemove) do
-        L.Debug("Removing entity.", v.Guid)
-        UE.Remove(v.Guid)
-        -- Osi.SetOnStage(v.Guid, 0)
-        -- Osi.DisappearOutOfSightTo(v.Guid, Player.Host(), "Run", 1, "")
-    end
+    StoryBypass.ClearArea(Player.Host())
 end
 
 function Action.StartCombat()
@@ -245,10 +236,18 @@ function Action.StartRound()
 end
 
 function Action.NotifyStarted()
-    return RetryUntil(function()
+    return RetryUntil(function(self)
+        if not S then
+            self:Clear()
+            return
+        end
+        if S.OnMap then
+            return true
+        end
+
         Player.Notify(__("Leave camp to join the battle."))
 
-        return not S or S.OnMap
+        return false
     end, {
         retries = 10,
         interval = 15000,
@@ -343,7 +342,7 @@ end
 
 ---@return table
 function Scenario.GetTemplates()
-    return External.Templates.GetScenarios() or scenarioTemplates
+    return External.Templates.GetScenarios(scenarioTemplates)
 end
 
 function Scenario.ExportTemplates()
@@ -438,8 +437,10 @@ function Scenario.Start(template, map)
 
     scenario.LootRates = template.Loot or C.LootRates
 
+    L.Dump(time)
     local enemyCount = 0
     for round, definitions in pairs(scenario.Timeline) do
+        L.Dump("Adding enemies for round.", round, definitions)
         for _, definition in pairs(definitions) do
             local e
             if UT.Contains(C.EnemyTier, definition) then
@@ -459,7 +460,7 @@ function Scenario.Start(template, map)
         end
     end
 
-    if map.Timeline then
+    if map.Timeline and UT.Size(map.Timeline) > 0 then
         -- pad positions from the map timeline
         if UT.Size(scenario.Positions) < UT.Size(map.Timeline) then
             UT.Merge(scenario.Positions, map.Timeline)
@@ -630,7 +631,9 @@ U.Osiris.On(
         end
 
         L.Debug("Entered combat.", guid, combatGuid)
-        Enemy.CreateTemporary(guid)
+        Schedule(function()
+            Enemy.CreateTemporary(guid)
+        end)
     end)
 )
 

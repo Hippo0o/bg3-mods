@@ -26,11 +26,15 @@ function Creation.Main(tab)
 
         pb.OnClick = function()
             local host = UE.GetHost()
-            local pos = host.Transform.Transform.Translate
             local region = host.Level.LevelName
-            local x, y, z = table.unpack(pos)
-            posBox.Text = posBox.Text .. string.format("%s: %s, %s, %s", region, x, y, z) .. "\n"
-            pi.Text = string.format("%s, %s, %s", x, y, z)
+            Net.RCE("return Osi.GetPosition(Osi.GetHostCharacter())").After(function(ok, x, y, z)
+                if not ok then
+                    return
+                end
+                Net.RCE('Osi.RequestPing(%s, %s, %s, "", "")', x, y, z)
+                posBox.Text = posBox.Text .. string.format("%s: %s, %s, %s", region, x, y, z) .. "\n"
+                pi.Text = string.format("%s, %s, %s", x, y, z)
+            end)
         end
 
         ca.OnClick = function()
@@ -63,7 +67,12 @@ function Creation.Main(tab)
     end
 
     do
+        local uwp = root:AddButton(__("Unlock Waypoints"))
+        uwp.OnClick = function()
+            Net.RCE("Osi.PROC_Debug_UnlockAllWP()")
+        end
         local wp = root:AddCollapsingHeader(__("Waypoints"))
+        wp.SameLine = true
         Components.Layout(wp, 1, 1, function(layout)
             layout.Table.ScrollY = true
             local wp = layout.Cells[1][1]

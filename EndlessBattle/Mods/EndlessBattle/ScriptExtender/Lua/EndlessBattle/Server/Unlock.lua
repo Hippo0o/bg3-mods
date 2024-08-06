@@ -1,5 +1,12 @@
 local unlocks = Require("EndlessBattle/Templates/Unlocks.lua")
 
+local persistentUnlocks = IO.LoadJson("Save/Unlocks.json") or {}
+local function persistUnlock(unlock)
+    persistentUnlocks[unlock.Id] = unlock.Bought
+
+    IO.SaveJson("Save/Unlocks.json", persistentUnlocks)
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                          Structures                                         --
@@ -39,6 +46,10 @@ function Object:Buy(character)
     self.Bought = self.Bought + 1
     self.BoughtBy[U.UUID.Extract(character)] = true
     self.OnActivate(self, character)
+
+    if self.Persistent then
+        persistUnlock(self)
+    end
 end
 
 function Object:Buyable()
@@ -135,6 +146,12 @@ function Unlock.Sync()
     end
 
     for i, u in pairs(PersistentVars.Unlocks) do
+        if u.Persistent then
+            if persistentUnlocks[u.Id] and persistentUnlocks[u.Id] > 0 then
+                u.Bought = persistentUnlocks[u.Id]
+            end
+        end
+
         PersistentVars.Unlocks[i] = Unlock.Restore(u)
     end
 

@@ -240,6 +240,10 @@ end
 
 function Object:Sync()
     local entity = self:Entity()
+    if not entity.ServerCharacter then
+        L.Debug("Entity not found", self.GUID)
+        return
+    end
 
     local currentTemplate = entity.ServerCharacter.Template
     if self.TemplateId == nil then
@@ -347,7 +351,7 @@ function Object:Clear(keepCorpse)
             UE.Remove(guid)
         end
 
-        return Osi.IsDead(guid) == 1 or not entity:IsAlive()
+        return Osi.IsDead(guid) == 1 or not entity or not entity:IsAlive()
     end, { retries = 3, interval = 300, immediate = true }).After(function()
         if not keepCorpse then
             for db, matches in pairs({
@@ -452,7 +456,8 @@ function Enemy.GetTemplates()
     Defer(3000, function()
         cache = nil
     end)
-    cache = External.Templates.GetEnemies() or enemyTemplates
+    cache = External.Templates.GetEnemies(enemyTemplates)
+
     return cache
 end
 

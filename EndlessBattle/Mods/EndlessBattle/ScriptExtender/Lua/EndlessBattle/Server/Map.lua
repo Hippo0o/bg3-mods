@@ -117,7 +117,7 @@ end
 function Map.GetTemplates(region)
     local r = {}
 
-    for _, m in ipairs(External.Templates.GetMaps() or mapTemplates) do
+    for _, m in ipairs(External.Templates.GetMaps(mapTemplates)) do
         if region == nil or m.Region == region then
             table.insert(r, m)
         end

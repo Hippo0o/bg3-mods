@@ -128,6 +128,9 @@ if Mod.EnableRCE then
     ---@vararg any for string.format
     ---@return ChainableEvent
     function M.RCE(code, ...)
+        if Mod.Dev then
+            L.Dump(code, ...)
+        end
         code = string.format(code, ...)
 
         return M.Request("RCE", code).After(function(event)

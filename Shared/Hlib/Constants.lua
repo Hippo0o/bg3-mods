@@ -47,6 +47,7 @@ local M = {
             MyconidColony = "S_UND_Myconid_WaypointTrigger_b83f13a0-e988-48f1-9068-ea9be2adffb2",
             GrymForge = "S_UND_Duergar_WaypointTrigger_01d43e65-d370-46c6-9998-a9f7523221eb",
             RisenRoad = "S_PLA_WaypointShrine_f68dedbb-a256-40f6-a01e-ab261851df5d",
+            WisperingDepth = "S_FOR_Bottomless_WaypointTrigger_ad3614e0-8895-45dd-a05d-a78eba584202"
         },
         Act1b = { -- CRE_Main_A
             TrieltaCrags = "S_CRE_Exterior_Waypoint_Pos_00abc10c-921d-46f9-80e0-2b8f92f884c7",
