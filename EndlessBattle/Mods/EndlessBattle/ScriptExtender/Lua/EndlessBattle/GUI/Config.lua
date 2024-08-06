@@ -8,18 +8,6 @@ function Config.Main(tab)
     Net.Send("Config")
 
     ---@type ExtuiCheckbox
-
-    local c1 = Config.Checkbox(
-        root,
-        "Enable Debug",
-        "some more info in the console and other debug features",
-        "Debug",
-        function(ckb)
-            Event.Trigger("ToggleDebug", ckb.Checked)
-        end
-    )
-    c1.Checked = Mod.Debug
-
     local c2 = Config.Checkbox(
         root,
         "Bypass Story",
@@ -68,6 +56,9 @@ function Config.Main(tab)
 
     local c8 =
         Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
+
+    local c1 = Config.Checkbox(root, "Enable Debug", "some more info in the console and other debug features", "Debug")
+    c1.Checked = Mod.Debug
 
     -- status label
     root:AddSeparator()
@@ -143,6 +134,8 @@ function Config.Main(tab)
         c6.Checked = config.SpawnItemsAtPlayer
         c7.Value = { config.ExpMultiplier, 0, 0, 0 }
         c8.Checked = config.RoguelikeMode
+
+        Event.Trigger("ToggleDebug", config.Debug)
     end)
 
     root:AddSeparator()

@@ -8,11 +8,7 @@ Require("EndlessBattle/GUI/Debug")
 -- register window event listeners
 ---@return EventListener
 function WindowEvent(event, callback, once)
-    local chain = Event.ChainOn(event, once).After(callback):Catch(function(self, err)
-        self:Unregister()
-    end)
-
-    return chain.Source
+    return Event.On(event, callback, once)
 end
 function WindowNet(event, callback, ...)
     return WindowEvent(Net.EventName(event), callback, ...)
