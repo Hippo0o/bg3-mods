@@ -16,7 +16,6 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field Map Map
 ---@field CombatId string
 ---@field Round integer
----@field UserId number
 ---@field Timeline table<string, number> Round, Amount of enemies
 ---@field LootObjects table<string, number>
 ---@field LootArmor table<string, number>
@@ -30,7 +29,6 @@ local Object = Libs.Object({
     Map = nil,
     CombatId = nil,
     OnMap = false,
-    UserId = nil,
     Round = 0,
     Timeline = {},
     LootObjects = {},
@@ -439,8 +437,7 @@ end
 
 ---@param template table
 ---@param map Map
----@param userId number|nil
-function Scenario.Start(template, map, userId)
+function Scenario.Start(template, map)
     if S ~= nil then
         L.Error("Scenario already started.")
         return
@@ -455,7 +452,6 @@ function Scenario.Start(template, map, userId)
     scenario.LootObjects = template.Loot.Objects
     scenario.LootArmor = template.Loot.Armor
     scenario.LootWeapons = template.Loot.Weapons
-    scenario.UserId = userId
 
     for round, definition in pairs(template.Timeline) do
         local enemyCount = #definition

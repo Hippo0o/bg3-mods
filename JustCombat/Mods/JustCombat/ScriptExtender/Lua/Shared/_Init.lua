@@ -28,7 +28,7 @@ Require("Shared/Event")
 Require("Shared/GameState")
 Require("Shared/Async")
 Require("Shared/Net")
-Require("Shared/EventDebug")
+Require("Shared/OsirisEventDebug")
 
 Ext.Events.SessionLoaded:Subscribe(function()
     local ModInfo = Ext.Mod.GetMod(Mod.ModUUID)["Info"]

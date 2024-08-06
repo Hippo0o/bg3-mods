@@ -9,8 +9,6 @@
 ---@param userId number
 ---@return string GUID of the host character
 function Player.Host(userId)
-    userId = userId or (S and S.UserId or nil)
-
     if userId then
         local player = UT.Find(UE.GetPlayers(), function(guid)
             if Ext.Entity.Get(guid).ServerCharacter.UserID == userId then

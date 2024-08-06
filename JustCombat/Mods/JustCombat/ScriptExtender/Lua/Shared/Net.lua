@@ -5,9 +5,6 @@ local Utils = Require("Shared/Utils")
 ---@type Libs
 local Libs = Require("Shared/Libs")
 
----@class Net
-local M = {}
-
 ---@class NetEvent : LibsObject
 ---@field Action string
 ---@field Payload any
@@ -52,6 +49,9 @@ Ext.Events.NetMessage:Subscribe(function(msg)
     Event.Trigger(netEventName(m.Action), m)
 end)
 
+---@class Net
+local M = {}
+
 ---@param action string
 ---@param payload any
 ---@param responseAction string|nil
@@ -79,7 +79,7 @@ end
 ---@param action string
 ---@param callback fun(event: NetEvent): void
 ---@param once boolean|nil
----@return NetListener
+---@return EventListener
 function M.On(action, callback, once)
     return Event.On(netEventName(action), callback, once)
 end

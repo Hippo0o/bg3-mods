@@ -6,33 +6,9 @@ local Utils = Require("Shared/Utils")
 ---@type Event
 local Event = Require("Shared/Event")
 
----@class GameState
-local M = {}
-
 local modeSave = "GameStateSave"
 local modeLoad = "GameStateLoad"
 local modeUnload = "GameStateUnload"
-
----@param callback fun()
----@param once boolean
----@return StateAction
-function M.OnSaving(callback, once)
-    return Event.On(modeSave, callback, once)
-end
-
----@param callback fun()
----@param once boolean
----@return StateAction
-function M.OnLoading(callback, once)
-    return Event.On(modeLoad, callback, once)
-end
-
----@param callback fun()
----@param once boolean
----@return StateAction
-function M.OnUnloading(callback, once)
-    return Event.On(modeUnload, callback, once)
-end
 
 Ext.Events.GameStateChanged:Subscribe(function(e)
     if e.FromState == "Sync" and e.ToState == "Running" then
@@ -52,5 +28,29 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
         Event.Trigger(modeUnload, e)
     end
 end)
+
+---@class GameState
+local M = {}
+
+---@param callback fun()
+---@param once boolean
+---@return EventListener
+function M.OnSaving(callback, once)
+    return Event.On(modeSave, callback, once)
+end
+
+---@param callback fun()
+---@param once boolean
+---@return EventListener
+function M.OnLoading(callback, once)
+    return Event.On(modeLoad, callback, once)
+end
+
+---@param callback fun()
+---@param once boolean
+---@return EventListener
+function M.OnUnloading(callback, once)
+    return Event.On(modeUnload, callback, once)
+end
 
 return M

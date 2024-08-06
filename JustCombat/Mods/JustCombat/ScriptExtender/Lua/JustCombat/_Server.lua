@@ -138,7 +138,7 @@ Net.On("Start", function(event)
         return
     end
 
-    Scenario.Start(template, map, event:UserId())
+    Scenario.Start(template, map)
     Net.Respond(event, { true })
 end)
 
@@ -198,7 +198,7 @@ do
 
         -- if start == 0 then
         --     start = 1
-        --     Require("Shared/EventDebug").Attach()
+        --     Require("Shared/OsirisEventDebug").Attach()
         -- end
         -- GameMode.AskUnlockAll()
 
