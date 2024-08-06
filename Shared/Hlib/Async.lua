@@ -284,6 +284,21 @@ function M.Schedule(func)
     return Runner.Chainable(lowPrio, func)
 end
 
+---@param ticks number
+---@param func fun()|nil
+---@return ChainableRunner
+function M.WaitTicks(ticks, func)
+    local chainable = Runner.Chainable(prio, func)
+    local tick = 0
+
+    chainable.Source.ExecCond = function(_, _)
+        tick = tick + 1
+        return tick >= ticks
+    end
+
+    return chainable
+end
+
 ---@param ms number
 ---@param func fun(self: Runner)
 ---@return Runner

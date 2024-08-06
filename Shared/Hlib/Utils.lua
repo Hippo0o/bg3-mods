@@ -449,6 +449,22 @@ function M.Table.Set(t)
     end)
 end
 
+---@param t table
+---@param key string
+---@return table<string, table>
+function M.Table.GroupBy(t, key)
+    local r = {}
+    for k, v in pairs(t) do
+        local vk = v[key]
+        if not r[vk] then
+            r[vk] = {}
+        end
+
+        r[vk][k] = v
+    end
+    return r
+end
+
 function M.Table.Pack(...)
     return { ... }
 end
