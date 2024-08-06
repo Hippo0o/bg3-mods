@@ -43,7 +43,6 @@ local Loop = Libs.Object({
     end,
     Start = function(self) ---@param self Loop
         assert(self.Handle == nil, "Loop already running.")
-        Utils.Log.Debug("Loop started.")
         local ticks = 0
         self.Handle = Ext.Events.Tick:Subscribe(function(e)
             if self:IsEmpty() then
@@ -61,7 +60,6 @@ local Loop = Libs.Object({
     end,
     Stop = function(self) ---@param self Loop
         assert(self.Handle ~= nil, "Loop not running.")
-        Utils.Log.Debug("Loop stopped.")
         Ext.Events.Tick:Unsubscribe(self.Handle)
         self.Handle = nil
     end,
