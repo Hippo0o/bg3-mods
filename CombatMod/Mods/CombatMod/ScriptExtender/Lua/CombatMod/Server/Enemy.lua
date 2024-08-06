@@ -16,6 +16,7 @@ L.Debug("Enemies loaded", #enemyTemplates)
 ---@field Tier string
 ---@field Info table
 ---@field GUID string
+---@field Temporary boolean
 -- potential overwrites
 ---@field LevelOverride integer
 ---@field Equipment string
@@ -33,6 +34,7 @@ local Object = Libs.Struct({
     Info = {},
     GUID = nil,
     IsBoss = false,
+    Temporary = false,
     -- not required
     Race = nil,
     LevelOverride = nil,
@@ -220,6 +222,18 @@ function Object:ModifyExperience(additonal)
     entity.ServerExperienceGaveOut.Experience = math.floor(exp / devider)
 end
 
+function Object:OnCombat()
+    if self.Temporary then
+        return
+    end
+
+    if Osi.IsInCombat(self.GUID) ~= 1 then
+        Osi.SetTag(self.GUID, C.ShadowCurseTag)
+    else
+        Osi.ClearTag(self.GUID, C.ShadowCurseTag)
+    end
+end
+
 function Object:Modify(keepFaction)
     if not self:IsSpawned() or Osi.IsDead(self.GUID) == 1 then
         return
@@ -239,6 +253,8 @@ function Object:Modify(keepFaction)
         return self:Entity():IsAlive()
     end).After(function()
         self:ModifyExperience()
+
+        self:OnCombat()
 
         L.Debug(
             "Enemy modified: ",
@@ -418,6 +434,7 @@ function Enemy.CreateTemporary(object)
     local e = Object.New({ Name = "Temporary" })
     e.GUID = U.UUID.Extract(object)
     e.Tier = C.EnemyTier[1]
+    e.Temporary = true
 
     PersistentVars.SpawnedEnemies[e.GUID] = e
 
@@ -787,3 +804,50 @@ function Enemy.TestEnemies(enemies, keepAlive)
         IO.SaveJson("RatedEnemies.json", dump)
     end)
 end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
+U.Osiris.On("EnteredCombat", 2, "after", function(character, _)
+    if Osi.IsPlayer(character) == 1 then
+        return
+    end
+
+    local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(character)]
+    if enemy then
+        enemy:OnCombat()
+    end
+end)
+
+U.Osiris.On("LeftCombat", 2, "after", function(character, _)
+    if Osi.IsPlayer(character) == 1 then
+        return
+    end
+
+    local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(character)]
+    if enemy then
+        enemy:OnCombat()
+    end
+end)
+
+U.Osiris.On(
+    "AttackedBy",
+    7,
+    "after",
+    function(defender, attackerOwner, attacker2, damageType, damageAmount, damageCause, storyActionID)
+        if Osi.IsPlayer(defender) == 1 then
+            return
+        end
+        if Osi.IsPlayer(attackerOwner) ~= 1 then
+            return
+        end
+
+        local enemy = PersistentVars.SpawnedEnemies[U.UUID.Extract(defender)]
+        if enemy then
+            enemy:Combat(true)
+        end
+    end
+)

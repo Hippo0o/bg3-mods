@@ -484,8 +484,7 @@ function Item.GenerateLoot(rolls, lootRates, fixedRolls)
         local items = {}
         local fail = 0
 
-        -- 1/7 chance for object
-        local bonusCategory = ({ "Object", "Weapon", "Armor", "Weapon", "Armor", "Weapon", "Armor" })[U.Random(7)]
+        local bonusCategory = ({ "Object", "Weapon", "Armor" })[U.Random(3)]
 
         local rarity = nil
         -- avoid 0 rolls e.g. legendary objects dont exist

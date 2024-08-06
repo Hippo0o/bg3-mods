@@ -802,6 +802,10 @@ U.Osiris.On(
             if Osi.IsAlly(Player.Host(), guid) == 0 then
                 table.insert(s.SpawnedEnemies, e)
                 Player.Notify(__("Enemy %s joined.", e:GetTranslatedName()), true)
+
+                Event.Trigger("ScenarioEnemySpawned", Current(), e)
+
+                Action.EnemyAdded(e)
             end
         end)
     end)
