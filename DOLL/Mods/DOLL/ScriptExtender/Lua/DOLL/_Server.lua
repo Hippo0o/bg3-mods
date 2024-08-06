@@ -1,7 +1,9 @@
 Require("DOLL/Shared")
 
-Require("DOLL/Server/Transmog")
+Require("DOLL/Server/Preset")
 Require("DOLL/Server/Visual")
+
+Require("DOLL/Server/Transmog")
 Require("DOLL/Server/Doll")
 
 Require("DOLL/Server/Net")
