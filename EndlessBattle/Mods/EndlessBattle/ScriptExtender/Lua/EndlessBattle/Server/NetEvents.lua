@@ -77,7 +77,7 @@ Net.On("Start", function(event)
         Net.Respond(event, { false, "Scenario not found." })
         return
     end
-    if map == nil then
+    if mapName and map == nil then
         Net.Respond(event, { false, "Map not found." })
         return
     end
@@ -154,6 +154,10 @@ Event.On("ScenarioEnded", function()
     Schedule(function()
         Net.Send("SyncState", PersistentVars)
     end)
+end)
+
+Event.On("RogueScoreChanged", function()
+    Net.Send("SyncState", PersistentVars)
 end)
 
 Event.On("ScenarioStopped", function()

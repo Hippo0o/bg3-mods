@@ -176,30 +176,41 @@ Net.On("BuyUnlock", function(event)
         return u.Id == event.Payload.Id
     end)
 
-    L.Dump("Unlock", unlock, found)
+    local function soundFail()
+        Osi.PlaySoundResource(Player.Host(event:UserId()), "294bbcfa-fd7b-d8bf-bba1-5b790f8518af")
+    end
+    local function soundSuccess()
+        Osi.PlaySoundResource(Player.Host(event:UserId()), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
+    end
 
     if unlock == nil then
         Net.Respond(event, { false, "Unlock not found." })
+        soundFail()
         return
     end
 
     if not unlock:Buyable() then
         Net.Respond(event, { false, "Unlock out of stock." })
+        soundFail()
         return
     end
 
     if unlock.Character and not event.Payload.Character then
         Net.Respond(event, { false, "Unlock needs a character." })
+        soundFail()
         return
     end
 
     if unlock.Cost > PersistentVars.Currency then
         Net.Respond(event, { false, "Not enough currency." })
+        soundFail()
+
         return
     end
 
     unlock:Buy(event.Payload.Character or Player.Host(event:UserId()))
     PersistentVars.Currency = PersistentVars.Currency - unlock.Cost
+    soundSuccess()
 
     Net.Respond(event, { true, PersistentVars.Currency })
     Unlock.UpdateUnlocked()

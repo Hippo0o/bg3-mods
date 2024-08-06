@@ -394,7 +394,7 @@ end
 ---@return Enemy|nil
 function Enemy.Find(search)
     for _, enemy in Enemy.Iter() do
-        if US.Contains(search, { enemy.TemplateId, enemy.Name, enemy:GetId() }) then
+        if US.Contains(search, { enemy.TemplateId, enemy.Name, enemy:GetId() }, false, true) then
             return enemy
         end
     end
@@ -425,8 +425,16 @@ function Enemy.GetByTemplateId(templateId)
     return list
 end
 
+local cache = nil
 function Enemy.GetTemplates()
-    return External.Templates.GetEnemies() or enemyTemplates
+    if cache then
+        return cache
+    end
+    Defer(3000, function()
+        cache = nil
+    end)
+    cache = External.Templates.GetEnemies() or enemyTemplates
+    return cache
 end
 
 ---@field filter fun(data: Enemy):boolean data is the enemy source data

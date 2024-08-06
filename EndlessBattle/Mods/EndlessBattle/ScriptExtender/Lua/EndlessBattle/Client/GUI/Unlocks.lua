@@ -35,7 +35,6 @@ function ClientUnlock.Main(tab)
 end
 
 function ClientUnlock.GetStock(unlock)
-    L.Dump("Unlock", unlock)
     local stock = unlock.Amount - unlock.Bought
     if stock > 0 then
         return __("Stock: %s", unlock.Amount - unlock.Bought .. "/" .. unlock.Amount)
@@ -48,14 +47,34 @@ function ClientUnlock.Tile(root, unlock)
 
     grp:AddIcon(unlock.Icon)
 
-    local text = grp:AddText(unlock.Name)
-    grp:AddSeparator()
-    local cost = grp:AddText(__("Cost: %s", unlock.Cost))
+    local col2 = grp:AddGroup(unlock.Id)
+    col2.SameLine = true
+    local cost = col2:AddText(__("Cost: %s", unlock.Cost))
     if unlock.Persistent then
-        cost.Label = cost.Label .. string.format(" (%s)", __("Permanent"))
+        cost.Label = __("Permanent") .. "\n" .. cost.Label
     end
+
+    local buyLabel = col2:AddText("")
+
+    if unlock.Amount ~= nil then
+        local amount = Components.Computed(buyLabel, function(root, unlock)
+            return ClientUnlock.GetStock(unlock)
+        end)
+        amount.Update(unlock)
+
+        Event.On("StateChange", function(state)
+            for _, new in pairs(state.Unlocks) do
+                if new.Id == unlock.Id then
+                    amount.Update(new)
+                end
+            end
+        end):Exec(State)
+    end
+
     grp:AddSeparator()
 
+    local text = grp:AddText(unlock.Name)
+    grp:AddSeparator()
     do
         local unlock = unlock
 
@@ -103,29 +122,22 @@ end
 function ClientUnlock.Buy(root, unlock)
     local grp = root:AddGroup(U.RandomId())
 
-    local buyLabel = grp:AddText("")
+    ---@type ExtuiButton
     local btn = grp:AddButton(__("Buy"))
 
     if unlock.Amount ~= nil then
-        local amount = Components.Computed(buyLabel, function(root, unlock)
-            return ClientUnlock.GetStock(unlock)
-        end)
-        amount.Update(unlock)
-
         Event.On("StateChange", function(state)
             for _, new in pairs(state.Unlocks) do
                 if new.Id == unlock.Id then
-                    amount.Update(new)
                     btn.Visible = new.Bought < new.Amount
                 end
             end
         end):Exec(State)
-    else
-        buyLabel.Label = __("Infinite")
     end
 
     btn.IDContext = U.RandomId()
     btn.OnClick = function()
+        btn:SetStyle("Alpha", 0.2)
         Net.Request("BuyUnlock", { Id = unlock.Id }).After(function(event)
             local ok, res = table.unpack(event.Payload)
 
@@ -134,16 +146,17 @@ function ClientUnlock.Buy(root, unlock)
             else
                 Event.Trigger("Success", __("Unlock %s bought.", unlock.Name))
             end
+            btn:SetStyle("Alpha", 1)
         end)
     end
+
+    grp:AddText("").SameLine = true
 
     return grp
 end
 
 function ClientUnlock.BuyChar(root, unlock)
     local grp = root:AddGroup(U.RandomId())
-
-    local buyLabel = grp:AddText("")
 
     ---@type ExtuiCombo
     local combo = grp:AddCombo("")
@@ -155,48 +168,20 @@ function ClientUnlock.BuyChar(root, unlock)
     btn.SameLine = true
 
     if unlock.Amount ~= nil then
-        local amount = Components.Computed(buyLabel, function(root, unlock)
-            return ClientUnlock.GetStock(unlock)
-        end)
-        amount.Update(unlock)
-
         Event.On("StateChange", function(state)
             for _, new in pairs(state.Unlocks) do
                 if new.Id == unlock.Id then
-                    amount.Update(new)
                     local buyable = new.Amount == nil or new.Bought < new.Amount
                     btn.Visible = buyable
                     combo.Visible = buyable
                 end
             end
         end):Exec(State)
-    else
-        buyLabel.Label = ""
     end
 
     local list = UT.Map(UE.GetParty(), function(e)
         return e.CustomName.Name .. " (" .. e.Uuid.EntityUuid .. ")", e.Uuid.EntityUuid
     end)
-
-    btn.OnClick = function()
-        local val = combo.Options[combo.SelectedIndex + 1]
-        L.Debug("Buy", val, unlock.Id)
-        local _, uuid = UT.Find(list, function(v)
-            return v == val
-        end)
-        Net.Request("BuyUnlock", { Id = unlock.Id, Character = uuid }).After(function(event)
-            local ok, res = table.unpack(event.Payload)
-            combo.SelectedIndex = 0
-
-            if not ok then
-                Event.Trigger("Error", res)
-            else
-                local name = list[uuid]:match("^(.-) %(")
-                Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, name))
-            end
-        end)
-    end
-
     Components.Computed(combo, function(_, state)
         local options = list
         if state.Unlocks then
@@ -211,6 +196,28 @@ function ClientUnlock.BuyChar(root, unlock)
 
         return UT.Values(options)
     end, "StateChange", "Options").Update(State)
+
+    btn.OnClick = function()
+        local val = combo.Options[combo.SelectedIndex + 1]
+        L.Debug("Buy", val, unlock.Id)
+        local _, uuid = UT.Find(list, function(v)
+            return v == val
+        end)
+        btn:SetStyle("Alpha", 0.2)
+        Net.Request("BuyUnlock", { Id = unlock.Id, Character = uuid }).After(function(event)
+            local ok, res = table.unpack(event.Payload)
+            combo.SelectedIndex = 0
+
+            if not ok then
+                Event.Trigger("Error", res)
+            else
+                local name = list[uuid]:match("^(.-) %(")
+                Event.Trigger("Success", __("Unlock %s bought for %s.", unlock.Name, name))
+            end
+            btn:SetStyle("Alpha", 1)
+        end)
+    end
+    grp:AddText("").SameLine = true
 
     return grp
 end
