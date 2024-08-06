@@ -1,139 +1,74 @@
-local damageMap = {}
-local damageMax = {}
-local cap = 10
+PersistentVars = {
+    damageMap = {},
+    displayedFor = {},
+    appliedFor = {},
+}
 
-local current = nil
-
-local function applyBlock(entity, block)
-    entity.Health.field_20 = block and 1 or 0
-    entity:Replicate("Health")
-end
-
-local function refresh(block)
-    local function iter(entity)
-        if entity.PartyMember then
-            return
-        end
-
-        if not entity.IsCharacter then
-            return
-        end
-
-        if not entity.Health then
-            return
-        end
-
-        if not entity.Uuid then
-            return
-        end
-
-        if not entity.CombatParticipant then
-            return
-        end
-        if not entity.CombatParticipant.CombatHandle then
-            return
-        end
-
-        applyBlock(entity, block)
+local function defaultVars()
+    if not PersistentVars.damageMap then
+        PersistentVars.damageMap = {}
     end
-
-    for _, entity in ipairs(Ext.Entity.GetAllEntitiesWithComponent("IsInTurnBasedMode")) do
-        iter(entity)
+    if not PersistentVars.displayedFor then
+        PersistentVars.displayedFor = {}
+    end
+    if not PersistentVars.appliedFor then
+        PersistentVars.appliedFor = {}
     end
 end
 
 local function resetCap(character)
-    damageMap[character] = Osi.GetLevel(character) * cap
-    damageMax[character] = Osi.GetLevel(character) * cap
-    -- Osi.ShowNotification(character, tostring(damageMap[attackerOwner]))
+    defaultVars()
+
+    if not PersistentVars.damageMap[character] then
+        PersistentVars.damageMap[character] = Osi.GetLevel(character) * 10
+    end
 end
 
-local timer
-local function update()
-    if not current then
-        refresh(false)
+local function updateFor(character)
+    defaultVars()
+    resetCap(character)
 
-        return
+    if PersistentVars.displayedFor[character] ~= PersistentVars.damageMap[character] then
+        Ext.Loca.UpdateTranslatedString(
+            "hf1e0c115g6d6cg46efg8a89gcc641d501589",
+            "Damage left: " .. PersistentVars.damageMap[character]
+        )
+        Osi.ApplyStatus(character, "DamageCap_Status", 0)
+        PersistentVars.displayedFor[character] = PersistentVars.damageMap[character]
     end
 
-    if not damageMap[current] then
-        resetCap(current)
+    if PersistentVars.damageMap[character] <= 0 then
+        if Osi.HasActiveStatus(character, "DamageCap_Reached") ~= 1 or not PersistentVars.appliedFor[character] then
+            Osi.ApplyStatus(character, "DamageCap_Reached", 1)
+            PersistentVars.appliedFor[character] = true
+        end
+    else
+        Osi.RemoveStatus(character, "DamageCap_Reached")
+        PersistentVars.appliedFor[character] = false
     end
-
-    refresh(damageMap[current] == 0)
-
-    if timer then
-        Ext.Timer.Cancel(timer)
-    end
-    timer = Ext.Timer.WaitFor(100, function()
-        Osi.QuestMessageHide("DamageCap")
-        Ext.Timer.WaitFor(300, function()
-            local status = { "Damage Cap: \n" }
-            for character, _ in pairs(damageMax) do
-                if damageMap[character] then
-                    table.insert(
-                        status,
-                        string.format(
-                            "%s: %d/%d \n",
-                            Osi.ResolveTranslatedString(Osi.GetDisplayName(character)),
-                            tonumber(damageMap[character]) or 0,
-                            tonumber(damageMax[character]) or 0
-                        )
-                    )
-                end
-            end
-            Osi.QuestMessageShow("DamageCap", table.concat(status))
-        end)
-
-        timer = nil
-    end)
-
 end
 
 Ext.Osiris.RegisterListener("CombatRoundStarted", 2, "after", function(_, _)
-    damageMap = {}
-
-    update()
+    defaultVars()
+    PersistentVars.damageMap = {}
+    PersistentVars.displayedFor = {}
+    PersistentVars.appliedFor = {}
 end)
 
 Ext.Osiris.RegisterListener("TurnStarted", 1, "after", function(character)
-    _D({ "TurnStarted", character })
-    if Osi.IsPlayer(character) == 1 then
-        current = character
-    else
-        current = nil
+    if Osi.IsPlayer(character) ~= 1 then
+        return
     end
 
-    update()
+    updateFor(character)
 end)
 
 Ext.Osiris.RegisterListener("GainedControl", 1, "after", function(character)
-    Osi.QuestMessageHide("DamageCap")
-
-    _D({ "GainedControl", character })
-    if Osi.IsPlayer(character) ~= 1 then
+    if Osi.IsPlayer(character) ~= 1 or Osi.IsInCombat(character) ~= 1 then
         return
     end
 
-    current = character
-
-    update()
-end)
-
-Ext.Osiris.RegisterListener("EnteredCombat", 2, "after", function(character, _)
-    if Osi.IsPlayer(character) ~= 1 then
-        return
-    end
-
-    update()
-end)
-
-Ext.Osiris.RegisterListener("StartAttack", 4, "before", function(defender, attackOwner, attacker, storyActionID)
-    if Osi.IsPlayer(attackOwner) ~= 1 then
-        return
-    end
-
-    current = attackOwner
+    updateFor(character)
 end)
 
 Ext.Osiris.RegisterListener(
@@ -141,24 +76,18 @@ Ext.Osiris.RegisterListener(
     7,
     "before",
     function(defender, attackerOwner, attacker2, damageType, damageAmount, damageCause, storyActionID)
-        _D({ defender, attackerOwner, attacker2, damageType, damageAmount, damageCause, storyActionID })
-
         if Osi.IsPlayer(attackerOwner) ~= 1 then
             return
         end
 
-        if damageAmount == 0 then
-            return
+        resetCap(attackerOwner)
+
+        if damageAmount > 0 then
+            local leftFromCap = PersistentVars.damageMap[attackerOwner]
+            local allowedDamage = math.min(leftFromCap, damageAmount)
+            PersistentVars.damageMap[attackerOwner] = leftFromCap - allowedDamage
         end
 
-        if not damageMap[attackerOwner] then
-            resetCap(attackerOwner)
-        end
-
-        local leftFromCap = damageMap[attackerOwner]
-        local allowedDamage = math.min(leftFromCap, damageAmount)
-        damageMap[attackerOwner] = leftFromCap - allowedDamage
-
-        update()
+        updateFor(attackerOwner)
     end
 )

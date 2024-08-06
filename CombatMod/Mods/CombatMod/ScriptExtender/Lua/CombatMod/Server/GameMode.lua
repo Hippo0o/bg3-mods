@@ -25,6 +25,7 @@ function GameMode.AskTutSkip()
                     -- Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
                     -- Osi.TeleportTo(Player.Host(), C.NPCCharacters.Jergal, "", 1, 1, 1)
                     Osi.PROC_Camp_ForcePlayersToCamp()
+                    Osi.AddGold(Player.Host(), 500)
 
                     External.LoadConfig()
 
@@ -594,9 +595,11 @@ function GameMode.RecruitOrigin(id)
 
     local function recruit(character, dialog)
         Osi.PROC_ORI_SetupCamp(character, 1)
+        Osi.SetOnStage(character, 1)
+
         Osi.RegisterAsCompanion(character, Player.Host())
-        Osi.SetEntityEvent(character, "CampSwapped_WLDMAIN", 1)
-        Osi.SetEntityEvent(character, "CAMP_CamperInCamp_WLDMAIN", 1)
+        -- Osi.SetEntityEvent(character, "CampSwapped_WLDMAIN", 1)
+        -- Osi.SetEntityEvent(character, "CAMP_CamperInCamp_WLDMAIN", 1)
 
         Osi.PROC_GLO_InfernalBox_SetNewOwner(character)
         Osi.PROC_GLO_InfernalBox_AddToOwner()

@@ -201,25 +201,14 @@ GameState.OnSave(IfActive(function()
     end
 end))
 
-Event.On("ScenarioTeleport", function()
-    for _, u in pairs(Unlock.Get()) do
-        u:OnReapply()
-    end
-end)
-
-Event.On("ScenarioStarted", function(scenario)
-    for _, u in pairs(Unlock.Get()) do
-        u:OnReapply()
-    end
-end)
+Event.On("ScenarioTeleport", Unlock.UpdateUnlocked)
+Event.On("ScenarioStarted", Unlock.UpdateUnlocked)
+Event.On("RogueScoreChanged", Unlock.UpdateUnlocked)
 
 Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)
 end)
 
-Event.On("RogueScoreChanged", function()
-    Unlock.UpdateUnlocked()
-end)
 
 Net.On("BuyUnlock", function(event)
     local unlock = UT.Find(Unlock.Get(), function(u)
@@ -232,6 +221,8 @@ Net.On("BuyUnlock", function(event)
     local function soundSuccess()
         Osi.PlaySoundResource(event:Character(), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
     end
+
+    Unlock.UpdateUnlocked()
 
     if Osi.IsInCombat(event:Character()) == 1 or (S and S:HasStarted()) then
         Net.Respond(event, { false, __("Cannot buy while in combat.") })
@@ -251,7 +242,7 @@ Net.On("BuyUnlock", function(event)
         return
     end
 
-    if unlock.Character and not event.Payload.Character then
+    if unlock.Character and (not event.Payload.Character or Osi.IsPlayer(event.Payload.Character) ~= 1) then
         Net.Respond(event, { false, __("Unlock needs a character.") })
         soundFail()
         return

@@ -196,7 +196,7 @@ function ClientUnlock.BuyChar(root, unlock)
         end
         list = {}
 
-        for i, u in ipairs(GE.GetParty()) do
+        for i, u in ipairs(UT.Filter(GE.GetParty(), "e -> e.PartyMember.IsPermanent")) do
             local name
             if u.CustomName then
                 name = u.CustomName.Name

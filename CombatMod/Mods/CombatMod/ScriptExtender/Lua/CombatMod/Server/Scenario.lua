@@ -140,7 +140,7 @@ function Action.GiveReward()
     Event.Trigger("ScenarioLoot", Current(), loot)
 
     local reward = Current():KillScore()
-    Osi.AddGold(Player.Host(), reward * 10)
+    Osi.AddGold(Player.Host(), reward)
     for _, p in pairs(GU.DB.GetPlayers()) do
         Osi.AddExplorationExperience(p, 100 + reward * 10)
     end
@@ -726,11 +726,10 @@ U.Osiris.On(
         end
 
         Async.WaitTicks(6, function()
-            if Ext.Entity.Get(uuid).CampPresence then
+            Osi.DetachFromPartyGroup(uuid)
+            if Ext.Entity.Get(uuid).CampPresence or not Ext.Entity.Get(uuid).ClientControl then
                 return
             end
-
-            Osi.DetachFromPartyGroup(uuid)
 
             Scenario.Teleport()
         end)
