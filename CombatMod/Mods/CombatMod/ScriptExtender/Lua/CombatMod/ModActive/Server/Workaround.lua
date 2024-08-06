@@ -6,10 +6,6 @@ function Workaround.Tadpole()
     end
 end
 
-GameState.OnLoad(Workaround.Tadpole)
-U.Osiris.On("CharacterJoinedParty", 1, "after", Workaround.Tadpole)
-U.Osiris.On("CharacterLeftParty", 1, "after", Workaround.Tadpole)
-
 function Workaround.Tags()
     for _, p in pairs(GU.Entity.GetParty()) do
         -- Osi.SetTag(p.Uuid.EntityUuid, "64bc9da1-9262-475a-a397-157600b7debd") -- AI_PREFERRED_TARGET
@@ -17,6 +13,13 @@ function Workaround.Tags()
     end
 end
 
-GameState.OnLoad(Workaround.Tags)
-U.Osiris.On("CharacterJoinedParty", 1, "after", Workaround.Tags)
-U.Osiris.On("CharacterLeftParty", 1, "after", Workaround.Tags)
+
+local function runAll()
+    Workaround.Tadpole()
+    Workaround.Tags()
+end
+
+GameState.OnLoad(runAll)
+U.Osiris.On("CharacterJoinedParty", 1, "after", runAll)
+U.Osiris.On("CharacterLeftParty", 1, "after", runAll)
+U.Osiris.On("LongRestFinished", 0, "after", runAll)
