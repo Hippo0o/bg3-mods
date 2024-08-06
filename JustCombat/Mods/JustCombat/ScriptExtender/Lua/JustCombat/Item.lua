@@ -18,7 +18,7 @@ L.Debug("Item lists loaded.", #objects, #armor, #weapons)
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
---                                            Structures                                       --
+--                                          Structures                                         --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
@@ -181,7 +181,7 @@ function Item.Armor(rarity)
             return false
         end
         if
-            not C.ItemsIncludeClothes
+            not Config.LootItemsIncludeClothes
             and (
                 cat:match("Clothing")
                 or cat:match("Shoes")

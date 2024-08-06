@@ -140,11 +140,11 @@ function M.TypedTable(typeDefs, repeatable)
                     return Object.Init(validator):Validate(value)
                 end
                 for _, enum in pairs(validator) do
-                    if value == enum then
+                    if Utils.Equals(enum, value, true) then
                         return true, value
                     end
                 end
-                return false, "Value not in enum"
+                return false, "value not in enum"
             end
 
             return false
@@ -162,39 +162,42 @@ function M.TypedTable(typeDefs, repeatable)
     end
 
     function Object:Validate(tableToValidate)
-        assert(
-            type(tableToValidate) == "table",
-            "Libs.TypedTable:Validate(tableToValidate) - table expected, got " .. type(tableToValidate)
-        )
+        if type(tableToValidate) ~= "table" then
+            return false, { "table expected, got " .. type(tableToValidate) }
+        end
 
         if self._TypeDefs._IsTypedTable then
             self._TypeDefs = { self._TypeDefs }
         end
 
         local failed = {}
-        local function validate(toCheck)
+        local function validate(repeatableKey)
             for k, _ in pairs(self._TypeDefs) do
-                local valid, error = self:TypeCheck(k, toCheck[k])
+                local valid, error = self:TypeCheck(k, tableToValidate[repeatableKey or k])
                 if not valid then
-                    error = error or "Type mismatch"
-                    -- table.insert(failed, { [tostring(k)] = error })
-                    failed[tostring(k)] = error
+                    error = error or "value invalid"
+                    failed[tostring(repeatableKey or k)] = error
                 end
             end
         end
 
         if self._Repeatable then
             if Utils.Table.Size(tableToValidate) == 0 then
-                validate({})
+                validate(1)
             end
-            for _, v in pairs(tableToValidate) do
-                validate({ v })
+            for k, v in pairs(tableToValidate) do
+                validate(k)
             end
         else
-            validate(tableToValidate)
+            validate()
         end
 
         return Utils.Table.Size(failed) == 0, failed
+    end
+
+    ---@return string[]|number[]
+    function Object:GetFields()
+        return Utils.Table.Keys(self._TypeDefs)
     end
 
     return Object.Init({
