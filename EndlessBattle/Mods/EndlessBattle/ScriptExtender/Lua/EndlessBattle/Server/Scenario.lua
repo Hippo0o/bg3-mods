@@ -507,6 +507,12 @@ function Scenario.Start(template, map)
 
     local timeline = template.Timeline
 
+    if template.Map ~= nil then
+        map = UT.Find(Map.Get(), function(m)
+            return m.Name == template.Map
+        end) or map
+    end
+
     if map == nil then
         local maps = Map.Get()
         map = maps[U.Random(#maps)]
