@@ -321,7 +321,7 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 0) -- not avoiding dangerous surfaces
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 1) -- avoiding dangerous surfaces
 
     local success = self:CreateAt(x, y, z)
 

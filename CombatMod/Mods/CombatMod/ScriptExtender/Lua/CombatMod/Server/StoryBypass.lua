@@ -118,6 +118,7 @@ function StoryBypass.ClearArea(character)
         end)
     end
 
+    Osi.CreateSurface(character, "None", 100, -1)
     -- Osi.ClearTag(v.Guid, "867f3a1e-1e4b-48c2-869e-343415231727")
     -- Osi.ClearTag(v.Guid, "f0020818-86f1-4ee9-a5a9-9ace9ecc9010")
     -- Osi.Resurrect(v.Guid)
