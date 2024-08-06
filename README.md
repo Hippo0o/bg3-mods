@@ -5,5 +5,5 @@
 ### JSON to Lua
 
 ```sh
-perl -pe 's/"(\w+)":/$1=/' input.json > output.lua
+perl -pe 's/"(\w+)"\s?:/$1=/' input.json > output.lua
 ```

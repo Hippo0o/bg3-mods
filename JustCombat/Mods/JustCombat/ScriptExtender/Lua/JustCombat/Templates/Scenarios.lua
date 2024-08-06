@@ -83,7 +83,7 @@ return {
         Loot = defaultLoot,
     },
     {
-        Name = "Scenario 3",
+        Name = "level 7 - 9",
 
         Timeline = {
             { medium, medium, medium },
@@ -99,7 +99,7 @@ return {
         Loot = defaultLoot,
     },
     {
-        Name = "Scenario 4",
+        Name = "level 8 - 10",
 
         Timeline = {
             { medium, medium, medium, medium, medium, low, low },
@@ -115,7 +115,7 @@ return {
         Loot = defaultLoot,
     },
     {
-        Name = "Scenario 5",
+        Name = "level 10 - 12",
 
         Timeline = {
             { medium, medium, high, medium, medium, ultra, ultra },
@@ -131,9 +131,8 @@ return {
         Loot = defaultLoot,
     },
     {
-        Name = "high",
+        Name = "very hard",
 
-        -- Spawns per Round
         Timeline = {
             { high, high, high },
             { high, high, high },
@@ -142,7 +141,51 @@ return {
             { epic, epic },
         },
 
-        -- Amount of enemies decide the amount of loot
+        Loot = defaultLoot,
+    },
+    {
+        Name = "ultra",
+
+        Timeline = {
+            { ultra },
+            { ultra, ultra },
+            {},
+            { ultra, ultra },
+        },
+
+        Loot = defaultLoot,
+    },
+    {
+        Name = "epic",
+
+        Timeline = {
+            { epic },
+            {},
+            { epic, epic },
+        },
+
+        Loot = defaultLoot,
+    },
+    {
+        Name = "legendary",
+
+        Timeline = {
+            { legendary },
+        },
+
+        Loot = defaultLoot,
+    },
+    {
+        Name = "impossible",
+
+        Timeline = {
+            { legendary, legendary, legendary },
+            {},
+            { legendary, legendary },
+            {},
+            { legendary },
+        },
+
         Loot = defaultLoot,
     },
 }

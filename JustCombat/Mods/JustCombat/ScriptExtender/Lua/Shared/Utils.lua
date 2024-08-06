@@ -414,9 +414,14 @@ function M.String.Contains(s, patterns, ignoreCase)
     end
     for _, pattern in ipairs(patterns) do
         if ignoreCase then
-            return M.String.IMatch(s, pattern) ~= nil
+            if M.String.IMatch(s, pattern) ~= nil then
+                return true
+            end
+        else
+            if string.match(s, pattern) ~= nil then
+                return true
+            end
         end
-        return string.match(s, pattern) ~= nil
     end
     return false
 end

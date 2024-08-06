@@ -26,7 +26,8 @@ UT.Merge(C, {
     NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral
     CombatWorkaround = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
-    BypassStory = false, -- skip dialogues, combat and interactions that aren't related to a scenario
+    BypassStory = true, -- skip dialogues, combat and interactions that aren't related to a scenario
+    BypassStoryAlways = false, -- always skip dialogues, combat and interactions that aren't related to a scenario
     ItemsIncludeClothes = false, -- include clothes in item lists
     ItemRarity = {
         "Common",
@@ -49,7 +50,12 @@ Mod.PersistentVarsTemplate = {
     SpawnedEnemies = {},
     SpawnedItems = {},
     Scenario = S,
-    Config = {},
+    Config = {
+        BypassStory = C.BypassStory,
+        BypassStoryAlways = C.BypassStoryAlways,
+        CombatWorkaround = C.CombatWorkaround,
+        ForceEnterCombat = C.ForceEnterCombat,
+    },
 }
 
 -------------------------------------------------------------------------------------------------
@@ -93,6 +99,7 @@ local GameState = Require("Shared/GameState")
 GameState.RegisterSavingAction(function()
     PersistentVars.Scenario = S
     PersistentVars.Config.BypassStory = C.BypassStory
+    PersistentVars.Config.BypassStoryAlways = C.BypassStoryAlways
     PersistentVars.Config.CombatWorkaround = C.CombatWorkaround
     PersistentVars.Config.ForceEnterCombat = C.ForceEnterCombat
 
@@ -105,7 +112,7 @@ GameState.RegisterSavingAction(function()
 
     for obj, _ in pairs(PersistentVars.SpawnedItems) do
         if
-            Item.IsOwned(obj) == 1 or Osi.IsItem(obj) == 0 -- was used
+            Item.IsOwned(obj) or Osi.IsItem(obj) == 0 -- was used
         then
             L.Debug("Cleaning up SpawnedItems", obj)
             PersistentVars.SpawnedItems[obj] = nil
@@ -123,11 +130,10 @@ GameState.RegisterLoadingAction(function(state)
         Scenario.RestoreFromState(S)
     end
 
-    if PersistentVars.Config then
-        C.BypassStory = PersistentVars.Config.BypassStory or false
-        C.CombatWorkaround = PersistentVars.Config.CombatWorkaround or false
-        C.ForceEnterCombat = PersistentVars.Config.ForceEnterCombat or false
-    end
+    C.BypassStory = PersistentVars.Config.BypassStory
+    C.BypassStoryAlways = PersistentVars.Config.BypassStoryAlways
+    C.CombatWorkaround = PersistentVars.Config.CombatWorkaround
+    C.ForceEnterCombat = PersistentVars.Config.ForceEnterCombat
 end)
 
 GameState.RegisterUnloadingAction(function()
@@ -137,7 +143,7 @@ end)
 do -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
     local function ifBypassStory(func)
         return function(...)
-            if C.BypassStory then
+            if C.BypassStory and (C.BypassStoryAlways or S ~= nil) then
                 func(...)
             end
         end
@@ -176,7 +182,7 @@ do -- story bypass skips most/all dialogues, combat and interactions that aren't
             if not paidActor and UE.IsNonPlayer(actor) then
                 L.Debug("DialogActorJoined", dialog, actor, instanceID, speakerIndex)
                 Osi.DialogRemoveActorFromDialog(instanceID, actor)
-                L.Info("Removing", actor)
+                L.Debug("Removing", actor)
                 UE.Remove(actor)
                 Player.Notify(
                     "Skipped interaction with "
@@ -215,7 +221,7 @@ do -- story bypass skips most/all dialogues, combat and interactions that aren't
         ifBypassStory(function(object, combatGuid)
             Schedule(function()
                 if not Enemy.IsValid(object) and UE.IsNonPlayer(object) then
-                    L.Info("Removing", object)
+                    L.Debug("Removing", object)
                     Osi.LeaveCombat(object)
                     UE.Remove(object)
                     Player.Notify(
@@ -239,50 +245,51 @@ do
     local Commands = {}
     Api = Commands -- Mods.JustCombat.Api
 
-    -- local start = 0
-    -- function Commands.Dev(new_start, amount)
-    -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
-    -- Enemy.TestEnemies(enemies, false)
+    local start = 0
+    function Commands.Dev(new_start, amount)
+        new_start = tonumber(new_start) or start
+        amount = tonumber(amount) or 100
 
-    -- new_start = tonumber(new_start) or start
-    -- amount = tonumber(amount) or 100
-    --
-    -- local j = 1
-    -- local templates = {}
-    -- for i, v in Enemy.Iter() do
-    --     if i >= new_start and (i - new_start) <= amount then
-    --         table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-    --         j = j + 1
-    --     end
-    -- end
-    --
-    -- start = new_start + j
+        local j = 0
+        local templates = {}
+        for i, v in Enemy.Iter() do
+            if i > new_start and (i - new_start) <= amount then
+                table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+                j = j + 1
+            end
+        end
+        start = new_start + j
 
-    -- local templates = {}
-    -- for i, v in Enemy.Iter() do
-    --     table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-    -- end
-    -- local enemies = Enemy.GenerateEnemyList(templates)
-    --
-    -- Enemy.TestEnemies(enemies)
+        local enemies = Enemy.GenerateEnemyList(templates)
 
-    -- Osi.TeleportToPosition(Player.Host(), 0, 0, 0, "", 1, 1, 1, 1, 0)
-    -- Osi.MakePlayer("S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12", Player.Host())
-    -- Osi.MakePlayer("S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c", Player.Host())
+        Enemy.TestEnemies(enemies)
+        -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
+        -- Enemy.TestEnemies(enemies, false)
+        -- local templates = {}
+        -- for i, v in Enemy.Iter() do
+        --     table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+        -- end
+        -- local enemies = Enemy.GenerateEnemyList(templates)
+        --
+        -- Enemy.TestEnemies(enemies)
 
-    -- local list = {}
-    -- for i, v in Enemy.iter() do
-    --     local key = v.TemplateId .. v.Stats .. v.Equipment .. v.Tier .. v.CharacterVisualResourceID .. v.Icon
-    --     L.Dump(key, list[key])
-    --     list[key] = v
-    -- end
-    -- Ext.IO.SaveFile(
-    --     "enemies.json",
-    --     Ext.DumpExport(UT.Map(list, function(v)
-    --         return v
-    --     end))
-    -- )
-    -- end
+        -- Osi.TeleportToPosition(Player.Host(), 0, 0, 0, "", 1, 1, 1, 1, 0)
+        -- Osi.MakePlayer("S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12", Player.Host())
+        -- Osi.MakePlayer("S_Player_Karlach_2c76687d-93a2-477b-8b18-8a14b549304c", Player.Host())
+
+        -- local list = {}
+        -- for i, v in Enemy.iter() do
+        --     local key = v.TemplateId .. v.Stats .. v.Equipment .. v.Tier .. v.CharacterVisualResourceID .. v.Icon
+        --     L.Dump(key, list[key])
+        --     list[key] = v
+        -- end
+        -- Ext.IO.SaveFile(
+        --     "enemies.json",
+        --     Ext.DumpExport(UT.Map(list, function(v)
+        --         return v
+        --     end))
+        -- )
+    end
 
     function Commands.Spawn(guid)
         local x, y, z = Player.Pos()
@@ -333,7 +340,7 @@ do
         Enemy.Cleanup()
     end
 
-    function Commands.Spawns(mapId)
+    function Commands.Spawns(mapId, repeats)
         RetryFor(function()
             L.Info("Pinging spawns.")
             local mapId = tonumber(mapId)
@@ -343,7 +350,9 @@ do
             end
 
             Map.GetByIndex(tonumber(mapId)):PingSpawns()
-        end)
+        end, {
+            retries = tonumber(repeats) or 1,
+        })
     end
 
     function Commands.Maps(id)
@@ -356,7 +365,7 @@ do
             return
         end
 
-        L.Info("ID", "Name")
+        L.Info("ID", "Name", "!JC Maps [id]")
 
         for i, v in pairs(maps) do
             L.Info(i, v.Name)
@@ -367,7 +376,7 @@ do
     end
 
     function Commands.Scenarios(id)
-        L.Info("ID", "Name")
+        L.Info("ID", "Name", "!JC Scenarios [id]")
         for i, v in pairs(Scenario.Get()) do
             L.Info(i, v.Name)
             if id and i == tonumber(id) then
@@ -377,11 +386,16 @@ do
     end
 
     function Commands.Start(scenarioId, mapId)
+        L.Info("!JC Scenarios", "List scenarios")
+        L.Info("!JC Maps", "List maps")
+        L.Info("!JC Start [scenarioId] [mapId]")
         if not scenarioId then
-            scenarioId = 1
+            L.Error("Scenario ID is required.")
+            return
         end
         if not mapId then
-            mapId = 1
+            L.Error("Map ID is required.")
+            return
         end
 
         local map = Map.Get(Osi.GetRegion(Player.Host()))[tonumber(mapId)]
@@ -444,6 +458,10 @@ do
         C.CombatWorkaround = ("true" == flag or tonumber(flag) == 1) and true or false
         L.Info("Combat workaround is", C.CombatWorkaround and "enabled" or "disabled")
     end
+    function Commands.StoryBypassAlways(flag)
+        C.BypassStoryAlways = ("true" == flag or tonumber(flag) == 1) and true or false
+        L.Info("Story bypass everywhere is", C.BypassStoryAlways and "enabled" or "disabled")
+    end
 
     function Commands.StoryBypass(flag)
         C.BypassStory = ("true" == flag or tonumber(flag) == 1) and true or false
@@ -458,7 +476,7 @@ do
 
     Ext.RegisterConsoleCommand("JC", function(_, fn, ...)
         if fn == nil or Commands[fn] == nil then
-            L.Dump(UT.Keys(Commands))
+            L.Dump("Available Commands", UT.Keys(Commands))
             return
         end
 
