@@ -368,32 +368,35 @@ function Action.MapEntered()
         Player.Notify(__("Entered combat area."))
     end)
 
-    for _, p in pairs(GE.GetParty()) do
-        Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
-    end
-
     local id = tostring(S())
     WaitTicks(33, function()
-        WaitUntil(function(self)
-            if tostring(S()) ~= id then
-                self:Clear()
-                return
-            end
-
-            -- check if no character in forced turnbased anymore
-            return UT.Find(GE.GetParty(), function(e)
-                return e.TurnBased
-                    and e.TurnBased.ActedThisRoundInCombat == false
-                    and e.TurnBased.RequestedEndTurn == false
-                    and e.TurnBased.IsInCombat_M == true
-            end) == nil
-        end, function()
-            WaitTicks(9, function()
-                if tostring(S()) == id then
-                    Action.StartCombat()
+        WaitUntil(
+            function(self)
+                if tostring(S()) ~= id then
+                    self:Clear()
+                    return
                 end
-            end)
-        end)
+
+                -- check if no character in forced turnbased anymore
+                return UT.Find(GE.GetParty(), function(e)
+                    return e.TurnBased
+                        and e.TurnBased.ActedThisRoundInCombat == false
+                        and e.TurnBased.RequestedEndTurn == false
+                        and e.TurnBased.IsInCombat_M == true
+                end) == nil
+            end,
+            function() -- TODO need to find the right timing or actions might not refresh because round never ended for that character
+                if tostring(S()) == id then
+                    for _, p in pairs(GE.GetParty()) do
+                        Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 0)
+                    end
+
+                    WaitTicks(6, function()
+                        Action.StartCombat()
+                    end)
+                end
+            end
+        )
     end)
 end
 
