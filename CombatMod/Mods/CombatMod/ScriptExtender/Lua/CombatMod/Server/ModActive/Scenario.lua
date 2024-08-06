@@ -257,6 +257,7 @@ function Action.SpawnRound()
     if triesToSpawn < 5 then
         triesToSpawn = 5
     end
+    triesToSpawn = triesToSpawn * 2
 
     local waitSpawn = 0
     for i, e in ipairs(toSpawn) do
@@ -289,14 +290,11 @@ function Action.SpawnRound()
                     :After(function(e, posCorrectionChainable)
                         Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
                         Event.Trigger("ScenarioEnemySpawned", Current(), e)
-                        Action.EnemyAdded(e)
 
                         return posCorrectionChainable
                     end)
                     :After(function(e, corrected)
-                        if corrected then
-                            Scenario.CombatSpawned(e)
-                        end
+                        Action.EnemyAdded(e)
 
                         return Defer(1000)
                     end)

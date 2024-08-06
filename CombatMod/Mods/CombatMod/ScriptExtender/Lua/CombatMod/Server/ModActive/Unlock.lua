@@ -183,6 +183,8 @@ function Unlock.UpdateUnlocked()
     for _, u in pairs(Unlock.Get()) do
         u:OnReapply()
     end
+
+    SyncState()
 end
 
 -------------------------------------------------------------------------------------------------
@@ -228,7 +230,7 @@ Net.On("BuyUnlock", function(event)
         return
     end
 
-    if Osi.IsInCombat(event:Character()) == 1 then --or (S and S:HasStarted()) then
+    if Osi.IsInCombat(event:Character()) == 1 or Scenario.HasStarted() then
         Net.Respond(event, { false, __("Cannot buy while in combat.") })
         soundFail()
         return

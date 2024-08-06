@@ -368,6 +368,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua -->
     <content contentuid="h2bed91d3g7eb8g4c48ga18dgea2e03afc80c" version="1">Scenario restored.</content>
 
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua -->
     <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua -->
     <content contentuid="h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed" version="1">Scenario stopped.</content>
 

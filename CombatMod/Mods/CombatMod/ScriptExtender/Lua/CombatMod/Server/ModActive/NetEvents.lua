@@ -1,4 +1,4 @@
-function SyncState()
+SyncState = Debounce(100, function()
     Net.Send(
         "SyncState",
         UT.Filter(PersistentVars, function(v, k)
@@ -8,11 +8,18 @@ function SyncState()
             return true
         end, true)
     )
-end
+end)
+
 Net.On("SyncState", SyncState)
 
 Net.On("IsHost", function(event)
     Net.Respond(event, event:IsHost())
+end)
+
+Net.On("GUIReady", function(event)
+    if PersistentVars.GUIOpen then
+        Net.Send("OpenGUI")
+    end
 end)
 
 Net.On("GetSelection", function(event)

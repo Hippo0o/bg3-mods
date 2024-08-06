@@ -40,20 +40,20 @@ function GameMode.GenerateScenario(score, cow)
     local tiers = {
         { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
         { name = C.EnemyTier[2], min = 20, value = 10, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
-        { name = C.EnemyTier[3], min = 40, value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
-        { name = C.EnemyTier[4], min = 60, value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
-        { name = C.EnemyTier[5], min = 80, value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
-        { name = C.EnemyTier[6], min = 100, value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
+        { name = C.EnemyTier[3], min = 50, value = 20, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+        { name = C.EnemyTier[4], min = 80, value = 32, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
+        { name = C.EnemyTier[5], min = 100, value = 48, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+        { name = C.EnemyTier[6], min = 140, value = 69, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
     }
 
     if PersistentVars.HardMode then
         tiers = {
             { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
-            { name = C.EnemyTier[2], min = 15, value = 8, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
-            { name = C.EnemyTier[3], min = 25, value = 15, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
-            { name = C.EnemyTier[4], min = 35, value = 27, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
-            { name = C.EnemyTier[5], min = 45, value = 35, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
-            { name = C.EnemyTier[6], min = 60, value = 52, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
+            { name = C.EnemyTier[2], min = 20, value = 8, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
+            { name = C.EnemyTier[3], min = 40, value = 15, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+            { name = C.EnemyTier[4], min = 60, value = 27, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
+            { name = C.EnemyTier[5], min = 80, value = 35, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+            { name = C.EnemyTier[6], min = 100, value = 52, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
         }
     end
 
@@ -162,13 +162,13 @@ function GameMode.GenerateScenario(score, cow)
                 remainingValue = remainingValue - tier.value
 
                 -- too strong for single round
-                if score <= 1000 and tier.name == C.EnemyTier[5] then
+                if score <= 500 and tier.name == C.EnemyTier[5] then
                     if not timeline[roundIndex + 1] or numRounds < maxRounds then
                         table.insert(timeline, roundIndex + 1, {})
                         numRounds = numRounds + 1
                     end
                 end
-                if score <= 3000 and tier.name == C.EnemyTier[6] then
+                if score <= 1000 and tier.name == C.EnemyTier[6] then
                     table.insert(timeline, {})
                     numRounds = numRounds + 1
 

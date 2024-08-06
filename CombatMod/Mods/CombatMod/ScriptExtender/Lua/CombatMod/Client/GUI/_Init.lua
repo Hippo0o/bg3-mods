@@ -170,3 +170,5 @@ Ext.Events.KeyInput:Subscribe(function(e)
         toggleWindow()
     end
 end)
+
+Net.Send("GUIReady")

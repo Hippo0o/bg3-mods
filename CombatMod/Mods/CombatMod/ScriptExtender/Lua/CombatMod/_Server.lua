@@ -133,8 +133,6 @@ end)
 
 do
     local Commands = {}
-    Api = Commands -- Mods.CombatMod.Api
-
     -- Net.On("Api", function(event)
     --     local fn = event.Payload.Command
     --     if fn == nil or Commands[fn] == nil then
@@ -147,10 +145,11 @@ do
 
     function Commands.UI()
         Event.Trigger("ModActive")
+        PersistentVars.GUIOpen = not PersistentVars.GUIOpen
         if PersistentVars.GUIOpen then
-            Net.Send("CloseGUI")
-        else
             Net.Send("OpenGUI")
+        else
+            Net.Send("CloseGUI")
         end
     end
 

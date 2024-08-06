@@ -213,23 +213,29 @@ function Object:ModifyTemplate()
     end)
 end
 
-function Object:ModifyExperience(additonal)
-    local entity = self:Entity()
+function Object:ModifyExperience()
+    RetryUntil(function()
+        return self:Entity().ServerExperienceGaveOut
+    end, { retries = 4, interval = 1000 }):After(function()
+        local entity = self:Entity()
 
-    local expMod = (Config.ExpMultiplier or 1) * 2
-    if self.IsBoss then
-        expMod = expMod * 2
-    end
+        local expMod = (Config.ExpMultiplier or 1) * 2
+        if self.IsBoss then
+            expMod = expMod * 2
+        end
 
-    if PersistentVars.Unlocked.ExpMultiplier then
-        expMod = expMod * 2
-    end
+        if PersistentVars.Unlocked.ExpMultiplier then
+            expMod = expMod * 2
+        end
 
-    local exp = entity.BaseHp.Vitality
-        * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
-        * expMod
+        local exp = entity.BaseHp.Vitality
+            * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
+            * expMod
 
-    entity.ServerExperienceGaveOut.Experience = math.floor(exp / Player.PartySize())
+        entity.ServerExperienceGaveOut.Experience = math.floor(exp / Player.PartySize())
+    end):Catch(function()
+        L.Error("Failed to modify experience: ", self.GUID)
+    end)
 end
 
 function Object:OnCombat()
@@ -368,8 +374,8 @@ function Object:Spawn(x, y, z, neutral)
 
     return true,
         RetryUntil(function(runner)
-            return self:Entity().BaseStats
-        end, { retries = 10, interval = 100 }):After(function()
+            return self:Entity().ServerReplicationDependencyOwner -- goal: a component that loads later and always exists
+        end, { retries = 30, interval = 100 }):After(function()
             self:Modify()
 
             if not neutral then
@@ -439,7 +445,7 @@ function Enemy.Restore(enemy)
     e:ModifyTemplate()
 
     RetryUntil(function(runner)
-        return e:Entity().BaseStats
+        return e:Entity().ServerReplicationDependencyOwner
     end, { retries = 30, interval = 100 }):After(function()
         e:Modify(true)
 

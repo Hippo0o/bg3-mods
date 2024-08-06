@@ -56,14 +56,6 @@ GameState.OnSave(function()
     end
 end)
 
-GameState.OnLoad(function()
-    if PersistentVars.GUIOpen then
-        Defer(1000, function()
-            Net.Send("OpenGUI")
-        end)
-    end
-end)
-
 -- collect stats
 Event.On("ScenarioEnded", function(scenario)
     table.insert(PersistentVars.History, {
