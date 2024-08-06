@@ -105,7 +105,7 @@ function Object:Spawn(x, y, z)
 
     self:ModifyTemplate()
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 100, Player.Host(), 1)
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1)
     if not x or not y or not z then
         L.Error("Failed to find valid position for: ", self.Name)
         return false

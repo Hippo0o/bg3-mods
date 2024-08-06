@@ -57,6 +57,8 @@ function Player.PickupAll(character)
         for rarity, pickup in pairs(data) do
             if pickup then
                 Item.PickupAll(character or Player.Host(), rarity, type)
+            else
+                Item.DestroyAll(rarity, type)
             end
         end
     end

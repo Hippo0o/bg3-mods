@@ -152,8 +152,8 @@ function StoryBypass.ClearArea(character)
     -- L.Dump(Osi.IsDestroyed(v.Guid))
 end
 
-function StoryBypass.ClearSurfaces(character)
-    local x, y, z = Osi.GetPosition(character)
+function StoryBypass.ClearSurfaces(guid, strength)
+    local x, y, z = Osi.GetPosition(guid)
 
     local function generateSpiral(x, y, numPoints, angleIncrement, radiusIncrement)
         local points = {}
@@ -170,24 +170,27 @@ function StoryBypass.ClearSurfaces(character)
     end
 
     local centerX, centerY = x, z
-    local numPoints = 30
+    local numPoints = strength or 20
     local angleIncrement = math.pi / 4 -- Adjust as needed
     local radiusIncrement = 1 -- Adjust as needed
     local spiralPoints = generateSpiral(centerX, centerY, numPoints, angleIncrement, radiusIncrement)
 
     for i, point in ipairs(spiralPoints) do
-        WaitTicks(12 * i, function()
-            local nx, ny, nz = Osi.FindValidPosition(point[1], y, point[2], 100, character, 1) -- avoiding dangerous surfaces
-            -- Osi.CreateSurfaceAtPosition(nx, ny, nz, "None", 100, -1)
-            -- Osi.RemoveSurfaceLayerAtPosition(nx, ny, nz, "Ground", 100)
-            Osi.TeleportToPosition(character, nx, y, nz)
-            Osi.UseSpell(character, "TOT_Zone_Clear", character)
-            Osi.RequestPing(nx, ny, nz, "", character)
-        end)
+        if i % 2 == 0 then
+            WaitTicks(4 * i, function()
+                local nx, ny, nz = Osi.FindValidPosition(point[1], y, point[2], 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
+                -- Osi.CreateSurfaceAtPosition(nx, ny, nz, "None", 100, -1)
+                -- Osi.RemoveSurfaceLayerAtPosition(nx, ny, nz, "Ground", 100)
+                Osi.TeleportToPosition(guid, nx, y, nz)
+                Osi.UseSpell(guid, "TOT_Zone_Clear", guid)
+                -- Osi.RequestPing(nx, ny, nz, "", character)
+            end)
+        end
     end
 
-    WaitTicks(13 * #spiralPoints, function()
-        Osi.TeleportToPosition(character, x, y, z)
+    return WaitTicks(5 * #spiralPoints, function()
+        Osi.TeleportToPosition(guid, x, y, z)
+        return true
     end)
 end
 

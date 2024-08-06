@@ -18,6 +18,7 @@ local Object = Libs.Struct({
     Enter = nil,
     Spawns = nil,
     Timeline = nil, -- used on scenario creation
+    Helpers = {},
 })
 
 ---@return Map
@@ -95,8 +96,11 @@ end
 function Object:GetSpawn(spawn)
     local pos = nil
 
-    if spawn > -1 then
+    if spawn > 0 then
         pos = self.Spawns[spawn]
+    end
+    if spawn == 0 then
+        pos = self.Enter
     end
     if not pos then
         pos = self.Spawns[math.random(1, #self.Spawns)]
@@ -136,8 +140,6 @@ function Object:SpawnIn(enemy, spawn, faceTowards)
         x, y, z = x2, y2, z2
     end
 
-    Osi.SteerTo(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 1)
-
     return true,
         chainable:After(function()
             return enemy,
@@ -173,13 +175,42 @@ function Object:PingSpawns()
     end
 end
 
-function Object:ClearSpawns()
+function Object:Prepare()
     for _, pos in pairs(UT.Combine({}, { self.Enter }, self.Spawns)) do
         local x, y, z = table.unpack(pos)
 
-        Osi.CreateSurfaceAtPosition(x, y, z, "None", 100, -1)
-        Osi.RemoveSurfaceLayerAtPosition(x, y, z, "Ground", 100)
+        local guid = Osi.CreateAt("c13a872b-7d9b-4c1d-8c65-f672333b0c11", x, y, z, 1, 0, "")
+        if not guid then
+            L.Error("Failed to create helper.", x, y, z)
+            self:Clear()
+            return false
+        end
+
+        table.insert(self.Helpers, guid)
     end
+
+    return true
+end
+
+function Object:VFXSpawns(spawns)
+    for _, guid in pairs(self.Helpers) do
+        Osi.RemoveStatus(guid, "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX")
+    end
+
+    for _, index in pairs(spawns) do
+        local helperObject = self.Helpers[index + 1]
+        if helperObject then
+            Osi.ApplyStatus(helperObject, "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX", -1)
+        end
+    end
+end
+
+function Object:Clear()
+    for _, guid in pairs(self.Helpers) do
+        GU.Object.Remove(guid)
+    end
+
+    self.Helpers = {}
 end
 
 -------------------------------------------------------------------------------------------------

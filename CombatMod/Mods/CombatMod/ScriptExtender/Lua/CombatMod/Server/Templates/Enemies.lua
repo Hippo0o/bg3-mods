@@ -5844,6 +5844,7 @@ return {
         Archetype = "dragon",
         CharacterVisualResourceID = "14cfa247-7ff3-b105-8ea8-798a68334c21",
         Equipment = "",
+        DisplayName = "h82c5c29eg1f19g49efgba3dg4f8c3557c479",
         Icon = "14cfa247-7ff3-b105-8ea8-798a68334c21-_(Icon_Dragon_Skeletal)",
         Info = {
             AC = 19,

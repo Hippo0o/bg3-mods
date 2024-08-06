@@ -102,7 +102,7 @@ function Object:SyncTemplate()
     self.CharacterVisualResourceID = template.CharacterVisualResourceID
     self.Icon = template.Icon
     self.Stats = template.Stats
-    self.DisplayName = template.DisplayName
+    self.DisplayName = template.DisplayName.Handle.Handle
     self.Equipment = template.Equipment
     self.Archetype = template.CombatComponent.Archetype
     self.AiHint = template.CombatComponent.AiHint
@@ -155,7 +155,7 @@ function Object:ModifyTemplate()
     end
 
     if self.DisplayName ~= nil then
-        templateOverwrite("DisplayName", self.DisplayName)
+        templateOverwrite("DisplayName", { Handle = { Handle = self.DisplayName } })
     end
 
     if self.Stats ~= nil then
@@ -339,7 +339,7 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
-    x, y, z = Osi.FindValidPosition(x, y, z, 100, "", 1) -- avoiding dangerous surfaces
+    x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
 
     local success = self:CreateAt(x, y, z)
 
@@ -358,6 +358,8 @@ function Object:Spawn(x, y, z, neutral)
             if not neutral then
                 self:Combat()
             end
+
+            Osi.SteerTo(self.GUID, Osi.GetClosestAlivePlayer(self.GUID), 1)
 
             return self
         end)

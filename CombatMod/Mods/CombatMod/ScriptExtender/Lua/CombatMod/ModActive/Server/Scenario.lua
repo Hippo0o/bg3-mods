@@ -50,10 +50,14 @@ function Object:SpawnsForRound()
     return self.Enemies[self.Round] or {}
 end
 
-function Object:GetPosition(enemyIndex)
+function Object:GetPosition(enemyIndex, forRound)
+    if not forRound then
+        forRound = self.Round
+    end
+
     local posIndex = 0
     for round, enemies in pairs(self.Enemies) do
-        if round < self.Round then
+        if round < forRound then
             posIndex = posIndex + #enemies
         end
     end
@@ -234,7 +238,7 @@ function Action.StartCombat()
 
     s:DetectCombatId()
 
-    s.Map:PingSpawns()
+    -- s.Map:PingSpawns()
 
     Event.Trigger("ScenarioCombatStarted", s)
 end
@@ -329,7 +333,11 @@ function Action.StartRound()
 
     Action.UpdateHelperName()
 
-    return Action.SpawnRound()
+    return Action.SpawnRound():After(function()
+        Scenario.MarkSpawns(s.Round + 1)
+
+        return true
+    end)
 end
 
 function Action.NotifyStarted()
@@ -368,6 +376,15 @@ function Action.MapEntered()
 
         Event.Trigger("ScenarioMapEntered", Current())
         Player.Notify(__("Entered combat area."))
+
+        for i, guid in pairs(Current().Map.Helpers) do
+            StoryBypass.ClearSurfaces(guid, 4)
+        end
+
+        -- clearing should be over by then
+        WaitTicks(33, function()
+            Scenario.MarkSpawns(1)
+        end)
     end)
 
     RetryUntil(function()
@@ -624,6 +641,7 @@ function Scenario.End()
 
     Event.Trigger("ScenarioEnded", Current())
     Player.Notify(__("Scenario ended."))
+    Current().Map:Clear()
 
     Action.GiveReward()
 
@@ -635,6 +653,7 @@ function Scenario.Stop()
     Action.RemoveHelper()
     Event.Trigger("ScenarioStopped", Current())
     Enemy.Cleanup()
+    Current().Map:Clear()
 
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario stopped."))
@@ -679,6 +698,24 @@ end
 
 function Scenario.HasStarted()
     return getmetatable(S()) and S():HasStarted()
+end
+
+function Scenario.MarkSpawns(round)
+    local s = Current()
+
+    local toSpawn = s.Enemies[round]
+
+    local spawns = {}
+    for i, e in ipairs(toSpawn or {}) do
+        local posIndex = s:GetPosition(i, round)
+        if posIndex == -1 then
+            return
+        end
+
+        table.insert(spawns, posIndex)
+    end
+
+    s.Map:VFXSpawns(spawns)
 end
 
 function Scenario.ForwardCombat()
@@ -782,6 +819,9 @@ Event.On(
             if not s.OnMap and U.UUID.Equals(character, Player.Host()) then
                 s.OnMap = true
                 WaitTicks(33, Action.MapEntered)
+                if not s.Map:Prepare() then
+                    Scenario.Stop()
+                end
             end
 
             Event.Trigger("ScenarioTeleported", character)

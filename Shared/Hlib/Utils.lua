@@ -369,6 +369,50 @@ function M.Table.Batch(t, size)
     return r
 end
 
+---@param t table
+---@param patch table
+---@param replaced table|nil
+---@return table t, table patch, table|nil replaced
+function M.Table.Patch(t, patch, replaced)
+    if not replaced then
+        replaced = {}
+    end
+
+    if type(patch) == "table" then
+        for k, v in pairs(patch) do
+            local diff = true
+            if type(v) == "table" then
+                diff = not M.Equals(v, {})
+
+                if not replaced[k] then
+                    replaced[k] = {}
+                end
+            else
+                diff = v ~= t[k]
+
+                if diff and replaced[k] == nil then
+                    replaced[k] = t[k]
+                end
+            end
+
+            if diff then
+                local _, new = M.Table.Patch(t[k], v, replaced[k])
+                t[k] = new
+            end
+
+            if M.Equals(replaced[k], {}) then
+                replaced[k] = nil
+            end
+        end
+    end
+
+    if M.Equals(replaced, {}) then
+        replaced = nil
+    end
+
+    return t, patch, replaced
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           String                                            --

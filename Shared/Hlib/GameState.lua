@@ -19,6 +19,8 @@ M.EventLoadSession = "_GameStateLoadSession"
 M.EventUnload = "_GameStateUnload"
 M.EventUnloadLevel = "_GameStateUnloadLevel"
 M.EventUnloadSession = "_GameStateUnloadSession"
+M.EventClientMenuLoad = "_GameStateClientMenuLoad"
+M.EventClientMenuUnload = "_GameStateClientMenuUnload"
 
 Ext.Events.GameStateChanged:Subscribe(function(e)
     if Mod.Dev then
@@ -32,12 +34,18 @@ Ext.Events.GameStateChanged:Subscribe(function(e)
         Event.Trigger(M.EventSave)
     elseif e.FromState == "Save" and e.ToState == "Running" then
         Event.Trigger(M.EventLoad)
+    elseif (e.FromState == "StartLoading" or e.FromState == "Running") and e.ToState == "Disconnect" then
+        Event.Trigger(M.EventUnload)
     elseif (e.FromState == "Running" or e.FromState == "Idle") and e.ToState == "UnloadLevel" then
         Event.Trigger(M.EventUnload)
     elseif e.FromState == "UnloadSession" and e.ToState == "LoadSession" then
         Event.Trigger(M.EventUnloadSession)
-    elseif e.FromState == "UnloadLevel" and (e.ToState == "LoadLevel" or e.ToState == "Idle") then
-        Event.Trigger(M.EventUnloadLevel)
+    elseif e.FromState == "Disconnect" and e.ToState == "UnloadLevel" then
+        Event.Trigger(M.EventUnloadSession)
+    elseif e.FromState == "StopLoading" and e.ToState == "Menu" then
+        Event.Trigger(M.EventClientMenuLoad)
+    elseif e.FromState == "Menu" and e.ToState == "StartLoading" then
+        Event.Trigger(M.EventClientMenuUnload)
     end
 end)
 
@@ -82,13 +90,25 @@ function M.OnUnloadLevel(callback, once)
     return Event.On(M.EventUnloadLevel, callback, once)
 end
 
-if Ext.IsServer() then
-    ---@param callback fun()
-    ---@param once boolean|nil
-    ---@return EventListener
-    function M.OnUnloadSession(callback, once)
-        return Event.On(M.EventUnloadSession, callback, once)
-    end
+---@param callback fun()
+---@param once boolean|nil
+---@return EventListener
+function M.OnUnloadSession(callback, once)
+    return Event.On(M.EventUnloadSession, callback, once)
+end
+
+---@param callback fun()
+---@param once boolean|nil
+---@return EventListener
+function M.OnClientMenuLoad(callback, once)
+    return Event.On(M.EventClientMenuLoad, callback, once)
+end
+
+---@param callback fun()
+---@param once boolean|nil
+---@return EventListener
+function M.OnClientMenuUnload(callback, once)
+    return Event.On(M.EventClientMenuUnload, callback, once)
 end
 
 return M

@@ -35,11 +35,14 @@ GameState.OnUnload(restore)
 
 -- triggered on load and on mod activation
 GameState.OnLoad(function()
-    if PersistentVars.Active then
+    if IsActive() then
         modify()
     else
         restore()
     end
+end)
+GameState.OnLoadSession(function()
+    modify()
 end)
 
 -------------------------------------------------------------------------------------------------
@@ -51,26 +54,9 @@ end)
 local templateIdsOverwritten = {}
 Event.On("TemplateOverwrite", function(templateId, prop, value)
     templateIdsOverwritten[templateId] = templateIdsOverwritten[templateId] or {}
-    local overwrites = templateIdsOverwritten[templateId]
     local template = Ext.Template.GetTemplate(templateId)
 
-    if type(value) == "table" then
-        for k, v in pairs(value) do
-            if template[prop][k] ~= v then
-                overwrites[prop] = overwrites[prop] or {}
-                overwrites[prop][k] = template[prop][k]
-
-                template[prop][k] = v
-            end
-        end
-        return
-    end
-
-    if template[prop] ~= value then
-        overwrites[prop] = template[prop]
-
-        template[prop] = value
-    end
+    UT.Patch(template, { [prop] = value }, templateIdsOverwritten[templateId])
 
     if Ext.IsServer() then
         Net.Send("TemplateOverwrite", { templateId, prop, value })
@@ -86,16 +72,10 @@ end
 GameState.OnUnload(function()
     for templateId, overwrites in pairs(templateIdsOverwritten) do
         L.Debug("Restoring template:", templateId)
+
         local template = Ext.Template.GetTemplate(templateId)
-        for i, v in pairs(overwrites) do
-            if type(v) == "table" then
-                for k, v in pairs(v) do
-                    template[i][k] = v
-                end
-            else
-                template[i] = v
-            end
-        end
+
+        UT.Patch(template, overwrites)
         templateIdsOverwritten[templateId] = nil
     end
 end)

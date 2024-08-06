@@ -314,7 +314,17 @@ Net.On("KillNearby", function(event)
 end)
 
 Net.On("ClearSurfaces", function(event)
-    StoryBypass.ClearSurfaces(event:Character())
+    local s = Scenario.Current()
+    if s then
+        for i, guid in pairs(s.Map.Helpers) do
+            WaitTicks(i, function()
+                StoryBypass.ClearSurfaces(guid)
+            end)
+        end
+    else
+        StoryBypass.ClearSurfaces(event:Character())
+    end
+
     Net.Respond(event, { true })
 end)
 

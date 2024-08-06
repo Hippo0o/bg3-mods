@@ -88,6 +88,13 @@ function Debug.Enemies(root)
         end
 
         tree = Components.Tree(grp, enemies, nil, function(node, key, value)
+            if key == "Name" then
+                node:AddButton("Spawn").OnClick = function()
+                    Net.RCE("Enemy.Find('%s'):Spawn(Osi.GetPosition(RCE:Character()))", value):After(function(_, err)
+                        L.Dump(err)
+                    end)
+                end
+            end
             if key == "TemplateId" then
                 local nodeLoaded = false
 
