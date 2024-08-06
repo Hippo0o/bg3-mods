@@ -81,6 +81,12 @@ function M.Random(...)
     return Ext.Math.Round(rand)
 end
 
+---@param userId number
+---@return number
+function M.PeerToUserId(userId)
+    return (userId & 0xffff0000) | 0x0001
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Entity                                            --

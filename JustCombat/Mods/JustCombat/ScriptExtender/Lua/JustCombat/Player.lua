@@ -6,8 +6,22 @@
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
+---@param userId number
 ---@return string GUID of the host character
-function Player.Host()
+function Player.Host(userId)
+    userId = userId or (S and S.UserId or nil)
+
+    if userId then
+        local player = UT.Find(UE.GetPlayers(), function(guid)
+            if Ext.Entity.Get(guid).ServerCharacter.UserID == U.PeerToUserId(userId) then
+                return guid
+            end
+        end)
+
+        if player then
+            return player
+        end
+    end
     return Osi.GetHostCharacter()
 end
 
@@ -31,6 +45,7 @@ end
 local buffering = false
 function Player.Notify(message, instant, ...)
     L.Info("Notify:", message, ...)
+    Net.Send("PlayerNotify", { message, ... })
 
     WaitFor(function()
         return not buffering or instant

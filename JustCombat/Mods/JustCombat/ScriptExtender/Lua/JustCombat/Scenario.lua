@@ -16,6 +16,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field Map Map
 ---@field CombatId string
 ---@field Round integer
+---@field UserId number
 ---@field Timeline table<string, number> Round, Amount of enemies
 ---@field LootObjects table<string, number>
 ---@field LootArmor table<string, number>
@@ -29,6 +30,7 @@ local Object = Libs.Object({
     Map = nil,
     CombatId = nil,
     OnMap = false,
+    UserId = nil,
     Round = 0,
     Timeline = {},
     LootObjects = {},
@@ -393,6 +395,8 @@ end
 function Scenario.RestoreFromState(state)
     xpcall(function()
         S = Scenario.Restore(state)
+        PersistentVars.Scenario = S
+
         Player.Notify("Scenario restored.")
 
         if not S:HasStarted() and S.OnMap then
@@ -402,6 +406,7 @@ function Scenario.RestoreFromState(state)
         L.Error(err)
         Enemy.Cleanup()
         S = nil
+        PersistentVars.Scenario = nil
         Player.Notify("Failed to restore scenario.")
     end)
 end
@@ -434,7 +439,8 @@ end
 
 ---@param template table
 ---@param map Map
-function Scenario.Start(template, map)
+---@param userId number|nil
+function Scenario.Start(template, map, userId)
     if S ~= nil then
         L.Error("Scenario already started.")
         return
@@ -449,6 +455,7 @@ function Scenario.Start(template, map)
     scenario.LootObjects = template.Loot.Objects
     scenario.LootArmor = template.Loot.Armor
     scenario.LootWeapons = template.Loot.Weapons
+    scenario.UserId = userId
 
     for round, definition in pairs(template.Timeline) do
         local enemyCount = #definition
@@ -472,6 +479,7 @@ function Scenario.Start(template, map)
 
     Player.Notify("Scenario " .. template.Name .. " started.")
     S = scenario
+    PersistentVars.Scenario = S
     Player.Notify("Leave camp to join the battle.")
 
     Enemy.Cleanup()
@@ -480,12 +488,14 @@ end
 function Scenario.End()
     Action.SpawnLoot()
     S = nil
+    PersistentVars.Scenario = nil
     Player.Notify("Scenario ended.")
 end
 
 function Scenario.Stop()
     Enemy.Cleanup()
     S = nil
+    PersistentVars.Scenario = nil
     Player.Notify("Scenario stopped.")
 end
 
