@@ -39,6 +39,7 @@ C = {
     ScenarioHelper = {
         TemplateId = "b4f5635b-2382-4fb2-ad0d-5be8b363e847",
         Handle = "h09f52fcdg7db3g44ddg91b1gb2b4d69ac32b",
+        Faction = "4be9261a-e481-8d9d-3528-f36956a19b17",
     },
     ItemRarity = {
         "Common",

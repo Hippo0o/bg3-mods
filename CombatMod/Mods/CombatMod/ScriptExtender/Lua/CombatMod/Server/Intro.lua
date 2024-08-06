@@ -32,11 +32,18 @@ function Intro.AskTutSkip()
             GameState.OnLoad(function()
                 Defer(3000, function()
                     Osi.PROC_GLO_Jergal_MoveToCamp()
+
+                    -- go underdark to trigger tremor
+                    Osi.TeleportToPosition(Player.Host(), 149.56359863281, 59.6376953125, -139.54454040527, "", 1, 1, 1)
+
                     return Defer(1000)
                 end).After(function()
-                    -- Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
+                    -- go to first camp
+                    Osi.TeleportToPosition(Player.Host(), -649.25, -0.0244140625, -184.75, "", 1, 1, 1)
                     -- Osi.TeleportTo(Player.Host(), C.NPCCharacters.Jergal, "", 1, 1, 1)
                     Osi.PROC_Camp_ForcePlayersToCamp()
+
+                    -- add starting items
                     Osi.AddGold(Player.Host(), 500)
                     Osi.TemplateAddTo("efcb70b7-868b-4214-968a-e23f6ad586bc", Player.Host(), 1, 0) -- camp supply backpack
                     Osi.TemplateAddTo("c1c3e4fb-d68c-4e10-afdc-d4550238d50e", Player.Host(), 4, 1) -- revify scrolls

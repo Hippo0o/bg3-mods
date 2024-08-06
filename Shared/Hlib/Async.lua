@@ -254,7 +254,7 @@ GameState.OnSave(function()
         loop:Stop()
     end
 end)
-GameState.OnSessionLoad(function()
+GameState.OnLoadSession(function()
     loop.Startable = false
 end)
 GameState.OnLoad(function()

@@ -16,7 +16,7 @@
 	"%s is now active.;1": {
 		"Handle": "h3b8161bbg6ed4g434ega08bg252882a9070a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/_Server.lua:158: in field '_Func'",
+		"Stack": "CombatMod/CombatMod/_Server.lua:110: in field '_Func'",
 		"Text": "%s is now active.",
 		"Version": 1
 	},
@@ -79,21 +79,21 @@
 	"Awakened Illithid Powers;1": {
 		"Handle": "hf34df053ga618g4a50gac07gec360e25ce14",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:252: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:270: in main chunk",
 		"Text": "Awakened Illithid Powers",
 		"Version": 1
 	},
 	"Break/Restore Oath;1": {
 		"Handle": "h337385c4g6626g4d09g9004g0b6f7226294d",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:353: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:416: in main chunk",
 		"Text": "Break/Restore Oath",
 		"Version": 1
 	},
 	"Buy 40 Camp Supplies;1": {
 		"Handle": "hab83587fgfed6g40d2ga98bg06b4cba92496",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:306: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:368: in main chunk",
 		"Text": "Buy 40 Camp Supplies",
 		"Version": 1
 	},
@@ -163,7 +163,7 @@
 	"Clearing all entities;1": {
 		"Handle": "h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/StoryBypass.lua:495: in upvalue 'func'",
+		"Stack": "CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:488: in upvalue 'func'",
 		"Text": "Clearing all entities",
 		"Version": 1
 	},
@@ -212,7 +212,7 @@
 	"Counter the Shadow Curse.;1": {
 		"Handle": "h2e6a96f6g7b3fg4c3agb1d5g9a5c53f7b87e",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:335: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:398: in main chunk",
 		"Text": "Counter the Shadow Curse.",
 		"Version": 1
 	},
@@ -338,7 +338,7 @@
 	"Fully Restore Character;1": {
 		"Handle": "hfea436e8gabf1g463bg9cd9g705dbefb527f",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:317: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:379: in main chunk",
 		"Text": "Fully Restore Character",
 		"Version": 1
 	},
@@ -373,14 +373,14 @@
 	"Get Pixie Blessing;1": {
 		"Handle": "h27f7bcfeg72a2g4e9agb14cg48fcd36e6ade",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:334: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:397: in main chunk",
 		"Text": "Get Pixie Blessing",
 		"Version": 1
 	},
 	"Get a Tadpole;1": {
 		"Handle": "h36f8f1b6g63adg4a4egb05cgbc28527e9e0a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:264: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:327: in main chunk",
 		"Text": "Get a Tadpole",
 		"Version": 1
 	},
@@ -429,7 +429,7 @@
 	"Includes %s;1": {
 		"Handle": "h2544d6fag7011g483agb167g7e5c93455c7e",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:238: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:236: in main chunk",
 		"Text": "Includes %s",
 		"Version": 1
 	},
@@ -513,7 +513,7 @@
 	"Needs to be a Paladin.;1": {
 		"Handle": "had299379gf87cg4c62g89e1gaa04abc38826",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:355: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:418: in main chunk",
 		"Text": "Needs to be a Paladin.",
 		"Version": 1
 	},
@@ -618,7 +618,7 @@
 	"Play Roguelike mode?\nContinuously create new battles.\nYou will gain a higher score with every completed fight.\nDifficulty increases with the score.;1": {
 		"Handle": "hf44e063cga11bg4536g9c77gd350fe55f172",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:196: in field 'AskConfirmation'",
 		"Text": "Play Roguelike mode?\nContinuously create new battles.\nYou will gain a higher score with every completed fight.\nDifficulty increases with the score.",
 		"Version": 1
 	},
@@ -709,7 +709,7 @@
 	"Resurrect character and fully restore all resources.;1": {
 		"Handle": "h06aadbc6g53ffg48e9gb359g9e8f517bbcad",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:319: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:381: in main chunk",
 		"Text": "Resurrect character and fully restore all resources.",
 		"Version": 1
 	},
@@ -723,7 +723,7 @@
 	"Roll Loot %dx;1": {
 		"Handle": "h3b8839f6g6eddg46cagb08bgb0ac52a9928e",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:198: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:354: in main chunk",
 		"Text": "Roll Loot %dx",
 		"Version": 1
 	},
@@ -828,21 +828,21 @@
 	"Spawn Mindflayer Companion;1": {
 		"Handle": "hc6c558ccg9390g40d9g9f5fg66bffd7d449d",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:368: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:293: in main chunk",
 		"Text": "Spawn Mindflayer Companion",
 		"Version": 1
 	},
 	"Spawns the Emperor as controllable party follower.;1": {
 		"Handle": "hece89b91gb9bdg4cecg8dfdgba8a2fdf98a8",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:369: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:294: in main chunk",
 		"Text": "Spawns the Emperor as controllable party follower.",
 		"Version": 1
 	},
 	"Start Ceremorphosis;1": {
 		"Handle": "h9f1540b5gca40g415eg8ac2g673868e0451a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:236: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:234: in main chunk",
 		"Text": "Start Ceremorphosis",
 		"Version": 1
 	},
@@ -1003,7 +1003,7 @@
 	"Unlock Tadpole Power;1": {
 		"Handle": "hb00c97b7ge559g4c2ega833gfa484a11d86a",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:218: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:236: in main chunk",
 		"Text": "Unlock Tadpole Power",
 		"Version": 1
 	},
@@ -1052,7 +1052,7 @@
 	"Use all Illithid Powers with Bonus Actions.;1": {
 		"Handle": "he7764179gb223g4142g8d44g5724af667506",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:254: in main chunk",
+		"Stack": "CombatMod/CombatMod/Templates/Unlocks.lua:272: in main chunk",
 		"Text": "Use all Illithid Powers with Bonus Actions.",
 		"Version": 1
 	},
@@ -1073,7 +1073,7 @@
 	"Welcome to %s! Start playing?;1": {
 		"Handle": "hfd862893ga8d3g47dcgacebg51ba0ec97398",
 		"LocaText": "",
-		"Stack": "CombatMod/CombatMod/Server/Player.lua:183: in field 'AskConfirmation'",
+		"Stack": "CombatMod/CombatMod/Server/Player.lua:196: in field 'AskConfirmation'",
 		"Text": "Welcome to %s! Start playing?",
 		"Version": 1
 	},

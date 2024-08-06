@@ -29,6 +29,7 @@ Require("CombatMod/Server/ModActive/StoryBypass")
 Require("CombatMod/Server/ModActive/GameMode")
 Require("CombatMod/Server/ModActive/NetEvents")
 Require("CombatMod/Server/ModActive/Unlock")
+Require("CombatMod/Server/ModActive/Overwrites")
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
@@ -49,7 +50,7 @@ GameState.OnSave(function()
 
     for obj, _ in pairs(PersistentVars.SpawnedItems) do
         if
-            Item.IsOwned(obj) or Osi.IsItem(obj) ~= 1 -- was used
+            GU.Object.IsOwned(obj) or Osi.IsItem(obj) ~= 1 -- was used
         then
             L.Debug("Cleaning up SpawnedItems", obj)
             PersistentVars.SpawnedItems[obj] = nil

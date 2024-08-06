@@ -14,6 +14,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field SpawnedEnemies Enemy[]
 ---@field Map Map
 ---@field CombatId string
+---@field CombatHelper string
 ---@field Round integer
 ---@field Timeline table<string, number> Round, Amount of enemies
 ---@field Positions table<number, number> Index, Spawn
@@ -132,9 +133,10 @@ function Action.CalculateLoot()
     end
 
     local rolls = scenario:KillScore() * lootMultiplier
+    local fixedRolls = math.max(10, UT.Size(scenario.KilledEnemies)) * lootMultiplier
 
-    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates)
-    L.Dump("Loot", loot, rolls, scenario.LootRates)
+    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates, math.floor(fixedRolls))
+    L.Dump("Loot", loot, rolls, fixedRolls, scenario.LootRates)
     return loot
 end
 
@@ -157,6 +159,11 @@ end
 function Action.SpawnHelper()
     local s = Current()
 
+    if s.CombatHelper then
+        L.Error("Combat helper already spawned.")
+        return
+    end
+
     Player.Notify(__("Combat is Starting."))
 
     local x, y, z = table.unpack(s.Map.Enter)
@@ -168,8 +175,14 @@ function Action.SpawnHelper()
         return
     end
 
-    Enemy.Combat(helper, true)
+    Osi.SetFaction(helper, C.ScenarioHelper.Faction)
     s.CombatHelper = helper
+
+    for _, player in pairs(GU.DB.GetPlayers()) do
+        Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), s.CombatHelper, player)
+    end
+
+    L.Debug("Combat helper spawned.", helper)
 end
 
 function Action.RemoveHelper()
@@ -624,13 +637,18 @@ end
 ---@param specific Enemy|nil
 -- we want to have all enemies on the map in combat
 function Scenario.CombatSpawned(specific)
-    local enemies = UT.Filter(Current().SpawnedEnemies, function(e)
+    local s = Current()
+
+    if not Player.InCombat() then
+        return
+    end
+
+    local enemies = UT.Filter(s.SpawnedEnemies, function(e)
         return specific == nil or U.Equals(e, specific)
     end)
 
     L.Debug("Combat spawned.", #enemies)
 
-    local target = Player.InCombat() or Player.Host()
     for _, enemy in ipairs(enemies) do
         RetryUntil(function()
             if not S then
@@ -644,6 +662,8 @@ function Scenario.CombatSpawned(specific)
             if Osi.IsDead(enemy.GUID) == 1 then
                 return true
             end
+
+            Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, C.EnemyFaction, s.CombatHelper, enemy.GUID)
 
             enemy:Combat(true)
             if S.CombatId then -- TODO check if works
@@ -753,13 +773,15 @@ U.Osiris.On(
             return
         end
 
+        Osi.ResumeCombat(s.CombatId)
+
         local guid = U.UUID.Extract(object)
 
-        if not GC.IsNonPlayer(guid) then
+        if Osi.IsCharacter(object) ~= 1 then
             return
         end
 
-        if Osi.IsCharacter(object) ~= 1 then
+        if not GC.IsNonPlayer(guid) then
             return
         end
 
@@ -872,10 +894,18 @@ U.Osiris.On(
         local s = Current()
 
         if U.UUID.Equals(uuid, s.CombatHelper) then
+            L.Debug("Combat helper turn started.", uuid)
+
             -- fallback check
             if not s:IsRunning() then
                 Scenario.End()
 
+                return
+            end
+
+            -- should not happen
+            if not Player.InCombat() then
+                Osi.PauseCombat(s.CombatId)
                 return
             end
 

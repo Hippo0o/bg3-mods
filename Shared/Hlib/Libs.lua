@@ -221,7 +221,7 @@ function M.Chainable(source)
     ---@overload fun(self: LibsChainable, func: fun(source: any, err: string), ...: any): LibsChainable
     ---@field Source any
     local Chainable = {
-        _IsChainable = true,
+        _IsChainable = Utils.RandomId("Chainable_"),
         _InitalInput = {},
         Source = source,
         _Chain = {},
@@ -230,7 +230,7 @@ function M.Chainable(source)
     local function inputToFunc(arg1, arg2, ...)
         local selfPassed = false
         if type(arg1) == "table" then
-            selfPassed = arg1._IsChainable
+            selfPassed = arg1._IsChainable == Chainable._IsChainable
             if not selfPassed then
                 return
             end
@@ -297,7 +297,7 @@ function M.Chainable(source)
 
         -- for when calling :Begin(), the source is passed as the first argument
         if stateIsChainable(state) then
-            if Utils.Equals(state[1].Source, Chainable.Source) then
+            if state[1]._IsChainable == Chainable._IsChainable then
                 state[1] = state[1].Source
             end
         end
