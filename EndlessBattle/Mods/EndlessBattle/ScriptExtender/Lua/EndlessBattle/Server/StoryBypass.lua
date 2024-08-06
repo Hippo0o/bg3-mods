@@ -236,6 +236,7 @@ end
 
 function StoryBypass.ClearArea(character)
     local nearby = UE.GetNearby(character, 50, true)
+
     local toRemove = UT.Filter(nearby, function(v)
         return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid) and not UE.IsImportant(v.Guid)
             or (v.Entity.ServerItem and not Item.IsOwned(v.Guid) and v.Entity.ServerItem.CanBePickedUp)
@@ -250,8 +251,6 @@ function StoryBypass.ClearArea(character)
             for _, b in pairs(batch) do
                 L.Debug("Removing entity.", b.Guid)
                 UE.Remove(b.Guid)
-                -- Osi.SetOnStage(v.Guid, 0)
-                -- Osi.DisappearOutOfSightTo(v.Guid, Player.Host(), "Run", 1, "")
             end
         end)
     end
