@@ -86,6 +86,7 @@ External.Validators.Enemy = tt({
     CharacterVisualResourceID = { "nil", U.UUID.IsValid },
     Race = { "nil", U.UUID.IsValid },
     Icon = { "nil", "string" },
+    DisplayName = { "nil", "string" },
 })
 
 local positionTimelineType = { "nil", tt({ "nil", "number" }, true) }

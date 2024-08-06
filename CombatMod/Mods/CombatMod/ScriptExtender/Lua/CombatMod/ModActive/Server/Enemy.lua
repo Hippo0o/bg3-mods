@@ -16,6 +16,7 @@
 ---@field WasAttacked boolean
 -- potential overwrites
 ---@field LevelOverride integer
+---@field DisplayName string
 ---@field Equipment string
 ---@field Race string
 ---@field Stats string
@@ -40,6 +41,7 @@ local Object = Libs.Struct({
     LevelOverride = 0,
     Equipment = nil,
     Stats = nil,
+    DisplayName = nil,
     SpellSet = nil,
     AiHint = nil,
     Archetype = nil,
@@ -100,6 +102,7 @@ function Object:SyncTemplate()
     self.CharacterVisualResourceID = template.CharacterVisualResourceID
     self.Icon = template.Icon
     self.Stats = template.Stats
+    self.DisplayName = template.DisplayName
     self.Equipment = template.Equipment
     self.Archetype = template.CombatComponent.Archetype
     self.AiHint = template.CombatComponent.AiHint
@@ -149,6 +152,10 @@ function Object:ModifyTemplate()
 
     if self.Icon ~= nil then
         templateOverwrite("Icon", self.Icon)
+    end
+
+    if self.DisplayName ~= nil then
+        templateOverwrite("DisplayName", self.DisplayName)
     end
 
     if self.Stats ~= nil then

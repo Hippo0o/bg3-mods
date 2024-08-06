@@ -6957,9 +6957,10 @@ return {
     -- },
     {
         AiHint = "00000000-0000-0000-0000-000000000000",
-        Archetype = "melee_large",
+        Archetype = "orthon_ranged",
         CharacterVisualResourceID = "c3c1482a-ef9e-c05e-093e-3e75b6581b0e",
         Equipment = "EQP_Orthon_Crossbow_Shortsword",
+        DisplayName = "hccfab3ccgbfbbg494bgab54g7af0b6a145b6",
         Icon = "c3c1482a-ef9e-c05e-093e-3e75b6581b0e-EQP_Orthon_Crossbow_Shortsword_(Icon_Orthon)",
         Info = {
             AC = 17,
