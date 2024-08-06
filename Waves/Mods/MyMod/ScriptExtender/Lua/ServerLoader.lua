@@ -3,4 +3,4 @@ Require("MyMod/_Init")
 
 Require("Shared/Mod").PreparePersistentVars()
 
-Require("Shared/GameState").OnLoadedActions()
+Require("Shared/GameState").OnLoadedActions({ FromState = "Sync", ToState = "Running" })
