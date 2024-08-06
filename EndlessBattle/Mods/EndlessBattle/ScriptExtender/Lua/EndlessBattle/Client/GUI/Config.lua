@@ -7,6 +7,9 @@ function Config.Main(tab)
 
     Net.Send("Config")
 
+    local c8 =
+        Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
+
     ---@type ExtuiCheckbox
     local c2 = Config.Checkbox(
         root,
@@ -54,9 +57,6 @@ function Config.Main(tab)
         10
     )
 
-    local c8 =
-        Config.Checkbox(root, "Play Roguelike Mode", "get continuesly harder battles automatically", "RoguelikeMode")
-
     local c1 = Config.Checkbox(root, "Enable Debug", "some more info in the console and other debug features", "Debug")
     c1.Checked = Mod.Debug
 
@@ -69,6 +69,30 @@ function Config.Main(tab)
         end
 
         Event.Trigger("Success", text)
+    end
+
+    Net.On("Config", function(event)
+        Event.Trigger("ConfigChange", event.Payload)
+    end)
+
+    Event.On("ConfigChange", function(config)
+        showStatus("Config updated", true)
+
+        Mod.Debug = config.Debug
+        c1.Checked = config.Debug
+        c2.Checked = config.BypassStory
+        c3.Checked = config.BypassStoryAlways
+        c4.Checked = config.ForceEnterCombat
+        c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
+        c6.Checked = config.SpawnItemsAtPlayer
+        c7.Value = { config.ExpMultiplier, 0, 0, 0 }
+        c8.Checked = config.RoguelikeMode
+
+        Event.Trigger("ToggleDebug", config.Debug)
+    end)
+
+    if not IsHost then
+        return
     end
 
     -- buttons
@@ -106,31 +130,10 @@ function Config.Main(tab)
         Net.Send("Config", { Default = true })
     end
 
-    -- events
-    Net.On("Config", function(event)
-        Event.Trigger("ConfigChange", event.Payload)
-    end)
-
     Event.On("UpdateConfig", function(config)
         Net.Send("Config", config)
 
         showStatus("Updating config...")
-    end)
-
-    Event.On("ConfigChange", function(config)
-        showStatus("Config updated", true)
-
-        Mod.Debug = config.Debug
-        c1.Checked = config.Debug
-        c2.Checked = config.BypassStory
-        c3.Checked = config.BypassStoryAlways
-        c4.Checked = config.ForceEnterCombat
-        c5.Value = { config.RandomizeSpawnOffset, 0, 0, 0 }
-        c6.Checked = config.SpawnItemsAtPlayer
-        c7.Value = { config.ExpMultiplier, 0, 0, 0 }
-        c8.Checked = config.RoguelikeMode
-
-        Event.Trigger("ToggleDebug", config.Debug)
     end)
 
     root:AddSeparator()
@@ -151,6 +154,7 @@ function Config.Checkbox(root, label, desc, field, onChange)
     root:AddSeparator()
     local checkbox = root:AddCheckbox(__(label))
     root:AddText(__(desc))
+
     checkbox.OnChange = function(ckb)
         Event.Trigger("UpdateConfig", { [field] = ckb.Checked })
         if onChange then
@@ -165,6 +169,7 @@ function Config.Slider(root, label, desc, field, min, max, onChange)
     root:AddSeparator()
     local slider = root:AddSliderInt(__(label), 0, min, max)
     root:AddText(__(desc))
+
     slider.OnChange = Async.Debounce(500, function(sld)
         Event.Trigger("UpdateConfig", { [field] = sld.Value[1] })
     end)

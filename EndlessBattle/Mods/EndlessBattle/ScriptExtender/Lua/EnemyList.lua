@@ -19,6 +19,7 @@ local str = table.concat({
 for _, tier in pairs(MT.C.EnemyTier) do
     local enemies = MT.Enemy.GetByTier(tier)
     for _, enemy in pairs(enemies) do
+        enemy:SyncTemplate()
         _D(enemy.Info)
         str = str
             .. table.concat({

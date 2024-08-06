@@ -38,7 +38,16 @@ end
 function ClientUnlock.GetStock(unlock)
     local stock = unlock.Amount - unlock.Bought
     if stock > 0 then
-        return __("Stock: %s", unlock.Amount - unlock.Bought .. "/" .. unlock.Amount)
+        local text = __("Stock: %s", unlock.Amount - unlock.Bought .. "/" .. unlock.Amount)
+
+        if unlock.Persistent then
+            text = string.format("%s (%s)", text, __("Permanent"))
+        end
+
+        return text
+    end
+    if unlock.Persistent then
+        return __("Active")
     end
     return __("Out of stock")
 end
@@ -46,17 +55,22 @@ end
 function ClientUnlock.Tile(root, unlock)
     local grp = root:AddGroup(unlock.Id)
 
-    local icon = grp:AddIcon(unlock.Icon)
-    if unlock.Description then
-        icon:Tooltip():AddText(unlock.Description)
-    end
+    xpcall(function()
+        local icon = grp:AddImage(unlock.Icon)
+        if unlock.Description then
+            icon:Tooltip():AddText(unlock.Description)
+        end
+    end, function(err)
+        L.Error("I blame Norbyte for this: %s", err)
+        local icon = grp:AddIcon(unlock.Icon)
+        if unlock.Description then
+            icon:Tooltip():AddText(unlock.Description)
+        end
+    end)
 
     local col2 = grp:AddGroup(unlock.Id)
     col2.SameLine = true
     local cost = col2:AddText(__("Cost: %s", unlock.Cost))
-    if unlock.Persistent then
-        cost.Label = __("Permanent") .. "\n" .. cost.Label
-    end
 
     local buyLabel = col2:AddText("")
 
@@ -104,7 +118,9 @@ function ClientUnlock.Tile(root, unlock)
                     local u = UT.Find(State.Unlocks, function(u)
                         return u.Id == req
                     end)
-                    bottomText.Label = bottomText.Label .. __("%s required", u.Name) .. "\n"
+                    if u then
+                        bottomText.Label = bottomText.Label .. __("%s required", u.Name) .. "\n"
+                    end
                 end
             end
         end
@@ -136,6 +152,7 @@ function ClientUnlock.Buy(root, unlock)
     ---@type ExtuiButton
     local btn = grp:AddButton(__("Buy"))
     btn.IDContext = U.RandomId()
+    btn.Label = string.format("    %s    ", __("Buy"))
 
     if unlock.Amount ~= nil then
         Event.On("StateChange", function(state)
@@ -173,6 +190,7 @@ function ClientUnlock.BuyChar(root, unlock)
     ---@type ExtuiButton
     local btn = grp:AddButton(__("Buy"))
     btn.IDContext = U.RandomId()
+    btn.Label = string.format("    %s    ", __("Buy"))
 
     ---@type ExtuiPopup
     local popup = grp:AddPopup("")
@@ -199,13 +217,16 @@ function ClientUnlock.BuyChar(root, unlock)
 
             ---@type ExtuiButton
             local b = popup:AddButton(unlock.Id .. "_" .. i)
-            b.Label = name
+            b.Label = string.format("%s", name)
             table.insert(list, b)
 
             if unlock.BoughtBy[uuid] then
                 b.Label = string.format("%s (%s)", name, __("bought"))
+
                 b:SetStyle("Alpha", 0.5)
             end
+
+            b.Label = string.format("  %s  ", b.Label)
 
             b.OnClick = function()
                 b:SetStyle("Alpha", 0.2)

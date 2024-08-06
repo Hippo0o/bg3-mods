@@ -20,6 +20,8 @@ local M = {}
 ---@field PeerId number|nil
 ---@field ResponseAction string|nil
 ---@field UserId fun(self: NetEvent): number
+---@field Character fun(self: NetEvent): string GUID
+---@field IsHost fun(self: NetEvent): boolean
 local NetEvent = Libs.Class({
     Action = nil,
     Payload = nil,
@@ -27,6 +29,14 @@ local NetEvent = Libs.Class({
     ResponseAction = nil,
     UserId = function(self)
         return (self.PeerId & 0xffff0000) | 0x0001
+    end,
+    Character = function(self)
+        assert(Ext.IsServer(), "NetEvent:Character() is only available on the server")
+        return Osi.GetCurrentCharacter(self:UserId())
+    end,
+    IsHost = function(self)
+        assert(Ext.IsServer(), "NetEvent:IsHost() is only available on the server")
+        return self:Character() == Osi.GetHostCharacter()
     end,
 })
 
@@ -119,7 +129,11 @@ if Mod.EnableRCE then
     M.On("RCE", function(event)
         local code = event.Payload
 
-        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code, _G)))
+        local env = {}
+        setmetatable(env, { __index = _G })
+        env.RCE = event
+
+        local res = Utils.Table.Pack(pcall(Ext.Utils.LoadString(code, env)))
 
         M.Respond(event, res)
     end)

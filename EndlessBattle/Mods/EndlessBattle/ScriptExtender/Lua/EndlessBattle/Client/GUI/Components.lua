@@ -59,10 +59,6 @@ function Components.Computed(root, compute, event, field)
     function o.Update(...)
         local value = { ... }
 
-        if #value == 1 then
-            value = value[1]
-        end
-
         if compute then
             value = compute(root, ...)
         end
@@ -150,8 +146,11 @@ end
 
 ---@class ComponentsConditional
 ---@field Root ExtuiGroup
+---@field Destroy boolean
 ---@field Update fun(bool: boolean)
+---@field Refresh fun() will destroy and recreate the elements
 ---@field Created table<number, ExtuiStyledRenderable>
+---@field OnEvent fun(...: any): boolean
 ---@param root ExtuiTreeParent
 ---@param create fun(conditional: ComponentsConditional): table<number, ExtuiStyledRenderable>|ExtuiStyledRenderable
 ---@param event string|nil
@@ -161,7 +160,12 @@ function Components.Conditional(root, create, event, destroy)
     local o = {
         Created = {},
         Root = root,
+        Destroy = destroy and true or false,
     }
+
+    function o.OnEvent(bool)
+        return bool
+    end
 
     function o.Update(bool)
         if bool then
@@ -183,7 +187,7 @@ function Components.Conditional(root, create, event, destroy)
             for i = #o.Created, 1, -1 do
                 o.Created[i].Visible = false
 
-                if destroy then
+                if o.Destroy then
                     o.Created[i]:Destroy()
                     table.remove(o.Created, i)
                 end
@@ -191,8 +195,18 @@ function Components.Conditional(root, create, event, destroy)
         end
     end
 
+    function o.Refresh()
+        local destroy = o.Destroy
+        o.Destroy = true
+        o.Update(false)
+        o.Update(true)
+        o.Destroy = destroy
+    end
+
     if event then
-        Event.On(event, o.Update)
+        Event.On(event, function(...)
+            o.Update(o.OnEvent(...))
+        end)
     end
 
     return o
@@ -230,4 +244,71 @@ function Components.Tree(root, tbl, label, onText)
     addNode(tree, tbl)
 
     return tree
+end
+
+function Components.Paged(root, list, pageSize)
+    local o = {
+        Root = root,
+        List = list,
+        PageSize = pageSize,
+    }
+    function o.OnPageChange(page, items) end
+
+    local currentPage = 1
+    local function changePage(page)
+        currentPage = page
+
+        for page, items in ipairs(UT.Batch(o.List, o.PageSize)) do
+            for _, item in pairs(items) do
+                item.Visible = page == currentPage
+            end
+            if page == currentPage then
+                o.OnPageChange(page, items)
+            end
+        end
+    end
+    changePage(currentPage)
+
+    local grp = root:AddGroup(U.RandomId())
+    local btnCond = Components.Conditional(grp, function(cond)
+        local bp = grp:AddButton("  <  ")
+        bp.OnClick = function()
+            if currentPage > 1 then
+                currentPage = currentPage - 1
+                changePage(currentPage)
+                cond.Refresh()
+            end
+        end
+        if currentPage == 1 then
+            bp:SetStyle("Alpha", 0.2)
+        end
+        bp.SameLine = false
+
+        local st = grp:AddText(currentPage .. "/" .. math.ceil(#o.List / o.PageSize))
+        st.SameLine = true
+
+        local bn = grp:AddButton("  >  ")
+        bn.OnClick = function()
+            if currentPage < math.ceil(#o.List / o.PageSize) then
+                currentPage = currentPage + 1
+                changePage(currentPage)
+                cond.Refresh()
+            end
+        end
+        bn.SameLine = true
+        if currentPage == math.ceil(#o.List / o.PageSize) then
+            bn:SetStyle("Alpha", 0.2)
+        end
+
+        return { bp, st, bn }
+    end)
+
+    o.UpdateItems = function(items)
+        o.List = items
+        changePage(1)
+
+        btnCond.Refresh()
+    end
+
+    return o
 end

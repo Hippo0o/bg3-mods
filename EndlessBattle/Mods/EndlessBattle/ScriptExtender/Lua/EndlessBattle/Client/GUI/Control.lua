@@ -86,7 +86,9 @@ function Control.StartPanel(root)
         local listCols = startLayout.Cells[1]
 
         local scenarioSelection = Components.Selection(listCols[1])
+        local scenarioSelPaged = Components.Paged(scenarioSelection.Root, {}, 5)
         local mapSelection = Components.Selection(listCols[2])
+        local mapSelPaged = Components.Paged(mapSelection.Root, {}, 5)
 
         Net.On("GetSelection", function(event)
             scenarioSelection.Reset()
@@ -99,11 +101,13 @@ function Control.StartPanel(root)
                 end
                 scenarioSelection.AddItem(label, item.Name)
             end
+            scenarioSelPaged.UpdateItems(scenarioSelection.Selectables)
 
             mapSelection.AddItem("Random", nil)
             for i, item in ipairs(event.Payload.Maps) do
                 mapSelection.AddItem(item.Name, item.Name)
             end
+            mapSelPaged.UpdateItems(mapSelection.Selectables)
         end)
 
         Event.On("StateChange", function()
@@ -121,11 +125,14 @@ function Control.StartPanel(root)
                 Event.Trigger("Teleport", { Map = mapSelection.Value })
             end
 
-            grp:AddButton(__("Ping Spawns")).OnClick = function(button)
+            local b2 = grp:AddButton(__("Ping Spawns"))
+            b2.SameLine = true
+            b2.OnClick = function(button)
                 Event.Trigger("PingSpawns", { Map = mapSelection.Value })
             end
 
-            grp:AddButton(__("Kill spawned")).OnClick = function()
+            local b3 = grp:AddButton(__("Kill spawned"))
+            b3.OnClick = function()
                 Net.Send("KillSpawned")
             end
 
@@ -160,6 +167,18 @@ function Control.RunningPanel(root)
                 return "Map: " .. tostring(state.Scenario.Map.Name)
             end
         end, "StateChange")
+
+        local cond = Components.Conditional(layout.Cells[1][1], function(cond)
+            local b = cond.Root:AddButton(__("Stop"))
+            b.OnClick = function()
+                Event.Trigger("Stop")
+            end
+
+            return b
+        end, "StateChange")
+        cond.OnEvent = function(state)
+            return state.Scenario and (state.Scenario.OnMap == false or state.Scenario.Round == 0)
+        end
 
         layout.Cells[1][2]:AddButton(__("Teleport")).OnClick = function()
             Event.Trigger("Teleport", { Map = State.Scenario.Map.Name })

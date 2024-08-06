@@ -129,7 +129,7 @@ local Queue = Libs.Class({
             self.Loop:Start()
         end
 
-        Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx, Mod.Dev and debug.traceback())
+        Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx, Mod.Dev and debug.traceback() or nil)
 
         return idx
     end,

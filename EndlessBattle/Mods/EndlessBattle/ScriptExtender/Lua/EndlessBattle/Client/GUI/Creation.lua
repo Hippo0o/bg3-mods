@@ -27,10 +27,12 @@ function Creation.Main(tab)
         pb.OnClick = function()
             local host = UE.GetHost()
             local region = host.Level.LevelName
-            Net.RCE("return Osi.GetPosition(Osi.GetHostCharacter())").After(function(ok, x, y, z)
+            L.Dump("Host", host.CustomName)
+            Net.RCE("return Osi.GetPosition(RCE:Character())").After(function(ok, x, y, z)
                 if not ok then
                     return
                 end
+
                 Net.RCE('Osi.RequestPing(%s, %s, %s, "", "")', x, y, z)
                 posBox.Text = posBox.Text .. string.format("%s: %s, %s, %s", region, x, y, z) .. "\n"
                 pi.Text = string.format("%s, %s, %s", x, y, z)
@@ -58,7 +60,7 @@ function Creation.Main(tab)
             x = x:match("[-]?%d+")
             y = y:match("[-]?%d+")
             z = z:match("[-]?%d+")
-            Net.RCE("Osi.TeleportToPosition(GetHostCharacter(), %d, %d, %d)", x, y, z).After(function(ok, err)
+            Net.RCE("Osi.TeleportToPosition(RCE:Character(), %d, %d, %d)", x, y, z).After(function(ok, err)
                 if not ok then
                     Event.Trigger("Error", err)
                 end
@@ -85,7 +87,7 @@ function Creation.Main(tab)
                     local label = waypoint:gsub(US.Escape(U.UUID.Extract(waypoint)), short)
                     local b = wp:AddButton(label)
                     b.OnClick = function()
-                        Net.RCE("TeleportToWaypoint(GetHostCharacter(), '%s')", waypoint).After(function(ok, err)
+                        Net.RCE("TeleportToWaypoint(RCE:Character(), '%s')", waypoint).After(function(ok, err)
                             if not ok then
                                 Event.Trigger("Error", err)
                             end

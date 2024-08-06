@@ -117,25 +117,6 @@ U.Osiris.On(
         cancelDialog(dialog, instanceID)
     end)
 )
-U.Osiris.On("EnteredForceTurnBased", 1, "before", function(object)
-    if Osi.IsCharacter(object) ~= 1 then
-        return
-    end
-
-    if not UE.IsNonPlayer(object) then
-        Osi.ForceTurnBasedMode(object, 0)
-        return
-    end
-
-    UE.Remove(object)
-    Player.Notify(
-        __(
-            "Skipped event with %s",
-            Osi.ResolveTranslatedString(Ext.Entity.Get(object).DisplayName.NameKey.Handle.Handle)
-        ),
-        true
-    )
-end)
 
 U.Osiris.On(
     "UseFinished",
@@ -181,17 +162,90 @@ U.Osiris.On(
     end)
 )
 
+local entityListener = nil
+GameState.OnLoad(function()
+    if not entityListener then
+        entityListener = Ext.Entity.Subscribe(
+            "CanTravel",
+            ifBypassStory(function(e)
+                if e.PartyMember then
+                    L.Debug("UnblockTravel", e.Uuid.EntityUuid)
+                    StoryBypass.UnblockTravel(e)
+                end
+            end)
+        )
+    end
+end)
+GameState.OnUnload(function()
+    if entityListener then
+        Ext.Entity.Unsubscribe(entityListener)
+        entityListener = nil
+    end
+end)
+
+U.Osiris.On(
+    "TeleportToFromCamp",
+    1,
+    "after",
+    ifBypassStory(function(character)
+        if not UE.IsPlayable(character) then
+            return
+        end
+
+        -- workaround for blocked travel
+        -- TODO fix this
+        Defer(1000, function()
+            if S and not S.OnMap then
+                L.Error("Teleport workaround", character)
+                Scenario.Teleport(character)
+            end
+        end)
+
+        if U.UUID.Equals(Player.Host(), character) then
+            if not Ext.Entity.Get(character).CampPresence or not S then
+                Player.ReturnToCamp()
+            end
+        end
+    end)
+)
+
+U.Osiris.On(
+    "LongRestStarted",
+    0,
+    "after",
+    ifBypassStory(function()
+        Osi.PROC_Camp_LongRestFinishForAllPlayers()
+        Osi.PROC_Camp_EveryoneWakeup()
+        Osi.RemoveStatus(GetHostCharacter(), "LONG_REST", "00000000-0000-0000-0000-000000000000")
+        -- Osi.RestoreParty(GetHostCharacter())
+        Osi.PROC_Camp_SetModeToDay()
+    end)
+)
+
+function StoryBypass.UnblockTravel()
+    for _, e in pairs(UE.GetParty()) do
+        Osi.RemoveStatus(e.Uuid.EntityUuid, "TRAVELBLOCK_CANTMOVE")
+        Osi.RemoveStatus(e.Uuid.EntityUuid, "TRAVELBLOCK_BLOCKEDZONE")
+
+        e.ServerCharacter.PlayerData.IsInDangerZone = false
+        e.CanTravel.ErrorFlags = {}
+        e.CanTravel.field_2 = 0
+        e:Replicate("CanTravel")
+    end
+end
+
 function StoryBypass.ClearArea(character)
-    local toRemove = UT.Filter(UE.GetNearby(character, 50, true), function(v)
-        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid)
-            or (
-                v.Entity.ServerItem
-                and not Item.IsOwned(v.Guid)
-                and (v.Entity.ServerItem.CanUse or v.Entity.ServerItem.CanBePickedUp)
-            )
+    local nearby = UE.GetNearby(character, 50, true)
+    local toRemove = UT.Filter(nearby, function(v)
+        return v.Entity.IsCharacter and UE.IsNonPlayer(v.Guid) and not UE.IsImportant(v.Guid)
+            or (v.Entity.ServerItem and not Item.IsOwned(v.Guid) and v.Entity.ServerItem.CanBePickedUp)
     end)
 
-    for _, batch in pairs(UT.Batch(toRemove, 20)) do
+    local toBlockUse = UT.Filter(nearby, function(v)
+        return v.Entity.ServerItem and not Item.IsOwned(v.Guid) and v.Entity.ServerItem.CanUse
+    end)
+
+    for _, batch in pairs(UT.Batch(toRemove, math.ceil(#toRemove / 5))) do
         Schedule(function()
             for _, b in pairs(batch) do
                 L.Debug("Removing entity.", b.Guid)
@@ -200,5 +254,10 @@ function StoryBypass.ClearArea(character)
                 -- Osi.DisappearOutOfSightTo(v.Guid, Player.Host(), "Run", 1, "")
             end
         end)
+    end
+
+    for _, v in pairs(toBlockUse) do
+        L.Debug("Blocking use", v.Guid)
+        v.Entity.ServerItem.CanUse = false
     end
 end

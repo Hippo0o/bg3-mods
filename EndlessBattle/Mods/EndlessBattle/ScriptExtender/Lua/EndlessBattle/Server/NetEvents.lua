@@ -1,3 +1,7 @@
+Net.On("IsHost", function(event)
+    Net.Respond(event, event:IsHost())
+end)
+
 Net.On("GetSelection", function(event)
     Net.Respond(event, {
         Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
@@ -104,9 +108,9 @@ Net.On("Teleport", function(event)
     end
 
     if S and U.Equals(map, S.Map) then
-        Scenario.Teleport(Player.Host(event:UserId()))
+        Scenario.Teleport(event:Character())
     else
-        Map.TeleportTo(map, Player.Host(event:UserId()), false)
+        Map.TeleportTo(map, event:Character(), false)
     end
 
     Net.Respond(event, { true })
@@ -150,6 +154,12 @@ Event.On("ScenarioStarted", function()
     end)
 end)
 
+Event.On("ScenarioCombatStarted", function()
+    Schedule(function()
+        Net.Send("SyncState", PersistentVars)
+    end)
+end)
+
 Event.On("ScenarioEnded", function()
     Schedule(function()
         Net.Send("SyncState", PersistentVars)
@@ -167,26 +177,28 @@ Event.On("ScenarioStopped", function()
 end)
 
 Net.On("Config", function(event)
-    local config = event.Payload
-    if config then
-        if config.Default then
-            config = DefaultConfig
-        end
+    if event:IsHost() then
+        local config = event.Payload
+        if config then
+            if config.Default then
+                config = DefaultConfig
+            end
 
-        External.ApplyConfig(config)
+            External.ApplyConfig(config)
 
-        if config.Persist then
-            External.SaveConfig()
-        end
+            if config.Persist then
+                External.SaveConfig()
+            end
 
-        if config.Reset then
-            External.LoadConfig()
-        end
+            if config.Reset then
+                External.LoadConfig()
+            end
 
-        if config.RoguelikeMode ~= nil then
-            if PersistentVars.RogueModeActive ~= config.RoguelikeMode then
-                PersistentVars.RogueModeActive = config.RoguelikeMode
-                Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
+            if config.RoguelikeMode ~= nil then
+                if PersistentVars.RogueModeActive ~= config.RoguelikeMode then
+                    PersistentVars.RogueModeActive = config.RoguelikeMode
+                    Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
+                end
             end
         end
     end
@@ -199,5 +211,5 @@ Net.On("Config", function(event)
 end)
 
 Net.On("KillNearby", function(event)
-    StoryBypass.ClearArea(Player.Host(event:UserId()))
+    StoryBypass.ClearArea(event:Character())
 end)
