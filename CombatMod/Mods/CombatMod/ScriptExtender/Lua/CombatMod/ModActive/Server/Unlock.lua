@@ -21,9 +21,9 @@ end
 ---@field BoughtBy table<string, bool> -- Character GUID
 ---@field Character boolean
 ---@field Unlocked boolean
----@field Requirement string|nil
+---@field Requirement table|string|nil
 ---@field Persistent boolean
----@field OnBuy fun(self: Unlock)
+---@field OnBuy fun(self: Unlock, character: string)
 ---@field OnReapply fun(self: Unlock)
 ---@field Buy fun(self: Unlock)
 local Object = Libs.Struct({
@@ -202,7 +202,9 @@ end)
 Event.On("ScenarioTeleporting", Unlock.UpdateUnlocked)
 Event.On("ScenarioStarted", Unlock.UpdateUnlocked)
 Event.On("RogueScoreChanged", Unlock.UpdateUnlocked)
+Event.On("TeleportedToAct", Unlock.UpdateUnlocked)
 U.Osiris.On("LongRestFinished", 0, "after", Unlock.UpdateUnlocked)
+U.Osiris.On("CombatRoundStarted", 2, "after", Unlock.UpdateUnlocked)
 
 Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)

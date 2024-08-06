@@ -289,8 +289,7 @@ do -- EXP Lock
                         e.Experience.CurrentLevelExperience = exp.CurrentLevelExperience
                         e.Experience.TotalExperience = exp.TotalExperience
                         e.Experience.NextLevelExperience = exp.NextLevelExperience
-                        e.Experience.field_28 = exp.field_28 -- dunno
-                        e.Experience.SomeExperience = exp.SomeExperience
+                        -- e.Experience.field_28 = exp.field_28 -- dunno
 
                         e:Replicate("EocLevel")
                         e:Replicate("AvailableLevel")
