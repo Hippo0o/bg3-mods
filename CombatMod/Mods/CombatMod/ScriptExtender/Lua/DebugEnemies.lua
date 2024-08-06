@@ -7,7 +7,7 @@ if DEBUG_ENEMIES then
     return
 end
 
-local MT = Mods.EndlessBattle
+local MT = Mods.ToT
 for _, tier in pairs(MT.C.EnemyTier) do
     local timeline = {}
     local enemies = MT.Enemy.GetByTier(tier)

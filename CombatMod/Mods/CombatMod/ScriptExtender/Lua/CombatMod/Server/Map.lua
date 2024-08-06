@@ -1,4 +1,4 @@
-local mapTemplates = Require("EndlessBattle/Templates/Maps.lua")
+local mapTemplates = Require("CombatMod/Templates/Maps.lua")
 External.File.ExportIfNeeded("Maps", mapTemplates)
 
 -------------------------------------------------------------------------------------------------

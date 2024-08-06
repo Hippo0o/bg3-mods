@@ -441,7 +441,12 @@ function GameMode.StartNext()
         return PersistentVars.RogueScore > 20 or v.Region == Player.Region()
     end)
 
-    Scenario.Start(rogueTemp, maps[U.Random(#maps)])
+    local map = nil
+    if #maps > 0 then
+        map = maps[U.Random(#maps)]
+    end
+
+    Scenario.Start(rogueTemp, map)
 end
 
 U.Osiris.On(

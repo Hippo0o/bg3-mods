@@ -81,7 +81,6 @@ local function cancelDialog(dialog, instanceID)
         end
 
         if #hasPlayable == #dialogActors then
-            L.Info(__("To disable story bypass, use !EB DisableStoryBypass"))
             Osi.DialogRequestStopForDialog(dialog, dialogActors[1])
         end
     end)
@@ -128,13 +127,11 @@ U.Osiris.On(
         end
         if Osi.IsLocked(item) == 1 then
             L.Debug("Auto unlocking", item)
-            L.Info(__("To disable story bypass, use !EB DisableStoryBypass"))
             Player.Notify(__("Auto unlocking"), true)
             Osi.Unlock(item, character)
         end
         if Osi.IsTrapArmed(item) == 1 then
             L.Debug("Auto disarming", item)
-            L.Info(__("To disable story bypass, use !EB DisableStoryBypass"))
             Player.Notify(__("Auto disarming"), true)
             Osi.SetTrapArmed(item, 0)
         end

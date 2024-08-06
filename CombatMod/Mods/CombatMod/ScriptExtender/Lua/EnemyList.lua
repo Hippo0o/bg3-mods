@@ -1,4 +1,4 @@
-local MT = Mods.EndlessBattle
+local MT = Mods.ToT
 
 local str = table.concat({
     "TemplateId",

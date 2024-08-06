@@ -1,4 +1,4 @@
-local unlocks = Require("EndlessBattle/Templates/Unlocks.lua")
+local unlocks = Require("CombatMod/Templates/Unlocks.lua")
 
 local persistentUnlocks = IO.LoadJson("Save/Unlocks.json") or {}
 local function persistUnlock(unlock)
