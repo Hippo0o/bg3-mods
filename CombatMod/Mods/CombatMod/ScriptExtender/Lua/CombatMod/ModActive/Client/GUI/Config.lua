@@ -100,7 +100,6 @@ function Config.Main(tab)
         showStatus(__("Config updated"), true)
 
         Mod.Debug = config.Debug
-        Mod.Dev = config.Dev
 
         Event.Trigger("ToggleDebug", config.Debug)
     end)

@@ -8,5 +8,5 @@ end)
 WaitUntil(function()
     return hostChecked
 end, function()
-    Require("CombatMod/Client/GUI/_Init")
+    Require("CombatMod/ModActive/Client/GUI/_Init")
 end)

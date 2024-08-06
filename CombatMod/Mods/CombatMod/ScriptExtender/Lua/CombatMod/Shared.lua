@@ -26,6 +26,9 @@ GC = GameUtils.Character
 ---@type IO
 IO = Require("Hlib/IO")
 
+Mod.Dev = IO.Exists("DevMode")
+Mod.Debug = Mod.Dev
+
 ---@type Constants
 local Constants = Require("Hlib/Constants")
 

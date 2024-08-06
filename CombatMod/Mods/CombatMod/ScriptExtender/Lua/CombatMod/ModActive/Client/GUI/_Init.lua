@@ -1,12 +1,12 @@
-Require("CombatMod/Client/GUI/Components")
+Require("CombatMod/ModActive/Client/GUI/Components")
 
-Require("CombatMod/Client/GUI/Control")
-Require("CombatMod/Client/GUI/Unlocks")
-Require("CombatMod/Client/GUI/Creation")
-Require("CombatMod/Client/GUI/Config")
-Require("CombatMod/Client/GUI/Extras")
-Require("CombatMod/Client/GUI/Loot")
-Require("CombatMod/Client/GUI/Debug")
+Require("CombatMod/ModActive/Client/GUI/Control")
+Require("CombatMod/ModActive/Client/GUI/Unlocks")
+Require("CombatMod/ModActive/Client/GUI/Creation")
+Require("CombatMod/ModActive/Client/GUI/Config")
+Require("CombatMod/ModActive/Client/GUI/Extras")
+Require("CombatMod/ModActive/Client/GUI/Loot")
+Require("CombatMod/ModActive/Client/GUI/Debug")
 
 ---@type ExtuiWindow
 local window = Ext.IMGUI.NewWindow(
@@ -91,20 +91,20 @@ do
     end
 end
 
-local tabs = window:AddTabBar(U.RandomId())
+Tabs = window:AddTabBar(U.RandomId())
 
-Control.Main(tabs)
+Control.Main(Tabs)
 
-ClientUnlock.Main(tabs)
+ClientUnlock.Main(Tabs)
 
-Config.Main(tabs)
+Config.Main(Tabs)
 
-Loot.Main(tabs)
+Loot.Main(Tabs)
 
-Extras.Main(tabs)
+Extras.Main(Tabs)
 
 Components.Conditional(_, function()
-    return { Creation.Main(tabs), Debug.Main(tabs) }
+    return { Creation.Main(Tabs), Debug.Main(Tabs) }
 end, "ToggleDebug")
 
 -------------------------------------------------------------------------------------------------

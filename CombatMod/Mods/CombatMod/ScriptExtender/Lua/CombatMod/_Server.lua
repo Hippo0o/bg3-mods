@@ -78,9 +78,9 @@ local function init()
     end
     done = true
 
-    Require("CombatMod/Overwrites")
+    Require("CombatMod/ModActive/Overwrites")
 
-    Require("CombatMod/Server/ModActive/_Init")
+    Require("CombatMod/ModActive/Server/_Init")
 
     Event.Trigger(GameState.EventLoad)
 
@@ -92,6 +92,19 @@ end
 --                                           Events                                            --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
+
+Event.On("ModActive", function()
+    if not PersistentVars.Active then
+        Player.Notify(__("%s is now active.", Mod.Prefix), true)
+    end
+
+    PersistentVars.Active = true
+
+    init()
+
+    -- client only listens once for this event
+    Net.Send("ModActive")
+end)
 
 GameState.OnLoad(function()
     External.LoadConfig()
@@ -111,19 +124,6 @@ GameState.OnLoad(function()
         Event.Trigger("ModActive")
     end
 end, true)
-
-Event.On("ModActive", function()
-    if not PersistentVars.Active then
-        Player.Notify(__("%s is now active.", Mod.Prefix), true)
-    end
-
-    PersistentVars.Active = true
-
-    init()
-
-    -- client only listens once for this event
-    Net.Send("ModActive")
-end)
 
 -------------------------------------------------------------------------------------------------
 --                                                                                             --

@@ -7,9 +7,6 @@ local Utils = Require("Hlib/Utils")
 ---@type Log
 local Log = Require("Hlib/Log")
 
----@type Libs
-local Libs = Require("Hlib/Libs")
-
 ---@type IO
 local IO = Require("Hlib/IO")
 
@@ -30,62 +27,96 @@ local M = {}
 
 M.Translations = {}
 M.UseLoca = true
+M.FilePath = "Localization/" .. Mod.TableKey
 
----@class LocalizationStruct
-local Localization = Libs.Struct({
-    Version = nil,
-    Text = nil,
-    Stack = {},
-    Handle = nil,
-    LocaText = nil,
-    _StackNew = true,
-})
-function Localization.New(text, version, handle)
-    local obj = Localization.Init({
+local function build(text, version, handle)
+    local tbl = {
         Version = version,
         Text = text,
-    })
+        Handle = nil,
+        LocaText = nil,
+        Stack = {},
+    }
 
     if M.UseLoca then
-        obj.Handle = handle or M.GenerateHandle(text, version)
-        obj.LocaText = M.Get(obj.Handle)
+        tbl.Handle = handle or M.GenerateHandle(text, version)
+        tbl.LocaText = M.Get(tbl.Handle)
 
-        if obj.LocaText ~= "" then
-            Log.Info("Translation found: ", obj.Handle, obj.Text, obj.LocaText)
+        if tbl.LocaText ~= "" then
+            Log.Info("Translation found: ", tbl.Handle, tbl.Text, tbl.LocaText)
 
-            obj.Text = obj.LocaText
+            tbl.Text = tbl.LocaText
         end
     end
 
-    return obj
+    return tbl
 end
-local stackNew = {}
-function Localization:ExtendStack(stack)
-    if self._StackNew then
-        self.Stack = {}
-        self._StackNew = false
-    end
 
-    if stack == "" then -- should not happen
+local function saveFile()
+    IO.SaveJson(
+        M.FilePath .. ".json",
+        Utils.Table.Map(M.Translations, function(v, k)
+            return {
+                Text = v.Text,
+                Version = v.Version,
+                Handle = v.Handle,
+                Stack = v.Stack,
+            },
+                k
+        end)
+    )
+end
+
+local stackUpdated = {}
+local function extendStack(key, stack)
+    if Ext.IsClient() then
+        Net.Send("_TranslationStack", { Key = key, Stack = stack })
+
         return
     end
 
-    for _, v in ipairs(self.Stack) do
+    local t = M.Translations[key]
+
+    if not stackUpdated[key] then
+        stackUpdated[key] = true
+        t.Stack = {}
+    end
+
+    if stack == "" then
+        return
+    end
+
+    for _, v in ipairs(t.Stack) do
         if v == stack then
             return
         end
     end
 
-    table.insert(self.Stack, stack)
+    table.insert(t.Stack, stack)
+
+    Event.Trigger("_TranslationChanged")
 end
 
-M.FilePath = "Localization/" .. Mod.TableKey
-M.Translations = {}
+Net.On("_TranslationRequest", function(event)
+    Utils.Table.Merge(M.Translations, event.Payload)
+end)
+
+Event.On("_TranslationChanged", function()
+    saveFile()
+
+    Net.Send("_TranslationRequest", M.Translations)
+end)
+
+Net.On("_TranslationStack", function(event)
+    extendStack(event.Payload.Key, event.Payload.Stack)
+
+    IO.SaveJson(M.FilePath .. "_stacks.json", stacks)
+end)
 
 GameState.OnLoadSession(function()
     local cached = IO.LoadJson(M.FilePath .. ".json") or {}
     for k, v in pairs(cached) do
-        M.Translations[k] = Localization.New(v.Text, v.Version, v.Handle)
+        M.Translations[k] = build(v.Text, v.Version, v.Handle)
         if type(v.Stack) ~= "table" then
             v.Stack = { v.Stack }
         end
@@ -94,59 +125,27 @@ GameState.OnLoadSession(function()
     end
 end)
 
-if Ext.IsServer() then
-    Net.On("_TranslationRequest", function(event)
-        Utils.Table.Merge(M.Translations, event.Payload)
-        Event.Trigger("_TranslationChanged")
-    end)
-else
-    Net.On("_TranslationRequest", function(event)
-        Utils.Table.Merge(M.Translations, event.Payload)
-    end)
-end
-
-Event.On(
-    "_TranslationChanged",
-    Async.Debounce(100, function()
-        if Ext.IsServer() then
-            IO.SaveJson(
-                M.FilePath .. ".json",
-                Utils.Table.Map(M.Translations, function(v, k)
-                    return {
-                        Text = v.Text,
-                        Version = v.Version,
-                        Handle = v.Handle,
-                        Stack = v.Stack,
-                    },
-                        k
-                end)
-            )
-        end
-        Net.Send("_TranslationRequest", M.Translations)
-    end)
-)
-
 function M.Translate(text, version)
     version = version or 1
 
     local key = text .. ";" .. version
 
-    if M.Translations[key] == nil or Mod.Dev then
+    if M.Translations[key] == nil then
+        M.Translations[key] = build(text, version)
+
+        Event.Trigger("_TranslationChanged")
+
+        Log.Debug("Localization/Translate", M.Translations[key].Handle, M.Translations[key].Text)
+    end
+
+    if Mod.Dev then
         local stack = Utils.String.Trim(Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
             return not line:match("stack traceback:")
                 and not line:match("Hlib/Localization.lua")
                 and not line:match("(...tail calls...)")
         end) or "")
 
-        if not M.Translations[key] then
-            M.Translations[key] = Localization.New(text, version)
-        end
-
-        Localization.ExtendStack(M.Translations[key], stack)
-
-        Event.Trigger("_TranslationChanged")
-
-        Log.Debug("Localization/Translate", M.Translations[key].Handle, M.Translations[key].Text)
+        extendStack(key, stack)
     end
 
     return M.Translations[key].Text

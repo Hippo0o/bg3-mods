@@ -66,7 +66,6 @@ External.Validators.Config = tt({
     LootIncludesCampSlot = { "nil", "boolean" },
     SpawnItemsAtPlayer = { "nil", "boolean" },
     Debug = { "nil", "boolean" },
-    Dev = { "nil", "boolean" },
     TurnOffNotifications = { "nil", "boolean" },
     ClearAllEntities = { "nil", "boolean" },
     MulitplayerRestrictUnlocks = { "nil", "boolean" },
@@ -354,9 +353,6 @@ function External.ApplyConfig(config)
         if config[field] ~= nil then
             if field == "Debug" then
                 Mod.Debug = config[field]
-            end
-            if field == "Dev" then
-                Mod.Dev = config[field]
             end
 
             Config[field] = config[field]

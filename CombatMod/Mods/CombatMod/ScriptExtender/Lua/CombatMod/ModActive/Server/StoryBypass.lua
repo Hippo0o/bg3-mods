@@ -186,7 +186,7 @@ function StoryBypass.ClearSurfaces(character)
         end)
     end
 
-    WaitTicks(13 * #spiral_points, function()
+    WaitTicks(13 * #spiralPoints, function()
         Osi.TeleportToPosition(character, x, y, z)
     end)
 end
