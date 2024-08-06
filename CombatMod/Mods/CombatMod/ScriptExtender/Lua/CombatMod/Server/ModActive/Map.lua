@@ -51,7 +51,7 @@ function Object:TeleportInRegion(character, withOffset)
     -- Osi.PROC_Foop(character)
 
     local x, y, z = table.unpack(self.Enter)
-    Async.WaitTicks(10, function()
+    WaitTicks(10, function()
         Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset)
 
         Event.Trigger("MapTeleported", self, character)
@@ -135,7 +135,7 @@ function Object:SpawnIn(enemy, spawn)
 
     return true, chainable:After(function()
         return enemy,
-            Async.WaitTicks(6, function()
+            WaitTicks(6, function()
                 local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
 
                 Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)

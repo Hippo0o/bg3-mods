@@ -361,7 +361,7 @@ function GameMode.ApplyDifficulty(enemy)
         Osi.AddBoosts(enemy.GUID, "AC(" .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
     end
 
-    Async.WaitTicks(6, function()
+    WaitTicks(6, function()
         local entity = Ext.Entity.Get(enemy.GUID)
 
         if mod2 > 0 then
@@ -584,7 +584,7 @@ function GameMode.RecruitOrigin(id)
         Osi.SetLevel(character, 1)
         Osi.RequestRespec(character)
 
-        Async.WaitTicks(20, function()
+        WaitTicks(20, function()
             local entity = Ext.Entity.Get(character)
 
             if not entity.Experience then

@@ -270,7 +270,7 @@ do -- EXP Lock
 
     local toggleCamp = Async.Throttle(100, function()
         StoryBypass.ExpLock.Resume()
-        Async.WaitTicks(12, function()
+        WaitTicks(12, function()
             if Player.InCamp() then
                 StoryBypass.ExpLock.Pause()
             else
@@ -486,7 +486,7 @@ U.Osiris.On(
         if not Ext.Entity.Get(character).CampPresence or not Scenario.Current() then
             L.Debug("ReturnToCamp", character)
             -- need ~2 ticks for changing CampPresence
-            Async.WaitTicks(3, function()
+            WaitTicks(3, function()
                 Player.ReturnToCamp()
             end)
         end

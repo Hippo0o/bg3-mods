@@ -332,18 +332,20 @@ function Action.MapEntered()
         return
     end
 
-    -- remove corpses from previous combat
-    Enemy.Cleanup()
+    Schedule(function()
+        -- remove corpses from previous combat
+        Enemy.Cleanup()
 
-    Event.Trigger("ScenarioMapEntered", Current())
-    Player.Notify(__("Entered combat area."))
+        Event.Trigger("ScenarioMapEntered", Current())
+        Player.Notify(__("Entered combat area."))
+    end)
 
     for _, p in pairs(GE.GetParty()) do
         Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
     end
 
     local id = tostring(S())
-    Async.WaitTicks(33, function()
+    WaitTicks(33, function()
         WaitUntil(function(self)
             if tostring(S()) ~= id then
                 self:Clear()
@@ -358,9 +360,11 @@ function Action.MapEntered()
                     and e.TurnBased.IsInCombat_M == true
             end) == nil
         end, function()
-            if tostring(S()) == id then
-                Action.StartCombat()
-            end
+            WaitTicks(9, function()
+                if tostring(S()) == id then
+                    Action.StartCombat()
+                end
+            end)
         end)
     end)
 end
@@ -735,8 +739,9 @@ U.Osiris.On(
             return
         end
 
-        Async.WaitTicks(6, function()
-            Osi.DetachFromPartyGroup(uuid)
+        Osi.DetachFromPartyGroup(uuid)
+
+        WaitTicks(6, function()
             if Ext.Entity.Get(uuid).CampPresence or not Ext.Entity.Get(uuid).ClientControl then
                 return
             end
@@ -749,10 +754,11 @@ U.Osiris.On(
 Event.On(
     "MapTeleported",
     ifScenario(function(map, character)
-        if map.Name == S().Map.Name then
-            if not S().OnMap and U.UUID.Equals(character, Player.Host()) then
-                S().OnMap = true
-                Defer(2000, Action.MapEntered)
+        local s = Current()
+        if map.Name == s.Map.Name then
+            if not s.OnMap and U.UUID.Equals(character, Player.Host()) then
+                s.OnMap = true
+                WaitTicks(60, Action.MapEntered)
             end
 
             Event.Trigger("ScenarioTeleported", character)
