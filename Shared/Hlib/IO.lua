@@ -40,16 +40,7 @@ function M.SaveJson(file, data)
         file = file .. ".json"
     end
 
-    M.Save(file, Ext.Json.Stringify(data))
-end
-
-function M.SaveDump(file, data)
-    if file:sub(-5) ~= ".json" then
-        file = file .. ".json"
-    end
-
-    Utils.Log.Dump(Utils.Table.Clean(data, 2))
-    M.Save(file, type(data) == "table" and Ext.Json.Stringify(Utils.Table.Clean(data, 2)) or data)
+    M.Save(file, Ext.Json.Stringify(type(data) == "table" and Utils.Table.Clean(data, 2) or data))
 end
 
 return M

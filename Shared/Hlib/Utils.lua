@@ -359,7 +359,18 @@ function M.Table.DeepClone(t, seen)
 end
 
 ---@param t table
----@param func function @function(value, key) -> value: any|nil, key: any|nil
+---@param func function 
+---@return table
+function M.Table.Each(t, func)
+    local r = {}
+
+    for k, v in pairs(t) do
+        func(v, k)
+    end
+end
+
+---@param t table
+---@param func fun(value, key): value: any|nil, key: any|nil
 ---@return table
 function M.Table.Map(t, func)
     local r = {}
@@ -377,7 +388,7 @@ function M.Table.Map(t, func)
 end
 
 ---@param t table
----@param func function @function(value, key) -> boolean
+---@param func fun(value, key): boolean
 ---@return table
 function M.Table.Filter(t, func, keepKeys)
     return M.Table.Map(t, function(v, k)
@@ -403,7 +414,7 @@ function M.Table.Contains(t, v, count)
 end
 
 ---@param t table table to search
----@param func function @function(value, key) -> boolean
+---@param func fun(value, key): boolean
 ---@return any|nil, string|number|nil @value, key
 function M.Table.Find(t, func)
     for k, v in pairs(t) do
