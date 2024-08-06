@@ -103,10 +103,12 @@ Event.On("ModActive", function()
     PersistentVars.Active = true
 
     init()
-
-    -- client only listens once for this event
-    Net.Send("ModActive")
 end, true)
+
+Event.On("ModActive", function()
+    -- client only listens once for this event
+    Net.Send("ModInactive")
+end)
 
 GameState.OnLoad(function()
     External.LoadConfig()
@@ -121,8 +123,10 @@ GameState.OnLoad(function()
             return k ~= "Dev" and k ~= "Debug"
         end, true))
     end
+end, true)
 
+GameState.OnLoad(function()
     if PersistentVars.Active then
         Event.Trigger("ModActive")
     end
-end, true)
+end)

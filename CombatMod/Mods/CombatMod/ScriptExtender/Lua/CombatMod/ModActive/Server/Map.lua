@@ -107,8 +107,9 @@ end
 
 ---@param enemy Enemy
 ---@param spawn number Index of Spawns or -1 for random
+---@param faceTowards string|nil GUID of entity to face towards
 ---@return boolean, ChainableRunner|nil
-function Object:SpawnIn(enemy, spawn)
+function Object:SpawnIn(enemy, spawn, faceTowards)
     local x, y, z = self:GetSpawn(spawn)
 
     pcall(function()
@@ -135,13 +136,17 @@ function Object:SpawnIn(enemy, spawn)
         x, y, z = x2, y2, z2
     end
 
+    if not faceTowards then
+        faceTowards = Osi.GetClosestAlivePlayer(enemy.GUID)
+    end
+
     return true,
         chainable:After(function()
             return enemy,
                 WaitTicks(6, function()
                     local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
 
-                    Osi.SteerTo(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 1)
+                    Osi.SteerTo(enemy.GUID, faceTowards, 1)
                     -- Osi.LookAtEntity(enemy.GUID, Osi.GetClosestAlivePlayer(enemy.GUID), 5)
 
                     return enemy, didCorrect

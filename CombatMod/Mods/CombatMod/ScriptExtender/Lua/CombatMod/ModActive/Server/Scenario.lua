@@ -270,7 +270,7 @@ function Action.SpawnRound()
 
                 L.Debug("Spawning enemy.", e:GetId(), posIndex)
 
-                local ok, chainable = s.Map:SpawnIn(e, posIndex)
+                local ok, chainable = s.Map:SpawnIn(e, posIndex, s.CombatHelper)
 
                 if not ok then
                     return false
