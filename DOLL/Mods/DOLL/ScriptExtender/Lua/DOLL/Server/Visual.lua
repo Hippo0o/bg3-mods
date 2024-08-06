@@ -91,3 +91,23 @@ function Visual.GetSlot(slot, type)
         end
     end)
 end
+
+function Visual.GetSlots()
+    local seen = {}
+    UT.Each(Ext.StaticData.GetAll(C.VisualTypes.CCSV), function(visual)
+        local data = Ext.StaticData.Get(visual, C.VisualTypes.CCSV)
+
+        if data.SlotName then
+            seen[data.SlotName] = true
+        end
+    end)
+    UT.Each(Ext.StaticData.GetAll(C.VisualTypes.CCAV), function(visual)
+        local data = Ext.StaticData.Get(visual, C.VisualTypes.CCAV)
+
+        if data.SlotName then
+            seen[data.SlotName] = true
+        end
+    end)
+
+    return UT.Keys(seen)
+end

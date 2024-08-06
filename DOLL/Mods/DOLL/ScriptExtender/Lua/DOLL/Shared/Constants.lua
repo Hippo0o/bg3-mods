@@ -17,6 +17,9 @@ M.VisualSlots = {
     ["Horns"] = "Horns",
     ["Amulet"] = "Amulet",
     ["Tail"] = "Tail",
+    ["DragonbornJaw"] = "DragonbornJaw",
+    ["DragonbornChin"] = "DragonbornChin",
+    ["DragonbornTop"] = "DragonbornTop",
 }
 
 ----------------------------------------------------------------------------------------------------
@@ -75,33 +78,6 @@ M.DollParts = {
         ["DRAGONBORN"] = "9c61a74a-20df-4119-89c5-d996956b6c66",
         ["HALF-ORC"] = "5c39a726-71c8-4748-ba8d-f768b3c11a91",
         ["AASIMAR"] = "ff2b6894-b03e-4bc6-a3b4-ce16ce405e7e",
-    },
-
-    -- TODO - check if we have to check aasimar subclasses
-    RACETAGS = {
-        ["69fd1443-7686-4ca9-9516-72ec0b9d94d7"] = "HUMAN",
-        ["677ffa76-2562-4217-873e-2253d4720ba4"] = "GITHYANKI",
-        ["aaef5d43-c6f3-434d-b11e-c763290dbe0c"] = "TIEFLING",
-        ["351f4e42-1217-4c06-b47a-443dcf69b111"] = "ELF",
-        ["34317158-8e6e-45a2-bd1e-6604d82fdda2"] = "HALF-ELF",
-        ["486a2562-31ae-437b-bf63-30393e18cbdd"] = "DWARF",
-        ["b99b6a5d-8445-44e4-ac58-81b2ee88aab1"] = "HALFLING",
-        ["1f0551f3-d769-47a9-b02b-5d3a8c51978c"] = "GNOME",
-        ["a672ac1d-d088-451a-9537-3da4bf74466c"] = "DROW",
-        ["3311a9a9-cdbc-4b05-9bf6-e02ba1fc72a3"] = "HALF-ORC",
-        ["02e5e9ed-b6b2-4524-99cd-cb2bc84c754a"] = "DRAGONBORN",
-        ["41c6cdc9-aff5-46ae-afc4-aa0ccd9cd201"] = "AASIMAR",
-        ["2fddf7dd-f79b-4998-882c-d7257badbfe6"] = "AASIMAR",
-    },
-
-    MODDED_RACES = {
-        {
-            name = "GITHZERAI",
-            raceUuid = "ca1c9216-a0cf-44e7-811a-2f9081c536ed",
-            racetag = "7fa93b80-8ba5-4c1d-9b00-5dd20ced7f67",
-            bs3 = 0,
-            bs4 = 0,
-        },
     },
 
     ---------------------------------------------------------------------------------------------------------

@@ -111,16 +111,15 @@ function M.Entity.GetProperty(entity, property, default)
     return default
 end
 
+if Ext.IsClient() then
+    return M
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                         Server Only                                         --
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
-
-if not Ext.IsServer() then
-    return
-end
-
 
 M.DB = {}
 
@@ -161,7 +160,6 @@ end
 function M.DB.GetPlayers()
     return M.DB.TryGet("DB_Players", 1, nil, 1)
 end
-
 
 M.Character = {}
 
@@ -218,7 +216,6 @@ function M.Character.IsImportant(character)
         )
 end
 
-
 M.Object = {}
 
 -- also works for items
@@ -233,3 +230,4 @@ function M.Object.Remove(guid)
     Osi.UnloadItem(guid)
 end
 
+return M

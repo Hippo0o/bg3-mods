@@ -9,11 +9,16 @@ Mod.TableKey = "DOLL"
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type GameUtils
+local GameUtils = Require("Hlib/GameUtils")
+
 U = Utils
+L = Utils.Log
 UT = Utils.Table
 US = Utils.String
-UE = Utils.Entity
-L = Utils.Log
+GU = GameUtils
+GE = GameUtils.Entity
+GC = GameUtils.Character
 
 ---@type Constants
 local Constants = Require("Hlib/Constants")

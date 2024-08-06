@@ -11,7 +11,6 @@ return {
             { 71.710556030273, 16.6015625, 372.14938354492 },
             { 55.75, 17.3173828125, 337.75 },
         },
-        Timeline = {},
     },
     {
         Name = "Swamp",
@@ -148,6 +147,7 @@ return {
         Name = "Exterior Ruins",
         Region = "WLD_Main_A",
         Enter = { 285.0, 18.892578125, 336.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { 284.0, 18.21484375, 315.0 },
             { 298.0, 18.9052734375, 331.0 },
@@ -163,6 +163,7 @@ return {
         Name = "Dank Crypt",
         Region = "WLD_Main_A",
         Enter = { -293.0, 17.4736328125, -263.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -317.0, 17.4765625, -263.0 },
             { -306.25, 17.5107421875, -240.75 },
@@ -180,6 +181,7 @@ return {
         Name = "Interior Inn",
         Region = "WLD_Main_A",
         Enter = { -49.0, 38.564453125, 627.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -72.653533935547, 38.564453125, 618.05865478516 },
             { -69.757675170898, 42.8408203125, 636.10638427734 },
@@ -199,6 +201,7 @@ return {
         Name = "Ebonlake Grotto (mushroom dance place)",
         Region = "WLD_Main_A",
         Enter = { 79.75, 51.8984375, -105.75 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { 83.540481567383, 46.318359375, -81.959289550781 },
             { 96.216468811035, 46.766567230225, -97.617736816406 },
@@ -215,6 +218,7 @@ return {
         Name = "Underdark (beach)",
         Region = "WLD_Main_A",
         Enter = { 8.75, 0.0, -204.25 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -5.3392777442932, 0.2138671875, -208.24270629883 },
             { 3.6886820793152, 0.1142578125, -214.35696411133 },
@@ -233,6 +237,7 @@ return {
         Name = "The Festering Cove",
         Region = "WLD_Main_A",
         Enter = { -414.25, 4.33203125, 285.25 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -400.75, 7.7568359375, 283.75 },
             { -404.41989135742, 10.111328125, 301.93557739258 },
@@ -254,6 +259,7 @@ return {
         Name = "Grymforge",
         Region = "WLD_Main_A",
         Enter = { -620.25, 15.1904296875, 304.75 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -611.25, 14.037109375, 312.75 },
             { -625.50836181641, 14.9853515625, 317.33227539062 },
@@ -276,6 +282,7 @@ return {
         Name = "Ancient Temple",
         Region = "WLD_Main_A",
         Enter = { -639.0, 10.7265625, 255.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -650.75, 11.568359375, 261.75 },
             { -625.57849121094, 11.0517578125, 254.95465087891 },
@@ -295,6 +302,7 @@ return {
         Name = "Grymforge (lava golem area)",
         Region = "WLD_Main_A",
         Enter = { -604.0, -6.83984375, 215.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -614.93365478516, -8.0644006729126, 221.50773620605 },
             { -626.42047119141, -4.5302734375, 224.21667480469 },
@@ -319,6 +327,7 @@ return {
         Name = "Mountain Pass (near gondola)",
         Region = "CRE_Main_A",
         Enter = { -42.0, 50.5009765625, -72.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -48.78296661377, 54.6953125, -90.057312011719 },
             { -51.791355133057, 55.279296875, -90.433097839355 },
@@ -337,6 +346,7 @@ return {
         Name = "Mountain Pass (creche exterior wilds)",
         Region = "CRE_Main_A",
         Enter = { -7.0, 16.5126953125, -9.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -22.25, 21.427734375, 0.25 },
             { -26.104434967041, 22.03515625, -0.31838226318359 },
@@ -359,6 +369,7 @@ return {
         Name = "Rosymorn Monastery (roof)",
         Region = "CRE_Main_A",
         Enter = { 68.0, 37.3759765625, 35.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { 86.593284606934, 37.53515625, 43.291717529297 },
             { 65.949394226074, 34.556640625, 55.385208129883 },
@@ -378,6 +389,7 @@ return {
         Name = "Rosymorn Monastery (interior outside creche enterance)",
         Region = "CRE_Main_A",
         Enter = { 74.0, 7.45703125, 65.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { 74.455200195312, 7.36328125, 81.459510803223 },
             { 81.578002929688, 9.15625, 50.340850830078 },
@@ -399,6 +411,7 @@ return {
     --     Name = "Last Light Inn",
     --     Region = "SCL_Main_A",
     --     Enter = { -76.0, 27.5234375, 144.0 },
+    --     Author = "Chronos Perpetua",
     --     Spawns = {
     --         { -83.138648986816, 27.525390625, 134.19332885742 },
     --         { -55.741355895996, 27.5087890625, 131.80215454102 },
@@ -427,6 +440,7 @@ return {
         Name = "Shadow Cursed Lands",
         Region = "SCL_Main_A",
         Enter = { 114.75, 55.7197265625, 161.25 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { 108.79568481445, 60.052734375, 184.98126220703 },
             { 107.2971572876, 59.5224609375, 182.9128112793 },
@@ -447,6 +461,7 @@ return {
         Name = "He Who Doesnt Remain",
         Region = "SCL_Main_A",
         Enter = { 125.0, 54.6494140625, 106.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { 113.57725524902, 55.365234375, 85.78727722168 },
             { 114.47676849365, 54.6171875, 83.940887451172 },
@@ -469,6 +484,7 @@ return {
         Name = "Shadow Cursed Lands 2",
         Region = "SCL_Main_A",
         Enter = { -11.0, 30.87109375, 57.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -12.094604492188, 30.1767578125, 76.496932983398 },
             { -8.6028022766113, 30.103515625, 74.965087890625 },
@@ -489,6 +505,7 @@ return {
         Name = "Shadow Cursed Lands 3 (Ambush House)",
         Region = "SCL_Main_A",
         Enter = { 18.0, 38.7763671875, -5.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -3.5740439891815, 40.486328125, -10.575455665588 },
             { 0.11982053518295, 40.5693359375, -13.620042800903 },
@@ -514,6 +531,7 @@ return {
         Name = "Rethwin Town (Mason Guild)",
         Region = "SCL_Main_A",
         Enter = { -113.0, 26.056640625, -6.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -100.84421539307, 26.05078125, 0.40502899885178 },
             { -98.98762512207, 26.05078125, 0.53846979141235 },
@@ -537,6 +555,7 @@ return {
         Name = "The dead people storage place",
         Region = "SCL_Main_A",
         Enter = { 36.0, -3.4345703125, -941.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { 36.523750305176, 1.552734375, -920.69854736328 },
             { 46.239601135254, 0.4892578125, -919.38403320312 },
@@ -557,6 +576,7 @@ return {
         Name = "Thorm Family Crypt",
         Region = "SCL_Main_A",
         Enter = { -281.25, -30.51953125, -873.75 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -298.36444091797, -31.22265625, -877.91979980469 },
             { -299.53680419922, -31.130859375, -874.92413330078 },
@@ -577,6 +597,7 @@ return {
         Name = "Gauntlet Of Shar (broken mirror room)",
         Region = "SCL_Main_A",
         Enter = { -635.0, -25.30859375, -722.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -646.60119628906, -25.310689926147, -710.25842285156 },
             { -658.25, -25.048828125, -719.75 },
@@ -595,6 +616,7 @@ return {
         Name = "Gauntlet of Shar (mushroom dance)",
         Region = "SCL_Main_A",
         Enter = { -817.0, 15.2099609375, -851.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -806.22296142578, 13.7255859375, -862.07263183594 },
             { -811.30151367188, 13.5439453125, -865.42376708984 },
@@ -616,6 +638,7 @@ return {
         Name = "Rethwin Town (large tree)",
         Region = "SCL_Main_A",
         Enter = { -151.0, 26.5947265625, -51.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -156.4100189209, 27.185546875, -33.529140472412 },
             { -150.68215942383, 27.1416015625, -40.700881958008 },
@@ -636,6 +659,7 @@ return {
         Name = "Rethwin Town (bar)",
         Region = "SCL_Main_A",
         Enter = { -223.0, 15.3076171875, -77.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -227.0002746582, 19.1650390625, -59.491561889648 },
             { -222.37228393555, 19.1650390625, -59.150676727295 },
@@ -659,6 +683,7 @@ return {
         Name = "Rethwin Town (road to Baldurs Gate barn)",
         Region = "SCL_Main_A",
         Enter = { -246.0, 31.087890625, -5.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -250.53881835938, 28.912109375, -25.740367889404 },
             { -250.33062744141, 31.05078125, -32.107563018799 },
@@ -679,6 +704,7 @@ return {
         Name = "Rethwin Town (House of Healing library)",
         Region = "SCL_Main_A",
         Enter = { -194.0, 41.568359375, 47.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -210.64993286133, 40.53515625, 31.18741607666 },
             { -212.1160736084, 40.77734375, 33.966342926025 },
@@ -708,6 +734,7 @@ return {
         Name = "Rethwin Town (graveyard mausoleum)",
         Region = "SCL_Main_A",
         Enter = { -155.0, 31.529296875, 65.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -168.20599365234, 31.57421875, 64.472595214844 },
             { -169.04766845703, 31.505859375, 59.989513397217 },
@@ -728,6 +755,7 @@ return {
         Name = "Rethwin Town (Tollhouse roof party rager extravaganza)",
         Region = "SCL_Main_A",
         Enter = { -108.0, 35.548828125, -71.0 },
+        Author = "Chronos Perpetua",
         Spawns = {
             { -122.65330505371, 35.22265625, -56.119441986084 },
             { -120.19821929932, 34.619140625, -53.579246520996 },

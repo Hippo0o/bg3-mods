@@ -39,6 +39,21 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
+---@param entity EntityHandle
+---@return ResourceCharacterCreationPreset|nil
+function Doll.CreationPresets(entity)
+    local subRace = entity.Race.Race
+    -- local rootTemplate = entity.GameObjectVisual.RootTemplateId
+
+    return UT.Map(Ext.StaticData.GetAll("CharacterCreationPreset"), function(preset)
+        local c = Ext.StaticData.Get(preset, "CharacterCreationPreset")
+
+        if c.SubRaceUUID == subRace then
+            return c
+        end
+    end)
+end
+
 ---@param character string
 ---@return DollStruct
 function Doll.Build(character)
@@ -49,15 +64,10 @@ function Doll.Build(character)
     local shape = entity.CharacterCreationStats and entity.CharacterCreationStats.BodyShape
         or C.DollParts.BODYSHAPE.NORMAL
 
-    local raceTag = UT.Find(entity.ServerRaceTag.Tags, function(tag)
-        return C.DollParts.RACETAGS[tag]
-    end)
-    local raceName = C.DollParts.RACETAGS[raceTag] or "HUMAN"
-
-    local race = C.DollParts.RACES[raceName]
+    local race = entity.CharacterCreationStats and entity.CharacterCreationStats.Race or C.DollParts.RACES.HUMAN
 
     if U.UUID.Equals(character, C.OriginCharactersSpecial.Halsin) then
-        race = "0eb594cb-8820-4be6-a58d-8be7a1a98fba"
+        race = C.DollParts.RACES.HUMAN
     end
 
     return Struct.Init({
@@ -71,8 +81,7 @@ end
 ---@param character string
 ---@param restrictRace boolean
 ---@return table<VisualSlots, VisualStruct[]>
-function Doll.Visuals(character, restrictRace)
-    local doll = Doll.Build(character)
+function Doll.Visuals(doll, restrictRace)
     local bySlot = {}
 
     for _, slot in pairs(C.VisualSlots) do
@@ -97,7 +106,9 @@ end
 
 function Doll.ApplyVisualSlot(character, slot, visual)
     local doll = Doll.Build(character)
-    local visuals = Doll.Visuals(character, false)[slot]
+    doll.BodyShape = 1
+    doll.BodyType = 1
+    local visuals = Doll.Visuals(doll, false)[slot]
 
     for _, v in pairs(visuals) do
         for _, uuid in pairs(doll:Visuals()) do
