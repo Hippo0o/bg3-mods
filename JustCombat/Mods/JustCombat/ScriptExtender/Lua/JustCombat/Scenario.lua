@@ -536,7 +536,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Events.RegisterListener(
+U.Events.On(
     "CombatRoundStarted",
     2,
     "before",
@@ -589,7 +589,7 @@ U.Events.RegisterListener(
     end)
 )
 
-U.Events.RegisterListener(
+U.Events.On(
     "EnteredCombat",
     2,
     "after",
@@ -624,7 +624,7 @@ U.Events.RegisterListener(
     end)
 )
 
-U.Events.RegisterListener(
+U.Events.On(
     "CombatStarted",
     1,
     "before",
@@ -648,7 +648,7 @@ U.Events.RegisterListener(
     end)
 )
 
-U.Events.RegisterListener(
+U.Events.On(
     "CombatEnded",
     1,
     "after",
@@ -667,7 +667,7 @@ U.Events.RegisterListener(
     end)
 )
 
-U.Events.RegisterListener(
+U.Events.On(
     "TeleportedFromCamp",
     1,
     "before",
@@ -681,7 +681,7 @@ U.Events.RegisterListener(
     end)
 )
 
-U.Events.RegisterListener(
+U.Events.On(
     "TeleportedFromCamp",
     1,
     "after",
@@ -692,7 +692,7 @@ U.Events.RegisterListener(
     end)
 )
 
-U.Events.RegisterListener(
+U.Events.On(
     "TeleportedToCamp",
     1,
     "after",
@@ -704,7 +704,7 @@ U.Events.RegisterListener(
     end)
 )
 
-U.Events.RegisterListener(
+U.Events.On(
     "Died",
     1,
     "before",

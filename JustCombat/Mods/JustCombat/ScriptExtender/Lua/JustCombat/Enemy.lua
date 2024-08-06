@@ -157,7 +157,7 @@ function Object:ModifyTemplate()
 
     -- restore template
     -- maybe not needed but template overwrites seem to be global
-    GameState.RegisterUnloadingAction(function()
+    GameState.OnUnloading(function()
         L.Debug("Restoring template:", self.TemplateId)
         local template = Ext.Template.GetTemplate(self.TemplateId)
         for i, v in pairs(overwrites) do

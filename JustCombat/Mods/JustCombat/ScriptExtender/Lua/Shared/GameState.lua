@@ -18,7 +18,7 @@ local actions = {}
 ---@field Func fun()
 ---@field Exec fun(self:StateAction, e:table)
 ---@field Unregister fun(self:StateAction)
----@field New fun(mode:number, func:fun(), once:boolean):StateAction
+---@field New fun(mode:number, callback:fun(), once:boolean):StateAction
 local StateAction = Libs.Object({
     Id = nil,
     Mode = nil,
@@ -44,11 +44,11 @@ local StateAction = Libs.Object({
     end,
 })
 
-function StateAction.New(mode, func, once)
+function StateAction.New(mode, callback, once)
     local a = StateAction.Init({
-        Id = tostring(func):gsub("function: ", ""),
+        Id = tostring(callback):gsub("function: ", ""),
         Mode = mode,
-        Func = func,
+        Func = callback,
         Once = once,
     })
 
@@ -56,25 +56,25 @@ function StateAction.New(mode, func, once)
     return a
 end
 
----@param func fun()
+---@param callback fun()
 ---@param once boolean
 ---@return StateAction
-function M.RegisterSavingAction(func, once)
-    return StateAction.New(1, func, once)
+function M.OnSaving(callback, once)
+    return StateAction.New(1, callback, once)
 end
 
----@param func fun()
+---@param callback fun()
 ---@param once boolean
 ---@return StateAction
-function M.RegisterLoadingAction(func, once)
-    return StateAction.New(2, func, once)
+function M.OnLoading(callback, once)
+    return StateAction.New(2, callback, once)
 end
 
----@param func fun()
+---@param callback fun()
 ---@param once boolean
 ---@return StateAction
-function M.RegisterUnloadingAction(func, once)
-    return StateAction.New(3, func, once)
+function M.OnUnloading(callback, once)
+    return StateAction.New(3, callback, once)
 end
 
 local function runAction(mode, e)

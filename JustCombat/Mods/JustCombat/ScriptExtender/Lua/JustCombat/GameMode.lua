@@ -126,13 +126,13 @@ local function ifBypassStory(func)
     end
 end
 
-U.Events.RegisterListener(
+U.Events.On(
     "AutomatedDialogStarted",
     2,
     "after",
     ifBypassStory(function(dialog, instanceID)
         if dialog == "GLO_Jergal_AD_AttackFromDialog_851c058a-3223-3930-05aa-8558a0e36b04" then
-            GameMode.AskBeginCombat()
+            Net.Send("OpenUI", {})
         end
     end)
 )
@@ -202,7 +202,7 @@ local function cancelDialog(dialog, instanceID)
     handlers[instanceID](dialog, instanceID)
 end
 
-U.Events.RegisterListener(
+U.Events.On(
     "DialogActorJoined",
     4,
     "after",
@@ -236,7 +236,7 @@ U.Events.RegisterListener(
         cancelDialog(dialog, instanceID)
     end)
 )
-U.Events.RegisterListener(
+U.Events.On(
     "UseFinished",
     3,
     "before",
@@ -258,7 +258,7 @@ U.Events.RegisterListener(
         end
     end)
 )
-U.Events.RegisterListener(
+U.Events.On(
     "EnteredCombat",
     2,
     "after",

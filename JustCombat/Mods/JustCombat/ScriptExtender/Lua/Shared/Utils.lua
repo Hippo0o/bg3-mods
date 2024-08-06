@@ -526,7 +526,7 @@ M.Events = {}
 ---@param typeName string before, beforeDelete, after or afterDelete
 ---@param callback fun(...)
 ---@return EventListener
-function M.Events.RegisterListener(name, arity, typeName, callback)
+function M.Events.On(name, arity, typeName, callback)
     local id = Ext.Osiris.RegisterListener(name, arity, typeName, callback)
 
     return {
@@ -534,7 +534,7 @@ function M.Events.RegisterListener(name, arity, typeName, callback)
         Params = { name, arity, typeName, callback },
         Unregister = function(self)
             Utils.Log.Error("Unregistering is not working yet.", self.SubscriberId)
-            -- return Ext.Osiris.UnregisterListener(self.SubscriberId)
+            return Ext.Osiris.UnregisterListener(self.SubscriberId)
         end,
     }
 end
@@ -548,16 +548,16 @@ end
 M.Log = {}
 
 function M.Log.Info(...)
-    Ext.Utils.Print(Mod.ModPrefix .. " [Info]", ...)
+    Ext.Utils.Print(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Info]", ...)
 end
 
 function M.Log.Warn(...)
-    Ext.Utils.PrintWarning(Mod.ModPrefix .. " [Warning]", ...)
+    Ext.Utils.PrintWarning(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Warning]", ...)
 end
 
 function M.Log.Debug(...)
     if Mod.Debug then
-        Ext.Utils.Print(Mod.ModPrefix .. " [Debug]", ...)
+        Ext.Utils.Print(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Debug]", ...)
     end
 end
 
@@ -568,7 +568,7 @@ function M.Log.Dump(...)
 end
 
 function M.Log.Error(...)
-    Ext.Utils.PrintError(Mod.ModPrefix .. " [Error]", ...)
+    Ext.Utils.PrintError(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Error]", ...)
 end
 
 return M
