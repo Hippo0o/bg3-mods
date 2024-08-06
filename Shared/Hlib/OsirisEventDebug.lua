@@ -10,15 +10,24 @@ M.Events = {}
 
 M.Listeners = {}
 
-function M.Attach()
-    for name, params in pairs(M.Events) do
+---@param events string[]|nil
+function M.Attach(events)
+    local eventDef = M.Events
+
+    if type(events) == "table" then
+        eventDef = Utils.Table.Filter(eventDef, function(v, k)
+            return Utils.Table.Contains(events, k)
+        end)
+    end
+
+    for name, params in pairs(eventDef) do
         params = Utils.String.Split(params, ",")
         if params[1] == "" then
             params = {}
         end
         table.insert(
             M.Listeners,
-            Utils.Osiris.On(name, #params, "after", function(...)
+            Ext.Osiris.RegisterListener(name, #params, "after", function(...)
                 local log = {}
                 for i, v in ipairs(params) do
                     v = Utils.String.Trim(v)
@@ -32,7 +41,7 @@ end
 
 function M.Detach()
     for _, listener in ipairs(M.Listeners) do
-        listener:Unregister()
+        Ext.Osiris.UnregisterListener(listener)
     end
     M.Listeners = {}
 end

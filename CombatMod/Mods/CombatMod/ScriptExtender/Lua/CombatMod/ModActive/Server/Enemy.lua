@@ -879,7 +879,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Osiris.On("EnteredCombat", 2, "after", function(character, _)
+Ext.Osiris.RegisterListener("EnteredCombat", 2, "after", function(character, _)
     if Osi.IsPlayer(character) == 1 then
         return
     end
@@ -890,7 +890,7 @@ U.Osiris.On("EnteredCombat", 2, "after", function(character, _)
     end
 end)
 
-U.Osiris.On("LeftCombat", 2, "after", function(character, _)
+Ext.Osiris.RegisterListener("LeftCombat", 2, "after", function(character, _)
     if Osi.IsPlayer(character) == 1 then
         return
     end
@@ -912,7 +912,7 @@ Ext.Osiris.RegisterListener("TurnStarted", 1, "before", function(character)
     end
 end)
 
-U.Osiris.On("AttackedBy", 7, "before", function(defender, attackerOwner)
+Ext.Osiris.RegisterListener("AttackedBy", 7, "before", function(defender, attackerOwner)
     if Osi.IsPlayer(defender) == 1 then
         return
     end

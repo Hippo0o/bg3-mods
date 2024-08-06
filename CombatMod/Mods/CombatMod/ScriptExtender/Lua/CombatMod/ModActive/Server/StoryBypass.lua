@@ -343,8 +343,8 @@ do -- EXP Lock
         end)
     end)
 
-    U.Osiris.On("TeleportedFromCamp", 1, "before", toggleCamp)
-    U.Osiris.On("TeleportedToCamp", 1, "before", toggleCamp)
+    Ext.Osiris.RegisterListener("TeleportedFromCamp", 1, "before", toggleCamp)
+    Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "before", toggleCamp)
     GameState.OnLoad(toggleCamp)
 end
 
@@ -427,7 +427,7 @@ local function cancelDialog(dialog, instanceID)
     handlers[instanceID](dialog, instanceID)
 end
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "DialogActorJoined",
     4,
     "after",
@@ -457,7 +457,7 @@ U.Osiris.On(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "UseFinished",
     3,
     "before",
@@ -477,7 +477,7 @@ U.Osiris.On(
         end
     end)
 )
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "EnteredCombat",
     2,
     "after",
@@ -496,7 +496,7 @@ U.Osiris.On(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "Resurrected",
     1,
     "after",
@@ -523,7 +523,7 @@ Ext.Entity.Subscribe(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "TeleportToFromCamp",
     1,
     "after",
@@ -557,7 +557,7 @@ U.Osiris.On(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "LongRestStarted",
     0,
     "after",

@@ -125,7 +125,7 @@ Difficulty increases with the score.]]):After(function(confirmed)
     end)
 end
 
-U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
+Ext.Osiris.RegisterListener("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
     -- if
     --     US.Contains(dialog, {
     --         "GLO_Jergal_AD_AttackFromDialog",
@@ -142,7 +142,7 @@ U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
     end
 end)
 
-U.Osiris.On("DialogActorJoined", 4, "after", function(dialog, instanceID, actor, speakerIndex)
+Ext.Osiris.RegisterListener("DialogActorJoined", 4, "after", function(dialog, instanceID, actor, speakerIndex)
     if
         US.Contains(dialog, {
             "TUT_Start_PAD_Start_",

@@ -425,7 +425,7 @@ function GameMode.ApplyDifficulty(enemy, score)
     GameMode.DifficultyAppliedTo[enemy.GUID] = true
 end
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "TeleportedToCamp",
     1,
     "after",

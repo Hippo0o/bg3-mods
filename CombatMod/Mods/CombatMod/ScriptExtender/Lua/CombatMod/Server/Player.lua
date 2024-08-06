@@ -246,7 +246,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Osiris.On("ReadyCheckPassed", 1, "after", function(id)
+Ext.Osiris.RegisterListener("ReadyCheckPassed", 1, "after", function(id)
     L.Debug("ReadyCheckPassed", id)
     if readyChecks[id] then
         local func = readyChecks[id]
@@ -255,7 +255,7 @@ U.Osiris.On("ReadyCheckPassed", 1, "after", function(id)
     end
 end)
 
-U.Osiris.On("ReadyCheckFailed", 1, "after", function(id)
+Ext.Osiris.RegisterListener("ReadyCheckFailed", 1, "after", function(id)
     L.Debug("ReadyCheckFailed", id)
     if readyChecks[id] then
         local func = readyChecks[id]

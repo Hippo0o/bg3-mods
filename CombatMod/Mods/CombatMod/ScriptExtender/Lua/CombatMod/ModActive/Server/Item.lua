@@ -623,7 +623,7 @@ end
 
 GameState.OnUnload(Item.ClearCache)
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "RequestCanPickup",
     3,
     "after",
@@ -646,7 +646,7 @@ U.Osiris.On(
     )
 )
 
-U.Osiris.On("TeleportedToCamp", 1, "after", function(uuid)
+Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "after", function(uuid)
     if U.UUID.Equals(uuid, Player.Host()) then
         Player.PickupAll()
     end

@@ -579,33 +579,4 @@ function M.UUID.FromString(str, iteration)
     return hashToUUID(simpleHash(prefix .. str))
 end
 
--------------------------------------------------------------------------------------------------
---                                                                                             --
---                                           Osiris                                            --
---                                                                                             --
--------------------------------------------------------------------------------------------------
-
-M.Osiris = {}
-
----@class OsirisEventListener
----@field SubscriberId number
----@field Params table name, arity, typeName, callback
----@field Unregister fun(self: OsirisEventListener): boolean
----@param name string Osi.Events
----@param arity number callback arguments
----@param typeName string before, beforeDelete, after or afterDelete
----@param callback fun(...)
----@return OsirisEventListener
-function M.Osiris.On(name, arity, typeName, callback)
-    local id = Ext.Osiris.RegisterListener(name, arity, typeName, callback)
-
-    return {
-        SubscriberId = id,
-        Params = { name, arity, typeName, callback },
-        Unregister = function(self)
-            return Ext.Osiris.UnregisterListener(self.SubscriberId)
-        end,
-    }
-end
-
 return M

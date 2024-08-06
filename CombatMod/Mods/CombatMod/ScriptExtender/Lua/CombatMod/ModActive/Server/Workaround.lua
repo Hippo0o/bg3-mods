@@ -33,6 +33,6 @@ local function runAll()
 end
 
 GameState.OnLoad(runAll)
-U.Osiris.On("CharacterJoinedParty", 1, "after", runAll)
-U.Osiris.On("CharacterLeftParty", 1, "after", runAll)
-U.Osiris.On("LongRestFinished", 0, "after", runAll)
+Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", runAll)
+Ext.Osiris.RegisterListener("CharacterLeftParty", 1, "after", runAll)
+Ext.Osiris.RegisterListener("LongRestFinished", 0, "after", runAll)

@@ -744,7 +744,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "TeleportedFromCamp",
     1,
     "after",
@@ -783,7 +783,7 @@ Event.On(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "TeleportedToCamp",
     1,
     "after",
@@ -792,7 +792,7 @@ U.Osiris.On(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "EnteredCombat",
     2,
     "after",
@@ -851,7 +851,7 @@ U.Osiris.On(
 )
 
 -- TODO maybe move to entity events
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "Resurrected",
     1,
     "before",
@@ -886,7 +886,7 @@ U.Osiris.On(
 )
 
 -- TODO maybe move to entity events
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "Died",
     1,
     "before",
@@ -925,7 +925,7 @@ U.Osiris.On(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "TurnStarted",
     1,
     "before",
@@ -982,7 +982,7 @@ U.Osiris.On(
     end)
 )
 
-U.Osiris.On(
+Ext.Osiris.RegisterListener(
     "CombatRoundStarted",
     2,
     "before",
