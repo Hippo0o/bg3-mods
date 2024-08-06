@@ -12,7 +12,7 @@ function M.Class(props)
     end
 
     if type(props) ~= "table" then
-        assert(type(props) == "table", "Libs.Class - table expected, got " .. type(props))
+        error("Libs.Class - table expected, got " .. type(props))
     end
 
     local propKeys = Utils.Table.Keys(props)
@@ -24,8 +24,8 @@ function M.Class(props)
     Class.__index = Class
 
     function Class.Init(values)
-        if values ~= nil then
-            assert(type(values) == "table", "Class.Init(values) - table expected, got " .. type(values))
+        if values ~= nil and type(values) ~= "table" then
+            error("Class.Init(values) - table expected, got " .. type(values))
         end
 
         local obj = {}
@@ -47,13 +47,12 @@ function M.Class(props)
 end
 
 ---@param typeDefs table<number, table<string, string|function|table|LibsTypedTable>>|LibsTypedTable
+---@param repeatable boolean|nil
 ---@return LibsTypedTable
 function M.TypedTable(typeDefs, repeatable)
-    assert(type(typeDefs) == "table", "Libs.TypedTable(typeDefs, ...) - table expected, got " .. type(typeDefs))
-    assert(
-        type(repeatable) == "boolean" or repeatable == nil,
-        "Libs.TypedTable(..., repeatable) - boolean expected, got " .. type(typeDefs)
-    )
+    if type(typeDefs) ~= "table" then
+        error("Libs.TypedTable(typeDefs, ...) - table expected, got " .. type(typeDefs))
+    end
 
     if typeDefs._IsTypedTable then
         typeDefs = { typeDefs }
@@ -77,20 +76,18 @@ function M.TypedTable(typeDefs, repeatable)
     ---@param value any
     ---@return boolean, string
     function TT:TypeCheck(key, value)
-        assert(
-            type(key) == "string" or type(key) == "number",
-            "Libs.TypedTable:TypeCheck(key, ...) - string or number expected, got " .. type(key)
-        )
+        if type(key) ~= "string" and type(key) ~= "number" then
+            error("Libs.TypedTable:TypeCheck(key, ...) - string or number expected, got " .. type(key))
+        end
 
         local typeDef = self._TypeDefs[key]
         if typeDef == nil then
             return false
         end
 
-        assert(
-            type(typeDef) == "table",
-            "Libs.TypedTable.typeDefs[" .. key .. "] - table expected, got " .. type(typeDef)
-        )
+        if type(typeDef) ~= "table" then
+            error("Libs.TypedTable.typeDefs[" .. key .. "] - table expected, got " .. type(typeDef))
+        end
 
         local matchType = {
             ["string"] = function()
@@ -261,7 +258,9 @@ function M.Chainable(source)
 
     function Chainable.After(arg1, arg2, ...)
         local func = inputToFunc(arg1, arg2, ...)
-        assert(type(func) == "function", "Chainable.After(func) - function expected, got " .. type(arg1))
+        if type(func) ~= "function" then
+            error("Chainable.After(func) - function expected, got " .. type(arg1))
+        end
 
         table.insert(Chainable._Chain, func)
 
@@ -271,7 +270,9 @@ function M.Chainable(source)
     local catch = nil
     function Chainable.Catch(arg1, arg2, ...)
         local func = inputToFunc(arg1, arg2, ...)
-        assert(type(func) == "function", "Chainable.Catch(func) - function expected, got " .. type(arg1))
+        if type(func) ~= "function" then
+            error("Chainable.Catch(func) - function expected, got " .. type(arg1))
+        end
 
         catch = func
 
@@ -279,7 +280,9 @@ function M.Chainable(source)
     end
 
     function Chainable.Throw(err)
-        assert(type(catch) == "function", err)
+        if type(catch) ~= "function" then
+            error(err)
+        end
 
         return catch(Chainable, err)
     end

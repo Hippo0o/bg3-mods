@@ -1,10 +1,10 @@
-Require("EndlessBattle/GUI/Components")
+Require("EndlessBattle/Client/GUI/Components")
 
-Require("EndlessBattle/GUI/Control")
-Require("EndlessBattle/GUI/Unlocks")
-Require("EndlessBattle/GUI/Creation")
-Require("EndlessBattle/GUI/Config")
-Require("EndlessBattle/GUI/Debug")
+Require("EndlessBattle/Client/GUI/Control")
+Require("EndlessBattle/Client/GUI/Unlocks")
+Require("EndlessBattle/Client/GUI/Creation")
+Require("EndlessBattle/Client/GUI/Config")
+Require("EndlessBattle/Client/GUI/Debug")
 
 Event.On("WindowClosed", function()
     Net.Send("WindowClosed")
