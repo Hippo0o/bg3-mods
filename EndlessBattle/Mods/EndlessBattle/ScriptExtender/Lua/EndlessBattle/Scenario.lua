@@ -322,6 +322,7 @@ function Action.MapEntered()
     end
 
     local x, y, z = Player.Pos()
+    Action.EmptyArea()
     RetryUntil(function(self, tries)
         if S == nil then -- scenario stopped
             self:Clear()
@@ -509,7 +510,7 @@ function Scenario.Start(template, map)
             local e
             if UT.Contains(C.EnemyTier, definition[i]) then
                 e = Enemy.Random(function(e)
-                    return e.Tier == definition[i]
+                    return e.Tier == definition[i] and Ext.Template.GetTemplate(e.TemplateId) ~= nil
                 end)
             else
                 e = Enemy.Find(definition[i])
@@ -530,6 +531,7 @@ function Scenario.Start(template, map)
     Action.NotifyStarted()
 
     Enemy.Cleanup()
+    Event.Trigger("ScenarioStarted")
 end
 
 function Scenario.End()
@@ -538,6 +540,7 @@ function Scenario.End()
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario ended."))
+    Event.Trigger("ScenarioEnded")
 end
 
 function Scenario.Stop()
@@ -545,6 +548,7 @@ function Scenario.Stop()
     S = nil
     PersistentVars.Scenario = nil
     Player.Notify(__("Scenario stopped."))
+    Event.Trigger("ScenarioStopped")
 end
 
 function Scenario.Teleport(uuid)

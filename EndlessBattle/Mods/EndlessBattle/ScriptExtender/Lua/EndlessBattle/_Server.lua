@@ -237,16 +237,16 @@ do
         local j = 0
         local templates = {}
         for i, v in Enemy.Iter() do
-            if i > new_start and (i - new_start) <= amount then
-                table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
-                j = j + 1
-            end
+            table.insert(templates, Ext.Template.GetTemplate(v.TemplateId))
+            -- if i > new_start and (i - new_start) <= amount then
+            --     j = j + 1
+            -- end
         end
         start = new_start + j
 
         local enemies = Enemy.GenerateEnemyList(templates)
 
-        Enemy.TestEnemies(enemies, true)
+        Enemy.TestEnemies(enemies)
 
         -- local enemies = Enemy.GenerateEnemyList(Ext.Template.GetAllRootTemplates())
         -- Enemy.TestEnemies(enemies, false)

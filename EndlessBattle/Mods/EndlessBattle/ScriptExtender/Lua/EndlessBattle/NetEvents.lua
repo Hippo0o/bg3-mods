@@ -121,9 +121,19 @@ Net.On("PingSpawns", function(event)
 end)
 
 Net.On("GetState", function(event)
-    Mod.Vars.State.Active = true
-
     Net.Respond(event, PersistentVars)
+end)
+
+Event.On("ScenarioStarted", function()
+    Net.Send("GetState", PersistentVars)
+end)
+
+Event.On("ScenarioEnded", function()
+    Net.Send("GetState", PersistentVars)
+end)
+
+Event.On("ScenarioStopped", function()
+    Net.Send("GetState", PersistentVars)
 end)
 
 Net.On("Config", function(event)
@@ -142,9 +152,19 @@ Net.On("Config", function(event)
         if config.Reset then
             External.LoadConfig()
         end
+
+        if config.RoguelikeMode ~= nil then
+            if PersistentVars.RogueModeActive ~= config.RoguelikeMode then
+                PersistentVars.RogueModeActive = config.RoguelikeMode
+                Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
+            end
+        end
     end
 
-    Net.Respond(event, Config)
+    local c = UT.DeepClone(Config)
+    c.RoguelikeMode = PersistentVars.RogueModeActive
+
+    Net.Respond(event, c)
 end)
 
 Net.On("KillNearby", function(event)
