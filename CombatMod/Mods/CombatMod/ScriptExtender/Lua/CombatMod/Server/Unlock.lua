@@ -204,6 +204,7 @@ end))
 Event.On("ScenarioTeleport", Unlock.UpdateUnlocked)
 Event.On("ScenarioStarted", Unlock.UpdateUnlocked)
 Event.On("RogueScoreChanged", Unlock.UpdateUnlocked)
+U.Osiris.On("LongRestFinished", 0, "after", IfActive(Unlock.UpdateUnlocked))
 
 Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)
@@ -221,13 +222,13 @@ Net.On("BuyUnlock", function(event)
         Osi.PlaySoundResource(event:Character(), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
     end
 
+    Schedule(Unlock.UpdateUnlocked)
+
     if Config.MulitplayerRestrictUnlocks and event:IsHost() == false then
         Net.Respond(event, { false, __("Host has restricted buying unlocks.") })
         soundFail()
         return
     end
-
-    Unlock.UpdateUnlocked()
 
     if Osi.IsInCombat(event:Character()) == 1 or (S and S:HasStarted()) then
         Net.Respond(event, { false, __("Cannot buy while in combat.") })
@@ -265,7 +266,6 @@ Net.On("BuyUnlock", function(event)
     soundSuccess()
 
     Net.Respond(event, { true, PersistentVars.Currency })
-    Unlock.UpdateUnlocked()
 
     SyncState()
 end)

@@ -51,7 +51,7 @@ end
 function ClientUnlock.Tile(root, unlock)
     local grp = root:AddGroup(unlock.Id)
 
-    local icon = grp:AddImage(unlock.Icon)
+    local icon = grp:AddImage(unlock.Icon, { 64, 64 })
     if unlock.Description then
         ---@type ExtuiTooltip
         local t = icon:Tooltip()

@@ -429,7 +429,7 @@ return UT.Combine({
         Id = "BuyGodBlessing",
         Name = Localization.Get("h86fef9afgeb0eg45e8g8388gd8e9f7c619b7"),
         Icon = "GenericIcon_Intent_Buff",
-        Description = "Gain +2 bonus to all Saving throws",
+        Description = "Gain +2 bonus to all Saving throws.",
         Cost = 60,
         Amount = nil,
         Character = true,
@@ -451,7 +451,7 @@ return UT.Combine({
     {
         Id = "BuyVoloErsatz",
         Name = Localization.Get("h232cc24ega0f9g4f4dgb5d3g46ab59579d4b"),
-        Description = "Grants See Invisibility",
+        Description = "Grants See Invisibility.",
         Icon = "Item_DEN_VoloOperation_ErsatzEye",
         Cost = 10,
         Amount = 1,
@@ -464,7 +464,7 @@ return UT.Combine({
         Id = "BuyBrand",
         Name = Localization.Get("h7cc7adeag848fg491cga683g0faeaea082c3"),
         Icon = "Item_UNI_Gob_Priest_Shield",
-        Description = "Bear the Absolute's Brand",
+        Description = "Bear the Absolute's Brand.",
         Cost = 20,
         Amount = 2,
         Character = true,
@@ -476,7 +476,7 @@ return UT.Combine({
         Id = "BuyBOOOALBlessing",
         Name = Localization.Get("hc6ac3045g2c16g4d9dgb178gfa9c8c0928b6"),
         Icon = "statIcons_BoooalsBenediction",
-        Description = "Advantage on Attack rolls against Bleeding cratures",
+        Description = "Advantage on Attack rolls against Bleeding cratures.",
         Cost = 50,
         Amount = 1,
         Character = true,
@@ -488,7 +488,7 @@ return UT.Combine({
         Id = "BuyFalseLife",
         Name = Localization.Get("hcb11494cg5afbg4068g8de7g50ccdae27cfe"),
         Icon = "GenericIcon_Intent_Healing",
-        Description = "20 Temporary HP after Long Rest",
+        Description = "Grants 20 Temporary HP after Long Rest.",
         Cost = 80,
         Amount = 1,
         Character = true,
@@ -511,8 +511,8 @@ return UT.Combine({
         Id = "BuyVampireAscendant",
         Name = Localization.Get("h7c8ce380g0d56g4807gb60cg58e283b4ecdb"),
         Icon = "Action_Monster_Bulette_Bite",
-        Description = "Gain Ascendant Bite and Misty Escape (Vampire Ascendant)",
-        Cost = 100,
+        Description = "Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
+        Cost = 300,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
@@ -523,18 +523,20 @@ return UT.Combine({
         Id = "BuyBloodyInheritance",
         Name = Localization.Get("hc4d08908g6040g4e50g889cg0ef6e267b6e0"),
         Icon = "PassiveFeature_Generic_Blood",
-        Description = "Gain Stunning Gaze and Critical Hit -2",
+        Description = "Gain Stunning Gaze and Critical Hit requirement reduced by 2.",
         Cost = 80,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
-            Osi.ApplyStatus(character, "END_ALLYABILITIES_BHAALBUFF", -1)
+            if Osi.HasActiveStatus(character, "END_ALLYABILITIES_BHAALBUFF") ~= 1 then
+                Osi.ApplyStatus(character, "END_ALLYABILITIES_BHAALBUFF", -1)
+            end
         end,
-        OnReapply = function(self) ---@param self Unlock
+        OnReapply = Async.Throttle(1000, function(self) ---@param self Unlock
             for uuid, _ in pairs(self.BoughtBy) do
                 self:OnBuy(uuid)
             end
-        end,
+        end),
     },
     {
         Id = "BuySlayer",
