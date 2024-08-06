@@ -74,19 +74,26 @@ function Player.TeleportToAct(act)
     teleporting = true
 
     local didUnload = false
+    local function checkUnload()
+        if didUnload then
+            GameState.OnLoad(function()
+                teleporting = false
+            end, true)
+        else
+            teleporting = false
+        end
+    end
+
     local handler = GameState.OnUnload(function()
         didUnload = true
+        checkUnload()
     end, true)
 
     Defer(3000, function()
         handler:Unregister()
 
-        if didUnload then
-            GameState.OnLoad(function()
-                teleporting = false
-            end, false)
-        else
-            teleporting = false
+        if not didUnload then
+            checkUnload()
         end
     end)
 

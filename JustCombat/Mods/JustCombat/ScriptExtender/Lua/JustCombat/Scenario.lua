@@ -10,6 +10,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 -------------------------------------------------------------------------------------------------
 
 ---@class Scenario: LibsObject
+---@field Name string
 ---@field Enemies table<number, Enemy[]>
 ---@field KilledEnemies Enemy[]
 ---@field SpawnedEnemies Enemy[]
@@ -23,6 +24,7 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field OnMap boolean
 ---@field New fun(self): self
 local Object = Libs.Object({
+    Name = nil,
     Enemies = {},
     KilledEnemies = {},
     SpawnedEnemies = {},
@@ -447,6 +449,7 @@ function Scenario.Start(template, map)
     local enemies = {}
 
     local scenario = Object.New()
+    scenario.Name = template.Name
     scenario.Map = map
     scenario.Timeline = template.Timeline
     scenario.LootObjects = template.Loot.Objects
@@ -496,7 +499,12 @@ function Scenario.Stop()
 end
 
 function Scenario.Teleport(uuid)
-    Current().Map:Teleport(uuid)
+    local s = Current()
+
+    if Map.TeleportTo(s.Map, uuid, true) then
+        s.OnMap = true
+        Event.Trigger("ScenarioTeleport", uuid)
+    end
 end
 
 ---@param specific Enemy
@@ -682,18 +690,15 @@ U.Osiris.On(
             return
         end
 
-        S.OnMap = true
-        Scenario.Teleport(uuid, true)
+        Scenario.Teleport(uuid)
     end)
 )
 
-U.Osiris.On(
-    "TeleportedFromCamp",
-    1,
-    "after",
-    ifScenario(function(uuid)
-        if S.OnMap and U.UUID.Equals(uuid, Player.Host()) then
-            Defer(1000, Action.MapEntered)
+Event.On(
+    "ScenarioTeleport",
+    ifScenario(function(target)
+        if S.OnMap and U.UUID.Equals(target, Player.Host()) then
+            Defer(2000, Action.MapEntered)
         end
     end)
 )

@@ -197,14 +197,14 @@ function M.Entity.GetNearby(source, radius, ignoreHeight)
     end
 
     local nearby = {}
-    for _, entity in ipairs(Ext.Entity.GetAllEntitiesWithComponent("Uuid")) do
+    for guid, entity in ipairs(Ext.Entity.GetAllEntitiesWithUuid()) do
         local pos = entityPos(entity)
         if pos then
             local distance = calcDisance(pos)
             if distance <= radius then
                 table.insert(nearby, {
                     Entity = entity,
-                    Guid = entity.Uuid.EntityUuid,
+                    Guid = guid,
                     Distance = distance,
                 })
             end
@@ -515,6 +515,26 @@ function M.UUID.Equals(item1, item2)
     return false
 end
 
+---@param strict boolean|nil prevent UUID collision - slow
+function M.UUID.Random(strict)
+    -- version 4 UUID
+    local template = "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx"
+    local uuid = string.gsub(template, "[xy]", function(c)
+        local v = (c == "x") and M.Random(0, 0xf) or M.Random(8, 0xb)
+        return string.format("%x", v)
+    end)
+
+    if not strict then
+        return uuid
+    end
+
+    if Ext.Template.GetTemplate(uuid) or Ext.Mod.IsModLoaded(uuid) or Ext.Entity.GetAllEntitiesWithUuid()[uuid] then
+        return M.UUID.Random(true)
+    end
+
+    return uuid
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Osiris                                            --
@@ -581,7 +601,7 @@ function M.Log.Dump(...)
 end
 
 function M.Log.Error(...)
-    Ext.Utils.PrintError(logPrefix(), ..., Mod.Debug and "\n" .. debug.traceback() or nil)
+    Ext.Utils.PrintError(logPrefix() .. "[Error]", ...)
 end
 
 return M

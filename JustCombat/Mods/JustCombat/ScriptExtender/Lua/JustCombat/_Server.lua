@@ -62,22 +62,25 @@ GameState.OnSave(function()
     end
 end)
 
-GameState.OnLoad(function(state)
-    if state.FromState == "Save" then
-        return
-    end
-
+GameState.OnLoadSession(function(state)
     External.LoadConfig()
 
-    S = PersistentVars.Scenario
-    if S ~= nil then
-        Scenario.RestoreFromState(S)
-    end
+    Async.Run(function() -- runs on OnLoad instead of OnLoadSession
+        S = PersistentVars.Scenario
+        if S ~= nil then
+            Scenario.RestoreFromState(S)
 
-    Defer(1000, function()
-        Net.Send("OpenGUI")
-        Net.Send("State")
+            Net.Send("OpenGUI")
+        end
     end)
+end)
+
+GameState.OnLoad(function()
+    if Mod.Debug then
+        Defer(1000, function()
+            Net.Send("OpenGUI")
+        end)
+    end
 end)
 
 GameState.OnUnload(function()
@@ -114,7 +117,8 @@ Net.On("Start", function(event)
     local template = UT.Find(Scenario.GetTemplates(), function(v)
         return v.Name == scenarioName
     end)
-    local map = UT.Find(Map.GetTemplates(), function(v)
+
+    local map = UT.Find(Map.Get(), function(v)
         return v.Name == mapName
     end)
 
@@ -138,6 +142,7 @@ end)
 
 Net.On("Teleport", function(event)
     local mapName = event.Payload.Map
+
     local map = UT.Find(Map.Get(), function(v)
         return v.Name == mapName
     end)
@@ -147,7 +152,12 @@ Net.On("Teleport", function(event)
         return
     end
 
-    map:Teleport(Player.Host(event:UserId()))
+    if S and U.Equals(map, S.Map) then
+        Scenario.Teleport(Player.Host(event:UserId()))
+    else
+        Map.TeleportTo(map, Player.Host(event:UserId()), false)
+    end
+
     Net.Respond(event, { true })
 end)
 
@@ -193,7 +203,7 @@ do
     function Commands.Dev(new_start, amount)
         L.Info(":)")
 
-        -- Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
+        Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
 
         -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
         -- local parts = US.Split(dump, "\n")
@@ -206,7 +216,7 @@ do
         --     start = 1
         --     Require("Shared/OsirisEventDebug").Attach()
         -- end
-        GameMode.AskUnlockAll()
+        -- GameMode.AskUnlockAll()
 
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100

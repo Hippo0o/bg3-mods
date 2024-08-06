@@ -12,10 +12,10 @@ local M = {}
 local listeners = {}
 
 ---@class EventListener : LibsObject
----@field Id string
----@field Event string
+---@field private Id string
+---@field private Event string
+---@field private Func fun(...: any)
 ---@field Once boolean
----@field Func fun(...: any)
 ---@field Exec fun(self: EventListener, ...: any)
 ---@field Unregister fun(self: EventListener)
 ---@field New fun(event: string, callback: fun(event: table), once: boolean): EventListener
@@ -39,8 +39,9 @@ local EventListener = Libs.Object({
     end,
     Unregister = function(self)
         local eventListeners = listeners[self.Event]
-        for i, listener in ipairs(eventListeners) do
-            if listener.Id == self.Id then
+        for i = #eventListeners, 1, -1 do
+            if eventListeners[i].Id == self.Id then
+                Utils.Log.Debug("Unregister", self.Event, self.Id)
                 table.remove(eventListeners, i)
             end
         end
@@ -74,7 +75,7 @@ end
 
 function M.Trigger(event, ...)
     if listeners[event] then
-        Utils.Log.Debug("Handle/Event", #listeners[event], event)
+        Utils.Log.Debug("Event", #listeners[event], event)
         for _, l in pairs(listeners[event]) do
             l:Exec(...)
         end
