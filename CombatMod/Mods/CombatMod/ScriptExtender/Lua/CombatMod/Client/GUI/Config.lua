@@ -63,7 +63,7 @@ function Config.Main(tab)
     local c4 = Config.Checkbox(
         root,
         "Force Enter Combat",
-        "more continues battle between rounds at the cost of cheesy out of combat strats",
+        "more continuous battle between rounds at the cost of cheesy out of combat strats",
         "ForceEnterCombat"
     )
 
