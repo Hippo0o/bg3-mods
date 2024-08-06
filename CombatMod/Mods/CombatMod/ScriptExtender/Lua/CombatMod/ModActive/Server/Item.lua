@@ -504,11 +504,17 @@ function Item.GenerateLoot(rolls, lootRates)
         rarities[category] = rarity
     end
 
+    local lastCategory = nil
+
     for i = 1, rolls do
         local items = {}
         local fail = 0
 
         local category = ({ "CombatObject", "Weapon", "Armor" })[math.random(3)]
+        if category == lastCategory then
+            category = ({ "CombatObject", "Weapon", "Armor" })[math.random(3)]
+        end
+        lastCategory = category
 
         local rarity = nil
         -- avoid 0 rolls e.g. legendary objects dont exist
