@@ -46,6 +46,73 @@ function Player.Notify(message, instant, ...)
     end)
 end
 
+local teleporting = nil
+function Player.TeleportToAct(act)
+    if teleporting then
+        return false
+    end
+
+    if teleporting == false then
+        teleporting = nil
+        return true
+    end
+
+    Osi.PROC_DEBUG_TeleportToAct(act)
+    teleporting = true
+
+    local didUnload = false
+    local handler = GameState.RegisterUnloadingAction(function()
+        didUnload = true
+    end, true)
+
+    Defer(3000, function()
+        handler:Unregister()
+
+        if didUnload then
+            GameState.RegisterLoadingAction(function()
+                teleporting = false
+            end, false)
+        else
+            teleporting = false
+        end
+    end)
+
+    return false
+end
+
+function Player.TeleportToRegion(region)
+    if teleporting then
+        return false
+    end
+
+    if teleporting == false then
+        teleporting = nil
+        return true
+    end
+
+    Osi.PROC_DEBUG_TeleportToRegion(region)
+    teleporting = true
+
+    local didUnload = false
+    local handler = GameState.RegisterUnloadingAction(function()
+        didUnload = true
+    end, true)
+
+    Defer(1000, function()
+        handler:Unregister()
+
+        if didUnload then
+            GameState.RegisterLoadingAction(function()
+                teleporting = false
+            end, false)
+        else
+            teleporting = false
+        end
+    end)
+
+    return false
+end
+
 local readyChecks = {}
 ---@param message string
 ---@param callback fun(result: boolean)
@@ -61,14 +128,15 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Ext.Osiris.RegisterListener("ReadyCheckPassed", 1, "after", function(id)
+U.Events.RegisterListener("ReadyCheckPassed", 1, "after", function(id)
     L.Debug("ReadyCheckPassed", id)
     if readyChecks[id] then
         readyChecks[id](true)
         readyChecks[id] = nil
     end
 end)
-Ext.Osiris.RegisterListener("ReadyCheckFailed", 1, "after", function(id)
+
+U.Events.RegisterListener("ReadyCheckFailed", 1, "after", function(id)
     L.Debug("ReadyCheckFailed", id)
     if readyChecks[id] then
         readyChecks[id](false)
@@ -76,6 +144,6 @@ Ext.Osiris.RegisterListener("ReadyCheckFailed", 1, "after", function(id)
     end
 end)
 
--- Ext.Osiris.RegisterListener("UsingSpell", 5, "before", function(caster, spell, spellType, spellElement, storyActionID)
+-- U.Events.RegisterListener("UsingSpell", 5, "before", function(caster, spell, spellType, spellElement, storyActionID)
 --     L.Info("UsingSpell:", caster, spell, spellType, spellElement, storyActionID)
 -- end)

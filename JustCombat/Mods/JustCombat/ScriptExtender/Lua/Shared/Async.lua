@@ -53,8 +53,9 @@ local Loop = Libs.Object({
             self:Tick(e.Time)
 
             ticks = ticks + 1
-            if ticks % 1000 == 0 then
+            if ticks % 3000 == 0 then
                 Utils.Log.Warn("Loop is running for too long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
+                Utils.Log.Dump(self)
             end
         end)
     end,
@@ -114,9 +115,6 @@ local Queue = Libs.Object({
         return idx
     end,
     Dequeue = function(self, idx) ---@param self Queue
-        -- self.Tasks = Utils.Table.Filter(self.Tasks, function(v)
-        --     return v.idx ~= idx
-        -- end)
         for i, v in ipairs(self.Tasks) do
             if v.idx == idx then
                 table.remove(self.Tasks, i)
@@ -135,12 +133,6 @@ local Queue = Libs.Object({
             end
         end
     end,
-    -- Queue:New alternative - example
-    -- New = function(self, loop)
-    --     return self.Init({
-    --         Loop = loop,
-    --     })
-    -- end,
 })
 
 ---@param loop Loop
@@ -202,8 +194,6 @@ GameState.RegisterUnloadingAction(function()
     if loop:IsRunning() then
         loop:Stop()
     end
-    prio.Tasks = {}
-    lowPrio.Tasks = {}
 end)
 GameState.RegisterSavingAction(function()
     if loop:IsRunning() then

@@ -256,7 +256,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "AddedTo",
     3,
     "before",

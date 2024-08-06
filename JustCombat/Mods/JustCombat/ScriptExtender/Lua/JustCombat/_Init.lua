@@ -140,9 +140,6 @@ GameState.RegisterUnloadingAction(function()
     S = nil
 end)
 
-do -- story bypass skips most/all dialogues, combat and interactions that aren't related to a scenario
-end
-
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                            Commands                                         --
@@ -157,7 +154,19 @@ do
     function Commands.Dev(new_start, amount)
         L.Info(":)")
 
+        -- Osi.SetEditionForCustomBook("JustCombat", 0)
+        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        -- Osi.AddEntryToCustomBook("JustCombat", "123\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+        -- Osi.OpenCustomBookUI(GetHostCharacter(), "JustCombat")
+
+        -- if start == 0 then
+        --     start = 1
+        --     Require("Shared/EventDebug").Attach()
+        -- end
         GameMode.AskUnlockAll()
+
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100
         --
@@ -402,7 +411,6 @@ do
     function Commands.StoryBypass(flag)
         Config.BypassStory = ("true" == flag or tonumber(flag) == 1) and true or false
         L.Info("Story bypass is", Config.BypassStory and "enabled" or "disabled")
-        External.SaveConfig()
     end
     function Commands.EnableStoryBypass()
         Commands.StoryBypass(1)

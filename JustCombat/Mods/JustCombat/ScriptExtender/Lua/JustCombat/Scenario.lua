@@ -535,7 +535,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "CombatRoundStarted",
     2,
     "before",
@@ -588,7 +588,7 @@ Ext.Osiris.RegisterListener(
     end)
 )
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "EnteredCombat",
     2,
     "after",
@@ -623,7 +623,7 @@ Ext.Osiris.RegisterListener(
     end)
 )
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "CombatStarted",
     1,
     "before",
@@ -647,7 +647,7 @@ Ext.Osiris.RegisterListener(
     end)
 )
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "CombatEnded",
     1,
     "after",
@@ -666,7 +666,7 @@ Ext.Osiris.RegisterListener(
     end)
 )
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "TeleportedFromCamp",
     1,
     "before",
@@ -680,7 +680,7 @@ Ext.Osiris.RegisterListener(
     end)
 )
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "TeleportedFromCamp",
     1,
     "after",
@@ -691,7 +691,7 @@ Ext.Osiris.RegisterListener(
     end)
 )
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "TeleportedToCamp",
     1,
     "after",
@@ -703,7 +703,7 @@ Ext.Osiris.RegisterListener(
     end)
 )
 
-Ext.Osiris.RegisterListener(
+U.Events.RegisterListener(
     "Died",
     1,
     "before",
