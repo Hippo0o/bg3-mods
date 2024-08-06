@@ -81,6 +81,12 @@ function M.Random(...)
     return Ext.Math.Round(rand)
 end
 
+---@param prefix string|nil
+---@return string
+function M.RandomId(prefix)
+    return tostring({}):gsub("table: ", prefix or "")
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Entity                                            --
@@ -567,7 +573,11 @@ function M.Log.Dump(...)
 end
 
 function M.Log.Error(...)
-    Ext.Utils.PrintError(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Error]", ...)
+    Ext.Utils.PrintError(
+        Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Error]",
+        ...,
+        Mod.Debug and "\n" .. debug.traceback() or nil
+    )
 end
 
 return M

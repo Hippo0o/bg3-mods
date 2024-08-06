@@ -7,24 +7,6 @@ Require("JustCombat/Shared")
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
--- lazy ass globals
-
----@type GameState
-GameState = Require("Shared/GameState")
-
----@type Async
-Async = Require("Shared/Async")
-WaitFor = Async.WaitFor
-RetryFor = Async.RetryFor
-Schedule = Async.Schedule
-Defer = Async.Defer
-
----@type Libs
-Libs = Require("Shared/Libs")
-
----@type Net
-Net = Require("Shared/Net")
-
 Config = {
     ForceCombatRestart = false, -- restart combat every round to reroll initiative and let newly spawned enemies act immediately
     ForceEnterCombat = false, -- more continues battle between rounds at the cost of cheesy out of combat strats
@@ -60,7 +42,7 @@ Require("JustCombat/GameMode")
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-GameState.OnSaving(function()
+GameState.OnSave(function()
     PersistentVars.Scenario = S
 
     for obj, _ in pairs(PersistentVars.SpawnedEnemies) do
@@ -80,7 +62,7 @@ GameState.OnSaving(function()
     end
 end)
 
-GameState.OnLoading(function(state)
+GameState.OnLoad(function(state)
     if state.FromState == "Save" then
         return
     end
@@ -91,12 +73,21 @@ GameState.OnLoading(function(state)
     if S ~= nil then
         Scenario.RestoreFromState(S)
     end
+
+    Defer(1000, function()
+        Net.Send("OpenGUI")
+        Net.Send("State")
+    end)
 end)
 
-GameState.OnUnloading(function()
+GameState.OnUnload(function()
     if PersistentVars then
         PersistentVars.Scenario = S
     end
+end)
+
+Ext.Events.ResetCompleted:Subscribe(function()
+    Event.Trigger(GameState.EventLoad, { FromState = "Sync", ToState = "Running" })
 end)
 
 -------------------------------------------------------------------------------------------------
@@ -105,21 +96,15 @@ end)
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-Net.On("GibList", function(event)
-    local list = {}
-    L.Dump("GibList", event.Payload)
-    if event.Payload == "Scenarios" then
-        list = UT.Map(Scenario.GetTemplates(), function(v, k)
+Net.On("LoadSelections", function(event)
+    Net.Respond(event, {
+        Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }
-        end)
-    end
-    if event.Payload == "Maps" then
-        list = UT.Map(Map.GetTemplates(), function(v, k)
+        end),
+        Maps = UT.Map(Map.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }
-        end)
-    end
-
-    Net.Respond(event, list)
+        end),
+    })
 end)
 
 Net.On("Start", function(event)
@@ -158,6 +143,17 @@ Net.On("Teleport", function(event)
     Net.Respond(event, { true })
 end)
 
+Net.On("PingSpawns", function(event)
+    local map = Map.Get(Player.Region())[tonumber(event.Payload.Map)]
+    if map == nil then
+        Net.Respond(event, { false, "Map not found." })
+        return
+    end
+
+    map:PingSpawns()
+    Net.Respond(event, { true })
+end)
+
 Net.On("State", function(event)
     Net.Respond(event, PersistentVars)
 end)
@@ -186,7 +182,6 @@ do
     function Commands.Dev(new_start, amount)
         L.Info(":)")
 
-        Net.Send("OpenUI", {})
         -- Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
 
         -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
@@ -200,7 +195,7 @@ do
         --     start = 1
         --     Require("Shared/OsirisEventDebug").Attach()
         -- end
-        -- GameMode.AskUnlockAll()
+        GameMode.AskUnlockAll()
 
         -- new_start = tonumber(new_start) or start
         -- amount = tonumber(amount) or 100
