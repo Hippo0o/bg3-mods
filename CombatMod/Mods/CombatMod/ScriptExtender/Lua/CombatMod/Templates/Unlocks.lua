@@ -58,16 +58,6 @@ end
 
 local multis = {
     {
-        Id = "MOD_BOOSTS",
-        Name = __("Unlock Multipliers"),
-        Icon = "PassiveFeature_Generic_Explosion",
-        Cost = 1000,
-        Amount = 1,
-        Character = false,
-        Persistent = true,
-        Requirement = 100,
-    },
-    {
         Id = "ExpMultiplier",
         Name = __("Gain double XP"),
         Icon = "Spell_MagicJar",
@@ -103,13 +93,23 @@ local multis = {
             PersistentVars.Unlocked.CurrencyMultiplier = true
         end,
     },
+    {
+        Id = "MOD_BOOSTS",
+        Name = __("Unlock Multipliers"),
+        Icon = "PassiveFeature_Generic_Explosion",
+        Cost = 1000,
+        Amount = 1,
+        Character = false,
+        Persistent = true,
+        Requirement = 100,
+    },
 }
 
 local ngPlus = {
     {
         Id = "NEWGAME_PLUS",
         Name = __("Unlock New Game+"),
-        Icon = "PassiveFeature_Generic_Explosion",
+        Icon = "Action_EndGame_NethereseOrbBlast",
         Cost = 2000,
         Amount = 1,
         Character = false,
@@ -119,7 +119,7 @@ local ngPlus = {
     {
         Id = "ScoreMultiplier",
         Name = __("Gain double RogueScore"),
-        Icon = "Action_EndGameAlly_ShadowAdepts",
+        Icon = "GenericIcon_Intent_Buff",
         Cost = 0,
         Amount = 1,
         Character = false,
@@ -129,9 +129,34 @@ local ngPlus = {
         end,
     },
     {
+        Id = "BuyStockPlus",
+        Name = __("Reset Stock"),
+        Icon = "Item_BOOK_SignedTradeVisa",
+        Description = __("Resets the stock of purchased standard unlocks."),
+        Cost = 1000,
+        Amount = nil,
+        Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
+        Character = false,
+        OnBuy = function(self, character)
+            if self.Bought > 0 then
+                for _, u in pairs(getUnlocks()) do
+                    if u.Id:match("^BuyHair") then
+                        u.Bought = 0
+                    end
+                    if u.Id == "TadAwaken" then
+                        u.Bought = 0
+                    end
+                    if u.Id == "BuyEmperor" then
+                        u.Bought = 0
+                    end
+                end
+            end
+        end,
+    },
+    {
         Id = "CurrencyPlus",
         Name = "+100 Currency",
-        Icon = "Action_EndGameAlly_ShadowAdepts",
+        Icon = "Item_CONT_GEN_Chest_Rich_B",
         Cost = 0,
         Amount = 1,
         Character = false,
@@ -151,30 +176,6 @@ local ngPlus = {
         OnBuy = function(self, character)
             for _, p in pairs(GU.DB.GetPlayers()) do
                 Osi.AddExplorationExperience(p, 1000)
-            end
-        end,
-    },
-    {
-        Id = "BuyStockPlus",
-        Name = __("Reset Stock"),
-        Icon = "Item_BOOK_SignedTradeVisa",
-        Cost = 1000,
-        Amount = nil,
-        Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
-        Character = false,
-        OnBuy = function(self, character)
-            if self.Bought > 0 then
-                for _, u in pairs(getUnlocks()) do
-                    if u.Id:match("^BuyHair") then
-                        u.Bought = 0
-                    end
-                    if u.Id == "TadAwaken" then
-                        u.Bought = 0
-                    end
-                    if u.Id == "BuyEmperor" then
-                        u.Bought = 0
-                    end
-                end
             end
         end,
     },
@@ -298,18 +299,16 @@ return UT.Combine(
             end,
         },
         {
-            Id = "BuyEmperor",
-            Name = __("Spawn Mindflayer Companion"),
-            Description = __("Spawns the Emperor as controllable party follower."),
-            Icon = "TadpoleSuperPower_SurvivalInstinct",
-            Cost = 200,
-            Amount = 1,
-            Character = false,
+            Id = "BuyRestore",
+            Name = __("Fully Restore Character"),
+            Icon = "Action_EndGame_IsobelHeal",
+            Description = __("Resurrect character and fully restore all resources."),
+            Cost = 20,
+            Amount = nil,
+            Character = true,
             OnBuy = function(self, character)
-                -- TODO fix HEALTHBOOST_HARDCODE
-                local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
-                Osi.AddPartyFollower(guid, character)
-                -- Osi.Follow(guid, character)
+                Osi.PROC_CharacterFullRestore(character)
+                Osi.UseSpell(character, "Shout_RegainHP_Peace_NPC", character)
             end,
         },
         {
@@ -346,9 +345,27 @@ return UT.Combine(
                 Osi.StartRespecToOathbreaker(character)
             end,
         },
+        {
+            Id = "BuyEmperor",
+            Name = __("Spawn Mindflayer Companion"),
+            Description = __("Spawns the Emperor as controllable party follower."),
+            Icon = "TadpoleSuperPower_IllithidExpertise",
+            Cost = 200,
+            Amount = 1,
+            Character = false,
+            OnBuy = function(self, character)
+                -- TODO fix HEALTHBOOST_HARDCODE
+                local temp = Ext.Template.GetTemplate("6efb2704-a025-49e0-ba9f-2b4f62dd2195")
+                temp.DisableEquipping = true
+
+                local guid = Osi.CreateAtObject("6efb2704-a025-49e0-ba9f-2b4f62dd2195", character, 1, 1, "", 1)
+                Osi.AddPartyFollower(guid, character)
+                -- Osi.Follow(guid, character)
+            end,
+        },
     },
-    multis,
     hagHair(),
+    multis,
     ngPlus
     -- Not working outside END_Main
     -- {

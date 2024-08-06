@@ -19,7 +19,6 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 ---@field Positions table<number, number> Index, Spawn
 ---@field LootRates table<string, table<string, number>>
 ---@field OnMap boolean
----@field RogueMode boolean
 ---@field New fun(self): self
 local Object = Libs.Class({
     Name = nil,
@@ -29,7 +28,6 @@ local Object = Libs.Class({
     Map = nil,
     CombatId = nil,
     OnMap = false,
-    RogueMode = false,
     Round = 0,
     Timeline = {},
     Positions = {},
@@ -221,8 +219,8 @@ function Action.NotifyStarted()
 
         return false
     end, {
-        retries = 10,
-        interval = 15000,
+        retries = 5,
+        interval = 30000,
         immediate = true,
     })
 end
@@ -670,7 +668,7 @@ U.Osiris.On(
 
         local guid = U.UUID.Extract(object)
 
-        if not Enemy.IsValid(guid) then
+        if not GC.IsNonPlayer(guid) then
             return
         end
 
@@ -686,7 +684,12 @@ U.Osiris.On(
 
         L.Debug("Entered combat.", guid, combatGuid)
         Schedule(function()
-            Enemy.CreateTemporary(guid)
+            local e = Enemy.CreateTemporary(guid)
+
+            if Osi.IsAlly(Player.Host(), guid) == 0 and Osi.IsCharacter == 1 then
+                table.insert(s.SpawnedEnemies, e)
+                Player.Notify(__("Enemy %s joined.", e:GetTranslatedName()), true)
+            end
         end)
     end)
 )

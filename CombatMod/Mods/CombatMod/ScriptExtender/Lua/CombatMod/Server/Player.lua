@@ -45,10 +45,24 @@ function Player.PickupAll(character)
     end
 end
 
+function Player.DisplayName(character)
+    local p = Ext.Entity.Get(character or Player.Host())
+
+    if p.CustomName then
+        return p.CustomName.Name
+    end
+
+    return Localization.Get(p.DisplayName.NameKey.Handle.Handle)
+end
+
 local buffering = false
 function Player.Notify(message, instant, ...)
     L.Info("Notify:", message, ...)
     Net.Send("PlayerNotify", { message, ... })
+
+    if Config.TurnOffNotifications then
+        return
+    end
 
     WaitUntil(function()
         return not buffering or instant

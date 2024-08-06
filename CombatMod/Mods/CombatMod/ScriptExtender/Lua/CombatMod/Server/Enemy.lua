@@ -403,6 +403,7 @@ end
 function Enemy.CreateTemporary(object)
     local e = Object.New({ Name = "Temporary" })
     e.GUID = U.UUID.Extract(object)
+    e.Tier = C.EnemyTier[1]
 
     PersistentVars.SpawnedEnemies[e.GUID] = e
 

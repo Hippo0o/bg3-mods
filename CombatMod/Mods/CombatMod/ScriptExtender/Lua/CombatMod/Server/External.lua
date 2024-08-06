@@ -64,11 +64,11 @@ External.Validators.Config = tt({
     RandomizeSpawnOffset = { "nil", "number" },
     ExpMultiplier = { "nil", "number" },
     ForceEnterCombat = { "nil", "boolean" },
-    HardMode = { "nil", "boolean" },
     BypassStory = { "nil", "boolean" },
     LootIncludesCampSlot = { "nil", "boolean" },
     SpawnItemsAtPlayer = { "nil", "boolean" },
     Debug = { "nil", "boolean" },
+    TurnOffNotifications = { "nil", "boolean" },
 })
 
 External.Validators.Enemy = tt({

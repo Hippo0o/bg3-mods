@@ -48,7 +48,7 @@ function M.PreparePersistentVars()
     end
 
     -- Remove keys we no longer use in the Template
-    for k, _ in ipairs(PersistentVars) do
+    for k, _ in pairs(PersistentVars) do
         if M.PersistentVarsTemplate[k] == nil then
             PersistentVars[k] = nil
         end

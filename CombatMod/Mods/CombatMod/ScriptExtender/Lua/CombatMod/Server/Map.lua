@@ -105,7 +105,7 @@ function Object:SpawnLoot(loot)
         x, y, z = Player.Pos()
     end
 
-    Item.SpawnLoot(loot, x, y, z)
+    Item.SpawnLoot(loot, x, y, z, true)
 end
 
 function Object:PingSpawns()

@@ -206,11 +206,10 @@ function ClientUnlock.BuyChar(root, unlock)
 
         for i, u in ipairs(GE.GetParty()) do
             local name
-            if not u.CustomName then
-                name = Localization.Get(u.DisplayName.NameKey.Handle.Handle)
-            end
-            if not name then
+            if u.CustomName then
                 name = u.CustomName.Name
+            else
+                name = Localization.Get(u.DisplayName.NameKey.Handle.Handle)
             end
 
             local uuid = u.Uuid.EntityUuid
@@ -221,6 +220,15 @@ function ClientUnlock.BuyChar(root, unlock)
             b.Label = string.format("%s", name)
             table.insert(list, b)
             b.Size = { 200, 0 }
+
+            local ping = popup:AddButton("")
+            ping.IDContext = U.RandomId()
+            ping.Label = __("Ping")
+            ping.OnClick = function()
+                Net.Send("Ping", { Target = uuid })
+            end
+            ping.SameLine = true
+            table.insert(list, ping)
 
             if unlock.BoughtBy[uuid] then
                 b.Label = string.format("%s (%s)", name, __("bought"))

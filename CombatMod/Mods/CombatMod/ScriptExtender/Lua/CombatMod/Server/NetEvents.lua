@@ -2,10 +2,10 @@ function SyncState()
     Net.Send(
         "SyncState",
         UT.Filter(PersistentVars, function(v, k)
-            if k == "SpawnedEnemies" and UT.Size(v) > 200 then
+            if k == "SpawnedEnemies" and UT.Size(v) > 30 then
                 return false
             end
-            return k ~= "Stats"
+            return true
         end, true)
     )
 end
@@ -169,6 +169,22 @@ Net.On("KillSpawned", function(event)
     Net.Respond(event, { true })
 end)
 
+Net.On("Ping", function(event)
+    local target = event.Payload.Target
+    if target then
+        local character = event:Character()
+        local x, y, z = Osi.GetPosition(target)
+        Osi.RequestPing(x, y, z, target, character)
+    end
+
+    local pos = event.Payload.Pos
+    if pos then
+        Osi.RequestPing(pos[1], pos[2], pos[3], nil, event:Character())
+    end
+
+    Net.Respond(event, { true })
+end)
+
 Net.On("PingSpawns", function(event)
     local mapName = event.Payload.Map
     local map = UT.Find(Map.Get(), function(v)
@@ -191,6 +207,7 @@ local function broadcastConfig()
     Schedule(function()
         local c = UT.DeepClone(Config)
         c.RoguelikeMode = PersistentVars.RogueModeActive
+        c.HardMode = PersistentVars.HardMode
         c.Debug = Mod.Debug
 
         Net.Send("Config", c)
@@ -230,6 +247,11 @@ Net.On("Config", function(event)
                     PersistentVars.RogueModeActive = config.RoguelikeMode
                     Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
                 end
+            end
+
+            if config.HardMode ~= nil then
+                PersistentVars.HardMode = config.HardMode
+                broadcastState()
             end
         end
     end

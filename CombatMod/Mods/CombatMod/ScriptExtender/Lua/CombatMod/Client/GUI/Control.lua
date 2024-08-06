@@ -87,7 +87,7 @@ function Control.Main(tab)
         textBox.Label = ""
     end)
     Components.Computed(textBox, function(_, event)
-        return textBox.Label .. event.Payload[1] .. "\n"
+        return string.format("[%d]: %s\n%s", Ext.Utils.MonotonicTime(), event.Payload[1], textBox.Label)
     end, Net.EventName("PlayerNotify"), "Label")
 end
 

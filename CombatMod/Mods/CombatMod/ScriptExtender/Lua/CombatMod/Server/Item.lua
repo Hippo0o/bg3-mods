@@ -39,7 +39,7 @@ local itemBlacklist = {
     "LOW_OskarsBeloved_",
     "WPN_Dart", -- unfinished
     "WPN_Sling", -- unfinished
-
+    "MAG_Harpers_SingingSword", -- unfinished
     -- "_Myrmidon_ConjureElemental$",
     -- "_Myrmidon_WildShape$",
     -- "_Myrmidon_Wildshape$",
@@ -169,6 +169,10 @@ end
 function Item.Objects(rarity, forCombat)
     local items = UT.Filter(objects, function(name)
         local stat = Ext.Stats.Get(name)
+        if not stat then
+            return false
+        end
+
         local cat = stat.ObjectCategory
         local tab = stat.InventoryTab
         local type = stat.ItemUseType
@@ -227,6 +231,9 @@ end
 function Item.Armor(rarity)
     local items = UT.Filter(armor, function(name)
         local stat = Ext.Stats.Get(name)
+        if not stat then
+            return false
+        end
         local slot = stat.Slot
 
         if name:match("^_") then
@@ -273,6 +280,9 @@ end
 function Item.Weapons(rarity)
     local items = UT.Filter(weapons, function(name)
         local stat = Ext.Stats.Get(name)
+        if not stat then
+            return false
+        end
 
         if name:match("^_") then
             return false
@@ -347,14 +357,17 @@ function Item.PickupAll(character, rarity, type)
     end
 end
 
-function Item.SpawnLoot(loot, x, y, z)
+function Item.SpawnLoot(loot, x, y, z, autoPickup)
     local i = 0
     Async.Interval(300 - (#loot * 2), function(self)
         i = i + 1
 
         if i > #loot then
             self:Clear()
-            Event.Trigger("LootSpawned", loot)
+            if autoPickup and Player.InCamp() then
+                Player.PickupAll()
+            end
+
             return
         end
 
@@ -398,7 +411,7 @@ function Item.GenerateLoot(rolls, lootRates)
             sum = sum + rate
             add(fixed, r, rate)
         end
-        add(fixed, "Nothing", math.ceil(sum / 4)) -- make a chance to get nothing
+        add(fixed, "Nothing", math.ceil(sum / 2)) -- make a chance to get nothing
     end
 
     local bonusRarities = {}
