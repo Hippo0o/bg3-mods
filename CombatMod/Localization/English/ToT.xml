@@ -1,564 +1,552 @@
 <?xml version="1.0" encoding="utf-8"?>
 <contentList>
-    <content contentuid="h323096eeg6765g4c3bgb010g3a5dd232187f" version="1">Start</content>
-
-
-    <content contentuid="hfea436e8gabf1g463bg9cd9g705dbefb527f" version="1">Fully Restore Character</content>
-
-
-    <content contentuid="h32554192g6700g414cgb016g672a12344508" version="1">Reset Templates</content>
-
-
-    <content contentuid="h366718e6g6332g44dbgb055g42bd5277609f" version="1">Debug</content>
-
-
-    <content contentuid="h2cb33b1dg79e6g46e4g81f8g0082e3da22a0" version="1">Buy for character</content>
-
-
-    <content contentuid="had299379gf87cg4c62g89e1gaa04abc38826" version="1">Needs to be a Paladin.</content>
-
-
-    <content contentuid="hd49633d2g81c3g4668gbe7ag500e1c58722c" version="1">items will spawn at the current player's position instead the maps entry point</content>
-
-
-    <content contentuid="h28a9d2d8g7dfcg4878g91b9gae1eb39b8c3c" version="1">Window toggle key</content>
-
-
-    <content contentuid="h44afa6c1g11fag4f39g8779gc95f255beb7d" version="1">Combat is Starting.</content>
-
-
-    <content contentuid="h2c411dfcg7914g448ag91f7g22ecf3d500ce" version="1">Exp Multiplier</content>
-
-
-    <content contentuid="he7764179gb223g4142g8d44g5724af667506" version="1">Use all Illithid Powers with Bonus Actions.</content>
-
-
-    <content contentuid="h3b8161bbg6ed4g434ega08bg252882a9070a" version="1">%s is now active.</content>
-
-
-    <content contentuid="h28fa5cc5g7dafg4099g81bcg96ff639eb4dd" version="1">Scenario ended.</content>
-
-
-    <content contentuid="h38df043eg6d8ag4516gb0begc370d29ce152" version="1">Cost: %s</content>
-
-
-    <content contentuid="h31b714deg64e2g4418gb028g427ed20a605c" version="1">Logs</content>
-
-
-    <content contentuid="h29013f4fg7c54g46a1ga1a3g20c7c38102e5" version="1">%d enemies left.</content>
-
-
-    <content contentuid="h2a64adc6g7f31g4f89gb195g79ef53b75bcd" version="1">Dropping loot.</content>
-
-
-    <content contentuid="h27f7bcfeg72a2g4e9agb14cg48fcd36e6ade" version="1">Get Pixie Blessing</content>
-
-
-    <content contentuid="hcb742a6eg9e21g47f3gbf84g7195dda653b7" version="1">You found the secret cow level!</content>
-
-
-    <content contentuid="h36f8f1b6g63adg4a4egb05cgbc28527e9e0a" version="1">Get a Tadpole</content>
-
-
-    <content contentuid="hc6c558ccg9390g40d9g9f5fg66bffd7d449d" version="1">Spawn Mindflayer Companion</content>
-
-
-    <content contentuid="h097e26aeg5c2bg473fgb3a4gd159d186f37b" version="1">TP</content>
-
-
-    <content contentuid="hf44e063cga11bg4536g9c77gd350fe55f172" version="1">Play Roguelike mode?
-        Continuously create new battles.
-        You will gain a higher score with every completed fight.
-        Difficulty increases with the score.</content>
-
-
-    <content contentuid="h16af0aafg43fag45ffga259gc399c07be1bb" version="1">Currency owned: %d   RogueScore: %d</content>
-
-
-    <content contentuid="h3bc40171g6e91g4542g808fg732422ad5106" version="1">Clear All Entities</content>
-
-
-    <content contentuid="h337385c4g6626g4d09g9004g0b6f7226294d" version="1">Break/Restore Oath</content>
-
-
-    <content contentuid="h6119ae15g344cg4fb4g8522ga9d267008bf0" version="1">Leave camp to join the battle.</content>
-
-
-    <content contentuid="h2e6a96f6g7b3fg4c3agb1d5g9a5c53f7b87e" version="1">Counter the Shadow Curse.</content>
-
-
-    <content contentuid="h979a14b3gc2cfg441egaa4ag92780868b05a" version="1">Perfect Clear! Double your score from %d to %d?</content>
-
-
-    <content contentuid="h2c5a29c3g790fg47c9ga1f6g91af03d4b38d" version="1">Unlock Waypoints</content>
-
-
-    <content contentuid="h637ce98fg3629g4bcdga504gfdabc726df89" version="1">Perfect Clear! Double your score from 5 to 10?</content>
-
-
-    <content contentuid="h20c028a6g7595g47dfgb13fg31b9531d139b" version="1">Creation</content>
-
-
-    <content contentuid="h35c56325g6090g4367g806fg6501624d4723" version="1">Enemy %s joined.</content>
-
-
-    <content contentuid="h3659a876g630cg4fd2gb056ga9b452748b96" version="1">Reset Config</content>
-
-
-    <content contentuid="h3d5fde62g680ag48b3gb0e6gced512c4ecf7" version="1">Round: %s</content>
-
-
-    <content contentuid="h294ce46eg7c19g4b13gb1a7gfd75d385df57" version="1">Gain double XP</content>
-
-
-    <content contentuid="h26aa74f2g73ffg421agb159g947c137bb65e" version="1">Challenge Mode</content>
-
-
-    <content contentuid="h35313866g6064g46d3gb060g20b552420297" version="1">Rare</content>
-
-
-    <content contentuid="h2f0de7b4g7a58g4b2eg91c3ged4873e1cf6a" version="1">Updating config...</content>
-
-
-    <content contentuid="h218206b6g74d7g453egb12bg13585309317a" version="1">Scenario: %s</content>
-
-
-    <content contentuid="hc2871d37g97d2g4486gaf1bg42e04d3960c2" version="1">multiplies the experience gained by killing enemies</content>
-
-
-    <content contentuid="h21780c4eg742dg4591gb124gb3f7d30691d5" version="1">Running</content>
-
-
-    <content contentuid="h322023aeg6775g476fgb011g3109d233132b" version="1">Buy</content>
-
-
-    <content contentuid="h28bc4630g7de9g4136g91b8gf750339ad572" version="1">%s required</content>
-
-
-    <content contentuid="h37bb2c47g62eeg4791ga048g81f7426aa3d5" version="1">Enemy %s rejoined.</content>
-
-
-    <content contentuid="hc327dd8cg9672g488dg9f01g4eebfd236cc9" version="1">Your Currency increased: %d -&gt; %d!</content>
-
-
-    <content contentuid="h2d849b5cg78d1g4ce0g91ebg7a86f3c958a4" version="1">Unlock New Game+</content>
-
-
-    <content contentuid="hb823bf93ged76g4eacga8b1g08ca0a932ae8" version="1">Randomize Spawn Offset</content>
-
-
-    <content contentuid="h28cd5020g7d98g4057g91bfge631339dc413" version="1">Persist Config</content>
-
-
-    <content contentuid="h273eb1cag726bg4e49gb140gd82f9362fa0d" version="1">Waypoints</content>
-
-
-    <content contentuid="he740f325gb215g4a67g8d47g3c016f651e23" version="1">Cannot teleport while in combat.</content>
-
-
-    <content contentuid="h972818a9gc27dg44dfg8a41gb2b9a863909b" version="1">Gain 50%% more loot</content>
-
-
-    <content contentuid="h27b40c36g72e1g4596gb148g73f0536a51d2" version="1">Reload</content>
-
-
-    <content contentuid="h3e9c6432g6bc9g4316gb0dagf57012f8d752" version="1">Stock: %s</content>
-
-
-    <content contentuid="h2d5b4e72g780eg41b2gb1e6g87d413c4a5f6" version="1">Kill spawned</content>
-
-
-    <content contentuid="hfe76c8bdgab23g49deg8cd4g5fb8eef67d9a" version="1">Auto-Pickup for Weapons</content>
-
-
-    <content contentuid="h413f98d6g146ag4cd8gb720gcabe5502e89c" version="1">Resetting config...</content>
-
-
-    <content contentuid="h29375bf8g7c62g40eag91a0g468cb38264ae" version="1">Bypass Story</content>
-
-
-    <content contentuid="h94e5715dgc1b0g4240g8a7dg6426e85f4604" version="1">Auto-Pickup for Armor</content>
-
-
-    <content contentuid="h2308c823g765dg49d7ga103gbfb103219d93" version="1">Unlock %s bought.</content>
-
-
-    <content contentuid="h3160102eg6435g4457gb025g3231d2071013" version="1">Go to Camp</content>
-
-
-    <content contentuid="hf1c74802ga492g41d5gbc2fg47b31e0d6591" version="1">Skipped interaction with %s</content>
-
-
-    <content contentuid="h255ed026g700bg4857gb166gde315344fc13" version="1">Permanent</content>
-
-
-    <content contentuid="h29b77480g7ce2g421dg91a8g447b338a6659" version="1">Default Config</content>
-
-
-    <content contentuid="h32391aeeg676cg44fbgb010ga29dd23280bf" version="1">State</content>
-
-
-    <content contentuid="hce43e6c9g9b16g4b39g8fd7g0d5fadf52f7d" version="1">Gain 20%% more Currency</content>
-
-
-    <content contentuid="h22c9bc4eg779cg4e91gb11fga8f7d33d8ad5" version="1">bought</content>
-
-
-    <content contentuid="h2dba28d2g78efg47d8gb1e8g91be13cab39c" version="1">Pickup All</content>
-
-
-    <content contentuid="hfd862893ga8d3g47dcgacebg51ba0ec97398" version="1">Welcome to %s! Start playing?</content>
-
-
-    <content contentuid="h3c609e26g6935g4cb7gb0f5g3ad152d718f3" version="1">Auto Hide</content>
-
-
-    <content contentuid="h327e121eg672bg4474gb014gd212d236f030" version="1">Stop</content>
-
-
-    <content contentuid="h373f16ceg626ag4439gb040gc25fd262e07d" version="1">Tier</content>
-
-
-    <content contentuid="h2e517b01g7b04g42e5g81d6g248323f406a1" version="1">Combat started.</content>
-
-
-    <content contentuid="hece89b91gb9bdg4cecg8dfdgba8a2fdf98a8" version="1">Spawns the Emperor as controllable party follower.</content>
-
-
-    <content contentuid="h9cec8225gc9b9g4d77g8afdgfb1168dfd933" version="1">Not enough currency.</content>
-
-
-    <content contentuid="h3cf1646eg69a4g4313gb0fcg2575d2de0757" version="1">Map: %s</content>
-
-
-    <content contentuid="hab83587fgfed6g40d2ga98bg06b4cba92496" version="1">Buy 40 Camp Supplies</content>
-
-
-    <content contentuid="h2bc3faaag7e96g4affgb18fg0c9993ad2ebb" version="1">Returned to camp.</content>
-
-
-    <content contentuid="h298720feg7cd2g475agb1abg413cd389631e" version="1">Out of stock</content>
-
-
-    <content contentuid="h29620d0ag7c37g4585gb1a5g13e3938731c1" version="1">Enable Debug</content>
-
-
-    <content contentuid="h2795a4eeg72c0g4f1bgb14ag697dd3684b5f" version="1">Legendary</content>
-
-
-    <content contentuid="hc1ee9e0bg94bbg4cb5gaf2dgdad38d0ff8f1" version="1">Cannot buy while in combat.</content>
-
-
-    <content contentuid="h868cae89gd3d9g4fbdg8b5bgf9dba979dbf9" version="1">Spawn Items At Player</content>
-
-
-    <content contentuid="h367fb87eg632ag4ed2gb054gc8b4d276ea96" version="1">Reset</content>
-
-
-    <content contentuid="h06aadbc6g53ffg48e9gb359g9e8f517bbcad" version="1">Resurrect character and fully restore all resources.</content>
-
-
-    <content contentuid="h315e322eg640bg4677gb026gd011d204f233" version="1">Ping Spawns</content>
-
-
-    <content contentuid="hb5676e2age032g43b7gb865g45d19a4767f3" version="1">All enemies are dead.</content>
-
-
-    <content contentuid="h243c04feg7169g451agb170gf37cd352d15e" version="1">Pickup</content>
-
-
-    <content contentuid="h4f00be40g1a55g4eb1g97c3g38d735e11af5" version="1">Scenario not found.</content>
-
-
-    <content contentuid="h3097f93eg65c2g4ac6gb03ag4ca0d2186e82" version="1">Next Round</content>
-
-
-    <content contentuid="hac065c23gf953g4097ga9f3g56f10bd174d3" version="1">Play Roguelike Mode</content>
-
-
-    <content contentuid="h8c247740gd971g4221g9bf1g744739d35665" version="1">skip dialogues, combat and interactions that aren't related to a scenario</content>
-
-
-    <content contentuid="h23579496g7602g4c1cgb106g4a7a53246858" version="1">Uncommon</content>
-
-
-    <content contentuid="hb13de5b9ge468g4b0eg8820ged68aa02cf4a" version="1">Skipped combat with %s</content>
-
-
-    <content contentuid="h2cf955d8g79acg4008g91fcga66eb3de844c" version="1">Destroy All</content>
-
-
-    <content contentuid="hb1436254ge416g4370g9827g05167a052734" version="1">Gain double RogueScore</content>
-
-
-    <content contentuid="h33c0b3bcg6695g4e6eg900fg3808f22d1a2a" version="1">Total Rounds: %s</content>
-
-
-    <content contentuid="h20450ab6g7510g45fegb137g6398531541ba" version="1">Enemies</content>
-
-
-    <content contentuid="hf6e3e1c8ga3b6g4b49g9c5dg0d2fbe7f2f0d" version="1">Teleporting back to camp in %d seconds.</content>
-
-
-    <content contentuid="h29895c61g7cdcg4093g81abga6f5238984d7" version="1">Default config...</content>
-
-
-    <content contentuid="hc777ee1dg9222g4bb4g8f44g4dd2ed666ff0" version="1">Auto-Pickup for Objects</content>
-
-
-    <content contentuid="h66887fc3g33ddg42a9ga55bgb4cf077996ed" version="1">will remove all entities from the map automatically and fix most issues with unexpected story triggers</content>
-
-
-    <content contentuid="h37ed89a8g62b8g4dcfg904dgeba9b26fc98b" version="1">Enemy %s spawned.</content>
-
-
-    <content contentuid="h2bed91d3g7eb8g4c48ga18dgea2e03afc80c" version="1">Scenario restored.</content>
-
-
-    <content contentuid="h5ed1a319g0b84g4f64g86deg2902a4fc0b20" version="1">some more info in the console and other debug features</content>
-
-
-    <content contentuid="hb2c48751ge791g4d20g881fg7b462a3d5964" version="1">randomize spawn position for more varied encounters (too high may cause issues)</content>
-
-
-    <content contentuid="h2544d6fag7011g483agb167g7e5c93455c7e" version="1">Includes %s</content>
-
-
-    <content contentuid="h85928628gd0c7g4d37g9b6ag1b51b9483973" version="1">Move to start scenario.</content>
-
-
-    <content contentuid="hf9ba1d4cgacefg4481g9ca8g92e7fe8ab0c5" version="1">don't show ingame notifications</content>
-
-
-    <content contentuid="h31b2227eg64e7g4772gb028g1114d20a3336" version="1">Pos</content>
-
-
-    <content contentuid="hd2a986b6g87fcg4d3egbe19gab585c3b897a" version="1">apparently it was too easy</content>
-
-
-    <content contentuid="hefbbbf98gbaeeg4eacg9dc8g88cabfeaaae8" version="1">Your RogueScore increased: %d -&gt; %d!</content>
-
-
-    <content contentuid="h2d89694ag78dcg43c1gb1ebga5a793c98785" version="1">Window Settings</content>
-
-
-    <content contentuid="h27607312g7235g4264gb145g340213671620" version="1">VeryRare</content>
-
-
-    <content contentuid="h8528df02gd07dg48a5gbb61gbec319439ce1" version="1">Upcoming Spawns: %s</content>
-
-
-    <content contentuid="h211f8066g744ag4d53gb122gcb355300e917" version="1">Rarity</content>
-
-
-    <content contentuid="h3b8839f6g6eddg46cagb08bgb0ac52a9928e" version="1">Roll Loot %dx</content>
-
-
-    <content contentuid="h3166c60eg6433g4935gb025g5f53d2077d71" version="1">Start Menu</content>
-
-
-    <content contentuid="h37333c06g6266g4695gb040g00f3526222d1" version="1">Ping</content>
-
-
-    <content contentuid="h231a0e4eg764fg45b1gb102g93d7d320b1f5" version="1">Unlocks</content>
-
-
-    <content contentuid="h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed" version="1">Scenario stopped.</content>
-
-
-    <content contentuid="hd8598cf9g8d0cg4d9ag8eb6gabfcac9489de" version="1">Scenario canceled due to timeout.</content>
-
-
-    <content contentuid="h2cd8cf00g798dg49a5g91fegbfc333dc9de1" version="1">Unlock Multipliers</content>
-
-
-    <content contentuid="h35d521a9g6080g474fg806eg6129a24c430b" version="1">Enemy %s killed.</content>
-
-
-    <content contentuid="hd0c773c3g8592g4269gae3fg440f0c1d662d" version="1">Unlock %s bought for %s.</content>
-
-
-    <content contentuid="h9dc524a2gc890g471fgbaefg617918cd435b" version="1">Turn Off Notifications</content>
-
-
-    <content contentuid="h7c764b2dg2923g41e7g84f4g5781e6d675a3" version="1">This will reset all changes you've made to the templates.</content>
-
-
-    <content contentuid="h273d0172g7268g4542gb140ge3241362c106" version="1">Templates</content>
-
-
-    <content contentuid="hc396e53dg96c3g4b06g8f0ag5d60ed287f42" version="1">Teleporting to different ACT</content>
-
-
-    <content contentuid="h25531a42g7006g44f1gb166g0297134420b5" version="1">Teleport</content>
-
-
-    <content contentuid="h23c73e06g7692g46b5gb10fg40d3532d62f1" version="1">Config</content>
-
-
-    <content contentuid="h9f1540b5gca40g415eg8ac2g673868e0451a" version="1">Start Ceremorphosis</content>
-
-
-    <content contentuid="h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6" version="1">Skip to Camp?</content>
-
-
-    <content contentuid="h243816eeg716dg443bgb170gb25dd352907f" version="1">Search</content>
-
-
-    <content contentuid="h360818b2g635dg44degb053gb2b81271909a" version="1">Reset Stock</content>
-
-
-    <content contentuid="hb72bdac5ge27eg48f9g8841g8e9f6a63acbd" version="1">Scenario not started.</content>
-
-
-    <content contentuid="h4d21e11dg1874g4b44g87e1g2d22e5c30f00" version="1">Persisting config...</content>
-
-
-    <content contentuid="h31b71a1eg64e2g44f4gb028g4292d20a60b0" version="1">Loot</content>
-
-
-    <content contentuid="hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1" version="1">Scenario %s started.</content>
-
-
-    <content contentuid="hd8cafdddg8d9fg4a88g8ebfg9ceeec9dbecc" version="1">Include camp clothes in item drops</content>
-
-
-    <content contentuid="h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1" version="1">Round %d</content>
-
-
-    <content contentuid="hfebba60egabeeg4f35gbcd8g8953defaab71" version="1">Cannot force next round while in combat.</content>
-
-
-    <content contentuid="h97fbaadfgc2aeg4ff8gaa4cg899ec86eabbc" version="1">Perfect Clear! Double your score from 10 to 20?</content>
-
-
-    <content contentuid="h270f8076g725ag4d52gb143gcb345361e916" version="1">Active</content>
-
-
-    <content contentuid="h322608ceg6773g45d9gb011g53bfd233719d" version="1">Items</content>
-
-
-    <content contentuid="h2553979eg7006g4c2cgb166g0a4ad3442868" version="1">Scenarios</content>
-
-
-    <content contentuid="hd1609e61g8435g4cb3g8e25g3ad52c0718f7" version="1">Recruit Origin characters?</content>
-
-
-    <content contentuid="hb00c97b7ge559g4c2ega833gfa484a11d86a" version="1">Unlock Tadpole Power</content>
-
-
-    <content contentuid="he3a5992cgb6f0g4cc7g9d09g6aa1ff2b4883" version="1">automatically starts combat between rounds</content>
-
-
-    <content contentuid="h307360eeg6526g435bgb034g053dd216271f" version="1">Play</content>
-
-
-    <content contentuid="h2e624d0ag7b37g4185gb1d5g17e393f735c1" version="1">Config updated</content>
-
-
-    <content contentuid="h35341416g6061g4414gb060g727252425050" version="1">Maps</content>
-
-
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:104: in field 'Tile' -->
     <content contentuid="h8c0d708fgd958g425dgabf3ge43bc9d1c619" version="1">%d RogueScore required</content>
 
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:625: in field 'CheckEnded' -->
+    <content contentuid="h29013f4fg7c54g46a1ga1a3g20c7c38102e5" version="1">%d enemies left.</content>
 
-    <content contentuid="h2cb5c7a2g79e0g492fgb1f8g6f4913da4d6b" version="1">Killed: %s</content>
+    <!-- CombatMod/CombatMod/_Server.lua:113: in field '_Func' -->
+    <content contentuid="h3b8161bbg6ed4g434ega08bg252882a9070a" version="1">%s is now active.</content>
 
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:110: in field 'Tile' -->
+    <content contentuid="h28bc4630g7de9g4136g91b8gf750339ad572" version="1">%s required</content>
 
-    <content contentuid="h2cb85222g79edg4077gb1f8gb61113da9433" version="1">Map not found.</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Components.lua:63: in field 'Update' -->
+    <content contentuid="h270f8076g725ag4d52gb143gcb345361e916" version="1">Active</content>
 
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:622: in field 'CheckEnded' -->
+    <content contentuid="hb5676e2age032g43b7gb865g45d19a4767f3" version="1">All enemies are dead.</content>
 
-    <content contentuid="h6256c771g3703g4922g8516g5f4427347d66" version="1">Resets the stock of purchased standard unlocks.</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:150: in field 'Client' -->
+    <content contentuid="h3c609e26g6935g4cb7gb0f5g3ad152d718f3" version="1">Auto Hide</content>
 
-
-    <content contentuid="hde7c3e25g8b29g46b7g8ed4gf0d16cf6d2f3" version="1">get continuously harder battles</content>
-
-
-    <content contentuid="h193979fag4c6cg42cagb2a0ga4ac9082868e" version="1">Hide this window when the native UI is focused.</content>
-
-
-    <content contentuid="h501f8202g054ag4d75gb632gcb131410e931" version="1">Global Settings - Host only</content>
-
-
-    <content contentuid="h361503c4g6340g4569g9052g630f7270412d" version="1">Force Enter Combat</content>
-
-
-    <content contentuid="h22e2080eg77b7g45d5gb11dg13b3d33f3191" version="1">Common</content>
-
-
-    <content contentuid="h3e82a111g6bd7g4f44g80dbg192222f93b00" version="1">Drop Camp Clothes</content>
-
-
-    <content contentuid="h254298eeg7017g4cdbgb167g1abdd345389f" version="1">Destroy</content>
-
-
-    <content contentuid="h31b7af7eg64e2g4fa2gb028g49c4d20a6be6" version="1">Clear Area</content>
-
-
-    <content contentuid="hf34df053ga618g4a50gac07gec360e25ce14" version="1">Awakened Illithid Powers</content>
-
-
-    <content contentuid="hd9d18c01g8c84g4d95g8eaeg2bf32c8c09d1" version="1">Hide this window when entering a map. Show this window when starting a scenario.</content>
-
-
-    <content contentuid="h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68" version="1">Clearing all entities</content>
-
-
-    <content contentuid="hfadaa9bfgaf8fg4fcegac9eg99a8cebcbb8a" version="1">Only Host Can Buy Unlocks</content>
-
-
-    <content contentuid="hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b" version="1">Entered combat area.</content>
-
-
-    <content contentuid="he8dbdedegbd8eg48b8gbdbeg8ededf9cacfc" version="1">Host has restricted buying unlocks.</content>
-
-
-    <content contentuid="h7b948ad7g2ec1g4df8ga48ag7b9e46a859bc" version="1">restrict other players in multiplayer from buying unlocks</content>
-
-
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:157: in field 'Client' -->
     <content contentuid="h34411c36g6114g4496gb077g22f0525500d2" version="1">Auto Toggle</content>
 
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:28: in local 'onCreated' -->
+    <content contentuid="h94e5715dgc1b0g4240g8a7dg6426e85f4604" version="1">Auto-Pickup for Armor</content>
 
-    <content contentuid="h2771ca17g7224g49f4ga144g2f9243660db0" version="1">Templates reset</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:43: in local 'onCreated' -->
+    <content contentuid="h91fd8555gc4a8g4d00g8a2cgeb66680ec944" version="1">Auto-Pickup for Combat Objects</content>
 
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:38: in local 'onCreated' -->
+    <content contentuid="hc777ee1dg9222g4bb4g8f44g4dd2ed666ff0" version="1">Auto-Pickup for Objects</content>
 
-    <content contentuid="h8bfedf62gdeabg48a3gbb8cgdec519aefce7" version="1">Unlock out of stock.</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:33: in local 'onCreated' -->
+    <content contentuid="hfe76c8bdgab23g49deg8cd4g5fb8eef67d9a" version="1">Auto-Pickup for Weapons</content>
 
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:269: in main chunk -->
+    <content contentuid="hf34df053ga618g4a50gac07gec360e25ce14" version="1">Awakened Illithid Powers</content>
 
-    <content contentuid="h00e41e74g55b1g44b2g933dg72d4711f50f6" version="1">in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport</content>
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:414: in main chunk -->
+    <content contentuid="h337385c4g6626g4d09g9004g0b6f7226294d" version="1">Break/Restore Oath</content>
 
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:366: in main chunk -->
+    <content contentuid="hab83587fgfed6g40d2ga98bg06b4cba92496" version="1">Buy 40 Camp Supplies</content>
 
-    <content contentuid="hd490c7efg81c5g492bgae7ag3f4dcc581d6f" version="1">Unlock needs a character.</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:190: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:179> -->
+    <content contentuid="h2cb33b1dg79e6g46e4g81f8g0082e3da22a0" version="1">Buy for character</content>
 
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:183: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:179> -->
+    <content contentuid="h322023aeg6775g476fgb011g3109d233132b" version="1">Buy</content>
 
-    <content contentuid="he699ae7dgb3ccg4fb2g8d5aga9d4ef788bf6" version="1">To Camp After n Seconds</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="h29375bf8g7c62g40eag91a0g468cb38264ae" version="1">Bypass Story</content>
 
+    <!-- CombatMod/CombatMod/Server/Unlock.lua:233: in field '_Func' -->
+    <content contentuid="hc1ee9e0bg94bbg4cb5gaf2dgdad38d0ff8f1" version="1">Cannot buy while in combat.</content>
 
-    <content contentuid="h8ccc2af7gd999g47fagabffgf19c49ddd3be" version="1">Resetting templates...</content>
+    <!-- CombatMod/CombatMod/Server/NetEvents.lua:127: in field '_Func' -->
+    <content contentuid="hfebba60egabeeg4f35gbcd8g8953defaab71" version="1">Cannot force next round while in combat.</content>
 
-
-    <content contentuid="hc1216d49g9474g4381g8f21g25e7ad0307c5" version="1">Starting items added. Hirelings unlocked.</content>
-
-
-    <content contentuid="hdaa39862g8ff6g4cd3gbe99g0ab51cbb2897" version="1">Failed to restore scenario.</content>
-
-
-    <content contentuid="h34873bdcg61d2g46e8g907bg408ef25962ac" version="1">Kill Score: %s</content>
-
-
-    <content contentuid="hb6e91cdbge3bcg4498ga85dga2fe8a7f80dc" version="1">Loot filter updated</content>
-
-
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:117: in field '_Func' -->
     <content contentuid="hf4935a60ga1c6g40f3g9c7ag06953e5824b7" version="1">Cannot stop while in progress.</content>
 
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:127: in field '_Func' -->
+    <content contentuid="he740f325gb215g4a67g8d47g3c016f651e23" version="1">Cannot teleport while in combat.</content>
 
-    <content contentuid="h410f889dg145ag4ddcg8723gcbbae501e998" version="1">Picked up %d items.</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="h26aa74f2g73ffg421agb159g947c137bb65e" version="1">Challenge Mode</content>
 
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="h3bc40171g6e91g4542g808fg732422ad5106" version="1">Clear All Entities</content>
 
-    <content contentuid="h23173fb5g7642g46aeg8102g40c8632062ea" version="1">Heal character and restore used spells.</content>
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:14: in field 'Main' -->
+    <content contentuid="h31b7af7eg64e2g4fa2gb028g49c4d20a6be6" version="1">Clear Area</content>
 
+    <!-- CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:524: in upvalue 'func' -->
+    <content contentuid="h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68" version="1">Clearing all entities</content>
 
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:167: in field 'SpawnHelper' -->
+    <content contentuid="h44afa6c1g11fag4f39g8779gc95f255beb7d" version="1">Combat is Starting.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:772: in upvalue 'func' -->
+    <content contentuid="h2e517b01g7b04g42e5g81d6g248323f406a1" version="1">Combat started.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated' -->
+    <content contentuid="h22e2080eg77b7g45d5gb11dg13b3d33f3191" version="1">Common</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:87: in field '_Func' -->
+    <content contentuid="h2e624d0ag7b37g4185gb1d5g17e393f735c1" version="1">Config updated</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:6: in field 'Main' -->
+    <content contentuid="h23c73e06g7692g46b5gb10fg40d3532d62f1" version="1">Config</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:61: in field 'Tile' -->
+    <content contentuid="h38df043eg6d8ag4516gb0begc370d29ce152" version="1">Cost: %s</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:396: in main chunk -->
+    <content contentuid="h2e6a96f6g7b3fg4c3agb1d5g9a5c53f7b87e" version="1">Counter the Shadow Curse.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Creation.lua:6: in field 'Main' -->
+    <content contentuid="h20c028a6g7595g47dfgb13fg31b9531d139b" version="1">Creation</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:8: in field 'Main' -->
+    <content contentuid="h16af0aafg43fag45ffga259gc399c07be1bb" version="1">Currency owned: %d   RogueScore: %d</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:143: in upvalue 'create' -->
+    <content contentuid="h366718e6g6332g44dbgb055g42bd5277609f" version="1">Debug</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:117: in field 'Main' -->
+    <content contentuid="h29b77480g7ce2g421dg91a8g447b338a6659" version="1">Default Config</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:133: in function <CombatMod/CombatMod/Client/GUI/Config.lua:132> -->
+    <content contentuid="h29895c61g7cdcg4093g81abga6f5238984d7" version="1">Default config...</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:15: in field 'Main' -->
+    <content contentuid="h2cf955d8g79acg4008g91fcga66eb3de844c" version="1">Destroy All</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:70: in local 'onCreated' -->
+    <content contentuid="h254298eeg7017g4cdbgb167g1abdd345389f" version="1">Destroy</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:372: in field '_Func' -->
     <content contentuid="h42fa25a1g17afg470fg871cg9169253eb34b" version="1">Destroyed %d items.</content>
 
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="h3e82a111g6bd7g4f44g80dbg192222f93b00" version="1">Drop Camp Clothes</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:144: in field 'GiveReward' -->
+    <content contentuid="h2a64adc6g7f31g4f89gb195g79ef53b75bcd" version="1">Dropping loot.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="h29620d0ag7c37g4585gb1a5g13e3938731c1" version="1">Enable Debug</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:75: in field 'Enemies' -->
+    <content contentuid="h20450ab6g7510g45fegb137g6398531541ba" version="1">Enemies</content>
+
+    <!-- CombatMod/CombatMod/Server/Scenario.lua:801: in function <CombatMod/CombatMod/Server/Scenario.lua:796> -->
+    <content contentuid="h35c56325g6090g4367g806fg6501624d4723" version="1">Enemy %s joined.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:889: in upvalue 'func' -->
+    <content contentuid="h35d521a9g6080g474fg806eg6129a24c430b" version="1">Enemy %s killed.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:856: in upvalue 'func' -->
+    <content contentuid="h37bb2c47g62eeg4791ga048g81f7426aa3d5" version="1">Enemy %s rejoined.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:263: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:262> -->
+    <content contentuid="h37ed89a8g62b8g4dcfg904dgeba9b26fc98b" version="1">Enemy %s spawned.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:334: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:325> -->
+    <content contentuid="hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b" version="1">Entered combat area.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:211: in field 'Slider' -->
+    <content contentuid="h2c411dfcg7914g448ag91f7g22ecf3d500ce" version="1">Exp Multiplier</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:395: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:390> -->
+    <content contentuid="hdaa39862g8ff6g4cd3gbe99g0ab51cbb2897" version="1">Failed to restore scenario.</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:377: in main chunk -->
+    <content contentuid="hfea436e8gabf1g463bg9cd9g705dbefb527f" version="1">Fully Restore Character</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:104: in main chunk -->
+    <content contentuid="hce43e6c9g9b16g4b39g8fd7g0d5fadf52f7d" version="1">Gain 20%% more Currency</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:92: in main chunk -->
+    <content contentuid="h972818a9gc27dg44dfg8a41gb2b9a863909b" version="1">Gain 50%% more loot</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:129: in main chunk -->
+    <content contentuid="hb1436254ge416g4370g9827g05167a052734" version="1">Gain double RogueScore</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:80: in main chunk -->
+    <content contentuid="h294ce46eg7c19g4b13gb1a7gfd75d385df57" version="1">Gain double XP</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:395: in main chunk -->
+    <content contentuid="h27f7bcfeg72a2g4e9agb14cg48fcd36e6ade" version="1">Get Pixie Blessing</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:326: in main chunk -->
+    <content contentuid="h36f8f1b6g63adg4a4egb05cgbc28527e9e0a" version="1">Get a Tadpole</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:13: in field 'Main' -->
+    <content contentuid="h501f8202g054ag4d75gb632gcb131410e931" version="1">Global Settings - Host only</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:163: in local 'onCreated' -->
+    <content contentuid="h3160102eg6435g4457gb025g3231d2071013" version="1">Go to Camp</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:379: in main chunk -->
+    <content contentuid="h23173fb5g7642g46aeg8102g40c8632062ea" version="1">Heal character and restore used spells.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:162: in field 'Client' -->
+    <content contentuid="hd9d18c01g8c84g4d95g8eaeg2bf32c8c09d1" version="1">Hide this window when entering a map. Show this window when starting a scenario.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:155: in field 'Client' -->
+    <content contentuid="h193979fag4c6cg42cagb2a0ga4ac9082868e" version="1">Hide this window when the native UI is focused.</content>
+
+    <!-- CombatMod/CombatMod/Server/Unlock.lua:225: in field '_Func' -->
+    <content contentuid="he8dbdedegbd8eg48b8gbdbeg8ededf9cacfc" version="1">Host has restricted buying unlocks.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="hd8cafdddg8d9fg4a88g8ebfg9ceeec9dbecc" version="1">Include camp clothes in item drops</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:235: in main chunk -->
+    <content contentuid="h2544d6fag7011g483agb167g7e5c93455c7e" version="1">Includes %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:155: in field 'Items' -->
+    <content contentuid="h322608ceg6773g45d9gb011g53bfd233719d" version="1">Items</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:203: in field 'UpdateHelperName' -->
+    <content contentuid="h34873bdcg61d2g46e8g907bg408ef25962ac" version="1">Kill Score: %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:155: in upvalue 'create' -->
+    <content contentuid="h2d5b4e72g780eg41b2gb1e6g87d413c4a5f6" version="1">Kill spawned</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:181: in upvalue 'compute' -->
+    <content contentuid="h2cb5c7a2g79e0g492fgb1f8g6f4913da4d6b" version="1">Killed: %s</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:314: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:305> -->
+    <content contentuid="h6119ae15g344cg4fb4g8522ga9d267008bf0" version="1">Leave camp to join the battle.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated' -->
+    <content contentuid="h2795a4eeg72c0g4f1bgb14ag697dd3684b5f" version="1">Legendary</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:71: in field 'Main' -->
+    <content contentuid="h31b714deg64e2g4418gb028g427ed20a605c" version="1">Logs</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:340: in field '_Func' -->
+    <content contentuid="hb6e91cdbge3bcg4498ga85dga2fe8a7f80dc" version="1">Loot filter updated</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:5: in field 'Main' -->
+    <content contentuid="h31b71a1eg64e2g44f4gb028g4292d20a60b0" version="1">Loot</content>
+
+    <!-- CombatMod/CombatMod/Server/NetEvents.lua:150: in field '_Func' -->
+    <content contentuid="h2cb85222g79edg4077gb1f8gb61113da9433" version="1">Map not found.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Components.lua:63: in field '_Func' -->
+    <content contentuid="h3cf1646eg69a4g4313gb0fcg2575d2de0757" version="1">Map: %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:89: in local 'onCreated' -->
+    <content contentuid="h35341416g6061g4414gb060g727252425050" version="1">Maps</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:416: in main chunk -->
+    <content contentuid="had299379gf87cg4c62g89e1gaa04abc38826" version="1">Needs to be a Paladin.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:215: in local 'onCreated' -->
+    <content contentuid="h3097f93eg65c2g4ac6gb03ag4ca0d2186e82" version="1">Next Round</content>
+
+    <!-- CombatMod/CombatMod/Server/Unlock.lua:252: in field '_Func' -->
+    <content contentuid="h9cec8225gc9b9g4d77g8afdgfb1168dfd933" version="1">Not enough currency.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:190: in field 'Checkbox' -->
+    <content contentuid="hfadaa9bfgaf8fg4fcegac9eg99a8cebcbb8a" version="1">Only Host Can Buy Unlocks</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Components.lua:63: in field 'Update' -->
+    <content contentuid="h298720feg7cd2g475agb1abg413cd389631e" version="1">Out of stock</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/GameMode.lua:267: in field 'UpdateRogueScore' -->
+    <content contentuid="h979a14b3gc2cfg441egaa4ag92780868b05a" version="1">Perfect Clear! Double your score from %d to %d?</content>
+
+    <!-- CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation' -->
+    <content contentuid="h637ce98fg3629g4bcdga504gfdabc726df89" version="1">Perfect Clear! Double your score from 5 to 10?</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:40: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34> -->
+    <content contentuid="h255ed026g700bg4857gb166gde315344fc13" version="1">Permanent</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:100: in field 'Main' -->
+    <content contentuid="h28cd5020g7d98g4057g91bfge631339dc413" version="1">Persist Config</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:102: in function <CombatMod/CombatMod/Client/GUI/Config.lua:101> -->
+    <content contentuid="h4d21e11dg1874g4b44g87e1g2d22e5c30f00" version="1">Persisting config...</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:349: in field '_Func' -->
+    <content contentuid="h410f889dg145ag4ddcg8723gcbbae501e998" version="1">Picked up %d items.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:9: in field 'Main' -->
+    <content contentuid="h2dba28d2g78efg47d8gb1e8g91be13cab39c" version="1">Pickup All</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:64: in local 'onCreated' -->
+    <content contentuid="h243c04feg7169g451agb170gf37cd352d15e" version="1">Pickup</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:227: in local 'onCreated' -->
+    <content contentuid="h315e322eg640bg4677gb026gd011d204f233" version="1">Ping Spawns</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:218: in upvalue 'createPopup' -->
+    <content contentuid="h37333c06g6266g4695gb040g00f3526222d1" version="1">Ping</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="hac065c23gf953g4097ga9f3g56f10bd174d3" version="1">Play Roguelike Mode</content>
+
+    <!-- CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation' -->
+    <content contentuid="hf44e063cga11bg4536g9c77gd350fe55f172" version="1">Play Roguelike mode?
+Continuously create new battles.
+You will gain a higher score with every completed fight.
+Difficulty increases with the score.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:48: in field 'Main' -->
+    <content contentuid="h307360eeg6526g435bgb034g053dd216271f" version="1">Play</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Creation.lua:13: in field 'Main' -->
+    <content contentuid="h31b2227eg64e7g4772gb028g1114d20a3336" version="1">Pos</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:211: in field 'Slider' -->
+    <content contentuid="hb823bf93ged76g4eacga8b1g08ca0a932ae8" version="1">Randomize Spawn Offset</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated' -->
+    <content contentuid="h35313866g6064g46d3gb060g20b552420297" version="1">Rare</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:242: in field 'Items' -->
+    <content contentuid="h211f8066g744ag4d53gb122gcb355300e917" version="1">Rarity</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:313: in field '_Func' -->
+    <content contentuid="h2e7ceb9cg7b29g4becg91d4gfd8af3f6dfa8" version="1">Recruiting %s.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:34: in field 'Main' -->
+    <content contentuid="h27b40c36g72e1g4596gb148g73f0536a51d2" version="1">Reload</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:109: in field 'Main' -->
+    <content contentuid="h3659a876g630cg4fd2gb056ga9b452748b96" version="1">Reset Config</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:141: in main chunk -->
+    <content contentuid="h360818b2g635dg44degb053gb2b81271909a" version="1">Reset Stock</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:132: in field 'Main' -->
+    <content contentuid="h32554192g6700g414cgb016g672a12344508" version="1">Reset Templates</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:143: in field 'Enemies' -->
+    <content contentuid="h367fb87eg632ag4ed2gb054gc8b4d276ea96" version="1">Reset</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:143: in main chunk -->
+    <content contentuid="h6256c771g3703g4922g8516g5f4427347d66" version="1">Resets the stock of purchased standard unlocks.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:125: in function <CombatMod/CombatMod/Client/GUI/Config.lua:124> -->
+    <content contentuid="h413f98d6g146ag4cd8gb720gcabe5502e89c" version="1">Resetting config...</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:141: in function <CombatMod/CombatMod/Client/GUI/Config.lua:140> -->
+    <content contentuid="h8ccc2af7gd999g47fagabffgf19c49ddd3be" version="1">Resetting templates...</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:381: in main chunk -->
+    <content contentuid="h06aadbc6g53ffg48e9gb359g9e8f517bbcad" version="1">Resurrect character and fully restore all resources.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:628: in field 'CheckShouldStop' -->
+    <content contentuid="h2bc3faaag7e96g4affgb18fg0c9993ad2ebb" version="1">Returned to camp.</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:352: in main chunk -->
+    <content contentuid="h3b8839f6g6eddg46cagb08bgb0ac52a9928e" version="1">Roll Loot %dx</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:293: in field 'StartRound' -->
+    <content contentuid="h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1" version="1">Round %d</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:200: in field 'UpdateHelperName' -->
+    <content contentuid="h3d5fde62g680ag48b3gb0e6gced512c4ecf7" version="1">Round: %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:62: in field '_Func' -->
+    <content contentuid="h21780c4eg742dg4591gb124gb3f7d30691d5" version="1">Running</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:575: in field 'Start' -->
+    <content contentuid="hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1" version="1">Scenario %s started.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:595: in field 'End' -->
+    <content contentuid="h28fa5cc5g7dafg4099g81bcg96ff639eb4dd" version="1">Scenario ended.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:137: in field '_Func' -->
+    <content contentuid="hb72bdac5ge27eg48f9g8841g8e9f6a63acbd" version="1">Scenario not started.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:442: in function <CombatMod/CombatMod/Server/ModActive/Scenario.lua:438> -->
+    <content contentuid="h2bed91d3g7eb8g4c48ga18dgea2e03afc80c" version="1">Scenario restored.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/NetEvents.lua:122: in field '_Func' -->
+    <content contentuid="h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed" version="1">Scenario stopped.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:199: in field 'UpdateHelperName' -->
+    <content contentuid="h218206b6g74d7g453egb12bg13585309317a" version="1">Scenario: %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:88: in local 'onCreated' -->
+    <content contentuid="h2553979eg7006g4c2cgb166g0a4ad3442868" version="1">Scenarios</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:115: in field 'Enemies' -->
+    <content contentuid="h243816eeg716dg443bgb170gb25dd352907f" version="1">Search</content>
+
+    <!-- CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation' -->
+    <content contentuid="h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6" version="1">Skip to Camp?</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:424: in upvalue 'func' -->
+    <content contentuid="hb13de5b9ge468g4b0eg8820ged68aa02cf4a" version="1">Skipped combat with %s</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/StoryBypass.lua:348: in upvalue 'func' -->
+    <content contentuid="hf1c74802ga492g41d5gbc2fg47b31e0d6591" version="1">Skipped interaction with %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="h868cae89gd3d9g4fbdg8b5bgf9dba979dbf9" version="1">Spawn Items At Player</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:292: in main chunk -->
+    <content contentuid="hc6c558ccg9390g40d9g9f5fg66bffd7d449d" version="1">Spawn Mindflayer Companion</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:293: in main chunk -->
+    <content contentuid="hece89b91gb9bdg4cecg8dfdgba8a2fdf98a8" version="1">Spawns the Emperor as controllable party follower.</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:233: in main chunk -->
+    <content contentuid="h9f1540b5gca40g415eg8ac2g673868e0451a" version="1">Start Ceremorphosis</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:66: in field '_Func' -->
+    <content contentuid="h3166c60eg6433g4935gb025g5f53d2077d71" version="1">Start Menu</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:123: in local 'onCreated' -->
+    <content contentuid="h323096eeg6765g4c3bgb010g3a5dd232187f" version="1">Start</content>
+
+    <!-- CombatMod/CombatMod/Server/Intro.lua:64: in function <CombatMod/CombatMod/Server/Intro.lua:40> -->
+    <content contentuid="hc1216d49g9474g4381g8f21g25e7ad0307c5" version="1">Starting items added. Hirelings unlocked.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:32: in field 'Main' -->
+    <content contentuid="h32391aeeg676cg44fbgb010ga29dd23280bf" version="1">State</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:37: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:34> -->
+    <content contentuid="h3e9c6432g6bc9g4316gb0dagf57012f8d752" version="1">Stock: %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:200: in upvalue 'create' -->
+    <content contentuid="h327e121eg672bg4474gb014gd212d236f030" version="1">Stop</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Creation.lua:21: in field 'Main' -->
+    <content contentuid="h097e26aeg5c2bg473fgb3a4gd159d186f37b" version="1">TP</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Control.lua:223: in local 'onCreated' -->
+    <content contentuid="h25531a42g7006g44f1gb166g0297134420b5" version="1">Teleport</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/GameMode.lua:434: in upvalue 'func' -->
+    <content contentuid="hf6e3e1c8ga3b6g4b49g9c5dg0d2fbe7f2f0d" version="1">Teleporting back to camp in %d seconds.</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Map.lua:83: in method 'Teleport' -->
+    <content contentuid="hc396e53dg96c3g4b06g8f0ag5d60ed287f42" version="1">Teleporting to different ACT</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:146: in function <CombatMod/CombatMod/Client/GUI/Config.lua:142> -->
+    <content contentuid="h2771ca17g7224g49f4ga144g2f9243660db0" version="1">Templates reset</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:50: in field 'Main' -->
+    <content contentuid="h273d0172g7268g4542gb140ge3241362c106" version="1">Templates</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:142: in field 'Main' -->
+    <content contentuid="h7c764b2dg2923g41e7g84f4g5781e6d675a3" version="1">This will reset all changes you've made to the templates.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Debug.lua:135: in field 'Enemies' -->
+    <content contentuid="h373f16ceg626ag4439gb040gc25fd262e07d" version="1">Tier</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:227: in field 'Slider' -->
+    <content contentuid="he699ae7dgb3ccg4fb2g8d5aga9d4ef788bf6" version="1">To Camp After n Seconds</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:201: in field 'UpdateHelperName' -->
+    <content contentuid="h33c0b3bcg6695g4e6eg900fg3808f22d1a2a" version="1">Total Rounds: %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:183: in field 'Checkbox' -->
+    <content contentuid="h9dc524a2gc890g471fgbaefg617918cd435b" version="1">Turn Off Notifications</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated' -->
+    <content contentuid="h23579496g7602g4c1cgb106g4a7a53246858" version="1">Uncommon</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:241: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:235> -->
+    <content contentuid="hd0c773c3g8592g4269gae3fg440f0c1d662d" version="1">Unlock %s bought for %s.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:166: in function <CombatMod/CombatMod/Client/GUI/Unlocks.lua:160> -->
+    <content contentuid="h2308c823g765dg49d7ga103gbfb103219d93" version="1">Unlock %s bought.</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:70: in main chunk -->
+    <content contentuid="h2cd8cf00g798dg49a5g91fegbfc333dc9de1" version="1">Unlock Multipliers</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:119: in main chunk -->
+    <content contentuid="h2d849b5cg78d1g4ce0g91ebg7a86f3c958a4" version="1">Unlock New Game+</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:235: in main chunk -->
+    <content contentuid="hb00c97b7ge559g4c2ega833gfa484a11d86a" version="1">Unlock Tadpole Power</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Creation.lua:65: in field 'Main' -->
+    <content contentuid="h2c5a29c3g790fg47c9ga1f6g91af03d4b38d" version="1">Unlock Waypoints</content>
+
+    <!-- CombatMod/CombatMod/Server/Unlock.lua:251: in field '_Func' -->
+    <content contentuid="hd490c7efg81c5g492bgae7ag3f4dcc581d6f" version="1">Unlock needs a character.</content>
+
+    <!-- CombatMod/CombatMod/Server/Unlock.lua:245: in field '_Func' -->
+    <content contentuid="h8bfedf62gdeabg48a3gbb8cgdec519aefce7" version="1">Unlock out of stock.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:6: in field 'Main' -->
+    <content contentuid="h231a0e4eg764fg45b1gb102g93d7d320b1f5" version="1">Unlocks</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Scenario.lua:202: in field 'UpdateHelperName' -->
+    <content contentuid="h8528df02gd07dg48a5gbb61gbec319439ce1" version="1">Upcoming Spawns: %s</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:128: in field '_Func' -->
+    <content contentuid="h2f0de7b4g7a58g4b2eg91c3ged4873e1cf6a" version="1">Updating config...</content>
+
+    <!-- CombatMod/CombatMod/Templates/Unlocks.lua:271: in main chunk -->
+    <content contentuid="he7764179gb223g4142g8d44g5724af667506" version="1">Use all Illithid Powers with Bonus Actions.</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Loot.lua:49: in local 'onCreated' -->
+    <content contentuid="h27607312g7235g4264gb145g340213671620" version="1">VeryRare</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Creation.lua:69: in field 'Main' -->
+    <content contentuid="h273eb1cag726bg4e49gb140gd82f9362fa0d" version="1">Waypoints</content>
+
+    <!-- CombatMod/CombatMod/Server/Player.lua:209: in field 'AskConfirmation' -->
+    <content contentuid="hfd862893ga8d3g47dcgacebg51ba0ec97398" version="1">Welcome to %s! Start playing?</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:148: in field 'Client' -->
+    <content contentuid="h2d89694ag78dcg43c1gb1ebga5a793c98785" version="1">Window Settings</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:164: in field 'Client' -->
+    <content contentuid="h28a9d2d8g7dfcg4878g91b9gae1eb39b8c3c" version="1">Window toggle key</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/GameMode.lua:462: in function <CombatMod/CombatMod/Server/ModActive/GameMode.lua:461> -->
+    <content contentuid="hcb742a6eg9e21g47f3gbf84g7195dda653b7" version="1">You found the secret cow level!</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/Unlock.lua:119: in function <CombatMod/CombatMod/Server/ModActive/Unlock.lua:118> -->
+    <content contentuid="hc327dd8cg9672g488dg9f01g4eebfd236cc9" version="1">Your Currency increased: %d -> %d!</content>
+
+    <!-- CombatMod/CombatMod/Server/ModActive/GameMode.lua:244: in function <CombatMod/CombatMod/Server/ModActive/GameMode.lua:243> -->
+    <content contentuid="hefbbbf98gbaeeg4eacg9dc8g88cabfeaaae8" version="1">Your RogueScore increased: %d -> %d!</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="hd2a986b6g87fcg4d3egbe19gab585c3b897a" version="1">apparently it was too easy</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="he3a5992cgb6f0g4cc7g9d09g6aa1ff2b4883" version="1">automatically starts combat between rounds</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Unlocks.lua:226: in upvalue 'createPopup' -->
+    <content contentuid="h22c9bc4eg779cg4e91gb11fga8f7d33d8ad5" version="1">bought</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="hf9ba1d4cgacefg4481g9ca8g92e7fe8ab0c5" version="1">don't show ingame notifications</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="hde7c3e25g8b29g46b7g8ed4gf0d16cf6d2f3" version="1">get continuously harder battles</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:228: in field 'Slider' -->
+    <content contentuid="h00e41e74g55b1g44b2g933dg72d4711f50f6" version="1">in roguelike, after combat, teleport back to camp automatically - set to 0 to disable auto-teleport</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="hd49633d2g81c3g4668gbe7ag500e1c58722c" version="1">items will spawn at the current player's position instead the maps entry point</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:212: in field 'Slider' -->
+    <content contentuid="hc2871d37g97d2g4486gaf1bg42e04d3960c2" version="1">multiplies the experience gained by killing enemies</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:212: in field 'Slider' -->
+    <content contentuid="hb2c48751ge791g4d20g881fg7b462a3d5964" version="1">randomize spawn position for more varied encounters (too high may cause issues)</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:192: in field 'Checkbox' -->
+    <content contentuid="h7b948ad7g2ec1g4df8ga48ag7b9e46a859bc" version="1">restrict other players in multiplayer from buying unlocks</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="h8c247740gd971g4221g9bf1g744739d35665" version="1">skip dialogues, combat and interactions that aren't related to a scenario</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="h5ed1a319g0b84g4f64g86deg2902a4fc0b20" version="1">some more info in the console and other debug features</content>
+
+    <!-- CombatMod/CombatMod/Client/GUI/Config.lua:185: in field 'Checkbox' -->
+    <content contentuid="h66887fc3g33ddg42a9ga55bgb4cf077996ed" version="1">will remove all entities from the map automatically and fix most issues with unexpected story triggers</content>
 
 </contentList>

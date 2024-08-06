@@ -36,7 +36,15 @@ local function resetCap(character)
     defaultVars()
 
     if not PersistentVars.damageMap[character] then
-        PersistentVars.damageMap[character] = Osi.GetLevel(character) * 10
+        local highest = 0
+        for _, val in ipairs(Ext.Entity.Get(character).Stats.AbilityModifiers) do
+            if val > highest then
+                highest = val
+            end
+        end
+        local cap = (Osi.GetLevel(character) + highest) * 10
+
+        PersistentVars.damageMap[character] = cap
     end
 end
 

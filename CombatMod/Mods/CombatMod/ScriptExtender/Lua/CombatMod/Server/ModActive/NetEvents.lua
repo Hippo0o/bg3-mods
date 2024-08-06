@@ -91,11 +91,11 @@ Net.On("Start", function(event)
     end)
 
     if template == nil then
-        Net.Respond(event, { false, __("Scenario not found.") })
+        Net.Respond(event, { false, "Scenario error" })
         return
     end
     if mapName and map == nil then
-        Net.Respond(event, { false, __("Map not found.") })
+        Net.Respond(event, { false, "Map error" })
         return
     end
     if template.Name == C.RoguelikeScenario and not Mod.Debug then
