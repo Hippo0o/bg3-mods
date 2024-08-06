@@ -1,4 +1,4 @@
-local window = Ext.IMGUI.NewWindow("DOLL")
+local window = Ext.IMGUI.NewWindow("GOV")
 
 Net.On("DollVisuals", function(event)
     Event.Trigger("BuildTree", event.Payload)

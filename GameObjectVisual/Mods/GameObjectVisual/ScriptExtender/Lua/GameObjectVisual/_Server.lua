@@ -1,12 +1,12 @@
-Require("DOLL/Shared")
+Require("GOV/Shared")
 
-Require("DOLL/Server/Preset")
-Require("DOLL/Server/Visual")
+Require("GOV/Server/Preset")
+Require("GOV/Server/Visual")
 
-Require("DOLL/Server/Transmog")
-Require("DOLL/Server/Doll")
+Require("GOV/Server/Transmog")
+Require("GOV/Server/Doll")
 
-Require("DOLL/Server/Net")
+Require("GOV/Server/Net")
 
 function VisualTest()
     local e = Ext.Entity.Get(GetHostCharacter())

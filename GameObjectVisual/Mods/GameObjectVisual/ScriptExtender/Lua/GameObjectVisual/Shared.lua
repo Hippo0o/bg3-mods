@@ -3,8 +3,8 @@ Mod = Require("Hlib/Mod")
 Mod.Debug = true
 Mod.Dev = false
 Mod.EnableRCE = true
-Mod.Prefix = "DOLL"
-Mod.TableKey = "DOLL"
+Mod.Prefix = "GOV"
+Mod.TableKey = "GOV"
 
 ---@type Utils
 local Utils = Require("Hlib/Utils")
@@ -24,7 +24,7 @@ GC = GameUtils.Character
 local Constants = Require("Hlib/Constants")
 
 ---@type DollConstants
-C = UT.Merge(Constants, Require("DOLL/Shared/Constants"))
+C = UT.Merge(Constants, Require("GOV/Shared/Constants"))
 
 ---@type GameState
 GameState = Require("Hlib/GameState")

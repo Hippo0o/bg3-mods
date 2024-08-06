@@ -1,6 +1,6 @@
 {
     "RequiredVersion": 17,
-    "ModTable": "DOLL",
+    "ModTable": "GOV",
     "FeatureFlags": ["Lua"]
 }
 
