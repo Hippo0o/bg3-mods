@@ -313,7 +313,7 @@ function Action.MapEntered()
             return
         end
         if tries % 10 == 0 then
-            Player.Notify(__("Move to start scenario"), true)
+            Player.Notify(__("Move to start scenario."), true)
         end
         local x2, y2, z2 = Player.Pos()
         return x ~= x2 or z ~= z2

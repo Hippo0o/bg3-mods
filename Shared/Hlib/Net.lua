@@ -95,11 +95,14 @@ end
 ---@param action string
 ---@param callback fun(responseEvent: NetEvent)
 ---@param payload any
+---@return EventListener
 function M.Request(action, callback, payload)
     local responseAction = action .. Utils.RandomId("_Response_")
     local listener = M.On(responseAction, callback, true)
 
     M.Send(action, payload, responseAction)
+
+    return listener
 end
 
 ---@param event NetEvent

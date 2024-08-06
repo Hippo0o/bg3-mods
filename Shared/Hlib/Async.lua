@@ -119,6 +119,10 @@ local Queue = Libs.Class({
             self.Loop:Start()
         end
 
+        if Mod.Dev then
+            Utils.Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx)
+        end
+
         return idx
     end,
     Dequeue = function(self, idx) ---@param self Queue
@@ -126,6 +130,10 @@ local Queue = Libs.Class({
             if v.idx == idx then
                 table.remove(self.Tasks, i)
                 self.Loop.Tasks:Dec()
+
+                if Mod.Dev then
+                    Utils.Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
+                end
 
                 return
             end

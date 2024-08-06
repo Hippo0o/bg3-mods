@@ -1,3 +1,6 @@
+---@type Mod
+local Mod = Require("Hlib/Mod")
+
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
@@ -15,7 +18,9 @@ M.EventUnloadLevel = "GameStateUnloadLevel"
 M.EventUnloadSession = "GameStateUnloadSession"
 
 Ext.Events.GameStateChanged:Subscribe(function(e)
-    Utils.Log.Debug("GameState", e.FromState, e.ToState)
+    if Mod.Dev then
+        Utils.Log.Debug("GameState", e.FromState, e.ToState)
+    end
     if e.FromState == "LoadSession" and e.ToState == "LoadLevel" then
         Utils.Log.Info("Session Loaded.")
         Event.Trigger(M.EventLoadSession, e)
