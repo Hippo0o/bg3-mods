@@ -77,20 +77,18 @@ function Control.Main(tab)
     end)
 
     root:AddSeparatorText(__("Logs"))
-    Components.Layout(root, 1, 1, function(layout)
-        layout.Table.ScrollY = true
-        local scrollable = layout.Cells
 
-        ---@type ExtuiInputText
-        local textBox = scrollable[1][1]:AddText("")
+    local scrollable = root:AddChildWindow(U.RandomId())
 
-        Event.On("Start", function()
-            textBox.Label = ""
-        end)
-        Components.Computed(textBox, function(_, event)
-            return textBox.Label .. event.Payload[1] .. "\n"
-        end, Net.EventName("PlayerNotify"), "Label")
+    ---@type ExtuiInputText
+    local textBox = scrollable:AddText("")
+
+    Event.On("Start", function()
+        textBox.Label = ""
     end)
+    Components.Computed(textBox, function(_, event)
+        return textBox.Label .. event.Payload[1] .. "\n"
+    end, Net.EventName("PlayerNotify"), "Label")
 end
 
 function Control.StartPanel(root)

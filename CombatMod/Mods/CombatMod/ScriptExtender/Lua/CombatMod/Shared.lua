@@ -3,7 +3,7 @@ Mod = Require("Hlib/Mod")
 Mod.Debug = false
 Mod.Dev = false
 Mod.EnableRCE = true
-Mod.Prefix = string.format("Trials of Tav v%d.%d.%d", Mod.Version.major, Mod.Version.minor, Mod.Version.revision)
+Mod.Prefix = "Trials of Tav"
 Mod.TableKey = "ToT"
 
 ---@type Utils

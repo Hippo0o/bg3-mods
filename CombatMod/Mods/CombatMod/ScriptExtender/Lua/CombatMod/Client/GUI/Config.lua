@@ -9,7 +9,8 @@ function Config.Main(tab)
 
     Components.Layout(root, 1, 1, function(layout)
         layout.Table.ScrollY = true
-        local root = layout.Cells[1][1]
+        local root = layout.Cells[1][1]:AddGroup("")
+        root.PositionOffset = { 5, 5 }
 
         local c8 = Config.Checkbox(
             root,
@@ -159,6 +160,8 @@ function Config.Main(tab)
             end)
         end
         root:AddText(__("This will reset all changes you've made to the templates.")).SameLine = true
+
+        root:AddDummy(1, 2)
     end)
 end
 
