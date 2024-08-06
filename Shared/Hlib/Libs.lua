@@ -219,18 +219,18 @@ function M.Chainable(source)
     ---@class Chainable
     ---@field After fun(func: fun(self: Chainable, ...: any): any): Chainable
     ---@field Catch fun(func: fun(self: Chainable, err: string)): Chainable
-    ---@field List table<number, fun(...: any): any>
+    ---@field Chain table<number, fun(...: any): any>
     ---@field Source any
     local Chainable = {
         _IsChainable = true,
         _InitalInput = {},
         Source = source,
-        List = {},
+        Chain = {},
     }
 
     function Chainable.After(func)
         assert(type(func) == "function", "Chainable.After(func) - function expected, got " .. type(func))
-        table.insert(Chainable.List, func)
+        table.insert(Chainable.Chain, func)
         return Chainable
     end
 
@@ -240,10 +240,7 @@ function M.Chainable(source)
 
     local catch = nil
     function Chainable.Catch(func)
-        assert(
-            type(func) == "function",
-            "Chainable.Catch(func) - function expected, got " .. type(func) .. debug.traceback()
-        )
+        assert(type(func) == "function", "Chainable.Catch(func) - function expected, got " .. type(func))
         catch = func
         return Chainable
     end
@@ -253,10 +250,10 @@ function M.Chainable(source)
         catch(Chainable, err)
     end
 
-    local function execute(...)
+    local function start(...)
         local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(Chainable._InitalInput))
 
-        for i, func in ipairs(Chainable.List) do
+        for i, func in ipairs(Chainable.Chain) do
             local ok = xpcall(function()
                 state = Utils.Table.Pack(func(Chainable, table.unpack(state)))
             end, function(err)
@@ -272,9 +269,9 @@ function M.Chainable(source)
                 ---@type Chainable
                 local nested = state[1]
 
-                nested.List = Utils.Table.DeepClone(Chainable.List)
+                nested.Chain = Utils.Table.DeepClone(Chainable.Chain)
                 for j = 1, i do
-                    table.remove(nested.List, 1)
+                    table.remove(nested.Chain, 1)
                 end
 
                 nested._InitalInput = state
@@ -288,7 +285,7 @@ function M.Chainable(source)
         end
     end
 
-    return Chainable, execute
+    return Chainable, start
 end
 
 return M

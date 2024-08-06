@@ -199,8 +199,8 @@ local Runner = Libs.Class({
 function Runner.Create(queue, func)
     local obj = Runner.Init()
 
-    local chainable, execute = Libs.Chainable(obj)
-    obj.Exec = execute
+    local chainable, startChain = Libs.Chainable(obj)
+    obj.Exec = startChain
 
     if func then
         chainable.After(func)
@@ -310,23 +310,14 @@ end
 -- check for condition every ~100ms
 function M.WaitFor(cond, func)
     local chainable = Runner.Create(prio, func)
-    local runner = chainable.Source
     local last = 0
-    local failsafe = 0
 
-    runner.ExecCond = function(self, time)
-        failsafe = failsafe + time.DeltaTime
+    chainable.Source.ExecCond = function(self, time)
         last = last + time.DeltaTime
         if last < 0.1 then
             return false
         end
         last = 0
-
-        if failsafe > 30 then
-            self:Clear()
-            L.Warn("WaitFor failsafe triggered.")
-            return false
-        end
 
         return cond(self, time)
     end
@@ -348,14 +339,14 @@ function M.RetryUntil(cond, options)
     local interval = options.interval or 1000
     local immediate = options.immediate or false
 
-    local chainable, execute = Libs.Chainable()
+    local chainable, startChain = Libs.Chainable()
     chainable.Catch(function() end) -- ignore errors by default
 
-    local interval = M.Interval(interval, function(self, time)
+    local runner = M.Interval(interval, function(self, time)
         local ok, result = pcall(cond, chainable, retries, time)
         if ok and result then
             self.Source:Clear()
-            execute(result)
+            startChain(result)
             return
         end
 
@@ -371,10 +362,10 @@ function M.RetryUntil(cond, options)
         end
     end)
 
-    chainable.Source = interval.Source
+    chainable.Source = runner.Source
 
     if immediate then
-        M.Run().After(function(_, _, time)
+        M.Run(function(_, time)
             chainable.Source:Exec(time)
         end)
     end
