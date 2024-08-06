@@ -437,6 +437,6 @@ U.Osiris.On("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
             "TUT_Misc_PAD_OriginPod_PlayerEmpty_",
         }) and U.UUID.Equals(actor, Player.Host())
     then
-        GameMode.AskTutSkip()
+        GameMode.AskOnboarding()
     end
 end)
