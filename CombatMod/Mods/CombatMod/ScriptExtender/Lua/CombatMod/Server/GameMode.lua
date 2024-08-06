@@ -144,7 +144,7 @@ Difficulty increases with the score.]]).After(function(confirmed)
         PersistentVars.RogueModeActive = confirmed
 
         if PersistentVars.RogueScore == 0 then
-            PersistentVars.RogueScore = (GE.GetHost().EocLevel.Level - 1) * 10 -- +10 per level
+            PersistentVars.RogueScore = math.max(100, (GE.GetHost().EocLevel.Level - 1) * 10) -- +10 per level, max 100
         end
 
         Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
@@ -252,9 +252,9 @@ function GameMode.GenerateScenario(score, cow)
         tiers = {
             { name = C.EnemyTier[1], value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
             { name = C.EnemyTier[2], value = 8, amount = #Enemy.GetByTier(C.EnemyTier[2]) },
-            { name = C.EnemyTier[3], value = 16, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
-            { name = C.EnemyTier[4], value = 28, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
-            { name = C.EnemyTier[5], value = 36, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
+            { name = C.EnemyTier[3], value = 15, amount = #Enemy.GetByTier(C.EnemyTier[3]) },
+            { name = C.EnemyTier[4], value = 27, amount = #Enemy.GetByTier(C.EnemyTier[4]) },
+            { name = C.EnemyTier[5], value = 35, amount = #Enemy.GetByTier(C.EnemyTier[5]) },
             { name = C.EnemyTier[6], value = 52, amount = #Enemy.GetByTier(C.EnemyTier[6]) },
         }
     end
