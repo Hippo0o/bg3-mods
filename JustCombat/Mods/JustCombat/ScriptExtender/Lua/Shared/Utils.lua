@@ -552,17 +552,25 @@ end
 
 M.Log = {}
 
+local function logPrefix()
+    local pre = Mod.ModPrefix .. " "
+    if Mod.Debug then
+        pre = pre .. (Ext.IsClient() and "[Client]" or "[Server]")
+    end
+    return pre
+end
+
 function M.Log.Info(...)
-    Ext.Utils.Print(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Info]", ...)
+    Ext.Utils.Print(logPrefix() .. "[Info]", ...)
 end
 
 function M.Log.Warn(...)
-    Ext.Utils.PrintWarning(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Warning]", ...)
+    Ext.Utils.PrintWarning(logPrefix() .. "[Warning]", ...)
 end
 
 function M.Log.Debug(...)
     if Mod.Debug then
-        Ext.Utils.Print(Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Debug]", ...)
+        Ext.Utils.Print(logPrefix() .. "[Debug]", ...)
     end
 end
 
@@ -573,11 +581,7 @@ function M.Log.Dump(...)
 end
 
 function M.Log.Error(...)
-    Ext.Utils.PrintError(
-        Mod.ModPrefix .. (Ext.IsClient() and " [Client]" or " ") .. "[Error]",
-        ...,
-        Mod.Debug and "\n" .. debug.traceback() or nil
-    )
+    Ext.Utils.PrintError(logPrefix(), ..., Mod.Debug and "\n" .. debug.traceback() or nil)
 end
 
 return M

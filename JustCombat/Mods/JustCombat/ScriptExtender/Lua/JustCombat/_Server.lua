@@ -108,11 +108,15 @@ Net.On("LoadSelections", function(event)
 end)
 
 Net.On("Start", function(event)
-    local scenarioId = tonumber(event.Payload.Scenario)
-    local mapId = tonumber(event.Payload.Map)
+    local scenarioName = event.Payload.Scenario
+    local mapName = event.Payload.Map
 
-    local template = Scenario.GetTemplates()[scenarioId]
-    local map = Map.Get(Player.Region())[mapId]
+    local template = UT.Find(Scenario.GetTemplates(), function(v)
+        return v.Name == scenarioName
+    end)
+    local map = UT.Find(Map.GetTemplates(), function(v)
+        return v.Name == mapName
+    end)
 
     if template == nil then
         Net.Respond(event, { false, "Scenario not found." })
@@ -133,7 +137,11 @@ Net.On("Stop", function(event)
 end)
 
 Net.On("Teleport", function(event)
-    local map = Map.Get(Player.Region())[tonumber(event.Payload.Map)]
+    local mapName = event.Payload.Map
+    local map = UT.Find(Map.Get(), function(v)
+        return v.Name == mapName
+    end)
+
     if map == nil then
         Net.Respond(event, { false, "Map not found." })
         return
@@ -144,7 +152,10 @@ Net.On("Teleport", function(event)
 end)
 
 Net.On("PingSpawns", function(event)
-    local map = Map.Get(Player.Region())[tonumber(event.Payload.Map)]
+    local mapName = event.Payload.Map
+    local map = UT.Find(Map.Get(), function(v)
+        return v.Name == mapName
+    end)
     if map == nil then
         Net.Respond(event, { false, "Map not found." })
         return
