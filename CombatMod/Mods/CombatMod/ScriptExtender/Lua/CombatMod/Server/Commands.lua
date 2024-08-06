@@ -246,7 +246,7 @@ function Commands.Stop()
 end
 
 function Commands.Dump(file)
-    for i, v in pairs(S.SpawnedEnemies) do
+    for i, v in pairs(Scenario.Current().SpawnedEnemies) do
         if v:IsSpawned() then
             L.Dump(UT.Filter(v:Entity().ServerCharacter, function(v, k)
                 return k ~= "Template" and k ~= "TemplateUsedForSpells"

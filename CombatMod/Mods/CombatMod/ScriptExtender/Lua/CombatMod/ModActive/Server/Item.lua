@@ -72,7 +72,7 @@ function Object:ModifyTemplate()
     local template = self:GetTemplate()
 
     if template.Stats ~= self.Name then
-        template.Stats = self.Name
+        Event.Trigger("TemplateOverwrite", self.RootTemplate, "Stats", self.Name)
     end
 end
 

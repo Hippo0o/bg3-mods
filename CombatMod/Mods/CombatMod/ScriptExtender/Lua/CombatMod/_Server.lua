@@ -124,7 +124,7 @@ GameState.OnLoad(function()
 end, true)
 
 GameState.OnLoad(function()
-    L.Dump("Check if mod is active", PersistentVars.Active)
+    L.Debug("Check if mod is active", PersistentVars.Active)
     if PersistentVars.Active then
         Event.Trigger("ModActive")
     end

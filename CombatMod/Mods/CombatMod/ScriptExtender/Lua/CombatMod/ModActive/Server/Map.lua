@@ -59,7 +59,7 @@ end
 
 local charactersToTeleport = {}
 function Object:Teleport(character, noOffset)
-    if self.Region == Osi.GetRegion(character) then
+    if self.Region == Player.Region() then
         return self:TeleportInRegion(character, not noOffset)
     end
 

@@ -34,25 +34,24 @@ local function build(text, version, handle)
         Version = version,
         Text = text,
         Handle = nil,
-        LocaText = nil,
         Stack = {},
     }
 
     if M.UseLoca then
         tbl.Handle = handle or M.GenerateHandle(text, version)
-        tbl.LocaText = M.Get(tbl.Handle)
+        local locaText = M.Get(tbl.Handle)
 
-        if tbl.LocaText ~= "" then
-            Log.Info("Translation found: ", tbl.Handle, tbl.Text, tbl.LocaText)
+        if locaText ~= "" then
+            Log.Info("Translation found: ", tbl.Handle, tbl.Text, locaText)
 
-            tbl.Text = tbl.LocaText
+            tbl.Text = locaText
         end
     end
 
     return tbl
 end
 
-local function saveFile()
+local saveFile = Async.Debounce(1000, function()
     IO.SaveJson(
         M.FilePath .. ".json",
         Utils.Table.Map(M.Translations, function(v, k)
@@ -65,34 +64,28 @@ local function saveFile()
                 k
         end)
     )
-end
+end)
 
-local stackUpdated = {}
 local function extendStack(key, stack)
-    if Ext.IsClient() then
-        Net.Send("_TranslationStack", { Key = key, Stack = stack })
-
-        return
-    end
+    local file = stack:match("([^:]+):%d+")
 
     local t = M.Translations[key]
 
-    if not stackUpdated[key] then
-        stackUpdated[key] = true
+    if type(t.Stack) ~= "table" then
         t.Stack = {}
     end
 
-    if stack == "" then
+    if file == "" then
         return
     end
 
     for _, v in ipairs(t.Stack) do
-        if v == stack then
+        if v == file then
             return
         end
     end
 
-    table.insert(t.Stack, stack)
+    table.insert(t.Stack, file)
 
     Event.Trigger("_TranslationChanged")
 end
@@ -101,16 +94,9 @@ Net.On("_TranslationRequest", function(event)
     Utils.Table.Merge(M.Translations, event.Payload)
 end)
 
-Event.On(
-    "_TranslationChanged",
-    Async.Debounce(100, function()
-        Net.Send("_TranslationRequest", M.Translations)
-        saveFile()
-    end)
-)
-
-Net.On("_TranslationStack", function(event)
-    extendStack(event.Payload.Key, event.Payload.Stack)
+Event.On("_TranslationChanged", function()
+    Net.Send("_TranslationRequest", M.Translations)
+    saveFile()
 end)
 
 GameState.OnLoadSession(function()
@@ -118,7 +104,7 @@ GameState.OnLoadSession(function()
     for k, v in pairs(cached) do
         M.Translations[k] = build(v.Text, v.Version, v.Handle)
         if type(v.Stack) ~= "table" then
-            v.Stack = { v.Stack }
+            v.Stack = {}
         end
 
         M.Translations[k].Stack = v.Stack
@@ -206,14 +192,8 @@ function M.BuildLocaFile()
         local handle = translation.Handle:gsub(";%d+$", "") -- handle should not have a version
 
         local stack = {}
-        local duplicate = {}
-        for i, v in ipairs(translation.Stack) do
-            local simple = v:match("([^:]+):%d+")
-
-            if not duplicate[simple] then
-                table.insert(stack, string.format("    <!-- %s -->", v:match("([^:]+):%d+")))
-                duplicate[simple] = true
-            end
+        for i, file in ipairs(translation.Stack) do
+            table.insert(stack, string.format("    <!-- %s -->", file))
         end
 
         table.insert(entries, string.format(xmlEntry, table.concat(stack, "\n"), handle, 1, translation.Text))

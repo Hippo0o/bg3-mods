@@ -1,5 +1,5 @@
 if Ext.IMGUI == nil then
-    L.Warn("IMGUI not available.", "Update to Script Extender v16.")
+    L.Error("IMGUI not available.", "Update to latest Script Extender.")
     return
 end
 

@@ -109,7 +109,6 @@ function Object:SyncTemplate()
     self.Race = template.Race
 end
 
-local templateIdsOverwritten = {}
 function Object:ModifyTemplate()
     local template = self:GetTemplate()
     if template == nil then
@@ -117,26 +116,8 @@ function Object:ModifyTemplate()
         return
     end
 
-    -- only overwrite if different, and save the original value for restoration
-    local overwrites = {}
     local function templateOverwrite(prop, value)
-        if type(value) == "table" then
-            for k, v in pairs(value) do
-                if template[prop][k] ~= v then
-                    overwrites[prop] = overwrites[prop] or {}
-                    overwrites[prop][k] = template[prop][k]
-
-                    template[prop][k] = v
-                end
-            end
-            return
-        end
-
-        if template[prop] ~= value then
-            overwrites[prop] = template[prop]
-
-            template[prop] = value
-        end
+        Event.Trigger("TemplateOverwrite", self.TemplateId, prop, value)
     end
 
     -- most relevant, blocks loot drops
@@ -185,29 +166,6 @@ function Object:ModifyTemplate()
     if self.LevelOverride > 0 then
         templateOverwrite("LevelOverride", self.LevelOverride)
     end
-
-    if templateIdsOverwritten[self.TemplateId] then
-        return
-    end
-
-    templateIdsOverwritten[self.TemplateId] = true
-
-    -- restore template
-    -- maybe not needed but template overwrites seem to be global
-    GameState.OnUnload(function()
-        L.Debug("Restoring template:", self.TemplateId)
-        local template = Ext.Template.GetTemplate(self.TemplateId)
-        for i, v in pairs(overwrites) do
-            if type(v) == "table" then
-                for k, v in pairs(v) do
-                    template[i][k] = v
-                end
-            else
-                template[i] = v
-            end
-        end
-        templateIdsOverwritten[self.TemplateId] = nil
-    end)
 end
 
 function Object:ModifyExperience()
@@ -286,12 +244,27 @@ function Object:Modify(keepFaction)
 
     self:ModifyExperience()
 
+    self:Replicate()
+
     -- entity.ServerCharacter.Treasures = { "Empty" }
 
     -- maybe useful
     -- Osi.CharacterGiveEquipmentSet(target, equipmentSet)
     -- Osi.SetAiHint(target, aiHint)
     -- Osi.AddCustomVisualOverride(character, visual)
+end
+
+function Object:Replicate()
+    Schedule(function()
+        local entity = self:Entity()
+        entity:Replicate("GameObjectVisual")
+        entity.Icon.Icon = entity.GameObjectVisual.Icon
+        entity:Replicate("Icon")
+        entity:Replicate("DisplayName")
+        entity:Replicate("CombatParticipant")
+    end):Catch(function(err)
+        L.Error("Replication failed: ", self.GUID, err)
+    end)
 end
 
 function Object:Sync()
@@ -322,15 +295,6 @@ function Object:Sync()
     self.SpellSet = currentTemplate.SpellSet
     self.LevelOverride = currentTemplate.LevelOverride
     self.Race = currentTemplate.Race
-end
-
-function Object:Replicate()
-    xpcall(function()
-        local entity = self:Entity()
-        entity:Replicate("GameObjectVisual")
-    end, function(err)
-        L.Error("Replication failed: ", self.GUID, err)
-    end)
 end
 
 ---@param x number
@@ -383,7 +347,6 @@ function Object:Spawn(x, y, z, neutral)
             return self:Entity().ServerReplicationDependencyOwner -- goal: a component that loads later and always exists
         end, { retries = 30, interval = 100 }):After(function()
             self:Modify()
-            self:Replicate()
 
             if not neutral then
                 self:Combat()
@@ -473,11 +436,11 @@ function Enemy.Restore(enemy)
 
     PersistentVars.SpawnedEnemies[e.GUID] = e
 
-    e:ModifyTemplate()
-
     RetryUntil(function(runner)
         return e:Entity().ServerReplicationDependencyOwner
     end, { retries = 30, interval = 100 }):After(function()
+        e:ModifyTemplate()
+
         e:Modify(true)
 
         return e
