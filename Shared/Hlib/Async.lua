@@ -1,6 +1,9 @@
 ---@type Libs
 local Libs = Require("Hlib/Libs")
 
+---@type Chainable
+local Chainable = Require("Hlib/Chainable")
+
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
@@ -214,7 +217,7 @@ function Runner.New(queue, func)
     return obj
 end
 
----@class ChainableRunner : LibsChainable
+---@class ChainableRunner : Chainable
 ---@field Source Runner
 ---@param queue Queue
 ---@param func fun()|nil
@@ -222,7 +225,7 @@ end
 function Runner.Chainable(queue, func)
     local obj = Runner.New(queue, func)
 
-    local chainable = Libs.Chainable(obj)
+    local chainable = Chainable.Create(obj)
     obj.Exec = function()
         chainable:Begin()
     end
@@ -377,7 +380,7 @@ function M.RetryUntil(cond, options)
     local interval = options.interval or 1000
     local immediate = options.immediate or false
 
-    local chainable = Libs.Chainable()
+    local chainable = Chainable.Create()
     chainable:Catch(function(err)
         L.Debug("RetryUntil catch error:", err)
     end)
@@ -455,6 +458,85 @@ function M.Throttle(ms, func)
 
         func(...)
     end
+end
+
+local function resumeCoroutine(co, ...)
+    local result = { coroutine.resume(co, ...) }
+    local ok = table.remove(result, 1)
+
+    if not ok then
+        error(table.unpack(result))
+    end
+
+    return table.unpack(result)
+end
+
+---@param func fun()
+---@return fun()
+function M.Wrap(func)
+    assert(type(func) == "function", "Async.Wrap(func) - function expected, got " .. type(func))
+
+    return function(...)
+        local args = { ... }
+
+        return M.Run(function()
+            local co = coroutine.create(func)
+
+            return resumeCoroutine(co, table.unpack(args))
+        end)
+    end
+end
+
+---@param chainable Chainable
+---@return any
+function M.Await(chainable)
+    local co = coroutine.running()
+
+    assert(co ~= nil, "Async.Await(chainable) - Can't await outside coroutine.")
+
+    assert(
+        type(chainable) == "table" and chainable._IsChainable,
+        "Async.Await(chainable) - Chainable expected, got " .. type(chainable)
+    )
+
+    chainable:After(function(...)
+        local args = { ... }
+
+        return M.Run(function()
+            return resumeCoroutine(co, table.unpack(args))
+        end)
+    end)
+
+    return coroutine.yield(chainable)
+end
+
+---@param chainables table<Chainable>
+---@return table<any>
+function M.AwaitAll(chainables)
+    assert(type(chainables) == "table", "Async.AwaitAll(chainables) - table expected, got " .. type(chainables))
+
+    local awaiting = #chainables
+    local results = {}
+
+    local combined = Chainable.Create()
+
+    for i, chainable in ipairs(chainables) do
+        assert(
+            type(chainable) == "table" and chainable._IsChainable,
+            "Async.AwaitAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
+        )
+
+        chainable:After(function(...)
+            results[i] = { ... }
+            awaiting = awaiting - 1
+
+            if awaiting == 0 then
+                combined:Begin(table.unpack(results))
+            end
+        end)
+    end
+
+    return M.Await(combined)
 end
 
 return M

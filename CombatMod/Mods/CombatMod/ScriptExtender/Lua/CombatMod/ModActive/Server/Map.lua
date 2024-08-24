@@ -64,7 +64,7 @@ function Object:Teleport(character, noOffset)
         return self:TeleportInRegion(character, not noOffset)
     end
 
-    local _, act = UT.Find(C.Regions, function(region, act)
+    local _, act = table.find(C.Regions, function(region, act)
         return region == self.Region
     end)
 
@@ -166,7 +166,7 @@ function Object:PingSpawns()
 end
 
 function Object:Prepare()
-    for _, pos in pairs(UT.Combine({}, { self.Enter }, self.Spawns)) do
+    for _, pos in pairs(table.combine({}, { self.Enter }, self.Spawns)) do
         local x, y, z = table.unpack(pos)
 
         local guid = Osi.CreateAt("c13a872b-7d9b-4c1d-8c65-f672333b0c11", x, y, z, 1, 0, "")
@@ -228,13 +228,13 @@ end
 ---@param region string|nil
 ---@return Map[]
 function Map.Get(region)
-    return UT.Map(Map.GetTemplates(region), Object.New)
+    return table.map(Map.GetTemplates(region), Object.New)
 end
 
 ---@param map Map
 ---@return Map
 function Map.Restore(map)
-    -- map = UT.Find(Map.GetTemplates(map.Region), function(v)
+    -- map = table.find(Map.GetTemplates(map.Region), function(v)
     --     return v.Name == map.Name
     -- end) or map
 

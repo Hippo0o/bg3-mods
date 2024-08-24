@@ -1,6 +1,9 @@
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type Chainable
+local Chainable = Require("Hlib/Chainable")
+
 ---@type Log
 local Log = Require("Hlib/Log")
 
@@ -79,7 +82,7 @@ function EventListener.New(event, callback, once)
     return obj
 end
 
----@class ChainableEvent : LibsChainable
+---@class ChainableEvent : Chainable
 ---@field Source EventListener
 ---@param event string
 ---@param once boolean|nil
@@ -87,7 +90,7 @@ end
 function EventListener.Chainable(event, once)
     local obj = EventListener.New(event, nil, once)
 
-    local chainable = Libs.Chainable(obj)
+    local chainable = Chainable.Create(obj)
 
     obj._Func = function(...)
         return chainable:Begin(...)

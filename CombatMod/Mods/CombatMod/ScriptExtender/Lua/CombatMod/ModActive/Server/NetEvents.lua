@@ -1,8 +1,8 @@
 function SyncState(peerId)
     Net.Send(
         "SyncState",
-        UT.Filter(PersistentVars, function(v, k)
-            if k == "SpawnedEnemies" and UT.Size(v) > 30 then
+        table.filter(PersistentVars, function(v, k)
+            if k == "SpawnedEnemies" and table.size(v) > 30 then
                 return false
             end
             return true
@@ -28,13 +28,13 @@ end)
 
 Net.On("GetSelection", function(event)
     Net.Respond(event, {
-        Scenarios = UT.Map(Scenario.GetTemplates(), function(v, k)
+        Scenarios = table.map(Scenario.GetTemplates(), function(v, k)
             if PersistentVars.RogueModeActive and not v.RogueLike then
                 return nil
             end
             return { Id = k, Name = v.Name }
         end),
-        Maps = UT.Map(Map.GetTemplates(), function(v, k)
+        Maps = table.map(Map.GetTemplates(), function(v, k)
             return { Id = k, Name = v.Name }
         end),
     })
@@ -95,11 +95,11 @@ Net.On("Start", function(event)
     local scenarioName = event.Payload.Scenario
     local mapName = event.Payload.Map
 
-    local template = UT.Find(Scenario.GetTemplates(), function(v)
+    local template = table.find(Scenario.GetTemplates(), function(v)
         return v.Name == scenarioName
     end)
 
-    local map = UT.Find(Map.Get(), function(v)
+    local map = table.find(Map.Get(), function(v)
         return v.Name == mapName
     end)
 
@@ -171,7 +171,7 @@ Net.On("Teleport", function(event)
 
     local mapName = event.Payload.Map
 
-    local map = UT.Find(Map.Get(), function(v)
+    local map = table.find(Map.Get(), function(v)
         return v.Name == mapName
     end)
 
@@ -236,7 +236,7 @@ end)
 
 Net.On("MarkSpawns", function(event)
     local mapName = event.Payload.Map
-    local map = UT.Find(Map.Get(), function(v)
+    local map = table.find(Map.Get(), function(v)
         return v.Name == mapName
     end)
     if map == nil then
@@ -244,7 +244,7 @@ Net.On("MarkSpawns", function(event)
         return
     end
 
-    map:VFXSpawns(UT.Keys(map.Spawns), 16)
+    map:VFXSpawns(table.keys(map.Spawns), 16)
 
     if Scenario.Current() then
         Scenario.MarkSpawns(Scenario.Current().Round + 1, 16)
@@ -255,7 +255,7 @@ end)
 
 Net.On("PingSpawns", function(event)
     local mapName = event.Payload.Map
-    local map = UT.Find(Map.Get(), function(v)
+    local map = table.find(Map.Get(), function(v)
         return v.Name == mapName
     end)
     if map == nil then
@@ -274,7 +274,7 @@ end
 
 local function broadcastConfig()
     Schedule(function()
-        local c = UT.DeepClone(Config)
+        local c = table.deepclone(Config)
         c.RoguelikeMode = PersistentVars.RogueModeActive
         c.HardMode = PersistentVars.HardMode
         c.Debug = Mod.Debug
@@ -356,7 +356,7 @@ end)
 
 Net.On("RecruitOrigin", function(event)
     local name = event.Payload
-    local char = UT.Find(C.OriginCharacters, function(v, k)
+    local char = table.find(C.OriginCharacters, function(v, k)
         return k == name
     end)
     if char then
@@ -430,7 +430,7 @@ Net.On("GetFilterableModList", function(event)
         return { Id = modId, Name = modName, Blacklist = false }
     end
     for modId, modName in pairs(Item.GetModList()) do
-        if not US.Contains(modName, { "Gustav", "GustavDev", "Shared", "SharedDev", "Honour" }) then
+        if not string.contains(modName, { "Gustav", "GustavDev", "Shared", "SharedDev", "Honour" }) then
             list[modId] = t(modId, modName)
         end
     end
@@ -459,7 +459,7 @@ Net.On("UpdateModFilter", function(event)
     if bool then
         table.insert(filters.Mods, modId)
     else
-        UT.Remove(filters.Mods, modId)
+        table.removevalue(filters.Mods, modId)
     end
 
     External.File.Export("ItemFilters", filters)

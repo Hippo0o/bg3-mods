@@ -148,7 +148,7 @@ local ngPlus = {
         OnBuy = function(self, character)
             if self.Bought > 0 then
                 for _, u in pairs(getUnlocks()) do
-                    if US.Contains(u.Id, {
+                    if string.contains(u.Id, {
                         "^Buy",
                         "TadAwaken",
                     }) then
@@ -207,7 +207,7 @@ local ngPlus = {
 }
 
 --- @type table<number, Unlock>
-return UT.Combine({
+return table.combine({
     {
         Id = "UnlockTadpole",
         Name = __("Unlock Tadpole Power"),

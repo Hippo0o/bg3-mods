@@ -131,7 +131,7 @@ end
 
 Ext.Osiris.RegisterListener("AutomatedDialogStarted", 2, "after", function(dialog, instanceID)
     -- if
-    --     US.Contains(dialog, {
+    --     string.contains(dialog, {
     --         "GLO_Jergal_AD_AttackFromDialog",
     --         "GLO_Jergal_AD_AttackedByPlayer",
     --     })
@@ -148,7 +148,7 @@ end)
 
 Ext.Osiris.RegisterListener("DialogActorJoined", 4, "after", function(dialog, instanceID, actor, speakerIndex)
     if
-        US.Contains(dialog, {
+        string.contains(dialog, {
             "TUT_Start_PAD_Start_",
             "TUT_Misc_PAD_OriginPod_PlayerEmpty_",
         }) and U.UUID.Equals(actor, Player.Host())

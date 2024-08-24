@@ -84,7 +84,7 @@ end
 function Object:KillScore()
     local score = 0
     for _, e in pairs(self.KilledEnemies) do
-        local _, value = UT.Find(C.EnemyTier, function(tier)
+        local _, value = table.find(C.EnemyTier, function(tier)
             return tier == e.Tier
         end)
 
@@ -262,7 +262,7 @@ function Action.SpawnRound()
                 waitSpawn = waitSpawn - 1
 
                 L.Error("Spawn limit exceeded.", e:GetId())
-                UT.Remove(s.SpawnedEnemies, e)
+                table.removevalue(s.SpawnedEnemies, e)
                 Action.EnemyRemoved()
             end)
             :After(function()
@@ -389,7 +389,7 @@ function Action.Failsafe(enemy)
         for _, e in pairs(list) do
             if not e:IsSpawned() then
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
-                UT.Remove(s.SpawnedEnemies, e)
+                table.removevalue(s.SpawnedEnemies, e)
             elseif Osi.IsDead(e.GUID) ~= 1 and Osi.IsInCombat(e.GUID) ~= 1 then
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
@@ -413,7 +413,7 @@ function Action.Failsafe(enemy)
                     if Osi.IsInCombat(e.GUID) ~= 1 then
                         L.Error("Failsafe 3 triggered.", e:GetId(), e.GUID)
 
-                        UT.Remove(s.SpawnedEnemies, e)
+                        table.removevalue(s.SpawnedEnemies, e)
                         e:Clear()
                     end
                 end)
@@ -472,19 +472,19 @@ end
 function Scenario.Restore(scenario)
     local s = Object.Init(scenario)
 
-    s.KilledEnemies = UT.Map(s.KilledEnemies, function(v, k)
+    s.KilledEnemies = table.map(s.KilledEnemies, function(v, k)
         return Enemy.Restore(v), tonumber(k)
     end)
-    s.SpawnedEnemies = UT.Map(s.SpawnedEnemies, function(v, k)
+    s.SpawnedEnemies = table.map(s.SpawnedEnemies, function(v, k)
         return Enemy.Restore(v), tonumber(k)
     end)
-    s.Enemies = UT.Map(s.Enemies, function(v, k)
-        return UT.Map(v, function(e)
+    s.Enemies = table.map(s.Enemies, function(v, k)
+        return table.map(v, function(e)
             return Enemy.Restore(e)
         end), tonumber(k)
     end)
 
-    s.Timeline = UT.Map(s.Timeline, function(v, k)
+    s.Timeline = table.map(s.Timeline, function(v, k)
         return v, tonumber(k)
     end)
 
@@ -521,7 +521,7 @@ function Scenario.Start(template, map)
         if type(template.Map) == "function" then
             map = template:Map()
         else
-            map = UT.Find(maps, function(m)
+            map = table.find(maps, function(m)
                 return m.Name == template.Map
             end) or map
         end
@@ -549,7 +549,7 @@ function Scenario.Start(template, map)
         L.Dump("Adding enemies for round.", round, definitions)
         for _, definition in pairs(definitions) do
             local e
-            if UT.Contains(C.EnemyTier, definition) then
+            if table.contains(C.EnemyTier, definition) then
                 e = Enemy.Random(function(e)
                     return e.Tier == definition
                 end)
@@ -566,20 +566,20 @@ function Scenario.Start(template, map)
         end
     end
 
-    if map.Timeline and UT.Size(map.Timeline) > 0 then
+    if map.Timeline and table.size(map.Timeline) > 0 then
         -- pad positions from the map timeline
-        if UT.Size(scenario.Positions) < UT.Size(map.Timeline) then
-            UT.Merge(scenario.Positions, map.Timeline)
+        if table.size(scenario.Positions) < table.size(map.Timeline) then
+            table.merge(scenario.Positions, map.Timeline)
         end
 
         -- append the map timeline until we have enough positions
-        while UT.Size(scenario.Positions) < enemyCount do
-            UT.Combine(scenario.Positions, map.Timeline)
+        while table.size(scenario.Positions) < enemyCount do
+            table.combine(scenario.Positions, map.Timeline)
         end
     end
 
     -- get spawn positions for every enemy
-    while UT.Size(scenario.Positions) < enemyCount do
+    while table.size(scenario.Positions) < enemyCount do
         table.insert(scenario.Positions, math.random(#map.Spawns))
     end
 
@@ -699,7 +699,7 @@ end
 function Scenario.CombatSpawned(specific)
     local s = Current()
 
-    local enemies = UT.Filter(s.SpawnedEnemies, function(e)
+    local enemies = table.filter(s.SpawnedEnemies, function(e)
         return specific == nil or U.Equals(e, specific)
     end)
 
@@ -824,7 +824,7 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-        if UT.Find(s.SpawnedEnemies, function(e)
+        if table.find(s.SpawnedEnemies, function(e)
             return U.UUID.Equals(e.GUID, guid)
         end) then
             return

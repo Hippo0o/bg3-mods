@@ -69,7 +69,7 @@ function Object:UpdateUnlocked()
     end
     local function unlockByBought(requirement)
         if type(requirement) == "string" then
-            local u = UT.Find(Unlock.Get(), function(u)
+            local u = table.find(Unlock.Get(), function(u)
                 return u.Id == requirement
             end)
             return u and u.Bought > 0
@@ -128,7 +128,7 @@ end
 
 function Unlock.Sync()
     for _, unlockTemplate in pairs(Unlock.GetTemplates()) do
-        local existing = UT.Find(PersistentVars.Unlocks, function(p)
+        local existing = table.find(PersistentVars.Unlocks, function(p)
             return p.Id == unlockTemplate.Id
         end)
 
@@ -136,7 +136,7 @@ function Unlock.Sync()
             table.insert(PersistentVars.Unlocks, unlockTemplate)
         else
             -- update keys from template that aren't stateful
-            UT.Merge(existing, unlockTemplate)
+            table.merge(existing, unlockTemplate)
             -- only key that can be nil on template
             if not unlockTemplate.Amount then
                 existing.Amount = nil
@@ -145,7 +145,7 @@ function Unlock.Sync()
     end
 
     local unlocks = {}
-    UT.Each(PersistentVars.Unlocks, function(u)
+    table.each(PersistentVars.Unlocks, function(u)
         if u.Persistent then
             if persistentUnlocks[u.Id] and persistentUnlocks[u.Id] > 0 then
                 u.Bought = persistentUnlocks[u.Id]
@@ -154,7 +154,7 @@ function Unlock.Sync()
             end
         end
 
-        local existing = UT.Find(Unlock.GetTemplates(), function(p)
+        local existing = table.find(Unlock.GetTemplates(), function(p)
             return p.Id == u.Id
         end)
 
@@ -211,7 +211,7 @@ Event.On("ScenarioEnded", function(scenario)
 end)
 
 Net.On("BuyUnlock", function(event)
-    local unlock = UT.Find(Unlock.Get(), function(u)
+    local unlock = table.find(Unlock.Get(), function(u)
         return u.Id == event.Payload.Id
     end)
 

@@ -71,7 +71,7 @@ Event.On("ScenarioEnded", function(scenario)
         RogueScore = PersistentVars.RogueScore,
         Currency = PersistentVars.Currency,
         Scenario = {
-            Enemies = UT.Size(scenario.KilledEnemies),
+            Enemies = table.size(scenario.KilledEnemies),
             Rounds = scenario.Round - 1,
             Map = scenario.Map.Name,
         },

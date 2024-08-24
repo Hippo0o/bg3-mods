@@ -304,7 +304,7 @@ function GameMode.StartNext()
         return
     end
 
-    local rogueTemp = UT.Find(Scenario.GetTemplates(), function(v)
+    local rogueTemp = table.find(Scenario.GetTemplates(), function(v)
         return v.Name == PersistentVars.RogueScenario
     end)
 
@@ -495,7 +495,7 @@ Event.On(
 local function getMap(template)
     local threshold = GameMode.IsHardMode() and 20 or 40
 
-    local maps = UT.Filter(Map.Get(), function(v)
+    local maps = table.filter(Map.Get(), function(v)
         return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
     end)
 
@@ -503,7 +503,7 @@ local function getMap(template)
     if #maps > 0 then
         local random = math.random(#maps)
 
-        if UT.Contains(PersistentVars.RandomLog.Maps, random) then
+        if table.contains(PersistentVars.RandomLog.Maps, random) then
             random = math.random(#maps)
         end
         LogRandom("Maps", random, 10)

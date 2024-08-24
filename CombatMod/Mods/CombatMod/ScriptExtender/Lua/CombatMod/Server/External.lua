@@ -16,7 +16,7 @@ local function filePath(name, dir)
         name = name .. ".json"
     end
 
-    if US.Contains(name, { "Enemies", "Maps", "Scenarios", "LootRates" }) then
+    if string.contains(name, { "Enemies", "Maps", "Scenarios", "LootRates" }) then
         name = string.format("v%d.%d/%s", Mod.Version.Major, Mod.Version.Minor, name)
     end
 
@@ -265,7 +265,7 @@ end
 function External.Templates.GetMaps()
     local data = External.File.Import("Maps") or Templates.GetMaps()
 
-    data = UT.Combine({}, addedMaps, data)
+    data = table.combine({}, addedMaps, data)
 
     for k, map in pairs(data) do
         for _, patch in ipairs(patchMaps) do
@@ -281,13 +281,13 @@ function External.Templates.GetMaps()
         end
     end
 
-    return UT.Values(data)
+    return table.values(data)
 end
 
 function External.Templates.GetScenarios()
     local data = External.File.Import("Scenarios") or Templates.GetScenarios()
 
-    data = UT.Combine({}, addedScenarios, data)
+    data = table.combine({}, addedScenarios, data)
 
     for k, scenario in pairs(data) do
         for _, patch in ipairs(patchScenarios) do
@@ -303,13 +303,13 @@ function External.Templates.GetScenarios()
         end
     end
 
-    return UT.Values(data)
+    return table.values(data)
 end
 
 function External.Templates.GetEnemies()
     local data = External.File.Import("Enemies") or Templates.GetEnemies()
 
-    data = UT.Combine({}, addedEnemies, data)
+    data = table.combine({}, addedEnemies, data)
 
     for k, enemy in pairs(data) do
         for _, patch in ipairs(patchEnemies) do
@@ -325,11 +325,11 @@ function External.Templates.GetEnemies()
         end
     end
 
-    return UT.Values(data)
+    return table.values(data)
 end
 
 function External.Templates.GetUnlocks()
-    local data = UT.Combine({}, addedUnlocks, Templates.GetUnlocks())
+    local data = table.combine({}, addedUnlocks, Templates.GetUnlocks())
 
     for k, unlock in pairs(data) do
         for _, patch in ipairs(patchUnlocks) do
@@ -345,7 +345,7 @@ function External.Templates.GetUnlocks()
         end
     end
 
-    return UT.Values(data)
+    return table.values(data)
 end
 
 function External.Templates.GetItemFilters(user)
@@ -354,18 +354,18 @@ function External.Templates.GetItemFilters(user)
     local file = External.File.Import("ItemFilters")
 
     if file and validateAndError(External.Validators.ItemFilter, file, "LoadItemFilters") then
-        UT.Combine(data.Names, file.Names)
-        UT.Combine(data.Mods, file.Mods)
+        table.combine(data.Names, file.Names)
+        table.combine(data.Mods, file.Mods)
     end
 
     if not user then
         for _, added in ipairs(addedItemFilters) do
-            UT.Combine(data.Names, added.Names)
-            UT.Combine(data.Mods, added.Mods)
+            table.combine(data.Names, added.Names)
+            table.combine(data.Mods, added.Mods)
         end
     end
 
-    return UT.DeepClone(data)
+    return table.deepclone(data)
 end
 
 function External.LoadLootRates()
@@ -375,9 +375,9 @@ function External.LoadLootRates()
         return
     end
 
-    local orig = UT.DeepClone(C.LootRates)
+    local orig = table.deepclone(C.LootRates)
     local ok = xpcall(function()
-        C.LootRates = UT.Merge(C.LootRates, data)
+        C.LootRates = table.merge(C.LootRates, data)
     end, function(e)
         C.LootRates = orig
     end)
@@ -424,8 +424,8 @@ function External.SaveConfig()
         return
     end
 
-    local config = UT.Filter(Config, function(value, key)
-        return UT.Contains(External.Validators.Config:GetFields(), key)
+    local config = table.filter(Config, function(value, key)
+        return table.contains(External.Validators.Config:GetFields(), key)
     end, true)
     External.File.Export("Config", config)
 end

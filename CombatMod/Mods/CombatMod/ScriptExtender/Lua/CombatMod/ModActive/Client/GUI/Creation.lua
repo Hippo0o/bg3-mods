@@ -37,7 +37,7 @@ function Creation.Main(tab)
         end
 
         ping.OnClick = function()
-            local x, y, z = table.unpack(US.Split(pi.Text, ","))
+            local x, y, z = table.unpack(string.split(pi.Text, ","))
             x = x:match("[-]?%d+")
             y = y:match("[-]?%d+")
             z = z:match("[-]?%d+")
@@ -49,7 +49,7 @@ function Creation.Main(tab)
         end
 
         tp.OnClick = function()
-            local x, y, z = table.unpack(US.Split(pi.Text, ","))
+            local x, y, z = table.unpack(string.split(pi.Text, ","))
             x = x:match("[-]?%d+")
             y = y:match("[-]?%d+")
             z = z:match("[-]?%d+")
@@ -72,12 +72,12 @@ function Creation.Main(tab)
             layout.Table.ScrollY = true
             local wp = layout.Cells[1][1]
 
-            local acts = UT.Keys(C.Waypoints)
+            local acts = table.keys(C.Waypoints)
             table.sort(acts)
             for _, act in ipairs(acts) do
                 wp:AddSeparatorText(act .. " - " .. C.Regions[act])
                 for short, waypoint in pairs(C.Waypoints[act]) do
-                    local label = waypoint:gsub(US.Escape(U.UUID.Extract(waypoint)), short)
+                    local label = waypoint:gsub(string.escape(U.UUID.Extract(waypoint)), short)
                     local b = wp:AddButton(label)
                     b.OnClick = function()
                         Net.RCE("TeleportToWaypoint(RCE:Character(), '%s')", waypoint):After(function(ok, err)

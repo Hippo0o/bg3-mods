@@ -51,8 +51,8 @@ function Commands.Test()
     --     true
     -- )
     -- local temps = Ext.Template.GetAllRootTemplates()
-    -- L.Dump(UT.Map(
-    --     UT.Filter(temps, function(v)
+    -- L.Dump(table.map(
+    --     table.filter(temps, function(v)
     --         return v.TemplateType == "item" and v.CombatComponent.CanFight
     --     end),
     --     function(v)
@@ -75,7 +75,7 @@ function Commands.Test()
     -- Osi.TeleportToWaypoint(Player.Host(), C.Waypoints.Act3b.GreyHarbor)
 
     -- local dump = Ext.DumpExport(_C().ServerCharacter.Template)
-    -- local parts = US.Split(dump, "\n")
+    -- local parts = string.split(dump, "\n")
     -- for _, part in ipairs(parts) do
     --     Osi.AddEntryToCustomBook("CombatMod", part .. "\n")
     -- end
@@ -125,7 +125,7 @@ function Commands.Test()
     -- end
     -- Ext.IO.SaveFile(
     --     "enemies.json",
-    --     Ext.DumpExport(UT.Map(list, function(v)
+    --     Ext.DumpExport(table.map(list, function(v)
     --         return v
     --     end))
     -- )
@@ -280,7 +280,7 @@ function Commands.Dump(file)
 
     for i, v in pairs(Scenario.Current().SpawnedEnemies) do
         if v:IsSpawned() then
-            L.Dump(UT.Filter(v:Entity().ServerCharacter, function(v, k)
+            L.Dump(table.filter(v:Entity().ServerCharacter, function(v, k)
                 return k ~= "Template" and k ~= "TemplateUsedForSpells"
             end, true))
 

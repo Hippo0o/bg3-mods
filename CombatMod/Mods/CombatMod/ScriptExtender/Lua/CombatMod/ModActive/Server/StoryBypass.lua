@@ -65,7 +65,9 @@ end
 function StoryBypass.RemoveAllEntities()
     StoryBypass.ExpLock.ResumeTemporary()
 
-    local toRemove = UT.Filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
+    Osi.PROC_MOO_Execution_StartFallbackExecutionCombat() -- prevent infinite timer loop
+
+    local toRemove = table.filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
 
     for i, e in ipairs(toRemove) do
         L.Debug("Removing", e.Uuid.EntityUuid, e.ServerCharacter.Template.Name)
@@ -95,7 +97,7 @@ function StoryBypass.ClearArea(character)
         end
     end
 
-    local toRemove = UT.Filter(nearby, function(v)
+    local toRemove = table.filter(nearby, function(v)
         return StoryBypass.AllowRemoval(v.Entity)
     end)
 
@@ -107,7 +109,7 @@ function StoryBypass.ClearArea(character)
         end)
     end
 
-    local objects = UT.Filter(nearby, function(v)
+    local objects = table.filter(nearby, function(v)
         return v.Entity.ServerItem and not GU.Object.IsOwned(v.Guid)
     end)
     for _, batch in pairs(UT.Batch(objects, math.ceil(#objects / 5))) do
@@ -126,7 +128,7 @@ function StoryBypass.ClearArea(character)
                             b.Entity.Health.Hp = 666
                             b.Entity.Health.MaxHp = 666
                             b.Entity:Replicate("Health")
-                            b.Entity.Resistances.Resistances = UT.Map(
+                            b.Entity.Resistances.Resistances = table.map(
                                 { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, -- 14
                                 function()
                                     return {
@@ -369,12 +371,12 @@ local function cancelDialog(dialog, instanceID)
         end)
         local dialogActors = actors[instanceID]
 
-        if UT.Find(dialogActors, Enemy.IsValid) then
+        if table.find(dialogActors, Enemy.IsValid) then
             return
         end
 
         for _, actor in ipairs(dialogActors) do
-            local paidActor = US.Contains(actor, {
+            local paidActor = string.contains(actor, {
                 "_Daisy_",
                 "Jergal",
                 -- "OathbreakerKnight",
@@ -386,11 +388,11 @@ local function cancelDialog(dialog, instanceID)
             end
         end
 
-        local hasRemovable = UT.Filter(dialogActors, function(actor)
+        local hasRemovable = table.filter(dialogActors, function(actor)
             return GC.IsNonPlayer(actor) and Osi.IsAlly(Player.Host(), actor) ~= 1
         end)
 
-        local hasPlayable = UT.Filter(dialogActors, function(actor)
+        local hasPlayable = table.filter(dialogActors, function(actor)
             return GC.IsPlayable(actor)
         end)
 
@@ -592,7 +594,7 @@ local function removeAllEntities()
         return
     end
 
-    if UT.Contains(PersistentVars.RegionsCleared, Player.Region()) then
+    if table.contains(PersistentVars.RegionsCleared, Player.Region()) then
         return
     end
 

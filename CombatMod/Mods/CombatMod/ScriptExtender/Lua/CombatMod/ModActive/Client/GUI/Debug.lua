@@ -122,15 +122,15 @@ function Debug.Enemies(root)
     search.OnChange = Debounce(100, function(input)
         local list = {}
         for k, enemies in pairs(netEnemies) do
-            list[k] = UT.Filter(enemies, function(item)
+            list[k] = table.filter(enemies, function(item)
                 local temp = Ext.Template.GetTemplate(item.TemplateId)
                 if not temp then
                     L.Error("Template not found", item.TemplateId, item.Name)
                     return false
                 end
 
-                return US.Contains(item.Name, input.Text, true, true)
-                    or US.Contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
+                return string.contains(item.Name, input.Text, true, true)
+                    or string.contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
             end)
         end
 
@@ -229,7 +229,7 @@ function Debug.Items(root)
     search.OnChange = Debounce(100, function(input)
         local list = {}
         for k, items in pairs(netItems) do
-            list[k] = UT.Filter(items, function(item)
+            list[k] = table.filter(items, function(item)
                 local temp = Ext.Template.GetTemplate(item.RootTemplate)
                 if not temp then
                     L.Error("Template not found", item.RootTemplate, item.Name)
@@ -237,12 +237,12 @@ function Debug.Items(root)
                 end
 
                 if input.Text:match("^#") then
-                    return US.Contains(item.Slot, input.Text:sub(2), true, true)
-                        or US.Contains(item.Tab, input.Text:sub(2), true, true)
+                    return string.contains(item.Slot, input.Text:sub(2), true, true)
+                        or string.contains(item.Tab, input.Text:sub(2), true, true)
                 end
 
-                return US.Contains(item.Name, input.Text, true, true)
-                    or US.Contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
+                return string.contains(item.Name, input.Text, true, true)
+                    or string.contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
             end)
         end
 

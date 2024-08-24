@@ -111,7 +111,7 @@ function Components.Selection(root, multiple)
     function selection.AddItem(label, value)
         local i = #selection.Selectables + 1
 
-        local selected = UT.Contains(selection.Selected, i)
+        local selected = table.contains(selection.Selected, i)
 
         local select = multiple and selection.Root:AddCheckbox(label, selected)
             or selection.Root:AddRadioButton(label, selected)
@@ -136,8 +136,8 @@ function Components.Selection(root, multiple)
                     table.insert(selection.Values, value)
                     selection.Value = value
                 else
-                    UT.Remove(selection.Selected, i)
-                    UT.Remove(selection.Values, value)
+                    table.removevalue(selection.Selected, i)
+                    table.removevalue(selection.Values, value)
                 end
             end
         end
@@ -237,7 +237,7 @@ function Components.Tree(root, tbl, label, onText)
                 k = "[" .. k .. "]"
             end
             if type(v) == "table" then
-                local label = k .. " (" .. UT.Size(v) .. ")"
+                local label = k .. " (" .. table.size(v) .. ")"
                 addNode(node:AddTree(label), v)
             else
                 local replaceNode = false

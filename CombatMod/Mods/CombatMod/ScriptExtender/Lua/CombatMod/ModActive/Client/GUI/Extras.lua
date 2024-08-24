@@ -56,7 +56,7 @@ function Extras.Button(root, text, desc, callback)
     b.OnClick = callback
 
     if desc then
-        for i, s in ipairs(US.Split(desc, "\n")) do
+        for i, s in ipairs(string.split(desc, "\n")) do
             if s ~= "" then
                 root:AddText(s).SameLine = i == 1
             end

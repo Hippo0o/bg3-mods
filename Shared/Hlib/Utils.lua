@@ -140,20 +140,20 @@ function M.Table.Size(t)
 end
 
 ---@param t table<number, any> e.g. { 1, 2, 3 } or { {v=1}, {v=2}, {v=3} }
----@param remove any|table<number, any> e.g. 2 or {v=2}
----@param multiple boolean|nil remove is a table of remove e.g. { 2, 3 } or { {v=2}, {v=3} }
+---@param value any|table<number, any> e.g. 2 or {v=2}
+---@param multiple boolean|nil value is a table of value e.g. { 2, 3 } or { {v=2}, {v=3} }
 ---@return table t
-function M.Table.Remove(t, remove, multiple)
+function M.Table.Remove(t, value, multiple)
     for i = #t, 1, -1 do
         if multiple then
-            for _, value in ipairs(remove) do
-                if M.Equals(t[i], value, true) then
+            for _, val in ipairs(value) do
+                if M.Equals(t[i], val, true) then
                     table.remove(t, i)
                     break
                 end
             end
         else
-            if M.Equals(t[i], remove, true) then
+            if M.Equals(t[i], value, true) then
                 table.remove(t, i)
             end
         end
@@ -187,10 +187,6 @@ end
 ---@param func function
 ---@return table
 function M.Table.Each(t, func)
-    if type(func) == "string" then
-        func = M.Lambda(func)
-    end
-
     local r = {}
     for k, v in pairs(t) do
         func(v, k)
@@ -201,10 +197,6 @@ end
 ---@param func fun(value, key): value: any|nil, key: any|nil
 ---@return table
 function M.Table.Map(t, func)
-    if type(func) == "string" then
-        func = M.Lambda(func)
-    end
-
     local r = {}
     for k, v in pairs(t) do
         local value, key = func(v, k)
@@ -223,10 +215,6 @@ end
 ---@param func fun(value, key): boolean
 ---@return table
 function M.Table.Filter(t, func, keepKeys)
-    if type(func) == "string" then
-        func = M.Lambda(func)
-    end
-
     return M.Table.Map(t, function(v, k)
         if func(v, k) then
             if keepKeys then
@@ -253,10 +241,6 @@ end
 ---@param func fun(value, key): boolean
 ---@return any|nil, string|number|nil @value, key
 function M.Table.Find(t, func)
-    if type(func) == "string" then
-        func = M.Lambda(func)
-    end
-
     for k, v in pairs(t) do
         if func(v, k) then
             return v, k
@@ -449,6 +433,14 @@ end
 
 function M.String.MatchAfter(s, prefix)
     return string.match(s, prefix .. "(.*)")
+end
+
+function M.String.UpperFirst(s)
+    return s:gsub("^%l", string.upper)
+end
+
+function M.String.LowerFirst(s)
+    return s:gsub("^%l", string.lower)
 end
 
 ---@param s string

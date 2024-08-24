@@ -52,7 +52,7 @@ function Loot.Main(tab)
     root:AddText(__("Blacklisted mods will not have their items dropped."))
 
     Net.Request("GetFilterableModList"):After(function(event)
-        local list = UT.Values(event.Payload)
+        local list = table.values(event.Payload)
 
         table.sort(list, function(a, b)
             return a.Name < b.Name

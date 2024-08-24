@@ -109,7 +109,7 @@ function M.On(action, callback, once)
 end
 
 ---@class ChainableRequest : ChainableEvent
----@field After fun(func: fun(event: NetEvent): any): LibsChainable
+---@field After fun(func: fun(event: NetEvent): any): Chainable
 ---@param action string
 ---@param payload any
 ---@return ChainableRequest

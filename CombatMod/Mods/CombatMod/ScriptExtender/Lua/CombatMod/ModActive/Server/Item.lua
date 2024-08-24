@@ -174,7 +174,7 @@ function Item.ClearCache()
 end
 
 function Item.Get(items, type, rarity)
-    return UT.Map(items, function(name)
+    return table.map(items, function(name)
         local item = Object.New(name, type)
 
         if rarity == nil or item.Rarity == rarity then
@@ -197,7 +197,7 @@ function Item.Objects(rarity, forCombat)
 
     local itemFilters = External.Templates.GetItemFilters()
 
-    local items = UT.Filter(objects, function(name)
+    local items = table.filter(objects, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
             return false
@@ -206,11 +206,11 @@ function Item.Objects(rarity, forCombat)
         local tab = stat.InventoryTab
         local type = stat.ItemUseType
 
-        if US.Contains(stat.ModId, itemFilters.Mods, true, true) then
+        if string.contains(stat.ModId, itemFilters.Mods, true, true) then
             return false
         end
 
-        if US.Contains(name, itemFilters.Names, true) then
+        if string.contains(name, itemFilters.Names, true) then
             return false
         end
 
@@ -247,7 +247,7 @@ function Item.Objects(rarity, forCombat)
         local a = Ext.Stats.TreasureCategory.GetLegacy("I_" .. name)
         local b = Ext.Stats.TreasureCategory.GetLegacy("I_" .. temp.Name)
         local c = false
-        for _, v in pairs(US.Split(stat.ObjectCategory, ";")) do
+        for _, v in pairs(string.split(stat.ObjectCategory, ";")) do
             c = Ext.Stats.TreasureCategory.GetLegacy(v)
             if c then
                 break
@@ -276,18 +276,18 @@ function Item.Armor(rarity)
 
     local itemFilters = External.Templates.GetItemFilters()
 
-    local items = UT.Filter(armor, function(name)
+    local items = table.filter(armor, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
             return false
         end
         local slot = stat.Slot
 
-        if US.Contains(stat.ModId, itemFilters.Mods, true, true) then
+        if string.contains(stat.ModId, itemFilters.Mods, true, true) then
             return false
         end
 
-        if US.Contains(name, itemFilters.Names, true) then
+        if string.contains(name, itemFilters.Names, true) then
             return false
         end
 
@@ -335,17 +335,17 @@ function Item.Weapons(rarity)
 
     local itemFilters = External.Templates.GetItemFilters()
 
-    local items = UT.Filter(weapons, function(name)
+    local items = table.filter(weapons, function(name)
         local stat = Ext.Stats.Get(name)
         if not stat then
             return false
         end
 
-        if US.Contains(stat.ModId, itemFilters.Mods, true, true) then
+        if string.contains(stat.ModId, itemFilters.Mods, true, true) then
             return false
         end
 
-        if US.Contains(name, itemFilters.Names, true) then
+        if string.contains(name, itemFilters.Names, true) then
             return false
         end
 
@@ -474,7 +474,7 @@ function Item.GenerateSimpleLoot(rolls, chanceFood, lootRates)
 
         local isFood = math.random() < chanceFood
 
-        items = UT.Filter(items, function(item)
+        items = table.filter(items, function(item)
             if isFood then
                 return item.Tab == "Consumable"
             else
@@ -484,11 +484,11 @@ function Item.GenerateSimpleLoot(rolls, chanceFood, lootRates)
 
         L.Debug("Rolling kill loot items:", #items, "Object")
         if #items > 0 then
-            table.insert(loot, UT.DeepClone(items[math.random(#items)]))
+            table.insert(loot, table.deepclone(items[math.random(#items)]))
         end
     end
 
-    return UT.DeepClone(loot)
+    return table.deepclone(loot)
 end
 
 function Item.GenerateLoot(rolls, lootRates)
@@ -553,16 +553,16 @@ function Item.GenerateLoot(rolls, lootRates)
                 items = Item.Objects(rarity, true)
                 if #items > 0 then
                     local bySlot = UT.GroupBy(items, "Slot")
-                    local slots = UT.Keys(bySlot)
+                    local slots = table.keys(bySlot)
                     local randomSlot = slots[math.random(#slots)]
                     L.Debug("Rolling CombatObject loot slot:", randomSlot, rarity)
 
                     if randomSlot == "Potion" and math.random() < 0.40 then
-                        items = UT.Filter(items, function(item)
+                        items = table.filter(items, function(item)
                             return item.Name:match("^OBJ_Potion_Healing")
                         end)
                     else
-                        items = UT.Values(bySlot[randomSlot])
+                        items = table.values(bySlot[randomSlot])
                     end
                 end
             elseif category == "Weapon" then
@@ -571,10 +571,10 @@ function Item.GenerateLoot(rolls, lootRates)
                 items = Item.Armor(rarity)
                 if #items > 0 then
                     local bySlot = UT.GroupBy(items, "Slot")
-                    local slots = UT.Keys(bySlot)
+                    local slots = table.keys(bySlot)
                     local randomSlot = slots[math.random(#slots)]
                     L.Debug("Rolling Armor loot slot:", randomSlot, rarity)
-                    items = UT.Values(bySlot[randomSlot])
+                    items = table.values(bySlot[randomSlot])
                 end
             end
         end
@@ -583,16 +583,16 @@ function Item.GenerateLoot(rolls, lootRates)
         if #items > 0 then
             local random = items[math.random(#items)]
 
-            if UT.Contains(PersistentVars.RandomLog.Items, random.Name) then
+            if table.contains(PersistentVars.RandomLog.Items, random.Name) then
                 random = items[math.random(#items)]
             end
             LogRandom("Items", random.Name, 100)
 
-            table.insert(loot, UT.DeepClone(random))
+            table.insert(loot, table.deepclone(random))
         end
     end
 
-    return UT.DeepClone(loot)
+    return table.deepclone(loot)
 end
 
 function Item.GetModList()
@@ -634,7 +634,7 @@ Ext.Osiris.RegisterListener(
                 return
             end
 
-            local item = UT.Find(PersistentVars.SpawnedItems, function(item)
+            local item = table.find(PersistentVars.SpawnedItems, function(item)
                 return U.UUID.Equals(item.GUID, object)
             end)
 

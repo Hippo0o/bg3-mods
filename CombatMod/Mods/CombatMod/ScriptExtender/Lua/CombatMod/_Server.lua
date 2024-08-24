@@ -19,16 +19,16 @@ Mod.PersistentVarsTemplate = {
         Items = {},
     },
     LootFilter = {
-        CombatObject = UT.Map(C.ItemRarity, function(v, k)
+        CombatObject = table.map(C.ItemRarity, function(v, k)
             return true, v
         end),
-        Object = UT.Map(C.ItemRarity, function(v, k)
+        Object = table.map(C.ItemRarity, function(v, k)
             return true, v
         end),
-        Armor = UT.Map(C.ItemRarity, function(v, k)
+        Armor = table.map(C.ItemRarity, function(v, k)
             return v ~= "Common", v
         end),
-        Weapon = UT.Map(C.ItemRarity, function(v, k)
+        Weapon = table.map(C.ItemRarity, function(v, k)
             return v ~= "Common", v
         end),
     },
@@ -57,7 +57,7 @@ DefaultConfig = {
     AutoTeleport = 30,
     ScalingModifier = 30,
 }
-Config = UT.DeepClone(DefaultConfig)
+Config = table.deepclone(DefaultConfig)
 
 External = {}
 Templates = {}
@@ -88,7 +88,7 @@ GameState.OnLoad(function()
     end
 
     if not U.Equals(PersistentVars.Config, {}) then
-        External.ApplyConfig(UT.Filter(PersistentVars.Config, function(v, k)
+        External.ApplyConfig(table.filter(PersistentVars.Config, function(v, k)
             return k ~= "Dev" and k ~= "Debug"
         end, true))
     end

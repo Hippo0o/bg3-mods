@@ -4,6 +4,8 @@ Mod.EnableRCE = true
 Mod.Prefix = "Trials of Tav"
 Mod.TableKey = "ToT"
 
+Require("Hlib/StandardLib") -- extends global metatables
+
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
@@ -82,7 +84,7 @@ C = {
         },
     },
 }
-C = UT.Merge(Constants, C)
+C = table.merge(Constants, C)
 
 ---@type GameState
 GameState = Require("Hlib/GameState")
@@ -98,9 +100,13 @@ RetryUntil = Async.RetryUntil
 Schedule = Async.Schedule
 Defer = Async.Defer
 Debounce = Async.Debounce
+Interval = Async.Interval
 
 ---@type Libs
 Libs = Require("Hlib/Libs")
+
+---@type Chainable
+Chainable = Require("Hlib/Chainable")
 
 ---@type Net
 Net = Require("Hlib/Net")

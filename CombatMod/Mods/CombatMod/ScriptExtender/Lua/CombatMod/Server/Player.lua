@@ -35,7 +35,7 @@ end
 ---@param character string|nil GUID
 ---@return string|nil GUID
 function Player.InCombat(character)
-    return UT.Find(GU.DB.GetPlayers(), function(guid)
+    return table.find(GU.DB.GetPlayers(), function(guid)
         return (character == nil or U.UUID.Equals(guid, character)) and Osi.IsInCombat(guid) == 1
     end)
 end
@@ -43,7 +43,7 @@ end
 ---@param character string|nil GUID
 ---@return string|nil GUID
 function Player.InCamp(character)
-    return UT.Find(GU.DB.GetPlayers(), function(guid)
+    return table.find(GU.DB.GetPlayers(), function(guid)
         return (character == nil or U.UUID.Equals(guid, character)) and Ext.Entity.Get(guid).CampPresence ~= nil
     end)
 end
@@ -51,7 +51,7 @@ end
 ---@param character string|nil GUID
 ---@return boolean
 function Player.IsPlayer(character)
-    return UT.Find(GU.DB.GetPlayers(), function(uuid)
+    return table.find(GU.DB.GetPlayers(), function(uuid)
         return U.UUID.Equals(character, uuid)
     end) ~= nil
 end
@@ -69,7 +69,7 @@ function Player.PickupAll(character)
 end
 
 function Player.PartySize()
-    local party = UT.Filter(GU.DB.GetPlayers(), function(guid)
+    local party = table.filter(GU.DB.GetPlayers(), function(guid)
         return Osi.CanJoinCombat(guid) == 1
     end)
 
@@ -223,8 +223,8 @@ function Player.ReturnToCamp()
 end
 
 local readyChecks = {}
----@class ChainableConfirmation : LibsChainable
----@field After fun(func: fun(result: boolean): any): LibsChainable
+---@class ChainableConfirmation : Chainable
+---@field After fun(func: fun(result: boolean): any): Chainable
 ---@param message string
 ---@return ChainableConfirmation
 function Player.AskConfirmation(message, ...)
@@ -232,7 +232,7 @@ function Player.AskConfirmation(message, ...)
     local msgId = U.RandomId("AskConfirmation_")
     Osi.ReadyCheckSpecific(msgId, message, 1, Player.Host(), "", "", "")
 
-    local chainable = Libs.Chainable(message)
+    local chainable = Chainable.Create(message)
     readyChecks[msgId] = function(...)
         chainable:Begin(...)
     end

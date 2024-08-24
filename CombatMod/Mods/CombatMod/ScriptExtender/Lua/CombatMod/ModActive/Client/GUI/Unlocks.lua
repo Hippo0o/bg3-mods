@@ -11,17 +11,17 @@ function ClientUnlock.Main(tab)
 
     Event.ChainOn("StateChange"):After(function(source, state)
         local unlocks = state.Unlocks
-        if UT.Size(unlocks) == 0 then
+        if table.size(unlocks) == 0 then
             return
         end
         source:Unregister()
 
         local cols = 3
-        local nrows = math.ceil(UT.Size(unlocks) / cols)
+        local nrows = math.ceil(table.size(unlocks) / cols)
         Components.Layout(root, cols, nrows, function(layout)
             layout.Table.Borders = true
             layout.Table.ScrollY = true
-            for i, unlock in ipairs(UT.Values(unlocks)) do
+            for i, unlock in ipairs(table.values(unlocks)) do
                 local c = (i - 1) % cols
                 local r = math.ceil(i / cols)
                 local cell = layout.Cells[r][c + 1]
@@ -108,7 +108,7 @@ function ClientUnlock.Tile(root, unlock)
                 if type(req) == "number" then
                     bottomText.Label = bottomText.Label .. __("%d RogueScore required", req) .. "\n"
                 elseif type(req) == "string" then
-                    local u = UT.Find(State.Unlocks, function(u)
+                    local u = table.find(State.Unlocks, function(u)
                         return u.Id == req
                     end)
                     if u then
@@ -182,7 +182,7 @@ function ClientUnlock.Buy(root, unlock)
 end
 
 function ClientUnlock.GetCharacters()
-    local characters = UT.Values(GE.GetParty())
+    local characters = table.values(GE.GetParty())
 
     table.sort(characters, function(a, b)
         return a.Uuid.EntityUuid < b.Uuid.EntityUuid

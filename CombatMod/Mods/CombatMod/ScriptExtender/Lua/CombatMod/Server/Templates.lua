@@ -3,7 +3,7 @@ local mapTemplates = Require("CombatMod/Server/Templates/Maps.lua")
 local scenarioTemplates = Require("CombatMod/Server/Templates/Scenarios.lua")
 local unlockTemplates = Require("CombatMod/Server/Templates/Unlocks.lua")
 local itemBlacklist = Require("CombatMod/Server/Templates/ItemBlacklist.lua")
-local originalLootRates = UT.DeepClone(C.LootRates)
+local originalLootRates = table.deepclone(C.LootRates)
 
 External.File.ExportIfNeeded("Enemies", enemyTemplates)
 External.File.ExportIfNeeded("Maps", mapTemplates)
@@ -28,21 +28,21 @@ function Templates.ExportLootRates()
 end
 
 function Templates.GetEnemies()
-    return UT.DeepClone(enemyTemplates)
+    return table.deepclone(enemyTemplates)
 end
 
 function Templates.GetMaps()
-    return UT.DeepClone(mapTemplates)
+    return table.deepclone(mapTemplates)
 end
 
 function Templates.GetScenarios()
-    return UT.DeepClone(scenarioTemplates)
+    return table.deepclone(scenarioTemplates)
 end
 
 function Templates.GetUnlocks()
-    return UT.DeepClone(unlockTemplates)
+    return table.deepclone(unlockTemplates)
 end
 
 function Templates.GetItemFilters()
-    return UT.DeepClone({ Names = itemBlacklist, Mods = {} })
+    return table.deepclone({ Names = itemBlacklist, Mods = {} })
 end

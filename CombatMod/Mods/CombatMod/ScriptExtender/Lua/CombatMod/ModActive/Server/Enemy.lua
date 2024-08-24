@@ -220,7 +220,7 @@ function Object:OnAttacked(attacker)
     end
     self.WasAttacked = true
 
-    local seenEnemy = UT.Find(GU.DB.TryGet("DB_Sees", 2, { nil, self.GUID }, 1), function(v)
+    local seenEnemy = table.find(GU.DB.TryGet("DB_Sees", 2, { nil, self.GUID }, 1), function(v)
         return Osi.IsEnemy(self.GUID, v) == 1
     end)
 
@@ -419,7 +419,7 @@ end
 
 function Enemy.RestoreFromSave(state)
     xpcall(function()
-        PersistentVars.SpawnedEnemies = UT.Map(state, function(v, k)
+        PersistentVars.SpawnedEnemies = table.map(state, function(v, k)
             return Enemy.Restore(v), k
         end)
     end, function(err)
@@ -496,7 +496,7 @@ end
 ---@return Enemy|nil
 function Enemy.Find(search)
     for _, enemy in Enemy.Iter() do
-        if US.Contains(search, { enemy.TemplateId, enemy.Name }, false, true) then
+        if string.contains(search, { enemy.TemplateId, enemy.Name }, false, true) then
             return enemy
         end
     end
@@ -538,7 +538,7 @@ function Enemy.GetTemplates()
         return cache
     end
 
-    cache = UT.Filter(External.Templates.GetEnemies(), function(v)
+    cache = table.filter(External.Templates.GetEnemies(), function(v)
         local template = Ext.Template.GetRootTemplate(v.TemplateId)
         local keep = template and Ext.Template.GetRootTemplate(template.ParentTemplateId)
         if not keep then
@@ -584,10 +584,10 @@ function Enemy.IsValid(object)
         and not GU.Object.IsOwned(object)
         and (
             Osi.IsSummon(object) == 1
-            or (Scenario.Current() and UT.Find(Scenario.Current().SpawnedEnemies, function(v)
+            or (Scenario.Current() and table.find(Scenario.Current().SpawnedEnemies, function(v)
                 return U.UUID.Equals(v.GUID, object)
             end) ~= nil)
-            or (UT.Find(PersistentVars.SpawnedEnemies, function(v)
+            or (table.find(PersistentVars.SpawnedEnemies, function(v)
                 return U.UUID.Equals(v.GUID, object)
             end) ~= nil)
             or U.UUID.Equals(C.EnemyFaction, Osi.GetFaction(object))
@@ -627,7 +627,7 @@ function Enemy.KillSpawned(object)
         if
             object == nil
             or U.UUID.Equals(enemy.GUID, object)
-            or US.Contains(object, { enemy.TemplateId, enemy.Name, enemy:GetId() })
+            or string.contains(object, { enemy.TemplateId, enemy.Name, enemy:GetId() })
         then
             enemy:Clear(true)
         end
@@ -711,7 +711,7 @@ end
 
 function Enemy.GenerateEnemyList(templates)
     local function isValidFilename(filename)
-        return US.Contains(filename, {
+        return string.contains(filename, {
             "Public/Gustav",
             "Public/GustavDev",
             "Public/Shared",
@@ -771,11 +771,11 @@ function Enemy.GenerateEnemyList(templates)
             "^QUEST_",
         }
 
-        if US.Contains(template.Name, patterns, true) then
+        if string.contains(template.Name, patterns, true) then
             L.Debug(template.Name)
             return false
         end
-        if US.Contains(template.Name, startswith, true) then
+        if string.contains(template.Name, startswith, true) then
             L.Debug(template.Name)
             return false
         end
@@ -853,7 +853,7 @@ function Enemy.TestEnemies(enemies, keepAlive)
                     if tier ~= "trash" then
                         table.insert(
                             dump,
-                            UT.Filter(enemy, function(v, k)
+                            table.filter(enemy, function(v, k)
                                 return k ~= "GUID"
                             end, true)
                         )
