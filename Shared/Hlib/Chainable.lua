@@ -18,6 +18,7 @@ local Chainable = Libs.Struct({
     _Chain = {},
     _Catch = {},
 })
+
 function Chainable.New(source)
     local obj = Chainable.Init()
     obj._IsChainable = Utils.RandomId("Chainable_")
@@ -27,6 +28,7 @@ function Chainable.New(source)
 
     return obj
 end
+
 function Chainable:After(func, passSource)
     if type(func) ~= "function" then
         error("Chainable:After(func) - function expected, got " .. type(func))
@@ -36,6 +38,7 @@ function Chainable:After(func, passSource)
 
     return self
 end
+
 function Chainable:Catch(func, passSource)
     if type(func) ~= "function" then
         error("Chainable:Catch(func) - function expected, got " .. type(func))
@@ -45,6 +48,7 @@ function Chainable:Catch(func, passSource)
 
     return self
 end
+
 function Chainable:Throw(err)
     local func, passSource = table.unpack(self._Catch)
 
@@ -58,6 +62,7 @@ function Chainable:Throw(err)
         func(err)
     end
 end
+
 function Chainable:Begin(...)
     local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(self._InitalInput))
 

@@ -186,6 +186,7 @@ end
 local Runner = Libs.Struct({
     _Id = nil,
     _Queue = nil,
+    _IsAsyncRunner = true,
     Cleared = false,
     ExecCond = function(_, _)
         return true
@@ -461,14 +462,17 @@ function M.Throttle(ms, func)
 end
 
 local function resumeCoroutine(co, ...)
-    local result = { coroutine.resume(co, ...) }
-    local ok = table.remove(result, 1)
+    local args = { ... }
+    return M.Run(function()
+        local result = { coroutine.resume(co, table.unpack(args)) }
+        local ok = table.remove(result, 1)
 
-    if not ok then
-        error(table.unpack(result))
-    end
+        if not ok then
+            error(table.unpack(result))
+        end
 
-    return table.unpack(result)
+        return table.unpack(result)
+    end)
 end
 
 ---@param func fun()
@@ -477,13 +481,8 @@ function M.Wrap(func)
     assert(type(func) == "function", "Async.Wrap(func) - function expected, got " .. type(func))
 
     return function(...)
-        local args = { ... }
-
-        return M.Run(function()
-            local co = coroutine.create(func)
-
-            return resumeCoroutine(co, table.unpack(args))
-        end)
+        local co = coroutine.create(func)
+        return resumeCoroutine(co, ...)
     end
 end
 
@@ -499,13 +498,27 @@ function M.Await(chainable)
         "Async.Await(chainable) - Chainable expected, got " .. type(chainable)
     )
 
+    local resumed = false
+
     chainable:After(function(...)
         local args = { ... }
 
-        return M.Run(function()
-            return resumeCoroutine(co, table.unpack(args))
-        end)
+        resumed = true
+
+        return resumeCoroutine(co, table.unpack(args))
     end)
+
+    if type(chainable.Source) == "table" and chainable.Source._IsAsyncRunner then
+        local clearFn = chainable.Source.Clear
+
+        chainable.Source.Clear = function(self)
+            clearFn(self)
+
+            if not resumed then
+                resumeCoroutine(co, nil)
+            end
+        end
+    end
 
     return coroutine.yield(chainable)
 end
