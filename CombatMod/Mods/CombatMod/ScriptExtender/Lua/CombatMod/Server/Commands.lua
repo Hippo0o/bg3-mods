@@ -144,15 +144,26 @@ function Commands.Spawn(search, neutral)
         return
     end
 
+    local c = Config.BypassStory
+    Config.BypassStory = false
+
     local ok, chainable = e:Spawn(x, y, z, neutral and true or false)
     if ok then
         chainable:After(function()
-            L.Dump(e, e:Entity().ServerCharacter)
-            e:Combat()
+            if not neutral then
+                e:Combat()
+            end
+            Defer(3000, function()
+                L.Dump(e, Enemy.CalcTier(e))
+            end)
         end)
     else
         L.Error("Failed to spawn enemy.")
     end
+
+    Defer(2000, function()
+        Config.BypassStory = c
+    end)
 
     -- Defer(1000, function()
     --     Ext.IO.SaveFile("spawn-" .. e:GetId() .. ".json", Ext.DumpExport(e:Entity():GetAllComponents()))

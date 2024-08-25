@@ -2819,4 +2819,16 @@ return {
 		TemplateId = "30d80d13-aebe-495a-88cc-ee58f58f99ca",
 		Tier = "ultra",
 	},
+	{
+		Info = {
+			AC = 13,
+			Level = 5,
+			Pwr = 56.0,
+			Stats = 8,
+			Vit = 44,
+		},
+		Name = "TOT_Bird_Eagle",
+		TemplateId = "7b7f0163-311e-401e-ac5c-33de42f54dde",
+		Tier = "high",
+	},
 }

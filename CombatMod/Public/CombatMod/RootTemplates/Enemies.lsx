@@ -7954,6 +7954,36 @@
 						</node>
 					</children>
 				</node>
+
+				<node id="GameObjects">
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="MapKey" type="FixedString"
+						value="7b7f0163-311e-401e-ac5c-33de42f54dde" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="1d13a1ff-4ce5-4281-bbc6-d782a403e652" />
+					<attribute id="Name" type="LSString" value="TOT_Bird_Eagle" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
+					<attribute id="Archetype" type="FixedString" value="ranged" />
+					<attribute id="Stats" type="FixedString" value="GiantEagle" />
+					<attribute id="CharacterVisualResourceID" type="FixedString"
+						value="afdd2ae9-f780-5e34-28fa-c71418d85e18" />
+					<attribute id="Icon" type="FixedString"
+						value="afdd2ae9-f780-5e34-28fa-c71418d85e18-_(Icon_Bird_Eagle)" />
+					<attribute id="LevelOverride" type="int32" value="5" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
 			</children>
 		</node>
 	</region>

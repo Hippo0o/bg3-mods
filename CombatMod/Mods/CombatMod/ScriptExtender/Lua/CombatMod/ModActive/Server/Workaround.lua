@@ -26,13 +26,21 @@ function Workaround.ResetApproval()
     end
 end
 
-local function runAll()
+local function party()
     xpcall(Workaround.Tadpole, L.Error)
     xpcall(Workaround.Tags, L.Error)
     xpcall(Workaround.ResetApproval, L.Error)
 end
 
-GameState.OnLoad(runAll)
-Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", runAll)
-Ext.Osiris.RegisterListener("CharacterLeftParty", 1, "after", runAll)
-Ext.Osiris.RegisterListener("LongRestFinished", 0, "after", runAll)
+GameState.OnLoad(party)
+Ext.Osiris.RegisterListener("CharacterJoinedParty", 1, "after", party)
+Ext.Osiris.RegisterListener("CharacterLeftParty", 1, "after", party)
+Ext.Osiris.RegisterListener("LongRestFinished", 0, "after", party)
+
+function Workaround.UndeadImmunity(guid)
+    if Osi.IsTagged(guid, "33c625aa-6982-4c27-904f-e47029a9b140") == 1 then -- UNDEAD
+        Osi.SetTag(guid, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
+    end
+end
+
+Ext.Osiris.RegisterListener("EnteredCombat", 2, "after", Workaround.UndeadImmunity)

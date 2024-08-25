@@ -22,9 +22,10 @@ end
 
 function StoryBypass.EndLongRest()
     Osi.PROC_Camp_LongRestFinishForAllPlayers()
-    Osi.PROC_Camp_EveryoneWakeup()
-    Osi.RemoveStatus(GetHostCharacter(), "LONG_REST", "00000000-0000-0000-0000-000000000000")
-    -- Osi.RestoreParty(GetHostCharacter())
+    -- Osi.PROC_Camp_EveryoneWakeup()
+    for _, p in pairs(GU.DB.GetPlayers()) do
+        Osi.RemoveStatus(p, "LONG_REST", "00000000-0000-0000-0000-000000000000")
+    end
     Osi.PROC_Camp_SetModeToDay()
 end
 
@@ -66,6 +67,7 @@ function StoryBypass.RemoveAllEntities()
     StoryBypass.ExpLock.ResumeTemporary()
 
     Osi.PROC_MOO_Execution_StartFallbackExecutionCombat() -- prevent infinite timer loop
+    Osi.PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff()
 
     local toRemove = table.filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
 
