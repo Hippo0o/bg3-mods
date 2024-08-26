@@ -56,11 +56,11 @@ end
 
 function StoryBypass.RemoveAutosave()
     L.Info("Removing autosave triggers")
-    L.Dump(Osi.DB_AutosaveTrigger:Get(nil))
-    L.Dump(Osi.DB_AutoSaveGroup:Get(nil, nil))
+    L.Dump(Osi.DB_AutoSaveTrigger:Get(nil))
+    L.Dump(Osi.DB_AutosaveGroup:Get(nil, nil))
 
-    Osi.DB_AutoSaveGroup:Delete(nil, nil)
-    Osi.DB_AutosaveTrigger:Delete(nil)
+    Osi.DB_AutosaveGroup:Delete(nil, nil)
+    Osi.DB_AutoSaveTrigger:Delete(nil)
 end
 
 function StoryBypass.RemoveAllEntities()
