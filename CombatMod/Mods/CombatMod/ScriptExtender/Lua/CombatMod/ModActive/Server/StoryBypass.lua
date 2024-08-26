@@ -24,7 +24,7 @@ function StoryBypass.EndLongRest()
     Osi.PROC_Camp_LongRestFinishForAllPlayers()
     -- Osi.PROC_Camp_EveryoneWakeup()
     for _, p in pairs(GU.DB.GetPlayers()) do
-        Osi.RemoveStatus(p, "LONG_REST", "00000000-0000-0000-0000-000000000000")
+        Osi.RemoveStatus(p, "LONG_REST")
     end
     Osi.PROC_Camp_SetModeToDay()
 end

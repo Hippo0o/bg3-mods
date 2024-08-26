@@ -127,7 +127,7 @@ function Player.TeleportToAct(act)
         return
     end
 
-    Osi.PROC_DEBUG_TeleportToAct(act)
+    Osi.PROC_Debug_TeleportToAct(act)
     teleporting = true
 
     local didUnload = false

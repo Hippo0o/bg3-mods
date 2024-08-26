@@ -11,7 +11,9 @@ return {
             :After(async(function()
                 local a = 0
 
+                L.Debug("A")
                 local b = await(async.defer(1000, function()
+                    L.Debug("B")
                     return 123
                 end))
 
@@ -21,6 +23,7 @@ return {
             end))
             :After(function(v)
                 assert(v == 123, "v is not 123")
+                L.Debug("C")
 
                 return v + 222
             end))
@@ -28,6 +31,7 @@ return {
         assert(x == 345, "x is not 345")
 
         local y = await(async.defer(1000, function()
+            L.Debug("D")
             return 456
         end))
 
@@ -38,6 +42,7 @@ return {
         assert(x + y == 801, "x+y is not 801")
 
         assert(interval.Cleared, "Interval not cleared")
+        L.Debug("E")
     end),
     Test2 = async(function()
         local time = 0
@@ -52,7 +57,9 @@ return {
                 :After(async(function()
                     local a = 0
 
+                    L.Debug("B")
                     local b = await(async.defer(1000, function()
+                        L.Debug("C")
                         return 123
                     end))
 
@@ -63,9 +70,11 @@ return {
                 :After(function(v)
                     assert(v == 123, "v is not 123")
 
+                    L.Debug("D")
                     return v + 222
                 end),
             async.defer(1000, function()
+                L.Debug("A")
                 return 456
             end)
         )
@@ -82,6 +91,7 @@ return {
         assert(x[1] + y[1] == 801, "x+y is not 801")
 
         assert(interval.Cleared, "Interval not cleared")
+        L.Debug("E")
     end),
     Test3 = async(function()
         local time = 0
@@ -115,11 +125,14 @@ return {
 
         assert(x == nil, "x is not nil")
     end),
-    Test4 = async(function ()
-        local ok, err = pcall(await, async.defer(1000, function()
-            error("Error")
-            return 123
-        end))
+    Test4 = async(function()
+        local ok, err = pcall(
+            await,
+            async.defer(1000, function()
+                error("Error")
+                return 123
+            end)
+        )
 
         assert(not ok, "Error not thrown")
 
@@ -127,5 +140,5 @@ return {
             error("Error")
             return 123
         end))
-    end)
+    end),
 }

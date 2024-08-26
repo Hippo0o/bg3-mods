@@ -238,12 +238,8 @@ function Runner.Chainable(queue, func)
     end
 
     obj.Clear = function(self)
-        local finished = self.Cleared
         clearFunc(self)
-
-        if not finished then
-            chainable:Finish()
-        end
+        chainable:Finish(true)
     end
 
     if func then

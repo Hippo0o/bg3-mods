@@ -68,7 +68,10 @@ function Chainable:Finish(success, ...)
     self._Chain = {}
 
     if type(self._Finish) == "function" then
-        return { self._Finish(success, ...) }
+        local func = self._Finish
+        self._Finish = nil
+
+        return { func(success, ...) }
     end
 
     if not success then
@@ -80,6 +83,10 @@ end
 
 function Chainable:Begin(...)
     local state = Utils.Table.Combine({ ... }, self._InitalInput)
+
+    if #self._Chain == 0 then
+        return self:Finish(true, table.unpack(state))
+    end
 
     for i, link in ipairs(self._Chain) do
         local func, passSource = table.unpack(link)
@@ -114,7 +121,7 @@ function Chainable:Begin(...)
 
             Utils.Table.Combine(nested._Chain, addonChain)
 
-            nested._InitalInput = Util.Table.Clone(state)
+            nested._InitalInput = Utils.Table.Clone(state)
             table.remove(nested._InitalInput, 1)
 
             if self._Catch then
@@ -123,6 +130,7 @@ function Chainable:Begin(...)
 
             if self._Finish then
                 nested._Finish = self._Finish
+                self._Finish = nil
             end
 
             break
