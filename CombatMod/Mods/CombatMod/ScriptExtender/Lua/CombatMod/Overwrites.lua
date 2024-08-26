@@ -64,7 +64,7 @@ if Ext.IsClient() then
     end)
 
     GameState.OnLoad(function()
-        Net.Send("RequestTemplateOverwrites") -- if the client is joined after the server
+        Net.Send("RequestTemplateOverwrites") -- if the client joined after the server
     end)
 end
 

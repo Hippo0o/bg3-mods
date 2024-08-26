@@ -201,11 +201,9 @@ function Object:ModifyExperience()
 end
 
 function Object:OnCombat()
-    -- if Osi.IsInCombat(self.GUID) ~= 1 then
-    --     Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
-    -- else
-    --     Osi.ClearTag(self.GUID, C.ShadowCurseTag)
-    -- end
+    if Osi.IsTagged(self.GUID, "33c625aa-6982-4c27-904f-e47029a9b140") == 1 then -- UNDEAD
+        Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
+    end
 end
 
 function Object:OnAttacked(attacker)

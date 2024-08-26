@@ -100,7 +100,7 @@ local posType = tt({
 })
 
 External.Validators.Map = tt({
-    Region = { "string" },
+    Region = { C.Regions },
     Enter = { posType },
     Spawns = tt(posType, true),
     Timeline = positionTimelineType,
