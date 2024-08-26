@@ -10,13 +10,7 @@ table.filter = Utils.Table.Filter
 table.find = Utils.Table.Find
 table.keys = Utils.Table.Keys
 table.values = Utils.Table.Values
----@param t table
----@return table
-table.clone = function(t)
-    return Utils.Table.Map(t, function(v, k)
-        return v, k
-    end)
-end
+table.clone = Utils.Table.Clone
 table.deepclone = Utils.Table.DeepClone
 table.combine = Utils.Table.Combine
 table.size = Utils.Table.Size
@@ -61,8 +55,8 @@ await = function(...)
     local args = { ... }
 
     if #args == 1 then
-        return Async.Await(args[1])
+        return Async.Sync(args[1])
     end
 
-    return Async.AwaitAll(args)
+    return Async.SyncAll(args)
 end

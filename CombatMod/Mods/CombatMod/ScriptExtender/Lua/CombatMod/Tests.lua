@@ -115,4 +115,17 @@ return {
 
         assert(x == nil, "x is not nil")
     end),
+    Test4 = async(function ()
+        local ok, err = pcall(await, async.defer(1000, function()
+            error("Error")
+            return 123
+        end))
+
+        assert(not ok, "Error not thrown")
+
+        await(async.defer(1000, function()
+            error("Error")
+            return 123
+        end))
+    end)
 }

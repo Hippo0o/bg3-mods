@@ -184,6 +184,14 @@ function M.Table.DeepClone(t, seen)
 end
 
 ---@param t table
+---@return table
+function M.Table.Clone(t)
+    return M.Table.Map(t, function(v, k)
+        return v, k
+    end)
+end
+
+---@param t table
 ---@param func function
 ---@return table
 function M.Table.Each(t, func)

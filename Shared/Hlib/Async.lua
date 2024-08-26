@@ -186,7 +186,6 @@ end
 local Runner = Libs.Struct({
     _Id = nil,
     _Queue = nil,
-    _IsAsyncRunner = true,
     Cleared = false,
     ExecCond = function(_, _)
         return true
@@ -231,9 +230,20 @@ function Runner.Chainable(queue, func)
         chainable:Begin()
     end
 
+    local clearFunc = obj.Clear
+
     obj.Failed = function(self, error)
-        self:Clear()
+        clearFunc(self)
         chainable:Throw(error)
+    end
+
+    obj.Clear = function(self)
+        local finished = self.Cleared
+        clearFunc(self)
+
+        if not finished then
+            chainable:Finish()
+        end
     end
 
     if func then
@@ -482,74 +492,72 @@ function M.Wrap(func)
 
     return function(...)
         local co = coroutine.create(func)
-        return resumeCoroutine(co, ...)
+        return resumeCoroutine(co, true, ...)
     end
 end
 
 ---@param chainable Chainable
 ---@return any
-function M.Await(chainable)
+function M.Sync(chainable)
     local co = coroutine.running()
 
-    assert(co ~= nil, "Async.Await(chainable) - Can't await outside coroutine.")
+    assert(co ~= nil, "Async.Sync(chainable) - Can't await outside coroutine.")
 
     assert(
         type(chainable) == "table" and chainable._IsChainable,
-        "Async.Await(chainable) - Chainable expected, got " .. type(chainable)
+        "Async.Sync(chainable) - Chainable expected, got " .. type(chainable)
     )
 
-    local resumed = false
-
-    chainable:After(function(...)
-        local args = { ... }
-
-        resumed = true
-
-        return resumeCoroutine(co, table.unpack(args))
-    end)
-
-    if type(chainable.Source) == "table" and chainable.Source._IsAsyncRunner then
-        local clearFn = chainable.Source.Clear
-
-        chainable.Source.Clear = function(self)
-            clearFn(self)
-
-            if not resumed then
-                resumeCoroutine(co, nil)
-            end
-        end
+    chainable._Finish = function(success, ...)
+        return resumeCoroutine(co, success, ...)
     end
 
-    return coroutine.yield(chainable)
+    local result = { coroutine.yield(chainable) }
+    local ok = table.remove(result, 1)
+
+    if not ok then
+        error(table.unpack(result))
+    end
+
+    return table.unpack(result)
 end
 
 ---@param chainables table<Chainable>
 ---@return table<any>
-function M.AwaitAll(chainables)
-    assert(type(chainables) == "table", "Async.AwaitAll(chainables) - table expected, got " .. type(chainables))
+function M.SyncAll(chainables)
+    assert(type(chainables) == "table", "Async.SyncAll(chainables) - table expected, got " .. type(chainables))
 
     local awaiting = #chainables
     local results = {}
 
     local combined = Chainable.Create()
+    local errors = {}
 
     for i, chainable in ipairs(chainables) do
         assert(
             type(chainable) == "table" and chainable._IsChainable,
-            "Async.AwaitAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
+            "Async.SyncAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
         )
 
-        chainable:After(function(...)
+        chainable._Finish = function(success, ...)
             results[i] = { ... }
             awaiting = awaiting - 1
 
-            if awaiting == 0 then
-                combined:Begin(table.unpack(results))
+            if not success then
+                errors[i] = { ... }
             end
-        end)
+
+            if awaiting == 0 then
+                if Utils.Table.Size(errors) > 0 then
+                    combined:Throw(table.unpack(errors))
+                else
+                    combined:Begin(table.unpack(results))
+                end
+            end
+        end
     end
 
-    return M.Await(combined)
+    return M.Sync(combined)
 end
 
 return M

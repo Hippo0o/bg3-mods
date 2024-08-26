@@ -17,6 +17,7 @@ local Chainable = Libs.Struct({
     _InitalInput = {},
     _Chain = {},
     _Catch = {},
+    _Finish = nil,
 })
 
 function Chainable.New(source)
@@ -53,18 +54,32 @@ function Chainable:Throw(err)
     local func, passSource = table.unpack(self._Catch)
 
     if type(func) ~= "function" then
-        error(err)
+        return self:Finish(false, err)
     end
 
     if passSource then
-        func(self.Source, err)
-    else
-        func(err)
+        return self:Finish(true, { func(self.Source, err) })
     end
+
+    return self:Finish(true, { func(err) })
+end
+
+function Chainable:Finish(success, ...)
+    self._Chain = {}
+
+    if type(self._Finish) == "function" then
+        return { self._Finish(success, ...) }
+    end
+
+    if not success then
+        error(...)
+    end
+
+    return { ... }
 end
 
 function Chainable:Begin(...)
-    local state = Utils.Table.Combine({ ... }, Utils.Table.DeepClone(self._InitalInput))
+    local state = Utils.Table.Combine({ ... }, self._InitalInput)
 
     for i, link in ipairs(self._Chain) do
         local func, passSource = table.unpack(link)
@@ -83,6 +98,7 @@ function Chainable:Begin(...)
         end
 
         if state[1] == nil then
+            state = self:Finish(true, table.unpack(state))
             break
         end
 
@@ -91,20 +107,29 @@ function Chainable:Begin(...)
             ---@type Chainable
             local nested = state[1]
 
-            local addonChain = Utils.Table.DeepClone(self._Chain)
+            local addonChain = Utils.Table.Clone(self._Chain)
             for j = 1, i do
                 table.remove(addonChain, 1)
             end
 
             Utils.Table.Combine(nested._Chain, addonChain)
 
-            nested._InitalInput = state
+            nested._InitalInput = Util.Table.Clone(state)
             table.remove(nested._InitalInput, 1)
+
             if self._Catch then
                 nested._Catch = self._Catch
             end
 
+            if self._Finish then
+                nested._Finish = self._Finish
+            end
+
             break
+        end
+
+        if i == #self._Chain then
+            state = self:Finish(true, table.unpack(state))
         end
     end
 
