@@ -118,6 +118,7 @@ function M.Request(action, payload)
     local chainable = Event.ChainOn(M.EventName(responseAction), true)
 
     M.Send(action, payload, responseAction)
+    -- TODO maybe add timeout and fail
 
     return chainable
 end

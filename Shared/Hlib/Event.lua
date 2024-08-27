@@ -41,6 +41,13 @@ local EventListener = Libs.Struct({
             self:Unregister()
         end
     end,
+    Register = function(self)
+        if not listeners[self._Event] then
+            listeners[self._Event] = {}
+        end
+
+        table.insert(listeners[self._Event], self)
+    end,
     Unregister = function(self)
         local eventListeners = listeners[self._Event]
         if not eventListeners then
@@ -73,11 +80,7 @@ function EventListener.New(event, callback, once)
 
     obj._Id = Utils.RandomId(event .. "_")
 
-    if not listeners[event] then
-        listeners[event] = {}
-    end
-
-    table.insert(listeners[event], obj)
+    obj:Register()
 
     return obj
 end
@@ -91,9 +94,15 @@ function EventListener.Chainable(event, once)
     local obj = EventListener.New(event, nil, once)
 
     local chainable = Chainable.Create(obj)
-
     obj._Func = function(...)
         return chainable:Begin(...)
+    end
+
+    local unregisterFunc = obj.Unregister
+
+    obj.Unregister = function(self)
+        unregisterFunc(self)
+        chainable:Finish(true)
     end
 
     return chainable
