@@ -35,19 +35,26 @@ string.ucfirst = Utils.String.UpperFirst
 
 fn = Utils.Lambda
 
-equals = Utils.Equals
+eq = Utils.Equals
 
 ---@type Async|function
 async = setmetatable({}, {
     __index = function(_, key)
-        key = Utils.String.UpperFirst(key)
+        local _, k = Utils.Table.Find(Async, function(_, k)
+            return string.lower(key) == string.lower(k)
+        end)
+
+        if not k then
+            return nil
+        end
+
         return function(...)
-            return Async[key](...)
+            return Async[k](...)
         end
     end,
     __call = function(_, ...)
         return Async.Wrap(...)
-    end
+    end,
 })
 
 ---@vararg Chainable

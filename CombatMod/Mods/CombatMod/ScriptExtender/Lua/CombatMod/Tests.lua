@@ -95,7 +95,7 @@ return {
     end),
     Test3 = async(function()
         local time = 0
-        local x = await(async.WaitUntil(function(self)
+        local x = await(async.waituntil(function(self)
             if time >= 4 then
                 return true
             end
@@ -110,7 +110,7 @@ return {
         assert(x == 123, "x is not 123")
 
         local time = 0
-        local x = await(async.WaitUntil(function(self)
+        local x = await(async.waituntil(function(self)
             if time >= 4 then
                 self:Clear()
                 return
