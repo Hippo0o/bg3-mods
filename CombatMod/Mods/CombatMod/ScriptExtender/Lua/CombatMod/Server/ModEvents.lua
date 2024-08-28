@@ -1,5 +1,6 @@
 ModEvent.Register("ScenarioCombatStarted")
 ModEvent.Register("ScenarioRoundStarted")
+ModEvent.Register("ScenarioRoundSpawned")
 ModEvent.Register("ScenarioEnemySpawned")
 ModEvent.Register("ScenarioEnemyKilled")
 ModEvent.Register("ScenarioRestored")

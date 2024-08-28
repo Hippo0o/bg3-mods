@@ -29,7 +29,7 @@ function GameMode.StartRoguelike(template)
     PersistentVars.RogueScenario = template.Name
 end
 
-function GameMode.GetTiers(cow)
+function GameMode.GetTiers(cow, score)
     -- define tiers and their corresponding difficulty values
     local tiers = {
         { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
@@ -52,7 +52,7 @@ function GameMode.GetTiers(cow)
     end
 
     if cow then
-        tiers = { { name = "TOT_OX_A", value = 4, amount = 100 } }
+        tiers = { { name = "TOT_OX_A", value = math.max(4, score / 100), amount = 100 } }
     end
 
     return tiers
@@ -66,15 +66,18 @@ function GameMode.GenerateScenario(score, tiers)
     local maxRounds = 10
     local preferredRounds = 3
     local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
+    local scoreTolerance = tiers[1].value
     if score > 1000 then
         maxRounds = 20
         preferredRounds = 5
         emptyRoundChance = 0.1
+        scoreTolerance = 50
     end
     if score > 3000 then
         maxRounds = math.ceil(score / 100)
         preferredRounds = math.ceil(score / 300)
         emptyRoundChance = 0
+        scoreTolerance = math.ceil(score / 30)
     end
 
     score = score >= tiers[1].value and score or tiers[1].value
@@ -199,7 +202,7 @@ function GameMode.GenerateScenario(score, tiers)
         while remainingValue > 0 do
             distribute()
 
-            if remainingValue < tiers[1].value then
+            if remainingValue < scoreTolerance then
                 break
             end
 
@@ -542,7 +545,7 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function(template)
-            local tiers = GameMode.GetTiers(makeItCow())
+            local tiers = GameMode.GetTiers(makeItCow(), PersistentVars.RogueScore)
 
             for i, tier in ipairs(tiers) do
                 local weight = tier.amount / 100 * 0.7 -- bias towards tiers with more enemies
@@ -566,7 +569,7 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function(template)
-            local tiers = GameMode.GetTiers(makeItCow())
+            local tiers = GameMode.GetTiers(makeItCow(), PersistentVars.RogueScore)
 
             for i, tier in ipairs(tiers) do
                 local weight = tier.amount / 100 * 0.9 -- bias towards tiers with more enemies
@@ -590,7 +593,7 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function(template)
-            local tiers = GameMode.GetTiers(makeItCow())
+            local tiers = GameMode.GetTiers(makeItCow(), PersistentVars.RogueScore)
 
             for i, tier in ipairs(tiers) do
                 local weight = tier.amount / 100 * 0.7 -- bias towards tiers with more enemies

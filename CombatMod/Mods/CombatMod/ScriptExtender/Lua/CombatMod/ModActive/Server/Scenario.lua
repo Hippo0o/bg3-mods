@@ -250,6 +250,8 @@ function Action.SpawnRound()
                         Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
                         Event.Trigger("ScenarioEnemySpawned", Current(), e)
 
+                        -- Action.GroupEnemy(e)
+
                         return posCorrectionChainable
                     end)
                     :After(function(e, corrected)
@@ -293,6 +295,8 @@ function Action.StartRound()
 
     return Action.SpawnRound():After(function()
         Scenario.MarkSpawns(s.Round + 1)
+
+        Event.Trigger("ScenarioRoundSpawned", s)
 
         return true
     end)
@@ -363,6 +367,19 @@ function Action.MapEntered()
         interval = 200,
     })
 end
+
+-- function Action.GroupEnemy(enemy)
+--     local s = Current()
+--     if #s.SpawnedEnemies < 11 then
+--         return
+--     end
+--
+--     if enemy.Tier ~= C.EnemyTier[1] then
+--         return
+--     end
+--
+--     Osi.RequestSetSwarmGroup(enemy.GUID, U.UUID.FromString("SwarmGroupLow"))
+-- end
 
 function Action.EnemyAdded(enemy)
     Scenario.CombatSpawned(enemy)
@@ -978,6 +995,37 @@ Ext.Osiris.RegisterListener(
 
                     Osi.EndTurn(uuid)
                 end)
+        end
+
+        if #s.SpawnedEnemies < 11 then
+            return
+        end
+
+        local enemy = table.find(s.SpawnedEnemies, function(e)
+            return U.UUID.Equals(e.GUID, uuid)
+        end)
+
+        if not enemy then
+            return
+        end
+        for i, tier in ipairs(C.EnemyTier) do
+            if enemy.Tier == tier then
+                Osi.StopFollow(uuid)
+                if #s.SpawnedEnemies > i * 11 then
+                    -- Osi.ApplyStatus(uuid, "COMMAND_APPROACH", -1)
+                    Osi.Follow(uuid, Osi.GetClosestAlivePlayer(uuid) or Player.Host())
+
+                    Defer(1000, function()
+                        Osi.EndTurn(uuid)
+                    end)
+
+                    Defer(4000, function()
+                        Osi.StopFollow(uuid)
+                    end)
+                end
+
+                break
+            end
         end
     end)
 )
