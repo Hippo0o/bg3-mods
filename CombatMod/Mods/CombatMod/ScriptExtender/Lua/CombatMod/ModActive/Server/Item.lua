@@ -403,7 +403,7 @@ function Item.PickupAll(character, rarity, type)
             and (type == nil or item.Type == type)
             and (rarity == nil or item.Rarity == rarity)
         then
-            Osi.ToInventory(item.GUID, character)
+            Osi.ToInventory(item.GUID, GC.GetPlayer(character))
             count = count + 1
             Schedule(function()
                 if GU.Object.IsOwned(item.GUID) or Osi.IsItem(item.GUID) ~= 1 then

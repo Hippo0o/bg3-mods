@@ -152,6 +152,8 @@ end
 
 M.Character = {}
 
+---@param character string GUID
+---@return boolean
 function M.Character.IsHireling(character)
     local faction = Osi.GetFaction(character)
 
@@ -195,6 +197,8 @@ function M.Character.IsPlayable(character)
         )
 end
 
+---@param character string GUID
+---@return boolean
 function M.Character.IsImportant(character)
     return M.Character.IsPlayable(character)
         or (
@@ -204,8 +208,21 @@ function M.Character.IsImportant(character)
         )
 end
 
+---@param character string GUID
+---@return boolean
 function M.Character.IsValid(character)
     return Osi.IsCharacter(character) == 1 and Osi.IsOnStage(character) == 1
+end
+
+---@param character string GUID
+---@return string GUID
+function M.Character.GetPlayer(character)
+    local owner = Osi.CharacterGetOwner(character)
+    if owner then
+        return owner
+    end
+
+    return character
 end
 
 ---@param character string GUID
