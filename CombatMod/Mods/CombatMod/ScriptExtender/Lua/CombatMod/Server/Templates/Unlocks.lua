@@ -125,6 +125,18 @@ local ngPlus = {
         Requirement = 300,
     },
     {
+        Id = "BuyRogueScore",
+        Name = __("%s RogueScore", "+50"),
+        Icon = "GenericIcon_Intent_Buff",
+        Cost = 20,
+        Amount = nil,
+        Character = false,
+        Requirement = "NEWGAME_PLUS",
+        OnBuy = function(self, character)
+            GameMode.UpdateRogueScore(PersistentVars.RogueScore + 50)
+        end,
+    },
+    {
         Id = "ScoreMultiplier",
         Name = __("Gain double RogueScore"),
         Icon = "GenericIcon_Intent_Buff",
@@ -148,10 +160,12 @@ local ngPlus = {
         OnBuy = function(self, character)
             if self.Bought > 0 then
                 for _, u in pairs(getUnlocks()) do
-                    if string.contains(u.Id, {
-                        "^Buy",
-                        "TadAwaken",
-                    }) then
+                    if
+                        string.contains(u.Id, {
+                            "^Buy",
+                            "TadAwaken",
+                        })
+                    then
                         if u.Cost > 0 and u.Amount ~= nil and u.Amount > 0 then
                             L.Debug(u.Id)
                             u.Bought = 0
@@ -198,7 +212,7 @@ local ngPlus = {
         Character = false,
         Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
-            local loot = Item.GenerateLoot(10, C.LootRates, 10)
+            local loot = Item.GenerateLoot(10, C.LootRates)
 
             local x, y, z = Osi.GetPosition(character)
             Item.SpawnLoot(loot, x, y, z)
@@ -331,7 +345,61 @@ return table.combine({
         Amount = 10,
         Character = false,
         OnBuy = function(self, character)
-            local loot = Item.GenerateLoot(10, C.LootRates, 10)
+            local loot = Item.GenerateLoot(10, C.LootRates)
+
+            local x, y, z = Osi.GetPosition(character)
+            Item.SpawnLoot(loot, x, y, z)
+        end,
+    },
+    {
+        Id = "BuyLootRare",
+        Name = __("Roll Rare Loot %dx", 3),
+        Icon = "Item_CONT_GEN_Chest_Jewel_C",
+        Cost = 50,
+        Amount = 6,
+        Character = false,
+        OnBuy = function(self, character)
+            local loot = Item.GenerateLoot(5, {
+                Objects = { Rare = 1 },
+                Armor = { Rare = 1 },
+                Weapons = { Rare = 1 },
+            })
+
+            local x, y, z = Osi.GetPosition(character)
+            Item.SpawnLoot(loot, x, y, z)
+        end,
+    },
+    {
+        Id = "BuyLootEpic",
+        Name = __("Roll Epic Loot %dx", 3),
+        Icon = "Item_CONT_GEN_Chest_Jewel_A",
+        Cost = 100,
+        Amount = 3,
+        Character = false,
+        OnBuy = function(self, character)
+            local loot = Item.GenerateLoot(3, {
+                Objects = { VeryRare = 1 },
+                Armor = { VeryRare = 1 },
+                Weapons = { VeryRare = 1 },
+            })
+
+            local x, y, z = Osi.GetPosition(character)
+            Item.SpawnLoot(loot, x, y, z)
+        end,
+    },
+    {
+        Id = "BuyLootLegendary",
+        Name = __("Roll Legendary Loot %dx", 1),
+        Icon = "Item_CONT_GEN_Chest_Jewel_D",
+        Cost = 100,
+        Amount = 3,
+        Character = false,
+        OnBuy = function(self, character)
+            local loot = Item.GenerateLoot(1, {
+                Objects = { Legendary = 1 },
+                Armor = { Legendary = 1 },
+                Weapons = { Legendary = 1 },
+            })
 
             local x, y, z = Osi.GetPosition(character)
             Item.SpawnLoot(loot, x, y, z)
@@ -405,7 +473,10 @@ return table.combine({
         Id = "BuyGodBlessing",
         Name = Localization.Get("h86fef9afgeb0eg45e8g8388gd8e9f7c619b7"),
         Icon = "GenericIcon_Intent_Buff",
-        Description = Localization.Get("he4120ec1gc489g4f2fg947cgbe6449fed394", Ext.Stats.Get("LOW_STORMSHORETABERNACLE_GODBLESSED").DescriptionParams), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",), --"Gain +2 bonus to all Saving throws.",
+        Description = Localization.Get(
+            "he4120ec1gc489g4f2fg947cgbe6449fed394",
+            Ext.Stats.Get("LOW_STORMSHORETABERNACLE_GODBLESSED").DescriptionParams
+        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",), --"Gain +2 bonus to all Saving throws.",
         Cost = 60,
         Amount = nil,
         Character = true,
@@ -422,7 +493,45 @@ return table.combine({
         Amount = nil,
         Character = true,
         OnBuy = function(self, character)
-            Osi.ApplyStatus(character, "GOB_CALMNESS_IN_PAIN", -1)
+            Osi.ApplyStatus(character, "GOB_CALMNESS_IN_PAIN", -1) -- removed on death
+        end,
+    },
+    {
+        Id = "BuyResonanceStone",
+        Name = Localization.Get("h2d9eec26gb99cg4944g9b9bg339dda67c9e2"),
+        Icon = "Item_TOOL_MF_Resonance_Crystal_A",
+        Description = Localization.Get("h541fc541g7e8cg4296g8b01g4c4b589be49e"),
+        Cost = 40,
+        Amount = nil,
+        Character = true,
+        OnBuy = function(self, character)
+            if Osi.HasAppliedStatus(character, "COL_RESONANCESTONE_BUFF") ~= 1 then
+                Osi.ApplyStatus(character, "COL_RESONANCESTONE_BUFF", -1) -- removed on death
+            end
+        end,
+    },
+    {
+        Id = "BuyAnimateDeadZone",
+        Name = Localization.Get("hca33cd78g2509g4736gb3cegc9af2d4faba5"),
+        Icon = "PassiveFeature_Generic_Death",
+        Description = Localization.Get("he14e8628g1c7fg4e46gadacga197c3410657"),
+        Cost = 30,
+        Amount = nil,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.ApplyStatus(character, "ANIMATEDEAD_ZONE", -1)
+        end,
+    },
+    {
+        Id = "BuyFrogMind",
+        Name = Localization.Get("hbf05d8a1g044ag4d4aga9ddga01f490d2ed2"),
+        Icon = "Item_DEC_MF_Brain_Jar_Memory_A",
+        Description = Localization.Get("haed9b6c2g4574g484bg9e1fgd26cf610c63a"),
+        Cost = 20,
+        Amount = nil,
+        Character = true,
+        OnBuy = function(self, character)
+            Osi.ApplyStatus(character, "COL_GITHZERAI_MIND_TECHNIQUE", -1)
         end,
     },
     {
@@ -476,7 +585,10 @@ return table.combine({
     {
         Id = "BuyWakeTheDead",
         Name = Localization.Get("h107871e3gd9c6g4091g828fg3608cb2cb03f"),
-        Description = Localization.Get("h0d543bfeg7506g45e8g84fag0350fb67b494", Ext.Stats.Get("Target_CursedTome_WakeTheDead").DescriptionParams), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
+        Description = Localization.Get(
+            "h0d543bfeg7506g45e8g84fag0350fb67b494",
+            Ext.Stats.Get("Target_CursedTome_WakeTheDead").DescriptionParams
+        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Icon = "Spell_WakeTheDead",
         Cost = 80,
         Amount = 1,
@@ -489,7 +601,10 @@ return table.combine({
         Id = "BuyVampireAscendant",
         Name = Localization.Get("h7c8ce380g0d56g4807gb60cg58e283b4ecdb"),
         Icon = "Action_Monster_Bulette_Bite",
-        Description = Localization.Get("hf9a3c136gfa53g4170g9eeega20ced9c9111", Ext.Stats.Get("LOW_Astarion_VampireAscendant").DescriptionParams), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
+        Description = Localization.Get(
+            "hf9a3c136gfa53g4170g9eeega20ced9c9111",
+            Ext.Stats.Get("LOW_Astarion_VampireAscendant").DescriptionParams
+        ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Cost = 300,
         Amount = 1,
         Character = true,
@@ -510,7 +625,7 @@ return table.combine({
                 Osi.ApplyStatus(character, "END_ALLYABILITIES_BHAALBUFF", -1)
             end
         end,
-        OnReapply = Async.Debounce(100, function(self) ---@param self Unlock
+        OnReapply = Debounce(100, function(self) ---@param self Unlock
             for uuid, _ in pairs(self.BoughtBy) do
                 self:OnBuy(uuid)
             end

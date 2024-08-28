@@ -7984,6 +7984,39 @@
 						</node>
 					</children>
 				</node>
+
+				<node id="GameObjects">
+					<attribute id="CharacterVisualResourceID" type="FixedString"
+						value="b13dd9f8-e9ee-52b2-e634-bfb9b1b7d94e" />
+					<attribute id="DisplayName" type="TranslatedString"
+						handle="h5a58f0ceg906cg456fg883ag47465a45ebe4" version="2" />
+					<attribute id="Equipment" type="FixedString" value="GLO_Cazador" />
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="Icon" type="FixedString"
+						value="b13dd9f8-e9ee-52b2-e634-bfb9b1b7d94e-GLO_Cazador_(Icon_Cazador)" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="LevelOverride" type="int32" value="12" />
+					<attribute id="MapKey" type="FixedString"
+						value="ab48a81f-8b31-4d26-b96c-bc4520103619" />
+					<attribute id="Name" type="LSString" value="TOT_Cazador" />
+					<attribute id="Race" type="guid" value="b615c4e0-2157-4878-ab4c-cdacc679a87b" />
+					<attribute id="Stats" type="FixedString" value="GLO_Cazador" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="8b9128de-fc04-4942-a896-4c377f28413c" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+
 			</children>
 		</node>
 	</region>

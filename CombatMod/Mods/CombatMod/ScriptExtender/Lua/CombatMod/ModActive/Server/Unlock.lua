@@ -111,10 +111,18 @@ function Unlock.CalculateReward(scenario)
     end
 
     local prev = PersistentVars.Currency or 0
-    PersistentVars.Currency = prev + math.floor(gained)
+    Unlock.UpdateCurrency(prev + math.floor(gained))
+end
 
-    Defer(2000, function()
-        Player.Notify(__("Your Currency increased: %d -> %d!", prev, PersistentVars.Currency))
+function Unlock.UpdateCurrency(currency)
+    local prev = PersistentVars.Currency or 0
+
+    PersistentVars.Currency = currency
+
+    Event.Trigger("CurrencyChanged", prev, currency)
+
+    Defer(1000, function()
+        Player.Notify(__("Your Currency increased: %d -> %d!", prev, currency))
     end)
 end
 
@@ -264,7 +272,7 @@ Net.On("BuyUnlock", function(event)
     local character = event.Payload.Character or event:Character()
 
     unlock:Buy(character)
-    PersistentVars.Currency = PersistentVars.Currency - unlock.Cost
+    Unlock.UpdateCurrency(PersistentVars.Currency - unlock.Cost)
 
     soundSuccess()
 

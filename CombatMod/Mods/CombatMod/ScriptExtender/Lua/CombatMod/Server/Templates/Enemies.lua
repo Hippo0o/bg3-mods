@@ -2831,4 +2831,16 @@ return {
 		TemplateId = "7b7f0163-311e-401e-ac5c-33de42f54dde",
 		Tier = "high",
 	},
+	{
+		Info = {
+			AC = 17,
+			Level = 12,
+			Pwr = 171.0,
+			Stats = 22,
+			Vit = 208,
+		},
+		Name = "TOT_Cazador",
+		TemplateId = "ab48a81f-8b31-4d26-b96c-bc4520103619",
+		Tier = "legendary",
+	},
 }

@@ -254,9 +254,9 @@ function Object:Modify(keepFaction)
 
     self:ModifyExperience()
 
-    self:Replicate()
+    self:Entity().ServerCharacter.Treasures = { "Empty" }
 
-    -- entity.ServerCharacter.Treasures = { "Empty" }
+    self:Replicate()
 
     -- maybe useful
     -- Osi.CharacterGiveEquipmentSet(target, equipmentSet)
@@ -539,11 +539,10 @@ function Enemy.GetTemplates()
     cache = table.filter(External.Templates.GetEnemies(), function(v)
         local template = Ext.Template.GetRootTemplate(v.TemplateId)
         local keep = template and Ext.Template.GetRootTemplate(template.ParentTemplateId)
+
         if not keep then
             L.Debug("Template does not exist:", v.TemplateId)
-        end
-
-        if (v.Stats and not Ext.Stats.Get(v.Stats)) or not Ext.Stats.Get(template.Stats) then
+        elseif (v.Stats and not Ext.Stats.Get(v.Stats)) or not Ext.Stats.Get(template.Stats) then
             L.Debug("Template Stats does not exist:", v.TemplateId)
             keep = false
         end

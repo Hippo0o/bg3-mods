@@ -536,16 +536,16 @@ function Item.GenerateLoot(rolls, lootRates)
         local items = {}
         local fail = 0
 
-        local category = rollCategory()
-        if category == lastCategory then
-            category = rollCategory()
-        end
-        lastCategory = category
-
         local rarity = nil
         -- avoid 0 rolls e.g. legendary objects dont exist
-        while #items == 0 and fail < 5 do
+        while #items == 0 and fail < 10 do
             fail = fail + 1
+
+            local category = rollCategory()
+            if category == lastCategory then
+                category = rollCategory()
+            end
+            lastCategory = category
 
             rarity = rarities[category][math.random(#rarities[category])]
 
@@ -577,9 +577,10 @@ function Item.GenerateLoot(rolls, lootRates)
                     items = table.values(bySlot[randomSlot])
                 end
             end
+
+            L.Debug("Rolling bonus loot items:", #items, category, rarity)
         end
 
-        L.Debug("Rolling bonus loot items:", #items, category, rarity)
         if #items > 0 then
             local random = items[math.random(#items)]
 
