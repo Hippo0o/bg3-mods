@@ -1005,17 +1005,21 @@ Ext.Osiris.RegisterListener(
             return U.UUID.Equals(e.GUID, uuid)
         end)
 
-        if not enemy then
+        if not enemy or enemy.Temporary or enemy.IsBoss then
             return
         end
         for i, tier in ipairs(C.EnemyTier) do
+            if i > 3 then
+                break
+            end
+
             if enemy.Tier == tier then
                 Osi.StopFollow(uuid)
                 if #s.SpawnedEnemies > i * 11 then
                     -- Osi.ApplyStatus(uuid, "COMMAND_APPROACH", -1)
-                    Osi.Follow(uuid, Osi.GetClosestAlivePlayer(uuid) or Player.Host())
 
-                    Defer(1000, function()
+                    Defer(2000, function()
+                        Osi.Follow(uuid, Osi.GetClosestAlivePlayer(uuid) or Player.Host())
                         Osi.EndTurn(uuid)
                     end)
 
