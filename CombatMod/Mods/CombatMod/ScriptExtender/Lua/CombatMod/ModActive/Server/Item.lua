@@ -416,6 +416,18 @@ function Item.PickupAll(character, rarity, type)
     return count
 end
 
+function Item.PickupLoot(character)
+    for type, data in pairs(PersistentVars.LootFilter) do
+        for rarity, pickup in pairs(data) do
+            if pickup then
+                Item.PickupAll(character or Player.Host(), rarity, type)
+            else
+                Item.DestroyAll(rarity, type)
+            end
+        end
+    end
+end
+
 function Item.SpawnLoot(loot, x, y, z, autoPickup)
     local i = 0
     local pingedLoot = {}
@@ -437,7 +449,7 @@ function Item.SpawnLoot(loot, x, y, z, autoPickup)
         if i > #pingedLoot then
             self:Clear()
             if autoPickup and Player.InCamp() then
-                Player.PickupAll()
+                Item.PickupLoot()
             end
 
             return
@@ -649,9 +661,10 @@ Ext.Osiris.RegisterListener(
 
 Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "after", function(uuid)
     if U.UUID.Equals(uuid, Player.Host()) then
-        Player.PickupAll()
+        Item.PickupLoot()
     end
 end)
+Event.On("ReturnToCamp", Item.PickupLoot)
 
 Event.On("ScenarioEnemyKilled", function(scenario, enemy)
     local nr = #scenario.KilledEnemies

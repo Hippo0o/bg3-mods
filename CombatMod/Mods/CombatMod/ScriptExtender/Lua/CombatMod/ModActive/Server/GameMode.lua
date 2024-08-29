@@ -484,7 +484,6 @@ Event.On(
         if Config.AutoTeleport > 0 then
             Player.Notify(__("Teleporting back to camp in %d seconds.", Config.AutoTeleport), true)
             local timer = Defer(Config.AutoTeleport * 1000, function()
-                Player.PickupAll()
                 Player.ReturnToCamp()
             end)
 

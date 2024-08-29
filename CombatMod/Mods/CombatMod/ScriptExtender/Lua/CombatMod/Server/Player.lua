@@ -56,18 +56,6 @@ function Player.IsPlayer(character)
     end) ~= nil
 end
 
-function Player.PickupAll(character)
-    for type, data in pairs(PersistentVars.LootFilter) do
-        for rarity, pickup in pairs(data) do
-            if pickup then
-                Item.PickupAll(character or Player.Host(), rarity, type)
-            else
-                Item.DestroyAll(rarity, type)
-            end
-        end
-    end
-end
-
 function Player.PartySize()
     local party = table.filter(GU.DB.GetPlayers(), function(guid)
         return Osi.CanJoinCombat(guid) == 1
@@ -209,6 +197,8 @@ function Player.TeleportToCamp()
 end
 
 function Player.ReturnToCamp()
+    Event.Trigger("ReturnToCamp")
+
     if Player.Region() == "END_Main" then
         -- act 1 seems to load fastest
         return Player.TeleportToAct("act1"):After(function()
