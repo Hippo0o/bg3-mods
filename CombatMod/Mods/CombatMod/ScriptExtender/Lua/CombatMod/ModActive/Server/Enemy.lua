@@ -200,11 +200,7 @@ function Object:ModifyExperience()
     end)
 end
 
-function Object:OnCombat()
-    if Osi.IsTagged(self.GUID, "33c625aa-6982-4c27-904f-e47029a9b140") == 1 then -- UNDEAD
-        Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
-    end
-end
+function Object:OnCombat() end
 
 function Object:OnAttacked(attacker)
     Schedule(function()
@@ -244,6 +240,11 @@ function Object:Modify(keepFaction)
     end
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
+
+    -- undead enemies get shadow curse immunity
+    if Osi.IsTagged(self.GUID, "33c625aa-6982-4c27-904f-e47029a9b140") == 1 then -- UNDEAD
+        Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
+    end
 
     -- if not self.Temporary then
     --     Osi.SetTag(self.GUID, "6d60bed7-10cc-4b52-8fb7-baa75181cd49") -- IGNORE_COMBAT_LATE_JOIN_PENALTY

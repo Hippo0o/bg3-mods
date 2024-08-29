@@ -360,7 +360,7 @@ Net.On("RecruitOrigin", function(event)
         return k == name
     end)
     if char then
-        GameMode.RecruitOrigin(name)
+        Player.RecruitOrigin(name)
         Net.Respond(event, { true, __("Recruiting %s.", name) })
     else
         Net.Respond(event, { false, string.format("Origin %s not found.", name) })
