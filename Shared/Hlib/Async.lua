@@ -213,7 +213,7 @@ function Runner.New(queue, func)
     obj.Exec = func
 
     if Mod.Dev then
-        obj._Origin = Utils.CallStack()
+        obj._Origin = Utils.CallStack({ "Hlib/Async.lua" })
     end
 
     obj._Id = queue:Enqueue(obj)
@@ -440,12 +440,18 @@ end
 function M.Debounce(ms, func)
     local runner
 
+    local origin = nil
+    if Mod.Dev then
+        origin = Utils.CallStack({ "Hlib/Async.lua" })
+    end
+
     return function(...)
         if runner then
             runner:Clear()
         end
 
         runner = M.Defer(ms, Utils.Bind(func, ...)).Source
+        runner._Origin = origin
     end
 end
 
@@ -456,14 +462,21 @@ end
 function M.Throttle(ms, func)
     local canRun = true
 
+    local origin = nil
+    if Mod.Dev then
+        origin = Utils.CallStack({ "Hlib/Async.lua" })
+    end
+
     return function(...)
         if not canRun then
             return
         end
         canRun = false
-        M.Defer(ms, function()
+
+        local runner = M.Defer(ms, function()
             canRun = true
-        end)
+        end).Source
+        runner._Origin = origin
 
         func(...)
     end

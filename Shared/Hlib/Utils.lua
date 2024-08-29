@@ -99,17 +99,24 @@ function M.Lambda(code, ...)
     end
 end
 
+---@param filter string[]|nil
 ---@return string
-function M.CallStack()
-    return M.String.Trim(M.Table.Find(M.String.Split(debug.traceback(), "\n"), function(line)
-        return not M.String.Contains(line, {
-            "stack traceback:",
-            "Hlib/",
-            "(...tail calls...)",
-            "[C++ Code]",
-            "...",
-            "builtin://",
-        }, false, true)
+function M.CallStack(filter)
+    local stack = debug.traceback()
+    return M.String.Trim(M.Table.Find(M.String.Split(stack, "\n"), function(line)
+        return not M.String.Contains(
+            line,
+            M.Table.Combine({
+                "stack traceback:",
+                "Hlib/Utils.lua",
+                "(...tail calls...)",
+                "[C++ Code]",
+                "...",
+                "builtin://",
+            }, filter or {}),
+            false,
+            true
+        )
     end) or "")
 end
 

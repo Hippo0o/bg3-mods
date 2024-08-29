@@ -758,13 +758,17 @@ end
 function Scenario.GroupDistantEnemies()
     local s = Current()
 
+    if not Config.GroupDistantEnemies then
+        return
+    end
+
     local enemies = table.filter(s.SpawnedEnemies, function(e)
         return e:IsSpawned() and string.contains(e.Tier, { table.unpack(C.EnemyTier, 1, 3) })
     end)
 
     for _, enemy in ipairs(enemies) do
         local uuid = enemy.GUID
-        local distance = Osi.GetDistanceTo(Osi.GetClosestAlivePlayer(uuid), uuid)
+        local _, distance = Osi.GetClosestAlivePlayer(uuid)
 
         local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 20 or distance > 30
 

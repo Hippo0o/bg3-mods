@@ -130,7 +130,7 @@ function M.Translate(text, version)
         --         and not line:match("Hlib/Localization.lua")
         --         and not line:match("(...tail calls...)")
         -- end) or "")
-        extendStack(key, Utils.CallStack())
+        extendStack(key, Utils.CallStack({ "Hlib/Localization.lua" }))
     end
 
     return M.Translations[key].Text

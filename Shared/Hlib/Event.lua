@@ -86,7 +86,7 @@ function EventListener.New(event, callback, once)
     obj._Id = Utils.RandomId(event .. "_")
 
     if Mod.Dev then
-        obj._Origin = Utils.CallStack()
+        obj._Origin = Utils.CallStack({ "Hlib/Event.lua" })
     end
 
     obj:Register()
@@ -137,7 +137,7 @@ end
 function M.Trigger(event, ...)
     local eventListeners = M.Listeners(event)
 
-    Log.Debug("Event/Trigger", #eventListeners, event, Mod.Dev and Utils.CallStack() or nil)
+    Log.Debug("Event/Trigger", #eventListeners, event, Mod.Dev and Utils.CallStack({ "Hlib/Event.lua" }) or nil)
 
     for _, l in ipairs(Utils.Table.Values(eventListeners)) do
         l:Exec(...)

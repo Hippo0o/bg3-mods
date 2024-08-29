@@ -50,6 +50,7 @@ DefaultConfig = {
     RandomizeSpawnOffset = 3,
     ExpMultiplier = 3,
     SpawnItemsAtPlayer = false,
+    GroupDistantEnemies = true,
     TurnOffNotifications = false,
     ClearAllEntities = true,
     AutoResurrect = true,
