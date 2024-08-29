@@ -217,9 +217,10 @@ end
 ---@param character string GUID
 ---@return string GUID
 function M.Character.GetPlayer(character)
-    local owner = Osi.CharacterGetOwner(character)
-    if owner then
-        return owner
+    character = Osi.CharacterGetOwner(character) or character
+
+    if Osi.IsPlayer(character) ~= 1 then
+        character = Osi.GetHostCharacter()
     end
 
     return character
