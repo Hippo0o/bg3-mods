@@ -73,6 +73,10 @@ function M.Debug(...)
 end
 
 function M.Dump(...)
+    if not Mod.Debug then
+        return
+    end
+
     for i, v in pairs({ ... }) do
         M.Debug(i .. ":", type(v) == "string" and v or Ext.DumpExport(v))
     end

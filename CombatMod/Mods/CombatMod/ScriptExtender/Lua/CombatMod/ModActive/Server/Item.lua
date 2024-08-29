@@ -674,25 +674,58 @@ Event.On("ScenarioEnemyKilled", function(scenario, enemy)
     Item.SpawnLoot(loot, x, y, z)
 end)
 
-Event.On("ScenarioEnded", function(scenario)
-    Player.Notify(__("Dropping loot."))
+Event.On(
+    "ScenarioEnded",
+    Async.Wrap(function(scenario)
+        Player.Notify(__("Dropping loot."))
 
-    local map = scenario.Map
+        local lootMultiplier = 1
+        if PersistentVars.Unlocked.LootMultiplier then
+            lootMultiplier = 1.5
+        end
 
-    local lootMultiplier = 1
-    if PersistentVars.Unlocked.LootMultiplier then
-        lootMultiplier = 1.5
-    end
+        local rolls = math.floor(scenario:KillScore() * lootMultiplier)
 
-    local rolls = scenario:KillScore() * lootMultiplier
+        local function rollsToChunks()
+            local size = 20
+            local chunks = {}
 
-    local loot = Item.GenerateLoot(math.floor(rolls), scenario.LootRates)
-    L.Dump("Loot", loot, rolls, scenario.LootRates)
+            for i = 1, math.floor(rolls / size) do
+                table.insert(chunks, size)
+            end
 
-    local x, y, z = map.Enter[1], map.Enter[2], map.Enter[3]
-    if Config.SpawnItemsAtPlayer then
-        x, y, z = Player.Pos()
-    end
+            local mod = rolls % size
+            if mod > 0 then
+                table.insert(chunks, mod)
+            end
 
-    Item.SpawnLoot(loot, x, y, z, true)
-end)
+            return chunks
+        end
+
+        local chainables = {}
+        for _, chunk in ipairs(rollsToChunks()) do
+            table.insert(
+                chainables,
+                Async.Run(function()
+                    return Item.GenerateLoot(chunk, scenario.LootRates)
+                end)
+            )
+        end
+        local results = Async.SyncAll(chainables)
+
+        local loot = {}
+        for _, r in ipairs(results) do
+            table.combine(loot, r)
+        end
+
+        L.Dump("Loot", loot, rolls, scenario.LootRates)
+
+        local map = scenario.Map
+        local x, y, z = map.Enter[1], map.Enter[2], map.Enter[3]
+        if Config.SpawnItemsAtPlayer then
+            x, y, z = Player.Pos()
+        end
+
+        Item.SpawnLoot(loot, x, y, z, true)
+    end)
+)
