@@ -102,7 +102,7 @@ function EventListener.Chainable(event, once)
 
     obj.Unregister = function(self)
         unregisterFunc(self)
-        chainable:Finish(true)
+        chainable:End(true)
     end
 
     return chainable
