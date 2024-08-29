@@ -252,7 +252,7 @@ function Components.Tree(root, tbl, label, onText)
     return tree
 end
 
-function Components.Paged(root, list, pageSize)
+function Components.Pagination(root, list, pageSize)
     local o = {
         Root = root,
         List = list,

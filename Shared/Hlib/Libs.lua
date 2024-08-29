@@ -66,7 +66,7 @@ function M.TypedTable(typeDefs, repeatable)
     ---@class LibsTypedTable : LibsStruct
     ---@field Validate fun(table: table): boolean
     ---@field TypeCheck fun(key: string, value: any): boolean
-    local TT = Libs.Struct({
+    local TT = M.Struct({
         _IsTypedTable = true,
         _TypeDefs = {},
         _Repeatable = false,
@@ -221,6 +221,13 @@ function M.Proxy(t, onSet, onGet)
 
     local proxy = false
 
+    local onModified = {}
+    local function modifiedEvent(raw, key, value)
+        for _, callback in ipairs(onModified) do
+            callback(value, key, raw)
+        end
+    end
+
     ---@class LibsProxy: table
     local Proxy = setmetatable({}, {
         __metatable = false,
@@ -257,7 +264,7 @@ function M.Proxy(t, onSet, onGet)
             end
 
             if type(value) == "table" then
-                value = Libs.Proxy(value, function(sub, subKey, subValue)
+                value = M.Proxy(value, function(sub, subKey, subValue)
                     local parent = {}
                     for k, v in pairs(raw) do
                         parent[k] = v
@@ -287,6 +294,8 @@ function M.Proxy(t, onSet, onGet)
             end
 
             rawset(raw, key, value)
+
+            modifiedEvent(raw, key, value)
         end,
     })
 
@@ -311,9 +320,19 @@ function M.Proxy(t, onSet, onGet)
         return t
     end
 
-    return Proxy, function()
-        return toTable(raw)
-    end
+    return Proxy,
+        ---@return table
+        function()
+            return toTable(raw)
+        end,
+        ---@param callback fun(value: any, key: string, raw: table)
+        function(callback)
+            assert(
+                type(callback) == "function",
+                "_,_,onModified(callback) = Libs.Proxy(...) - function expected, got " .. type(callback)
+            )
+            table.insert(onModified, callback)
+        end
 end
 
 return M

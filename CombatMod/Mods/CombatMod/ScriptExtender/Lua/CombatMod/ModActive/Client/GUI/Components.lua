@@ -80,9 +80,9 @@ end
 ---@field Values table<number, any>
 ---@field Value any
 ---@field Root ExtuiGroup
----@field Selectables table<number, ExtuiRadioButton>
+---@field Selectables table<number, ExtuiRadioButton|ExtuiCheckbox>
 ---@field Reset fun()
----@field AddItem fun(label: string, value: any)
+---@field AddItem fun(label: string, value: any): ExtuiRadioButton|ExtuiCheckbox
 ---@param multiple boolean|nil
 ---@param root ExtuiTreeParent
 ---@return ComponentsSelection
@@ -142,6 +142,8 @@ function Components.Selection(root, multiple)
             end
         end
         table.insert(selection.Selectables, select)
+
+        return select 
     end
 
     return selection
@@ -255,7 +257,7 @@ function Components.Tree(root, tbl, label, onText)
     return tree
 end
 
-function Components.Paged(root, list, pageSize)
+function Components.Pagination(root, list, pageSize)
     local o = {
         Root = root,
         List = list,

@@ -86,9 +86,9 @@ function Control.StartPanel(root)
         local listCols = startLayout.Cells[1]
 
         local scenarioSelection = Components.Selection(listCols[1])
-        local scenarioSelPaged = Components.Paged(scenarioSelection.Root, {}, 5)
+        local scenarioSelPagination = Components.Pagination(scenarioSelection.Root, {}, 5)
         local mapSelection = Components.Selection(listCols[2])
-        local mapSelPaged = Components.Paged(mapSelection.Root, {}, 5)
+        local mapSelPagination = Components.Pagination(mapSelection.Root, {}, 5)
 
         Net.On("GetSelection", function(event)
             scenarioSelection.Reset()
@@ -98,16 +98,22 @@ function Control.StartPanel(root)
                 local label = item.Name
                 scenarioSelection.AddItem(label, item.Name)
             end
-            scenarioSelPaged.UpdateItems(scenarioSelection.Selectables)
+            scenarioSelPagination.UpdateItems(scenarioSelection.Selectables)
 
             mapSelection.AddItem("Random", nil)
             if not State.RogueModeActive then
                 for i, item in ipairs(event.Payload.Maps) do
-                    mapSelection.AddItem(item.Name, item.Name)
+                    local element = mapSelection.AddItem(item.Name, item.Name)
+
+                    if item.Author then
+                        local t = element:Tooltip()
+                        t:SetStyle("WindowPadding", 30, 10)
+                        t:AddText(item.Author)
+                    end
                 end
             end
 
-            mapSelPaged.UpdateItems(mapSelection.Selectables)
+            mapSelPagination.UpdateItems(mapSelection.Selectables)
         end)
 
         local startButton = listCols[1]:AddButton(__("Start"))
@@ -179,7 +185,13 @@ function Control.RunningPanel(root)
                 local _, act = table.find(C.Regions, function(region)
                     return region == state.Scenario.Map.Region
                 end)
-                return __("Map: %s", string.format("%s - %s", state.Scenario.Map.Name, act))
+
+                local mapName = state.Scenario.Map.Name
+                if state.Scenario.Map.Author then
+                    mapName = state.Scenario.Map.Author .. "'s " .. mapName
+                end
+
+                return __("Map: %s", string.format("%s - %s", mapName, act))
             end
         end, "StateChange")
 
@@ -187,7 +199,7 @@ function Control.RunningPanel(root)
             Event.Trigger("Stop")
         end
 
-        layout.Cells[1][1]:AddButton(__("Go to Camp")).OnClick = function(button)
+        layout.Cells[1][1]:AddButton(__("Go to Camp")).OnClick = function()
             Event.Trigger("ToCamp")
         end
 

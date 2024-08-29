@@ -13,6 +13,7 @@
 ---@field Enter Pos
 ---@field Spawns Pos[]
 ---@field Timeline number[]
+---@field Helpers string[] list of GUID
 local Object = Libs.Struct({
     Region = nil,
     Enter = nil,
