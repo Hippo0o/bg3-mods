@@ -239,7 +239,7 @@ function Runner.Chainable(queue, func)
 
     obj.Clear = function(self)
         clearFunc(self)
-        chainable:Finish(true)
+        chainable:End
     end
 
     if func then
@@ -504,7 +504,8 @@ function M.Sync(chainable)
         "Async.Sync(chainable) - Chainable expected, got " .. type(chainable)
     )
 
-    chainable._Finish = function(success, ...)
+    chainable._OnEnd = function(self, success, ...)
+        self._OnEnd = nil
         return resumeCoroutine(co, success, ...)
     end
 
@@ -535,7 +536,9 @@ function M.SyncAll(chainables)
             "Async.SyncAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
         )
 
-        chainable._Finish = function(success, ...)
+        chainable._OnEnd = function(self, success, ...)
+            self._OnEnd = nil
+
             results[i] = { ... }
             awaiting = awaiting - 1
 

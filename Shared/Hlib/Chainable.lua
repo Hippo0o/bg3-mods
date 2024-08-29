@@ -17,7 +17,9 @@ local Chainable = Libs.Struct({
     _InitalInput = {},
     _Chain = {},
     _Catch = {},
-    _Finish = nil,
+    _OnEnd = nil,
+    _OnThrow = nil,
+    _OnBegin = nil,
 })
 
 function Chainable.New(source)
@@ -51,27 +53,28 @@ function Chainable:Catch(func, passSource)
 end
 
 function Chainable:Throw(err)
+    if type(self._OnThrow) == "function" then
+        self:_OnThrow(err)
+    end
+
     local func, passSource = table.unpack(self._Catch)
 
     if type(func) ~= "function" then
-        return self:Finish(false, err)
+        return self:End(false, err)
     end
 
     if passSource then
-        return self:Finish(true, { func(self.Source, err) })
+        return self:End(true, { func(self.Source, err) })
     end
 
-    return self:Finish(true, { func(err) })
+    return self:End(true, { func(err) })
 end
 
-function Chainable:Finish(success, ...)
+function Chainable:End(success, ...)
     self._Chain = {}
 
-    if type(self._Finish) == "function" then
-        local func = self._Finish
-        self._Finish = nil
-
-        return { func(success, ...) }
+    if type(self._OnEnd) == "function" then
+        return { self:_OnEnd(success, ...) }
     end
 
     if not success then
@@ -84,8 +87,12 @@ end
 function Chainable:Begin(...)
     local state = Utils.Table.Combine({ ... }, self._InitalInput)
 
+    if type(self._OnBegin) == "function" then
+        state = { self:_OnBegin(table.unpack(state)) }
+    end
+
     if #self._Chain == 0 then
-        return self:Finish(true, table.unpack(state))
+        return self:End(true, table.unpack(state))
     end
 
     for i, link in ipairs(self._Chain) do
@@ -105,7 +112,7 @@ function Chainable:Begin(...)
         end
 
         if state[1] == nil then
-            state = self:Finish(true, table.unpack(state))
+            state = self:End(true, table.unpack(state))
             break
         end
 
@@ -126,18 +133,26 @@ function Chainable:Begin(...)
 
             if self._Catch then
                 nested._Catch = self._Catch
+                self._Catch = nil
             end
-
-            if self._Finish then
-                nested._Finish = self._Finish
-                self._Finish = nil
+            if self._OnThrow then
+                nested._OnThrow = self._OnThrow
+                self._OnThrow = nil
+            end
+            if self._OnEnd then
+                nested._OnEnd = self._OnEnd
+                self._OnEnd = nil
+            end
+            if self._OnBegin then
+                nested._OnBegin = self._OnBegin
+                self._OnBegin = nil
             end
 
             break
         end
 
         if i == #self._Chain then
-            state = self:Finish(true, table.unpack(state))
+            state = self:End(true, table.unpack(state))
         end
     end
 
