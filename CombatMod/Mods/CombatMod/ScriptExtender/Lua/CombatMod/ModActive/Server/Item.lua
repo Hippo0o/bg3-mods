@@ -700,7 +700,7 @@ Event.On(
         local rolls = math.floor(scenario:KillScore() * lootMultiplier)
 
         local function rollsToChunks()
-            local size = 20
+            local size = 50
             local chunks = {}
 
             for i = 1, math.floor(rolls / size) do
@@ -715,20 +715,15 @@ Event.On(
             return chunks
         end
 
-        local chainables = {}
-        for _, chunk in ipairs(rollsToChunks()) do
-            table.insert(
-                chainables,
-                Async.Run(function()
-                    return Item.GenerateLoot(chunk, scenario.LootRates)
-                end)
-            )
-        end
-        local results = Async.SyncAll(chainables)
+        local results = {
+            Async.SyncAll(table.map(rollsToChunks(), function(chunk)
+                return Async.Run(U.Bind(Item.GenerateLoot, chunk, scenario.LootRates))
+            end)),
+        }
 
         local loot = {}
         for _, r in ipairs(results) do
-            table.combine(loot, r)
+            table.combine(loot, r[1])
         end
 
         L.Dump("Loot", loot, rolls, scenario.LootRates)

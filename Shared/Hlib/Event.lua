@@ -26,10 +26,15 @@ local listeners = {}
 local EventListener = Libs.Struct({
     _Id = nil,
     _Event = nil,
+    _Origin = nil,
     _Func = function() end,
     Once = false,
     Exec = function(self, ...)
         local args = { ... }
+
+        if Mod.Dev then
+            Log.Debug("Event/Exec", self._Id, self._Origin)
+        end
 
         xpcall(function()
             self._Func(table.unpack(args))
@@ -56,7 +61,7 @@ local EventListener = Libs.Struct({
 
         for i = #eventListeners, 1, -1 do
             if eventListeners[i]._Id == self._Id then
-                Log.Debug("Event/Unregister", self._Event, self._Id)
+                Log.Debug("Event/Unregister", self._Id, self._Origin)
                 table.remove(eventListeners, i)
             end
         end
@@ -79,6 +84,10 @@ function EventListener.New(event, callback, once)
     })
 
     obj._Id = Utils.RandomId(event .. "_")
+
+    if Mod.Dev then
+        obj._Origin = Utils.CallStack()
+    end
 
     obj:Register()
 
@@ -128,7 +137,7 @@ end
 function M.Trigger(event, ...)
     local eventListeners = M.Listeners(event)
 
-    Log.Debug("Event/Trigger", #eventListeners, event)
+    Log.Debug("Event/Trigger", #eventListeners, event, Mod.Dev and Utils.CallStack() or nil)
 
     for _, l in ipairs(Utils.Table.Values(eventListeners)) do
         l:Exec(...)

@@ -56,18 +56,18 @@ end
 
 function StoryBypass.RemoveAutosave()
     L.Info("Removing autosave triggers")
-    L.Dump(Osi.DB_AutoSaveTrigger:Get(nil))
-    L.Dump(Osi.DB_AutosaveGroup:Get(nil, nil))
-
     Osi.DB_AutosaveGroup:Delete(nil, nil)
     Osi.DB_AutoSaveTrigger:Delete(nil)
+
+    L.Dump(Osi.DB_AutoSaveTrigger:Get(nil))
+    L.Dump(Osi.DB_AutosaveGroup:Get(nil, nil))
 end
 
 function StoryBypass.RemoveAllEntities()
     StoryBypass.ExpLock.ResumeTemporary()
 
     Osi.PROC_MOO_Execution_StartFallbackExecutionCombat() -- prevent infinite timer loop
-    Osi.PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff()
+    -- Osi.PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff()
 
     local toRemove = table.filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
 

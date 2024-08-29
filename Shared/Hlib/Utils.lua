@@ -99,6 +99,30 @@ function M.Lambda(code, ...)
     end
 end
 
+---@return string
+function M.CallStack()
+    return M.String.Trim(M.Table.Find(M.String.Split(debug.traceback(), "\n"), function(line)
+        return not M.String.Contains(line, {
+            "stack traceback:",
+            "Hlib/",
+            "(...tail calls...)",
+            "[C++ Code]",
+            "...",
+            "builtin://",
+        }, false, true)
+    end) or "")
+end
+
+---@param func function
+---@vararg any
+---@return function
+function M.Bind(func, ...)
+    local args = { ... }
+    return function()
+        return func(table.unpack(args))
+    end
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Table                                             --
@@ -195,6 +219,16 @@ end
 ---@param func function
 ---@return table
 function M.Table.Each(t, func)
+    local r = {}
+    for k, v in pairs(t) do
+        func(v, k)
+    end
+end
+
+---@param t table
+---@param func function
+---@return table
+function M.Table.Pick(t, amount)
     local r = {}
     for k, v in pairs(t) do
         func(v, k)

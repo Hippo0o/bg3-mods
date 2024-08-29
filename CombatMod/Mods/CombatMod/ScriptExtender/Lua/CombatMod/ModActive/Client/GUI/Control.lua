@@ -103,13 +103,12 @@ function Control.StartPanel(root)
             mapSelection.AddItem("Random", nil)
             if not State.RogueModeActive then
                 for i, item in ipairs(event.Payload.Maps) do
-                    local element = mapSelection.AddItem(item.Name, item.Name)
-
+                    local label = item.Name
                     if item.Author then
-                        local t = element:Tooltip()
-                        t:SetStyle("WindowPadding", 30, 10)
-                        t:AddText(item.Author)
+                        label = item.Author .. "'s " .. label
                     end
+
+                    mapSelection.AddItem(label, item.Name)
                 end
             end
 

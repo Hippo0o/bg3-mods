@@ -755,6 +755,60 @@ function Scenario.CombatSpawned(specific)
     end
 end
 
+function Scenario.GroupDistantEnemies()
+    local s = Current()
+
+    local enemies = table.filter(s.SpawnedEnemies, function(e)
+        return e:IsSpawned() and string.contains(e.Tier, { table.unpack(C.EnemyTier, 1, 3) })
+    end)
+
+    for _, enemy in ipairs(enemies) do
+        local uuid = enemy.GUID
+        local distance = Osi.GetDistanceTo(Osi.GetClosestAlivePlayer(uuid), uuid)
+
+        local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 20 or distance > 30
+
+        if shouldSwarm then
+            Osi.RequestSetSwarmGroup(uuid, "TOT_Swarm_Group")
+            L.Debug("Enemy added to swarm", uuid, distance, Osi.GetSwarmGroup(uuid))
+        else
+            if Osi.GetSwarmGroup(uuid) then
+                Osi.RequestSetSwarmGroup(uuid, "")
+            end
+        end
+    end
+    -- local enemy = table.find(s.SpawnedEnemies, function(e)
+    --     return U.UUID.Equals(e.GUID, uuid)
+    -- end)
+    --
+    -- if not enemy or enemy.Temporary or enemy.IsBoss then
+    --     return
+    -- end
+    -- for i, tier in ipairs(C.EnemyTier) do
+    --     if i > 3 then
+    --         break
+    --     end
+    --
+    --     if enemy.Tier == tier then
+    --         Osi.StopFollow(uuid)
+    --         if #s.SpawnedEnemies > i * 11 then
+    --             -- Osi.ApplyStatus(uuid, "COMMAND_APPROACH", -1)
+    --
+    --             Defer(2000, function()
+    --                 Osi.Follow(uuid, Osi.GetClosestAlivePlayer(uuid) or Player.Host())
+    --                 Osi.EndTurn(uuid)
+    --             end)
+    --
+    --             Defer(4000, function()
+    --                 Osi.StopFollow(uuid)
+    --             end)
+    --         end
+    --
+    --         break
+    --     end
+    -- end
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Events                                            --
@@ -943,6 +997,19 @@ Ext.Osiris.RegisterListener(
 )
 
 Ext.Osiris.RegisterListener(
+    "TurnEnded",
+    1,
+    "after",
+    ifScenario(function(uuid)
+        local s = Current()
+
+        if Player.IsPlayer(uuid) then
+            Scenario.GroupDistantEnemies()
+        end
+    end)
+)
+
+Ext.Osiris.RegisterListener(
     "TurnStarted",
     1,
     "before",
@@ -996,41 +1063,6 @@ Ext.Osiris.RegisterListener(
                     Osi.EndTurn(uuid)
                 end)
         end
-
-        if #s.SpawnedEnemies < 11 then
-            return
-        end
-
-        local enemy = table.find(s.SpawnedEnemies, function(e)
-            return U.UUID.Equals(e.GUID, uuid)
-        end)
-
-        if not enemy or enemy.Temporary or enemy.IsBoss then
-            return
-        end
-        for i, tier in ipairs(C.EnemyTier) do
-            if i > 3 then
-                break
-            end
-
-            if enemy.Tier == tier then
-                Osi.StopFollow(uuid)
-                if #s.SpawnedEnemies > i * 11 then
-                    -- Osi.ApplyStatus(uuid, "COMMAND_APPROACH", -1)
-
-                    Defer(2000, function()
-                        Osi.Follow(uuid, Osi.GetClosestAlivePlayer(uuid) or Player.Host())
-                        Osi.EndTurn(uuid)
-                    end)
-
-                    Defer(4000, function()
-                        Osi.StopFollow(uuid)
-                    end)
-                end
-
-                break
-            end
-        end
     end)
 )
 
@@ -1052,8 +1084,10 @@ Ext.Osiris.RegisterListener(
 
         s:DetectCombatId()
 
-        Scenario.CombatSpawned()
-
         Scenario.CheckShouldStop()
+
+        Scenario.GroupDistantEnemies()
+
+        Scenario.CombatSpawned()
     end)
 )

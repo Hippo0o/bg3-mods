@@ -246,6 +246,10 @@ function Object:Modify(keepFaction)
         Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
     end
 
+    if Osi.GetSwarmGroup(self.GUID) then
+        Osi.RequestSetSwarmGroup(self.GUID, "")
+    end
+
     -- if not self.Temporary then
     --     Osi.SetTag(self.GUID, "6d60bed7-10cc-4b52-8fb7-baa75181cd49") -- IGNORE_COMBAT_LATE_JOIN_PENALTY
     -- end

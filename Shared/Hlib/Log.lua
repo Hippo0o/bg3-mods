@@ -54,21 +54,32 @@ function M.ColorText(text, color)
     return string.format("\x1b[%dm%s\x1b[0m", color or 37, text)
 end
 
+local lastTime = 0
+local function logTime()
+    if not Mod.Debug then
+        return ""
+    end
+
+    local log = "[" .. Ext.Utils.MonotonicTime() - lastTime .. "]"
+    lastTime = Ext.Utils.MonotonicTime()
+    return log
+end
 local function logPrefix()
-    return M.RainbowText(Mod.Prefix) .. " " .. (Ext.IsClient() and "[Client]" or "[Server]")
+    local prefix = M.RainbowText(Mod.Prefix) .. " " .. (Ext.IsClient() and "[Client]" or "[Server]")
+    return prefix
 end
 
 function M.Info(...)
-    Ext.Utils.Print(logPrefix() .. M.ColorText("[Info]"), ...)
+    Ext.Utils.Print(logPrefix() .. M.ColorText("[Info]") .. logTime(), ...)
 end
 
 function M.Warn(...)
-    Ext.Utils.PrintWarning(logPrefix() .. M.ColorText("[Warning]", 33), ...)
+    Ext.Utils.PrintWarning(logPrefix() .. M.ColorText("[Warning]", 33) .. logTime(), ...)
 end
 
 function M.Debug(...)
     if Mod.Debug then
-        Ext.Utils.Print(logPrefix() .. M.ColorText("[Debug]", 36), ...)
+        Ext.Utils.Print(logPrefix() .. M.ColorText("[Debug]", 36) .. logTime(), ...)
     end
 end
 
@@ -83,7 +94,7 @@ function M.Dump(...)
 end
 
 function M.Error(...)
-    Ext.Utils.PrintError(logPrefix() .. M.ColorText("[Error]", 31), ...)
+    Ext.Utils.PrintError(logPrefix() .. M.ColorText("[Error]", 31) .. logTime(), ...)
 end
 
 return M

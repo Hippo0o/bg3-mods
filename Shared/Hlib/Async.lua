@@ -133,7 +133,7 @@ local Queue = Libs.Struct({
         end
 
         if Mod.Dev then
-            Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx)
+            Log.Debug("Queue/Enqueue", self.Loop.Tasks.Count, idx, item._Origin)
         end
 
         return idx
@@ -145,7 +145,7 @@ local Queue = Libs.Struct({
                 self.Loop.Tasks:Dec()
 
                 if Mod.Dev then
-                    Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx)
+                    Log.Debug("Queue/Dequeue", self.Loop.Tasks.Count, idx, v.item._Origin)
                 end
 
                 return
@@ -186,6 +186,7 @@ end
 local Runner = Libs.Struct({
     _Id = nil,
     _Queue = nil,
+    _Origin = nil,
     Cleared = false,
     ExecCond = function(_, _)
         return true
@@ -210,6 +211,10 @@ function Runner.New(queue, func)
     local obj = Runner.Init()
 
     obj.Exec = func
+
+    if Mod.Dev then
+        obj._Origin = Utils.CallStack()
+    end
 
     obj._Id = queue:Enqueue(obj)
     obj._Queue = queue
@@ -239,7 +244,7 @@ function Runner.Chainable(queue, func)
 
     obj.Clear = function(self)
         clearFunc(self)
-        chainable:End
+        chainable:End(true)
     end
 
     if func then
@@ -440,10 +445,7 @@ function M.Debounce(ms, func)
             runner:Clear()
         end
 
-        local args = { ... }
-        runner = M.Defer(ms, function()
-            func(table.unpack(args))
-        end).Source
+        runner = M.Defer(ms, Utils.Bind(func, ...)).Source
     end
 end
 
@@ -468,9 +470,8 @@ function M.Throttle(ms, func)
 end
 
 local function resumeCoroutine(co, ...)
-    local args = { ... }
-    return M.Run(function()
-        local result = { coroutine.resume(co, table.unpack(args)) }
+    return M.Run(Utils.Bind(function(...)
+        local result = { coroutine.resume(co, ...) }
         local ok = table.remove(result, 1)
 
         if not ok then
@@ -478,7 +479,7 @@ local function resumeCoroutine(co, ...)
         end
 
         return table.unpack(result)
-    end)
+    end, ...))
 end
 
 ---@param func fun()
@@ -488,7 +489,7 @@ function M.Wrap(func)
 
     return function(...)
         local co = coroutine.create(func)
-        return resumeCoroutine(co, true, ...)
+        return resumeCoroutine(co, ...)
     end
 end
 

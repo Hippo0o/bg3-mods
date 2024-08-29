@@ -361,9 +361,7 @@ function M.Object.Remove(guid)
 end
 
 function M.Object.IsOwned(guid)
-    return Osi.IsInInventory(guid) == 1
-        or Osi.GetInventoryOwner(guid) ~= nil
-        or Osi.GetFirstInventoryOwnerCharacter(guid) ~= nil
+    return Osi.IsInInventory(guid) == 1 or not M.Character.IsNonPlayer(Osi.GetOwner(guid) or "")
 end
 
 return M

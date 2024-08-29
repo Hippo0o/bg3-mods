@@ -125,13 +125,12 @@ function M.Translate(text, version)
     end
 
     if Mod.Dev then
-        local stack = Utils.String.Trim(Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
-            return not line:match("stack traceback:")
-                and not line:match("Hlib/Localization.lua")
-                and not line:match("(...tail calls...)")
-        end) or "")
-
-        extendStack(key, stack)
+        -- local stack = Utils.String.Trim(Utils.Table.Find(Utils.String.Split(debug.traceback(), "\n"), function(line)
+        --     return not line:match("stack traceback:")
+        --         and not line:match("Hlib/Localization.lua")
+        --         and not line:match("(...tail calls...)")
+        -- end) or "")
+        extendStack(key, Utils.CallStack())
     end
 
     return M.Translations[key].Text

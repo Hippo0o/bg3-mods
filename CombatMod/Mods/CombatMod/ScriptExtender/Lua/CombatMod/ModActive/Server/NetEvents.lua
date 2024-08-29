@@ -35,7 +35,7 @@ Net.On("GetSelection", function(event)
             return { Id = k, Name = v.Name }
         end),
         Maps = table.map(Map.GetTemplates(), function(v, k)
-            return { Id = k, Name = v.Name }
+            return { Id = k, Name = v.Name, Author = v.Author }
         end),
     })
 end)
