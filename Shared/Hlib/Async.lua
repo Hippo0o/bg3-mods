@@ -513,15 +513,11 @@ function M.Sync(chainable)
 
     assert(co ~= nil, "Async.Sync(chainable) - Can't await outside coroutine.")
 
-    assert(
-        type(chainable) == "table" and chainable._IsChainable,
-        "Async.Sync(chainable) - Chainable expected, got " .. type(chainable)
-    )
+    assert(type(chainable) == "table" and chainable._IsChainable, "Async.Sync(chainable) - Chainable expected")
 
-    chainable._OnEnd = function(self, success, ...)
-        self._OnEnd = nil
-        return resumeCoroutine(co, success, ...)
-    end
+    Chainable.OnEnd(chainable, function(success, state)
+        resumeCoroutine(co, success, table.unpack(state))
+    end)
 
     local result = { coroutine.yield(chainable) }
     local ok = table.remove(result, 1)
@@ -550,14 +546,12 @@ function M.SyncAll(chainables)
             "Async.SyncAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
         )
 
-        chainable._OnEnd = function(self, success, ...)
-            self._OnEnd = nil
-
-            results[i] = { ... }
+        Chainable.OnEnd(chainable, function(success, state)
+            results[i] = state
             awaiting = awaiting - 1
 
             if not success then
-                errors[i] = { ... }
+                errors[i] = state
             end
 
             if awaiting == 0 then
@@ -567,7 +561,7 @@ function M.SyncAll(chainables)
                     combined:Begin(table.unpack(results))
                 end
             end
-        end
+        end)
     end
 
     return M.Sync(combined)

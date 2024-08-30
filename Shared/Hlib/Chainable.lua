@@ -17,9 +17,6 @@ local Chainable = Libs.Struct({
     _InitalInput = {},
     _Chain = {},
     _Catch = {},
-    _OnEnd = nil,
-    _OnThrow = nil,
-    _OnBegin = nil,
 })
 
 function Chainable.New(source)
@@ -53,10 +50,6 @@ function Chainable:Catch(func, passSource)
 end
 
 function Chainable:Throw(err)
-    if type(self._OnThrow) == "function" then
-        self:_OnThrow(err)
-    end
-
     local func, passSource = table.unpack(self._Catch)
 
     if type(func) ~= "function" then
@@ -70,29 +63,11 @@ function Chainable:Throw(err)
     return self:End(true, { func(err) })
 end
 
-function Chainable:End(success, ...)
-    self._Chain = {}
-
-    if type(self._OnEnd) == "function" then
-        return { self:_OnEnd(success, ...) }
-    end
-
-    if not success then
-        error(...)
-    end
-
-    return { ... }
-end
-
 function Chainable:Begin(...)
     local state = Utils.Table.Combine({ ... }, self._InitalInput)
 
-    if type(self._OnBegin) == "function" then
-        state = { self:_OnBegin(table.unpack(state)) }
-    end
-
     if #self._Chain == 0 then
-        return self:End(true, table.unpack(state))
+        return self:End(true, state)
     end
 
     for i, link in ipairs(self._Chain) do
@@ -112,7 +87,7 @@ function Chainable:Begin(...)
         end
 
         if state[1] == nil then
-            state = self:End(true, table.unpack(state))
+            state = self:End(true, state)
             break
         end
 
@@ -133,30 +108,61 @@ function Chainable:Begin(...)
 
             if self._Catch then
                 nested._Catch = self._Catch
-                self._Catch = nil
             end
-            if self._OnThrow then
-                nested._OnThrow = self._OnThrow
-                self._OnThrow = nil
-            end
-            if self._OnEnd then
-                nested._OnEnd = self._OnEnd
-                self._OnEnd = nil
-            end
-            if self._OnBegin then
-                nested._OnBegin = self._OnBegin
-                self._OnBegin = nil
-            end
+
+            nested._IsChainable = self._IsChainable
 
             break
         end
 
         if i == #self._Chain then
-            state = self:End(true, table.unpack(state))
+            state = self:End(true, state)
         end
     end
 
     return state
+end
+
+local listeners = {}
+
+---@param success boolean
+---@param state table|string
+---@return table|string state
+function Chainable:End(success, state)
+    self._Chain = {}
+
+    if listeners[self._IsChainable] then
+        local tbl = listeners[self._IsChainable]
+        listeners[self._IsChainable] = nil
+
+        for _, listener in ipairs(tbl) do
+            listener(success, state)
+        end
+
+        return state
+    end
+
+    if not success then
+        error(state)
+    end
+
+    return state
+end
+
+---@param chainable Chainable
+---@param func fun(success: boolean, state: table|string)
+function M.OnEnd(chainable, func)
+    assert(
+        type(chainable) == "table" and chainable._IsChainable,
+        "Chainable.OnEnd(chainable, ...) - Chainable expected"
+    )
+    assert(type(func) == "function", "Chainable.OnEnd(..., func) - function expected, got " .. type(func))
+
+    if not listeners[chainable._IsChainable] then
+        listeners[chainable._IsChainable] = {}
+    end
+
+    table.insert(listeners[chainable._IsChainable], func)
 end
 
 ---@param source any
