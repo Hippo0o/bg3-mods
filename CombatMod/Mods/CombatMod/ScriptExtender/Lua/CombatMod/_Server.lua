@@ -83,12 +83,12 @@ Require("CombatMod/Server/ModEvents")
 GameState.OnLoad(function()
     External.LoadConfig()
 
-    PersistentVars.Asked = PersistentVars.Active
     if PersistentVars.Asked == false then
         Intro.AskOnboarding()
     end
+    PersistentVars.Asked = PersistentVars.Active
 
-    if not U.Equals(PersistentVars.Config, {}) then
+    if not eq(PersistentVars.Config, {}) then
         External.ApplyConfig(table.filter(PersistentVars.Config, function(v, k)
             return k ~= "Dev" and k ~= "Debug"
         end, true))

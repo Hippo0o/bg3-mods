@@ -104,7 +104,7 @@ local Loop = Libs.Struct({
                 end
 
                 if result == true then
-                    if Ext.Utils.MonotonicTime() - startTime > 10 then
+                    if Ext.Utils.MonotonicTime() - startTime > 30 then
                         return
                     end
                 end
@@ -153,13 +153,16 @@ local Queue = Libs.Struct({
         end
     end,
     Iter = function(self) ---@param self Queue
-        local i = 0
-        return function()
-            i = i + 1
-            if self.Tasks[i] then
-                return i, self.Tasks[i].item
-            end
-        end
+        return ipairs(Utils.Table.Map(self.Tasks, function(v)
+            return v.item
+        end))
+        -- local i = 0
+        -- return function()
+        --     i = i + 1
+        --     if self.Tasks[i] then
+        --         return i, self.Tasks[i].item
+        --     end
+        -- end
     end,
 })
 
@@ -231,7 +234,9 @@ function Runner.Chainable(queue, func)
     local obj = Runner.New(queue, func)
 
     local chainable = Chainable.Create(obj)
+    local ran = false
     obj.Exec = function()
+        ran = true
         chainable:Begin()
     end
 
@@ -244,7 +249,9 @@ function Runner.Chainable(queue, func)
 
     obj.Clear = function(self)
         clearFunc(self)
-        chainable:End(true)
+        if not ran then
+            chainable:End(true, {})
+        end
     end
 
     if func then
@@ -283,6 +290,12 @@ GameState.OnLoad(function()
         loop:Start()
     end
 end)
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           Runners                                           --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
 
 ---@param ms number
 ---@param func fun()|nil
@@ -433,6 +446,12 @@ function M.RetryUntil(cond, options)
     return chainable
 end
 
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                          Wrappers                                           --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
 ---@param ms number
 ---@param func fun(...)
 ---@return fun(...)
@@ -482,6 +501,12 @@ function M.Throttle(ms, func)
     end
 end
 
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                         Async/Await                                         --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
 local function resumeCoroutine(co, ...)
     return M.Run(Utils.Bind(function(...)
         local result = { coroutine.resume(co, ...) }
@@ -501,6 +526,14 @@ function M.Wrap(func)
     assert(type(func) == "function", "Async.Wrap(func) - function expected, got " .. type(func))
 
     return function(...)
+        local co, main = coroutine.running()
+        if not main and coroutine.status(co) == "running" then
+            local result = { func(...) }
+            return M.Run(function()
+                return table.unpack(result)
+            end)
+        end
+
         local co = coroutine.create(func)
         return resumeCoroutine(co, ...)
     end
@@ -515,15 +548,17 @@ function M.Sync(chainable)
 
     assert(type(chainable) == "table" and chainable._IsChainable, "Async.Sync(chainable) - Chainable expected")
 
-    Chainable.OnEnd(chainable, function(success, state)
-        resumeCoroutine(co, success, table.unpack(state))
-    end)
+    local finalFunc = chainable._Final
+    chainable:Final(function(self, ...)
+        self._Final = finalFunc
+        return true, resumeCoroutine(co, ...)
+    end, true)
 
     local result = { coroutine.yield(chainable) }
     local ok = table.remove(result, 1)
 
     if not ok then
-        error(table.unpack(result))
+        error(debug.traceback(table.unpack(result)))
     end
 
     return table.unpack(result)
@@ -546,12 +581,12 @@ function M.SyncAll(chainables)
             "Async.SyncAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
         )
 
-        Chainable.OnEnd(chainable, function(success, state)
-            results[i] = state
+        chainable:Final(function(success, ...)
+            results[i] = { ... }
             awaiting = awaiting - 1
 
             if not success then
-                errors[i] = state
+                errors[i] = { ... }
             end
 
             if awaiting == 0 then
@@ -561,6 +596,8 @@ function M.SyncAll(chainables)
                     combined:Begin(table.unpack(results))
                 end
             end
+
+            return true
         end)
     end
 

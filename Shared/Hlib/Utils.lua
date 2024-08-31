@@ -38,13 +38,13 @@ function M.Equals(v1, v2, ignoreMT)
     return Ext.DumpExport(v1) == Ext.DumpExport(v2)
 end
 
----@param userdata userdata
+---@param struct userdata|table|any
 ---@param property string
 ---@param default any|nil
 ---@return any
-function M.GetProperty(userdata, property, default)
+function M.GetProperty(struct, property, default)
     local ok, value = pcall(function()
-        return userdata[property]
+        return struct[property]
     end)
     if ok then
         return value

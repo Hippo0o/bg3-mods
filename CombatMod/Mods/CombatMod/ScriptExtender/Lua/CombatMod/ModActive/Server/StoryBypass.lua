@@ -118,7 +118,11 @@ function StoryBypass.ClearArea(character)
             for _, b in pairs(batch) do
                 -- Osi.CreateSurface(b.Guid, "None", 10, -1)
                 if b.Entity.ServerItem then
-                    if b.Entity.ServerItem.IsLadder or b.Entity.ServerItem.IsDoor or b.Entity.GameplayLight then
+                    if
+                        b.Entity.ServerItem.IsLadder
+                        or b.Entity.ServerItem.IsDoor
+                        or table.contains(get(Ext.Stats.Get(b.Entity.ServerItem.Stats), "Flags", {}), "Torch")
+                    then
                         b.Entity.ServerItem.CanBePickedUp = false
                         b.Entity.ServerItem.CanBeMoved = false
                         if b.Entity.ServerItem.IsDoor then
@@ -584,7 +588,7 @@ Event.On(
     end)
 )
 Event.On(
-    "ScenarioCombatStarted",
+    "ScenarioMapEntered",
     ifBypassStory(function()
         StoryBypass.ClearArea(Player.Host())
     end)

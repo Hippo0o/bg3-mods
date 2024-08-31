@@ -717,7 +717,7 @@ function Scenario.CombatSpawned(specific)
     local s = Current()
 
     local enemies = table.filter(s.SpawnedEnemies, function(e)
-        return specific == nil or U.Equals(e, specific)
+        return specific == nil or eq(e, specific)
     end)
 
     L.Debug("Combat spawned.", #enemies)

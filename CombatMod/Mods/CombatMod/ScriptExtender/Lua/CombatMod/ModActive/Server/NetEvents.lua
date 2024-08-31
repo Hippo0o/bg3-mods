@@ -187,7 +187,7 @@ Net.On("Teleport", function(event)
 
     local s = Scenario.Current()
 
-    if s and U.Equals(map, s.Map) then
+    if s and eq(map, s.Map) then
         Scenario.Teleport(event:Character())
     else
         map:Teleport(event:Character())

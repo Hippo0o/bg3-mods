@@ -103,15 +103,19 @@ function EventListener.Chainable(event, once)
     local obj = EventListener.New(event, nil, once)
 
     local chainable = Chainable.Create(obj)
+    local ran = false
     obj._Func = function(...)
-        return chainable:Begin(...)
+        ran = true
+        chainable:Begin(...)
     end
 
     local unregisterFunc = obj.Unregister
 
     obj.Unregister = function(self)
         unregisterFunc(self)
-        chainable:End(true)
+        if not ran then
+            chainable:End(true, {})
+        end
     end
 
     return chainable

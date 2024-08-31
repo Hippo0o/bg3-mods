@@ -44,7 +44,7 @@ end)
 GameState.OnLoad(function()
     Enemy.RestoreFromSave(PersistentVars.SpawnedEnemies)
 
-    if U.Equals(PersistentVars.Scenario, {}) then
+    if eq(PersistentVars.Scenario, {}) then
         PersistentVars.Scenario = nil
     end
 

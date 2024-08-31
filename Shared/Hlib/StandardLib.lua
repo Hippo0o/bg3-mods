@@ -37,6 +37,8 @@ fn = Utils.Lambda
 
 eq = Utils.Equals
 
+get = Utils.GetProperty
+
 ---@type Async|function
 async = setmetatable({}, {
     __index = function(_, key)
