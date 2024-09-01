@@ -64,7 +64,6 @@ External = {}
 Templates = {}
 
 Require("CombatMod/Server/External")
-Require("CombatMod/Server/Templates")
 
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)

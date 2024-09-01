@@ -23,7 +23,7 @@ sync-files:
 	done
 
 copy:
-	rsync --verbose -avc --copy-links --delete "$(MOD_DIR)/$(MOD)/." "$(MOUNT_DIR)/Temp/$(MOD)/."
+	rsync --verbose --exclude=Mods/CombatMod/ScriptExtender/Lua/Exclude -avc --copy-links --delete "$(MOD_DIR)/$(MOD)/." "$(MOUNT_DIR)/Temp/$(MOD)/."
 
 copy-back:
 	cp $(MOUNT_DIR)/Temp/$(MOD).zip .

@@ -9,6 +9,8 @@ local function modify()
 
     -- Mindflayer form can't level up
     Ext.StaticData.Get("e6e0499b-c7b7-4f4a-b286-ecede5225ca1", "ShapeshiftRule").BlockLevelUp = false
+    -- Ext.StaticData.Get("e6e0499b-c7b7-4f4a-b286-ecede5225ca1", "ShapeshiftRule").ApplyVisual = false
+    -- Ext.StaticData.Get("e6e0499b-c7b7-4f4a-b286-ecede5225ca1", "ShapeshiftRule").ChangeIcon = false
 
     isDirty = true
 end

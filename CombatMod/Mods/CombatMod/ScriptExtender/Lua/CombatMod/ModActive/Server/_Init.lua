@@ -53,6 +53,7 @@ GameState.OnLoad(function()
     end
 end, true)
 
+Require("CombatMod/ModActive/Server/Templates")
 Require("CombatMod/ModActive/Server/Scenario")
 Require("CombatMod/ModActive/Server/Enemy")
 Require("CombatMod/ModActive/Server/Map")
