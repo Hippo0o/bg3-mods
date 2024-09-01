@@ -234,9 +234,7 @@ function Runner.Chainable(queue, func)
     local obj = Runner.New(queue, func)
 
     local chainable = Chainable.Create(obj)
-    local ran = false
     obj.Exec = function()
-        ran = true
         chainable:Begin()
     end
 
@@ -249,9 +247,7 @@ function Runner.Chainable(queue, func)
 
     obj.Clear = function(self)
         clearFunc(self)
-        if not ran then
-            chainable:End(true, {})
-        end
+        chainable:End(true, {})
     end
 
     if func then
@@ -406,9 +402,13 @@ function M.RetryUntil(cond, options)
     local immediate = options.immediate or false
 
     local chainable = Chainable.Create()
-    chainable:Catch(function(err)
-        L.Debug("RetryUntil catch error:", err)
-    end)
+    local function fail(...)
+        chainable:Catch(function(err)
+            L.Debug("RetryUntil catch error:", err)
+        end)
+
+        chainable:Throw(...)
+    end
 
     local runner = M.Interval(interval, function(self)
         local ok, result = pcall(cond, self, retries, chainable)
@@ -426,13 +426,15 @@ function M.RetryUntil(cond, options)
 
         if retries == 0 then
             self:Clear()
-            chainable:Throw(result)
+
+            fail(result)
         end
     end)
 
     runner.Failed = function(self, error)
         self:Clear()
-        chainable:Throw(error)
+
+        fail(result)
     end
 
     chainable.Source = runner
@@ -548,11 +550,9 @@ function M.Sync(chainable)
 
     assert(type(chainable) == "table" and chainable._IsChainable, "Async.Sync(chainable) - Chainable expected")
 
-    local finalFunc = chainable._Final
-    chainable:Final(function(self, ...)
-        self._Final = finalFunc
+    chainable:Final(function(...)
         return true, resumeCoroutine(co, ...)
-    end, true)
+    end)
 
     local result = { coroutine.yield(chainable) }
     local ok = table.remove(result, 1)

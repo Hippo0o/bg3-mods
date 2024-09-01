@@ -358,7 +358,7 @@ return table.combine({
     },
     {
         Id = "BuyLootRare",
-        Name = __("Roll Rare Loot %dx", 3),
+        Name = __("Roll Rare Loot %dx", 5),
         Icon = "Item_CONT_GEN_Chest_Jewel_C",
         Cost = 50,
         Requirement = 50,

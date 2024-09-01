@@ -115,7 +115,7 @@ end
 ---@return ChainableRequest
 function M.Request(action, payload)
     local responseAction = action .. Utils.RandomId("_Response_")
-    local chainable = Event.ChainOn(M.EventName(responseAction), true)
+    local chainable = Event.ChainOn(M.EventName(responseAction))
 
     M.Send(action, payload, responseAction)
     -- TODO maybe add timeout and fail

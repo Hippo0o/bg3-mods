@@ -97,15 +97,12 @@ end
 ---@class ChainableEvent : Chainable
 ---@field Source EventListener
 ---@param event string
----@param once boolean|nil
 ---@return ChainableEvent
-function EventListener.Chainable(event, once)
-    local obj = EventListener.New(event, nil, once)
+function EventListener.Chainable(event)
+    local obj = EventListener.New(event, nil, true)
 
     local chainable = Chainable.Create(obj)
-    local ran = false
     obj._Func = function(...)
-        ran = true
         chainable:Begin(...)
     end
 
@@ -113,19 +110,16 @@ function EventListener.Chainable(event, once)
 
     obj.Unregister = function(self)
         unregisterFunc(self)
-        if not ran then
-            chainable:End(true, {})
-        end
+        chainable:End(true, {})
     end
 
     return chainable
 end
 
 ---@param event string
----@param once boolean|nil
 ---@return ChainableEvent
-function M.ChainOn(event, once)
-    return EventListener.Chainable(event, once)
+function M.ChainOn(event)
+    return EventListener.Chainable(event)
 end
 
 ---@param event string

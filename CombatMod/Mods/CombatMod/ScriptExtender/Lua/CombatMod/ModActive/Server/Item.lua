@@ -726,7 +726,7 @@ Event.On(
             table.combine(loot, r[1])
         end
 
-        L.Dump("Loot", loot, scenario.LootRates, rolls, #loot, #loot == rolls)
+        L.Dump("Loot", loot, scenario.LootRates, rolls, #loot)
 
         local map = scenario.Map
         local x, y, z = map.Enter[1], map.Enter[2], map.Enter[3]

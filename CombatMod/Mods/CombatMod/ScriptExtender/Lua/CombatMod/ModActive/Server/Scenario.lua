@@ -244,30 +244,25 @@ function Action.SpawnRound()
                 retries = triesToSpawn,
                 interval = 100,
             })
-            :After(function(spawnedChainable)
-                return spawnedChainable
-                    :After(function(e, posCorrectionChainable)
-                        Player.Notify(__("Enemy %s spawned.", e:GetTranslatedName()), true, e:GetId())
-                        Event.Trigger("ScenarioEnemySpawned", Current(), e)
+            :After(function(enemy, posCorrectionChainable)
+                Player.Notify(__("Enemy %s spawned.", enemy:GetTranslatedName()), true, enemy:GetId())
+                Event.Trigger("ScenarioEnemySpawned", Current(), enemy)
 
-                        -- Action.GroupEnemy(e)
+                -- Action.GroupEnemy(e)
 
-                        return posCorrectionChainable
-                    end)
-                    :After(function(e, corrected)
-                        Action.EnemyAdded(e)
+                return posCorrectionChainable
+            end)
+            :After(function(e, corrected)
+                Action.EnemyAdded(e)
 
-                        return Defer(1000)
-                    end)
+                return Defer(1000)
             end)
             :Catch(function()
-                waitSpawn = waitSpawn - 1
-
                 L.Error("Spawn limit exceeded.", e:GetId())
                 table.removevalue(s.SpawnedEnemies, e)
                 Action.EnemyRemoved()
             end)
-            :After(function()
+            :Final(function()
                 waitSpawn = waitSpawn - 1
             end)
     end
@@ -674,8 +669,9 @@ function Scenario.IsHelper(uuid)
 
     return U.UUID.Equals(S().CombatHelper, uuid)
         or table.find(S().Map.Helpers, function(helper)
-            return U.UUID.Equals(helper, uuid)
-        end) ~= nil
+                return U.UUID.Equals(helper, uuid)
+            end)
+            ~= nil
 end
 
 function Scenario.HasStarted()

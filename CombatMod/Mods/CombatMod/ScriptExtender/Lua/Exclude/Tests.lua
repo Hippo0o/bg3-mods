@@ -57,7 +57,7 @@ local tests = {
         end)
 
         local x = await(async
-            .defer(3000)
+            .defer(1000)
             :After(async(function()
                 local a = 0
 
@@ -75,7 +75,9 @@ local tests = {
                 assert(v == 123, "v is not 123")
                 Log.Warn("C")
 
-                return v + 222
+                return async.defer(1000, function()
+                    return v + 222
+                end)
             end))
 
         assert(x == 345, "x is not 345")
@@ -214,14 +216,37 @@ local tests = {
         Log.Warn("E")
         assert(x == 456, "x is not 456")
 
+        local ok, err = pcall(
+            await,
+            async
+                .defer(100, function()
+                    Log.Warn("F")
+                    return async.defer(100)
+                end)
+                :After(function()
+                    Log.Warn("F2")
+                    error("Error")
+                    return 456
+                end)
+                :Catch(function(err)
+                    Log.Warn("F3")
+                    error("Catch " .. err)
+                    return 456
+                end)
+        )
+
+        assert(not ok, "Error not thrown")
+        assert(type(err) == "string", "Error is not 'Catch Error'")
+        Log.Error("G", err)
+
         await(async.defer(1000, function()
-            Log.Warn("F", "Throwing error")
+            Log.Warn("H", "Throwing error")
             error("Error")
             return 123
         end))
 
         assert(false, "Error not thrown")
-        Log.Warn("-D")
+        Log.Warn("-H")
     end),
 }
 
