@@ -1093,5 +1093,7 @@ Ext.Osiris.RegisterListener(
         Scenario.GroupDistantEnemies()
 
         Scenario.CombatSpawned()
+
+        Scenario.CheckEnded()
     end)
 )

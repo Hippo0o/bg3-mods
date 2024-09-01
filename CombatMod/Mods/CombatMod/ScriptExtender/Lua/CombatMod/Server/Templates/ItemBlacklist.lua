@@ -8,6 +8,7 @@ local regex = {
 	"_Pact$",
 	"_Rusty$",
 	"_Dart$",
+	"_Dart_%d*$",
 	"_Sling$",
 	"_Bonesaw$",
 	"_FlameBlade$",

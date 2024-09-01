@@ -149,33 +149,6 @@ local ngPlus = {
         end,
     },
     {
-        Id = "BuyStockPlus",
-        Name = __("Reset Stock"),
-        Icon = "Item_BOOK_SignedTradeVisa",
-        Description = __("Resets the stock of purchased standard unlocks."),
-        Cost = 1000,
-        Amount = nil,
-        Requirement = { "NEWGAME_PLUS" },
-        Character = false,
-        OnBuy = function(self, character)
-            if self.Bought > 0 then
-                for _, u in pairs(getUnlocks()) do
-                    if
-                        string.contains(u.Id, {
-                            "^Buy",
-                            "TadAwaken",
-                        })
-                    then
-                        if u.Cost > 0 and u.Amount ~= nil and u.Amount > 0 then
-                            L.Debug(u.Id)
-                            u.Bought = 0
-                        end
-                    end
-                end
-            end
-        end,
-    },
-    {
         Id = "CurrencyPlus",
         Name = "+100 Currency",
         Icon = "Item_CONT_GEN_Chest_Rich_B",
@@ -218,6 +191,33 @@ local ngPlus = {
             Item.SpawnLoot(loot, x, y, z)
         end,
     },
+    {
+        Id = "BuyStockPlus",
+        Name = __("Reset Stock"),
+        Icon = "Item_BOOK_SignedTradeVisa",
+        Description = __("Resets the stock of purchased standard unlocks."),
+        Cost = 1000,
+        Amount = nil,
+        Requirement = { "NEWGAME_PLUS" },
+        Character = false,
+        OnBuy = function(self, character)
+            if self.Bought > 0 then
+                for _, u in pairs(getUnlocks()) do
+                    if
+                        string.contains(u.Id, {
+                            "^Buy",
+                            "TadAwaken",
+                        })
+                    then
+                        if u.Cost > 0 and u.Amount ~= nil and u.Amount > 0 then
+                            L.Debug(u.Id)
+                            u.Bought = 0
+                        end
+                    end
+                end
+            end
+        end,
+    },
 }
 
 --- @type table<number, Unlock>
@@ -227,6 +227,7 @@ return table.combine({
         Name = __("Unlock Tadpole Power"),
         Icon = "TadpoleSuperPower_IllithidPowers",
         Cost = 10,
+        Requirement = 25,
         Amount = nil,
         Character = true,
         OnBuy = function(self, character)
@@ -256,6 +257,7 @@ return table.combine({
         Cost = 900,
         Amount = 1,
         Character = true,
+        Requirement = 75,
         OnBuy = function(self, character)
             Osi.ApplyStatus(character, "MIND_FLAYER_FORM", -1)
             -- takes a bit to transform
@@ -275,6 +277,7 @@ return table.combine({
         Icon = "PassiveFeature_CRE_GithInfirmary_Awakened",
         Description = __("Use all Illithid Powers with Bonus Actions."),
         Cost = 100,
+        Requirement = 50,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
@@ -287,6 +290,7 @@ return table.combine({
         Description = Localization.Get("hcf1ccad1gddf7g447agaf91gf473f16583a0"),
         Icon = "TadpoleSuperPower_SurvivalInstinct",
         Cost = 40,
+        Requirement = 50,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
@@ -299,6 +303,7 @@ return table.combine({
         Description = __("Spawns the Emperor as controllable party follower."),
         Icon = "TadpoleSuperPower_IllithidExpertise",
         Cost = 200,
+        Requirement = 50,
         Amount = 1,
         Character = false,
         OnBuy = function(self, character)
@@ -356,6 +361,7 @@ return table.combine({
         Name = __("Roll Rare Loot %dx", 3),
         Icon = "Item_CONT_GEN_Chest_Jewel_C",
         Cost = 50,
+        Requirement = 50,
         Amount = 6,
         Character = false,
         OnBuy = function(self, character)
@@ -374,6 +380,7 @@ return table.combine({
         Name = __("Roll Epic Loot %dx", 3),
         Icon = "Item_CONT_GEN_Chest_Jewel_A",
         Cost = 100,
+        Requirement = 50,
         Amount = 3,
         Character = false,
         OnBuy = function(self, character)
@@ -392,6 +399,7 @@ return table.combine({
         Name = __("Roll Legendary Loot %dx", 1),
         Icon = "Item_CONT_GEN_Chest_Jewel_D",
         Cost = 100,
+        Requirement = 50,
         Amount = 3,
         Character = false,
         OnBuy = function(self, character)
@@ -478,6 +486,7 @@ return table.combine({
             Ext.Stats.Get("LOW_STORMSHORETABERNACLE_GODBLESSED").DescriptionParams
         ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",), --"Gain +2 bonus to all Saving throws.",
         Cost = 60,
+        Requirement = 50,
         Amount = nil,
         Character = true,
         OnBuy = function(self, character)
@@ -500,14 +509,15 @@ return table.combine({
         Id = "BuyResonanceStone",
         Name = Localization.Get("h2d9eec26gb99cg4944g9b9bg339dda67c9e2"),
         Icon = "Item_TOOL_MF_Resonance_Crystal_A",
-        Description = Localization.Get("h541fc541g7e8cg4296g8b01g4c4b589be49e"),
+        Description = Localization.Get("hecfe4e23g8a90g4a74g8bc7g5eca34496309"),
         Cost = 40,
         Amount = nil,
-        Character = true,
+        Character = false,
         OnBuy = function(self, character)
-            if Osi.HasAppliedStatus(character, "COL_RESONANCESTONE_BUFF") ~= 1 then
-                Osi.ApplyStatus(character, "COL_RESONANCESTONE_BUFF", -1) -- removed on death
-            end
+            Osi.TemplateAddTo("a7edf7ca-1999-4d2c-b1bf-035d6e2b9e6e", character, 1, 1)
+            -- if Osi.HasAppliedStatus(character, "COL_RESONANCESTONE_BUFF") ~= 1 then
+            --     Osi.ApplyStatus(character, "COL_RESONANCESTONE_BUFF", -1) -- removed on death
+            -- end
         end,
     },
     {
@@ -516,11 +526,16 @@ return table.combine({
         Icon = "PassiveFeature_Generic_Death",
         Description = Localization.Get("he14e8628g1c7fg4e46gadacga197c3410657"),
         Cost = 30,
-        Amount = nil,
+        Amount = 1,
         Character = true,
         OnBuy = function(self, character)
             Osi.ApplyStatus(character, "ANIMATEDEAD_ZONE", -1)
         end,
+        OnReapply = Debounce(100, function(self) ---@param self Unlock
+            for uuid, _ in pairs(self.BoughtBy) do
+                self:OnBuy(uuid)
+            end
+        end),
     },
     {
         Id = "BuyFrogMind",
@@ -576,6 +591,7 @@ return table.combine({
         Icon = "GenericIcon_Intent_Healing",
         Description = Localization.Get("hce17bfdcg2d30g4a97g9850g0219c6a5116a", 20), --"Grants 20 Temporary HP after Long Rest.",
         Cost = 80,
+        Requirement = 100,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
@@ -591,6 +607,7 @@ return table.combine({
         ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Icon = "Spell_WakeTheDead",
         Cost = 80,
+        Requirement = 100,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
@@ -606,6 +623,7 @@ return table.combine({
             Ext.Stats.Get("LOW_Astarion_VampireAscendant").DescriptionParams
         ), --"Gain Ascendant Bite and Misty Escape (Vampire Ascendant).",
         Cost = 300,
+        Requirement = 100,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
@@ -618,6 +636,7 @@ return table.combine({
         Icon = "PassiveFeature_Generic_Blood",
         Description = Localization.Get("h473ffdccgc70fg4761gaa67gbf0fb07d475f"), --"Gain Stunning Gaze and Critical Hit requirement reduced by 2.",
         Cost = 80,
+        Requirement = 100,
         Amount = 1,
         Character = true,
         OnBuy = function(self, character)
@@ -636,6 +655,7 @@ return table.combine({
         Name = Localization.Get("h7ee059fega56bg48d4g99abg0a1ee50238d1"),
         Description = Localization.Get("h67dd3fb6ge300g42f0gaea3g0ecb374132c7", 10),
         Icon = "Action_DarkUrge",
+        Requirement = 100,
         Cost = 100,
         Amount = 1,
         Character = true,

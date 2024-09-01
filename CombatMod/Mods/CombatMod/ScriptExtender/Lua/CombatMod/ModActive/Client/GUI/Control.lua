@@ -240,6 +240,10 @@ function Control.RunningPanel(root)
                 Net.Send("KillSpawned")
             end
 
+            grp:AddButton(__("Ping Spawns")).OnClick = function()
+                Event.Trigger("PingSpawns", { Map = State.Scenario.Map.Name })
+            end
+
             return grp
         end, "ToggleDebug").Update(Mod.Debug)
     end)

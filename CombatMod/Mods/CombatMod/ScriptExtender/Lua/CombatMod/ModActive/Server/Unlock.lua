@@ -119,6 +119,10 @@ function Unlock.UpdateCurrency(currency)
 
     PersistentVars.Currency = currency
 
+    if prev == currency then
+        return
+    end
+
     Event.Trigger("CurrencyChanged", prev, currency)
 
     Defer(1000, function()

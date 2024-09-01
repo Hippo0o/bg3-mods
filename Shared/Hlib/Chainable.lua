@@ -25,12 +25,11 @@ function Chainable.New(source)
     local obj = Chainable.Init()
     obj._IsChainable = Utils.RandomId("Chainable_")
     obj.Source = source
-    obj._InitalInput = {}
 
     return obj
 end
 
----@param obj any
+---@param value any
 ---@return boolean
 function M.IsChainable(value)
     return type(value) == "table" and value._IsChainable
