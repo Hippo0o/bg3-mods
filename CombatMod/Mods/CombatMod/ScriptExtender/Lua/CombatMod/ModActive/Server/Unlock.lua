@@ -25,6 +25,7 @@ end
 ---@field Persistent boolean
 ---@field OnBuy fun(self: Unlock, character: string)
 ---@field OnReapply fun(self: Unlock)
+---@field OnInit fun(self: Unlock)
 ---@field Buy fun(self: Unlock)
 local Object = Libs.Struct({
     Id = nil,
@@ -40,6 +41,7 @@ local Object = Libs.Struct({
     Persistent = false,
     OnBuy = function() end,
     OnReapply = function() end,
+    OnInit = function() end,
 })
 
 function Object:Buy(character)
@@ -186,7 +188,15 @@ function Unlock.Sync()
     Unlock.UpdateUnlocked()
 end
 
+local initialized = {}
 function Unlock.UpdateUnlocked()
+    for _, u in pairs(Unlock.Get()) do
+        if not initialized[u.Id] then
+            u:OnInit()
+            initialized[u.Id] = true
+        end
+    end
+
     for _, u in pairs(Unlock.Get()) do
         u:UpdateUnlocked()
     end

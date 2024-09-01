@@ -425,23 +425,61 @@ return table.combine({
         end,
     },
     {
-        Id = "BuyRestore",
-        Name = __("Fully Restore Character"),
+        Id = "ShortRestRecovery",
+        Name = "Restore Resources on Short Rest",
         Icon = "Action_EndGame_IsobelHeal",
-        Description = __("Heal character and restore used spells."),
-        Cost = 20,
-        Amount = nil,
-        Character = true,
+        Cost = 200,
+        Requirement = 100,
+        Amount = 1,
+        Character = false,
         OnBuy = function(self, character)
-            -- for _, p in pairs(GE.GetParty()) do
-            --     Osi.PROC_CharacterFullRestore(p.Uuid.EntityUuid)
-            --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
-            -- end
-            -- Osi.PROC_GLO_PartyMembers_TempRestore(character)
-            Osi.PROC_CharacterFullRestore(character)
-            -- Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
+            if self.Bought > 1 then
+                return
+            end
+
+            self:OnInit()
+        end,
+        OnInit = function(self)
+            if self.Bought > 0 then
+                Ext.Osiris.RegisterListener("ShortRested", 1, "after", function(character)
+                    local entity = Ext.Entity.Get(character)
+                    local resources = get(entity.ActionResources, "Resources", {})
+                    for uuid, list in pairs(resources) do
+                        for _, resource in pairs(list) do
+                            L.Dump(
+                                "Restoring Resource",
+                                character,
+                                get(Ext.StaticData.Get(resource.ResourceUUID, "ActionResource"), "Name", "Unknown")
+                            )
+
+                            local toRestore = math.max(1, resource.MaxAmount / 2)
+                            resource.Amount = math.min(resource.MaxAmount, math.floor(resource.Amount + toRestore))
+                        end
+                    end
+
+                    entity:Replicate("ActionResources")
+                end)
+            end
         end,
     },
+    -- {
+    --     Id = "BuyRestore",
+    --     Name = __("Fully Restore Character"),
+    --     Icon = "Action_EndGame_IsobelHeal",
+    --     Description = __("Heal character and restore used spells."),
+    --     Cost = 20,
+    --     Amount = nil,
+    --     Character = true,
+    --     OnBuy = function(self, character)
+    --         -- for _, p in pairs(GE.GetParty()) do
+    --         --     Osi.PROC_CharacterFullRestore(p.Uuid.EntityUuid)
+    --         --     Osi.UseSpell(p.Uuid.EntityUuid, "Shout_DivineIntervention_Healing", p.Uuid.EntityUuid)
+    --         -- end
+    --         -- Osi.PROC_GLO_PartyMembers_TempRestore(character)
+    --         Osi.PROC_CharacterFullRestore(character)
+    --         -- Osi.ApplyStatus(character, "ALCH_POTION_REST_SLEEP_GREATER_RESTORATION", 1)
+    --     end,
+    -- },
     {
         Id = "Moonshield",
         Name = __("Get Pixie Blessing"),

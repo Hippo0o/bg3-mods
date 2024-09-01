@@ -170,7 +170,7 @@ function Object:Prepare()
     for _, pos in pairs(table.combine({}, { self.Enter }, self.Spawns)) do
         local x, y, z = table.unpack(pos)
 
-        local guid = Osi.CreateAt("c13a872b-7d9b-4c1d-8c65-f672333b0c11", x, y, z, 1, 0, "")
+        local guid = Osi.CreateAt(C.MapHelper, x, y, z, 1, 0, "")
         if not guid then
             L.Error("Failed to create helper.", x, y, z)
             self:Clear()

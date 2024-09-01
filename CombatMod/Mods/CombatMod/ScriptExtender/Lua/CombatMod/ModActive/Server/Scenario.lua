@@ -668,7 +668,14 @@ function Scenario.CheckShouldStop()
 end
 
 function Scenario.IsHelper(uuid)
-    return S() and U.UUID.Equals(S().CombatHelper, uuid)
+    if not S() then
+        return false
+    end
+
+    return U.UUID.Equals(S().CombatHelper, uuid)
+        or table.find(S().Map.Helpers, function(helper)
+            return U.UUID.Equals(helper, uuid)
+        end) ~= nil
 end
 
 function Scenario.HasStarted()

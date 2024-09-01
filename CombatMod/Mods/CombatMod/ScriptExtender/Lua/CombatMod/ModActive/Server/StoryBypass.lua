@@ -111,7 +111,7 @@ function StoryBypass.ClearArea(character)
     end
 
     local objects = table.filter(nearby, function(v)
-        return v.Entity.ServerItem and not GU.Object.IsOwned(v.Guid)
+        return v.Entity.ServerItem and not GU.Object.IsOwned(v.Guid) and not Scenario.IsHelper(v.Guid)
     end)
     for _, batch in pairs(UT.Batch(objects, math.ceil(#objects / 5))) do
         Schedule(function()
@@ -148,10 +148,9 @@ function StoryBypass.ClearArea(character)
                         b.Entity.Health
                         or b.Entity.ServerItem.CanBePickedUp
                         or b.Entity.ServerItem.CanUse
-                        or (
-                            b.Entity.ServerItem.Template.Id == C.ScenarioHelper.TemplateId
-                            and not Scenario.IsHelper(b.Guid)
-                        )
+                        or b.Entity.CanBeDisarmed
+                        or b.Entity.ServerItem.Template.Id == C.ScenarioHelper.TemplateId
+                        or b.Entity.ServerItem.Template.Id == C.MapHelper
                     then -- TODO remove more CanUse objects
                         GU.Object.Remove(b.Guid)
                     end
@@ -596,6 +595,10 @@ Event.On(
 
 local function removeAllEntities()
     if Scenario.HasStarted() or not Config.ClearAllEntities then
+        return
+    end
+
+    if Player.Region() == C.Regions.Act0 then
         return
     end
 

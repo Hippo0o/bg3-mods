@@ -13,6 +13,7 @@ C = {
         Handle = "h09f52fcdg7db3g44ddg91b1gb2b4d69ac32b",
         Faction = "4be9261a-e481-8d9d-3528-f36956a19b17",
     },
+    MapHelper = "c13a872b-7d9b-4c1d-8c65-f672333b0c11",
     ItemRarity = {
         "Common",
         "Uncommon",

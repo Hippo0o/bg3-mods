@@ -9,12 +9,13 @@ function ClientUnlock.Main(tab)
         return __("Currency owned: %d   RogueScore: %d", state.Currency, state.RogueScore or 0)
     end, "StateChange")
 
-    Event.ChainOn("StateChange"):After(function(self, state)
+    local handler
+    handler = Event.On("StateChange", function(state)
         local unlocks = state.Unlocks
         if table.size(unlocks) == 0 then
             return
         end
-        self.Source:Unregister()
+        handler:Unregister()
 
         local cols = 3
         local nrows = math.ceil(table.size(unlocks) / cols)
@@ -28,7 +29,7 @@ function ClientUnlock.Main(tab)
                 ClientUnlock.Tile(cell, unlock)
             end
         end)
-    end, true)
+    end)
 end
 
 function ClientUnlock.GetStock(unlock)
