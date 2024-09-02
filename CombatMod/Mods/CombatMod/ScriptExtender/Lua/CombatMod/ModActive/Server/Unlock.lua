@@ -159,6 +159,7 @@ function Unlock.Sync()
     end
 
     local unlocks = {}
+    local removedUnlocks = {}
     table.each(PersistentVars.Unlocks, function(u)
         if u.Persistent then
             if persistentUnlocks[u.Id] and persistentUnlocks[u.Id] > 0 then
@@ -168,7 +169,7 @@ function Unlock.Sync()
             end
         end
 
-        local existing = table.find(Unlock.GetTemplates(), function(p)
+        local existing, index = table.find(Unlock.GetTemplates(), function(p)
             return p.Id == u.Id
         end)
 
@@ -178,12 +179,15 @@ function Unlock.Sync()
             if tonumber(u.Bought) < 1 then
                 return
             end
+
+            table.insert(removedUnlocks, Unlock.Restore(u))
+            return
         end
 
-        table.insert(unlocks, Unlock.Restore(u))
+        unlocks[index] = Unlock.Restore(u)
     end)
 
-    PersistentVars.Unlocks = unlocks
+    PersistentVars.Unlocks = table.combine(unlocks, removedUnlocks)
 
     Unlock.UpdateUnlocked()
 end
