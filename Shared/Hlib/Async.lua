@@ -532,38 +532,7 @@ function M.Wrap(func)
     assert(type(func) == "function", "Async.Wrap(func) - function expected, got " .. type(func))
 
     return function(...)
-        -- #1
-        -- local co, main = coroutine.running()
-        -- local chainable = resumeCoroutine(coroutine.create(func), ...)
-        --
-        -- if not main and coroutine.status(co) == "running" then
-        --     chainable:Final(function (success, ...)
-        --         return success, resumeCoroutine(co, ...)
-        --     end)
-        -- end
-        --
-        -- return chainable
-        -- #2
-        -- local co, main = coroutine.running()
-        -- if not main and coroutine.status(co) == "running" then
-        --     return M.Run(Utils.Bind(func, ...)):Final(function(success, ...)
-        --         return success, resumeCoroutine(co, ...)
-        --     end)
-        -- end
-        --
-        -- local co = coroutine.create(func)
-        -- return resumeCoroutine(co, ...)
-        -- #3
-        local co, main = coroutine.running()
-        if not main and coroutine.status(co) == "running" then
-            local result = { func(...) }
-            return M.Run(function()
-                return table.unpack(result)
-            end)
-        end
-
-        local co = coroutine.create(func)
-        return resumeCoroutine(co, ...)
+        return resumeCoroutine(coroutine.create(func), ...)
     end
 end
 

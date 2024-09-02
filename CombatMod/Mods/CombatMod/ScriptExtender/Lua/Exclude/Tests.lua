@@ -162,7 +162,7 @@ local tests = {
         assert(x == 123, "x is not 123")
 
         local time = 0
-        local x = Async.Sync(Async.Waituntil(function(self)
+        local x = Async.Sync(Async.WaitUntil(function(self)
             if time >= 4 then
                 Log.Warn("D")
                 self:Clear()
