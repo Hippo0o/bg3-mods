@@ -391,6 +391,7 @@ end
 ---@field retries number|nil default: 3, -1 for infinite
 ---@field interval number|nil default: 1000
 ---@field immediate boolean|nil default: false
+---@field throw boolean|nil default: false
 ---@param cond fun(self: Runner, triesLeft: number, chainable: ChainableRunner): boolean
 ---@param options RetryForOptions|nil
 ---@return ChainableRunner
@@ -403,9 +404,12 @@ function M.RetryUntil(cond, options)
 
     local chainable = Chainable.Create()
     local function fail(...)
-        chainable:Catch(function(err)
-            L.Debug("RetryUntil catch error:", err)
-        end)
+        if not options.throw then
+            chainable:Catch(function(err)
+                L.Debug("RetryUntil catch error:", err)
+                return err
+            end)
+        end
 
         chainable:Throw(...)
     end

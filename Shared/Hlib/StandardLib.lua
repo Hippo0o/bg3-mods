@@ -39,33 +39,34 @@ eq = Utils.Equals
 
 get = Utils.GetProperty
 
----@type Async|function
-async = setmetatable({}, {
-    __index = function(_, key)
-        local _, k = Utils.Table.Find(Async, function(_, k)
-            return string.lower(key) == string.lower(k)
-        end)
+async = Async.Wrap
 
-        if not k then
-            return nil
-        end
-
-        return function(...)
-            return Async[k](...)
-        end
+---@class Await
+---@field condition fun(cond: fun(self: Runner, chainable: ChainableRunner): boolean): boolean|nil
+---@field sleep fun(ms: number)
+---@field ticks fun(ticks: number)
+---@field retry fun(cond: fun(self: Runner, triesLeft: number, chainable: ChainableRunner): boolean, opts: RetryForOptions|nil): boolean|any
+---@type Await|fun(chainable: ChainableRunner): any|fun(chainables: ChainableRunner[]): table<number, any>
+await = setmetatable({}, {
+    condition = function(cond)
+        return Async.Sync(Async.WaitUntil(cond))
+    end,
+    sleep = function(ms)
+        return Async.Sync(Async.Defer(ms))
+    end,
+    ticks = function(ticks)
+        return Async.Sync(Async.WaitTicks(ticks))
+    end,
+    retry = function(cond, opts)
+        return Async.Sync(Async.RetryUntil(cond, Utils.Table.Merge({ throw = true }, opts)))
     end,
     __call = function(_, ...)
-        return Async.Wrap(...)
+        local args = { ... }
+
+        if #args == 1 then
+            return Async.Sync(args[1])
+        end
+
+        return Async.SyncAll(args)
     end,
 })
-
----@vararg Chainable
-await = function(...)
-    local args = { ... }
-
-    if #args == 1 then
-        return Async.Sync(args[1])
-    end
-
-    return Async.SyncAll(args)
-end

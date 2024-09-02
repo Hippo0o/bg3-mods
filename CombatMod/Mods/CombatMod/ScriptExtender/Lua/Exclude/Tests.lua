@@ -1,21 +1,20 @@
-Require("Hlib/StandardLib")
 local Log = Require("Hlib/Log")
+local Async = Require("Hlib/Async")
 
 local tests = {
-    async(function()
+    Async.Wrap(function()
         local time = 0
-        local interval = async.interval(1000, function()
+        local interval = Async.Interval(1000, function()
             time = time + 1
             assert(time <= 5, "Time out")
         end)
 
-        local x = await(async
-            .defer(3000)
-            :After(async(function()
+        local x = Async.Sync(Async.Defer(3000)
+            :After(Async.Wrap(function()
                 local a = 0
 
                 Log.Warn("A")
-                local b = await(async.defer(1000, function()
+                local b = Async.Sync(Async.Defer(1000, function()
                     Log.Warn("B")
                     return 123
                 end))
@@ -33,7 +32,7 @@ local tests = {
 
         assert(x == 345, "x is not 345")
 
-        local y = await(async.defer(1000, function()
+        local y = Async.Sync(Async.Defer(1000, function()
             Log.Warn("D")
             return 456
         end))
@@ -49,20 +48,19 @@ local tests = {
 
         return true
     end),
-    async(function()
+    Async.Wrap(function()
         local time = 0
-        local interval = async.interval(1000, function()
+        local interval = Async.Interval(1000, function()
             time = time + 1
             assert(time <= 5, "Time out")
         end)
 
-        local x = await(async
-            .defer(1000)
-            :After(async(function()
+        local x = Async.Sync(Async.Defer(1000)
+            :After(Async.Wrap(function()
                 local a = 0
 
                 Log.Warn("A")
-                local b = await(async.defer(1000, function()
+                local b = Async.Sync(Async.Defer(1000, function()
                     Log.Warn("B")
                     return 123
                 end))
@@ -75,14 +73,14 @@ local tests = {
                 assert(v == 123, "v is not 123")
                 Log.Warn("C")
 
-                return async.defer(1000, function()
+                return Async.Defer(1000, function()
                     return v + 222
                 end)
             end))
 
         assert(x == 345, "x is not 345")
 
-        local y = await(async.defer(1000, function()
+        local y = Async.Sync(Async.Defer(1000, function()
             Log.Warn("D")
             return 456
         end))
@@ -96,21 +94,20 @@ local tests = {
         assert(interval.Cleared, "Interval not cleared")
         Log.Warn("E")
     end),
-    async(function()
+    Async.Wrap(function()
         local time = 0
-        local interval = async.interval(1000, function()
+        local interval = Async.Interval(1000, function()
             time = time + 1
             assert(time <= 4, "Time out")
         end)
 
-        local x, y = await(
-            async
-                .defer(3000)
-                :After(async(function()
+        local x, y = Async.SyncAll({
+            Async.Defer(3000)
+                :After(Async.Wrap(function()
                     local a = 0
 
                     Log.Warn("B")
-                    local b = await(async.defer(1000, function()
+                    local b = Async.Sync(Async.Defer(1000, function()
                         Log.Warn("C")
                         return 123
                     end))
@@ -125,11 +122,11 @@ local tests = {
                     Log.Warn("D")
                     return v + 222
                 end),
-            async.defer(1000, function()
+            Async.Defer(1000, function()
                 Log.Warn("A")
                 return 456
-            end)
-        )
+            end),
+        })
 
         assert(#x == 1, "x is not 1 length table")
         assert(#y == 1, "y is not 1 length table")
@@ -145,9 +142,9 @@ local tests = {
         assert(interval.Cleared, "Interval not cleared")
         Log.Warn("E")
     end),
-    async(function()
+    Async.Wrap(function()
         local time = 0
-        local x = await(async.waituntil(function(self)
+        local x = Async.Sync(Async.WaitUntil(function(self)
             if time >= 4 then
                 Log.Warn("A")
                 return true
@@ -165,7 +162,7 @@ local tests = {
         assert(x == 123, "x is not 123")
 
         local time = 0
-        local x = await(async.waituntil(function(self)
+        local x = Async.Sync(Async.Waituntil(function(self)
             if time >= 4 then
                 Log.Warn("D")
                 self:Clear()
@@ -182,47 +179,42 @@ local tests = {
         assert(x == nil, "x is not nil")
         Log.Warn("E")
     end),
-    async(function()
+    Async.Wrap(function()
         local ok, err = pcall(
             await,
-            async
-                .defer(1000, function()
-                    Log.Warn("A")
-                    return async.defer(100)
-                end)
-                :After(function()
-                    Log.Warn("A2")
-                    error("Error")
-                    return 456
-                end)
+            Async.Defer(1000, function()
+                Log.Warn("A")
+                return Async.Defer(100)
+            end):After(function()
+                Log.Warn("A2")
+                error("Error")
+                return 456
+            end)
         )
 
         assert(not ok, "Error not thrown")
         assert(type(err) == "string", "Error is not 'Error'")
         Log.Error("B", err)
 
-        local x = await(async
-            .defer(1000, function()
-                Log.Warn("C")
-                error("Error")
-                return 123
-            end)
-            :Catch(function(err)
-                Log.Error("D", err)
-                assert(type(err) == "string", "Error is not 'Error'")
-                return 456
-            end))
+        local x = Async.Sync(Async.Defer(1000, function()
+            Log.Warn("C")
+            error("Error")
+            return 123
+        end):Catch(function(err)
+            Log.Error("D", err)
+            assert(type(err) == "string", "Error is not 'Error'")
+            return 456
+        end))
 
         Log.Warn("E")
         assert(x == 456, "x is not 456")
 
         local ok, err = pcall(
             await,
-            async
-                .defer(100, function()
-                    Log.Warn("F")
-                    return async.defer(100)
-                end)
+            Async.Defer(100, function()
+                Log.Warn("F")
+                return Async.Defer(100)
+            end)
                 :After(function()
                     Log.Warn("F2")
                     error("Error")
@@ -239,7 +231,7 @@ local tests = {
         assert(type(err) == "string", "Error is not 'Catch Error'")
         Log.Error("G", err)
 
-        await(async.defer(1000, function()
+        Async.Sync(Async.Defer(1000, function()
             Log.Warn("H", "Throwing error")
             error("Error")
             return 123
@@ -250,7 +242,7 @@ local tests = {
     end),
 }
 
-return async(function(j)
+return Async.Wrap(function(j)
     for i, test in pairs(tests) do
         if j and i ~= j then
             goto continue
@@ -258,7 +250,7 @@ return async(function(j)
 
         Log.Warn("Running test", i)
         xpcall(function()
-            local x = { await(test()) }
+            local x = { Async.Sync(test()) }
             Log.Info("Test Success", i, table.unpack(x))
         end, function(err)
             Log.Error("Test failed", i, err)
