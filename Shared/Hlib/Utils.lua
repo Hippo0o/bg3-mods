@@ -130,6 +130,21 @@ function M.Bind(func, ...)
     end
 end
 
+---@param func function
+---@return fun(...): any
+function M.Once(func)
+    local called = false
+    local result = {}
+    return function(...)
+        if not called then
+            called = true
+            result = { func(...) }
+        end
+
+        return table.unpack(result)
+    end
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Table                                             --

@@ -316,21 +316,41 @@ return table.combine({
             -- Osi.SetTag(guid, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
             -- Osi.AddPassive(guid, "ShortResting")
             -- Osi.AddPartyFollower(guid, character)
+            Defer(1000, function()
+                self:OnReapply()
+            end)
+
+            self:OnInit()
         end,
-        OnReapply = function(self)
+        OnReapply = function(self) ---@param self Unlock
             for _, p in pairs(GE.GetParty()) do
-                if p.ServerCharacter.Template.Id == self.TemplateId then
-                    self.OwnedBy[p.EntityUuid.Uuid] = GC.GetPlayer(p.EntityUuid.Uuid)
+                if p.ServerCharacter.Template.Id == self.TemplateId and p.Uuid then
+                    self.OwnedBy[p.Uuid.EntityUuid] = GC.GetPlayer(p.Uuid.EntityUuid)
                 end
             end
+        end,
+        Register = U.Once(function(self)
+            Ext.Osiris.RegisterListener("CastedSpell", 5, "after", function(caster, spell)
+                if spell ~= "Shout_Dismiss_Self" then
+                    return
+                end
 
-            for uuid, player in pairs(self.OwnedBy) do
-                if Osi.IsDead(uuid) == 1 then
-                    if Player.IsPlayer(player) and Player.InCamp(player) then
-                        Osi.Resurrect(uuid)
-                        Osi.EndTurn(uuid)
+                self.OwnedBy[U.UUID.Extract(caster)] = nil
+            end)
+            Ext.Osiris.RegisterListener("LongRestFinished", 0, "after", function()
+                for uuid, player in pairs(self.OwnedBy) do
+                    if not GC.IsValid(uuid) then
+                        if Player.IsPlayer(player) and Player.InCamp(player) then
+                            self:OnBuy(player)
+                            self.OwnedBy[uuid] = nil
+                        end
                     end
                 end
+            end)
+        end),
+        OnInit = function(self)
+            if self.Bought > 0 then
+                self:Register()
             end
         end,
     },
@@ -451,32 +471,31 @@ return table.combine({
         Amount = 1,
         Character = false,
         OnBuy = function(self, character)
-            if self.Bought > 1 then
-                return
-            end
-
             self:OnInit()
         end,
+        Register = U.Once(function(self)
+            Ext.Osiris.RegisterListener("ShortRested", 1, "after", function(character)
+                local entity = Ext.Entity.Get(character)
+                local resources = get(entity.ActionResources, "Resources", {})
+                for uuid, list in pairs(resources) do
+                    for _, resource in pairs(list) do
+                        L.Dump(
+                            "Restoring Resource",
+                            character,
+                            get(Ext.StaticData.Get(resource.ResourceUUID, "ActionResource"), "Name", "Unknown")
+                        )
+
+                        local toRestore = math.max(1, resource.MaxAmount / 2)
+                        resource.Amount = math.min(resource.MaxAmount, math.floor(resource.Amount + toRestore))
+                    end
+                end
+
+                entity:Replicate("ActionResources")
+            end)
+        end),
         OnInit = function(self)
             if self.Bought > 0 then
-                Ext.Osiris.RegisterListener("ShortRested", 1, "after", function(character)
-                    local entity = Ext.Entity.Get(character)
-                    local resources = get(entity.ActionResources, "Resources", {})
-                    for uuid, list in pairs(resources) do
-                        for _, resource in pairs(list) do
-                            L.Dump(
-                                "Restoring Resource",
-                                character,
-                                get(Ext.StaticData.Get(resource.ResourceUUID, "ActionResource"), "Name", "Unknown")
-                            )
-
-                            local toRestore = math.max(1, resource.MaxAmount / 2)
-                            resource.Amount = math.min(resource.MaxAmount, math.floor(resource.Amount + toRestore))
-                        end
-                    end
-
-                    entity:Replicate("ActionResources")
-                end)
+                self:Register()
             end
         end,
     },

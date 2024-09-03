@@ -196,16 +196,24 @@ local initialized = {}
 function Unlock.UpdateUnlocked()
     for _, u in pairs(Unlock.Get()) do
         if not initialized[u.Id] then
-            u:OnInit()
+            xpcall(u.OnInit, function(err)
+                L.Error(err)
+            end, u)
+
             initialized[u.Id] = true
         end
     end
 
     for _, u in pairs(Unlock.Get()) do
-        u:UpdateUnlocked()
+        xpcall(u.UpdateUnlocked, function(err)
+            L.Error(err)
+        end, u)
     end
+
     for _, u in pairs(Unlock.Get()) do
-        u:OnReapply()
+        xpcall(u.OnReapply, function(err)
+            L.Error(err)
+        end, u)
     end
 
     SyncState()
