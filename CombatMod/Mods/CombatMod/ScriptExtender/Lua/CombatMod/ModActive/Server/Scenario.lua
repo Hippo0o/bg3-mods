@@ -629,7 +629,7 @@ function Scenario.Stop()
     Player.Notify(__("Scenario stopped."))
 end
 
-Scenario.Teleport = Async.Throttle(3000, function()
+Scenario.Teleport = Throttle(3000, function()
     local s = Current()
 
     for _, p in pairs(GE.GetParty()) do

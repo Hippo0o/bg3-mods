@@ -1,26 +1,26 @@
 if not Require then
     local register = {}
     ---@param module string
-    function Require(module)
+    ---@param nocache boolean|nil
+    function Require(module, nocache)
         if not string.match(module, ".lua$") then
             module = module .. ".lua"
         end
 
-        if register[module] then
-            return register[module]
+        if register[module] and not nocache then
+            return table.unpack(register[module])
         end
 
-        local result = Ext.Utils.Include(ModuleUUID, module, _G)
-        register[module] = result or {}
+        local r = { Ext.Utils.Include(ModuleUUID, module, _G) }
+        register[module] = r
 
-        return result
+        return table.unpack(r)
     end
 end
 
 ---@type Mod
 local Mod = Require("Hlib/Mod")
 
-Require("Hlib/Constants")
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 

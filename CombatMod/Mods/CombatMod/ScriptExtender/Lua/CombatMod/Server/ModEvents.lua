@@ -12,3 +12,8 @@ ModEvent.Register("ScenarioTeleporting")
 ModEvent.Register("ScenarioTeleported")
 ModEvent.Register("ScenarioPerfectClear")
 ModEvent.Register("MapTeleported")
+
+-- Example usage:
+-- Ext.ModEvents.ToT.ScenarioCombatStarted:Subscribe(function(scenario) ---@param scenario Scenario
+--
+-- end)

@@ -43,6 +43,7 @@ RetryUntil = Async.RetryUntil
 Schedule = Async.Schedule
 Defer = Async.Defer
 Debounce = Async.Debounce
+Throttle = Async.Throttle
 Interval = Async.Interval
 
 ---@type Libs

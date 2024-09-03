@@ -640,7 +640,7 @@ Ext.Osiris.RegisterListener(
     "RequestCanPickup",
     3,
     "after",
-    Async.Throttle( -- avoid recursion
+    Throttle( -- avoid recursion
         10,
         function(character, object, requestID)
             if GC.IsNonPlayer(character, true) then

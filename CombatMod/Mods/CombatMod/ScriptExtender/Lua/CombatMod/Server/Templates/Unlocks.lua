@@ -304,6 +304,8 @@ return table.combine({
         Icon = "TadpoleSuperPower_IllithidExpertise",
         Cost = 200,
         Requirement = 50,
+        TemplateId = "1467fb3e-b769-41b1-8207-53e42b5b7aaf",
+        OwnedBy = {},
         Amount = 1,
         Character = false,
         OnBuy = function(self, character)
@@ -314,6 +316,22 @@ return table.combine({
             -- Osi.SetTag(guid, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
             -- Osi.AddPassive(guid, "ShortResting")
             -- Osi.AddPartyFollower(guid, character)
+        end,
+        OnReapply = function(self)
+            for _, p in pairs(GE.GetParty()) do
+                if p.ServerCharacter.Template.Id == self.TemplateId then
+                    self.OwnedBy[p.EntityUuid.Uuid] = GC.GetPlayer(p.EntityUuid.Uuid)
+                end
+            end
+
+            for uuid, player in pairs(self.OwnedBy) do
+                if Osi.IsDead(uuid) == 1 then
+                    if Player.IsPlayer(player) and Player.InCamp(player) then
+                        Osi.Resurrect(uuid)
+                        Osi.EndTurn(uuid)
+                    end
+                end
+            end
         end,
     },
     {

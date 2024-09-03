@@ -329,7 +329,7 @@ do -- EXP Lock
         end
     end)
 
-    local toggleCamp = Async.Throttle(100, function()
+    local toggleCamp = Throttle(100, function()
         if Scenario.HasStarted() then
             StoryBypass.ExpLock.Pause()
             return

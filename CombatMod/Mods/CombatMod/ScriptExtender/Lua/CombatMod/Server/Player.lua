@@ -188,9 +188,6 @@ function Player.TeleportToCamp()
             if Osi.IsDead(entity.Uuid.EntityUuid) == 1 and Config.AutoResurrect then
                 Osi.Resurrect(entity.Uuid.EntityUuid)
                 Osi.EndTurn(entity.Uuid.EntityUuid)
-                Defer(1000, function()
-                    Osi.SetHitpoints(entity.Uuid.EntityUuid, 20)
-                end)
             end
         end
     end

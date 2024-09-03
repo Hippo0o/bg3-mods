@@ -163,7 +163,7 @@ Net.On("CloseGUI", function(event)
     close()
 end)
 
-local toggleWindow = Async.Throttle(100, toggle)
+local toggleWindow = Throttle(100, toggle)
 
 Ext.Events.KeyInput:Subscribe(function(e)
     if e.Event == "KeyDown" and e.Repeat == false and e.Key == Settings.ToggleKey then
