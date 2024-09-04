@@ -305,7 +305,6 @@ return table.combine({
         Cost = 200,
         Requirement = 50,
         TemplateId = "1467fb3e-b769-41b1-8207-53e42b5b7aaf",
-        OwnedBy = {},
         Amount = 1,
         Character = false,
         OnBuy = function(self, character)
@@ -349,6 +348,7 @@ return table.combine({
             end)
         end),
         OnInit = function(self)
+            self.OwnedBy = self.OwnedBy or {}
             if self.Bought > 0 then
                 self:Register()
             end

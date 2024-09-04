@@ -1,7 +1,7 @@
 new entry "TOT_Zone_Clear"
 type "SpellData"
 data "SpellType" "Zone"
-data "SpellProperties" "GROUND:IF(Surface('SurfaceBlood')):SurfaceChange(DestroyWater);GROUND:IF(Surface('SurfaceBloodSilver')):SurfaceChange(DestroyWater);GROUND:IF(Surface('SurfaceAsh')):SurfaceClearLayer(Ground) "
+data "SpellProperties" "GROUND:IF(Surface('SurfaceBlood')):SurfaceChange(DestroyWater);GROUND:IF(Surface('SurfaceBloodSilver')):SurfaceChange(DestroyWater);GROUND:IF(Surface('SurfaceAsh')):SurfaceClearLayer(Ground);GROUND:IF(Surface('SurfaceWaterFrozen')):SurfaceClearLayer(Ground)"
 data "SurfaceType" "Sentinel"
 data "SurfaceLifetime" "0"
 data "SurfaceGrowStep" "300"

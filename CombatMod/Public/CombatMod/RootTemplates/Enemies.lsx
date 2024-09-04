@@ -7668,6 +7668,8 @@
 					<attribute id="Flag" type="int32" value="0" />
 					<attribute id="IsEquipmentLootable" type="bool" value="False" />
 					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="DisplayName" type="TranslatedString"
+						handle="hccfab3ccgbfbbg494bgab54g7af0b6a145b6" version="3" />
 					<attribute id="MapKey" type="FixedString"
 						value="ba981e3b-5284-483d-9978-fcf12c13d708" />
 					<attribute id="ParentTemplateId" type="FixedString"

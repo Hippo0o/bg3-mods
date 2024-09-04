@@ -29,30 +29,9 @@ end
 
 ---@param character string GUID
 function Object:TeleportInRegion(character, withOffset)
-    local x, y, z = table.unpack(self.Enter)
+    local _, chainable = self:TeleportToSpawn(character, 0, withOffset)
 
-    pcall(function()
-        local offset = math.floor(tonumber(Config.RandomizeSpawnOffset / 2))
-        if offset > 0 and withOffset then
-            x = x + math.random() * math.random(-offset, offset)
-            z = z + math.random() * math.random(-offset, offset)
-        end
-
-        x, y, z = Osi.FindValidPosition(x, y, z, 50, character, 1)
-    end)
-    if not x or not y or not z then
-        x = self.Enter[1]
-        y = self.Enter[2]
-        z = self.Enter[3]
-    end
-
-    Osi.TeleportToPosition(character, x, y, z, "", 1, 1, 1, 0, 1)
-    -- Osi.PROC_Foop(character)
-
-    local x, y, z = table.unpack(self.Enter)
-    WaitTicks(10, function()
-        Map.CorrectPosition(character, x, y, z, Config.RandomizeSpawnOffset)
-
+    chainable:After(function()
         Event.Trigger("MapTeleported", self, character)
     end)
 
@@ -108,6 +87,42 @@ function Object:GetSpawn(spawn)
     end
 
     return table.unpack(pos)
+end
+
+function Object:TeleportToSpawn(guid, spawn, withOffset)
+    local x, y, z = self:GetSpawn(spawn)
+
+    pcall(function()
+        if withOffset then
+            local offset = tonumber(Config.RandomizeSpawnOffset)
+            if not GC.IsNonPlayer(guid) then
+                ofsset = offset / 2
+            end
+
+            local offset = math.floor(offset)
+            if offset > 0 then
+                x = x + math.random() * math.random(-offset, offset)
+                z = z + math.random() * math.random(-offset, offset)
+            end
+        end
+
+        x, y, z = Osi.FindValidPosition(x, y, z, 50, guid, 1)
+    end)
+    if not x or not y or not z then
+        x, y, z = self:GetSpawn(spawn)
+    end
+
+    Osi.TeleportToPosition(guid, x, y, z, "", 1, 1, 1, 0, 1)
+
+    if GC.IsNonPlayer(guid) then
+        Osi.PROC_Foop(guid)
+    end
+
+    local x, y, z = self:GetSpawn(spawn)
+    return true,
+        WaitTicks(10, function()
+            return Map.CorrectPosition(guid, x, y, z, Config.RandomizeSpawnOffset)
+        end)
 end
 
 ---@param enemy Enemy

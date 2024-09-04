@@ -690,7 +690,7 @@ end)
 Event.On(
     "ScenarioEnded",
     Async.Wrap(function(scenario)
-        Player.Notify(__("Dropping loot."))
+        Player.Notify(__("Dropping loot."), true)
 
         local lootMultiplier = 1
         if PersistentVars.Unlocked.LootMultiplier then
@@ -717,7 +717,7 @@ Event.On(
 
         local results = {
             Async.SyncAll(table.map(rollsToChunks(), function(chunk)
-                return Async.Run(U.Bind(Item.GenerateLoot, chunk, scenario.LootRates))
+                return Schedule(U.Bind(Item.GenerateLoot, chunk, scenario.LootRates))
             end)),
         }
 

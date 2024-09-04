@@ -161,7 +161,7 @@ function Chainable:Begin(...)
             end
 
             local func, passSelf, chainOnNil = table.unpack(link.exec)
-            if firstExec or state[1] or chainOnNil then
+            if firstExec or state[1] ~= nil or chainOnNil then
                 firstExec = false
 
                 if passSelf then

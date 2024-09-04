@@ -1013,6 +1013,8 @@ Ext.Osiris.RegisterListener(
         if Player.IsPlayer(uuid) then
             Scenario.GroupDistantEnemies()
         end
+
+        L.Dump(Ext.Entity.Get(uuid).ActionResources.Resources["734cbcfb-8922-4b6d-8330-b2a7e4c14b6a"])
     end)
 )
 
@@ -1023,53 +1025,66 @@ Ext.Osiris.RegisterListener(
     ifScenario(function(uuid)
         local s = Current()
 
-        if U.UUID.Equals(uuid, s.CombatHelper) then
-            L.Debug("Combat helper turn started.", uuid)
-
-            -- fallback check
-            if not s:IsRunning() then
-                Scenario.End()
-
-                return
-            end
-
-            s:DetectCombatId()
-            Osi.PauseCombat(s.CombatId)
-
-            Action.StartRound()
-                :After(function()
-                    if Current().Round == 1 then
-                        for _, p in pairs(GE.GetParty()) do
-                            Osi.LeaveCombat(p.Uuid.EntityUuid)
-                        end
-
-                        Player.Notify(__("Combat started."))
-
-                        Scenario.CombatSpawned()
-                    end
-
-                    return Defer(1000)
-                end)
-                :After(function()
-                    if Player.InCombat() then
-                        return true
-                    end
-
-                    return WaitUntil(function(self)
-                        if S() ~= s then
-                            self:Clear()
-                            return
-                        end
-
-                        return Player.InCombat()
-                    end)
-                end)
-                :After(function()
-                    Osi.ResumeCombat(s.CombatId)
-
-                    Osi.EndTurn(uuid)
-                end)
+        if not U.UUID.Equals(uuid, s.CombatHelper) then
+            return
         end
+        L.Debug("Combat helper turn started.", uuid)
+
+        -- fallback check
+        if not s:IsRunning() then
+            Scenario.End()
+
+            return
+        end
+
+        s:DetectCombatId()
+        Osi.PauseCombat(s.CombatId)
+
+        xpcall(function()
+            local player = Osi.GetClosestPlayer(s.CombatHelper)
+            local x, y, z = Osi.GetPosition(player)
+            x = (s.Map.Enter[1] + x) / 2
+            y = (s.Map.Enter[2] + y) / 2
+            z = (s.Map.Enter[3] + z) / 2
+            x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
+            Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
+        end, function(err)
+            L.Error(err)
+        end)
+
+        Action.StartRound()
+            :After(function()
+                if Current().Round == 1 then
+                    for _, p in pairs(GE.GetParty()) do
+                        Osi.LeaveCombat(p.Uuid.EntityUuid)
+                    end
+
+                    Player.Notify(__("Combat started."))
+
+                    Scenario.CombatSpawned()
+                end
+
+                return Defer(1000)
+            end)
+            :After(function()
+                if Player.InCombat() then
+                    return true
+                end
+
+                return WaitUntil(function(self)
+                    if S() ~= s then
+                        self:Clear()
+                        return
+                    end
+
+                    return Player.InCombat()
+                end)
+            end)
+            :After(function()
+                Osi.ResumeCombat(s.CombatId)
+
+                Osi.EndTurn(uuid)
+            end)
     end)
 )
 
