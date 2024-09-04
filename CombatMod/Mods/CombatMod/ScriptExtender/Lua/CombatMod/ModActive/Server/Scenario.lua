@@ -734,15 +734,7 @@ function Scenario.TeleportHelper()
         local y = (y1 + y2 + y3) / 3
         local z = (z1 + z2 + z3) / 3
 
-        local nx, ny, nz = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
-        if not nx or not ny or not nz then
-            s.Map:TeleportToSpawn(s.CombatHelper, -1)
-            Schedule(Scenario.TeleportHelper)
-
-            return
-        end
-
-        Osi.TeleportToPosition(s.CombatHelper, nx, ny, nz, "", 1, 1, 1, 0, 1)
+        Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
     end, function(err)
         L.Error(err)
     end)
@@ -1091,8 +1083,6 @@ Ext.Osiris.RegisterListener(
         Scenario.DetectCombatId()
         Osi.PauseCombat(s.CombatId)
 
-        Scenario.TeleportHelper()
-
         Action.StartRound()
             :After(function()
                 if Current().Round == 1 then
@@ -1146,6 +1136,8 @@ Ext.Osiris.RegisterListener(
         end
 
         Scenario.DetectCombatId()
+
+        Scenario.TeleportHelper()
 
         Scenario.CheckShouldStop()
 
