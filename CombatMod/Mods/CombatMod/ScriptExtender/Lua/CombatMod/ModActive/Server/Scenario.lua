@@ -31,6 +31,7 @@ local Object = Libs.Struct({
     Positions = {},
     LootRates = {},
     CombatHelper = nil,
+    EnemyFallback = {},
 })
 
 ---@param round number
@@ -402,8 +403,7 @@ function Action.Failsafe(enemy)
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
 
-                local x, y, z = s.Map:GetSpawn(-1)
-                Osi.TeleportToPosition(e.GUID, x, y, z, "", 1, 1, 1, 0, 1)
+                s.Map:TeleportToSpawn(e.GUID, -1)
 
                 e:Combat(true)
 
@@ -723,11 +723,10 @@ function Scenario.TeleportHelper()
 
         local max = 0
         for _, enemy in ipairs(s.SpawnedEnemies) do
-            local x, y, z = Osi.GetPosition(enemy.GUID)
-            local d = Ext.Math.Distance({ x2, y2, z2 }, { x, y, z })
+            local d = Osi.GetDistanceTo(enemy.GUID, s.CombatHelper)
             if d > max then
                 max = d
-                x3, y3, z3 = x, y, z
+                x3, y3, z3 = Osi.GetPosition(enemy.GUID)
             end
         end
 
@@ -735,8 +734,15 @@ function Scenario.TeleportHelper()
         local y = (y1 + y2 + y3) / 3
         local z = (z1 + z2 + z3) / 3
 
-        x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
-        Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
+        local nx, ny, nz = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
+        if not nx or not ny or not nz then
+            s.Map:TeleportToSpawn(s.CombatHelper, -1)
+            Schedule(Scenario.TeleportHelper)
+
+            return
+        end
+
+        Osi.TeleportToPosition(s.CombatHelper, nx, ny, nz, "", 1, 1, 1, 0, 1)
     end, function(err)
         L.Error(err)
     end)
@@ -763,9 +769,9 @@ function Scenario.CombatSpawned(specific)
                 return false
             end
 
-            if Osi.IsDead(enemy.GUID) == 1 then
-                return true
-            end
+            -- if Osi.IsDead(enemy.GUID) == 1 then
+            --     return true
+            -- end
 
             enemy:Combat(true)
 
@@ -1042,7 +1048,24 @@ Ext.Osiris.RegisterListener(
             Scenario.GroupDistantEnemies()
         end
 
-        L.Dump(Ext.Entity.Get(uuid).ActionResources.Resources["734cbcfb-8922-4b6d-8330-b2a7e4c14b6a"])
+        if Enemy.IsValid(uuid) and GC.IsValid(uuid) then
+            local resources = get(Ext.Entity.Get(uuid).ActionResources, "Resources")
+            if
+                resources
+                and resources["734cbcfb-8922-4b6d-8330-b2a7e4c14b6a"][1].Amount > 0
+                and Osi.GetHitpointsPercentage(uuid) > 95
+            then
+                s.EnemyFallback[uuid] = (s.EnemyFallback[uuid] or 0) + 1
+            else
+                s.EnemyFallback[uuid] = math.max(0, (s.EnemyFallback[uuid] or 0) - 1)
+            end
+
+            if s.EnemyFallback[uuid] > 2 then
+                s.Map:TeleportToSpawn(uuid, -1)
+
+                s.EnemyFallback[uuid] = 2
+            end
+        end
     end)
 )
 
