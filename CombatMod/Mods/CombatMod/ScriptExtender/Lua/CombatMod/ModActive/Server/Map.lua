@@ -182,7 +182,7 @@ function Object:PingSpawns()
 end
 
 function Object:Prepare()
-    for _, pos in pairs(table.combine({}, { self.Enter }, self.Spawns)) do
+    for _, pos in pairs(table.extend({}, { self.Enter }, self.Spawns)) do
         local x, y, z = table.unpack(pos)
 
         local guid = Osi.CreateAt(C.MapHelper, x, y, z, 1, 0, "")

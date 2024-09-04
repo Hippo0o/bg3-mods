@@ -723,7 +723,7 @@ Event.On(
 
         local loot = {}
         for _, r in ipairs(results) do
-            table.combine(loot, r[1])
+            table.extend(loot, r[1])
         end
 
         L.Dump("Loot", loot, scenario.LootRates, rolls, #loot)

@@ -31,7 +31,7 @@ function M.Struct(props)
         local obj = {}
         setmetatable(obj, Struct)
 
-        local keys = values and Utils.Table.Combine(Utils.Table.Values(propKeys), Utils.Table.Keys(values)) or propKeys
+        local keys = values and Utils.Table.Extend(Utils.Table.Values(propKeys), Utils.Table.Keys(values)) or propKeys
         for _, key in pairs(keys) do
             obj[key] = values and values[key] or Utils.Table.DeepClone(props[key])
         end

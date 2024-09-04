@@ -106,7 +106,7 @@ function M.CallStack(filter)
     return M.String.Trim(M.Table.Find(M.String.Split(stack, "\n"), function(line)
         return not M.String.Contains(
             line,
-            M.Table.Combine({
+            M.Table.Extend({
                 "stack traceback:",
                 "Hlib/Utils.lua",
                 "(...tail calls...)",
@@ -168,7 +168,7 @@ end
 ---@param t1 table<number, any>
 ---@vararg table
 ---@return table<number, any> t1
-function M.Table.Combine(t1, ...)
+function M.Table.Extend(t1, ...)
     for _, t in ipairs({ ... }) do
         for _, v in pairs(t) do
             table.insert(t1, v)

@@ -221,7 +221,7 @@ local ngPlus = {
 }
 
 --- @type table<number, Unlock>
-return table.combine({
+return table.extend({
     {
         Id = "UnlockTadpole",
         Name = __("Unlock Tadpole Power"),

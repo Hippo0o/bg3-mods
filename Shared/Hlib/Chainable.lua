@@ -123,7 +123,7 @@ function Chainable:Throw(err)
 end
 
 function Chainable:Begin(...)
-    local state = Utils.Table.Combine({ ... }, self._InitalInput)
+    local state = Utils.Table.Extend({ ... }, self._InitalInput)
     self._InitalInput = {}
     self._Began = true
 
@@ -131,7 +131,7 @@ function Chainable:Begin(...)
         ---@type Chainable
         local nested = state[1]
 
-        Utils.Table.Combine(nested._Chain, self._Chain)
+        Utils.Table.Extend(nested._Chain, self._Chain)
 
         self._Chain = {}
 

@@ -99,10 +99,6 @@ function Object:KillScore()
     return score
 end
 
-function Object:DetectCombatId()
-    self.CombatId = Osi.CombatGetGuidFor(self.CombatHelper)
-end
-
 ---@return Scenario|nil
 local function S()
     return PersistentVars.Scenario
@@ -194,7 +190,7 @@ end
 function Action.StartCombat()
     local s = Current()
 
-    s:DetectCombatId()
+    Scenario.DetectCombatId()
 
     -- s.Map:PingSpawns()
 
@@ -552,7 +548,6 @@ function Scenario.Start(template, map)
     scenario.Name = template.Name
     scenario.Map = map
     scenario.Timeline = timeline
-    scenario.Positions = template.Positions or {}
 
     scenario.LootRates = template.Loot or C.LootRates
 
@@ -579,14 +574,9 @@ function Scenario.Start(template, map)
     end
 
     if map.Timeline and table.size(map.Timeline) > 0 then
-        -- pad positions from the map timeline
-        if table.size(scenario.Positions) < table.size(map.Timeline) then
-            table.merge(scenario.Positions, map.Timeline)
-        end
-
-        -- append the map timeline until we have enough positions
+        -- append positions from the map timeline and until we have enough positions
         while table.size(scenario.Positions) < enemyCount do
-            table.combine(scenario.Positions, map.Timeline)
+            table.extend(scenario.Positions, map.Timeline)
         end
     end
 
@@ -712,6 +702,28 @@ function Scenario.ForwardCombat()
     Action.StartRound()
 
     Osi.ResumeCombat(s.CombatId)
+end
+
+function Scenario.DetectCombatId()
+    local s = Current()
+
+    s.CombatId = Osi.CombatGetGuidFor(s.CombatHelper)
+end
+
+function Scenario.TeleportHelper()
+    local s = Current()
+
+    xpcall(function()
+        local player = Osi.GetClosestPlayer(s.CombatHelper)
+        local x, y, z = Osi.GetPosition(player)
+        x = (s.Map.Enter[1] + x) / 2
+        y = (s.Map.Enter[2] + y) / 2
+        z = (s.Map.Enter[3] + z) / 2
+        x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
+        Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
+    end, function(err)
+        L.Error(err)
+    end)
 end
 
 ---@param specific Enemy|nil
@@ -882,7 +894,7 @@ Ext.Osiris.RegisterListener(
         end
 
         if s.CombatId ~= combatGuid then
-            s:DetectCombatId()
+            Scenario.DetectCombatId()
         end
 
         if s.CombatId ~= combatGuid then -- should not happen
@@ -1037,20 +1049,10 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-        s:DetectCombatId()
+        Scenario.DetectCombatId()
         Osi.PauseCombat(s.CombatId)
 
-        xpcall(function()
-            local player = Osi.GetClosestPlayer(s.CombatHelper)
-            local x, y, z = Osi.GetPosition(player)
-            x = (s.Map.Enter[1] + x) / 2
-            y = (s.Map.Enter[2] + y) / 2
-            z = (s.Map.Enter[3] + z) / 2
-            x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
-            Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
-        end, function(err)
-            L.Error(err)
-        end)
+        Scenario.TeleportHelper()
 
         Action.StartRound()
             :After(function()
@@ -1104,7 +1106,7 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-        s:DetectCombatId()
+        Scenario.DetectCombatId()
 
         Scenario.CheckShouldStop()
 

@@ -81,7 +81,7 @@ function Doll.Visuals(doll, restrictRace)
     for _, slot in pairs(C.VisualSlots) do
         ---@type VisualStruct[]
         local visuals =
-            UT.Combine({}, Visual.GetSlot(slot, C.VisualTypes.CCAV), Visual.GetSlot(slot, C.VisualTypes.CCSV))
+            UT.Extend({}, Visual.GetSlot(slot, C.VisualTypes.CCAV), Visual.GetSlot(slot, C.VisualTypes.CCSV))
 
         bySlot[slot] = UT.Filter(visuals, function(visual)
             visual:FillFromDoll(doll)

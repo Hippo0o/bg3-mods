@@ -187,7 +187,7 @@ function Unlock.Sync()
         unlocks[index] = Unlock.Restore(u)
     end)
 
-    PersistentVars.Unlocks = table.combine(unlocks, removedUnlocks)
+    PersistentVars.Unlocks = table.extend(unlocks, removedUnlocks)
 
     Unlock.UpdateUnlocked()
 end

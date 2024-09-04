@@ -49,10 +49,6 @@ local Object = Libs.Struct({
     Icon = nil,
 })
 
-Object.__tostring = function(self)
-    return self.GUID
-end
-
 ---@param data table enemy source data
 ---@return Enemy
 function Object.New(data)
@@ -63,6 +59,10 @@ function Object.New(data)
     o.GUID = nil
 
     return o
+end
+
+function Object:__tostring()
+    return self.GUID
 end
 
 function Object:GetId()
@@ -240,6 +240,11 @@ function Object:Modify(keepFaction)
     end
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
+
+    if self.SpellSet == "" then
+        Osi.AddSpell(self.GUID, "Target_Enemy")
+        Osi.AddSpell(self.GUID, "Target_Enemy")
+    end
 
     -- undead enemies get shadow curse immunity
     if Osi.IsTagged(self.GUID, "33c625aa-6982-4c27-904f-e47029a9b140") == 1 then -- UNDEAD
@@ -458,6 +463,7 @@ function Enemy.Restore(enemy)
     end, { retries = 30, interval = 100 }):After(function()
         e:ModifyTemplate()
 
+        e:Sync()
         e:Modify(true)
 
         return e

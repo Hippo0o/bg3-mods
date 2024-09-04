@@ -63,7 +63,7 @@ The `Utils` module contains a lot of useful functions that can be used in your s
 local Utils = Require("Hlib/Utils")
 -- table functions
 Utils.Table.Merge({ a = 1 }, { b = 2 }) -- {a = 1, b = 2}
-Utils.Table.Combine({ 1, 2 }, { 1, 3 }) -- {1, 2, 1, 3}
+Utils.Table.Extend({ 1, 2 }, { 1, 3 }) -- {1, 2, 1, 3}
 Utils.Table.Filter({ 1, 2, 3 }, function(v) return v > 1 end) -- {2, 3}
 Utils.Table.Map({ 1, 2, 3 }, function(v) return v * 2 end) -- {2, 4, 6}
 Utils.Table.DeepClone({ a = { b = 1 } }) -- {a = {b = 1}}

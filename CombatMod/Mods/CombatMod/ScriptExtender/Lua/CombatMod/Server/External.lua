@@ -91,8 +91,6 @@ External.Validators.Enemy = tt({
     DisplayName = { "nil", "string" },
 })
 
-local positionTimelineType = { "nil", tt({ "nil", "number" }, true) }
-
 local posType = tt({
     { "number" }, -- x
     { "number" }, -- y
@@ -103,7 +101,7 @@ External.Validators.Map = tt({
     Region = { C.Regions },
     Enter = { posType },
     Spawns = tt(posType, true),
-    Timeline = positionTimelineType,
+    Timeline = { "nil", tt({ "nil", "number" }, true) },
     Author = { "nil", "string" },
 })
 
@@ -153,9 +151,13 @@ External.Validators.Scenario = tt({
             tt({ "nil", C.EnemyTier, validateTimelineEntry }, true),
         }, true),
     },
-    Positions = positionTimelineType,
     OnStart = { "nil", "function" },
-    Map = { "nil", "string", "function" },
+    Map = {
+        "nil",
+        "string",
+        "function",
+        External.Validators.Map,
+    },
     Loot = {
         "nil",
         lootRatesType,
@@ -265,7 +267,7 @@ end
 function External.Templates.GetMaps()
     local data = External.File.Import("Maps") or Templates.GetMaps()
 
-    data = table.combine({}, addedMaps, data)
+    data = table.extend({}, addedMaps, data)
 
     for k, map in pairs(data) do
         for _, patch in ipairs(patchMaps) do
@@ -287,7 +289,7 @@ end
 function External.Templates.GetScenarios()
     local data = External.File.Import("Scenarios") or Templates.GetScenarios()
 
-    data = table.combine({}, addedScenarios, data)
+    data = table.extend({}, addedScenarios, data)
 
     for k, scenario in pairs(data) do
         for _, patch in ipairs(patchScenarios) do
@@ -309,7 +311,7 @@ end
 function External.Templates.GetEnemies()
     local data = External.File.Import("Enemies") or Templates.GetEnemies()
 
-    data = table.combine({}, addedEnemies, data)
+    data = table.extend({}, addedEnemies, data)
 
     for k, enemy in pairs(data) do
         for _, patch in ipairs(patchEnemies) do
@@ -329,7 +331,7 @@ function External.Templates.GetEnemies()
 end
 
 function External.Templates.GetUnlocks()
-    local data = table.combine({}, addedUnlocks, Templates.GetUnlocks())
+    local data = table.extend({}, addedUnlocks, Templates.GetUnlocks())
 
     for k, unlock in pairs(data) do
         for _, patch in ipairs(patchUnlocks) do
@@ -354,14 +356,14 @@ function External.Templates.GetItemFilters(user)
     local file = External.File.Import("ItemFilters")
 
     if file and validateAndError(External.Validators.ItemFilter, file, "LoadItemFilters") then
-        table.combine(data.Names, file.Names)
-        table.combine(data.Mods, file.Mods)
+        table.extend(data.Names, file.Names)
+        table.extend(data.Mods, file.Mods)
     end
 
     if not user then
         for _, added in ipairs(addedItemFilters) do
-            table.combine(data.Names, added.Names)
-            table.combine(data.Mods, added.Mods)
+            table.extend(data.Names, added.Names)
+            table.extend(data.Mods, added.Mods)
         end
     end
 
