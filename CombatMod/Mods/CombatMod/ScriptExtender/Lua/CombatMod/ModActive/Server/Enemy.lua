@@ -183,7 +183,7 @@ function Object:ModifyExperience()
 
         local expMod = (Config.ExpMultiplier or 1) * 2
         if self.IsBoss then
-            expMod = expMod * 2
+            expMod = expMod * 1.2
         end
 
         if PersistentVars.Unlocked.ExpMultiplier then

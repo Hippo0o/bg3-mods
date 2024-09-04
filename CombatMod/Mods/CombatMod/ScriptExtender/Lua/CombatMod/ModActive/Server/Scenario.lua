@@ -574,7 +574,7 @@ function Scenario.Start(template, map)
     end
 
     if map.Timeline and table.size(map.Timeline) > 0 then
-        -- append positions from the map timeline and until we have enough positions
+        -- append positions from the map timeline until we have enough positions
         while table.size(scenario.Positions) < enemyCount do
             table.extend(scenario.Positions, map.Timeline)
         end
@@ -714,11 +714,27 @@ function Scenario.TeleportHelper()
     local s = Current()
 
     xpcall(function()
+        local x1, y1, z1 = table.unpack(s.Map.Enter)
+
         local player = Osi.GetClosestPlayer(s.CombatHelper)
-        local x, y, z = Osi.GetPosition(player)
-        x = (s.Map.Enter[1] + x) / 2
-        y = (s.Map.Enter[2] + y) / 2
-        z = (s.Map.Enter[3] + z) / 2
+        local x2, y2, z2 = Osi.GetPosition(player)
+
+        local x3, y3, z3 = table.unpack(s.Map.Enter)
+
+        local max = 0
+        for _, enemy in ipairs(s.SpawnedEnemies) do
+            local x, y, z = Osi.GetPosition(enemy.GUID)
+            local d = Ext.Math.Distance({ x2, y2, z2 }, { x, y, z })
+            if d > max then
+                max = d
+                x3, y3, z3 = x, y, z
+            end
+        end
+
+        local x = (x1 + x2 + x3) / 3
+        local y = (y1 + y2 + y3) / 3
+        local z = (z1 + z2 + z3) / 3
+
         x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
         Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
     end, function(err)
