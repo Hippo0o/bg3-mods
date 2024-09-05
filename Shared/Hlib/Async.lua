@@ -527,7 +527,7 @@ local function resumeCoroutine(co, ...)
 end
 
 ---@param func fun()
----@return fun()
+---@return fun(): Chainable
 function M.Wrap(func)
     assert(type(func) == "function", "Async.Wrap(func) - function expected, got " .. type(func))
 

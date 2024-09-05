@@ -5,7 +5,7 @@
 ### JSON to Lua
 
 ```sh
-perl -pe 's/"(\w+)"\s?:/$1=/' input.json > output.lua
+perl -pe 's/"(\w+)"\s?:/$1=/; s/\[/\{/g; s/\]/\}/g' input.json > output.lua
 ```
 
 ### count lines of code (ToT)

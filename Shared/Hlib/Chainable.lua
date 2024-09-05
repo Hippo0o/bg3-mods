@@ -185,10 +185,17 @@ function Chainable:Begin(...)
     return self:End(true, state)
 end
 
----@param success boolean
----@param state table
+---@param success boolean|nil
+---@param state table|nil
 ---@return any
 function Chainable:End(success, state)
+    if success == nil then
+        success = true
+    end
+    if state == nil then
+        state = {}
+    end
+
     while #self._Chain > 0 do
         local link = table.remove(self._Chain, 1)
         if link.final then

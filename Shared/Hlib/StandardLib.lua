@@ -46,7 +46,9 @@ async = Async.Wrap
 ---@field sleep fun(ms: number)
 ---@field ticks fun(ticks: number)
 ---@field retry fun(cond: fun(self: Runner, triesLeft: number, chainable: ChainableRunner): boolean, opts: RetryForOptions|nil): boolean|any
----@type Await|fun(chainable: ChainableRunner): any|fun(chainables: ChainableRunner[]): table<number, any>
+---@field request fun(action: string, payload: any): any
+---@field event fun(event: string): any
+---@type Await|fun(chainable: Chainable): any|fun(chainables: Chainable[]): table<number, any>
 await = setmetatable({}, {
     condition = function(cond)
         return Async.Sync(Async.WaitUntil(cond))
@@ -59,6 +61,14 @@ await = setmetatable({}, {
     end,
     retry = function(cond, opts)
         return Async.Sync(Async.RetryUntil(cond, Utils.Table.Merge({ throw = true }, opts)))
+    end,
+    request = function(action, payload)
+        return Async.Sync(Net.Request(action, payload):After(function(event)
+            return table.unpack(event.Payload)
+        end))
+    end,
+    event = function(event)
+        return Async.Sync(Event.ChainOn(event))
     end,
     __call = function(_, ...)
         local args = { ... }

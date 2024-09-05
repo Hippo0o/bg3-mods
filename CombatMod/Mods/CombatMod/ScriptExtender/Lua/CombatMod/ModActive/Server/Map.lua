@@ -119,10 +119,7 @@ function Object:TeleportToSpawn(guid, spawn, withOffset)
     end
 
     local x, y, z = self:GetSpawn(spawn)
-    return true,
-        WaitTicks(10, function()
-            return Map.CorrectPosition(guid, x, y, z, Config.RandomizeSpawnOffset)
-        end)
+    return true, WaitTicks(10, U.Bind(Map.CorrectPosition, guid, x, y, z, Config.RandomizeSpawnOffset))
 end
 
 ---@param enemy Enemy
@@ -158,8 +155,8 @@ function Object:SpawnIn(enemy, spawn, faceTowards)
 
     return true,
         chainable:After(function()
-            return enemy, -- 2nd param chainable can only be chained on if executed later
-                WaitTicks(6, function() -- 6 ticks to ensure enitity is spawned
+            return enemy,
+                WaitTicks(6, function()
                     local didCorrect = Map.CorrectPosition(enemy.GUID, x, y, z, Config.RandomizeSpawnOffset)
 
                     if not faceTowards then

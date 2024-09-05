@@ -239,19 +239,7 @@ end
 
 ---@param t table
 ---@param func function
----@return table
 function M.Table.Each(t, func)
-    local r = {}
-    for k, v in pairs(t) do
-        func(v, k)
-    end
-end
-
----@param t table
----@param func function
----@return table
-function M.Table.Pick(t, amount)
-    local r = {}
     for k, v in pairs(t) do
         func(v, k)
     end
