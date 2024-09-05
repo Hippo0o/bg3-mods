@@ -4,7 +4,7 @@
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Scenario: LibsStruct
+---@class Scenario: Struct
 ---@field Name string
 ---@field Enemies table<number, Enemy[]>
 ---@field KilledEnemies Enemy[]

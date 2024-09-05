@@ -449,6 +449,128 @@ function M.Table.Patch(t, patch, replaced)
     return t, patch, replaced
 end
 
+---@param t table
+---@param onSet fun(value: any, key: string, raw: table, parent: table|nil): any value
+---@param onGet fun(value: any, key: string, raw: table, parent: table|nil): any value
+---@return Proxy, fun(): table toTable, fun(callback: fun(value: any, key: string, raw: table): any) onModified
+function M.Table.Proxy(t, onSet, onGet)
+    local raw = {}
+    t = t or {}
+
+    local proxy = false
+
+    local onModified = {}
+    local function modifiedEvent(raw, key, value)
+        for _, callback in ipairs(onModified) do
+            callback(value, key, raw)
+        end
+    end
+
+    ---@class Proxy: table
+    local Proxy = setmetatable({}, {
+        __metatable = false,
+        __name = "Proxy",
+        __eq = function(self, other)
+            -- create a closure around `t` to emulate shallow equality
+            return rawequal(t, other) or rawequal(self, other)
+        end,
+        __pairs = function(self)
+            -- wrap `next` to enable proxy hits during traversal
+            return function(tab, key)
+                local index, value = next(raw, key)
+
+                return index, value ~= nil and self[index]
+            end,
+                self,
+                nil
+        end,
+        -- these metamethods create closures around `actual`
+        __len = function(self)
+            return rawlen(raw)
+        end,
+        __index = function(self, key)
+            local v = rawget(raw, key)
+            if proxy and onGet then
+                v = onGet(v, key, raw)
+            end
+
+            return v
+        end,
+        __newindex = function(self, key, value)
+            if proxy and onSet then
+                value = onSet(value, key, raw)
+            end
+
+            if type(value) == "table" then
+                value = M.Proxy(value, function(sub, subKey, subValue)
+                    local parent = {}
+                    for k, v in pairs(raw) do
+                        parent[k] = v
+                    end
+
+                    parent[key] = sub
+
+                    if proxy and onSet then
+                        return onSet(subValue, subKey, parent, raw)
+                    end
+
+                    return subValue
+                end, function(sub, subKey, subValue)
+                    local parent = {}
+                    for k, v in pairs(raw) do
+                        parent[k] = v
+                    end
+
+                    parent[key] = sub
+
+                    if proxy and onGet then
+                        return onGet(subValue, subKey, parent, raw)
+                    end
+
+                    return subValue
+                end)
+            end
+
+            rawset(raw, key, value)
+
+            modifiedEvent(raw, key, value)
+        end,
+    })
+
+    -- copy all values from `t` to `proxy`
+    for key, value in pairs(t) do
+        Proxy[key] = value
+    end
+
+    -- enable after initialization
+    proxy = true
+
+    -- recursively convert `proxy` to a table
+    local function toTable(tbl)
+        local t = {}
+        for k, v in pairs(tbl) do
+            if type(v) == "table" then
+                t[k] = toTable(v)
+            else
+                t[k] = v
+            end
+        end
+        return t
+    end
+
+    return Proxy,
+        function()
+            return toTable(raw)
+        end,
+        function(callback)
+            assert(
+                type(callback) == "function",
+                "_,_,onModified(callback) = Libs.Proxy(...) - function expected, got " .. type(callback)
+            )
+            table.insert(onModified, callback)
+        end
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           String                                            --

@@ -42,32 +42,32 @@ get = Utils.GetProperty
 async = Async.Wrap
 
 ---@class Await
----@field condition fun(cond: fun(self: Runner, chainable: ChainableRunner): boolean): boolean|nil
----@field sleep fun(ms: number)
----@field ticks fun(ticks: number)
----@field retry fun(cond: fun(self: Runner, triesLeft: number, chainable: ChainableRunner): boolean, opts: RetryForOptions|nil): boolean|any
----@field request fun(action: string, payload: any): any
----@field event fun(event: string): any
+---@field Condition fun(cond: fun(self: Runner, chainable: ChainableRunner): boolean): boolean|nil
+---@field Sleep fun(ms: number)
+---@field Ticks fun(ticks: number)
+---@field Retry fun(cond: fun(self: Runner, triesLeft: number, chainable: ChainableRunner): boolean, opts: RetryForOptions|nil): boolean|any
+---@field Request fun(action: string, payload: any): any
+---@field Event fun(event: string): any
 ---@type Await|fun(chainable: Chainable): any|fun(chainables: Chainable[]): table<number, any>
 await = setmetatable({}, {
-    condition = function(cond)
+    Condition = function(cond)
         return Async.Sync(Async.WaitUntil(cond))
     end,
-    sleep = function(ms)
+    Sleep = function(ms)
         return Async.Sync(Async.Defer(ms))
     end,
-    ticks = function(ticks)
+    Ticks = function(ticks)
         return Async.Sync(Async.WaitTicks(ticks))
     end,
-    retry = function(cond, opts)
+    Retry = function(cond, opts)
         return Async.Sync(Async.RetryUntil(cond, Utils.Table.Merge({ throw = true }, opts)))
     end,
-    request = function(action, payload)
+    Request = function(action, payload)
         return Async.Sync(Net.Request(action, payload):After(function(event)
             return table.unpack(event.Payload)
         end))
     end,
-    event = function(event)
+    Event = function(event)
         return Async.Sync(Event.ChainOn(event))
     end,
     __call = function(_, ...)

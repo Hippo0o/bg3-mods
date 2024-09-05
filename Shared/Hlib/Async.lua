@@ -1,9 +1,6 @@
 ---@type Libs
 local Libs = Require("Hlib/Libs")
 
----@type Chainable
-local Chainable = Require("Hlib/Chainable")
-
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
@@ -13,7 +10,7 @@ local Log = Require("Hlib/Log")
 ---@class Async
 local M = {}
 
----@class Loop : LibsStruct
+---@class Loop : Struct
 ---@field Startable boolean
 ---@field Queues Queue[]
 ---@field Handle number|nil
@@ -113,7 +110,7 @@ local Loop = Libs.Struct({
     end,
 })
 
----@class Queue : LibsStruct
+---@class Queue : Struct
 ---@field Loop Loop
 ---@field Tasks table<number, { idx: number, item: Runner }>
 ---@field Enqueue fun(self: Queue, item: Runner): string
@@ -179,7 +176,7 @@ function Queue.New(loop)
 end
 
 -- exposed
----@class Runner : LibsStruct
+---@class Runner : Struct
 ---@field Cleared boolean
 ---@field ExecCond fun(self: Runner, time: GameTime): boolean
 ---@field Exec fun(self: Runner)
@@ -233,7 +230,7 @@ end
 function Runner.Chainable(queue, func)
     local obj = Runner.New(queue, func)
 
-    local chainable = Chainable.Create(obj)
+    local chainable = Libs.Chainable(obj)
     obj.Exec = function()
         chainable:Begin()
     end
@@ -402,7 +399,7 @@ function M.RetryUntil(cond, options)
     local interval = options.interval or 1000
     local immediate = options.immediate or false
 
-    local chainable = Chainable.Create()
+    local chainable = Libs.Chainable()
     local function fail(...)
         if not options.throw then
             chainable:Catch(function(err)
@@ -543,7 +540,7 @@ function M.Sync(chainable)
 
     assert(co ~= nil, "Async.Sync(chainable) - Can't await outside coroutine.")
 
-    assert(type(chainable) == "table" and chainable._IsChainable, "Async.Sync(chainable) - Chainable expected")
+    assert(Libs.IsChainable(chainable), "Async.Sync(chainable) - Chainable expected")
 
     chainable:Final(function(...)
         return true, resumeCoroutine(co, ...)
@@ -567,12 +564,12 @@ function M.SyncAll(chainables)
     local awaiting = #chainables
     local results = {}
 
-    local combined = Chainable.Create()
+    local combined = Libs.Chainable()
     local errors = {}
 
     for i, chainable in ipairs(chainables) do
         assert(
-            type(chainable) == "table" and chainable._IsChainable,
+            Libs.IsChainable(chainable),
             "Async.SyncAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
         )
 

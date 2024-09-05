@@ -117,7 +117,7 @@ function M.CreateModVar(tableKey, template, syncServer, syncClient)
             end
 
             if syncServer or syncClient then
-                M.Vars[tableKey] = Require("Hlib/Libs").Proxy(M.Vars[tableKey], function(value, key, raw)
+                M.Vars[tableKey] = Require("Hlib/Utils").Table.Proxy(M.Vars[tableKey], function(value, key, raw)
                     vars[tableKey] = raw
 
                     return value

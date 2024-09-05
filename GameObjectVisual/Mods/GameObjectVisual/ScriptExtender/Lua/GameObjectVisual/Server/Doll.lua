@@ -7,7 +7,7 @@ Doll = {}
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class DollStruct : LibsStruct
+---@class DollStruct : Struct
 ---@field Uuid string
 ---@field BodyType number 0|1 (Male,Female)
 ---@field BodyShape number 0|1 (Normal,Strong)

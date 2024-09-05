@@ -17,7 +17,7 @@ local Libs = Require("Hlib/Libs")
 local M = {}
 
 -- exposed
----@class NetEvent : LibsStruct
+---@class NetEvent : Struct
 ---@field Action string
 ---@field Payload any
 ---@field PeerId number|nil

@@ -11,7 +11,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Unlock : LibsStruct
+---@class Unlock : Struct
 ---@field Id string
 ---@field Name string
 ---@field Icon string

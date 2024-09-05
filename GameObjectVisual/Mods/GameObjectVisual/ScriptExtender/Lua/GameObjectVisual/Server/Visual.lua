@@ -7,7 +7,7 @@ Visual = {}
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class VisualStruct : LibsStruct
+---@class VisualStruct : Struct
 ---@field Uuid string
 ---@field SlotName VisualSlots
 ---@field Type VisualTypes

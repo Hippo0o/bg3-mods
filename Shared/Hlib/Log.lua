@@ -4,45 +4,40 @@ local M = {}
 ---@type Mod
 local Mod = Require("Hlib/Mod")
 
--- Fallen is the best
 function M.RainbowText(text)
-    local function HSVToRGB(h, s, v)
-        local c = v * s
-        local hp = h / 60
-        local x = c * (1 - math.abs(hp % 2 - 1))
-        local r, g, b = 0, 0, 0
-
-        if hp >= 0 and hp <= 1 then
-            r, g, b = c, x, 0
-        elseif hp >= 1 and hp <= 2 then
-            r, g, b = x, c, 0
-        elseif hp >= 2 and hp <= 3 then
-            r, g, b = 0, c, x
-        elseif hp >= 3 and hp <= 4 then
-            r, g, b = 0, x, c
-        elseif hp >= 4 and hp <= 5 then
-            r, g, b = x, 0, c
-        elseif hp >= 5 and hp <= 6 then
-            r, g, b = c, 0, x
+    function hsvToRgb(h, s, v)
+        local r, g, b
+        local i = math.floor(h * 6)
+        local f = h * 6 - i
+        local p = v * (1 - s)
+        local q = v * (1 - f * s)
+        local t = v * (1 - (1 - f) * s)
+        i = i % 6
+        if i == 0 then
+            r, g, b = v, t, p
+        elseif i == 1 then
+            r, g, b = q, v, p
+        elseif i == 2 then
+            r, g, b = p, v, t
+        elseif i == 3 then
+            r, g, b = p, q, v
+        elseif i == 4 then
+            r, g, b = t, p, v
+        elseif i == 5 then
+            r, g, b = v, p, q
         end
 
-        local m = v - c
-        return math.floor((r + m) * 255), math.floor((g + m) * 255), math.floor((b + m) * 255)
+        return math.floor(r * 255), math.floor(g * 255), math.floor(b * 255)
     end
 
-    local coloredText = ""
-    local len = #text
-    local step = 360 / len
-    local hue = 0
-
-    for i = 1, len do
-        local char = text:sub(i, i)
-        local r, g, b = HSVToRGB(hue, 1, 1)
-        coloredText = coloredText .. M.ColorText(char, { r, g, b })
-        hue = (hue + step) % 360
+    local length = #text
+    local rainbowText = {}
+    for i = 1, length do
+        local hue = (i - 1) / length
+        table.insert(rainbowText, M.ColorText(text:sub(i, i), { hsvToRgb(hue, 1, 1) }))
     end
 
-    return coloredText
+    return table.concat(rainbowText)
 end
 
 function M.ColorText(text, color)

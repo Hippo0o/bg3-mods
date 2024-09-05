@@ -219,7 +219,7 @@ function Player.AskConfirmation(message, ...)
     local msgId = U.RandomId("AskConfirmation_")
     Osi.ReadyCheckSpecific(msgId, message, 1, Player.Host(), "", "", "")
 
-    local chainable = Chainable.Create(message)
+    local chainable = Libs.Chainable(message)
     readyChecks[msgId] = function(...)
         chainable:Begin(...)
     end

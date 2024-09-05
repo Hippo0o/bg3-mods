@@ -1,6 +1,6 @@
 IsHost = Ext.Net.IsHost()
 
-Settings = Libs.Proxy(
+Settings = UT.Proxy(
     table.merge({ AutoHide = false, ToggleKey = "U", AutoOpen = true }, IO.LoadJson("ClientConfig.json") or {}),
     function(value, _, raw)
         -- raw not updated yet

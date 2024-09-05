@@ -101,7 +101,7 @@ end
 function EventListener.Chainable(event)
     local obj = EventListener.New(event, nil, true)
 
-    local chainable = Chainable.Create(obj)
+    local chainable = Libs.Chainable(obj)
     obj._Func = function(...)
         chainable:Begin(...)
     end

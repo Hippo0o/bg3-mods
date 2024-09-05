@@ -4,7 +4,7 @@
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Enemy : LibsStruct
+---@class Enemy : Struct
 ---@field Name string
 ---@field TemplateId string
 ---@field IsBoss boolean

@@ -15,7 +15,7 @@ end
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
----@class Item : LibsStruct
+---@class Item : Struct
 ---@field Name string
 ---@field Type string
 ---@field RootTemplate string
