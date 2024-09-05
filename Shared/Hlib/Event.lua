@@ -1,9 +1,6 @@
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
----@type Chainable
-local Chainable = Require("Hlib/Chainable")
-
 ---@type Log
 local Log = Require("Hlib/Log")
 

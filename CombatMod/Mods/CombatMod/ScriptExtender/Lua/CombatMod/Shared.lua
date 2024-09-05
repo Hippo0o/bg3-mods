@@ -49,9 +49,6 @@ Interval = Async.Interval
 ---@type Libs
 Libs = Require("Hlib/Libs")
 
----@type Chainable
-Chainable = Require("Hlib/Chainable")
-
 ---@type Net
 Net = Require("Hlib/Net")
 

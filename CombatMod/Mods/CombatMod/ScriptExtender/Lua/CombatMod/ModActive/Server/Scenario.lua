@@ -713,7 +713,7 @@ end
 function Scenario.TeleportHelper()
     local s = Current()
 
-    xpcall(function()
+    RetryUntil(function()
         local x1, y1, z1 = table.unpack(s.Map.Enter)
 
         local player = Osi.GetClosestPlayer(s.CombatHelper)
@@ -734,9 +734,13 @@ function Scenario.TeleportHelper()
         local y = (y1 + y2 + y3) / 3
         local z = (z1 + z2 + z3) / 3
 
+        if Osi.GetDistanceToPosition(s.CombatHelper, x, y, z) < 10 then
+            return true
+        end
+
         Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
-    end, function(err)
-        L.Error(err)
+        return false
+
     end)
 end
 
@@ -1049,7 +1053,7 @@ Ext.Osiris.RegisterListener(
             then
                 s.EnemyFallback[uuid] = (s.EnemyFallback[uuid] or 0) + 1
             else
-                s.EnemyFallback[uuid] = math.max(0, (s.EnemyFallback[uuid] or 0) - 1)
+                s.EnemyFallback[uuid] = (s.EnemyFallback[uuid] or 0) - 1
             end
 
             if s.EnemyFallback[uuid] > 2 then

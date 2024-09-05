@@ -242,7 +242,7 @@ end
 ---@field Catch fun(self: Chainable, func: fun(source: any|nil, err: string), passSelf: boolean|nil): Chainable
 ---@field Final fun(self: Chainable, func: fun(...: any, passSelf: boolean|nil): boolean, any): Chainable
 ---@field Source any
-local Chainable = Libs.Struct({
+local Chainable = M.Struct({
     Source = nil,
     _InitalInput = {},
     _Chain = {},

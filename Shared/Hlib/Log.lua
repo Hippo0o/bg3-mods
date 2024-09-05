@@ -4,7 +4,7 @@ local M = {}
 ---@type Mod
 local Mod = Require("Hlib/Mod")
 
-function M.RainbowText(text)
+function M.RainbowText(text, offset)
     function hsvToRgb(h, s, v)
         local r, g, b
         local i = math.floor(h * 6)
@@ -30,10 +30,13 @@ function M.RainbowText(text)
         return math.floor(r * 255), math.floor(g * 255), math.floor(b * 255)
     end
 
+    if offset == nil then
+        offset = 0
+    end
     local length = #text
     local rainbowText = {}
     for i = 1, length do
-        local hue = (i - 1) / length
+        local hue = (i + offset - 1) / length
         table.insert(rainbowText, M.ColorText(text:sub(i, i), { hsvToRgb(hue, 1, 1) }))
     end
 
@@ -59,8 +62,11 @@ local function logTime()
     lastTime = Ext.Utils.MonotonicTime()
     return log
 end
+
+local rainbowOffset = 0
 local function logPrefix()
-    local prefix = M.RainbowText(Mod.Prefix) .. " " .. (Ext.IsClient() and "[Client]" or "[Server]")
+    rainbowOffset = (rainbowOffset + 1) % 360
+    local prefix = M.RainbowText(Mod.Prefix, rainbowOffset) .. " " .. (Ext.IsClient() and "[Client]" or "[Server]")
     return prefix
 end
 

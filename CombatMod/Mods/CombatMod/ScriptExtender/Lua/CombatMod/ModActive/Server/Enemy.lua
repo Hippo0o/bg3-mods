@@ -241,10 +241,10 @@ function Object:Modify(keepFaction)
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
 
-    if self.SpellSet == "" then
-        Osi.AddSpell(self.GUID, "Projectile_Jump")
-        Osi.AddSpell(self.GUID, "Shout_Dash")
-    end
+    -- if self.SpellSet == "" then
+    --     Osi.AddSpell(self.GUID, "Projectile_Jump")
+    --     Osi.AddSpell(self.GUID, "Shout_Dash")
+    -- end
 
     -- undead enemies get shadow curse immunity
     if Osi.IsTagged(self.GUID, "33c625aa-6982-4c27-904f-e47029a9b140") == 1 then -- UNDEAD

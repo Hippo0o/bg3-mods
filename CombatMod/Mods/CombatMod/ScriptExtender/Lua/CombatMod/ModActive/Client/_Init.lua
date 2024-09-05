@@ -22,7 +22,7 @@ Net.On(
     Debounce(300, function(event)
         State = event.Payload or {}
         Event.Trigger("StateChange", State)
-    end)
+    end, true)
 )
 
 Net.On("Notification", function(event)

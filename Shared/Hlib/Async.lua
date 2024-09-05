@@ -457,9 +457,10 @@ end
 
 ---@param ms number
 ---@param func fun(...)
+---@param immediate boolean|nil
 ---@return fun(...)
 -- will create a function that is debounced
-function M.Debounce(ms, func)
+function M.Debounce(ms, func, immediate)
     local runner
 
     local origin = nil
@@ -468,11 +469,21 @@ function M.Debounce(ms, func)
     end
 
     return function(...)
+        local exec = Utils.Bind(func, ...)
+
         if runner then
             runner:Clear()
+        elseif immediate then
+            exec()
+            exec = nil
         end
 
-        runner = M.Defer(ms, Utils.Bind(func, ...)).Source
+        runner = M.Defer(ms, function()
+            runner = nil
+            if exec then
+                exec()
+            end
+        end).Source
         runner._Origin = origin
     end
 end

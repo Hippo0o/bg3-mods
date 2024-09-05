@@ -443,18 +443,19 @@ return {
 		TemplateId = "e008d8eb-ccf9-44bd-b4cb-e55dfc6e9ee2",
 		Tier = "epic",
 	},
-	{
-		Info = {
-			AC = 16,
-			Level = 12,
-			Pwr = 238.5,
-			Stats = 10,
-			Vit = 369,
-		},
-		Name = "TOT_SteelWatcher_Quadruped_B",
-		TemplateId = "cff36b0c-bd37-478c-831c-875c0c6f7dfd",
-		Tier = "legendary",
-	},
+	-- duplicate, is just the polymorphed version for honour mode
+	-- {
+	-- 	Info = {
+	-- 		AC = 16,
+	-- 		Level = 12,
+	-- 		Pwr = 238.5,
+	-- 		Stats = 10,
+	-- 		Vit = 369,
+	-- 	},
+	-- 	Name = "TOT_SteelWatcher_Quadruped_B",
+	-- 	TemplateId = "cff36b0c-bd37-478c-831c-875c0c6f7dfd",
+	-- 	Tier = "legendary",
+	-- },
 	{
 		Info = {
 			AC = 17,
@@ -621,7 +622,7 @@ return {
 		},
 		Name = "TOT_SteelWatcher_Quadruped_A",
 		TemplateId = "011210c0-744d-413f-beaf-a0d31d9fcf99",
-		Tier = "legendary",
+		Tier = "mythical",
 	},
 	{
 		Info = {
@@ -1221,7 +1222,7 @@ return {
 		},
 		Name = "TOT_Dragon_Red",
 		TemplateId = "8c9216a1-c2e6-42ea-8fe5-2ce658706ad6",
-		Tier = "legendary",
+		Tier = "mythical",
 	},
 	{
 		Info = {
@@ -1749,7 +1750,7 @@ return {
 		},
 		Name = "TOT_MOO_Ketheric",
 		TemplateId = "307d5a85-aa03-42ab-afba-2832300d3041",
-		Tier = "legendary",
+		Tier = "mythical",
 	},
 	{
 		Info = {
@@ -2289,7 +2290,7 @@ return {
 		},
 		Name = "TOT_Dragon_Skeletal",
 		TemplateId = "a75d3784-2973-4440-917d-963ce49d9b1c",
-		Tier = "legendary",
+		Tier = "mythical",
 	},
 	{
 		Info = {
