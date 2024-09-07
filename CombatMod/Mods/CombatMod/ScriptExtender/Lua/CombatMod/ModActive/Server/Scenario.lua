@@ -347,7 +347,13 @@ function Action.MapEntered()
         end
 
         for _, player in pairs(GU.DB.GetPlayers()) do
-            Osi.RemoveStatus(player, "SNEAKING")
+            if Osi.HasActiveStatus(player, "SNEAKING") == 1 then
+                Osi.RemoveStatus(player, "SNEAKING")
+
+                Defer(1000, function()
+                    Osi.ApplyStatus(player, "SNEAKING", -1)
+                end)
+            end
 
             Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), S().CombatHelper, player)
         end
@@ -359,19 +365,6 @@ function Action.MapEntered()
         interval = 200,
     })
 end
-
--- function Action.GroupEnemy(enemy)
---     local s = Current()
---     if #s.SpawnedEnemies < 11 then
---         return
---     end
---
---     if enemy.Tier ~= C.EnemyTier[1] then
---         return
---     end
---
---     Osi.RequestSetSwarmGroup(enemy.GUID, U.UUID.FromString("SwarmGroupLow"))
--- end
 
 function Action.EnemyAdded(enemy)
     Scenario.CombatSpawned(enemy)
@@ -740,7 +733,6 @@ function Scenario.TeleportHelper()
 
         Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
         return false
-
     end)
 end
 
@@ -782,7 +774,11 @@ function Scenario.CombatSpawned(specific)
             immediate = true,
             retries = 5,
             interval = 1000,
-        }):Catch(ifScenario(function()
+        }):After(ifScenario(function()
+            enemy:Replicate("TurnOrder")
+            enemy:Replicate("TurnBased")
+            enemy:Replicate("CombatParticipant")
+        end)):Catch(ifScenario(function()
             Action.Failsafe(enemy)
         end))
     end
@@ -1092,6 +1088,9 @@ Ext.Osiris.RegisterListener(
                 if Current().Round == 1 then
                     for _, p in pairs(GE.GetParty()) do
                         Osi.LeaveCombat(p.Uuid.EntityUuid)
+                        Defer(1000, function()
+                            Osi.ForceTurnBasedMode(p.Uuid.EntityUuid, 1)
+                        end)
                     end
 
                     Player.Notify(__("Combat started."))

@@ -6587,54 +6587,6 @@
 						<node id="LocomotionParams">
 							<attribute id="IsWorldClimbingEnabled" type="bool" value="False" />
 						</node>
-						<node id="ScriptConfigGlobalParameters">
-							<children>
-								<node id="ScriptConfigParameter">
-									<attribute id="Name" type="LSString" value="CustomFallback" />
-									<children>
-										<node id="Value">
-											<children>
-												<node id="Scalar">
-													<children>
-														<node id="Scalar">
-															<children>
-																<node id="String">
-																	<attribute id="String"
-																		type="LSString"
-																		value="WYR_DRAGONFALLBACK" />
-																</node>
-															</children>
-														</node>
-													</children>
-												</node>
-											</children>
-										</node>
-									</children>
-								</node>
-								<node id="ScriptConfigParameter">
-									<attribute id="Name" type="LSString" value="CustomFallback" />
-									<children>
-										<node id="Value">
-											<children>
-												<node id="Scalar">
-													<children>
-														<node id="Scalar">
-															<children>
-																<node id="String">
-																	<attribute id="String"
-																		type="LSString"
-																		value="WYR_DRAGONFALLBACK" />
-																</node>
-															</children>
-														</node>
-													</children>
-												</node>
-											</children>
-										</node>
-									</children>
-								</node>
-							</children>
-						</node>
 						<node id="SkillList">
 							<children>
 								<node id="Skill">

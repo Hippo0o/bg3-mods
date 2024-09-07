@@ -1836,18 +1836,18 @@ return {
 		TemplateId = "bee463e5-69ff-4426-9dc9-6d5f49b596d4",
 		Tier = "high",
 	},
-	{
-		Info = {
-			AC = 13,
-			Level = 2,
-			Pwr = 34.0,
-			Stats = 2,
-			Vit = 26,
-		},
-		Name = "TOT_Worg_White_A",
-		TemplateId = "e7befe3d-8fbd-4dad-8e13-2ddef67e6889",
-		Tier = "mid",
-	},
+	-- {
+	-- 	Info = {
+	-- 		AC = 13,
+	-- 		Level = 2,
+	-- 		Pwr = 34.0,
+	-- 		Stats = 2,
+	-- 		Vit = 26,
+	-- 	},
+	-- 	Name = "TOT_Worg_White_A",
+	-- 	TemplateId = "e7befe3d-8fbd-4dad-8e13-2ddef67e6889",
+	-- 	Tier = "mid",
+	-- },
 	{
 		Info = {
 			AC = 18,
