@@ -7,9 +7,9 @@ function Player.FixTadpole()
 end
 
 function Player.SetTags()
-    for _, p in pairs(GU.Entity.GetParty()) do
-        -- Osi.SetTag(p.Uuid.EntityUuid, "64bc9da1-9262-475a-a397-157600b7debd") -- AI_PREFERRED_TARGET
-        Osi.SetTag(p.Uuid.EntityUuid, "6d60bed7-10cc-4b52-8fb7-baa75181cd49") -- IGNORE_COMBAT_LATE_JOIN_PENALTY
+    for _, p in pairs(GU.DB.GetPlayers()) do
+        Osi.SetTag(p, "64bc9da1-9262-475a-a397-157600b7debd") -- AI_PREFERRED_TARGET
+        Osi.SetTag(p, "6d60bed7-10cc-4b52-8fb7-baa75181cd49") -- IGNORE_COMBAT_LATE_JOIN_PENALTY
     end
 end
 

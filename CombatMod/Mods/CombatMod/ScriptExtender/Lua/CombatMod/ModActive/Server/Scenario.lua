@@ -709,8 +709,17 @@ function Scenario.TeleportHelper()
     RetryUntil(function()
         local x1, y1, z1 = table.unpack(s.Map.Enter)
 
-        local player = Osi.GetClosestPlayer(s.CombatHelper)
-        local x2, y2, z2 = Osi.GetPosition(player)
+        local x2, y2, z2 = table.unpack(s.Map.Enter)
+
+        local max = 0
+        for _, player in ipairs(GU.DB.GetPlayers()) do
+            local d = Osi.GetDistanceTo(player, s.CombatHelper)
+            if d > max then
+                max = d
+                x3, y3, z3 = Osi.GetPosition(player)
+            end
+        end
+
 
         local x3, y3, z3 = table.unpack(s.Map.Enter)
 
