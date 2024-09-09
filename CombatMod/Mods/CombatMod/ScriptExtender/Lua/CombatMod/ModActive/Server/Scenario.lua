@@ -716,10 +716,9 @@ function Scenario.TeleportHelper()
             local d = Osi.GetDistanceTo(player, s.CombatHelper)
             if d > max then
                 max = d
-                x3, y3, z3 = Osi.GetPosition(player)
+                x2, y2, z2 = Osi.GetPosition(player)
             end
         end
-
 
         local x3, y3, z3 = table.unpack(s.Map.Enter)
 
@@ -804,9 +803,22 @@ function Scenario.GroupDistantEnemies()
         return e:IsSpawned() and string.contains(e.Tier, { table.unpack(C.EnemyTier, 1, 3) })
     end)
 
+    local partyPositions = table.map(GU.Entity.GetParty(), function(entity)
+        return entity.Transform.Transform.Translate
+    end)
+
     for _, enemy in ipairs(enemies) do
         local uuid = enemy.GUID
-        local _, distance = Osi.GetClosestAlivePlayer(uuid)
+
+        local x, y, z = Osi.GetPosition(uuid)
+
+        local distance = 0
+        for _, xyz in ipairs(partyPositions) do
+            local d = Ext.Math.Distance({ x, xyz[2], z }, xyz)
+            if d < distance then
+                distance = d
+            end
+        end
 
         local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 20 or distance > 30
 
