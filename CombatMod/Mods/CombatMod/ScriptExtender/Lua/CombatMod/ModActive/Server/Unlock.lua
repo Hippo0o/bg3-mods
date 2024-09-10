@@ -219,6 +219,65 @@ function Unlock.UpdateUnlocked()
     SyncState()
 end
 
+function Unlock.Buy(unlockId, buyer, target)
+    local unlock = table.find(Unlock.Get(), function(u)
+        return u.Id == unlockId
+    end)
+
+    local function soundFail()
+        Osi.PlaySoundResource(buyer, "294bbcfa-fd7b-d8bf-bba1-5b790f8518af")
+    end
+    local function soundSuccess()
+        Osi.PlaySoundResource(buyer, "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
+    end
+
+    if Config.MulitplayerRestrictUnlocks and not GU.Character.IsHost(buyer) then
+        soundFail()
+        return false, __("Host has restricted buying unlocks.")
+    end
+
+    if Osi.IsInCombat(buyer) == 1 or Scenario.HasStarted() then
+        soundFail()
+        return false, __("Cannot buy while in combat.")
+    end
+
+    if unlock == nil then
+        soundFail()
+        return false, __("Unlock not found.")
+    end
+
+    Schedule(Unlock.UpdateUnlocked)
+
+    if not unlock:Buyable() then
+        soundFail()
+        return false, __("Unlock out of stock.")
+    end
+
+    if unlock.Character and not target then
+        soundFail()
+        return false, __("Unlock needs a character.")
+    end
+
+    if unlock.Cost > PersistentVars.Currency then
+        soundFail()
+        return false, __("Not enough currency.")
+    end
+
+    local character = target or buyer
+
+    unlock:Buy(character)
+    Unlock.UpdateCurrency(PersistentVars.Currency - unlock.Cost)
+
+    soundSuccess()
+
+    Osi.ApplyStatus(buyer, "WAR_GODS_BLESSING", 1)
+    if unlock.Character then
+        Osi.ApplyStatus(character, "WAR_GODS_BLESSING", 1)
+    end
+
+    return true, PersistentVars.Currency
+end
+
 -------------------------------------------------------------------------------------------------
 --                                                                                             --
 --                                           Events                                            --
@@ -244,68 +303,3 @@ Event.On("ScenarioEnded", function(scenario)
     Unlock.CalculateReward(scenario)
 end)
 
-Net.On("BuyUnlock", function(event)
-    local unlock = table.find(Unlock.Get(), function(u)
-        return u.Id == event.Payload.Id
-    end)
-
-    local function soundFail()
-        Osi.PlaySoundResource(event:Character(), "294bbcfa-fd7b-d8bf-bba1-5b790f8518af")
-    end
-    local function soundSuccess()
-        Osi.PlaySoundResource(event:Character(), "a6571b9a-0b79-6712-6326-a0e3134ed0ad")
-    end
-
-    Schedule(Unlock.UpdateUnlocked)
-
-    if Config.MulitplayerRestrictUnlocks and event:IsHost() == false then
-        Net.Respond(event, { false, __("Host has restricted buying unlocks.") })
-        soundFail()
-        return
-    end
-
-    if Osi.IsInCombat(event:Character()) == 1 or Scenario.HasStarted() then
-        Net.Respond(event, { false, __("Cannot buy while in combat.") })
-        soundFail()
-        return
-    end
-
-    if unlock == nil then
-        Net.Respond(event, { false, __("Unlock not found.") })
-        soundFail()
-        return
-    end
-
-    if not unlock:Buyable() then
-        Net.Respond(event, { false, __("Unlock out of stock.") })
-        soundFail()
-        return
-    end
-
-    if unlock.Character and not event.Payload.Character then
-        Net.Respond(event, { false, __("Unlock needs a character.") })
-        soundFail()
-        return
-    end
-
-    if unlock.Cost > PersistentVars.Currency then
-        Net.Respond(event, { false, __("Not enough currency.") })
-        soundFail()
-
-        return
-    end
-
-    local character = event.Payload.Character or event:Character()
-
-    unlock:Buy(character)
-    Unlock.UpdateCurrency(PersistentVars.Currency - unlock.Cost)
-
-    soundSuccess()
-
-    Osi.ApplyStatus(event:Character(), "WAR_GODS_BLESSING", 1)
-    if unlock.Character then
-        Osi.ApplyStatus(character, "WAR_GODS_BLESSING", 1)
-    end
-
-    Net.Respond(event, { true, PersistentVars.Currency })
-end)

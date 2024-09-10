@@ -133,6 +133,10 @@ Net.On("Stop", function(event)
     Net.Respond(event, { true, __("Scenario stopped.") })
 end)
 
+Net.On("BuyUnlock", function(event)
+    Net.Respond(event, { Unlock.Buy(event.Payload.Id, event:Character(), event.Payload.Character) })
+end)
+
 Net.On("ToCamp", function(event)
     if Player.Region() == C.Regions.Act0 then
         Intro.AskTutSkip()

@@ -25,19 +25,7 @@ if Ext.Mod.IsModLoaded(M.UUID) then
 end
 
 local function applyTemplate(vars, template)
-    for k, v in pairs(template) do
-        if type(v) == "table" then
-            if vars[k] == nil then
-                vars[k] = {}
-            end
-
-            applyTemplate(vars[k], v)
-        else
-            if vars[k] == nil then
-                vars[k] = v
-            end
-        end
-    end
+    Require("Hlib/Utils").Table.Patch(vars, template)
 end
 
 -------------------------------------------------------------------------------------------------

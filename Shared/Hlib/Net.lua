@@ -4,6 +4,9 @@ local Mod = Require("Hlib/Mod")
 ---@type Utils
 local Utils = Require("Hlib/Utils")
 
+---@type GameUtils
+local GameUtils = Require("Hlib/GameUtils")
+
 ---@type Log
 local Log = Require("Hlib/Log")
 
@@ -35,11 +38,11 @@ local NetEvent = Libs.Struct({
     end,
     Character = function(self)
         assert(Ext.IsServer(), "NetEvent:Character() is only available on the server")
-        return Osi.GetCurrentCharacter(self:UserId())
+        return GameUtils.Character.GetForUser(self:UserId())
     end,
     IsHost = function(self)
         assert(Ext.IsServer(), "NetEvent:IsHost() is only available on the server")
-        return self:Character() == Osi.GetHostCharacter()
+        return GameUtils.Character.IsHost(self:Character())
     end,
 })
 

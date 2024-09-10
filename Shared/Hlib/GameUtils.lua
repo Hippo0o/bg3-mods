@@ -215,7 +215,7 @@ function M.Character.IsValid(character)
 end
 
 ---@param character string GUID
----@return string GUID
+---@return string character GUID
 function M.Character.GetPlayer(character)
     character = Osi.CharacterGetOwner(character) or character
 
@@ -224,6 +224,18 @@ function M.Character.GetPlayer(character)
     end
 
     return character
+end
+
+---@param character string GUID
+---@return boolean
+function M.Character.IsHost(character)
+    return Utils.UUID.Equals(Osi.GetHostCharacter(), character)
+end
+
+---@param userId number
+---@return string character GUID
+function M.Character.GetForUser(userId)
+    return Osi.GetCurrentCharacter(userId)
 end
 
 ---@param character string GUID
