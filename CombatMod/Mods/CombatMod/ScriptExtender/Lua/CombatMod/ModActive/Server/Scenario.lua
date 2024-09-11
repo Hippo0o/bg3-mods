@@ -566,6 +566,7 @@ function Scenario.Start(template, map)
     scenario.Name = template.Name
     scenario.Map = map
     scenario.Timeline = timeline
+    scenario.Positions = template.Positions or {}
 
     scenario.LootRates = template.Loot or C.LootRates
 

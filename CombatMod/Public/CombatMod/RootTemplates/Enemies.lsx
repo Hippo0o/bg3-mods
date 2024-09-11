@@ -8482,6 +8482,133 @@
 					</children>
 				</node>
 
+				<node id="GameObjects">
+					<attribute id="Archetype" type="FixedString" value="melee" />
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString"
+						value="a056e158-8ec0-4539-9e55-333866a0ff2c" />
+					<attribute id="Name" type="LSString" value="TOT_Meenlock" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="cc1b177d-5053-4472-b1e2-8c3e42fc17da" />
+					<attribute id="Race" type="guid" value="c9479054-6a06-438b-9ab3-0467f70709de" />
+					<attribute id="Stats" type="FixedString" value="Meenlock" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+
+				<node id="GameObjects">
+					<attribute id="Archetype" type="FixedString" value="melee" />
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="LevelName" type="FixedString" value="" />
+
+					<attribute id="Icon" type="FixedString"
+						value="735a67d6-edd1-346b-206d-7df560cdb1b6-_(Icon_Cat_Gremishka)" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="9f7bbeff-abf3-40d3-bbb2-beaa40546ddc" />
+					<attribute id="Name" type="LSString" value="TOT_Gremishka_Spawn" />
+					<attribute id="MapKey" type="FixedString"
+						value="b71656d4-9039-4323-8308-52868ce7a672" />
+					<attribute id="SwarmGroup" type="FixedString" value="" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+
+				<node id="GameObjects">
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="ced6bfeb-8f6f-47d0-943f-77833f643318" />
+					<attribute id="MapKey" type="FixedString"
+						value="099e83cc-5a92-4738-9060-0020db4b0516" />
+					<attribute id="Name" type="LSString" value="TOT_Slayer" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+
+				<node id="GameObjects">
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="86e4ef7c-9ad0-42c5-a868-0ed52f627013" />
+					<attribute id="MapKey" type="FixedString"
+						value="66d2e9e8-119b-4fe5-9969-5afe61fbf241" />
+					<attribute id="Name" type="LSString" value="TOT_Myconid_Slender_Black" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="b3356d4d-397a-42b9-adb4-bef555124cb5" />
+					<attribute id="MapKey" type="FixedString"
+						value="29fb7fd0-de0e-4c2e-8299-6932bb6156c2" />
+					<attribute id="Name" type="LSString" value="TOT_Myconid_Slender_White" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+				<node id="GameObjects">
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="6aa53435-94e4-45d6-a056-144866910f3e" />
+					<attribute id="MapKey" type="FixedString"
+						value="c665134b-2ed9-49ca-b775-0b5eab6502ec" />
+					<attribute id="Name" type="LSString" value="TOT_Myconid_Slender_Green" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
 			</children>
 		</node>
 	</region>

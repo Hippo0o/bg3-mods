@@ -158,6 +158,7 @@ External.Validators.Scenario = tt({
         "function",
         External.Validators.Map,
     },
+    Positions = { "nil", tt({ "nil", "number" }, true) },
     Loot = {
         "nil",
         lootRatesType,
