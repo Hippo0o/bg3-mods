@@ -179,18 +179,19 @@ return {
 		TemplateId = "e2a53f2c-2e2b-4fa2-a9b2-cee2c5e0578c",
 		Tier = "low",
 	},
-	{
-		Info = {
-			AC = 15,
-			Level = 11,
-			Pwr = 99.0,
-			Stats = 16,
-			Vit = 84,
-		},
-		Name = "TOT_LOW_OskarsBeloved_MonstrousSpirit",
-		TemplateId = "08fe6015-a6e6-4370-9944-6f8ca8fe6f7b",
-		Tier = "legendary",
-	},
+	-- ppl don't like this one
+	-- {
+	-- 	Info = {
+	-- 		AC = 15,
+	-- 		Level = 11,
+	-- 		Pwr = 99.0,
+	-- 		Stats = 16,
+	-- 		Vit = 84,
+	-- 	},
+	-- 	Name = "TOT_LOW_OskarsBeloved_MonstrousSpirit",
+	-- 	TemplateId = "08fe6015-a6e6-4370-9944-6f8ca8fe6f7b",
+	-- 	Tier = "legendary",
+	-- },
 	{
 		Info = {
 			AC = 12,
