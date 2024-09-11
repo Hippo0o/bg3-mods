@@ -603,6 +603,28 @@ function Enemy.IsValid(object)
         )
 end
 
+---@param object string GUID
+---@return number distance, number x, number y, number z
+function Enemy.DistanceToParty(object)
+    local partyPositions = table.map(GU.Entity.GetParty(), function(entity)
+        return entity.Transform.Transform.Translate
+    end)
+
+    local x, y, z = Osi.GetPosition(object)
+
+    local distance = 999
+    local partyXyz = {}
+    for _, xyz in ipairs(partyPositions) do
+        local d = Ext.Math.Distance({ x, xyz[2], z }, xyz)
+        if d < distance then
+            distance = d
+            partyXyz = xyz
+        end
+    end
+
+    return distance, table.unpack(partyXyz)
+end
+
 function Enemy.Cleanup()
     for guid, enemy in pairs(PersistentVars.SpawnedEnemies) do
         if not Enemy.IsValid(guid) then

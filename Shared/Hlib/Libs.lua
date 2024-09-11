@@ -428,6 +428,7 @@ function Chainable:End(success, state)
 
     if not success then
         self._Chain = {}
+        self._Began = true
         error(table.unpack(state))
     end
 
@@ -440,6 +441,10 @@ function Chainable:End(success, state)
     end
 
     return table.unpack(state)
+end
+
+function Chainable:IsDone()
+    return self._Began and #self._Chain == 0
 end
 
 ---@param value any

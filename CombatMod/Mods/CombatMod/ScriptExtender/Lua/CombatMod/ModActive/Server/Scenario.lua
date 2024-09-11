@@ -245,12 +245,12 @@ function Action.SpawnRound()
                 Player.Notify(__("Enemy %s spawned.", enemy:GetTranslatedName()), true, enemy:GetId())
                 Event.Trigger("ScenarioEnemySpawned", Current(), enemy)
 
-                -- Action.GroupEnemy(e)
-
                 return posCorrectionChainable
             end)
             :After(function(e, corrected)
                 Action.EnemyAdded(e)
+
+                Scenario.CloseEnemyDistance(e)
 
                 return Defer(1000)
             end)
@@ -419,6 +419,31 @@ function Action.Failsafe(enemy)
                     end
                 end)
             end
+        end
+    end
+end
+
+function Action.EnemyFallback(enemy)
+    local s = Current()
+
+    local uuid = enemy.GUID
+
+    if Enemy.IsValid(uuid) and GC.IsValid(uuid) then
+        local resources = get(Ext.Entity.Get(uuid).ActionResources, "Resources")
+        if
+            resources
+            and resources["734cbcfb-8922-4b6d-8330-b2a7e4c14b6a"][1].Amount > 0
+            and Osi.GetHitpointsPercentage(uuid) > 95
+        then
+            s.EnemyFallback[uuid] = (s.EnemyFallback[uuid] or 0) + 1
+        else
+            s.EnemyFallback[uuid] = (s.EnemyFallback[uuid] or 0) - 1
+        end
+
+        if s.EnemyFallback[uuid] > 2 then
+            s.Map:TeleportToSpawn(uuid, -1)
+
+            s.EnemyFallback[uuid] = 2
         end
     end
 end
@@ -783,6 +808,7 @@ function Scenario.CombatSpawned(specific)
             retries = 5,
             interval = 1000,
         }):After(ifScenario(function()
+            -- doesnt work it seems
             enemy:Replicate("TurnOrder")
             enemy:Replicate("TurnBased")
             enemy:Replicate("CombatParticipant")
@@ -803,22 +829,12 @@ function Scenario.GroupDistantEnemies()
         return e:IsSpawned() and string.contains(e.Tier, { table.unpack(C.EnemyTier, 1, 3) })
     end)
 
-    local partyPositions = table.map(GU.Entity.GetParty(), function(entity)
-        return entity.Transform.Transform.Translate
-    end)
-
     for _, enemy in ipairs(enemies) do
         local uuid = enemy.GUID
 
         local x, y, z = Osi.GetPosition(uuid)
 
-        local distance = 0
-        for _, xyz in ipairs(partyPositions) do
-            local d = Ext.Math.Distance({ x, xyz[2], z }, xyz)
-            if d < distance then
-                distance = d
-            end
-        end
+        local distance = Enemy.DistanceToParty(uuid)
 
         local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 20 or distance > 30
 
@@ -861,6 +877,51 @@ function Scenario.GroupDistantEnemies()
     --         break
     --     end
     -- end
+end
+
+---@param specific Enemy|nil
+function Scenario.CloseEnemyDistance(specific, maxDistance)
+    local s = Current()
+
+    local enemies = table.filter(s.SpawnedEnemies, function(e)
+        return specific == nil or eq(e, specific)
+    end)
+
+    if not maxDistance then
+        maxDistance = 40
+    end
+
+    local adjusting = table.map(enemies, function(enemy)
+        local x, y, z = Osi.GetPosition(enemy.GUID)
+
+        local distance, x2, y2, z2 = Enemy.DistanceToParty(enemy.GUID)
+
+        if distance < maxDistance then
+            return
+        end
+
+        local closestSpawn = -1
+        local closest = 999
+        for i, spawn in ipairs(s.Map.Spawns) do
+            local d = Ext.Math.Distance({ x, y, z }, spawn)
+            local d2 = Ext.Math.Distance({ x2, y2, z2 }, spawn)
+
+            if d < d2 and d2 < maxDistance and closest > d then
+                closestSpawn = i
+                closest = d
+            end
+        end
+
+        local _, chainable = s.Map:TeleportToSpawn(enemy.GUID, closestSpawn, true)
+
+        return chainable
+    end)
+
+    return WaitUntil(function()
+        return #table.filter(adjusting, function(chainable)
+            return chainable:IsDone()
+        end) == 0
+    end)
 end
 
 -------------------------------------------------------------------------------------------------
@@ -1061,23 +1122,12 @@ Ext.Osiris.RegisterListener(
             Scenario.GroupDistantEnemies()
         end
 
-        if Enemy.IsValid(uuid) and GC.IsValid(uuid) then
-            local resources = get(Ext.Entity.Get(uuid).ActionResources, "Resources")
-            if
-                resources
-                and resources["734cbcfb-8922-4b6d-8330-b2a7e4c14b6a"][1].Amount > 0
-                and Osi.GetHitpointsPercentage(uuid) > 95
-            then
-                s.EnemyFallback[uuid] = (s.EnemyFallback[uuid] or 0) + 1
-            else
-                s.EnemyFallback[uuid] = (s.EnemyFallback[uuid] or 0) - 1
-            end
+        local enemy = table.find(s.SpawnedEnemies, function(e)
+            return U.UUID.Equals(e.GUID, uuid)
+        end)
 
-            if s.EnemyFallback[uuid] > 2 then
-                s.Map:TeleportToSpawn(uuid, -1)
-
-                s.EnemyFallback[uuid] = 2
-            end
+        if enemy then
+            Action.EnemyFallback(enemy)
         end
     end)
 )
@@ -1165,7 +1215,9 @@ Ext.Osiris.RegisterListener(
 
         Scenario.CheckShouldStop()
 
-        Scenario.GroupDistantEnemies()
+        Scenario.CloseEnemyDistance():After(function()
+            Scenario.GroupDistantEnemies()
+        end)
 
         Scenario.CombatSpawned()
 
