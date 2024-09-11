@@ -304,7 +304,7 @@ local items = {
 	"MAG_Surgeon_Syringe",
 	"MAG_Surgeon_Trepan",
 	"MAG_Bloodsoaked_Greataxe",
-	"MAG_WYR_Orin_Bhaalist_Dagger",
+	-- "MAG_WYR_Orin_Bhaalist_Dagger",
 	"MAG_BG_Sarevok_OfChaos_Greatsword_NoPassives",
 	"MAG_Vicious_Shortsword",
 	"MAG_Infernal_Mace",
