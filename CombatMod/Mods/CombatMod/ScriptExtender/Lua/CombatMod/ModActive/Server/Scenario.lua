@@ -570,18 +570,29 @@ function Scenario.Start(template, map)
 
     scenario.LootRates = template.Loot or C.LootRates
 
+    local enemyTemplates = nil
+    if template.Enemies then
+        if type(template.Enemies) == "function" then
+            enemyTemplates = template:Enemies()
+        else
+            enemyTemplates = template.Enemies
+        end
+    end
+    local function getEnemy(definition)
+        if table.contains(C.EnemyTier, definition) then
+            local enemies = Enemy.GetByTier(definition, enemyTemplates)
+
+            return enemies[math.random(#enemies)]
+        end
+
+        return Enemy.Find(definition, enemyTemplates)
+    end
+
     local enemyCount = 0
     for round, definitions in pairs(scenario.Timeline) do
         L.Dump("Adding enemies for round.", round, definitions)
         for _, definition in pairs(definitions) do
-            local e
-            if table.contains(C.EnemyTier, definition) then
-                e = Enemy.Random(function(e)
-                    return e.Tier == definition
-                end)
-            else
-                e = Enemy.Find(definition)
-            end
+            local e = getEnemy(definition)
 
             if e == nil then
                 L.Error("Starting scenario failed.", "Enemy configuration is wrong.")

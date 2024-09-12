@@ -491,21 +491,8 @@ function Enemy.CreateTemporary(object)
 end
 
 ---@return Enemy|nil
-function Enemy.Random(filter)
-    local list = {}
-    for _, enemy in Enemy.Iter(filter) do
-        table.insert(list, enemy)
-    end
-    if #list == 0 then
-        return nil
-    end
-    local enemy = list[math.random(#list)]
-    return Object.New(enemy)
-end
-
----@return Enemy|nil
-function Enemy.Find(search)
-    for _, enemy in Enemy.Iter() do
+function Enemy.Find(search, templates)
+    for _, enemy in Enemy.Iter(templates) do
         if string.contains(search, { enemy.TemplateId, enemy.Name }, false, true) then
             return enemy
         end
@@ -514,9 +501,9 @@ end
 
 ---@param tier string
 ---@return Enemy[]
-function Enemy.GetByTier(tier)
+function Enemy.GetByTier(tier, templates)
     local list = {}
-    for _, enemy in Enemy.Iter() do
+    for _, enemy in Enemy.Iter(templates) do
         if enemy.Tier == tier then
             table.insert(list, enemy)
         end
@@ -526,9 +513,9 @@ function Enemy.GetByTier(tier)
 end
 
 ---@return Enemy[]
-function Enemy.GetByTemplateId(templateId)
+function Enemy.GetByTemplateId(templateId, templates)
     local list = {}
-    for _, enemy in Enemy.Iter() do
+    for _, enemy in Enemy.Iter(templates) do
         if enemy.TemplateId == templateId then
             table.insert(list, enemy)
         end
@@ -537,18 +524,8 @@ function Enemy.GetByTemplateId(templateId)
     return list
 end
 
-local cache = nil
-local resetCache = Debounce(10000, function()
-    cache = nil
-end)
-function Enemy.GetTemplates()
-    resetCache()
-
-    if cache then
-        return cache
-    end
-
-    cache = table.filter(External.Templates.GetEnemies(), function(v)
+Enemy.GetTemplates = Cached(function()
+    return table.filter(External.Templates.GetEnemies(), function(v)
         local template = Ext.Template.GetRootTemplate(v.TemplateId)
         local keep = template and Ext.Template.GetRootTemplate(template.ParentTemplateId)
 
@@ -561,26 +538,19 @@ function Enemy.GetTemplates()
 
         return keep
     end)
+end, 10000)
 
-    return cache
-end
-
----@field filter fun(data: Enemy):boolean data is the enemy source data
+---@field templates table<number, table>
 ---@return fun():number,Enemy
-function Enemy.Iter(filter)
-    local templates = Enemy.GetTemplates()
+function Enemy.Iter(templates)
+    if not templates then
+        templates = Enemy.GetTemplates()
+    end
     local i = 0
-    local j = 0
     return function()
         i = i + 1
-        j = j + 1
-        if filter then
-            while templates[j] and not filter(templates[j]) do
-                j = j + 1
-            end
-        end
-        if templates[j] then
-            return i, Object.New(templates[j])
+        if templates[i] then
+            return i, Object.New(templates[i])
         end
     end
 end

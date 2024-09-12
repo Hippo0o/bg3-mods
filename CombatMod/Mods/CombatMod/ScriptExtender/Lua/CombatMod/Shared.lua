@@ -60,3 +60,25 @@ Localization = Require("Hlib/Localization")
 __ = Localization.Localize
 
 Require("CombatMod/Constants")
+
+---@param func fun(): any
+---@param duration number
+---@return fun(): any
+function Cached(func, duration)
+    local cache = nil
+    local resetCache = Debounce(duration or 10000, function()
+        cache = nil
+    end)
+
+    return function(...)
+        resetCache()
+
+        if cache then
+            return table.unpack(cache)
+        end
+
+        cache = { func(...) }
+
+        return table.unpack(cache)
+    end
+end

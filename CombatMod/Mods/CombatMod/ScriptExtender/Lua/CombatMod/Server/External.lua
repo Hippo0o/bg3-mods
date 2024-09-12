@@ -163,6 +163,11 @@ External.Validators.Scenario = tt({
         "nil",
         lootRatesType,
     },
+    Enemies = {
+        "nil",
+        "function",
+        tt(External.Validators.Enemy, true),
+    },
 })
 External.Validators.Unlock = tt({
     Id = { "string" },

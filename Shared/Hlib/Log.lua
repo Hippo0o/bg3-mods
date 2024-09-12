@@ -1,8 +1,8 @@
----@class Log
-local M = {}
-
 ---@type Mod
 local Mod = Require("Hlib/Mod")
+
+---@class Log
+local M = {}
 
 function M.RainbowText(text, offset)
     function hsvToRgb(h, s, v)
