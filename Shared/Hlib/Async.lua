@@ -68,6 +68,13 @@ local Loop = Libs.Struct({
             ticks = ticks + 1
             if ticks % 3000 == 0 then
                 Log.Debug("Loop is running for long.", "Ticks:", ticks, "Tasks:", self.Tasks.Count)
+                if Mod.Dev then
+                    for _, queue in ipairs(self.Queues) do
+                        for _, runner in queue:Iter() do
+                            Log.Debug("Async/Runner", runner._Origin)
+                        end
+                    end
+                end
             end
         end)
     end,

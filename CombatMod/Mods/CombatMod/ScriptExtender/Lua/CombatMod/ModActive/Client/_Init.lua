@@ -25,15 +25,29 @@ Net.On(
     end, true)
 )
 
-Net.On("Notification", function(event)
-    local data = event.Payload
-    WaitUntil(function()
-        return get(Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext, "CurrentSubtitle", false)
-    end, function()
-        local context = Ext.UI.GetRoot():Child(1):Child(1):Child(2).DataContext
+do
+    local subtitleWidget
+    RetryUntil(function()
+        for i = 1, 12 do
+            if get(Ext.UI.GetRoot():Child(1):Child(1):Child(i), "XAMLPath", ""):match("OverheadInfo") then
+                subtitleWidget = i
+                break
+            end
+        end
+
+        return subtitleWidget
+    end)
+
+    Net.On("Notification", function(event)
+        if not subtitleWidget then
+            return
+        end
+        local data = event.Payload
+
+        local context = Ext.UI.GetRoot():Child(1):Child(1):Child(subtitleWidget).DataContext
         context.CurrentSubtitleDuration = data.Duration or 3
         context.CurrentSubtitle = data.Text
     end)
-end)
+end
 
 Require("CombatMod/ModActive/Client/GUI/_Init")
