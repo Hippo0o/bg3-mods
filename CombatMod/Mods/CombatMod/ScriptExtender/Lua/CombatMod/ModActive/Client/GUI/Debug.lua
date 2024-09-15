@@ -10,23 +10,10 @@ function Debug.Main(tab)
     local root = tabRoot:AddChildWindow(""):AddGroup("")
     root.PositionOffset = { 5, 5 }
 
-    root:AddSeparatorText("Cheat")
     local ca = root:AddButton(__("Clear Area"))
     ca.OnClick = function()
         Net.Send("KillNearby")
     end
-
-    root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Debounce(1000, function(input)
-        Net.RCE("PersistentVars.RogueScore = %d", input.Value[1]):After(function()
-            Net.Send("SyncState")
-        end)
-    end)
-
-    root:AddInputInt("Currency", State.Currency or 0).OnChange = Debounce(1000, function(input)
-        Net.RCE("PersistentVars.Currency = %d", input.Value[1]):After(function()
-            Net.Send("SyncState")
-        end)
-    end)
 
     -- section State
     local state = root:AddGroup(__("State"))

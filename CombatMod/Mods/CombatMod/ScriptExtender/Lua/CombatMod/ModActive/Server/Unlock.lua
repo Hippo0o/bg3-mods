@@ -128,7 +128,7 @@ function Unlock.UpdateCurrency(currency)
     Event.Trigger("CurrencyChanged", prev, currency)
 
     Defer(1000, function()
-        Player.Notify(__("Your Currency increased: %d -> %d!", prev, currency))
+        Player.Notify(__("Your Currency changed: %d -> %d!", prev, currency))
     end)
 end
 

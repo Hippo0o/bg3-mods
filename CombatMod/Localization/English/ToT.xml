@@ -3,6 +3,9 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Unlocks.lua -->
     <content contentuid="h8c0d708fgd958g425dgabf3ge43bc9d1c619" version="1">%d RogueScore required</content>
 
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
+    <content contentuid="h29013f4fg7c54g46a1ga1a3g20c7c38102e5" version="1">%d enemies left.</content>
+
     <!-- CombatMod/CombatMod/Server/Templates/Unlocks.lua -->
     <content contentuid="h29c3d32ag7c96g4867gb1afg0e01938d2c23" version="1">%s RogueScore</content>
 
@@ -15,7 +18,7 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Components.lua -->
     <content contentuid="h270f8076g725ag4d52gb143gcb345361e916" version="1">Active</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="hb5676e2age032g43b7gb865g45d19a4767f3" version="1">All enemies are dead.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -87,10 +90,10 @@
     <!-- CombatMod/CombatMod/ModActive/Server/StoryBypass.lua -->
     <content contentuid="h8cb6b79dgd9e3g4e2cg8bf8g584ae9da7a68" version="1">Clearing all entities</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h44afa6c1g11fag4f39g8779gc95f255beb7d" version="1">Combat is Starting.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h2e517b01g7b04g42e5g81d6g248323f406a1" version="1">Combat started.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua -->
@@ -131,7 +134,7 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua -->
     <content contentuid="h254298eeg7017g4cdbgb167g1abdd345389f" version="1">Destroy</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/NetEvents.lua -->
     <content contentuid="h42fa25a1g17afg470fg871cg9169253eb34b" version="1">Destroyed %d items.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -140,7 +143,7 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
     <content contentuid="h3e82a111g6bd7g4f44g80dbg192222f93b00" version="1">Drop Camp Clothes</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Item.lua -->
     <content contentuid="h2a64adc6g7f31g4f89gb195g79ef53b75bcd" version="1">Dropping loot.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -158,19 +161,19 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Debug.lua -->
     <content contentuid="h20450ab6g7510g45fegb137g6398531541ba" version="1">Enemies</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h35c56325g6090g4367g806fg6501624d4723" version="1">Enemy %s joined.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h35d521a9g6080g474fg806eg6129a24c430b" version="1">Enemy %s killed.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h37bb2c47g62eeg4791ga048g81f7426aa3d5" version="1">Enemy %s rejoined.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h37ed89a8g62b8g4dcfg904dgeba9b26fc98b" version="1">Enemy %s spawned.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b" version="1">Entered combat area.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -236,7 +239,7 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Debug.lua -->
     <content contentuid="h322608ceg6773g45d9gb011g53bfd233719d" version="1">Items</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h34873bdcg61d2g46e8g907bg408ef25962ac" version="1">Kill Score: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
@@ -263,7 +266,7 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua -->
     <content contentuid="h31b71a1eg64e2g44f4gb028g4292d20a60b0" version="1">Loot</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/NetEvents.lua -->
     <content contentuid="h2cb85222g79edg4077gb1f8gb61113da9433" version="1">Map not found.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Components.lua -->
@@ -293,11 +296,8 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Components.lua -->
     <content contentuid="h298720feg7cd2g475agb1abg413cd389631e" version="1">Out of stock</content>
 
-
+    <!-- CombatMod/CombatMod/Server/Player.lua -->
     <content contentuid="h979a14b3gc2cfg441egaa4ag92780868b05a" version="1">Perfect Clear! Double your score from %d to %d?</content>
-
-
-    <content contentuid="h637ce98fg3629g4bcdga504gfdabc726df89" version="1">Perfect Clear! Double your score from 5 to 10?</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Unlocks.lua -->
     <content contentuid="h255ed026g700bg4857gb166gde315344fc13" version="1">Permanent</content>
@@ -305,10 +305,10 @@
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
     <content contentuid="h28cd5020g7d98g4057g91bfge631339dc413" version="1">Persist Config</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
     <content contentuid="h4d21e11dg1874g4b44g87e1g2d22e5c30f00" version="1">Persisting config...</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/NetEvents.lua -->
     <content contentuid="h410f889dg145ag4ddcg8723gcbbae501e998" version="1">Picked up %d items.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Loot.lua -->
@@ -351,7 +351,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Extras.lua -->
     <content contentuid="hfafd2f0cgafa8g47a5g9c9cge1c3febec3e1" version="1">Recruit Origins (Experimental)</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/NetEvents.lua -->
     <content contentuid="h2e7ceb9cg7b29g4becg91d4gfd8af3f6dfa8" version="1">Recruiting %s.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Debug.lua -->
@@ -375,13 +375,13 @@ Difficulty increases with the score.</content>
 
     <content contentuid="h413f98d6g146ag4cd8gb720gcabe5502e89c" version="1">Resetting config...</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
     <content contentuid="h8ccc2af7gd999g47fagabffgf19c49ddd3be" version="1">Resetting templates...</content>
 
 
     <content contentuid="h06aadbc6g53ffg48e9gb359g9e8f517bbcad" version="1">Resurrect character and fully restore all resources.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h2bc3faaag7e96g4affgb18fg0c9993ad2ebb" version="1">Returned to camp.</content>
 
     <!-- CombatMod/CombatMod/Server/Templates/Unlocks.lua -->
@@ -396,7 +396,11 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/Server/Templates/Unlocks.lua -->
     <content contentuid="h3d445f63g6811g40a3ga0e7g76c502c554e7" version="1">Roll Rare Loot %dx</content>
 
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
+    <content contentuid="h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1" version="1">Round %d</content>
+
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h3d5fde62g680ag48b3gb0e6gced512c4ecf7" version="1">Round: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
@@ -406,19 +410,21 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/ModActive/Server/NetEvents.lua -->
     <content contentuid="hbc1acb0ege94fg49e5gb8f2g9f83dad0bda1" version="1">Scenario %s started.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h28fa5cc5g7dafg4099g81bcg96ff639eb4dd" version="1">Scenario ended.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/NetEvents.lua -->
     <content contentuid="hb72bdac5ge27eg48f9g8841g8e9f6a63acbd" version="1">Scenario not started.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h2bed91d3g7eb8g4c48ga18dgea2e03afc80c" version="1">Scenario restored.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Server/NetEvents.lua -->
     <content contentuid="h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed" version="1">Scenario stopped.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h218206b6g74d7g453egb12bg13585309317a" version="1">Scenario: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
@@ -427,13 +433,13 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Debug.lua -->
     <content contentuid="h243816eeg716dg443bgb170gb25dd352907f" version="1">Search</content>
 
-
+    <!-- CombatMod/CombatMod/Server/Player.lua -->
     <content contentuid="h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6" version="1">Skip to Camp?</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/StoryBypass.lua -->
     <content contentuid="hb13de5b9ge468g4b0eg8820ged68aa02cf4a" version="1">Skipped combat with %s</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/StoryBypass.lua -->
     <content contentuid="hf1c74802ga492g41d5gbc2fg47b31e0d6591" version="1">Skipped interaction with %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -454,7 +460,7 @@ Difficulty increases with the score.</content>
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
     <content contentuid="h323096eeg6765g4c3bgb010g3a5dd232187f" version="1">Start</content>
 
-
+    <!-- CombatMod/CombatMod/Server/Intro.lua -->
     <content contentuid="hc1216d49g9474g4381g8f21g25e7ad0307c5" version="1">Starting items added. Hirelings unlocked.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Debug.lua -->
@@ -475,10 +481,10 @@ Difficulty increases with the score.</content>
 
     <content contentuid="hf6e3e1c8ga3b6g4b49g9c5dg0d2fbe7f2f0d" version="1">Teleporting back to camp in %d seconds.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Map.lua -->
     <content contentuid="hc396e53dg96c3g4b06g8f0ag5d60ed287f42" version="1">Teleporting to different ACT</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
     <content contentuid="h2771ca17g7224g49f4ga144g2f9243660db0" version="1">Templates reset</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Debug.lua -->
@@ -494,6 +500,7 @@ Difficulty increases with the score.</content>
     <content contentuid="he699ae7dgb3ccg4fb2g8d5aga9d4ef788bf6" version="1">To Camp After n Seconds</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h33c0b3bcg6695g4e6eg900fg3808f22d1a2a" version="1">Total Rounds: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -523,13 +530,14 @@ Difficulty increases with the score.</content>
 
     <content contentuid="hd490c7efg81c5g492bgae7ag3f4dcc581d6f" version="1">Unlock needs a character.</content>
 
-
+    <!-- CombatMod/CombatMod/ModActive/Server/Unlock.lua -->
     <content contentuid="h8bfedf62gdeabg48a3gbb8cgdec519aefce7" version="1">Unlock out of stock.</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Unlocks.lua -->
     <content contentuid="h231a0e4eg764fg45b1gb102g93d7d320b1f5" version="1">Unlocks</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Control.lua -->
+    <!-- CombatMod/CombatMod/ModActive/Server/Scenario.lua -->
     <content contentuid="h8528df02gd07dg48a5gbb61gbec319439ce1" version="1">Upcoming Spawns: %s</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
@@ -560,10 +568,10 @@ Difficulty increases with the score.</content>
     <content contentuid="hcb742a6eg9e21g47f3gbf84g7195dda653b7" version="1">You found the secret cow level!</content>
 
     <!-- CombatMod/CombatMod/ModActive/Server/Unlock.lua -->
-    <content contentuid="hc327dd8cg9672g488dg9f01g4eebfd236cc9" version="1">Your Currency increased: %d -> %d!</content>
+    <content contentuid="h89d4bc36gdc81g4e96gbbaeg78f0598c5ad2" version="1">Your Currency changed: %d -> %d!</content>
 
-
-    <content contentuid="hefbbbf98gbaeeg4eacg9dc8g88cabfeaaae8" version="1">Your RogueScore increased: %d -> %d!</content>
+    <!-- CombatMod/CombatMod/ModActive/Server/GameMode.lua -->
+    <content contentuid="hc2618a3eg9734g4df6gbf15g2b90dd3709b2" version="1">Your RogueScore changed: %d -> %d!</content>
 
     <!-- CombatMod/CombatMod/ModActive/Client/GUI/Config.lua -->
     <content contentuid="hd2a986b6g87fcg4d3egbe19gab585c3b897a" version="1">apparently it was too easy</content>

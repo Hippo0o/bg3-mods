@@ -5,6 +5,12 @@
 		"Text": "%d RogueScore required",
 		"Version": 1
 	},
+	"%d enemies left.;1": {
+		"Handle": "h29013f4fg7c54g46a1ga1a3g20c7c38102e5",
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
+		"Text": "%d enemies left.",
+		"Version": 1
+	},
 	"%s RogueScore;1": {
 		"Handle": "h29c3d32ag7c96g4867gb1afg0e01938d2c23",
 		"Stack": ["CombatMod/CombatMod/Server/Templates/Unlocks.lua"],
@@ -31,7 +37,7 @@
 	},
 	"All enemies are dead.;1": {
 		"Handle": "hb5676e2age032g43b7gb865g45d19a4767f3",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "All enemies are dead.",
 		"Version": 1
 	},
@@ -175,13 +181,13 @@
 	},
 	"Combat is Starting.;1": {
 		"Handle": "h44afa6c1g11fag4f39g8779gc95f255beb7d",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Combat is Starting.",
 		"Version": 1
 	},
 	"Combat started.;1": {
 		"Handle": "h2e517b01g7b04g42e5g81d6g248323f406a1",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Combat started.",
 		"Version": 1
 	},
@@ -265,7 +271,7 @@
 	},
 	"Destroyed %d items.;1": {
 		"Handle": "h42fa25a1g17afg470fg871cg9169253eb34b",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/NetEvents.lua"],
 		"Text": "Destroyed %d items.",
 		"Version": 1
 	},
@@ -283,7 +289,7 @@
 	},
 	"Dropping loot.;1": {
 		"Handle": "h2a64adc6g7f31g4f89gb195g79ef53b75bcd",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Item.lua"],
 		"Text": "Dropping loot.",
 		"Version": 1
 	},
@@ -319,31 +325,31 @@
 	},
 	"Enemy %s joined.;1": {
 		"Handle": "h35c56325g6090g4367g806fg6501624d4723",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Enemy %s joined.",
 		"Version": 1
 	},
 	"Enemy %s killed.;1": {
 		"Handle": "h35d521a9g6080g474fg806eg6129a24c430b",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Enemy %s killed.",
 		"Version": 1
 	},
 	"Enemy %s rejoined.;1": {
 		"Handle": "h37bb2c47g62eeg4791ga048g81f7426aa3d5",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Enemy %s rejoined.",
 		"Version": 1
 	},
 	"Enemy %s spawned.;1": {
 		"Handle": "h37ed89a8g62b8g4dcfg904dgeba9b26fc98b",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Enemy %s spawned.",
 		"Version": 1
 	},
 	"Entered combat area.;1": {
 		"Handle": "hb6f1a7a1ge3a4g4f2fg885cg29492a7e0b6b",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Entered combat area.",
 		"Version": 1
 	},
@@ -475,7 +481,7 @@
 	},
 	"Kill Score: %s;1": {
 		"Handle": "h34873bdcg61d2g46e8g907bg408ef25962ac",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Kill Score: %s",
 		"Version": 1
 	},
@@ -529,7 +535,7 @@
 	},
 	"Map not found.;1": {
 		"Handle": "h2cb85222g79edg4077gb1f8gb61113da9433",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/NetEvents.lua"],
 		"Text": "Map not found.",
 		"Version": 1
 	},
@@ -589,14 +595,8 @@
 	},
 	"Perfect Clear! Double your score from %d to %d?;1": {
 		"Handle": "h979a14b3gc2cfg441egaa4ag92780868b05a",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/Server/Player.lua"],
 		"Text": "Perfect Clear! Double your score from %d to %d?",
-		"Version": 1
-	},
-	"Perfect Clear! Double your score from 5 to 10?;1": {
-		"Handle": "h637ce98fg3629g4bcdga504gfdabc726df89",
-		"Stack": [],
-		"Text": "Perfect Clear! Double your score from 5 to 10?",
 		"Version": 1
 	},
 	"Permanent;1": {
@@ -613,13 +613,13 @@
 	},
 	"Persisting config...;1": {
 		"Handle": "h4d21e11dg1874g4b44g87e1g2d22e5c30f00",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "Persisting config...",
 		"Version": 1
 	},
 	"Picked up %d items.;1": {
 		"Handle": "h410f889dg145ag4ddcg8723gcbbae501e998",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/NetEvents.lua"],
 		"Text": "Picked up %d items.",
 		"Version": 1
 	},
@@ -700,7 +700,7 @@
 	},
 	"Recruiting %s.;1": {
 		"Handle": "h2e7ceb9cg7b29g4becg91d4gfd8af3f6dfa8",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/NetEvents.lua"],
 		"Text": "Recruiting %s.",
 		"Version": 1
 	},
@@ -748,7 +748,7 @@
 	},
 	"Resetting templates...;1": {
 		"Handle": "h8ccc2af7gd999g47fagabffgf19c49ddd3be",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "Resetting templates...",
 		"Version": 1
 	},
@@ -760,7 +760,7 @@
 	},
 	"Returned to camp.;1": {
 		"Handle": "h2bc3faaag7e96g4affgb18fg0c9993ad2ebb",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Returned to camp.",
 		"Version": 1
 	},
@@ -788,9 +788,18 @@
 		"Text": "Roll Rare Loot %dx",
 		"Version": 1
 	},
+	"Round %d;1": {
+		"Handle": "h38b71f0eg6de2g44a5gb0b8g42c3d29a60e1",
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
+		"Text": "Round %d",
+		"Version": 1
+	},
 	"Round: %s;1": {
 		"Handle": "h3d5fde62g680ag48b3gb0e6gced512c4ecf7",
-		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
+		"Stack": [
+			"CombatMod/CombatMod/ModActive/Client/GUI/Control.lua",
+			"CombatMod/CombatMod/ModActive/Server/Scenario.lua"
+		],
 		"Text": "Round: %s",
 		"Version": 1
 	},
@@ -811,13 +820,13 @@
 	},
 	"Scenario ended.;1": {
 		"Handle": "h28fa5cc5g7dafg4099g81bcg96ff639eb4dd",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Scenario.lua"],
 		"Text": "Scenario ended.",
 		"Version": 1
 	},
 	"Scenario not started.;1": {
 		"Handle": "hb72bdac5ge27eg48f9g8841g8e9f6a63acbd",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/NetEvents.lua"],
 		"Text": "Scenario not started.",
 		"Version": 1
 	},
@@ -829,13 +838,19 @@
 	},
 	"Scenario stopped.;1": {
 		"Handle": "h2a7aafc0g7f2fg4fa9g9194g99cf33b6bbed",
-		"Stack": [],
+		"Stack": [
+			"CombatMod/CombatMod/ModActive/Server/Scenario.lua",
+			"CombatMod/CombatMod/ModActive/Server/NetEvents.lua"
+		],
 		"Text": "Scenario stopped.",
 		"Version": 1
 	},
 	"Scenario: %s;1": {
 		"Handle": "h218206b6g74d7g453egb12bg13585309317a",
-		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
+		"Stack": [
+			"CombatMod/CombatMod/ModActive/Client/GUI/Control.lua",
+			"CombatMod/CombatMod/ModActive/Server/Scenario.lua"
+		],
 		"Text": "Scenario: %s",
 		"Version": 1
 	},
@@ -853,19 +868,19 @@
 	},
 	"Skip to Camp?;1": {
 		"Handle": "h2bb88d7eg7eedg4d82gb188gbbe4d3aa99c6",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/Server/Player.lua"],
 		"Text": "Skip to Camp?",
 		"Version": 1
 	},
 	"Skipped combat with %s;1": {
 		"Handle": "hb13de5b9ge468g4b0eg8820ged68aa02cf4a",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/StoryBypass.lua"],
 		"Text": "Skipped combat with %s",
 		"Version": 1
 	},
 	"Skipped interaction with %s;1": {
 		"Handle": "hf1c74802ga492g41d5gbc2fg47b31e0d6591",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/StoryBypass.lua"],
 		"Text": "Skipped interaction with %s",
 		"Version": 1
 	},
@@ -907,7 +922,7 @@
 	},
 	"Starting items added. Hirelings unlocked.;1": {
 		"Handle": "hc1216d49g9474g4381g8f21g25e7ad0307c5",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/Server/Intro.lua"],
 		"Text": "Starting items added. Hirelings unlocked.",
 		"Version": 1
 	},
@@ -949,13 +964,13 @@
 	},
 	"Teleporting to different ACT;1": {
 		"Handle": "hc396e53dg96c3g4b06g8f0ag5d60ed287f42",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Map.lua"],
 		"Text": "Teleporting to different ACT",
 		"Version": 1
 	},
 	"Templates reset;1": {
 		"Handle": "h2771ca17g7224g49f4ga144g2f9243660db0",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Config.lua"],
 		"Text": "Templates reset",
 		"Version": 1
 	},
@@ -985,7 +1000,10 @@
 	},
 	"Total Rounds: %s;1": {
 		"Handle": "h33c0b3bcg6695g4e6eg900fg3808f22d1a2a",
-		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
+		"Stack": [
+			"CombatMod/CombatMod/ModActive/Client/GUI/Control.lua",
+			"CombatMod/CombatMod/ModActive/Server/Scenario.lua"
+		],
 		"Text": "Total Rounds: %s",
 		"Version": 1
 	},
@@ -1045,7 +1063,7 @@
 	},
 	"Unlock out of stock.;1": {
 		"Handle": "h8bfedf62gdeabg48a3gbb8cgdec519aefce7",
-		"Stack": [],
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/Unlock.lua"],
 		"Text": "Unlock out of stock.",
 		"Version": 1
 	},
@@ -1057,7 +1075,10 @@
 	},
 	"Upcoming Spawns: %s;1": {
 		"Handle": "h8528df02gd07dg48a5gbb61gbec319439ce1",
-		"Stack": ["CombatMod/CombatMod/ModActive/Client/GUI/Control.lua"],
+		"Stack": [
+			"CombatMod/CombatMod/ModActive/Client/GUI/Control.lua",
+			"CombatMod/CombatMod/ModActive/Server/Scenario.lua"
+		],
 		"Text": "Upcoming Spawns: %s",
 		"Version": 1
 	},
@@ -1115,16 +1136,16 @@
 		"Text": "You found the secret cow level!",
 		"Version": 1
 	},
-	"Your Currency increased: %d -> %d!;1": {
-		"Handle": "hc327dd8cg9672g488dg9f01g4eebfd236cc9",
+	"Your Currency changed: %d -> %d!;1": {
+		"Handle": "h89d4bc36gdc81g4e96gbbaeg78f0598c5ad2",
 		"Stack": ["CombatMod/CombatMod/ModActive/Server/Unlock.lua"],
-		"Text": "Your Currency increased: %d -> %d!",
+		"Text": "Your Currency changed: %d -> %d!",
 		"Version": 1
 	},
-	"Your RogueScore increased: %d -> %d!;1": {
-		"Handle": "hefbbbf98gbaeeg4eacg9dc8g88cabfeaaae8",
-		"Stack": [],
-		"Text": "Your RogueScore increased: %d -> %d!",
+	"Your RogueScore changed: %d -> %d!;1": {
+		"Handle": "hc2618a3eg9734g4df6gbf15g2b90dd3709b2",
+		"Stack": ["CombatMod/CombatMod/ModActive/Server/GameMode.lua"],
+		"Text": "Your RogueScore changed: %d -> %d!",
 		"Version": 1
 	},
 	"apparently it was too easy;1": {

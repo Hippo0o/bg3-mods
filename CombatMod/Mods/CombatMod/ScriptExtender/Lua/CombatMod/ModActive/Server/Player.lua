@@ -204,3 +204,11 @@ end
 function Player.OverridePartySize(size)
     Osi.SetMaxPartySizeOverride(size)
 end
+
+function Player.GiveExperience(exp)
+    StoryBypass.ExpLock.PauseTemporary()
+
+    for _, p in pairs(GU.DB.GetPlayers()) do
+        Osi.AddExplorationExperience(p, exp)
+    end
+end

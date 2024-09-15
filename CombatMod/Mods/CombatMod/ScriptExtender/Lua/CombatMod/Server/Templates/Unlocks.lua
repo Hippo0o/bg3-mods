@@ -169,11 +169,7 @@ local ngPlus = {
         Character = false,
         Requirement = { "NEWGAME_PLUS", "ScoreMultiplier" },
         OnBuy = function(self, character)
-            StoryBypass.ExpLock.PauseTemporary()
-
-            for _, p in pairs(GU.DB.GetPlayers()) do
-                Osi.AddExplorationExperience(p, 1000)
-            end
+            Player.GiveExperience(1000)
         end,
     },
     {
@@ -373,11 +369,7 @@ return table.extend({
         Amount = 4,
         Character = false,
         OnBuy = function(self, character)
-            StoryBypass.ExpLock.PauseTemporary()
-
-            for _, p in pairs(GU.DB.GetPlayers()) do
-                Osi.AddExplorationExperience(p, 1000)
-            end
+            Player.GiveExperience(1000)
         end,
     },
     {

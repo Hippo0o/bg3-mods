@@ -295,7 +295,7 @@ function GameMode.RewardRogueScore(scenario)
     if endRound <= scenario:TotalRounds() then
         Event.Trigger("ScenarioPerfectClear", scenario)
 
-        Player.AskConfirmation(__("Perfect Clear! Double your score from %d to %d?", baseScore, baseScore * 2))
+        Player.AskConfirmation("Perfect Clear! Double your score from %d to %d?", baseScore, baseScore * 2)
             :After(function(confirmed)
                 if confirmed then
                     GameMode.UpdateRogueScore(score + baseScore)

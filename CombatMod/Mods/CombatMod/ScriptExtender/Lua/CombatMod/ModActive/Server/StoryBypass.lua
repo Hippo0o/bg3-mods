@@ -148,7 +148,7 @@ function StoryBypass.ClearArea(character)
                         b.Entity.Health
                         or b.Entity.ServerItem.CanBePickedUp
                         or b.Entity.ServerItem.CanUse
-                        or b.Entity.CanBeDisarmed
+                        or b.Entity.ServerDisarmAttempt
                         or b.Entity.ServerItem.Template.Id == C.ScenarioHelper.TemplateId
                         or b.Entity.ServerItem.Template.Id == C.MapHelper
                     then -- TODO remove more CanUse objects
