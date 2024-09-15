@@ -129,30 +129,41 @@ function StoryBypass.ClearArea(character)
                             Osi.Unlock(b.Guid)
                             Osi.Open(b.Guid)
                         end
-                        if b.Entity.Health then
-                            b.Entity.Health.Hp = 666
-                            b.Entity.Health.MaxHp = 666
-                            b.Entity:Replicate("Health")
-                            b.Entity.Resistances.Resistances = table.map(
-                                { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, -- 14
-                                function()
-                                    return {
-                                        "ImmuneToMagical",
-                                        "ImmuneToNonMagical",
-                                    }
-                                end
-                            )
-                            b.Entity:Replicate("Resistances")
-                        end
                     elseif
-                        b.Entity.Health
-                        or b.Entity.ServerItem.CanBePickedUp
-                        or b.Entity.ServerItem.CanUse
+                        b.Entity.ServerItem.CanBePickedUp
                         or b.Entity.ServerDisarmAttempt
                         or b.Entity.ServerItem.Template.Id == C.ScenarioHelper.TemplateId
                         or b.Entity.ServerItem.Template.Id == C.MapHelper
                     then -- TODO remove more CanUse objects
                         GU.Object.Remove(b.Guid)
+                    elseif b.Entity.ServerItem.CanUse then
+                        b.Entity.ServerItem.CanUse = false
+                    end
+
+                    b.Entity.ServerItem.CanBeMoved = false
+
+                    xpcall(function()
+                        if b.Entity.InventoryOwner then
+                            for _, item in pairs(b.Entity.InventoryOwner.Inventories[1].InventoryContainer.Items) do
+                                GU.Object.Remove(item.Item.Uuid.EntityUuid)
+                            end
+                        end
+                    end, L.Error)
+
+                    if b.Entity.Health then
+                        b.Entity.Health.Hp = 666
+                        b.Entity.Health.MaxHp = 666
+                        b.Entity:Replicate("Health")
+                        b.Entity.Resistances.Resistances = table.map(
+                            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 }, -- 14
+                            function()
+                                return {
+                                    "ImmuneToMagical",
+                                    "ImmuneToNonMagical",
+                                }
+                            end
+                        )
+                        b.Entity:Replicate("Resistances")
                     end
                 end
             end
