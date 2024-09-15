@@ -164,7 +164,7 @@ function StoryBypass.ClearArea(character)
                             end
                         )
                         b.Entity:Replicate("Resistances")
-                        Osi.ApplyStatus(b.Guid, "INVULNERABLE", -1)
+                        Osi.ApplyStatus(b.Guid, "INVULNERABLE_NOT_SHOWN", -1)
                     end
                 end
             end
