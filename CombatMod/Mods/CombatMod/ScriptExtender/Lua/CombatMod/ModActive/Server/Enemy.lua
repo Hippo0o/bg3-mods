@@ -255,9 +255,10 @@ function Object:Modify(keepFaction)
         Osi.RequestSetSwarmGroup(self.GUID, "")
     end
 
-    -- if not self.Temporary then
-    --     Osi.SetTag(self.GUID, "6d60bed7-10cc-4b52-8fb7-baa75181cd49") -- IGNORE_COMBAT_LATE_JOIN_PENALTY
-    -- end
+    if not self.Temporary then
+        -- Osi.SetTag(self.GUID, "6d60bed7-10cc-4b52-8fb7-baa75181cd49") -- IGNORE_COMBAT_LATE_JOIN_PENALTY
+        Osi.ClearTag(self.GUID, "26c78224-a4c1-43e4-b943-75e7fa1bfa41") -- SUMMON
+    end
 
     Osi.SetTag(self.GUID, "b5825091-f2ed-4657-8d86-c0d020c358a0") -- PALADIN_BLOCK_OATHBREAK
     Osi.ClearTag(self.GUID, "9787450d-f34d-43bd-be88-d2bac00bb8ee") -- AI_UNPREFERRED_TARGET

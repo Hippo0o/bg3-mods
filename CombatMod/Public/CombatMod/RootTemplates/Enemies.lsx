@@ -10,12 +10,12 @@
 					<attribute id="Flag" type="int32" value="0" />
 					<attribute id="IsEquipmentLootable" type="bool" value="False" />
 					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="MapKey" type="FixedString"
 						value="d743f1ac-0934-4bf1-88a8-56aeb062ca2d" />
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="339b7a9b-fce9-42d3-a542-2cb116c174aa" />
 					<attribute id="Name" type="LSString" value="TOT_LOW_KurwinCoffin_Kobolds_Melee" />
-					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="LOW_KoboldGang_Melee" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -179,7 +179,7 @@
 						value="ec34598b-0a16-4b50-b271-c6682893837f" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Humans_Female_FlamingFist_Ranger_B" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Human_Ranger" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -372,7 +372,7 @@
 						value="e2dc5cb8-cd3d-4bf3-8f7d-a7f66f12ad12" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Dwarves_Female_Hill_FlamingFist_Cleric" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_magic_smart" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Dwarf_Cleric" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -636,7 +636,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="f5f1adc6-bc9a-418c-af58-af412f8b9c5d" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Female_Ranger" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_ranged" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Ranger" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -700,7 +700,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="74672dc8-497c-4d9c-92b7-7347ab643e43" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Female_Raider" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Raider" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -830,7 +830,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="66487c2e-972e-40ad-af97-e2f286c8c501" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Female_Gish_Strong" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_smart" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Gish_Strong" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -993,7 +993,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="122ce989-2603-4bf4-a3ee-8b2513c39d5e" />
 					<attribute id="Name" type="LSString" value="TOT_Shadow_A_Summon" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="shadow" />
 					<attribute id="Stats" type="FixedString" value="Shadow_Summon" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -1092,7 +1092,7 @@
 						value="d7d3d4ec-095a-460c-817f-56dd1df3561a" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Dwarves_Male_Hill_FlamingFist_Cleric" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_magic_smart" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Dwarf_Cleric" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -1518,17 +1518,17 @@
 					<attribute id="MapKey" type="FixedString"
 						value="cd9d7499-adcb-440b-b05f-7f6141862645" />
 					<attribute id="ParentTemplateId" type="FixedString"
-						value="9ed52ea6-0f17-4c94-b3b2-157ff1551dfc" />
+						value="8cbfdc24-e73c-4083-a746-d23c8901c458" />
 					<attribute id="Name" type="LSString"
 						value="TOT_WoodWoad_Dryad_ConjureWoodlandBeings" />
-					<attribute id="AiHint" type="guid" value="f76e60e1-2957-470b-8a25-efdf32475ce0" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
-					<attribute id="Stats" type="FixedString" value="WoodWoad_Dryad_Summon" />
+					<attribute id="Stats" type="FixedString" value="WoodWoad" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
 						value="70451ccc-1d24-5933-a0f7-dfda5e4dc2be" />
 					<attribute id="Icon" type="FixedString"
 						value="70451ccc-1d24-5933-a0f7-dfda5e4dc2be-EQP_WoodWoad_Conjure_(Icon_WoodWoad)" />
-					<attribute id="Equipment" type="FixedString" value="EQP_WoodWoad_Conjure" />
+					<attribute id="Equipment" type="FixedString" value="EQP_WoodWoad_Club" />
 					<attribute id="SpellSet" type="FixedString" value="CommonBeastActions" />
 					<attribute id="LevelOverride" type="int32" value="6" />
 					<children>
@@ -1586,7 +1586,7 @@
 						value="a90b6296-1261-44d1-b6bf-4f07eb0f7b77" />
 					<attribute id="Name" type="LSString"
 						value="TOT_HalfElves_Female_Wood_Cultist_Bane_IronConsul" />
-					<attribute id="AiHint" type="guid" value="c1b1489e-ffc5-447f-9866-53cd808e2e18" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_magic" />
 					<attribute id="Stats" type="FixedString" value="HalfElf_Cultist_Bane_IronConsul" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -1779,7 +1779,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="9a8b2d7f-e1a3-456a-8c66-c362cb6d1539" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Female_GateMaster" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="mage" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Gish" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -2070,7 +2070,7 @@
 						value="cc69a4f1-3dea-4e3a-86c2-7953ed10569e" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Undead_DarkJusticiar_Melee_Scimitar_DW_Summon" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Melee" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -2137,7 +2137,7 @@
 						value="4b5f8dbe-04c4-4d0c-a8ac-a1366ca3d49e" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Humans_Male_FlamingFist_Ranger_B" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Human_Ranger" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -2208,7 +2208,7 @@
 						value="4885c1bf-e721-b36a-9f8b-9ac125121030" />
 					<attribute id="Icon" type="FixedString"
 						value="4885c1bf-e721-b36a-9f8b-9ac125121030-_(Icon_Bugbear_Male)" />
-					<attribute id="Equipment" type="FixedString" value="" />
+					<attribute id="Equipment" type="FixedString" value="EQP_Bugbear_MorningStar" />
 					<attribute id="SpellSet" type="FixedString" value="CommonNPCActions" />
 					<attribute id="LevelOverride" type="int32" value="3" />
 					<children>
@@ -2265,7 +2265,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="249a5352-3455-4f61-aaae-d37b7dd6aeb7" />
 					<attribute id="Name" type="LSString" value="TOT_Undead_DarkJusticiar_Melee" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Melee" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -2396,7 +2396,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="4249f5a3-1a88-4ab7-9afb-40ed069ccf15" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Female_Raider_Strong" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Raider_Strong" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -2429,7 +2429,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="53af9627-5afb-4985-a584-3fa532b3078e" />
 					<attribute id="Name" type="LSString" value="TOT_Mephit_Grease" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="LOW_GreaseWizard_Mephit" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -2655,7 +2655,7 @@
 						value="2774a43e-db7a-49d4-90b2-e07097b0b531" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Humans_Female_FlamingFist_Cleric" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_magic_smart" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Human_Cleric" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -2882,12 +2882,12 @@
 					<attribute id="MapKey" type="FixedString"
 						value="df06f3ce-5d8e-4881-9f0b-24a4060e6771" />
 					<attribute id="ParentTemplateId" type="FixedString"
-						value="74e37928-4361-4d5b-a304-0ba82f5e398a" />
+						value="f765566e-3f98-457b-9048-59bdcc66f51d" />
 					<attribute id="Name" type="LSString"
-						value="TOT_MEPHIT_Mud_A_ConjureElementals_Summon" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+						value="TOT_MEPHIT_Mud_A" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
-					<attribute id="Stats" type="FixedString" value="Mephit_Mud_ConjureElemental" />
+					<attribute id="Stats" type="FixedString" value="Mephit_Mud" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
 						value="0920593a-1091-dda9-7b5b-7ee3cb87c266" />
 					<attribute id="Icon" type="FixedString"
@@ -3013,7 +3013,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="2a9aa281-93fd-4bda-8c41-59006f57ff94" />
 					<attribute id="Name" type="LSString" value="TOT_Hag_Green_Act3Hag_Double" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="hag_green" />
 					<attribute id="Stats" type="FixedString" value="HAG_AuntieEthel_Double" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -3045,7 +3045,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="d4edf374-6efe-463f-8899-889db26dee4e" />
 					<attribute id="Name" type="LSString" value="TOT_Hag_Green_Act3Hag" />
-					<attribute id="AiHint" type="guid" value="1902723d-dd16-4e7a-87d6-7b07f63add79" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="hag_green" />
 					<attribute id="Stats" type="FixedString" value="HAG_AuntieEthel" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -3176,7 +3176,7 @@
 						value="8f940f2e-2e46-4944-b871-5f04d03e8635" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Undead_DarkJusticiar_Ranger_Summon" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Ranger_Summon" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -3538,7 +3538,7 @@
 						value="91392ba7-4a09-40f2-80c3-5410a165adaa" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Humans_Male_FlamingFist_Caster_B" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="mage" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Human_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -3604,7 +3604,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="460b5168-4f85-426b-a3bd-aee2248ee9f9" />
 					<attribute id="Name" type="LSString" value="TOT_Humans_Male_FlamingFist_Cleric" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_magic_smart" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Human_Cleric" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -3670,7 +3670,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="0212f79d-38cc-4d0c-9d07-920e843b20dd" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Male_Ranger_Tier2" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_ranged" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Ranger_Strong" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -3734,7 +3734,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="7e33f957-e22a-4654-b1bf-c06a269f3e53" />
 					<attribute id="Name" type="LSString" value="TOT_Undead_DarkJusticiar_Ranger" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Ranger" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -4058,7 +4058,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="e9cd3bf8-6e97-47c4-9bac-106f46123141" />
 					<attribute id="Name" type="LSString" value="TOT_BLIGHT_VineBlight_Dark_A" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="beast_ranged" />
 					<attribute id="Stats" type="FixedString" value="Blight_Vine_Dark" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -4090,7 +4090,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="fb2bbd97-c390-4dac-b6b8-815937f865fc" />
 					<attribute id="Name" type="LSString" value="TOT_Kuotoa" />
-					<attribute id="AiHint" type="guid" value="f76e60e1-2957-470b-8a25-efdf32475ce0" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="Kuotoa" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -4476,7 +4476,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="2facfc7e-5fe9-4a8d-9fec-dcb5ce6c5ebf" />
 					<attribute id="Name" type="LSString" value="TOT_AnimatedArmor" />
-					<attribute id="AiHint" type="guid" value="f76e60e1-2957-470b-8a25-efdf32475ce0" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_stupid" />
 					<attribute id="Stats" type="FixedString" value="AnimatedArmor" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -4508,7 +4508,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="73813152-927c-42c3-b3d9-b19ff041dc13" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Male_Gish_Strong" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_smart" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Gish_Strong" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -4574,7 +4574,7 @@
 						value="1a80541e-f990-4a07-ba08-008b9992f7be" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Humans_Female_FlamingFist_Caster_B" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="mage" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Human_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -4736,7 +4736,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="70c3189a-ec6a-420a-86b9-865c1fe4d73d" />
 					<attribute id="Name" type="LSString" value="TOT_Undead_DarkJusticiar_Caster" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="mage" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -4802,7 +4802,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="05157722-2144-4712-922b-20ae9ff5f88f" />
 					<attribute id="Name" type="LSString" value="TOT_Cloaker_Phantasm" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="cloaker_phantasm" />
 					<attribute id="Stats" type="FixedString" value="Cloaker_Phantasm" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -5192,7 +5192,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="bf128eb5-3f9b-4448-839f-2f4e7bd4f7ae" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Male_Warlock" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_mage" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -5223,10 +5223,10 @@
 						value="e76dfdfd-66f1-4ea5-96c2-4b7e979f29e1" />
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="9bfb58f1-52d2-45d4-8485-0eb224f1a87f" />
-					<attribute id="Name" type="LSString" value="TOT_MEPHIT_Ice_A_Summon" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="Name" type="LSString" value="TOT_MEPHIT_Ice_A" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
-					<attribute id="Stats" type="FixedString" value="Mephit_Ice_ConjureElemental" />
+					<attribute id="Stats" type="FixedString" value="Mephit_Ice" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
 						value="6d1ab2b2-8e58-e10d-beb4-014fd2f075e6" />
 					<attribute id="Icon" type="FixedString"
@@ -5484,7 +5484,7 @@
 						value="ca14c991-1191-401a-8a11-adbde2c12083" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Dwarves_Female_Hill_FlamingFist_Ranger_B" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Dwarf_Ranger" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -5516,7 +5516,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="65de24d9-acf3-436a-95ef-b8f973ee07c2" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Male_Raider_Strong" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Raider_Strong" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -5550,7 +5550,7 @@
 						value="53faee69-a102-48f6-82b2-7f47a8c9494c" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Undead_DarkJusticiar_Melee_Scimitar_Shield_Summon" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Melee" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -5583,7 +5583,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="7764910f-cfdd-4684-b1c2-11bd49d0079b" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Female_Gish" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_smart" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Gish" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -5616,7 +5616,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="bdf828ab-4335-4626-b159-312b67397011" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Male_Ranger" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_ranged" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Ranger" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -5980,7 +5980,7 @@
 						value="ae247710-a2dc-4302-8bd0-e6ef2ba498c6" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Dwarves_Male_Hill_FlamingFist_Caster_B" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="mage" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Dwarf_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -6080,7 +6080,7 @@
 						value="24d398bb-52ec-4eb6-ba52-5a3c22c2eed1" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Dwarves_Male_Hill_FlamingFist_Ranger_B" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Dwarf_Ranger" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -6211,7 +6211,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="be97477c-a045-4d43-b084-b9727d73832b" />
 					<attribute id="Name" type="LSString" value="TOT_Githyanki_Male_Raider" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="ranged" />
 					<attribute id="Stats" type="FixedString" value="Githyanki_Raider" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -6276,7 +6276,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="01fa8d64-f63e-4bb8-9ee4-cba84dad3781" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Male_Caster" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_mage" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -6438,7 +6438,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="499f0cbf-2549-4502-894f-be3cd3733ab5" />
 					<attribute id="Name" type="LSString" value="TOT_Cloaker" />
-					<attribute id="AiHint" type="guid" value="f76e60e1-2957-470b-8a25-efdf32475ce0" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="Cloaker" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -7093,7 +7093,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="9e9000e1-c4cf-42cf-8f5c-60e4cda2bca5" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Female_Caster" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_mage" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -7157,7 +7157,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="28eb9dbc-af0e-4272-b921-67363eeafede" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Female_Ranger_Tier2" />
-					<attribute id="AiHint" type="guid" value="3cae4ff5-e9c0-485b-b695-f8830961a781" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_ranged" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Ranger_Strong" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -7221,7 +7221,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="19aafe06-624c-4dd4-9480-60a359fb9c50" />
 					<attribute id="Name" type="LSString" value="TOT_Goblins_Male_Devout" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="goblin_mage" />
 					<attribute id="Stats" type="FixedString" value="Goblin_Cleric" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -7319,7 +7319,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="89419ac3-95d1-4c90-9a29-7b6445acb270" />
 					<attribute id="Name" type="LSString" value="TOT_Undead_DarkJusticiar_Boss" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee_large" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Boss" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -7352,7 +7352,7 @@
 						value="635d439b-9a48-4ccd-959d-66dd77164a45" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Undead_DarkJusticiar_Melee_Mace_Shield_Summon" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="DarkJusticiar_Melee" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -7385,7 +7385,7 @@
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="6597824a-fc73-474a-b594-b3bbd8591016" />
 					<attribute id="Name" type="LSString" value="TOT_Construct_FleshGolem" />
-					<attribute id="AiHint" type="guid" value="f5614548-32cc-4e2e-b108-32e5d532471e" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Stats" type="FixedString" value="FleshGolem" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -7616,7 +7616,7 @@
 						value="47909493-0907-4d7e-9e02-88d8c035d0cc" />
 					<attribute id="Name" type="LSString"
 						value="TOT_Dwarves_Female_Hill_FlamingFist_Caster_B" />
-					<attribute id="AiHint" type="guid" value="45a231e4-e94f-4b0e-a941-2daf1adf44b5" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="mage" />
 					<attribute id="Stats" type="FixedString" value="FlamingFist_Dwarf_Caster" />
 					<attribute id="CharacterVisualResourceID" type="FixedString"
@@ -8484,6 +8484,7 @@
 
 				<node id="GameObjects">
 					<attribute id="Archetype" type="FixedString" value="melee" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Flag" type="int32" value="0" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="MapKey" type="FixedString"
@@ -8508,6 +8509,9 @@
 				</node>
 
 				<node id="GameObjects">
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="Archetype" type="FixedString" value="melee" />
 					<attribute id="Flag" type="int32" value="0" />
 					<attribute id="LevelName" type="FixedString" value="" />
@@ -8534,6 +8538,9 @@
 
 				<node id="GameObjects">
 					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="ced6bfeb-8f6f-47d0-943f-77833f643318" />
@@ -8554,6 +8561,9 @@
 
 				<node id="GameObjects">
 					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="86e4ef7c-9ad0-42c5-a868-0ed52f627013" />
@@ -8573,6 +8583,9 @@
 				</node>
 				<node id="GameObjects">
 					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="b3356d4d-397a-42b9-adb4-bef555124cb5" />
@@ -8592,6 +8605,9 @@
 				</node>
 				<node id="GameObjects">
 					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
 					<attribute id="LevelName" type="FixedString" value="" />
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="6aa53435-94e4-45d6-a056-144866910f3e" />
@@ -8599,6 +8615,35 @@
 						value="c665134b-2ed9-49ca-b775-0b5eab6502ec" />
 					<attribute id="Name" type="LSString" value="TOT_Myconid_Slender_Green" />
 					<attribute id="Type" type="FixedString" value="character" />
+					<children>
+						<node id="Treasures">
+							<children>
+								<node id="TreasureItem">
+									<attribute id="Object" type="FixedString" value="Empty" />
+								</node>
+							</children>
+						</node>
+					</children>
+				</node>
+
+				<node id="GameObjects">
+					<attribute id="Flag" type="int32" value="0" />
+					<attribute id="IsEquipmentLootable" type="bool" value="False" />
+					<attribute id="IsLootable" type="bool" value="False" />
+					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
+					<attribute id="LevelName" type="FixedString" value="" />
+					<attribute id="MapKey" type="FixedString"
+						value="87b1bd02-a3dd-4e95-9ff7-0a468a383c86" />
+					<attribute id="Type" type="FixedString" value="character" />
+					<attribute id="CharacterVisualResourceID" type="FixedString"
+						value="3addbe4e-f867-6435-c260-fc3a3be53e87" />
+					<attribute id="Equipment" type="FixedString" value="EQP_Club" />
+					<attribute id="Icon" type="FixedString"
+						value="3addbe4e-f867-6435-c260-fc3a3be53e87-EQP_Club_(Icon_Dryad)" />
+					<attribute id="ParentTemplateId" type="FixedString"
+						value="07d79901-9cb9-41e7-a289-e8b38432d24e" />
+					<attribute id="Name" type="LSString" value="TOT_Bipedal_Fey_Dryad" />
+					<attribute id="Stats" type="FixedString" value="Dryad" />
 					<children>
 						<node id="Treasures">
 							<children>
