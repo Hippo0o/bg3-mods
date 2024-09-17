@@ -314,18 +314,6 @@ return {
 	},
 	{
 		Info = {
-			AC = 12,
-			Level = 3,
-			Pwr = 42.0,
-			Stats = -1,
-			Vit = 46,
-		},
-		Name = "TOT_LOW_Thay_Undead_Ghoul",
-		TemplateId = "e8069aea-1930-49b2-b6a4-5b27d85ad9b8",
-		Tier = "mid",
-	},
-	{
-		Info = {
 			AC = 11,
 			Level = 4,
 			Pwr = 43.0,
@@ -624,18 +612,6 @@ return {
 		Name = "TOT_SteelWatcher_Quadruped_A",
 		TemplateId = "011210c0-744d-413f-beaf-a0d31d9fcf99",
 		Tier = "mythical",
-	},
-	{
-		Info = {
-			AC = 12,
-			Level = 3,
-			Pwr = 30.0,
-			Stats = -1,
-			Vit = 22,
-		},
-		Name = "TOT_Undead_Ghoul_Clothing",
-		TemplateId = "cf48a924-53ef-490f-bd96-f79ada85e664",
-		Tier = "mid",
 	},
 	{
 		Info = {
@@ -1045,18 +1021,18 @@ return {
 		TemplateId = "b82ab26d-b6fe-46df-b354-ad8e63407fa4",
 		Tier = "ultra",
 	},
-	{
-		Info = {
-			AC = 12,
-			Level = 6,
-			Pwr = 75.5,
-			Stats = 1,
-			Vit = 95,
-		},
-		Name = "TOT_LOW_GreaseWizard_FireElemental",
-		TemplateId = "344345b4-5f7d-4116-8570-9bbfd7320d70",
-		Tier = "ultra",
-	},
+	-- {
+	-- 	Info = {
+	-- 		AC = 12,
+	-- 		Level = 6,
+	-- 		Pwr = 75.5,
+	-- 		Stats = 1,
+	-- 		Vit = 95,
+	-- 	},
+	-- 	Name = "TOT_LOW_GreaseWizard_FireElemental",
+	-- 	TemplateId = "344345b4-5f7d-4116-8570-9bbfd7320d70",
+	-- 	Tier = "ultra",
+	-- },
 	{
 		Info = {
 			AC = 11,
@@ -1597,18 +1573,18 @@ return {
 		TemplateId = "543adbde-c8b7-48dd-962f-9faffa36da3c",
 		Tier = "epic",
 	},
-	{
-		Info = {
-			AC = 11,
-			Level = 3,
-			Pwr = 24.0,
-			Stats = -1,
-			Vit = 12,
-		},
-		Name = "TOT_LOW_GreaseWizard_FireMephit",
-		TemplateId = "2c79bae7-9350-4482-960f-0c84c2bfb7fd",
-		Tier = "mid",
-	},
+	-- {
+	-- 	Info = {
+	-- 		AC = 11,
+	-- 		Level = 3,
+	-- 		Pwr = 24.0,
+	-- 		Stats = -1,
+	-- 		Vit = 12,
+	-- 	},
+	-- 	Name = "TOT_LOW_GreaseWizard_FireMephit",
+	-- 	TemplateId = "2c79bae7-9350-4482-960f-0c84c2bfb7fd",
+	-- 	Tier = "mid",
+	-- },
 	{
 		Info = {
 			AC = 14,
