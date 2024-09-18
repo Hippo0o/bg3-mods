@@ -288,18 +288,18 @@ return {
 		TemplateId = "00a9c1d8-302f-452b-b444-bcffe3f6098b",
 		Tier = "epic",
 	},
-	{
-		Info = {
-			AC = 15,
-			Level = 11,
-			Pwr = 99.0,
-			Stats = 16,
-			Vit = 84,
-		},
-		Name = "TOT_LOW_OskarsBeloved_KerriSpirit",
-		TemplateId = "165534e4-433f-4757-9795-817c1ce38f0a",
-		Tier = "epic",
-	},
+	-- {
+	-- 	Info = {
+	-- 		AC = 15,
+	-- 		Level = 11,
+	-- 		Pwr = 99.0,
+	-- 		Stats = 16,
+	-- 		Vit = 84,
+	-- 	},
+	-- 	Name = "TOT_LOW_OskarsBeloved_KerriSpirit",
+	-- 	TemplateId = "165534e4-433f-4757-9795-817c1ce38f0a",
+	-- 	Tier = "epic",
+	-- },
 	{
 		Info = {
 			AC = 16,

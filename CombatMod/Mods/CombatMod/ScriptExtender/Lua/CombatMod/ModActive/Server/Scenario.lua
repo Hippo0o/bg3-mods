@@ -265,8 +265,10 @@ function Action.SpawnRound()
     end
 
     L.Debug("Enemies queued for spawning.", #toSpawn)
+    local failsafe = 0
     return WaitUntil(function()
-        return waitSpawn == 0
+        failsafe = failsafe + 1
+        return waitSpawn == 0 or failsafe > #toSpawn * 10
     end)
 end
 
@@ -821,9 +823,9 @@ function Scenario.CombatSpawned(specific)
             interval = 1000,
         }):After(ifScenario(function()
             -- doesnt work it seems
-            -- enemy:Replicate("TurnOrder")
-            -- enemy:Replicate("TurnBased")
-            -- enemy:Replicate("CombatParticipant")
+            enemy:Replicate("TurnOrder")
+            enemy:Replicate("TurnBased")
+            enemy:Replicate("CombatParticipant")
         end)):Catch(ifScenario(function()
             Action.Failsafe(enemy)
         end))

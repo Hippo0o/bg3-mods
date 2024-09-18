@@ -108,7 +108,7 @@ local Loop = Libs.Struct({
                 end
 
                 if result == true then
-                    if Ext.Utils.MonotonicTime() - startTime > 30 then
+                    if Ext.Utils.MonotonicTime() - startTime > 10000 then
                         return
                     end
                 end
