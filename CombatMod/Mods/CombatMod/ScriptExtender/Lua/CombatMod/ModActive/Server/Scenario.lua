@@ -821,12 +821,7 @@ function Scenario.CombatSpawned(specific)
             immediate = true,
             retries = 5,
             interval = 1000,
-        }):After(ifScenario(function()
-            -- doesnt work it seems
-            enemy:Replicate("TurnOrder")
-            enemy:Replicate("TurnBased")
-            enemy:Replicate("CombatParticipant")
-        end)):Catch(ifScenario(function()
+        }):Catch(ifScenario(function()
             Action.Failsafe(enemy)
         end))
     end

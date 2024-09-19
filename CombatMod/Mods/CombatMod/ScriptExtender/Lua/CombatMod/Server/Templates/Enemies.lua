@@ -2245,18 +2245,18 @@ return {
 		TemplateId = "a7b69d67-6f58-4b0f-ad1f-c94789032ee1",
 		Tier = "mid",
 	},
-	{
-		Info = {
-			AC = 18,
-			Level = 1,
-			Pwr = 73.0,
-			Stats = 10,
-			Vit = 82,
-		},
-		Name = "TOT_S_LOW_CazadorsPalace_Cells_Prisoner_001",
-		TemplateId = "12916d23-c5fb-407e-b835-91063a0cf16c",
-		Tier = "ultra",
-	},
+	-- {
+	-- 	Info = {
+	-- 		AC = 18,
+	-- 		Level = 1,
+	-- 		Pwr = 73.0,
+	-- 		Stats = 10,
+	-- 		Vit = 82,
+	-- 	},
+	-- 	Name = "TOT_S_LOW_CazadorsPalace_Cells_Prisoner_001",
+	-- 	TemplateId = "12916d23-c5fb-407e-b835-91063a0cf16c",
+	-- 	Tier = "ultra",
+	-- },
 	{
 		Info = {
 			AC = 19,
