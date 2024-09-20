@@ -55,7 +55,12 @@ end
 ---@param prefix string|nil
 ---@return string
 function M.RandomId(prefix, tbl)
-    return tostring(tbl or {}):gsub("table: ", prefix or "")
+    if tbl then
+        tbl = M.Table.ToStringRaw(tbl)
+    else
+        tbl = tostring({})
+    end
+    return tbl:gsub("table: ", prefix or "")
 end
 
 function M.Random(...)
@@ -63,7 +68,6 @@ function M.Random(...)
     for i = 1, iter do
         Ext.Math.Random()
     end
-
     return Ext.Math.Random(...)
 end
 
@@ -456,6 +460,12 @@ function M.Table.Patch(t, patch, replaced)
     end
 
     return t, patch, replaced
+end
+
+function M.Table.ToStringRaw(t)
+    return M.Table.Keys({
+        [t] = true,
+    })[1]
 end
 
 ---@param t table
