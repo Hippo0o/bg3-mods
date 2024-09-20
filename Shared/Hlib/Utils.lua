@@ -53,14 +53,18 @@ function M.GetProperty(struct, property, default)
 end
 
 ---@param prefix string|nil
+---@param input table|nil
 ---@return string
-function M.RandomId(prefix, tbl)
-    if tbl then
-        tbl = M.Table.ToStringRaw(tbl)
+function M.RandomId(prefix, input)
+    local id
+    if type(input) == "table" then
+        id = M.Table.ToStringRaw(input)
     else
-        tbl = tostring({})
+        id = tostring({})
     end
-    return tbl:gsub("table: ", prefix or "")
+    id = id:gsub("table: ", prefix or "")
+
+    return id
 end
 
 function M.Random(...)
@@ -462,10 +466,14 @@ function M.Table.Patch(t, patch, replaced)
     return t, patch, replaced
 end
 
+---@param t table
+---@return string
 function M.Table.ToStringRaw(t)
-    return M.Table.Keys({
+    for k, _ in pairs({
         [t] = true,
-    })[1]
+    }) do
+        return k
+    end
 end
 
 ---@param t table
