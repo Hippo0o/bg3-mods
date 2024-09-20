@@ -367,7 +367,7 @@ function Object:Spawn(x, y, z, neutral)
     return true,
         RetryUntil(function(runner)
             return self:Entity().ServerReplicationDependencyOwner -- goal: a component that loads later and always exists
-        end, { retries = 90, interval = 100 }):After(function()
+        end, { retries = 90, interval = 200, immediate = true }):After(function()
             self:Modify()
 
             if not neutral then
