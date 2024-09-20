@@ -469,11 +469,17 @@ end
 ---@param t table
 ---@return string
 function M.Table.ToStringRaw(t)
-    for k, _ in pairs({
-        [t] = true,
-    }) do
-        return k
+    local meta = getmetatable(t)
+    local str
+    if meta then
+        local s = meta.__tostring
+        meta.__tostring = nil
+        str = tostring(t)
+        meta.__tostring = s
+    else
+        str = tostring(t)
     end
+    return str
 end
 
 ---@param t table
