@@ -54,8 +54,17 @@ end
 
 ---@param prefix string|nil
 ---@return string
-function M.RandomId(prefix)
-    return tostring({}):gsub("table: ", prefix or "")
+function M.RandomId(prefix, tbl)
+    return tostring(tbl or {}):gsub("table: ", prefix or "")
+end
+
+function M.Random(...)
+    local iter = math.floor(tostring(tonumber(tostring({}):gsub("table: ", ""), 16) / 0xFFFFFFF):sub(-3))
+    for i = 1, iter do
+        Ext.Math.Random()
+    end
+
+    return Ext.Math.Random(...)
 end
 
 ---@param code string x, y -> x + y
@@ -707,7 +716,7 @@ end
 function M.UUID.Random()
     -- version 4 UUID
     return string.gsub("xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx", "[xy]", function(c)
-        local v = (c == "x") and math.random(0, 0xf) or math.random(8, 0xb)
+        local v = (c == "x") and M.Random(0, 0xf) or M.Random(8, 0xb)
         return string.format("%x", v)
     end)
 end

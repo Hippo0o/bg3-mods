@@ -128,7 +128,7 @@ local Queue = Libs.Struct({
     Loop = nil,
     Tasks = {},
     Enqueue = function(self, item) ---@param self Queue
-        local idx = Utils.RandomId("Queue_")
+        local idx = Utils.RandomId("Queue_", item)
         table.insert(self.Tasks, { idx = idx, item = item })
 
         self.Loop.Tasks:Inc()
