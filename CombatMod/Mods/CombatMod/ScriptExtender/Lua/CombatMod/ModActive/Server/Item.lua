@@ -717,7 +717,7 @@ Event.On(
 
         local results = {
             Async.SyncAll(table.map(rollsToChunks(), function(chunk)
-                return Schedule(U.Bind(Item.GenerateLoot, chunk, scenario.LootRates))
+                return Defer(100, U.Bind(Item.GenerateLoot, chunk, scenario.LootRates))
             end)),
         }
 
