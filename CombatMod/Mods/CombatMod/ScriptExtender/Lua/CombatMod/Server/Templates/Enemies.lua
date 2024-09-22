@@ -1669,18 +1669,18 @@ return {
 		TemplateId = "292092e8-d244-475f-b46e-0e85e0d37a63",
 		Tier = "ultra",
 	},
-	{
-		Info = {
-			AC = 15,
-			Level = 8,
-			Pwr = 77.0,
-			Stats = 15,
-			Vit = 56,
-		},
-		Name = "TOT_Cloaker_Phantasm",
-		TemplateId = "fdf734fe-7bce-4a07-a84c-b7f2502ec6c0",
-		Tier = "ultra",
-	},
+	-- {
+	-- 	Info = {
+	-- 		AC = 15,
+	-- 		Level = 8,
+	-- 		Pwr = 77.0,
+	-- 		Stats = 15,
+	-- 		Vit = 56,
+	-- 	},
+	-- 	Name = "TOT_Cloaker_Phantasm",
+	-- 	TemplateId = "fdf734fe-7bce-4a07-a84c-b7f2502ec6c0",
+	-- 	Tier = "ultra",
+	-- },
 	{
 		Info = {
 			AC = 19,
@@ -2831,7 +2831,7 @@ return {
 		},
 		Name = "TOT_Meenlock",
 		TemplateId = "a056e158-8ec0-4539-9e55-333866a0ff2c",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		Info = {

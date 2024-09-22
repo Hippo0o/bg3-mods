@@ -68,6 +68,13 @@ function StoryBypass.RemoveAllEntities()
     Osi.PROC_MOO_Execution_StartFallbackExecutionCombat() -- prevent infinite timer loop
     -- Osi.PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff()
 
+    -- give netherstones to quest progress set flags
+    Osi.PROC_GEN_OrinsAbduction_InCampAbductions_Disable()
+    Osi.PROC_GEN_OrinsAbduction_Debug_SetKilledGortash()
+    Osi.ToInventory("S_COL_CrownController_Ketheric_06b8891b-e71c-423b-8482-2680c3c16a4d", Player.Host())
+    Osi.ToInventory("S_WYR_CrownController_Gortash_383be300-d328-4152-86df-4927482d1fd7", Player.Host())
+    Osi.ToInventory("S_LOW_CrownController_Orin_360b0dfd-8e0b-48d2-a079-fcf68c104d6b", Player.Host())
+
     local toRemove = table.filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
 
     for i, e in ipairs(toRemove) do

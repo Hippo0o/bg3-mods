@@ -372,18 +372,25 @@ end
 
 ---@param cond fun(self: Runner, chainable: ChainableRunner): boolean
 ---@param func fun()|nil
+---@param tries number|nil default: 600 (~60s)
 ---@return ChainableRunner
 -- check for condition every ~100ms
-function M.WaitUntil(cond, func)
+function M.WaitUntil(cond, func, tries)
     local chainable = Runner.Chainable(prio, func)
     local last = 0
 
+    local triesLeft = tries or 600
     chainable.Source.ExecCond = function(self, time)
+        if triesLeft == 0 then
+            error("WaitUntil tries exhausted")
+        end
+
         last = last + time.DeltaTime
         if last < 0.1 then
             return false
         end
         last = 0
+        triesLeft = triesLeft - 1
 
         return cond(self, chainable)
     end

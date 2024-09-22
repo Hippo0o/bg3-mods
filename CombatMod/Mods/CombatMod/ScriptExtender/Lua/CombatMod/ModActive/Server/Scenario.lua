@@ -257,8 +257,11 @@ function Action.SpawnRound()
             :Catch(function()
                 L.Error("Spawn limit exceeded.", e:GetId())
                 table.removevalue(s.SpawnedEnemies, e)
-                e:Clear()
                 Action.EnemyRemoved()
+
+                if e:IsSpawned() then
+                    e:Clear()
+                end
             end)
             :Final(function()
                 waitSpawn = waitSpawn - 1
@@ -1078,6 +1081,8 @@ Ext.Osiris.RegisterListener(
                 return
             end
         end
+
+        Enemy.Combat(uuid, true)
     end)
 )
 

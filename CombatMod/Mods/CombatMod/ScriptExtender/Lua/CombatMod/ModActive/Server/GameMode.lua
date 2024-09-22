@@ -103,12 +103,14 @@ function GameMode.GenerateScenario(score, tiers)
         return maxRounds
     end
 
+    local playerLevel = Player.Level()
+
     -- select a tier based on amount of enemies in tier
     local function selectTier(remainingValue)
         local validTiers = {}
         local totalWeight = 0
         for i, tier in ipairs(tiers) do
-            if score >= (tier.min or tier.value) then -- handle min score
+            if i <= playerLevel and score >= (tier.min or tier.value) then -- handle min score
                 if remainingValue >= tier.value then
                     local weight = tier.weight
 
