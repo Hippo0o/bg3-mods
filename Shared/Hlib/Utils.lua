@@ -334,11 +334,19 @@ function M.Table.Values(t)
     end)
 end
 
----@param t table<number, string>
----@return table<string, number>
+---@param t table<number, string> { 1 = "a", 2 = "b" }
+---@return table<string, number> { a = 1, b = 2 }
+function M.Table.Invert(t)
+    return M.Table.Map(t, function(v, k)
+        return k, v
+    end)
+end
+
+---@param t table<number|string, any> { 1 = "a", 2 = "b" }
+---@return table<string, bool> { ["a"] = true, ["b"] = true }
 function M.Table.Set(t)
     return M.Table.Map(t, function(v, k)
-        return k, tostring(v)
+        return true, tostring(v)
     end)
 end
 
