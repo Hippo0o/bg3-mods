@@ -247,6 +247,29 @@ return table.extend({
         end,
     },
     {
+        Id = "BuyAscension", -- God of Ambition, same as in the base game epilogue, except allowing the user to change equipment
+        Name = Localization.Get("h4232ff7cgcfb9g4a22g9443gf87f1019d70e"),
+        Icon = "statIcons_GaleGod",
+        Description = Localization.Get("h0ce87b14g60d6g4926g8e02gc284a85c83c3"),
+        Requirement = 100,
+        Cost = 900,
+        Amount = 1,
+        Character = true,
+        OnBuy = function(self, character) -- Checks to see if recepient is Gale, if Gale Mind Flayer, or other, then gives visually appropriate version of the same buff
+            if Osi.HasAppliedStatus(character, "TOT_ASCENSION") ~=1 and Osi.HasAppliedStatus(character, "EPI_GALEGOD") ~=1 then
+                if Osi.IsTagged(character, "a3907be6-50c2-407e-b159-8c53f9a3418e") == 1 then
+                    if Osi.HasAppliedStatus(character, "MIND_FLAYER_FORM") == 1 then
+                        Osi.ApplyStatus(character, "EPI_GALEGOD_MINDFLAYER", -1)
+                    else
+                        Osi.ApplyStatus(character, "EPI_GALEGOD", -1)
+                    end
+                else
+                    Osi.ApplyStatus(character, "TOT_ASCENSION", -1)
+                end
+            end
+        end,
+    },
+    {
         Id = "BuyMindflayerForm",
         Name = Localization.Get("hd58a2099g6c22g499fga7acgab8d6fda5615"),
         Icon = "TadpoleSuperPower_Ceremorphosis",
