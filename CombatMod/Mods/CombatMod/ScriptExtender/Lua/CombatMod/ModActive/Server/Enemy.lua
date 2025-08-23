@@ -182,8 +182,43 @@ function Object:ModifyExperience()
         local entity = self:Entity()
 
         local expMod = (Config.ExpMultiplier or 1) * 2
+
+        if self.Temporary then
+            expMod = 0
+        end
+
         if self.IsBoss then
-            expMod = expMod * 1.2
+            expMod = expMod * 1.25
+        end
+
+        if not (PersistentVars.HardMode or PersistentVars.SuperHardMode) then
+            if Player.Level() < 5 then
+                expMod = expMod * 1.2
+            elseif Player.Level() < 10 then
+                expMod = expMod * 1.65
+            elseif Player.Level() < 15 then
+                expMod = expMod * 1.25
+            end
+        end
+
+        local partySizeEXPMod = Player.PartySize()
+
+        if partySizeEXPMod == 4 then
+            L.Debug("Standard party size, standard scaling")
+        elseif partySizeEXPMod == 1 then
+            expMod = expMod * 1.12
+        elseif partySizeEXPMod == 2 then
+            expMod = expMod * 1.08
+        elseif partySizeEXPMod == 3 then
+            expMod = expMod * 1.04
+        elseif partySizeEXPMod == 5 then
+            expMod = expMod * 0.834
+        elseif partySizeEXPMod == 6 then
+            expMod = expMod * 0.715
+        elseif partySizeEXPMod == 7 then
+            expMod = expMod * 0.625
+        elseif partySizeEXPMod >= 8 then
+            expMod = expMod * 0.5
         end
 
         if PersistentVars.Unlocked.ExpMultiplier then
@@ -194,13 +229,15 @@ function Object:ModifyExperience()
             * math.ceil(entity.EocLevel.Level / 2) -- ceil(1/2) = 1
             * expMod
 
-        entity.ServerExperienceGaveOut.Experience = math.floor(exp / Player.PartySize())
+        entity.ServerExperienceGaveOut.Experience = math.floor(exp / 4)
     end):Catch(function()
         L.Error("Failed to modify experience: ", self.GUID)
     end)
 end
 
-function Object:OnCombat() end
+function Object:OnCombat() 
+    Osi.RemoveStatus(self.GUID, "TOT_INVULNERABLE")
+end
 
 function Object:OnAttacked(attacker)
     Schedule(function()
@@ -232,6 +269,13 @@ function Object:Modify(keepFaction)
         return
     end
 
+    for _, player in pairs(GU.DB.GetPlayers()) do
+        if self.GUID == player then
+            L.Error("Don't perform enemy modifications on players: ", self.GUID)
+            return
+        end
+    end
+
     Osi.SetCharacterLootable(self.GUID, 0)
     Osi.SetCombatGroupID(self.GUID, "a209e7e8-fece-4a68-b4cf-b3000159cf3d")
 
@@ -240,6 +284,9 @@ function Object:Modify(keepFaction)
     end
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
+        
+    -- Always invulnerable during setup
+    Osi.ApplyStatus(self.GUID, "TOT_INVULNERABLE", -1)
 
     -- if self.SpellSet == "" then
     --     Osi.AddSpell(self.GUID, "Projectile_Jump")
@@ -247,7 +294,10 @@ function Object:Modify(keepFaction)
     -- end
 
     -- undead enemies get shadow curse immunity
-    if Osi.IsTagged(self.GUID, "33c625aa-6982-4c27-904f-e47029a9b140") == 1 then -- UNDEAD
+    if
+        Osi.IsTagged(self.GUID, "33c625aa-6982-4c27-904f-e47029a9b140") == 1
+        or Osi.IsTagged(self.GUID, "22e5209c-eaeb-40dc-b6ef-a371794110c2") == 1
+    then -- UNDEAD OR CONSTRUCT
         Osi.SetTag(self.GUID, C.ShadowCurseTag) -- ACT2_SHADOW_CURSE_IMMUNE
     end
 
@@ -354,9 +404,50 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
+    -- spawn in asylum first to avoid issues with invalid surfaces
+    local asylumX, asylumY, asylumZ = 0, 0, 0
+    if Player.Region() == C.Regions.Act1 then
+        asylumX = -284.551
+        asylumY = 24.104
+        asylumZ = 116.642
+    elseif Player.Region() == C.Regions.Act1b then
+        asylumX = 736.06
+        asylumY = 0
+        asylumZ = -743.228
+    elseif Player.Region() == C.Regions.Act2 then
+        asylumX = 55.421
+        asylumY = 0
+        asylumZ = -1407.249
+    elseif Player.Region() == C.Regions.Act2b then
+        asylumX = 357.448
+        asylumY = 19.951
+        asylumZ = 29.953
+    elseif Player.Region() == C.Regions.Act3 then
+        asylumX = 605.245
+        asylumY = 0
+        asylumZ = -750.309
+    elseif Player.Region() == C.Regions.Act3b then
+        asylumX = -1565.942
+        asylumY = 0.853
+        asylumZ = 297.384
+    elseif Player.Region() == C.Regions.Act3c then
+        asylumX = -1909.747
+        asylumY = -0.232
+        asylumZ = 2675.996
+    elseif Player.Region() == C.Regions.Act3i then
+        asylumX = 169.889
+        asylumY = 0
+        asylumZ = 11.882
+    end
+
     x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
 
-    local success = self:CreateAt(x, y, z)
+    local success = self:CreateAt(asylumX, asylumY, asylumZ)
+
+    WaitTicks(6, function()
+        Osi.TeleportToPosition(self.GUID, x, y, z, "", 1, 1, 1, 0, 1)
+        Osi.PROC_Foop(self.GUID)
+    end)
 
     if not success then
         L.Error("Failed to spawn: ", self:GetTranslatedName(), self:GetId())
@@ -582,6 +673,9 @@ function Enemy.DistanceToParty(object)
     end)
 
     local x, y, z = Osi.GetPosition(object)
+    if x == nil or y == nil or z == nil then
+        return
+    end
 
     local distance = 999
     local partyXyz = {}
@@ -608,6 +702,13 @@ end
 
 ---@param object string GUID
 function Enemy.Combat(object, force)
+    for _, player in pairs(GU.DB.GetPlayers()) do
+        if object == player then
+            L.Error("Don't set a player's faction to enemy: ", object)
+            return
+        end
+    end
+
     Osi.ApplyStatus(object, "InitiateCombat", -1)
     Osi.ApplyStatus(object, "BringIntoCombat", -1)
 
@@ -687,15 +788,19 @@ function Enemy.CalcTier(enemy)
     local pwr = (vit / 2) + sum + prof + ac + level * 2
 
     local category
-    if pwr > 150 then
+    if pwr > 350 then
+        category = C.EnemyTier[8]
+    elseif pwr % 351 > 270 then
+        category = C.EnemyTier[7]
+    elseif pwr % 271 > 180 then
         category = C.EnemyTier[6]
-    elseif pwr % 151 > 90 then
+    elseif pwr % 181 > 125 then
         category = C.EnemyTier[5]
-    elseif pwr % 91 > 65 then
+    elseif pwr % 126 > 80 then
         category = C.EnemyTier[4]
-    elseif pwr % 66 > 45 then
+    elseif pwr % 81 > 50 then
         category = C.EnemyTier[3]
-    elseif pwr % 46 > 25 then
+    elseif pwr % 51 > 25 then
         category = C.EnemyTier[2]
     else
         category = C.EnemyTier[1]

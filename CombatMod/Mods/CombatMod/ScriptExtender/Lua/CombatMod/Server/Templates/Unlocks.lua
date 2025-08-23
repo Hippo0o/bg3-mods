@@ -255,7 +255,7 @@ return table.extend({
         Character = true,
         Requirement = 75,
         OnBuy = function(self, character)
-            Osi.ApplyStatus(character, "MIND_FLAYER_FORM", -1)
+            Osi.ApplyStatus(character, "TOT_MIND_FLAYER_FORM", -1)
             -- takes a bit to transform
             WaitTicks(100, function()
                 self:OnReapply()

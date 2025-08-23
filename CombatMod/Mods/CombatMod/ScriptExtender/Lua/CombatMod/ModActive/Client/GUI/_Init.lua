@@ -10,7 +10,7 @@ Require("CombatMod/ModActive/Client/GUI/Debug")
 
 ---@type ExtuiWindow
 local window = Ext.IMGUI.NewWindow(
-    string.format("%s v%d.%d.%d", Mod.Prefix, Mod.Version.Major, Mod.Version.Minor, Mod.Version.Revision)
+    string.format("%s v%d.%d.%d.%d", Mod.Prefix, Mod.Version.Major, Mod.Version.Minor, Mod.Version.Revision, Mod.Version.Build)
 )
 
 L.Warn("Window created.", "DX11 is known to cause issues.")

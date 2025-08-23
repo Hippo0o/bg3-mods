@@ -114,8 +114,12 @@ function Player.TeleportToAct(act)
     if teleporting then
         return
     end
-
-    Osi.PROC_Debug_TeleportToAct(act)
+    if act == "Act3i" then
+        Osi.TeleportPartiesToLevelWithMovie("IRN_Main_A", "", "")
+        Osi.DB_Debug_RestoringAct("Act3b", "IRN_Main_A")
+    else
+        Osi.PROC_Debug_TeleportToAct(act)
+    end
     teleporting = true
 
     local didUnload = false
@@ -196,7 +200,7 @@ end
 function Player.ReturnToCamp()
     Event.Trigger("ReturnToCamp")
 
-    if Player.Region() == "END_Main" then
+    if table.contains({ C.Regions.Act3c, C.Regions.Act3i }, Player.Region()) then
         -- act 1 seems to load fastest
         return Player.TeleportToAct("act1"):After(function()
             Player.TeleportToCamp()

@@ -1,5 +1,5 @@
-local low, medium, high, ultra, epic, legendary =
-    C.EnemyTier[1], C.EnemyTier[2], C.EnemyTier[3], C.EnemyTier[4], C.EnemyTier[5], C.EnemyTier[6]
+local low, medium, high, ultra, epic, legendary, mythical, divine =
+    C.EnemyTier[1], C.EnemyTier[2], C.EnemyTier[3], C.EnemyTier[4], C.EnemyTier[5], C.EnemyTier[6], C.EnemyTier[7], C.EnemyTier[8]
 
 local defaultLoot = C.LootRates
 
@@ -141,7 +141,18 @@ return {
             {},
             { legendary, legendary },
             {},
-            { legendary },
+            { mythical },
+        },
+    },
+    {
+        Name = "demigods",
+
+        Timeline = {
+            { legendary, legendary, legendary },
+            {},
+            { mythical, mythical },
+            {},
+            { divine },
         },
     }
 }

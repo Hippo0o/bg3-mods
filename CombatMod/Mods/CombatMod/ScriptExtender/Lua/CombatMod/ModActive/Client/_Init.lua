@@ -36,7 +36,7 @@ do
         end
 
         return subtitleWidget
-    end)
+    end, { retries = 60 })
 
     Net.On("Notification", function(event)
         if not subtitleWidget then

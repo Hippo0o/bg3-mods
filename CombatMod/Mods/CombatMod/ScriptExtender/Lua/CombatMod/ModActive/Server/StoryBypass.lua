@@ -43,6 +43,111 @@ function StoryBypass.UnblockTravel(entity)
     Osi.UnblockFlee(entity.Uuid.EntityUuid)
 end
 
+function StoryBypass.RestoreFlags()
+    L.Debug("RestoreFlags")
+    -- If we just came from Netherbrain, we need to clear flags preventing Long Rest
+    Osi.ClearFlag(
+        "CURRENTREGION_END_Main_140b4d3e-6cc7-48cb-b66f-dbc4eba710e1",
+        "NULL_00000000-0000-0000-0000-000000000000",
+        0
+    )
+    Osi.ClearFlag(
+        "END_BrainBattle_Event_Started_3cd63c2e-7343-45dd-9137-4cabca2179a6",
+        "NULL_00000000-0000-0000-0000-000000000000",
+        0
+    )
+    Osi.ClearFlag(
+        "END_General_State_CurrentlyInBrainBattle_0d7205b2-0d55-4540-8737-543253873cd6",
+        "NULL_00000000-0000-0000-0000-000000000000",
+        0
+    )
+    Osi.PROC_END_BrainBattle_ClearBrainBattle()
+    Osi.ClearFlag(
+        "END_General_State_Started_a0fd5f91-e4b3-4d01-84d3-9ff484139e99",
+        "NULL_00000000-0000-0000-0000-000000000000",
+        0
+    )
+    Osi.DB_Camp_Unlocked(1)
+    Osi.SetLongRestAvailable(1)
+    Osi.PROC_Foop("S_GLO_JergalAvatar_0133f2ad-e121-4590-b5f0-a79413919805")
+    Osi.SetTag("S_GLO_JergalAvatar_0133f2ad-e121-4590-b5f0-a79413919805", "TRADER_91d5ebc6-91ea-44db-8a51-216860d69b5b")
+    Osi.PROC_GLO_Jergal_SetDialog("CAMP_Jergal_7f4acd9b-15c0-81fe-9409-623634ec3ed3")
+
+    Osi.PROC_GLO_Jergal_MoveToCamp()
+    Osi.PROC_GLO_Jergal_Appear()
+
+    Osi.SetJoinBlock(0)
+
+    for _, player in pairs(GU.DB.GetPlayers()) do
+        Osi.SetIsInDangerZone(player, 0)
+        Osi.PROC_SetBlockDismiss(player, 0)
+        Osi.DB_InDangerZone:Delete(player, "ENDGAME")
+
+        StoryBypass.ConvinceCharacterToBehave(player)
+    end
+end
+
+function StoryBypass.ConvinceCharacterToBehave(character)
+    L.Debug("ConvinceCharacterToBehave", character)
+    if character == C.OriginCharactersStarter.Karlach then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersStarter.Karlach,
+            "Karlach_InParty_12459660-b66e-9b0b-9963-670e0993543d"
+        )
+
+        Osi.RemoveStatus(character, "ORI_KARLACH_ENRAGE")
+        Osi.AddBoost(character, "StatusImmunity(ORI_KARLACH_ENRAGE)", Mod.TableKey, Mod.TableKey)
+    elseif character == C.OriginCharactersStarter.Gale then
+        Osi.DB_OriginInPartyDialog(C.OriginCharactersStarter.Gale, "Gale_InParty_6beb1b10-845f-49fa-6d6d-f425eaa42574")
+    elseif character == C.OriginCharactersStarter.Astarion then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersStarter.Astarion,
+            "Astarion_InParty_53aba16e-55bb-a0fc-a444-522e237dbe46"
+        )
+    elseif character == C.OriginCharactersStarter.Laezel then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersStarter.Laezel,
+            "Laezel_InParty_93bf58f5-5111-9730-1ee2-62dfb0b00c96"
+        )
+    elseif character == C.OriginCharactersStarter.Wyll then
+        Osi.DB_OriginInPartyDialog(C.OriginCharactersStarter.Wyll, "Wyll_InParty_6dff0a1f-1a51-725d-6e9a-52b5742ba9e6")
+    elseif character == C.OriginCharactersStarter.ShadowHeart then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersStarter.ShadowHeart,
+            "ShadowHeart_InParty_95ca3833-09d0-5772-b16a-c7a5e9208fe5"
+        )
+    elseif character == C.OriginCharactersSpecial.Halsin then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersSpecial.Halsin,
+            "Halsin_InParty_890c2586-6b71-ca01-5bd6-19d533181c71"
+        )
+    elseif character == C.OriginCharactersSpecial.Minthara then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersSpecial.Minthara,
+            "Minthara_InParty_13d72d55-0d47-c280-9e9c-da076d8876d8"
+        )
+        Osi.SetFaction(C.OriginCharactersSpecial.Minthara, C.CompanionFaction)
+    elseif character == C.OriginCharactersSpecial.Jaheira then
+        Osi.DB_PermaDefeated:Delete(C.OriginCharactersSpecial.Jaheira)
+        Osi.ClearTag(C.OriginCharactersSpecial.Jaheira, "BLOCK_RESURRECTION_22a75dbb-1588-407e-b559-5aa4e6d4e6a6")
+        Osi.SetHasDialog(C.OriginCharactersSpecial.Jaheira, 1)
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersSpecial.Jaheira,
+            "Jaheira_InParty_e97481ba-961c-50a7-c54f-d34d6b75044d"
+        )
+    elseif character == C.OriginCharactersSpecial.Minsc then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersSpecial.Minsc,
+            "Minsc_InParty_d0554ced-ca60-938b-362c-07b0c77610d7"
+        )
+    elseif character == C.OriginCharactersSpecial.Alfira then
+        Osi.DB_OriginInPartyDialog(
+            C.OriginCharactersSpecial.Alfira,
+            "DEN_Bard_InParty_3c71c397-b378-340b-0da9-ef3d17d14423"
+        )
+    end
+end
+
 function StoryBypass.AllowRemoval(entity)
     return entity.IsCharacter
         and GC.IsNonPlayer(entity.Uuid.EntityUuid)
@@ -124,6 +229,14 @@ function StoryBypass.ClearArea(character)
         Schedule(function()
             for _, b in pairs(batch) do
                 -- Osi.CreateSurface(b.Guid, "None", 10, -1)
+                local removeItems = {
+                    "40c79f34-a39d-4495-9145-08a16cde2159", -- S_IRN_LobbyLadder_000
+                    "8f766750-9d29-4170-b898-57b95e92e3c0", -- S_SHA_PUZ_SilentLibrary_Librarian_Item
+                }
+                if table.contains(removeItems, b.Guid) then
+                    GU.Object.Remove(b.Guid)
+                end
+
                 if b.Entity.ServerItem then
                     if
                         b.Entity.ServerItem.IsLadder
@@ -426,7 +539,7 @@ local function cancelDialog(dialog, instanceID)
 
         L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
 
-        if #hasRemovable > 0 or table.contains(dialogActors, C.NPCCharacters.Emperor) then
+        if #hasRemovable > 0 then
             StoryBypass.CancelDialog(dialog, instanceID)
         end
 
@@ -519,6 +632,19 @@ Ext.Osiris.RegisterListener(
                 true
             )
         end
+
+        if object == "S_END_CrownProxy_b06e8326-a034-4480-8652-6a66b3bd7d0a" then
+            L.Debug("Removing story object ", object)
+            Osi.TurnBasedTimerCancel("S_END_CrownProxy_b06e8326-a034-4480-8652-6a66b3bd7d0a", "END_NautiloidCountdown")
+            Osi.DB_END_BrainBattle_TadpoleReminderActive:Delete(1)
+            Osi.LeaveCombat(object)
+            GU.Object.Remove(object)
+        elseif object == "S_END_Nautiloid_002_f50dc928-bb2d-48b6-a2dd-98fce0a47d28" then
+            L.Debug("Removing story object ", object)
+            Osi.RemoveStatus(object, "END_NAUTILOID_SPAWN_VFX", "NULL_00000000-0000-0000-0000-000000000000")
+            Osi.LeaveCombat(object)
+            GU.Object.Remove(object)
+        end
     end)
 )
 
@@ -588,7 +714,13 @@ Ext.Osiris.RegisterListener(
     0,
     "after",
     ifBypassStory(function()
-        StoryBypass.EndLongRest()
+        Defer(2000, function()
+            local dialog, instance = Osi.SpeakerGetDialog(Player.Host(), 1)
+            if dialog then
+                StoryBypass.CancelDialog(dialog, instance)
+            end
+            StoryBypass.EndLongRest()
+        end)
     end)
 )
 
@@ -604,6 +736,7 @@ Event.On(
         end
 
         Osi.RemoveStatus(character, "SURPRISED", C.NullGuid)
+        Osi.RemoveStatus(character, "END_NETHERBRAIN_SLOW", C.NullGuid)
     end)
 )
 Event.On(
@@ -612,6 +745,22 @@ Event.On(
         StoryBypass.ClearArea(Player.Host())
     end)
 )
+
+Event.On(
+    "ReturnToCamp",
+    ifBypassStory(function()
+        StoryBypass.RestoreFlags()
+        for _, p in pairs(GU.DB.GetPlayers()) do
+            StoryBypass.ConvinceCharacterToBehave(p)
+        end
+    end)
+)
+GameState.OnLoad(ifBypassStory(function()
+    StoryBypass.RestoreFlags()
+    for _, p in pairs(GU.DB.GetPlayers()) do
+        StoryBypass.ConvinceCharacterToBehave(p)
+    end
+end))
 
 local function removeAllEntities()
     if Scenario.HasStarted() or not Config.ClearAllEntities then

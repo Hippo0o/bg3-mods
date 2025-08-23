@@ -29,6 +29,7 @@ C = {
         "epic",
         "legendary",
         "mythical",
+        "divine",
     },
     RoguelikeScenario = "Roguelike",
     LootRates = {

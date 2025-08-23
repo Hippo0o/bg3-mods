@@ -94,6 +94,23 @@ end)
 Net.On("Start", function(event)
     local scenarioName = event.Payload.Scenario
     local mapName = event.Payload.Map
+    local difficultyValue = event.Payload.Difficulty
+
+    if difficultyValue == 0 then
+        PersistentVars.HardMode = false
+        PersistentVars.SuperHardMode = false
+        Event.Trigger("DifficultyModeChanged", true)
+    elseif difficultyValue == 1 then
+        PersistentVars.HardMode = true
+        PersistentVars.SuperHardMode = false
+        Event.Trigger("DifficultyModeChanged", true)
+    elseif difficultyValue == 2 then
+        PersistentVars.HardMode = false
+        PersistentVars.SuperHardMode = true
+        Event.Trigger("DifficultyModeChanged", true)
+    else
+        Net.Respond(event, { false, "Scenario error" })
+    end
 
     local template = table.find(Scenario.GetTemplates(), function(v)
         return v.Name == scenarioName
@@ -248,10 +265,10 @@ Net.On("MarkSpawns", function(event)
         return
     end
 
-    map:VFXSpawns(table.keys(map.Spawns), 16)
+    map:VFXSpawns(table.keys(map.Spawns), 72)
 
     if Scenario.Current() then
-        Scenario.MarkSpawns(Scenario.Current().Round + 1, 16)
+        Scenario.MarkSpawns(Scenario.Current().Round + 1, 72)
     end
 
     Net.Respond(event, { true })
@@ -281,6 +298,7 @@ local function broadcastConfig()
         local c = table.deepclone(Config)
         c.RoguelikeMode = PersistentVars.RogueModeActive
         c.HardMode = PersistentVars.HardMode
+        c.SuperHardMode = PersistentVars.SuperHardMode
         c.Debug = Mod.Debug
 
         Net.Send("Config", c)
@@ -288,8 +306,10 @@ local function broadcastConfig()
 end
 
 Event.On("RogueModeChanged", broadcastConfig)
+Event.On("DifficultyModeChanged", broadcastConfig)
 
 Event.On("RogueModeChanged", broadcastState)
+Event.On("DifficultyModeChanged", broadcastState)
 Event.On("ScenarioStarted", broadcastState)
 Event.On("ScenarioMapEntered", broadcastState)
 Event.On("ScenarioRoundStarted", broadcastState)
@@ -326,6 +346,19 @@ Net.On("Config", function(event)
 
             if config.HardMode ~= nil then
                 PersistentVars.HardMode = config.HardMode
+                if PersistentVars.HardMode == true then
+                    config.SuperHardMode = false
+                    PersistentVars.SuperHardMode = config.SuperHardMode
+                end
+                broadcastState()
+            end
+
+            if config.SuperHardMode ~= nil then
+                PersistentVars.SuperHardMode = config.SuperHardMode
+                if PersistentVars.SuperHardMode == true then
+                    config.HardMode = false
+                    PersistentVars.HardMode = config.HardMode
+                end
                 broadcastState()
             end
         end
@@ -368,6 +401,33 @@ Net.On("RecruitOrigin", function(event)
         Net.Respond(event, { true, __("Recruiting %s.", name) })
     else
         Net.Respond(event, { false, string.format("Origin %s not found.", name) })
+    end
+end)
+
+Net.On("FixFactions", function(event)
+    if Player.InCombat() then
+        Net.Respond(event, { false, __("Cannot change factions while in combat.") })
+    else
+        for _, player in pairs(GU.DB.GetPlayers()) do
+            Osi.SetFaction(player, C.CompanionFaction)
+        end
+        Net.Respond(event, { true })
+    end
+end)
+
+Net.On("FixLongRest", function(event)
+    if Player.InCombat() then
+        Net.Respond(event, { false, __("Cannot use this function while in combat.") })
+    else
+        Osi.DB_Camp_Unlocked(1)
+        Osi.SetLongRestAvailable(1)
+        Osi.SetJoinBlock(0)
+        for _, player in pairs(GU.DB.GetPlayers()) do
+            Osi.SetIsInDangerZone(player, 0)
+            Osi.PROC_SetBlockDismiss(player, 0)
+            Osi.DB_InDangerZone:Delete(player, "ENDGAME")
+        end
+        Net.Respond(event, { true })
     end
 end)
 

@@ -352,16 +352,40 @@ function Action.MapEntered()
             return true
         end
 
-        for _, player in pairs(GU.DB.GetPlayers()) do
-            if Osi.HasActiveStatus(player, "SNEAKING") == 1 then
-                Osi.RemoveStatus(player, "SNEAKING")
+        for _, player in pairs(GE.GetParty()) do
+            Osi.RemoveStatus(player.Uuid.EntityUuid, "DASH")
+            Osi.RemoveStatus(player.Uuid.EntityUuid, "DASH_STACKED")
+            Osi.RemoveStatus(player.Uuid.EntityUuid, "DASH_STACKED_2")
 
+            if Osi.HasActiveStatus(player.Uuid.EntityUuid, "SNEAKING") == 1 then
+                Osi.RemoveStatus(player.Uuid.EntityUuid, "SNEAKING")
                 Defer(1000, function()
-                    Osi.ApplyStatus(player, "SNEAKING", -1)
+                    Osi.ApplyStatus(player.Uuid.EntityUuid, "SNEAKING", -1)
                 end)
             end
 
-            Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(player), S().CombatHelper, player)
+            -- TODO query dynamically
+            local statusThatPreventsCombat = {
+                "INVISIBILITY", "GREATER_INVISIBILITY", "INVISIBILITY_PANTHER", "POTION_OF_INVISIBILITY",
+                "SUPREME_SNEAK", "HIDE_IN_PLAIN_SIGHT", "ONE_WITH_SHADOWS",
+            }
+
+            for status in ipairs(statusThatPreventsCombat) do
+                if Osi.HasActiveStatus(player.Uuid.EntityUuid, status) == 1 then
+                    local turnCount = Osi.GetStatusCurrentLifetime(player.Uuid.EntityUuid, status)
+                    Osi.RemoveStatus(player.Uuid.EntityUuid, status)
+                    Defer(1000, function()
+                        Osi.ApplyStatus(player.Uuid.EntityUuid, status, turnCount)
+                    end)
+                end
+            end
+
+            Osi.SetHostileAndEnterCombat(
+                C.ScenarioHelper.Faction,
+                Osi.GetFaction(player.Uuid.EntityUuid),
+                S().CombatHelper,
+                player.Uuid.EntityUuid
+            )
         end
 
         return Player.InCombat()
@@ -431,6 +455,10 @@ end
 
 function Action.EnemyFallback(enemy)
     local s = Current()
+
+    if enemy.Name == "MOD_Harpy_Combat" or enemy.Name == "MOD_Harpy_CombatB" then
+        return
+    end
 
     local uuid = enemy.GUID
 
@@ -719,7 +747,7 @@ function Scenario.MarkSpawns(round, duration)
         table.insert(spawns, posIndex)
     end
 
-    s.Map:VFXSpawns(spawns, duration or 6)
+    s.Map:VFXSpawns(spawns, duration or 24)
 end
 
 function Scenario.ForwardCombat()
@@ -766,12 +794,21 @@ function Scenario.TeleportHelper()
         local x3, y3, z3 = table.unpack(s.Map.Enter)
 
         local max = 0
+        local invalid = {}
         for _, enemy in ipairs(s.SpawnedEnemies) do
             local d = Osi.GetDistanceTo(enemy.GUID, s.CombatHelper)
-            if d > max then
+            if d == nil then
+                table.insert(invalid, enemy)
+            elseif d > max then
                 max = d
                 x3, y3, z3 = Osi.GetPosition(enemy.GUID)
             end
+        end
+
+        -- should not happen usually, TODO maybe seperate function
+        if #invalid > 0 then
+            L.Error("Removing invalid enemies from scenario.", #invalid)
+            table.removevalue(s.SpawnedEnemies, invalid, true)
         end
 
         local x = (x1 + x2 + x3) / 3
@@ -905,9 +942,19 @@ function Scenario.CloseEnemyDistance(specific, maxDistance)
     end
 
     local adjusting = table.map(enemies, function(enemy)
+        if enemy.Name == "MOD_Harpy_Combat" or enemy.Name == "MOD_Harpy_CombatB" then
+            return
+        end
+
         local x, y, z = Osi.GetPosition(enemy.GUID)
+        if x == nil or y == nil or z == nil then
+            return
+        end
 
         local distance, x2, y2, z2 = Enemy.DistanceToParty(enemy.GUID)
+        if x2 == nil or y2 == nil or z2 == nil then
+            return
+        end
 
         if distance < maxDistance then
             return

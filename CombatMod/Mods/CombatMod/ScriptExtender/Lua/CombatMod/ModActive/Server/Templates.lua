@@ -11,6 +11,8 @@ External.File.ExportIfNeeded("Scenarios", scenarioTemplates)
 External.File.ExportIfNeeded("LootRates", originalLootRates)
 External.File.ExportIfNeeded("ItemFilters", { Names = {}, Mods = {} })
 
+External.LoadLootRates()
+
 function Templates.ExportEnemies()
     External.File.Export("Enemies", enemyTemplates)
 end

@@ -12,6 +12,7 @@ Mod.PersistentVarsTemplate = {
     LastScenario = nil,
     RogueScore = 0,
     HardMode = false, -- applies additional difficulty to the game
+    SuperHardMode = false,
     GUIOpen = false,
     History = {},
     RandomLog = { -- log last random values to prevent repeating the same
@@ -50,7 +51,7 @@ DefaultConfig = {
     RandomizeSpawnOffset = 3,
     ExpMultiplier = 3,
     SpawnItemsAtPlayer = false,
-    GroupDistantEnemies = true,
+    GroupDistantEnemies = false,
     TurnOffNotifications = false,
     ClearAllEntities = true,
     AutoResurrect = true,
@@ -68,8 +69,6 @@ Require("CombatMod/Server/External")
 External.LoadConfig()
 External.File.ExportIfNeeded("Config", Config)
 
-External.LoadLootRates()
-
 Intro = {}
 Player = {}
 Commands = {}
@@ -81,8 +80,8 @@ Require("CombatMod/Server/ModEvents")
 
 GameState.OnLoad(function()
     External.LoadConfig()
-
-    if PersistentVars.Asked == false then
+    local tutorialCC = GU.DB.TryGet("DB_TUT_CharacterCreation_Started", 1, nil, 1)[1]
+    if PersistentVars.Asked == false and not tutorialCC then
         Intro.AskOnboarding()
     end
     PersistentVars.Asked = PersistentVars.Active

@@ -233,6 +233,8 @@ function Item.Objects(rarity, forCombat)
                     -- or cat:match("^Drink")
                     -- alchemy items
                     or name:match("^ALCH_Ingredient")
+					
+					or name:match("^GLO_SoulCoin")
                 )
             then
                 return false

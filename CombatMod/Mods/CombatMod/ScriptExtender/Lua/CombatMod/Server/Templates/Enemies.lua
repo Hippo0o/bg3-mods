@@ -13,6 +13,78 @@ return {
 	},
 	{
 		Info = {
+			AC = 8,
+			Level = 3,
+			Pwr = 11.0,
+			Stats = -5,
+			Vit = 22,
+		},
+		Name = "TOT_Zombie_A",
+		TemplateId = "582034b4-14b5-4472-8425-469b84393bf3",
+		Tier = "low",
+	},
+	{
+		Info = {
+			AC = 10,
+			Level = 1,
+			Pwr = 11.0,
+			Stats = 3,
+			Vit = 13,
+		},
+		Name = "TOT_Regular_Rat",
+		TemplateId = "47c8d717-ac85-4d30-9c76-b942ae588aef",
+		Tier = "low",
+	},
+	{
+		Info = {
+			AC = 10,
+			Level = 1,
+			Pwr = 11.0,
+			Stats = 3,
+			Vit = 13,
+		},
+		Name = "TOT_Vampire_Rat",
+		TemplateId = "47bf3b23-20b9-4f95-8e67-fbdd6ef2ecba",
+		Tier = "low",
+	},
+	{
+		Info = {
+			AC = 10,
+			Level = 1,
+			Pwr = 11.0,
+			Stats = 3,
+			Vit = 13,
+		},
+		Name = "TOT_Cranium_Rat",
+		TemplateId = "5ff6a1b5-6c6d-447b-ab6c-f9a4bea20ff5",
+		Tier = "low",
+	},
+	{
+		Info = {
+			AC = 10,
+			Level = 1,
+			Pwr = 11.0,
+			Stats = 3,
+			Vit = 13,
+		},
+		Name = "TOT_Necro_Rat",
+		TemplateId = "03676e51-2c60-412a-8944-476557a3a5bb",
+		Tier = "low",
+	},
+	{
+		Info = {
+			AC = 10,
+			Level = 1,
+			Pwr = 11.0,
+			Stats = 3,
+			Vit = 13,
+		},
+		Name = "TOT_Sleep_Rat",
+		TemplateId = "162b7dc9-d4be-4e6e-970a-3c597498cbc3",
+		Tier = "low",
+	},
+	{
+		Info = {
 			AC = 17,
 			Level = 9,
 			Pwr = 92.0,
@@ -81,7 +153,7 @@ return {
 		},
 		Name = "TOT_Shadow_Wraith_A",
 		TemplateId = "9a5d6e4f-707e-4091-831c-8dc819550805",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -94,6 +166,18 @@ return {
 		Name = "TOT_Undead_Skeleton_Blood",
 		TemplateId = "95048801-bbad-429d-bf84-4ecb9e4b0d29",
 		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 15,
+			Level = 6,
+			Pwr = 38.5,
+			Stats = -1,
+			Vit = 74,
+		},
+		Name = "TOT_GreaterZombie_A",
+		TemplateId = "94ed34fb-1e19-41dc-9c21-171967da9d3c",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -117,7 +201,7 @@ return {
 		},
 		Name = "TOT_Elemental_Water_ConjureElemental",
 		TemplateId = "046e20d0-8775-40d5-a19b-a64d684d1f3c",
-		Tier = "epic",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -141,7 +225,7 @@ return {
 		},
 		Name = "TOT_Dwarves_Female_Hill_FlamingFist_Cleric",
 		TemplateId = "374535ec-df6a-49f0-8212-9e42dc6fa112",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -165,7 +249,7 @@ return {
 		},
 		Name = "TOT_Myrmidon_Air",
 		TemplateId = "bd08bf83-7d6d-4953-875f-a14b37dfc6a6",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -179,19 +263,18 @@ return {
 		TemplateId = "e2a53f2c-2e2b-4fa2-a9b2-cee2c5e0578c",
 		Tier = "low",
 	},
-	-- ppl don't like this one
-	-- {
-	-- 	Info = {
-	-- 		AC = 15,
-	-- 		Level = 11,
-	-- 		Pwr = 99.0,
-	-- 		Stats = 16,
-	-- 		Vit = 84,
-	-- 	},
-	-- 	Name = "TOT_LOW_OskarsBeloved_MonstrousSpirit",
-	-- 	TemplateId = "08fe6015-a6e6-4370-9944-6f8ca8fe6f7b",
-	-- 	Tier = "legendary",
-	-- },
+	{ --	 ppl don't like this one
+		Info = {
+			AC = 15,
+			Level = 11,
+			Pwr = 99.0,
+			Stats = 16,
+			Vit = 84,
+		},
+		Name = "TOT_LOW_OskarsBeloved_MonstrousSpirit",
+		TemplateId = "08fe6015-a6e6-4370-9944-6f8ca8fe6f7b",
+		Tier = "legendary",
+	},
 	{
 		Info = {
 			AC = 12,
@@ -286,7 +369,7 @@ return {
 		},
 		Name = "TOT_SteelWatcher_Biped_A_Ranged",
 		TemplateId = "00a9c1d8-302f-452b-b444-bcffe3f6098b",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	-- {
 	-- 	Info = {
@@ -310,7 +393,7 @@ return {
 		},
 		Name = "TOT_Githyanki_Female_Gish_Strong",
 		TemplateId = "efe33532-dfc1-407b-8948-2ca89cbfc405",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -341,7 +424,7 @@ return {
 			AC = 16,
 			Level = 8,
 			Pwr = 94.0,
-			Stats = 21,
+			Stats = 19,
 			Vit = 76,
 		},
 		Name = "TOT_Tieflings_Male_Mephistopheles_Cultist_Bhaal_DeathsHead",
@@ -394,7 +477,7 @@ return {
 		},
 		Name = "TOT_Dwarves_Male_Hill_FlamingFist_Cleric",
 		TemplateId = "07e193b9-e9b2-4328-8427-e09d8389c9cc",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -406,7 +489,7 @@ return {
 		},
 		Name = "TOT_Myrmidon_Water",
 		TemplateId = "dbe13a26-b5fa-4d81-8cac-1615e8835cb1",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -455,20 +538,20 @@ return {
 		},
 		Name = "TOT_Elemental_Earth_ConjureElemental",
 		TemplateId = "d7d00e85-41d7-43b8-927b-47cd536a4fdb",
-		Tier = "epic",
+		Tier = "high",
 	},
-	{
-		Info = {
-			AC = 10,
-			Level = 1,
-			Pwr = 23.0,
-			Stats = 5,
-			Vit = 8,
-		},
-		Name = "TOT_Necromancer_A",
-		TemplateId = "f7ffd336-3158-4a60-921f-2692664adf62",
-		Tier = "low",
-	},
+	--	{
+	--		Info = {
+	--			AC = 10,
+	--			Level = 1,
+	--			Pwr = 23.0,
+	--			Stats = 5,
+	--			Vit = 8,
+	--		},
+	--		Name = "TOT_Necromancer_A",
+	--		TemplateId = "f7ffd336-3158-4a60-921f-2692664adf62",
+	--		Tier = "low",
+	--	},
 	{
 		Info = {
 			AC = 18,
@@ -491,7 +574,7 @@ return {
 		},
 		Name = "TOT_Undead_Mummy_CreateUndead",
 		TemplateId = "7a3c3f58-66b4-47de-9ef1-9335039c1ed1",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -510,24 +593,12 @@ return {
 			AC = 21,
 			Level = 10,
 			Pwr = 138.0,
-			Stats = 25,
+			Stats = 22,
 			Vit = 136,
 		},
 		Name = "TOT_Deva_Male_CursedTome",
 		TemplateId = "ac1795fc-cd91-472f-992c-9ff277de532c",
-		Tier = "epic",
-	},
-	{
-		Info = {
-			AC = 11,
-			Level = 3,
-			Pwr = 24.0,
-			Stats = -1,
-			Vit = 12,
-		},
-		Name = "TOT_MEPHIT_Magma_A",
-		TemplateId = "a2fcb46b-8c8c-45d2-8bcb-004c17215ad5",
-		Tier = "low",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -553,30 +624,18 @@ return {
 		TemplateId = "cd9d7499-adcb-440b-b05f-7f6141862645",
 		Tier = "mid",
 	},
-	{
-		Info = {
-			AC = 18,
-			Level = 10,
-			Pwr = 107.0,
-			Stats = 15,
-			Vit = 100,
-		},
-		Name = "TOT_AdamantineGolem_A",
-		TemplateId = "21232d04-dd83-46ea-96f6-b5dc2428cb9c",
-		Tier = "legendary",
-	},
-	{
-		Info = {
-			AC = 18,
-			Level = 11,
-			Pwr = 103.5,
-			Stats = 13,
-			Vit = 93,
-		},
-		Name = "TOT_HalfElves_Female_Wood_Cultist_Bane_IronConsul",
-		TemplateId = "8b79861d-7dd9-49dd-9e7f-9aa19f5f1322",
-		Tier = "epic",
-	},
+	--	{
+	--		Info = {
+	--			AC = 18,
+	--			Level = 11,
+	--			Pwr = 103.5,
+	--			Stats = 13,
+	--			Vit = 93,
+	--		},
+	--		Name = "TOT_HalfElves_Female_Wood_Cultist_Bane_IronConsul",
+	--		TemplateId = "8b79861d-7dd9-49dd-9e7f-9aa19f5f1322",
+	--		Tier = "epic",
+	--	},
 	{
 		Info = {
 			AC = 13,
@@ -599,7 +658,7 @@ return {
 		},
 		Name = "TOT_SteelWatcher_Biped_B",
 		TemplateId = "3fde5190-6901-43ff-8740-1c1f1b445ed0",
-		Tier = "legendary",
+		Tier = "epic",
 	},
 	{
 		Info = {
@@ -611,7 +670,7 @@ return {
 		},
 		Name = "TOT_SteelWatcher_Quadruped_A",
 		TemplateId = "011210c0-744d-413f-beaf-a0d31d9fcf99",
-		Tier = "mythical",
+		Tier = "legendary",
 	},
 	{
 		Info = {
@@ -659,7 +718,7 @@ return {
 		},
 		Name = "TOT_Elemental_Air_ConjureElemental",
 		TemplateId = "ef0578b5-ac1e-460f-9dd2-a1d455a9e36d",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -702,12 +761,12 @@ return {
 			AC = 21,
 			Level = 10,
 			Pwr = 138.0,
-			Stats = 25,
+			Stats = 22,
 			Vit = 136,
 		},
 		Name = "TOT_Deva_Male_PlanarAlly_Banite",
 		TemplateId = "5c4de267-050b-4d4e-8ad0-1b7602d4b8a6",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -731,6 +790,102 @@ return {
 		},
 		Name = "TOT_Goblins_Female_Warlock",
 		TemplateId = "c3c62c25-310e-4126-9614-7f468acc1a28",
+		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 13,
+			Level = 3,
+			Pwr = 27.0,
+			Stats = 2,
+			Vit = 22,
+		},
+		Name = "TOT_HagFrog",
+		TemplateId = "522d7ca8-4abd-4fa0-a949-b54f1df9a6d6",
+		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 15,
+			Level = 5,
+			Pwr = 27.0,
+			Stats = 15,
+			Vit = 30,
+		},
+		Name = "TOT_Olodan",
+		TemplateId = "75f8e959-3697-45e5-9ef6-55a937d231dc",
+		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 13,
+			Level = 5,
+			Pwr = 27.0,
+			Stats = 15,
+			Vit = 30,
+		},
+		Name = "TOT_Pinta",
+		TemplateId = "d7b8b903-799c-4d39-b10b-655a6e621540",
+		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 13,
+			Level = 5,
+			Pwr = 27.0,
+			Stats = 15,
+			Vit = 36,
+		},
+		Name = "TOT_Wren",
+		TemplateId = "b3d5439b-7604-462c-9d69-1a5d9fc16453",
+		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 12,
+			Level = 7,
+			Pwr = 46.0,
+			Stats = 15,
+			Vit = 62,
+		},
+		Name = "TOT_Gekh",
+		TemplateId = "31d56e04-71e8-4456-a45c-d3e35ff25248",
+		Tier = "high",
+	},
+	{
+		Info = {
+			AC = 18,
+			Level = 5,
+			Pwr = 38.0,
+			Stats = 15,
+			Vit = 30,
+		},
+		Name = "TOT_Lurgan",
+		TemplateId = "93509c77-1fca-4758-9a39-4d9781418cd3",
+		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 13,
+			Level = 5,
+			Pwr = 38.0,
+			Stats = 15,
+			Vit = 35,
+		},
+		Name = "TOT_Holvik",
+		TemplateId = "371bb362-a802-4782-b5e2-bca814af0fb9",
+		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 14,
+			Level = 4,
+			Pwr = 38.0,
+			Stats = 15,
+			Vit = 52,
+		},
+		Name = "TOT_Garmor",
+		TemplateId = "1040c374-ffde-4249-9524-ff65ccaa4692",
 		Tier = "mid",
 	},
 	{
@@ -817,18 +972,18 @@ return {
 		TemplateId = "ea3860ad-a859-4ff7-9609-79b1551aeb4f",
 		Tier = "high",
 	},
-	{
-		Info = {
-			AC = 11,
-			Level = 5,
-			Pwr = 40.5,
-			Stats = 2,
-			Vit = 29,
-		},
-		Name = "TOT_Intellect_Devourer_Explosive",
-		TemplateId = "ea24ec68-2ae1-447c-80a5-350ee32de6d8",
-		Tier = "mid",
-	},
+	-- This is an unfinished Intellect Glutton	{
+	--		Info = {
+	--			AC = 11,
+	--			Level = 5,
+	--			Pwr = 40.5,
+	--			Stats = 2,
+	--			Vit = 29,
+	--		},
+	--		Name = "TOT_Intellect_Devourer_Explosive",
+	--		TemplateId = "ea24ec68-2ae1-447c-80a5-350ee32de6d8",
+	--		Tier = "mid",
+	--	},
 	{
 		Info = {
 			AC = 18,
@@ -864,18 +1019,6 @@ return {
 		Name = "TOT_Githyanki_Female_Raider_Strong",
 		TemplateId = "9aad468e-7131-438b-98c0-6e3e8aa99cc3",
 		Tier = "ultra",
-	},
-	{
-		Info = {
-			AC = 14,
-			Level = 4,
-			Pwr = 29.0,
-			Stats = -2,
-			Vit = 14,
-		},
-		Name = "TOT_Mephit_Grease",
-		TemplateId = "0de5a933-f9bb-4ed3-afd7-2d5700d347e4",
-		Tier = "mid",
 	},
 	{
 		Info = {
@@ -959,7 +1102,7 @@ return {
 		},
 		Name = "TOT_Humans_Female_FlamingFist_Cleric",
 		TemplateId = "b6033940-18c9-4bdc-bfe1-4f90f13402d2",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -1033,18 +1176,18 @@ return {
 	-- 	TemplateId = "344345b4-5f7d-4116-8570-9bbfd7320d70",
 	-- 	Tier = "ultra",
 	-- },
-	{
-		Info = {
-			AC = 11,
-			Level = 7,
-			Pwr = 35.0,
-			Stats = -2,
-			Vit = 18,
-		},
-		Name = "TOT_MEPHIT_Mud_A",
-		TemplateId = "df06f3ce-5d8e-4881-9f0b-24a4060e6771",
-		Tier = "mid",
-	},
+	--	{
+	--		Info = {
+	--			AC = 11,
+	--			Level = 4,
+	--			Pwr = 35.0,
+	--			Stats = -2,
+	--			Vit = 18,
+	--		},
+	--		Name = "TOT_MEPHIT_Mud_A",
+	--		TemplateId = "df06f3ce-5d8e-4881-9f0b-24a4060e6771",
+	--		Tier = "mid",
+	--	},
 	{
 		Info = {
 			AC = 13,
@@ -1055,7 +1198,7 @@ return {
 		},
 		Name = "TOT_Elemental_Fire_ConjureElemental",
 		TemplateId = "3084e5b8-e5a8-4b5a-bfbc-6603bff52176",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1127,7 +1270,7 @@ return {
 		},
 		Name = "TOT_SteelWatcher_Biped_C",
 		TemplateId = "34dbd9ad-95ee-482d-8fe8-e5ff1358e1e7",
-		Tier = "legendary",
+		Tier = "epic",
 	},
 	{
 		Info = {
@@ -1163,7 +1306,7 @@ return {
 		},
 		Name = "TOT_Redcap_Pirate_Caster",
 		TemplateId = "4d71b61c-595a-4309-b6f4-e8a510e7ba31",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1188,18 +1331,6 @@ return {
 		Name = "TOT_Humans_Female_FlamingFist_Melee_Defender",
 		TemplateId = "f6529fc3-5583-434f-b108-cf56e84b06ae",
 		Tier = "high",
-	},
-	{
-		Info = {
-			AC = 19,
-			Level = 17,
-			Pwr = 283.0,
-			Stats = 24,
-			Vit = 400,
-		},
-		Name = "TOT_Dragon_Red",
-		TemplateId = "8c9216a1-c2e6-42ea-8fe5-2ce658706ad6",
-		Tier = "mythical",
 	},
 	{
 		Info = {
@@ -1230,12 +1361,12 @@ return {
 			AC = 21,
 			Level = 10,
 			Pwr = 151.0,
-			Stats = 25,
+			Stats = 22,
 			Vit = 162,
 		},
 		Name = "TOT_LOW_Deva_Male_StormshoreTabernacle_Curse",
 		TemplateId = "73ef0f34-765a-4156-842a-c04b8955f3c7",
-		Tier = "legendary",
+		Tier = "epic",
 	},
 	{
 		Info = {
@@ -1247,7 +1378,7 @@ return {
 		},
 		Name = "TOT_Humans_Male_FlamingFist_Cleric",
 		TemplateId = "ac3228f8-93f5-4eb5-be40-61bdc71865ec",
-		Tier = "high",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -1283,7 +1414,7 @@ return {
 		},
 		Name = "TOT_Undead_Mummy",
 		TemplateId = "4256b8e0-8e15-4985-bae2-0f8408c69010",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1355,7 +1486,7 @@ return {
 		},
 		Name = "TOT_Werewolf",
 		TemplateId = "2f2aac10-bc02-4d24-be43-2b43d402e4e4",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1374,7 +1505,7 @@ return {
 			AC = 16,
 			Level = 8,
 			Pwr = 94.0,
-			Stats = 21,
+			Stats = 19,
 			Vit = 76,
 		},
 		Name = "TOT_Humans_Male_Cultist_Bhaal_DeathsHead",
@@ -1403,7 +1534,7 @@ return {
 		},
 		Name = "TOT_Ogres_Female_A",
 		TemplateId = "9f2869cb-936a-4830-8884-090d56b21beb",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1434,12 +1565,12 @@ return {
 			AC = 21,
 			Level = 10,
 			Pwr = 138.0,
-			Stats = 25,
+			Stats = 22,
 			Vit = 136,
 		},
 		Name = "TOT_Deva_Male_PlanarAlly",
 		TemplateId = "a6ffd848-1c86-46ec-91e0-30d4e30212f9",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -1464,6 +1595,18 @@ return {
 		Name = "TOT_Owlbear_Dad",
 		TemplateId = "f2d065e9-b779-4fe5-9a23-4cca8faae822",
 		Tier = "ultra",
+	},
+	{
+		Info = {
+			AC = 13,
+			Level = 7,
+			Pwr = 70.5,
+			Stats = 4,
+			Vit = 60,
+		},
+		Name = "TOT_ShadowOwlbear",
+		TemplateId = "4dba9d5d-3191-40d6-a18c-c2e3014c194c",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1494,7 +1637,7 @@ return {
 			AC = 20,
 			Level = 16,
 			Pwr = 210.0,
-			Stats = 22,
+			Stats = 20,
 			Vit = 262,
 		},
 		Name = "TOT_S_LOW_MurderTribunal_Sarevok",
@@ -1563,6 +1706,18 @@ return {
 	},
 	{
 		Info = {
+			AC = 18,
+			Level = 4,
+			Pwr = 34.5,
+			Stats = -10,
+			Vit = 33,
+		},
+		Name = "TOT_AnimatedArmorRanged",
+		TemplateId = "5e5e2205-5ea3-4b22-a60e-6fc64a9be2d3",
+		Tier = "mid",
+	},
+	{
+		Info = {
 			AC = 16,
 			Level = 9,
 			Pwr = 97.5,
@@ -1571,7 +1726,7 @@ return {
 		},
 		Name = "TOT_Githyanki_Male_Gish_Strong",
 		TemplateId = "543adbde-c8b7-48dd-962f-9faffa36da3c",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	-- {
 	-- 	Info = {
@@ -1607,7 +1762,7 @@ return {
 		},
 		Name = "TOT_SteelWatcher_Biped_A",
 		TemplateId = "fcbe353e-198c-4fa6-b45b-300ff0e8e3cf",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -1621,18 +1776,18 @@ return {
 		TemplateId = "1dd82bc3-8f1c-404a-b8c6-18126f094304",
 		Tier = "ultra",
 	},
-	{
-		Info = {
-			AC = 14,
-			Level = 20,
-			Pwr = 179.5,
-			Stats = 27,
-			Vit = 185,
-		},
-		Name = "TOT_S_GLO_Elminster",
-		TemplateId = "52eb0a9e-f706-4e2c-9174-4da6c77f789f",
-		Tier = "legendary",
-	},
+	--	{
+	--		Info = {
+	--			AC = 14,
+	--			Level = 20,
+	--			Pwr = 179.5,
+	--			Stats = 24,
+	--			Vit = 185,
+	--		},
+	--		Name = "TOT_S_GLO_Elminster",
+	--		TemplateId = "52eb0a9e-f706-4e2c-9174-4da6c77f789f",
+	--		Tier = "legendary",
+	--	},
 	{
 		Info = {
 			AC = 16,
@@ -1720,14 +1875,14 @@ return {
 	{
 		Info = {
 			AC = 22,
-			Level = 10,
-			Pwr = 137.5,
+			Level = 11,
+			Pwr = 300.0,
 			Stats = 19,
 			Vit = 145,
 		},
 		Name = "TOT_MOO_Ketheric",
 		TemplateId = "307d5a85-aa03-42ab-afba-2832300d3041",
-		Tier = "mythical",
+		Tier = "legendary",
 	},
 	{
 		Info = {
@@ -1764,18 +1919,6 @@ return {
 		Name = "TOT_Goblins_Male_Warlock",
 		TemplateId = "024d1cae-737a-4381-b5d3-3faea40f1de8",
 		Tier = "low",
-	},
-	{
-		Info = {
-			AC = 11,
-			Level = 7,
-			Pwr = 38.5,
-			Stats = 0,
-			Vit = 21,
-		},
-		Name = "TOT_MEPHIT_Ice_A",
-		TemplateId = "e76dfdfd-66f1-4ea5-96c2-4b7e979f29e1",
-		Tier = "mid",
 	},
 	{
 		Info = {
@@ -1943,7 +2086,7 @@ return {
 		},
 		Name = "TOT_Sharran_Cultist_Human_Male_Caster_A",
 		TemplateId = "4bed4a1d-6963-43e2-ae6d-0d14f7c39faa",
-		Tier = "epic",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1956,6 +2099,18 @@ return {
 		Name = "TOT_Ooze_Grease",
 		TemplateId = "3145d0d8-8a55-46e0-ba89-585e68aeb7d9",
 		Tier = "mid",
+	},
+	{
+		Info = {
+			AC = 8,
+			Level = 6,
+			Pwr = 33.0,
+			Stats = -7,
+			Vit = 52,
+		},
+		Name = "TOT_Ooze_Fetid",
+		TemplateId = "414917b2-47c3-487c-99d5-45e86ef698fc",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -1991,18 +2146,6 @@ return {
 		},
 		Name = "TOT_LOW_BhaalCultist_Crow",
 		TemplateId = "2502e69f-2126-4a2c-a865-1b3af903ceef",
-		Tier = "mid",
-	},
-	{
-		Info = {
-			AC = 11,
-			Level = 5,
-			Pwr = 40.5,
-			Stats = 2,
-			Vit = 29,
-		},
-		Name = "TOT_Intellect_Detonator",
-		TemplateId = "33cdf021-a6fa-4b56-980c-1bd6f1d33c09",
 		Tier = "mid",
 	},
 	{
@@ -2067,18 +2210,6 @@ return {
 	},
 	{
 		Info = {
-			AC = 14,
-			Level = 6,
-			Pwr = 46.5,
-			Stats = 1,
-			Vit = 33,
-		},
-		Name = "TOT_Shadow_Dog_DevilishOx",
-		TemplateId = "ed0d2bea-f5ed-4985-b13e-6f4105f49f44",
-		Tier = "high",
-	},
-	{
-		Info = {
 			AC = 16,
 			Level = 8,
 			Pwr = 50.5,
@@ -2099,7 +2230,7 @@ return {
 		},
 		Name = "TOT_GLO_GithKnight_Act3",
 		TemplateId = "a7c21f62-2b3f-4ef5-9090-a89bc0dd987c",
-		Tier = "legendary",
+		Tier = "epic",
 	},
 	{
 		Info = {
@@ -2257,18 +2388,6 @@ return {
 	-- 	TemplateId = "12916d23-c5fb-407e-b835-91063a0cf16c",
 	-- 	Tier = "ultra",
 	-- },
-	{
-		Info = {
-			AC = 19,
-			Level = 17,
-			Pwr = 281.0,
-			Stats = 22,
-			Vit = 400,
-		},
-		Name = "TOT_Dragon_Skeletal",
-		TemplateId = "a75d3784-2973-4440-917d-963ce49d9b1c",
-		Tier = "mythical",
-	},
 	{
 		Info = {
 			AC = 18,
@@ -2435,7 +2554,19 @@ return {
 		},
 		Name = "TOT_Undead_DarkJusticiar_Boss",
 		TemplateId = "5beabcd8-d82c-4fc4-b131-d118dd032f75",
-		Tier = "epic",
+		Tier = "ultra",
+	},
+	{
+		Info = {
+			AC = 16,
+			Level = 7,
+			Pwr = 112.0,
+			Stats = 10,
+			Vit = 112,
+		},
+		Name = "TOT_SHA_LastJusticiar",
+		TemplateId = "417cd993-e290-4e44-bc29-fa719a9630f8",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -2483,7 +2614,7 @@ return {
 		},
 		Name = "TOT_Sharran_Cultist_Elf_Female_Caster_A",
 		TemplateId = "f864facf-37ff-441d-b69e-507130ca97d0",
-		Tier = "epic",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -2495,7 +2626,7 @@ return {
 		},
 		Name = "TOT_Myrmidon_Fire",
 		TemplateId = "0f8b7ae3-15e9-43bc-99a2-04837c629a27",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -2579,7 +2710,7 @@ return {
 		},
 		Name = "TOT_Myrmidon_Earth",
 		TemplateId = "01ac5949-4d57-4f13-b84d-5b008f3ffa49",
-		Tier = "epic",
+		Tier = "ultra",
 	},
 	{
 		Info = {
@@ -2603,7 +2734,7 @@ return {
 		},
 		Name = "TOT_Ogres_Male_A",
 		TemplateId = "9bb85fbc-445c-415f-a761-94d81ead0b66",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -2627,7 +2758,7 @@ return {
 		},
 		Name = "TOT_Elemental_Grease",
 		TemplateId = "8b597b49-d42e-45e5-8312-145ac5d68b3b",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {
@@ -2711,7 +2842,7 @@ return {
 		},
 		Name = "TOT_SteelWatcher_Biped_B_Ranged",
 		TemplateId = "a6f89469-6e38-4374-82ca-6f97d46c7b38",
-		Tier = "legendary",
+		Tier = "epic",
 	},
 	{
 		Info = {
@@ -2759,7 +2890,7 @@ return {
 		},
 		Name = "TOT_Meazel",
 		TemplateId = "339defbb-7f0c-412c-9113-f6eba8198275",
-		Tier = "ultra",
+		Tier = "high",
 	},
 	{
 		Info = {

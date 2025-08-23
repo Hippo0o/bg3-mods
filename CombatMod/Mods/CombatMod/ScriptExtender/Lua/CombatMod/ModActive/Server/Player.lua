@@ -91,6 +91,20 @@ function Player.RecruitOrigin(id)
         Osi.DB_Dialogs(C.OriginCharactersSpecial.Minthara, "Minthara_InParty_13d72d55-0d47-c280-9e9c-da076d8876d8")
     end
 
+    local function fixAlfira()
+        Osi.SetFlag("DEN_Bard_HasMet_User_981dfdf9-82f6-bca6-881c-4548793becd5", Player.Host())
+        Osi.ClearFlag("ORI_DarkUrge_MurderOfAlfira_State_InGoblinCamp_e402fcb5-ad72-4c1e-eae2-5c8ac20914c0", "NULL_00000000-0000-0000-0000-000000000000", 0)
+        Osi.SetFlag("CAMP_DarkUrge_Event_RecruitAlfira_a61d6b2a-73a1-3f12-60b0-a5e3025cbeac", Player.Host())
+        Osi.PROC_RemoveAllDialogEntriesForSpeaker(C.OriginCharactersSpecial.Alfira)
+        Osi.DB_Dialogs(C.OriginCharactersSpecial.Alfira, "DEN_Bard_InParty_3c71c397-b378-340b-0da9-ef3d17d14423")
+        Osi.DB_OriginInPartyDialog(C.OriginCharactersSpecial.Alfira, "DEN_Bard_InParty_3c71c397-b378-340b-0da9-ef3d17d14423")
+        Osi.DB_OriginNPCAlignment(C.OriginCharactersSpecial.Alfira, "ACT1_DEN_TieflingBard_082ce2e1-e636-4a56-817c-af798bdc59d8")
+        Osi.DB_OriginPartOfTheTeamFlag(C.OriginCharactersSpecial.Alfira, "NULL_00000000-0000-0000-0000-000000000000","NULL_00000000-0000-0000-0000-000000000000", "ORI_Alfira_ControlledByUser_e7f05e38-3c03-4e6d-9649-936d7fdfd8e9")
+        Osi.DB_OriginKickFromPartyFlags(C.OriginCharactersSpecial.Alfira, "ORI_Alfira_Event_KickCompanion_23496e30-47fd-47a2-aa6d-8f2e71820e84", "ORI_Alfira_State_CanBeKicked_a6499b8c-0908-463e-a9b7-ca0350820f1c")
+        Osi.PROC_GLO_PartyMembers_Initialize(C.OriginCharactersSpecial.Alfira)
+        Osi.PROC_GLO_PartyMembers_MakeNPC(C.OriginCharactersSpecial.Alfira)
+    end
+
     local function fixHalsin()
         -- Osi.PROC_GLO_Halsin_DebugReturnVictory()
         -- needs certain story outcome
@@ -194,9 +208,20 @@ function Player.RecruitOrigin(id)
         end,
         Jaheira = function()
             recruit(uuid) -- "04443f0f-9c62-d474-a98a-3e13eec31c69")
+            Osi.ClearTag(uuid, "BLOCK_RESURRECTION_22a75dbb-1588-407e-b559-5aa4e6d4e6a6")
         end,
         Minsc = function()
-            recruit(uuid) -- "630440f5-b71a-8764-94e8-b62544254cff")
+            recruit(uuid, "630440f5-b71a-8764-94e8-b62544254cff") -- "630440f5-b71a-8764-94e8-b62544254cff")
+            Osi.ClearTag(uuid, "BLOCK_RESURRECTION_22a75dbb-1588-407e-b559-5aa4e6d4e6a6")
+            Osi.PROC_SaveGamePatch_GUS300074_ResetMinscDialog()
+        end,
+        Alfira = function()
+            fixAlfira()
+            recruit(uuid) -- "4a405fba-3000-4c63-97e5-a8001ebb883c")
+            Osi.PROC_GLO_PartyMembers_Add(uuid, Player.Host())
+            Osi.MakePlayerActive(uuid)
+            Osi.Resurrect(uuid)
+            Osi.SetFaction(uuid, C.CompanionFaction)
         end,
     })[id]()
 end

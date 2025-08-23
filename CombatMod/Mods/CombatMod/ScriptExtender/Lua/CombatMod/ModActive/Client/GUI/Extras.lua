@@ -40,6 +40,17 @@ function Extras.Main(tab)
     end
     root:AddText(__("Needs to be run multiple times in some cases. May not work in all cases."))
     root:AddText(__("Level will be reset. Inventory will be emptied."))
+    root:AddText(__("Alfira is barely functional. Larian did not fully implement her as a companion, just a set piece for one camp night. Use at your own risk."))
+
+    root:AddSeparator()
+    Extras.Button(root, __("Fix Factions"), __("Resets the faction all of current party members, in case scripting has caused someone to stop being considered an ally. Cannot be used during combat."), function(btn)
+        Net.Request("FixFactions"):After(DisplayResponse)
+    end)
+
+    root:AddSeparator()
+    Extras.Button(root, __("Fix Long Rest"), __("Reruns the scripting that applies each time you press the Camp button, fixing Long Rest. Cannot be used during combat."), function(btn)
+        Net.Request("FixLongRest"):After(DisplayResponse)
+    end)
 
     root:AddSeparatorText("Cheat")
     root:AddInputInt("RogueScore", State.RogueScore or 0).OnChange = Debounce(1000, function(input)

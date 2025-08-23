@@ -1,0 +1,4 @@
+new entry "TOT_MIND_FLAYER_FORM"
+type "StatusData"
+data "StatusType" "BOOST"
+using "MIND_FLAYER_FORM"
