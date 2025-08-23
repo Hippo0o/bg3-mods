@@ -426,7 +426,7 @@ local function cancelDialog(dialog, instanceID)
 
         L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
 
-        if #hasRemovable > 0 then
+        if #hasRemovable > 0 or table.contains(dialogActors, C.NPCCharacters.Emperor) then
             StoryBypass.CancelDialog(dialog, instanceID)
         end
 

@@ -211,7 +211,7 @@ end
 
 local readyChecks = {}
 ---@class ChainableConfirmation : Chainable
----@field After fun(func: fun(result: boolean): any): Chainable
+---@field After fun(self: Chainable, func: fun(result: boolean): any): Chainable
 ---@param message string
 ---@return ChainableConfirmation
 function Player.AskConfirmation(message, ...)

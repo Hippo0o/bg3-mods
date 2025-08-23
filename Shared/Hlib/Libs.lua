@@ -188,7 +188,7 @@ function TT:Validate(tableToValidate)
         if Utils.Table.Size(tableToValidate) == 0 then
             validate(1)
         end
-        for k, v in pairs(tableToValidate) do
+        for k, _ in pairs(tableToValidate) do
             validate(k)
         end
     else
@@ -238,8 +238,8 @@ end
 -------------------------------------------------------------------------------------------------
 
 ---@class Chainable : Struct
----@field After fun(self: Chainable, func: fun(source: any|nil, ...: any), passSelf: boolean|nil, chainOnNil: boolean|nil): Chainable
----@field Catch fun(self: Chainable, func: fun(source: any|nil, err: string), passSelf: boolean|nil): Chainable
+---@field After fun(self: Chainable, func: fun(source: any|nil, ...: any): any, passSelf: boolean|nil, chainOnNil: boolean|nil): Chainable
+---@field Catch fun(self: Chainable, func: fun(source: any|nil, err: string): any, passSelf: boolean|nil): Chainable
 ---@field Final fun(self: Chainable, func: fun(...: any, passSelf: boolean|nil): boolean, any): Chainable
 ---@field Source any
 local Chainable = M.Struct({
@@ -295,7 +295,7 @@ function Chainable:Throw(err)
 
         if link.catch then
             catch = link.catch
-            for j = 1, i do
+            for _ = 1, i do
                 table.remove(self._Chain, 1)
             end
 
