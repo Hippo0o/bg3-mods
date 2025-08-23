@@ -1776,18 +1776,18 @@ return {
 		TemplateId = "1dd82bc3-8f1c-404a-b8c6-18126f094304",
 		Tier = "ultra",
 	},
-	--	{
-	--		Info = {
-	--			AC = 14,
-	--			Level = 20,
-	--			Pwr = 179.5,
-	--			Stats = 24,
-	--			Vit = 185,
-	--		},
-	--		Name = "TOT_S_GLO_Elminster",
-	--		TemplateId = "52eb0a9e-f706-4e2c-9174-4da6c77f789f",
-	--		Tier = "legendary",
-	--	},
+	{
+		Info = {
+			AC = 14,
+			Level = 20,
+			Pwr = 179.5,
+			Stats = 24,
+			Vit = 185,
+		},
+		Name = "TOT_S_GLO_Elminster",
+		TemplateId = "52eb0a9e-f706-4e2c-9174-4da6c77f789f",
+		Tier = "legendary",
+	},
 	{
 		Info = {
 			AC = 16,

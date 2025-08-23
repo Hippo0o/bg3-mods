@@ -69,12 +69,8 @@ function StoryBypass.RestoreFlags()
     )
     Osi.DB_Camp_Unlocked(1)
     Osi.SetLongRestAvailable(1)
-    Osi.PROC_Foop("S_GLO_JergalAvatar_0133f2ad-e121-4590-b5f0-a79413919805")
     Osi.SetTag("S_GLO_JergalAvatar_0133f2ad-e121-4590-b5f0-a79413919805", "TRADER_91d5ebc6-91ea-44db-8a51-216860d69b5b")
     Osi.PROC_GLO_Jergal_SetDialog("CAMP_Jergal_7f4acd9b-15c0-81fe-9409-623634ec3ed3")
-
-    Osi.PROC_GLO_Jergal_MoveToCamp()
-    Osi.PROC_GLO_Jergal_Appear()
 
     Osi.SetJoinBlock(0)
 
@@ -687,6 +683,8 @@ Ext.Osiris.RegisterListener(
         Schedule(function()
             if not Ext.Entity.Get(C.NPCCharacters.Jergal).CampPresence then
                 Osi.PROC_GLO_Jergal_MoveToCamp()
+                Osi.PROC_GLO_Jergal_Appear()
+                Osi.PROC_Foop("S_GLO_JergalAvatar_0133f2ad-e121-4590-b5f0-a79413919805")
             end
         end)
 

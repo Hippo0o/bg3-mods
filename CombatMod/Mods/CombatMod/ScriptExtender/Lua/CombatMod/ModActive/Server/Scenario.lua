@@ -456,10 +456,6 @@ end
 function Action.EnemyFallback(enemy)
     local s = Current()
 
-    if enemy.Name == "MOD_Harpy_Combat" or enemy.Name == "MOD_Harpy_CombatB" then
-        return
-    end
-
     local uuid = enemy.GUID
 
     if Enemy.IsValid(uuid) and GC.IsValid(uuid) then
@@ -942,10 +938,6 @@ function Scenario.CloseEnemyDistance(specific, maxDistance)
     end
 
     local adjusting = table.map(enemies, function(enemy)
-        if enemy.Name == "MOD_Harpy_Combat" or enemy.Name == "MOD_Harpy_CombatB" then
-            return
-        end
-
         local x, y, z = Osi.GetPosition(enemy.GUID)
         if x == nil or y == nil or z == nil then
             return

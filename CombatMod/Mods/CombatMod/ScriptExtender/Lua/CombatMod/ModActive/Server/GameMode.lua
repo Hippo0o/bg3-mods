@@ -33,7 +33,7 @@ function GameMode.StartRoguelike(template)
     PersistentVars.RogueScenario = template.Name
 end
 
-function GameMode.GetTiers(cow, harvard, score)
+function GameMode.GetTiers(cow, score)
     -- define tiers and their corresponding difficulty values
     local tiers = {
         { name = C.EnemyTier[1], min = 0, value = 4, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
@@ -59,7 +59,6 @@ function GameMode.GetTiers(cow, harvard, score)
         }
     end
 
-
     if GameMode.IsSuperHardMode() then
         tiers = {
             { name = C.EnemyTier[1], min = 0, value = 1, amount = #Enemy.GetByTier(C.EnemyTier[1]) },
@@ -77,15 +76,10 @@ function GameMode.GetTiers(cow, harvard, score)
         tiers = { { name = "TOT_OX_A", value = math.max(4, score / 100), amount = 100 } }
     end
 
-    if harvard then
-        tiers = { { name = "MOD_MysterySpawn_Combat", value = math.max(4, score / 100), amount = 100 } }
-    end
-
     return tiers
 end
 
 function GameMode.GenerateScenario(score, tiers)
-
     L.Debug("Generate Scenario", score)
 
     local minRounds = 1
@@ -94,7 +88,7 @@ function GameMode.GenerateScenario(score, tiers)
     local emptyRoundChance = 0.2 -- 20% chance for a round to be empty
     local scoreTolerance = tiers[1].value
     if score > 70 then
-       emptyRoundChance = 0.1
+        emptyRoundChance = 0.1
     elseif score > 120 then
         preferredRounds = 2
         emptyRoundChance = 0.05
@@ -179,7 +173,6 @@ function GameMode.GenerateScenario(score, tiers)
             table.insert(timeline, {})
         end
 
-
         local roundsSkipped = {}
         local function distribute()
             local roundIndex = math.random(1, numRounds)
@@ -227,18 +220,18 @@ function GameMode.GenerateScenario(score, tiers)
                             numRounds = numRounds + 1
                         end
                     elseif tier.name == C.EnemyTier[8] then
-						table.insert(timeline, {})
-						table.insert(timeline, {})
+                        table.insert(timeline, {})
+                        table.insert(timeline, {})
                         numRounds = numRounds + 2
                         if not timeline[roundIndex + 1] then
                             table.insert(timeline, roundIndex + 1, {})
                             numRounds = numRounds + 1
                         end
-						if not timeline[roundIndex + 2] then
+                        if not timeline[roundIndex + 2] then
                             table.insert(timeline, roundIndex + 2, {})
                             numRounds = numRounds + 1
                         end
-					end
+                    end
                 end
             end
         end
@@ -357,33 +350,32 @@ function GameMode.RewardRogueScore(scenario)
     GameMode.UpdateRogueScore(score)
 
     -- If not hard mode, give an extra round for perfect clear
-    if (GameMode.IsHardMode() or GameMode.IsSuperHardMode()) then
+    if GameMode.IsHardMode() or GameMode.IsSuperHardMode() then
         endRound = endRound + 1
     end
 
     if endRound <= scenario:TotalRounds() then
         Event.Trigger("ScenarioPerfectClear", scenario)
-        Player.AskConfirmation("Perfect Clear! Gain bonus loot and EXP?")
-            :After(function(confirmed)
-                if confirmed then
-                    local bonusMod = Player.Level()
-                    local bonusEXP = 100
-                    if bonusMod < 4 then
-                        bonusEXP = bonusMod * 100
-                    elseif bonusMod < 8 then
-                        bonusEXP = bonusMod * 280 
-                    elseif bonusMod < 13 then
-                        bonusEXP = bonusMod * 360
-                    else
-                        bonusEXP = bonusMod * 400
-                    end
-                    Player.GiveExperience(bonusEXP)
-                    local bonusRolls = math.max(math.floor(scenario:KillScore() * 0.25), 1)
-                    local loot = Item.GenerateLoot(bonusRolls, scenario.LootRates)
-                    local x, y, z = Osi.GetPosition(Player.Host())
-                    Item.SpawnLoot(loot, x, y, z)
+        Player.AskConfirmation("Perfect Clear! Gain bonus loot and EXP?"):After(function(confirmed)
+            if confirmed then
+                local bonusMod = Player.Level()
+                local bonusEXP = 100
+                if bonusMod < 4 then
+                    bonusEXP = bonusMod * 100
+                elseif bonusMod < 8 then
+                    bonusEXP = bonusMod * 280
+                elseif bonusMod < 13 then
+                    bonusEXP = bonusMod * 360
+                else
+                    bonusEXP = bonusMod * 400
                 end
-            end)
+                Player.GiveExperience(bonusEXP)
+                local bonusRolls = math.max(math.floor(scenario:KillScore() * 0.25), 1)
+                local loot = Item.GenerateLoot(bonusRolls, scenario.LootRates)
+                local x, y, z = Osi.GetPosition(Player.Host())
+                Item.SpawnLoot(loot, x, y, z)
+            end
+        end)
     end
 end
 
@@ -413,7 +405,7 @@ function GameMode.ApplyDifficulty(enemy, score)
         return
     end
 
--- Legendary Action summons like the Claws of Tu'narath become exponentially more dangerous if they're allowed to scale
+    -- Legendary Action summons like the Claws of Tu'narath become exponentially more dangerous if they're allowed to scale
     if enemy.Temporary then
         return
     end
@@ -437,7 +429,7 @@ function GameMode.ApplyDifficulty(enemy, score)
 
     local mod = scale(score)
 
--- Elminster's Intelligence should not be scaling at the same rate as a cow's Strength. One gains the ability to hit you, the other's already-devastating spells become irresistible.
+    -- Elminster's Intelligence should not be scaling at the same rate as a cow's Strength. One gains the ability to hit you, the other's already-devastating spells become irresistible.
     if enemy.Tier == 4 or enemy.Tier == "ultra" then
         mod = math.floor(mod / 1.2)
     elseif enemy.Tier == 5 or enemy.Tier == "epic" then
@@ -642,22 +634,6 @@ local function makeItCow()
     return lolcow
 end
 
-local function makeItWilloughby()
-    local harvard = math.random() < 0.0001
-    if harvard then
-        local hasWilloughby = Enemy.Find("MOD_MysterySpawn_Combat")
-        harvard = hasWilloughby and true or false
-    end
-
-    if harvard then
-        Defer(1000, function()
-            Player.Notify(__("You have incurred the wrath of Nature's Vengeance!"))
-        end)
-    end
-
-    return harvard
-end
-
 Schedule(function()
     External.Templates.AddScenario({
         RogueLike = true,
@@ -670,7 +646,7 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function(template)
-            local tiers = GameMode.GetTiers(makeItCow(), makeItWilloughby(), PersistentVars.RogueScore)
+            local tiers = GameMode.GetTiers(makeItCow(), PersistentVars.RogueScore)
 
             for i, tier in ipairs(tiers) do
                 local weight = (tier.amount / 100) * 0.3 -- slight bias towards tiers with more enemies
@@ -694,11 +670,11 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function(template)
-            local tiers = GameMode.GetTiers(makeItCow(), makeItWilloughby(), PersistentVars.RogueScore)
+            local tiers = GameMode.GetTiers(makeItCow(), PersistentVars.RogueScore)
 
             for i, tier in ipairs(tiers) do
                 local weight = tier.amount / 2000 -- slight bias towards tiers with more enemies
-                tier.weight = weight + 1 - ((i+1) * 0.062) -- slightly descending bias per tier
+                tier.weight = weight + 1 - ((i + 1) * 0.062) -- slightly descending bias per tier
                 L.Debug("Tier", tier.name, tier.weight)
             end
 
@@ -718,7 +694,7 @@ Schedule(function()
 
         -- Spawns per Round
         Timeline = function(template)
-            local tiers = GameMode.GetTiers(makeItCow(), makeItWilloughby(), PersistentVars.RogueScore)
+            local tiers = GameMode.GetTiers(makeItCow(), PersistentVars.RogueScore)
 
             for i, tier in ipairs(tiers) do
                 local weight = tier.amount / 100 * 0.7 -- mild bias towards tiers with more enemies

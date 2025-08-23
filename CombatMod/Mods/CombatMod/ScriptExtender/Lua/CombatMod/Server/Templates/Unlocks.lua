@@ -468,21 +468,53 @@ return table.extend({
         Register = U.Once(function(self)
             Ext.Osiris.RegisterListener("ShortRested", 1, "after", function(character)
                 local entity = Ext.Entity.Get(character)
-                local resources = get(entity.ActionResources, "Resources", {})
-                for uuid, list in pairs(resources) do
-                    for _, resource in pairs(list) do
-                        L.Dump(
-                            "Restoring Resource",
-                            character,
-                            get(Ext.StaticData.Get(resource.ResourceUUID, "ActionResource"), "Name", "Unknown")
-                        )
+                Osi.RemoveStatus(character, "SPELLSLOT_1")
+                Osi.RemoveStatus(character, "SPELLSLOT_2")
+                Osi.RemoveStatus(character, "SPELLSLOT_3")
+                Osi.RemoveStatus(character, "SPELLSLOT_4")
+                Osi.RemoveStatus(character, "SPELLSLOT_5")
+                Osi.RemoveStatus(character, "SORCERYPOINT_1")
+                Osi.RemoveStatus(character, "SORCERYPOINT_2")
+                Osi.RemoveStatus(character, "SORCERYPOINT_3")
+                Osi.RemoveStatus(character, "SORCERYPOINT_4")
+                Osi.RemoveStatus(character, "SORCERYPOINT_5")
 
-                        local toRestore = math.max(1, resource.MaxAmount / 2)
-                        resource.Amount = math.min(resource.MaxAmount, math.floor(resource.Amount + toRestore))
+                Schedule(function()
+                    local resources = get(entity.ActionResources, "Resources", {})
+                    for uuid, list in pairs(resources) do
+                        for _, resource in pairs(list) do
+                            L.Dump(
+                                "Restoring Resource",
+                                character,
+                                get(Ext.StaticData.Get(resource.ResourceUUID, "ActionResource"), "Name", "Unknown"),
+                                resource.Amount,
+                                resource.MaxAmount
+                            )
+
+                            local maxAmount = resource.MaxAmount
+                            local maxRestoreAmount = resource.MaxAmount
+                            if resource.ResourceUUID == "d136c5d9-0ff0-43da-acce-a74a07f8d6bf" then -- Spellslot
+                                maxRestoreAmount = math.round(maxRestoreAmount / 2)
+                                if maxRestoreAmount < resource.Amount then
+                                    -- set max amount to current to not remove slots
+                                    maxRestoreAmount = resource.Amount
+                                    if resource.MaxAmount < resource.Amount then -- probably impossible condition
+                                        -- if max amount is lower than current, remove slots
+                                        maxRestoreAmount = resource.MaxAmount
+                                    end
+                                end
+                            end
+                            if resource.ResourceUUID == "46886ba5-6505-4875-a747-ac14118e1e08" then -- SorceryPoint
+                                maxAmount = entity.EocLevel.Level
+                            end
+
+                            local toRestore = math.max(1, maxAmount / 2)
+                            resource.Amount = math.min(maxRestoreAmount, math.floor(resource.Amount + toRestore))
+                        end
                     end
-                end
 
-                entity:Replicate("ActionResources")
+                    entity:Replicate("ActionResources")
+                end)
             end)
         end),
         OnInit = function(self)

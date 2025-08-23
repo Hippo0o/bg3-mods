@@ -77,12 +77,6 @@ function Control.Main(tab)
         )
     )
     root:AddText("")
-    root:AddText(
-        __(
-            "Lone Wolf Mode is recommended for players who want to play solo.\nIt can be enabled on the Config tab, and it can be used in conjunction with Challenge Mode or Hell Mode.\nRemember to Reset Templates after enabling or disabling Lone Wolf Mode."
-        )
-    )
-    root:AddText("")
     root:AddSeparator()
 
     root:AddSeparatorText(__("Logs"))

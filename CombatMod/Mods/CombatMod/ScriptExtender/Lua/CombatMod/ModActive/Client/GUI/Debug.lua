@@ -15,6 +15,15 @@ function Debug.Main(tab)
         Net.Send("KillNearby")
     end
 
+    local tn = root:AddButton("Test Notification")
+    tn.SameLine = true
+    tn.OnClick = function()
+        Event.Trigger(
+            Net.EventName("Notification"),
+            { Payload = { Text = "This is a test notification!", Duration = 5 } }
+        )
+    end
+
     -- section State
     local state = root:AddGroup(__("State"))
     state:AddSeparatorText(__("State"))
@@ -117,7 +126,12 @@ function Debug.Enemies(root)
                 end
 
                 return string.contains(item.Name, input.Text, true, true)
-                    or string.contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
+                    or string.contains(
+                        Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle),
+                        input.Text,
+                        true,
+                        true
+                    )
             end)
         end
 
@@ -229,7 +243,12 @@ function Debug.Items(root)
                 end
 
                 return string.contains(item.Name, input.Text, true, true)
-                    or string.contains(Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle), input.Text, true, true)
+                    or string.contains(
+                        Ext.Loca.GetTranslatedString(temp.DisplayName.Handle.Handle),
+                        input.Text,
+                        true,
+                        true
+                    )
             end)
         end
 

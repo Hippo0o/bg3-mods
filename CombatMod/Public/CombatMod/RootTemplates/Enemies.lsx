@@ -5602,39 +5602,6 @@
 					<attribute id="IsEquipmentLootable" type="bool" value="False" />
 					<attribute id="IsLootable" type="bool" value="False" />
 					<attribute id="MapKey" type="FixedString"
-						value="582034b4-14b5-4472-8425-469b84393bf3" />
-					<attribute id="ParentTemplateId" type="FixedString"
-						value="a42a8493-b701-4d71-bdc8-0857e718c247" />
-					<attribute id="Name" type="LSString" value="TOT_Zombie_A" />
-					<attribute id="AiHint" type="guid" value="00000000-0000-0000-0000-000000000000" />
-					<attribute id="Archetype" type="FixedString" value="zombie" />
-					<attribute id="Stats" type="FixedString" value="Zombie" />
-					<attribute id="CharacterVisualResourceID" type="FixedString"
-						value="0cbb8c47-b5b4-cef1-297b-de9485d39266" />
-					<attribute id="Icon" type="FixedString"
-						value="0cbb8c47-b5b4-cef1-297b-de9485d39266-_(Icon_Zombie)" />
-					<attribute id="Equipment" type="FixedString" value="" />
-					<attribute id="SpellSet" type="FixedString"
-						value="CommonNPCActions_NoThrow_NoShove" />
-					<attribute id="LevelOverride" type="int32" value="3" />
-					<children>
-						<node id="Treasures">
-							<children>
-								<node id="TreasureItem">
-									<attribute id="Object" type="FixedString" value="Empty" />
-								</node>
-							</children>
-						</node>
-					</children>
-				</node>
-
-				<node id="GameObjects">
-					<attribute id="LevelName" type="FixedString" value="" />
-					<attribute id="Type" type="FixedString" value="character" />
-					<attribute id="Flag" type="int32" value="0" />
-					<attribute id="IsEquipmentLootable" type="bool" value="False" />
-					<attribute id="IsLootable" type="bool" value="False" />
-					<attribute id="MapKey" type="FixedString"
 						value="94ed34fb-1e19-41dc-9c21-171967da9d3c" />
 					<attribute id="ParentTemplateId" type="FixedString"
 						value="d07a6db8-462f-48ac-8286-8aad8282ba02" />

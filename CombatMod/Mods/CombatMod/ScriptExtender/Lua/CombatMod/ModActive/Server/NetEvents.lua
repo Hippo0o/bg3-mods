@@ -40,13 +40,16 @@ Net.On("GetSelection", function(event)
     })
 end)
 
-Net.On("GetTemplates", function(event)
-    Net.Respond(event, {
-        Scenarios = Scenario.GetTemplates(),
-        Maps = Map.GetTemplates(),
-        -- Enemies = Enemy.GetTemplates(),
-    })
-end)
+Net.On(
+    "GetTemplates",
+    Throttle(1000, function(event)
+        Net.Respond(event, {
+            Scenarios = Scenario.GetTemplates(),
+            Maps = Map.GetTemplates(),
+            -- Enemies = Enemy.GetTemplates(),
+        })
+    end)
+)
 
 Net.On("ResetTemplates", function(event)
     if event.Payload.Scenarios then
