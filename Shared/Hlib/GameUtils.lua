@@ -140,14 +140,24 @@ function M.DB.TryGet(query, arity, args, take)
     return result
 end
 
----@return string[] list of avatar characters
+---@return string[] list of avatar characters GUID
 function M.DB.GetAvatars()
     return M.DB.TryGet("DB_Avatars", 1, nil, 1)
 end
 
----@return string[] list of playable characters
+---@return string[] list of playable characters GUID
 function M.DB.GetPlayers()
     return M.DB.TryGet("DB_Players", 1, nil, 1)
+end
+
+---@return string[] list of party members GUID
+function M.DB.GetFullParty()
+    return M.DB.TryGet("DB_PartyMembers", 1, nil, 1)
+end
+
+---@return string[] list of characters currently in camp GUID
+function M.DB.GetCharactersInCamp()
+    return M.DB.TryGet("DB_InCamp", 1, nil, 1)
 end
 
 M.Character = {}
