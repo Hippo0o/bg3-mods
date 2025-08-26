@@ -14,10 +14,6 @@ function Config.Main(tab)
 
     Config.Checkbox(root, "Play Roguelike Mode", "Play continuously harder random battles", "RoguelikeMode")
 
-    Config.Checkbox(root, "Challenge Mode", "A challenge for experienced players. Increases Encounter Budget, increases rate of Enemy Scaling, and allows more powerful monsters to arrive sooner.", "HardMode")
-
-    Config.Checkbox(root, "Hell Mode", "An unfair challenge for players who want a punishing experience. Powerful monsters will arrive much sooner and begin swarming.", "SuperHardMode")
-
     Config.Checkbox(
         root,
         "Spawn Items At Player",

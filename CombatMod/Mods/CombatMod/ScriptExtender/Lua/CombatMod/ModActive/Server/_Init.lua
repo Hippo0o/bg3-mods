@@ -67,8 +67,6 @@ Require("CombatMod/ModActive/Server/Player")
 -- collect stats
 Event.On("ScenarioEnded", function(scenario)
     table.insert(PersistentVars.History, {
-        HardMode = PersistentVars.HardMode,
-        SuperHardMode = PersistentVars.SuperHardMode,
         RogueScore = PersistentVars.RogueScore,
         Currency = PersistentVars.Currency,
         Scenario = {

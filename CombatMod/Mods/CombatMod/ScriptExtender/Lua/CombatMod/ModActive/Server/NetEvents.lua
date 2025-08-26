@@ -97,23 +97,6 @@ end)
 Net.On("Start", function(event)
     local scenarioName = event.Payload.Scenario
     local mapName = event.Payload.Map
-    local difficultyValue = event.Payload.Difficulty
-
-    if difficultyValue == 0 then
-        PersistentVars.HardMode = false
-        PersistentVars.SuperHardMode = false
-        Event.Trigger("DifficultyModeChanged", true)
-    elseif difficultyValue == 1 then
-        PersistentVars.HardMode = true
-        PersistentVars.SuperHardMode = false
-        Event.Trigger("DifficultyModeChanged", true)
-    elseif difficultyValue == 2 then
-        PersistentVars.HardMode = false
-        PersistentVars.SuperHardMode = true
-        Event.Trigger("DifficultyModeChanged", true)
-    else
-        Net.Respond(event, { false, "Scenario error" })
-    end
 
     local template = table.find(Scenario.GetTemplates(), function(v)
         return v.Name == scenarioName
@@ -300,8 +283,6 @@ local function broadcastConfig()
     Schedule(function()
         local c = table.deepclone(Config)
         c.RoguelikeMode = PersistentVars.RogueModeActive
-        c.HardMode = PersistentVars.HardMode
-        c.SuperHardMode = PersistentVars.SuperHardMode
         c.Debug = Mod.Debug
 
         Net.Send("Config", c)
@@ -309,10 +290,8 @@ local function broadcastConfig()
 end
 
 Event.On("RogueModeChanged", broadcastConfig)
-Event.On("DifficultyModeChanged", broadcastConfig)
 
 Event.On("RogueModeChanged", broadcastState)
-Event.On("DifficultyModeChanged", broadcastState)
 Event.On("ScenarioStarted", broadcastState)
 Event.On("ScenarioMapEntered", broadcastState)
 Event.On("ScenarioRoundStarted", broadcastState)
@@ -345,24 +324,6 @@ Net.On("Config", function(event)
                     PersistentVars.RogueModeActive = config.RoguelikeMode
                     Event.Trigger("RogueModeChanged", PersistentVars.RogueModeActive)
                 end
-            end
-
-            if config.HardMode ~= nil then
-                PersistentVars.HardMode = config.HardMode
-                if PersistentVars.HardMode == true then
-                    config.SuperHardMode = false
-                    PersistentVars.SuperHardMode = config.SuperHardMode
-                end
-                broadcastState()
-            end
-
-            if config.SuperHardMode ~= nil then
-                PersistentVars.SuperHardMode = config.SuperHardMode
-                if PersistentVars.SuperHardMode == true then
-                    config.HardMode = false
-                    PersistentVars.HardMode = config.HardMode
-                end
-                broadcastState()
             end
         end
     end

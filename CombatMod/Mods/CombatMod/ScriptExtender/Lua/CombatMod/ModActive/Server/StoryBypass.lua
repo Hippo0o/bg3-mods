@@ -535,9 +535,9 @@ local function cancelDialog(dialog, instanceID)
 
         L.Dump("cancelDialog", dialog, instanceID, dialogActors, hasRemovable, hasPlayable)
 
-        if #hasRemovable > 0 then
-            StoryBypass.CancelDialog(dialog, instanceID)
-        end
+        StoryBypass.CancelDialog(dialog, instanceID)
+        -- if #hasRemovable > 0 then
+        -- end
 
         for _, actor in ipairs(hasRemovable) do
             L.Debug("Removing", actor)

@@ -144,6 +144,8 @@ function Object:SpawnIn(enemy, spawn, faceTowards)
         return false
     end
 
+    Osi.PROC_Foop(enemy.GUID)
+
     local x, y, z = self:GetSpawn(spawn)
 
     local x2, y2, z2 = Osi.FindValidPosition(x, y, z, 50, enemy.GUID, 1)

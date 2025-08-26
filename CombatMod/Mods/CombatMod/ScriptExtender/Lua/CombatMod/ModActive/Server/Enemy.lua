@@ -191,16 +191,6 @@ function Object:ModifyExperience()
             expMod = expMod * 1.25
         end
 
-        if not (PersistentVars.HardMode or PersistentVars.SuperHardMode) then
-            if Player.Level() < 5 then
-                expMod = expMod * 1.2
-            elseif Player.Level() < 10 then
-                expMod = expMod * 1.65
-            elseif Player.Level() < 15 then
-                expMod = expMod * 1.25
-            end
-        end
-
         local partySizeEXPMod = Player.PartySize()
 
         if partySizeEXPMod == 4 then
@@ -235,9 +225,7 @@ function Object:ModifyExperience()
     end)
 end
 
-function Object:OnCombat() 
-    Osi.RemoveStatus(self.GUID, "TOT_INVULNERABLE")
-end
+function Object:OnCombat() end
 
 function Object:OnAttacked(attacker)
     Schedule(function()
@@ -284,9 +272,6 @@ function Object:Modify(keepFaction)
     end
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
-        
-    -- Always invulnerable during setup
-    Osi.ApplyStatus(self.GUID, "TOT_INVULNERABLE", -1)
 
     -- if self.SpellSet == "" then
     --     Osi.AddSpell(self.GUID, "Projectile_Jump")
@@ -404,50 +389,10 @@ function Object:Spawn(x, y, z, neutral)
         return false
     end
 
-    -- spawn in asylum first to avoid issues with invalid surfaces
-    local asylumX, asylumY, asylumZ = 0, 0, 0
-    if Player.Region() == C.Regions.Act1 then
-        asylumX = -284.551
-        asylumY = 24.104
-        asylumZ = 116.642
-    elseif Player.Region() == C.Regions.Act1b then
-        asylumX = 736.06
-        asylumY = 0
-        asylumZ = -743.228
-    elseif Player.Region() == C.Regions.Act2 then
-        asylumX = 55.421
-        asylumY = 0
-        asylumZ = -1407.249
-    elseif Player.Region() == C.Regions.Act2b then
-        asylumX = 357.448
-        asylumY = 19.951
-        asylumZ = 29.953
-    elseif Player.Region() == C.Regions.Act3 then
-        asylumX = 605.245
-        asylumY = 0
-        asylumZ = -750.309
-    elseif Player.Region() == C.Regions.Act3b then
-        asylumX = -1565.942
-        asylumY = 0.853
-        asylumZ = 297.384
-    elseif Player.Region() == C.Regions.Act3c then
-        asylumX = -1909.747
-        asylumY = -0.232
-        asylumZ = 2675.996
-    elseif Player.Region() == C.Regions.Act3i then
-        asylumX = 169.889
-        asylumY = 0
-        asylumZ = 11.882
-    end
-
     x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
 
-    local success = self:CreateAt(asylumX, asylumY, asylumZ)
-
-    WaitTicks(6, function()
-        Osi.TeleportToPosition(self.GUID, x, y, z, "", 1, 1, 1, 0, 1)
-        Osi.PROC_Foop(self.GUID)
-    end)
+    local success = self:CreateAt(x, y, z)
+    Osi.ApplyStatus(self.GUID, "TOT_INVULNERABLE", 1, 1)
 
     if not success then
         L.Error("Failed to spawn: ", self:GetTranslatedName(), self:GetId())
@@ -466,6 +411,7 @@ function Object:Spawn(x, y, z, neutral)
             end
 
             Osi.SteerTo(self.GUID, Osi.GetClosestAlivePlayer(self.GUID), 1)
+            Osi.RemoveStatus(self.GUID, "TOT_INVULNERABLE")
 
             return self
         end)
