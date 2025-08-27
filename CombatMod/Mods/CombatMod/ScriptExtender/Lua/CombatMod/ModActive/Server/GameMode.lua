@@ -167,10 +167,28 @@ function GameMode.GenerateScenario(score, tiers)
         end
 
         local roundsSkipped = {}
+        local maxPerRound = 10
         local function distribute()
             local roundIndex = math.random(1, numRounds)
 
-            if #timeline[roundIndex] > 10 then
+            if #timeline[roundIndex] > maxPerRound then
+                if
+                    -- check if timeline has any round that isnt maxed
+                    table.find(
+                        table.map(timeline, function(round)
+                            return #round
+                        end),
+                        function(count)
+                            return count < maxPerRound + 1
+                        end
+                    )
+                then
+                    return
+                end
+
+                numRounds = numRounds + 1
+                maxPerRound = maxPerRound + 1
+                table.insert(timeline, roundIndex, {})
                 return
             end
 
@@ -234,7 +252,6 @@ function GameMode.GenerateScenario(score, tiers)
         local failsafe = 0
         while remainingValue > 0 do
             distribute()
-            L.Debug("Remaining Value", remainingValue, maxValue, #timeline, failed)
 
             if remainingValue < scoreTolerance then
                 break
@@ -392,19 +409,15 @@ function GameMode.ApplyDifficulty(enemy, score)
         local max_value = Config.ScalingModifier
 
         local rate = i / 1000
-        return math.floor(max_value * (1 - math.exp(-rate * x)))
+        local mod = math.floor(max_value * (1 - math.exp(-rate * x)))
+
+        -- funny magic calculation that makes higher tier enemies scale less and lower tiers scale more
+        local tierValue = UT.Invert(C.EnemyTier)[enemy.Tier] or 1
+        return math.floor(mod / (0.331 * math.exp(0.318 * tierValue)))
     end
 
     local mod = scale(score)
-
-    local tierValue = UT.Invert(C.EnemyTier)[enemy.Tier] or 1
-    if tierValue > 4 then
-        -- funny magic calculation that makes higher tier enemies scale less
-        mod = math.floor(mod / (0.331 * math.exp(0.318 * tierValue)))
-    end
-
     if mod <= 0 then
-        mod = 0
         return
     end
 
@@ -608,18 +621,23 @@ local function getEnemies(timeline)
 
     for tier, amount in pairs(tiers) do
         local list = Enemy.GetByTier(tier)
-        local tierValue = UT.Invert(C.EnemyTier)[tier]
+        if #list > 0 then
+            local tierValue = UT.Invert(C.EnemyTier)[tier]
 
-        local uniqueness = math.ceil(amount / (10 - tierValue))
+            local m = table.size(tiers)
+            m = math.max(1, m - tierValue)
+            m = 10 * m
+            local uniqueness = math.ceil(amount / m)
 
-        if tierValue >= 6 then -- legendary or higher is always preferred unique
-            uniqueness = amount
-        end
+            if tierValue >= 6 then -- legendary or higher is always preferred unique
+                uniqueness = amount
+            end
 
-        L.Dump("Enemies - Tiers", tier, amount, uniqueness, #list)
+            L.Dump("Enemies - Tiers", tier, amount, uniqueness, #list)
 
-        for i = 1, uniqueness do
-            table.insert(enemies, list[math.random(#list)])
+            for i = 1, uniqueness do
+                table.insert(enemies, list[math.random(#list)])
+            end
         end
     end
 

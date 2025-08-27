@@ -571,7 +571,7 @@ Ext.Osiris.RegisterListener(
 
         if
             dialog:match("CAMP_")
-            or dialog:match("^Hireling_")
+            or dialog:match("Hireling_")
             or dialog:match("Tadpole")
             or dialog:match("Recruitment")
             or dialog:match("InParty")

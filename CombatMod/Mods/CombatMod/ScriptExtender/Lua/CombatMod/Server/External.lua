@@ -65,6 +65,7 @@ External.Validators.Config = tt({
     BypassStory = { "nil", "boolean" },
     LootIncludesCampSlot = { "nil", "boolean" },
     SpawnItemsAtPlayer = { "nil", "boolean" },
+    GroupDistantEnemies = { "nil", "boolean" },
     Debug = { "nil", "boolean" },
     TurnOffNotifications = { "nil", "boolean" },
     ClearAllEntities = { "nil", "boolean" },

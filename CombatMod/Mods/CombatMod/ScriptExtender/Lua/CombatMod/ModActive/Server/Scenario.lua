@@ -768,7 +768,7 @@ function Scenario.TeleportHelper()
         end
 
         Osi.TeleportToPosition(s.CombatHelper, x, y, z, "", 1, 1, 1, 0, 0)
-        return false
+        error("Teleported helper.")
     end)
 end
 
@@ -801,9 +801,9 @@ function Scenario.CombatSpawned(specific)
 
             Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, C.EnemyFaction, s.CombatHelper, enemy.GUID)
 
-            if S().CombatId then -- TODO check if works
-                Osi.PROC_EnterCombatByID(enemy.GUID, S().CombatId)
-            end
+            -- if S().CombatId then -- TODO check if works
+            --     -- Osi.PROC_EnterCombatByID(enemy.GUID, S().CombatId)
+            -- end
 
             return Osi.IsInCombat(enemy.GUID) == 1
         end, {
@@ -884,7 +884,7 @@ function Scenario.GroupDistantEnemies()
         local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 20 or distance > 30
 
         if shouldSwarm then
-            Osi.RequestSetSwarmGroup(uuid, "TOT_Swarm_Group")
+            Osi.RequestSetSwarmGroup(uuid, enemy.Name)
             L.Debug("Enemy added to swarm", uuid, distance, Osi.GetSwarmGroup(uuid))
         else
             if Osi.GetSwarmGroup(uuid) then

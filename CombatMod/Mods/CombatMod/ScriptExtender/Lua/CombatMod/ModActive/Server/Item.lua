@@ -233,8 +233,7 @@ function Item.Objects(rarity, forCombat)
                     -- or cat:match("^Drink")
                     -- alchemy items
                     or name:match("^ALCH_Ingredient")
-					
-					or name:match("^GLO_SoulCoin")
+                    or name:match("^GLO_SoulCoin")
                 )
             then
                 return false
@@ -678,8 +677,14 @@ Event.On("ScenarioEnemyKilled", function(scenario, enemy)
         chanceFood = math.max(1, 10 - nr) / 10
     end
 
+    local rolls = 1
     if PersistentVars.Unlocked.LootMultiplier then
-        rolls = nr % 2 == 0 and 2 or 1
+        rolls = 1.5
+    end
+
+    rolls = math.round((rolls + 0.3) * math.random())
+    if rolls < 1 then
+        return
     end
 
     local loot = Item.GenerateSimpleLoot(rolls, chanceFood, scenario.LootRates)
@@ -700,6 +705,8 @@ Event.On(
         end
 
         local rolls = math.floor(scenario:KillScore() * lootMultiplier)
+        -- reduce loot rolls
+        rolls = math.random(math.floor(rolls * 0.3), math.ceil(rolls * 0.6))
 
         local function rollsToChunks()
             local size = 20
