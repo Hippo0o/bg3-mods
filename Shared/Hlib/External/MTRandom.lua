@@ -18,13 +18,26 @@ local t, c = 15, 0xEFC60000
 local l = 18
 local f = 1812433253
 
--- Assign functions
-local bnot = bit.bnot
-local bxor = bit.bxor
-local band = bit.band
-local bor = bit.bor
-local rshift = bit.rshift
-local lshift = bit.lshift
+-- Bitwise operations
+-- bit table is nil
+local function bnot(x)
+    return ~x
+end
+local function bxor(a, b)
+    return a ~ b
+end
+local function band(a, b)
+    return a & b
+end
+local function bor(a, b)
+    return a | b
+end
+local function rshift(a, b)
+    return a >> b
+end
+local function lshift(a, b)
+    return a << b
+end
 local function int32(int) -- 32 bits
     return band(int, 0xFFFFFFFF)
 end

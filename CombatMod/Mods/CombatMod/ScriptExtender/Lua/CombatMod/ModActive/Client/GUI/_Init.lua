@@ -113,30 +113,31 @@ end, "ToggleDebug")
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-do -- auto hide window
-    local windowVisible = Debounce(1000, function(bool)
-        if Settings.AutoHide then
-            window.Visible = bool
-        end
-    end)
-    -- local windowAlpha = Debounce(100, function(bool)
-    --     if bool then
-    --         window:SetStyle("Alpha", 1)
-    --         window.Visible = bool
-    --     else
-    --         window:SetStyle("Alpha", 0.5)
-    --     end
-    -- end)
-
-    Ext.UI.GetRoot():Subscribe("MouseEnter", function()
-        windowVisible(false)
-        -- windowAlpha(false)
-    end)
-    Ext.UI.GetRoot():Subscribe("MouseLeave", function()
-        windowVisible(true)
-        -- windowAlpha(true)
-    end)
-end
+-- broken
+-- do -- auto hide window
+--     local windowVisible = Debounce(1000, function(bool)
+--         if Settings.AutoHide then
+--             window.Visible = bool
+--         end
+--     end)
+--     -- local windowAlpha = Debounce(100, function(bool)
+--     --     if bool then
+--     --         window:SetStyle("Alpha", 1)
+--     --         window.Visible = bool
+--     --     else
+--     --         window:SetStyle("Alpha", 0.5)
+--     --     end
+--     -- end)
+--
+--     Ext.UI.GetRoot():Subscribe("MouseEnter", function()
+--         windowVisible(false)
+--         -- windowAlpha(false)
+--     end)
+--     Ext.UI.GetRoot():Subscribe("MouseLeave", function()
+--         windowVisible(true)
+--         -- windowAlpha(true)
+--     end)
+-- end
 
 GameState.OnSave(function()
     window.Visible = false

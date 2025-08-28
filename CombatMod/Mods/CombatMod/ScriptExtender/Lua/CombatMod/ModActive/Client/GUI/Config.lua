@@ -162,12 +162,12 @@ end
 function Config.Client(root)
     root:AddSeparatorText(__("Window Settings"))
 
-    local c = root:AddCheckbox(__("Auto Hide"))
-    c.OnChange = function(ckb)
-        Settings.AutoHide = ckb.Checked
-    end
-    c.Checked = Settings.AutoHide
-    root:AddText(__("Hide this window when the native UI is focused."))
+    -- local c = root:AddCheckbox(__("Auto Hide"))
+    -- c.OnChange = function(ckb)
+    --     Settings.AutoHide = ckb.Checked
+    -- end
+    -- c.Checked = Settings.AutoHide
+    -- root:AddText(__("Hide this window when the native UI is focused."))
 
     local c = root:AddCheckbox(__("Auto Toggle"))
     c.OnChange = function(ckb)
