@@ -67,13 +67,11 @@ function M.RandomId(prefix, input)
     return id
 end
 
-function M.Random(...)
-    local iter = math.floor(tostring(tonumber(tostring({}):gsub("table: ", ""), 16) / 0xFFFFFFF):sub(-3))
-    for i = 1, iter do
-        Ext.Math.Random()
-    end
-    return Ext.Math.Random(...)
-end
+local LibRandom = Require("Hlib/External/MTRandom")
+LibRandom.seed_mt(
+    Ext.Utils.MonotonicTime() * math.floor(tostring(tonumber(tostring({}):gsub("table: ", ""), 16) / 0xFFFFFFF):sub(-3))
+)
+M.Random = LibRandom.random
 
 ---@param code string x, y -> x + y
 ---@vararg any injected arguments: x
