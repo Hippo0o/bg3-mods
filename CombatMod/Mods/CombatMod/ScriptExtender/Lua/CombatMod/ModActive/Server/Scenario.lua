@@ -509,9 +509,6 @@ function Scenario.Start(template, map)
         return
     end
 
-    ---@type Enemy[]
-    local enemies = {}
-
     ---@type Scenario
     local scenario = Object.New()
 
@@ -563,6 +560,9 @@ function Scenario.Start(template, map)
     local function getEnemy(definition)
         if table.contains(C.EnemyTier, definition) then
             local enemies = Enemy.GetByTier(definition, enemyTemplates)
+            if #enemies == 0 then
+                return
+            end
 
             return enemies[math.random(#enemies)]
         end
