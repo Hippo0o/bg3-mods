@@ -17,6 +17,7 @@ table.size = Utils.Table.Size
 table.each = Utils.Table.Each
 table.contains = Utils.Table.Contains
 table.removevalue = Utils.Table.Remove
+table.unique = Utils.Table.Unique
 ---@param t table
 ---@param key any
 ---@return table t

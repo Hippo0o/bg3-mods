@@ -276,6 +276,7 @@ end
 
 ---@param t table
 ---@param func fun(value, key): boolean
+---@param keepKeys boolean|nil
 ---@return table
 function M.Table.Filter(t, func, keepKeys)
     return M.Table.Map(t, function(v, k)
@@ -326,6 +327,20 @@ function M.Table.Values(t)
     return M.Table.Map(t, function(v)
         return v
     end)
+end
+
+---@param t table
+---@param keepKeys boolean|nil
+---@return table
+function M.Table.Unique(t, keepKeys)
+    local seen = {}
+    return M.Table.Filter(t, function(v)
+        if seen[v] then
+            return false
+        end
+        seen[v] = true
+        return true
+    end, keepKeys)
 end
 
 ---@param t table<number, string> { 1 = "a", 2 = "b" }
