@@ -193,7 +193,9 @@ External.Validators.Unlock = tt({
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
-External.Templates = {}
+External.Templates = {
+    EnemiesCached = nil,
+}
 
 local function validateAndError(validator, data, key)
     local ok, error = validator:Validate(data)
@@ -214,6 +216,7 @@ end
 
 local addedEnemies = {}
 function External.Templates.AddEnemy(data)
+    External.Templates.EnemiesCached = nil
     if validateAndError(External.Validators.Enemy, data, "AddEnemy") then
         table.insert(addedEnemies, data)
     end
@@ -283,7 +286,7 @@ function External.Templates.GetMaps()
         end
     end
 
-    return table.values(data)
+    return table.unique(data)
 end
 
 function External.Templates.GetScenarios()
@@ -305,10 +308,14 @@ function External.Templates.GetScenarios()
         end
     end
 
-    return table.values(data)
+    return table.unique(data)
 end
 
-function External.Templates.GetEnemies()
+function External.Templates.GetEnemies(refresh)
+    if External.Templates.EnemiesCached ~= nil and not refresh then
+        return External.Templates.EnemiesCached
+    end
+
     local data = External.File.Import("Enemies") or Templates.GetEnemies()
 
     data = table.extend({}, addedEnemies, data)
@@ -327,7 +334,8 @@ function External.Templates.GetEnemies()
         end
     end
 
-    return table.values(data)
+    External.Templates.EnemiesCached = table.unique(data)
+    return External.Templates.EnemiesCached
 end
 
 function External.Templates.GetUnlocks()
@@ -347,7 +355,7 @@ function External.Templates.GetUnlocks()
         end
     end
 
-    return table.values(data)
+    return table.unique(data)
 end
 
 function External.Templates.GetItemFilters(fileOnly)

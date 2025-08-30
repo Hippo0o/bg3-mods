@@ -4,6 +4,12 @@
 --                                                                                             --
 -------------------------------------------------------------------------------------------------
 
+---@class EnemyTemplate
+---@field Name string
+---@field TemplateId string
+---@field Tier string
+---@field Info table
+
 ---@class Enemy : Struct
 ---@field Name string
 ---@field TemplateId string
@@ -192,10 +198,7 @@ function Object:ModifyExperience()
         end
 
         local partySizeEXPMod = Player.PartySize()
-
-        if partySizeEXPMod == 4 then
-            L.Debug("Standard party size, standard scaling")
-        elseif partySizeEXPMod == 1 then
+        if partySizeEXPMod == 1 then
             expMod = expMod * 1.12
         elseif partySizeEXPMod == 2 then
             expMod = expMod * 1.08
@@ -528,6 +531,8 @@ function Enemy.CreateTemporary(object)
     return e
 end
 
+---@param search string
+---@param templates EnemyTemplate[]|nil
 ---@return Enemy|nil
 function Enemy.Find(search, templates)
     for _, enemy in Enemy.Iter(templates) do
@@ -538,6 +543,7 @@ function Enemy.Find(search, templates)
 end
 
 ---@param tier string
+---@param templates EnemyTemplate[]|nil
 ---@return Enemy[]
 function Enemy.GetByTier(tier, templates)
     local list = {}
@@ -550,6 +556,8 @@ function Enemy.GetByTier(tier, templates)
     return list
 end
 
+---@param templateId string
+---@param templates EnemyTemplate[]|nil
 ---@return Enemy[]
 function Enemy.GetByTemplateId(templateId, templates)
     local list = {}
@@ -562,6 +570,7 @@ function Enemy.GetByTemplateId(templateId, templates)
     return list
 end
 
+---@return EnemyTemplate[]
 Enemy.GetTemplates = Cached(function()
     return table.filter(External.Templates.GetEnemies(), function(v)
         local template = Ext.Template.GetRootTemplate(v.TemplateId)
@@ -578,7 +587,7 @@ Enemy.GetTemplates = Cached(function()
     end)
 end, 10000)
 
----@field templates table<number, table>
+---@param templates EnemyTemplate[]|nil
 ---@return fun():number,Enemy
 function Enemy.Iter(templates)
     if not templates then
