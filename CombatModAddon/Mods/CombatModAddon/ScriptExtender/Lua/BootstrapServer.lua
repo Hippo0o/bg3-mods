@@ -24,7 +24,7 @@ Ext.Events.SessionLoaded:Subscribe(function()
     -- end
 
     -- On mod active check what mods are loaded and include addons
-    Ext.ModEvents.ToT.ModActive:Subscribe(function()
+    Ext.ModEvents.ToT.ModInit:Subscribe(function()
         -- if Ext.Mod.IsModLoaded("49a94025-c3e4-461f-bc08-2de6a629666c") then
         --     log("AdditionalEnemies detected.")
         --

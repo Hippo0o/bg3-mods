@@ -299,9 +299,7 @@ function GameMode.GenerateScenario(score, tiers)
     local partySizeMod = Player.PartySize()
     local spawnValue = score
 
-    if partySizeMod == 4 then
-        L.Debug("Standard party size, standard scaling")
-    elseif partySizeMod == 1 then
+    if partySizeMod == 1 then
         spawnValue = math.ceil(score * 0.7)
     elseif partySizeMod == 2 then
         spawnValue = math.ceil(score * 0.8)
@@ -500,6 +498,109 @@ function GameMode.ApplyDifficulty(enemy, score)
     GameMode.DifficultyAppliedTo[enemy.GUID] = true
 end
 
+function GameMode.GetRandomMap(template)
+    local threshold = 40
+
+    local maps = table.filter(Map.Get(), function(v)
+        return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
+    end)
+
+    local map = nil
+    if #maps > 0 then
+        local random = math.random(#maps)
+
+        if table.contains(PersistentVars.RandomLog.Maps, random) then
+            random = math.random(#maps)
+        end
+        LogRandom("Maps", random, 10)
+
+        map = maps[random]
+    end
+
+    return map
+end
+
+function GameMode.GetFilteredEnemies(timeline, templates)
+    local enemies = {}
+    local tiers = {}
+    for _, definitions in ipairs(timeline) do
+        for _, definition in ipairs(definitions) do
+            if table.contains(C.EnemyTier, definition) then
+                tiers[definition] = (tiers[definition] or 0) + 1
+            else
+                -- timeline had an explicit enemy
+                table.insert(enemies, Enemy.Find(definition, templates))
+            end
+        end
+    end
+
+    for tier, amount in pairs(tiers) do
+        local list = Enemy.GetByTier(tier, templates)
+        if #list > 0 then
+            local tierValue = UT.Invert(C.EnemyTier)[tier]
+
+            local m = table.size(tiers)
+            m = math.max(1, m - tierValue)
+            m = 10 * m
+            local uniqueness = math.ceil(amount / m)
+
+            if tierValue >= 6 then -- legendary or higher is always preferred unique
+                uniqueness = amount
+            end
+
+            L.Dump("Enemies - Tiers", tier, amount, uniqueness, #list)
+
+            for i = 1, uniqueness do
+                table.insert(enemies, list[math.random(#list)])
+            end
+        end
+    end
+
+    L.Dump(
+        "Enemies",
+        table.map(enemies, function(v)
+            return v.Name
+        end)
+    )
+
+    return enemies
+end
+
+function GameMode.GenerateTimeline(difficulty)
+    local tiers = GameMode.MakeItCow() or GameMode.GetTiers(PersistentVars.RogueScore, difficulty)
+
+    for i, tier in ipairs(tiers) do
+        local weight = tier.amount / 2000 -- slight bias towards tiers with more enemies
+        tier.weight = weight + 1 - ((i + 1) * 0.062) -- slightly descending bias per tier
+        L.Debug("Tier", tier.name, tier.weight)
+    end
+    L.Dump("Tiers", tiers)
+    return GameMode.GenerateScenario(PersistentVars.RogueScore, tiers)
+end
+
+function GameMode.MakeItCow()
+    local lolcow = math.random() < 0.001
+    if lolcow then
+        local hasOX = Enemy.Find("TOT_OX_A")
+        lolcow = hasOX and true or false
+    end
+
+    if lolcow then
+        Defer(1000, function()
+            Player.Notify(__("You found the secret cow level!"))
+        end)
+        return { { name = "TOT_OX_A", value = math.max(4, PersistentVars.RogueScore / 100), amount = 100 } }
+    end
+
+    return false
+end
+
+-------------------------------------------------------------------------------------------------
+--                                                                                             --
+--                                           Events                                            --
+--                                                                                             --
+-------------------------------------------------------------------------------------------------
+
 Ext.Osiris.RegisterListener(
     "TeleportedToCamp",
     1,
@@ -566,103 +667,6 @@ Event.On(
     end)
 )
 
-local function getMap(template)
-    local threshold = 40
-
-    local maps = table.filter(Map.Get(), function(v)
-        return PersistentVars.RogueScore > threshold or v.Region == C.Regions.Act1
-    end)
-
-    local map = nil
-    if #maps > 0 then
-        local random = math.random(#maps)
-
-        if table.contains(PersistentVars.RandomLog.Maps, random) then
-            random = math.random(#maps)
-        end
-        LogRandom("Maps", random, 10)
-
-        map = maps[random]
-    end
-
-    return map
-end
-
-local function makeItCow()
-    local lolcow = math.random() < 0.001
-    if lolcow then
-        local hasOX = Enemy.Find("TOT_OX_A")
-        lolcow = hasOX and true or false
-    end
-
-    if lolcow then
-        Defer(1000, function()
-            Player.Notify(__("You found the secret cow level!"))
-        end)
-        return { { name = "TOT_OX_A", value = math.max(4, PersistentVars.RogueScore / 100), amount = 100 } }
-    end
-
-    return false
-end
-
-local function getEnemies(timeline)
-    local enemies = {}
-    local tiers = {}
-    for _, definitions in ipairs(timeline) do
-        for _, definition in ipairs(definitions) do
-            if table.contains(C.EnemyTier, definition) then
-                tiers[definition] = (tiers[definition] or 0) + 1
-            else
-                -- timeline had an explicit enemy
-                table.insert(enemies, Enemy.Find(definition))
-            end
-        end
-    end
-
-    for tier, amount in pairs(tiers) do
-        local list = Enemy.GetByTier(tier)
-        if #list > 0 then
-            local tierValue = UT.Invert(C.EnemyTier)[tier]
-
-            local m = table.size(tiers)
-            m = math.max(1, m - tierValue)
-            m = 10 * m
-            local uniqueness = math.ceil(amount / m)
-
-            if tierValue >= 6 then -- legendary or higher is always preferred unique
-                uniqueness = amount
-            end
-
-            L.Dump("Enemies - Tiers", tier, amount, uniqueness, #list)
-
-            for i = 1, uniqueness do
-                table.insert(enemies, list[math.random(#list)])
-            end
-        end
-    end
-
-    L.Dump(
-        "Enemies",
-        table.map(enemies, function(v)
-            return v.Name
-        end)
-    )
-
-    return enemies
-end
-
-local function getTimeline(difficulty)
-    local tiers = makeItCow() or GameMode.GetTiers(PersistentVars.RogueScore, difficulty)
-
-    for i, tier in ipairs(tiers) do
-        local weight = tier.amount / 2000 -- slight bias towards tiers with more enemies
-        tier.weight = weight + 1 - ((i + 1) * 0.062) -- slightly descending bias per tier
-        L.Debug("Tier", tier.name, tier.weight)
-    end
-    L.Dump("Tiers", tiers)
-    return GameMode.GenerateScenario(PersistentVars.RogueScore, tiers)
-end
-
 Schedule(function()
     External.Templates.AddScenario({
         RogueLike = true,
@@ -671,20 +675,18 @@ Schedule(function()
         end,
 
         Name = C.RoguelikeScenario,
-        Map = getMap,
+        Map = GameMode.GetRandomMap,
 
         Enemies = function(self)
-            return getEnemies(self._Timeline)
+            return GameMode.GetFilteredEnemies(self._Timeline)
         end,
 
         -- Spawns per Round
         _Timeline = nil,
         Timeline = function(self)
-            self._Timeline = getTimeline(0)
+            self._Timeline = GameMode.GenerateTimeline(0)
             return self._Timeline
         end,
-
-        Loot = C.LootRates,
     })
     External.Templates.AddScenario({
         RogueLike = true,
@@ -693,20 +695,18 @@ Schedule(function()
         end,
 
         Name = C.RoguelikeScenario .. " (Hard)",
-        Map = getMap,
+        Map = GameMode.GetRandomMap,
 
         Enemies = function(self)
-            return getEnemies(self._Timeline)
+            return GameMode.GetFilteredEnemies(self._Timeline)
         end,
 
         -- Spawns per Round
         _Timeline = nil,
         Timeline = function(self)
-            self._Timeline = getTimeline(1)
+            self._Timeline = GameMode.GenerateTimeline(1)
             return self._Timeline
         end,
-
-        Loot = C.LootRates,
     })
     External.Templates.AddScenario({
         RogueLike = true,
@@ -715,19 +715,17 @@ Schedule(function()
         end,
 
         Name = C.RoguelikeScenario .. " (Hell)",
-        Map = getMap,
+        Map = GameMode.GetRandomMap,
 
         Enemies = function(self)
-            return getEnemies(self._Timeline)
+            return GameMode.GetFilteredEnemies(self._Timeline)
         end,
 
         -- Spawns per Round
         _Timeline = nil,
         Timeline = function(self)
-            self._Timeline = getTimeline(2)
+            self._Timeline = GameMode.GenerateTimeline(2)
             return self._Timeline
         end,
-
-        Loot = C.LootRates,
     })
 end)
