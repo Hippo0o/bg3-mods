@@ -627,12 +627,13 @@ function Enemy.DistanceToParty(object)
         return entity.Transform.Transform.Translate
     end)
 
+    local distance = 999
+
     local x, y, z = Osi.GetPosition(object)
     if x == nil or y == nil or z == nil then
-        return
+        return distance, 0, 0, 0
     end
 
-    local distance = 999
     local partyXyz = {}
     for _, xyz in ipairs(partyPositions) do
         local d = Ext.Math.Distance({ x, xyz[2], z }, xyz)

@@ -497,7 +497,7 @@ local function cancelDialog(dialog, instanceID)
         return
     end
 
-    handlers[instanceID] = Debounce(10, function(dialog, instanceID)
+    handlers[instanceID] = Debounce(100, function(dialog, instanceID)
         Schedule(function()
             actors[instanceID] = nil
             handlers[instanceID] = nil
@@ -570,8 +570,8 @@ Ext.Osiris.RegisterListener(
         L.Debug("DialogActorJoined", dialog, actor)
 
         if
-            dialog:match("CAMP_")
-            or dialog:match("Hireling_")
+            -- dialog:match("CAMP_")
+            dialog:match("Hireling_")
             or dialog:match("Tadpole")
             or dialog:match("Recruitment")
             or dialog:match("InParty")

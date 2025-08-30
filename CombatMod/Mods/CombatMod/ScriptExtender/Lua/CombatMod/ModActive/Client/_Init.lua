@@ -45,12 +45,12 @@ do
 
     local function showMessage(text, duration)
         if not subtitleWidget then
-            -- WaitUntil(function()
-            --     return subtitleWidget ~= nil
-            -- end):After(function()
-            --     showMessage(text, duration)
-            -- end)
-            L.Error("Notification not displayed: " .. text)
+            -- L.Error("Notification not displayed: " .. text)
+            WaitUntil(function()
+                return subtitleWidget ~= nil
+            end):After(function()
+                showMessage(text, duration)
+            end)
             return
         end
 

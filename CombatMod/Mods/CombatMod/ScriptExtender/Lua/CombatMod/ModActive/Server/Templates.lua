@@ -15,7 +15,6 @@ External.LoadLootRates()
 
 function Templates.ExportEnemies()
     External.File.Export("Enemies", enemyTemplates)
-    External.Templates.EnemiesCached = nil
 end
 
 function Templates.ExportMaps()

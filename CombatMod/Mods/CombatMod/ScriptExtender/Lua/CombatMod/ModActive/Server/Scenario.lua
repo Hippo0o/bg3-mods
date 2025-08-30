@@ -877,11 +877,9 @@ function Scenario.GroupDistantEnemies()
     for _, enemy in ipairs(enemies) do
         local uuid = enemy.GUID
 
-        local x, y, z = Osi.GetPosition(uuid)
-
         local distance = Enemy.DistanceToParty(uuid)
 
-        local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 20 or distance > 30
+        local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 30 or distance > 60
 
         if shouldSwarm then
             Osi.RequestSetSwarmGroup(uuid, enemy.Name)
