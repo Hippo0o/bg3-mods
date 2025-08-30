@@ -314,6 +314,22 @@ function M.Table.Find(t, func)
 end
 
 ---@param t table
+---@return any|nil
+function M.Table.Last(t)
+    if next(t) == nil then
+        return nil
+    end
+
+    local n = #t
+    if n > 0 then
+        return t[n]
+    end
+
+    local vals = M.Table.Values(t)
+    return vals[#vals]
+end
+
+---@param t table
 ---@return table
 function M.Table.Keys(t)
     return M.Table.Map(t, function(_, k)

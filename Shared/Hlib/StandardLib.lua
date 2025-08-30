@@ -18,6 +18,7 @@ table.each = Utils.Table.Each
 table.contains = Utils.Table.Contains
 table.removevalue = Utils.Table.Remove
 table.unique = Utils.Table.Unique
+table.last = Utils.Table.Last
 ---@param t table
 ---@param key any
 ---@return table t

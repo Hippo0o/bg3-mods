@@ -100,6 +100,24 @@ function M.Entity.GetNearby(source, radius, ignoreHeight, withComponent)
     return nearby
 end
 
+function M.Entity.CanAct(entity, ignoreMovement)
+    if ignoreMovement and Utils.GetProperty(entity.TurnBased, "TurnActionsCompleted", nil) == true then
+        return false
+    end
+
+    local resources = Utils.GetProperty(entity.ActionResources, "Resources")
+    if not resources then
+        return false
+    end
+
+    return Utils.GetProperty(resources["734cbcfb-8922-4b6d-8330-b2a7e4c14b6a"][1], "Amount", 0) > 0 -- ActionPoint
+        and Utils.GetProperty(resources["420c8df5-45c2-4253-93c2-7ec44e127930"][1], "Amount", 0) > 0 -- BonusActionPoint
+        and (
+            ignoreMovement
+            or Utils.GetProperty(resources["d6b2369d-84f0-4ca4-a3a7-62d2d192a185"][1], "Amount", 0) > 0 -- MoveActionPoint
+        )
+end
+
 if Ext.IsClient() then
     return M
 end
