@@ -213,6 +213,12 @@ function Player.ReturnToCamp()
     return Schedule()
 end
 
+function Player.HadTurn()
+    return table.find(GE.GetParty(), function(e)
+        return e.TurnBased.ActedThisRoundInCombat == false
+    end) == nil
+end
+
 local readyChecks = {}
 ---@class ChainableConfirmation : Chainable
 ---@field After fun(self: Chainable, func: fun(result: boolean): any): Chainable

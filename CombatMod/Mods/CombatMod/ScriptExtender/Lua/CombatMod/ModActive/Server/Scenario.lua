@@ -197,7 +197,7 @@ function Action.StartCombat()
 
     Event.Trigger("ScenarioCombatStarted", s)
 
-    Osi.Autosave()
+    Osi.AutoSave()
 end
 
 ---@return ChainableRunner
@@ -863,32 +863,51 @@ function Scenario.ForcePartyIntoCombat()
     })
 end
 
-function Scenario.GroupDistantEnemies()
+function Scenario.GroupDistantEnemies(source)
     local s = Current()
 
     if not Config.GroupDistantEnemies then
         return
     end
 
+    local function shouldSwarm(enemy)
+        local distance = Enemy.DistanceToParty(enemy.GUID)
+        return #s.SpawnedEnemies > 11 and distance > 20 or distance > 30
+    end
+
+    if source and not shouldSwarm(source) then
+        return
+    end
+
     local enemies = table.filter(s.SpawnedEnemies, function(e)
-        return e:IsSpawned() and string.contains(e.Tier, { table.unpack(C.EnemyTier, 1, 3) })
+        return e:IsSpawned()
+            and (source == nil or (e.GUID ~= source.GUID and e.Name == source.Name))
+            and get(e:Entity().TurnBased, "ActedThisRoundInCombat") == false
+        -- string.contains(e.Tier, { table.unpack(C.EnemyTier, 1, 3) })
     end)
 
+    local limit = 3
     for _, enemy in ipairs(enemies) do
-        local uuid = enemy.GUID
-
-        local distance = Enemy.DistanceToParty(uuid)
-
-        local shouldSwarm = #s.SpawnedEnemies > 11 and distance > 30 or distance > 60
-
-        if shouldSwarm then
-            Osi.RequestSetSwarmGroup(uuid, enemy.Name)
-            L.Debug("Enemy added to swarm", uuid, distance, Osi.GetSwarmGroup(uuid))
-        else
-            if Osi.GetSwarmGroup(uuid) then
-                Osi.RequestSetSwarmGroup(uuid, "")
-            end
+        if shouldSwarm(enemy) then
+            limit = limit - 1
+            local e = enemy:Entity()
+            e.TurnBased.CanAct_M = true
+            e.TurnBased.IsActiveCombatTurn = true
+            e:Replicate("TurnBased")
+            L.Dump("Force enemy turn", enemy.GUID, e.TurnBased)
         end
+        if limit <= 0 then
+            break
+        end
+
+        -- if shouldSwarm then
+        --     Osi.RequestSetSwarmGroup(uuid, enemy.Name)
+        --     L.Debug("Enemy added to swarm", uuid, distance, Osi.GetSwarmGroup(uuid))
+        -- else
+        --     if Osi.GetSwarmGroup(uuid) then
+        --         Osi.RequestSetSwarmGroup(uuid, "")
+        --     end
+        -- end
     end
     -- local enemy = table.find(s.SpawnedEnemies, function(e)
     --     return U.UUID.Equals(e.GUID, uuid)
@@ -931,7 +950,7 @@ function Scenario.CloseEnemyDistance(specific, maxDistance)
     end)
 
     if not maxDistance then
-        maxDistance = 40
+        maxDistance = 60
     end
 
     local adjusting = table.map(enemies, function(enemy)
@@ -941,9 +960,6 @@ function Scenario.CloseEnemyDistance(specific, maxDistance)
         end
 
         local distance, x2, y2, z2 = Enemy.DistanceToParty(enemy.GUID)
-        if x2 == nil or y2 == nil or z2 == nil then
-            return
-        end
 
         if distance < maxDistance then
             return
@@ -1169,10 +1185,6 @@ Ext.Osiris.RegisterListener(
     ifScenario(function(uuid)
         local s = Current()
 
-        if Player.IsPlayer(uuid) then
-            Scenario.GroupDistantEnemies()
-        end
-
         local enemy = table.find(s.SpawnedEnemies, function(e)
             return U.UUID.Equals(e.GUID, uuid)
         end)
@@ -1189,6 +1201,13 @@ Ext.Osiris.RegisterListener(
     "before",
     ifScenario(function(uuid)
         local s = Current()
+
+        local enemy = table.find(s.SpawnedEnemies, function(e)
+            return U.UUID.Equals(e.GUID, uuid)
+        end)
+        if enemy and Player.HadTurn() then
+            Scenario.GroupDistantEnemies(enemy)
+        end
 
         if not U.UUID.Equals(uuid, s.CombatHelper) then
             return
@@ -1269,9 +1288,7 @@ Ext.Osiris.RegisterListener(
 
         Scenario.CheckShouldStop()
 
-        Scenario.CloseEnemyDistance():After(function()
-            Scenario.GroupDistantEnemies()
-        end)
+        Scenario.CloseEnemyDistance()
 
         Scenario.CombatSpawned()
 
