@@ -12,8 +12,14 @@ local function ReplaceEnemies()
     -- second approach
     UT.Each(customEnemies, External.Templates.AddEnemy)
     -- bcs we replace existing enemies too, we need to filter here
+    local filtered = {}
     External.Templates.PatchEnemies(function(e)
-        return UT.Contains(customEnemies, e) and e or nil
+        if UT.Contains(customEnemies, e) and not filtered[e] then
+            filtered[e] = true -- prevent duplicates
+            return e
+        end
+
+        return nil
     end)
 end
 
@@ -31,5 +37,33 @@ local function ExtendItemFilter()
     External.Templates.AddItemFilter({ Names = itemFilter })
 end
 
+local function RegisterLoneWolfMode()
+    local GameMode = Mods.ToT.GameMode
+    -- special list of enemy templates for LoneWolf mode
+    local templates = Require("Mods/AdvancedTTSpells/Templates/LoneWolfEnemies.lua")
+
+    External.Templates.AddScenario({
+        RogueLike = true,
+        OnStart = function(self)
+            GameMode.StartRoguelike(self)
+        end,
+
+        Name = Mods.ToT.C.RoguelikeScenario .. " (LoneWolf)",
+        Map = GameMode.GetRandomMap,
+
+        Enemies = function(self)
+            return GameMode.GetFilteredEnemies(self._Timeline, templates)
+        end,
+
+        -- Spawns per Round
+        _Timeline = nil,
+        Timeline = function(self)
+            self._Timeline = GameMode.GenerateTimeline(0)
+            return self._Timeline
+        end,
+    })
+end
+
 ReplaceEnemies()
 ExtendItemFilter()
+RegisterLoneWolfMode()
