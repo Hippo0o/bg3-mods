@@ -16,6 +16,7 @@ local listeners = {}
 ---@class EventListener : LibsStruct
 ---@field private _Id string
 ---@field private _Event string
+---@field private _Exectuing boolean
 ---@field private _Func fun(...: any)
 ---@field Once boolean
 ---@field Exec fun(self: EventListener, ...: any)
@@ -33,12 +34,20 @@ local EventListener = Libs.Struct({
             Log.Debug("Event/Exec", self._Id, self._Origin)
         end
 
+        if self._Exectuing then
+            Log.Warn("Event/Exec", "Recursive event execution detected, skipping...", self._Id, self._Origin)
+            return
+        end
+
+        self._Exectuing = true
+
         xpcall(function()
             self._Func(table.unpack(args))
         end, function(err)
             Log.Error(err)
         end)
 
+        self._Exectuing = false
         if self.Once then
             self:Unregister()
         end

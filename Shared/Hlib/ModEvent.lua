@@ -17,7 +17,10 @@ local M = {}
 ---@vararg any
 function M.Trigger(event, ...)
     L.Debug("ModEvent/Trigger", Mod.TableKey, event)
-    Ext.ModEvents[Mod.TableKey][event]:Throw(...)
+    Ext.ModEvents[Mod.TableKey][event]:Throw({
+        Stopped = false, -- SE has a check for that specific field
+        Payload = { ... },
+    })
 end
 
 ---@param event string
