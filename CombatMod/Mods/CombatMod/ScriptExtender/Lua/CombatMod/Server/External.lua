@@ -133,8 +133,8 @@ local lootRatesType = tt({
 External.Validators.LootRates = lootRatesType
 
 External.Validators.ItemFilter = tt({
-    Mods = tt({ "nil", U.UUID.IsValid }, true),
-    Names = tt({ "nil", "string" }, true),
+    Mods = { "nil", tt({ "nil", U.UUID.IsValid }, true) },
+    Names = { "nil", tt({ "nil", "string" }, true) },
 })
 
 local function validateTimelineEntry(value)
@@ -223,13 +223,6 @@ local addedScenarios = {}
 function External.Templates.AddScenario(data)
     if validateAndError(External.Validators.Scenario, data, "AddScenario") then
         table.insert(addedScenarios, data)
-    end
-end
-
-local addedUnlocks = {}
-function External.Templates.AddUnlock(data)
-    if validateAndError(External.Validators.Unlock, data, "AddUnlock") then
-        table.insert(addedUnlocks, data)
     end
 end
 
@@ -357,20 +350,20 @@ function External.Templates.GetUnlocks()
     return table.values(data)
 end
 
-function External.Templates.GetItemFilters(user)
-    local data = user and { Names = {}, Mods = {} } or Templates.GetItemFilters()
+function External.Templates.GetItemFilters(fileOnly)
+    local data = fileOnly and { Names = {}, Mods = {} } or Templates.GetItemFilters()
 
     local file = External.File.Import("ItemFilters")
 
     if file and validateAndError(External.Validators.ItemFilter, file, "LoadItemFilters") then
-        table.extend(data.Names, file.Names)
-        table.extend(data.Mods, file.Mods)
+        table.extend(data.Names, file.Names or {})
+        table.extend(data.Mods, file.Mods or {})
     end
 
-    if not user then
+    if not fileOnly then
         for _, added in ipairs(addedItemFilters) do
-            table.extend(data.Names, added.Names)
-            table.extend(data.Mods, added.Mods)
+            table.extend(data.Names, added.Names or {})
+            table.extend(data.Mods, added.Mods or {})
         end
     end
 
