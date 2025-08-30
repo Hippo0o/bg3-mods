@@ -12,14 +12,9 @@ local function ReplaceEnemies()
     -- second approach
     UT.Each(customEnemies, External.Templates.AddEnemy)
     -- bcs we replace existing enemies too, we need to filter here
-    local filtered = {}
+    local reg = UT.Invert(customEnemies)
     External.Templates.PatchEnemies(function(e)
-        if UT.Contains(customEnemies, e) and not filtered[e] then
-            filtered[e] = true -- prevent duplicates
-            return e
-        end
-
-        return nil
+        return reg[e] and e or nil
     end)
 end
 
@@ -27,8 +22,9 @@ local function ReplaceUnlocks()
     local customUnlocks = Require("Mods/AdvancedTTSpells/Templates/Unlocks.lua")
     UT.Each(customUnlocks, External.Templates.AddUnlock)
     -- bcs we replace all unlocks, we need to filter here
+    local reg = UT.Invert(customEnemies)
     External.Templates.PatchUnlocks(function(u)
-        return UT.Contains(customUnlocks, u) and u or nil
+        return reg[u] and u or nil
     end)
 end
 
