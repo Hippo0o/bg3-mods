@@ -52,7 +52,7 @@ local upper_mask = int32(bnot(lower_mask))
 function M.seed_mt(seed)
     index = n
     if not seed then
-        seed = os.time()
+        seed = Ext.Utils.MonotonicTime()
     end
     MT[0] = int32(seed)
     for i = 1, n - 1 do
