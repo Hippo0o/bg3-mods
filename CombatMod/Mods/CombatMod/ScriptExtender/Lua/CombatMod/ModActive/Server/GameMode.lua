@@ -404,18 +404,28 @@ function GameMode.ApplyDifficulty(enemy, score)
 
     local function scale(i)
         local x = i / 200
-        local max_value = Config.ScalingModifier
-
         local rate = i / 1000
-        local mod = math.floor(max_value * (1 - math.exp(-rate * x)))
+        local scalar = Config.ScalingModifier
+
+        local mod = math.floor(scalar * (1 - math.exp(-rate * x)))
+        local tierValue = UT.Invert(C.EnemyTier)[enemy.Tier] or 1
 
         -- funny magic calculation that makes higher tier enemies scale less and lower tiers scale more
-        local tierValue = UT.Invert(C.EnemyTier)[enemy.Tier] or 1
-        return math.floor(mod / (0.331 * math.exp(0.318 * tierValue)))
+        local denom = 0.331 * math.exp(0.318 * tierValue)
+
+        if mod == 0 then
+            local invRatio = (100 - i) / 100
+            -- raise expFactor to boost higher tiers more aggressively
+            local expFactor = math.exp(0.5 * tierValue)
+            local mod = math.floor(invRatio * expFactor)
+            return -mod
+        end
+
+        return math.floor(mod / denom)
     end
 
     local mod = scale(score)
-    if mod <= 0 then
+    if mod == 0 then
         return
     end
 
@@ -441,7 +451,7 @@ function GameMode.ApplyDifficulty(enemy, score)
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. "," .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. "," .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         -- Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
-        if mod2 > 0 then
+        if mod2 ~= 0 then
             Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
         end
     end
