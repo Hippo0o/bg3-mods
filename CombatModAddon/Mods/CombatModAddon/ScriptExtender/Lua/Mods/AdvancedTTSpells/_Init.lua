@@ -5,27 +5,33 @@ local UT = Mods.ToT.UT
 
 local function ReplaceEnemies()
     local customEnemies = Require("Mods/AdvancedTTSpells/Templates/Enemies.lua")
-    -- first approach
-    -- force export our list to overwrite existing file
-    -- is not needed if second approach overwrites templates at runtime
-    External.File.Export("Enemies", customEnemies)
-    -- second approach
-    UT.Each(customEnemies, External.Templates.AddEnemy)
-    -- bcs we replace existing enemies too, we need to filter here
-    local reg = UT.Invert(customEnemies)
-    External.Templates.PatchEnemies(function(e)
-        return reg[e] and e or nil
-    end)
+    -- UT.Each(customEnemies, External.Templates.AddEnemy)
+    -- -- bcs we replace existing enemies too, we need to filter here
+    -- local reg = UT.Invert(customEnemies)
+    -- External.Templates.PatchEnemies(function(e)
+    --     return reg[e] and e or nil
+    -- end)
+
+    Mods.ToT.Templates.ExportEnemies = function()
+        External.File.Export("Enemies", customEnemies)
+    end
+    Mods.ToT.Templates.GetEnemies = function()
+        return UT.DeepClone(customEnemies)
+    end
 end
 
 local function ReplaceUnlocks()
     local customUnlocks = Require("Mods/AdvancedTTSpells/Templates/Unlocks.lua")
-    UT.Each(customUnlocks, External.Templates.AddUnlock)
-    -- bcs we replace all unlocks, we need to filter here
-    local reg = UT.Invert(customEnemies)
-    External.Templates.PatchUnlocks(function(u)
-        return reg[u] and u or nil
-    end)
+    -- UT.Each(customUnlocks, External.Templates.AddUnlock)
+    -- -- bcs we replace all unlocks, we need to filter here
+    -- local reg = UT.Invert(customEnemies)
+    -- External.Templates.PatchUnlocks(function(u)
+    --     return reg[u] and u or nil
+    -- end)
+
+    Mods.ToT.Templates.GetUnlocks = function()
+        return UT.DeepClone(customUnlocks)
+    end
 end
 
 local function ExtendItemFilter()
