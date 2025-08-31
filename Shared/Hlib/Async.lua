@@ -567,7 +567,7 @@ function M.Sync(chainable)
 
     assert(Libs.IsChainable(chainable), "Async.Sync(chainable) - Chainable expected")
 
-    chainable:Final(function(...)
+    chainable:Stop(function(...)
         return true, resumeCoroutine(co, ...)
     end)
 
@@ -598,7 +598,7 @@ function M.SyncAll(chainables)
             "Async.SyncAll(chainables[" .. i .. "]) - Chainable expected, got " .. type(chainable)
         )
 
-        chainable:Final(function(success, ...)
+        chainable:Stop(function(success, ...)
             results[i] = { ... }
             awaiting = awaiting - 1
 

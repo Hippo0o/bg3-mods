@@ -240,7 +240,8 @@ end
 ---@class Chainable : Struct
 ---@field After fun(self: Chainable, func: fun(source: any|nil, ...: any): any, passSelf: boolean|nil, chainOnNil: boolean|nil): Chainable
 ---@field Catch fun(self: Chainable, func: fun(source: any|nil, err: string): any, passSelf: boolean|nil): Chainable
----@field Final fun(self: Chainable, func: fun(...: any, passSelf: boolean|nil): boolean, any): Chainable
+---@field Always fun(self: Chainable, func: fun(source: any|nil, success: boolean, ...: any): any, passSelf: boolean|nil): Chainable
+---@field Stop fun(self: Chainable, func: fun(source: any|nil, success: boolean, ...: any): boolean, any, passSelf: boolean|nil): Chainable
 ---@field Source any
 local Chainable = M.Struct({
     Source = nil,
@@ -273,14 +274,26 @@ function Chainable:Catch(func, passSelf)
     return self
 end
 
--- callback to catch errors and finalize the chain before
--- takes priority over catch if before catch
-function Chainable:Final(func, passSelf)
+-- callback to execute even if the chain didn't catch an error
+-- if the callback returns nil, the chain will continue with previous result
+function Chainable:Always(func, passSelf)
     if type(func) ~= "function" then
-        error("Chainable:Final(func) - function expected, got " .. type(func))
+        error("Chainable:Always(func) - function expected, got " .. type(func))
     end
 
-    table.insert(self._Chain, { final = { func, passSelf } })
+    table.insert(self._Chain, { always = { func, passSelf } })
+
+    return self
+end
+
+-- callback to catch errors and stop the chain at this point
+-- takes priority over catch if before catch
+function Chainable:Stop(func, passSelf)
+    if type(func) ~= "function" then
+        error("Chainable:Stop(func) - function expected, got " .. type(func))
+    end
+
+    table.insert(self._Chain, { stop = { func, passSelf } })
 
     return self
 end
@@ -288,15 +301,25 @@ end
 function Chainable:Throw(err)
     local catch = {}
 
+    local alwaysLinks = {}
     for i, link in ipairs(self._Chain) do
-        if link.final then
+        if link.stop then
             break
+        end
+
+        if link.always then
+            table.insert(alwaysLinks, link)
         end
 
         if link.catch then
             catch = link.catch
             for _ = 1, i do
                 table.remove(self._Chain, 1)
+            end
+
+            -- on first catch, prepend all always links found before it to the chain again
+            for j = #alwaysLinks, 1, -1 do
+                table.insert(self._Chain, 1, alwaysLinks[j])
             end
 
             break
@@ -356,13 +379,21 @@ function Chainable:Begin(...)
     end
 
     local firstExec = true
-    while #self._Chain > 0 do
-        local link = table.remove(self._Chain, 1)
+    local appendedLinks = 0
+    while #self._Chain > appendedLinks do
+        local link = table.remove(self._Chain, appendedLinks + 1)
 
         local ok, err = pcall(function()
-            if link.final then
+            if link.stop then
                 table.insert(self._Chain, 1, link)
                 state = { self:End(true, state) }
+                return
+            end
+
+            if link.always then
+                appendedLinks = appendedLinks + 1
+                table.insert(self._Chain, appendedLinks, link)
+                return
             end
 
             if not link.exec then
@@ -407,8 +438,8 @@ function Chainable:End(success, state)
 
     while #self._Chain > 0 do
         local link = table.remove(self._Chain, 1)
-        if link.final then
-            local func, passSelf = table.unpack(link.final)
+        if link.stop then
+            local func, passSelf = table.unpack(link.stop)
             if type(func) == "function" then
                 local params = { success, table.unpack(state) }
                 if passSelf then
@@ -423,6 +454,28 @@ function Chainable:End(success, state)
             end
 
             break
+        end
+
+        if link.always then
+            local func, passSelf = table.unpack(link.always)
+            if type(func) == "function" then
+                local ok, err = pcall(function()
+                    local params = { success, table.unpack(state) }
+                    if passSelf then
+                        table.insert(params, 1, self)
+                    end
+
+                    local result = { func(table.unpack(params)) }
+                    if #result > 0 then
+                        state = result
+                    end
+                end)
+
+                if not ok then
+                    success = false
+                    state = { err }
+                end
+            end
         end
     end
 
