@@ -667,33 +667,6 @@ Ext.Osiris.RegisterListener("TeleportedToCamp", 1, "after", function(uuid)
 end)
 Event.On("ReturnToCamp", Item.PickupLoot)
 
-Event.On("ScenarioEnemyKilled", function(scenario, enemy)
-    local nr = #scenario.KilledEnemies
-
-    local chanceFood = 1
-    if nr <= 6 then
-        chanceFood = 0.9
-    else
-        chanceFood = math.max(1, 10 - nr) / 10
-    end
-
-    local rolls = 1
-    if PersistentVars.Unlocked.LootMultiplier then
-        rolls = 1.5
-    end
-
-    rolls = math.round((rolls + 0.3) * math.random())
-    if rolls < 1 then
-        return
-    end
-
-    local loot = Item.GenerateSimpleLoot(rolls, chanceFood, scenario.LootRates)
-
-    local x, y, z = Osi.GetPosition(enemy.GUID)
-
-    Item.SpawnLoot(loot, x, y, z)
-end)
-
 Event.On(
     "ScenarioEnded",
     Async.Wrap(function(scenario)
@@ -730,12 +703,33 @@ Event.On(
             end)),
         }
 
+        local totalRolls = 0
+        for _, enemy in ipairs(scenario.KilledEnemies) do
+            local chanceFood = 1
+            if totalRolls <= 6 then
+                chanceFood = 0.9
+            else
+                chanceFood = math.max(1, 10 - totalRolls) / 10
+            end
+
+            local rolls = 1
+            if PersistentVars.Unlocked.LootMultiplier then
+                rolls = 1.5
+            end
+
+            rolls = math.round((rolls + 0.3) * math.random())
+            if rolls > 0 then
+                totalRolls = totalRolls + rolls
+                local loot = Item.GenerateSimpleLoot(rolls, chanceFood, scenario.LootRates)
+
+                table.insert(results, { loot })
+            end
+        end
+
         local loot = {}
         for _, r in ipairs(results) do
             table.extend(loot, r[1])
         end
-
-        L.Dump("Loot", loot, scenario.LootRates, rolls, #loot)
 
         local map = scenario.Map
         local x, y, z = map.Enter[1], map.Enter[2], map.Enter[3]
