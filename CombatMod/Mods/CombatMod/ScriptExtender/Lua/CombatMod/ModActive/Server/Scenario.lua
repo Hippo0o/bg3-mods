@@ -290,8 +290,6 @@ function Action.StartRound()
     Action.UpdateHelperName()
 
     return Action.SpawnRound():After(function()
-        Scenario.MarkSpawns(s.Round + 1)
-
         Event.Trigger("ScenarioRoundSpawned", s)
 
         return true
@@ -817,13 +815,17 @@ function Scenario.CombatSpawned(specific)
 end
 
 ---@return ChainableRunner
-function Scenario.ForcePartyIntoCombat()
+function Scenario.ForcePartyIntoCombat(reset)
     return RetryUntil(function()
         if not S() then
             return true
         end
 
         for _, guid in pairs(GU.DB.GetFullParty()) do
+            if reset then
+                Osi.LeaveCombat(guid)
+            end
+
             Osi.RemoveStatus(guid, "DASH")
             Osi.RemoveStatus(guid, "DASH_STACKED")
             Osi.RemoveStatus(guid, "DASH_STACKED_2")
@@ -891,7 +893,7 @@ function Scenario.GroupDistantEnemies(source)
         if shouldSwarm(enemy) then
             limit = limit - 1
             local e = enemy:Entity()
-            e.TurnBased.CanAct_M = true
+            e.TurnBased.CanActInCombat = true
             e.TurnBased.IsActiveCombatTurn = true
             e:Replicate("TurnBased")
             L.Dump("Force enemy turn", enemy.GUID, e.TurnBased)
@@ -1199,7 +1201,7 @@ Ext.Osiris.RegisterListener(
     "TurnStarted",
     1,
     "before",
-    ifScenario(function(uuid)
+    ifScenario(async(function(uuid)
         local s = Current()
 
         local enemy = table.find(s.SpawnedEnemies, function(e)
@@ -1224,46 +1226,32 @@ Ext.Osiris.RegisterListener(
         Scenario.DetectCombatId()
         Osi.PauseCombat(s.CombatId)
 
-        local resetParty = #s.SpawnedEnemies == 0 and s:HasMoreRounds()
+        if Current().Round == 0 then
+            -- goal is to reset gloom stalker
+            await(Scenario.ForcePartyIntoCombat(true))
+            await(Defer(1000))
+        end
 
-        Action.StartRound()
-            :After(function()
-                if Current().Round == 1 then
-                    Player.Notify(__("Combat started."))
+        await(Action.StartRound())
 
-                    Scenario.CombatSpawned()
-                end
+        if Current().Round == 1 then
+            Player.Notify(__("Combat started."))
 
-                if resetParty then
-                    for _, entity in pairs(GE.GetParty()) do
-                        -- goal is to reset assassin and gloom stalker
-                        entity.TurnBased.HadTurnInCombat = false
-                        entity:Replicate("TurnBased")
-                    end
-                end
+            -- Scenario.CombatSpawned()
+        end
 
-                return Defer(1000)
-            end)
-            :After(function()
-                if Player.InCombat() then
-                    return true
-                end
+        await(WaitUntil(function(self)
+            if S() ~= s then
+                self:Clear()
+                return
+            end
 
-                return WaitUntil(function(self)
-                    if S() ~= s then
-                        self:Clear()
-                        return
-                    end
+            return Player.InCombat()
+        end))
 
-                    return Player.InCombat()
-                end)
-            end)
-            :After(function()
-                Osi.ResumeCombat(s.CombatId)
-
-                Osi.EndTurn(uuid)
-            end)
-    end)
+        Osi.ResumeCombat(s.CombatId)
+        Osi.EndTurn(uuid)
+    end))
 )
 
 Ext.Osiris.RegisterListener(
@@ -1293,5 +1281,7 @@ Ext.Osiris.RegisterListener(
         Scenario.CombatSpawned()
 
         Scenario.CheckEnded()
+
+        Scenario.MarkSpawns(s.Round + 1)
     end)
 )
