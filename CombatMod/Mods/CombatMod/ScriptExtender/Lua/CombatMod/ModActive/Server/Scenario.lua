@@ -265,7 +265,7 @@ function Action.SpawnRound()
                     e:Clear()
                 end
             end)
-            :Final(function()
+            :Always(function()
                 waitSpawn = waitSpawn - 1
             end)
     end

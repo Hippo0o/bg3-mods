@@ -196,16 +196,35 @@ function Object:Prepare()
 end
 
 function Object:VFXSpawns(spawns, time)
+    -- LOW_CAZADORSPALACE_SARCOPHAGUS_BEAM_007
+    -- END_HIGHHALLINTERIOR_DROPPODTARGET_VFX
+    local status = "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX"
+
     for _, guid in pairs(self.Helpers) do
-        -- LOW_CAZADORSPALACE_SARCOPHAGUS_BEAM_007
-        -- END_HIGHHALLINTERIOR_DROPPODTARGET_VFX
-        Osi.RemoveStatus(guid, "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX")
+        Osi.RemoveStatus(guid, status)
     end
 
     for _, index in pairs(spawns) do
         local helperObject = self.Helpers[index + 1]
         if helperObject then
-            Osi.ApplyStatus(helperObject, "END_HIGHHALLINTERIOR_DROPPODTARGET_VFX", time or -1)
+            Osi.ApplyStatus(helperObject, status, time or -1)
+            Osi.SetCanJoinCombat(helperObject, 1)
+            Osi.SetCanFight(helperObject, 1)
+
+            for _, player in pairs(GU.DB.GetPlayers()) do
+                Osi.SetRelationTemporaryHostile(helperObject, player)
+                Osi.EnterCombat(helperObject, player)
+            end
+
+            RetryUntil(function()
+                return Osi.HasActiveStatus(helperObject, status) == 0 or Player.HadTurn()
+            end, { retries = time or -1, interval = 1000, throw = true }):Catch(function()
+                Osi.RemoveStatus(helperObject, status)
+            end):Always(function()
+                Osi.SetCanJoinCombat(helperObject, 0)
+                Osi.SetCanFight(helperObject, 0)
+                Osi.LeaveCombat(helperObject)
+            end)
         end
     end
 end
