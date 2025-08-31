@@ -395,7 +395,8 @@ function Object:Spawn(x, y, z, neutral)
     x, y, z = Osi.FindValidPosition(x, y, z, 100, C.NPCCharacters.Volo, 1) -- avoiding dangerous surfaces
 
     local success = self:CreateAt(x, y, z)
-    Osi.ApplyStatus(self.GUID, "TOT_INVULNERABLE", 1, 1)
+    Osi.ApplyStatus(self.GUID, "INVULNERABLE", 1, 1)
+    Osi.SetTag(self.GUID, C.IgnoreChasmsTag)
 
     if not success then
         L.Error("Failed to spawn: ", self:GetTranslatedName(), self:GetId())
@@ -414,7 +415,8 @@ function Object:Spawn(x, y, z, neutral)
             end
 
             Osi.SteerTo(self.GUID, Osi.GetClosestAlivePlayer(self.GUID), 1)
-            Osi.RemoveStatus(self.GUID, "TOT_INVULNERABLE")
+            Osi.RemoveStatus(self.GUID, "INVULNERABLE")
+            Osi.ClearTag(self.GUID, C.IgnoreChasmsTag)
 
             return self
         end)

@@ -7,6 +7,7 @@ C = {
     EnemyFaction = "64321d50-d516-b1b2-cfac-2eb773de1ff6", -- NPC Evil
     NeutralFaction = "cfb709b3-220f-9682-bcfb-6f0d8837462e", -- NPC Neutral
     ShadowCurseTag = "b47643e0-583c-4808-b108-f6d3b605b0a9", -- ACT2_SHADOW_CURSE_IMMUNE
+    IgnoreChasmsTag = "a50cb0b1-29a6-4711-a71d-0dc3e3642287", -- IGNORE_CHASMS
     CompanionFaction = "4abec10d-c2d1-a505-a09a-719c83999847",
     ScenarioHelper = {
         TemplateId = "b4f5635b-2382-4fb2-ad0d-5be8b363e847",
