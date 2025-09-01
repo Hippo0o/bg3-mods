@@ -204,27 +204,18 @@ function Object:VFXSpawns(spawns, time)
         Osi.RemoveStatus(guid, status)
     end
 
+    local time = time or -1
+
     for _, index in pairs(spawns) do
-        local helperObject = self.Helpers[index + 1]
+        local helperObject = self.Helpers[index]
         if helperObject then
-            Osi.ApplyStatus(helperObject, status, time or -1)
-            Osi.SetCanJoinCombat(helperObject, 1)
-            Osi.SetCanFight(helperObject, 1)
+            Osi.ApplyStatus(helperObject, status, time)
 
-            for _, player in pairs(GU.DB.GetPlayers()) do
-                Osi.SetRelationTemporaryHostile(helperObject, player)
-                Osi.EnterCombat(helperObject, player)
+            if time > 0 then
+                Defer(time * 1000, function()
+                    Osi.RemoveStatus(helperObject, status)
+                end)
             end
-
-            RetryUntil(function()
-                return Osi.HasActiveStatus(helperObject, status) == 0 or Player.HadTurn()
-            end, { retries = time or -1, interval = 1000, throw = true }):Catch(function()
-                Osi.RemoveStatus(helperObject, status)
-            end):Always(function()
-                Osi.SetCanJoinCombat(helperObject, 0)
-                Osi.SetCanFight(helperObject, 0)
-                Osi.LeaveCombat(helperObject)
-            end)
         end
     end
 end

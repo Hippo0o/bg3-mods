@@ -219,7 +219,6 @@ function Action.SpawnRound()
 
     local waitSpawn = 0
     for i, e in ipairs(toSpawn) do
-        table.insert(s.SpawnedEnemies, e)
         waitSpawn = waitSpawn + 1
 
         -- spawning multiple enemies at once will cause bugs when templates get overwritten
@@ -258,8 +257,7 @@ function Action.SpawnRound()
             end)
             :Catch(function()
                 L.Error("Spawn limit exceeded.", e:GetId())
-                table.removevalue(s.SpawnedEnemies, e)
-                Action.EnemyRemoved()
+                Action.EnemyRemoved(e)
 
                 if e:IsSpawned() then
                     e:Clear()
@@ -347,11 +345,15 @@ function Action.MapEntered()
 end
 
 function Action.EnemyAdded(enemy)
+    table.insert(Current().SpawnedEnemies, enemy)
+
     Scenario.CombatSpawned(enemy)
 end
 
 -- Enemy died or couldnt spawn
-function Action.EnemyRemoved()
+function Action.EnemyRemoved(enemy)
+    table.removevalue(Current().SpawnedEnemies, enemy)
+
     Scenario.CheckEnded()
 end
 
@@ -371,7 +373,7 @@ function Action.Failsafe(enemy)
         for _, e in pairs(list) do
             if not e:IsSpawned() then
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
-                table.removevalue(s.SpawnedEnemies, e)
+                Action.EnemyRemoved(e)
             elseif Osi.IsDead(e.GUID) ~= 1 and Osi.IsInCombat(e.GUID) ~= 1 then
                 L.Error("Failsafe triggered.", e:GetId(), e.GUID)
                 Osi.SetVisible(e.GUID, 1) -- sneaky shits never engage combat
@@ -394,7 +396,7 @@ function Action.Failsafe(enemy)
                     if Osi.IsInCombat(e.GUID) ~= 1 then
                         L.Error("Failsafe 3 triggered.", e:GetId(), e.GUID)
 
-                        table.removevalue(s.SpawnedEnemies, e)
+                        Action.EnemyRemoved(e)
                         e:Clear()
                     end
                 end)
@@ -424,6 +426,59 @@ function Action.EnemyFallback(enemy)
             s.Map:TeleportToSpawn(uuid, -1)
 
             s.EnemyFallback[uuid] = 2
+        end
+    end
+end
+
+Action.SpawnHelperTurn = async(function()
+    local s = Current()
+
+    Scenario.DetectCombatId()
+    Osi.PauseCombat(s.CombatId)
+
+    if Current().Round == 0 then
+        -- goal is to reset gloom stalker
+        await(Scenario.ForcePartyIntoCombat(true))
+        await(WaitTicks(3))
+    end
+
+    await(Action.StartRound())
+
+    if Current().Round == 1 then
+        Player.Notify(__("Combat started."))
+
+        -- Scenario.CombatSpawned()
+    end
+
+    await(WaitUntil(function(self)
+        assert(S() == s, "Scenario invalid.")
+
+        return Player.InCombat()
+    end))
+
+    Osi.ResumeCombat(s.CombatId)
+    Osi.EndTurn(s.CombatHelper)
+end)
+
+function Action.MapSpawnsCombat(spawns)
+    local s = Current()
+
+    local map = s.Map
+    for index, helper in pairs(map.Helpers) do
+        if table.contains(spawns, index) then
+            Osi.SetCanJoinCombat(helper, 1)
+            Osi.SetCanFight(helper, 1)
+
+            for _, player in pairs(GU.DB.GetPlayers()) do
+                Osi.SetRelationTemporaryHostile(helper, player)
+                Osi.EnterCombat(helper, player)
+            end
+            Osi.SetRelationTemporaryHostile(helper, s.CombatHelper)
+            Osi.EnterCombat(helper, s.CombatHelper)
+        else
+            Osi.SetCanJoinCombat(helper, 0)
+            Osi.SetCanFight(helper, 0)
+            Osi.LeaveCombat(helper)
         end
     end
 end
@@ -690,10 +745,11 @@ function Scenario.MarkSpawns(round, duration)
             return
         end
 
-        table.insert(spawns, posIndex)
+        table.insert(spawns, posIndex + 1) -- need + 1 because index 1 is enter point
     end
 
-    s.Map:VFXSpawns(spawns, duration or 24)
+    Action.MapSpawnsCombat(spawns)
+    s.Map:VFXSpawns(spawns, duration or 24, true)
 end
 
 function Scenario.ForwardCombat()
@@ -948,7 +1004,7 @@ function Scenario.CloseEnemyDistance(specific, maxDistance)
     local s = Current()
 
     local enemies = table.filter(s.SpawnedEnemies, function(e)
-        return specific == nil or eq(e, specific)
+        return (specific == nil or eq(e, specific))
     end)
 
     if not maxDistance then
@@ -1092,7 +1148,6 @@ Ext.Osiris.RegisterListener(
             local e = Enemy.CreateTemporary(guid)
 
             if Osi.IsAlly(Player.Host(), guid) == 0 then
-                table.insert(s.SpawnedEnemies, e)
                 Player.Notify(__("Enemy %s joined.", e:GetTranslatedName()))
 
                 Event.Trigger("ScenarioEnemySpawned", Current(), e)
@@ -1127,7 +1182,6 @@ Ext.Osiris.RegisterListener(
                 end
 
                 -- let it count twice for loot
-                table.insert(s.SpawnedEnemies, e)
                 Player.Notify(__("Enemy %s rejoined.", e:GetTranslatedName()))
                 -- table.remove(s.KilledEnemies, i)
 
@@ -1160,7 +1214,7 @@ Ext.Osiris.RegisterListener(
                     table.insert(s.KilledEnemies, e)
                 end
 
-                table.remove(s.SpawnedEnemies, i)
+                Action.EnemyRemoved(e)
 
                 -- might revive and rejoin battle
                 Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()))
@@ -1175,8 +1229,6 @@ Ext.Osiris.RegisterListener(
             L.Debug("Non-spawned enemy killed.", uuid)
             return
         end
-
-        Action.EnemyRemoved()
     end)
 )
 
@@ -1201,7 +1253,7 @@ Ext.Osiris.RegisterListener(
     "TurnStarted",
     1,
     "before",
-    ifScenario(async(function(uuid)
+    ifScenario(function(uuid)
         local s = Current()
 
         local enemy = table.find(s.SpawnedEnemies, function(e)
@@ -1209,6 +1261,12 @@ Ext.Osiris.RegisterListener(
         end)
         if enemy and Player.HadTurn() then
             Scenario.GroupDistantEnemies(enemy)
+        end
+
+        if string.contains(uuid, s.Map.Helpers, true, true) then
+            L.Debug("Map helper turn started.", uuid)
+            Action.MapSpawnsCombat()
+            return
         end
 
         if not U.UUID.Equals(uuid, s.CombatHelper) then
@@ -1223,35 +1281,8 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-        Scenario.DetectCombatId()
-        Osi.PauseCombat(s.CombatId)
-
-        if Current().Round == 0 then
-            -- goal is to reset gloom stalker
-            await(Scenario.ForcePartyIntoCombat(true))
-            await(Defer(1000))
-        end
-
-        await(Action.StartRound())
-
-        if Current().Round == 1 then
-            Player.Notify(__("Combat started."))
-
-            -- Scenario.CombatSpawned()
-        end
-
-        await(WaitUntil(function(self)
-            if S() ~= s then
-                self:Clear()
-                return
-            end
-
-            return Player.InCombat()
-        end))
-
-        Osi.ResumeCombat(s.CombatId)
-        Osi.EndTurn(uuid)
-    end))
+        Action.SpawnHelperTurn(uuid)
+    end)
 )
 
 Ext.Osiris.RegisterListener(
