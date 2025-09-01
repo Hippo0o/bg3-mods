@@ -412,16 +412,13 @@ function GameMode.ApplyDifficulty(enemy, score)
 
         -- funny magic calculation that makes higher tier enemies scale less and lower tiers scale more
         local denom = 0.331 * math.exp(0.318 * tierValue)
+        local mod = math.floor(mod / denom)
 
-        if mod == 0 then
-            local invRatio = (100 - i) / 100
-            -- raise expFactor to boost higher tiers more aggressively
-            local expFactor = math.exp(0.5 * tierValue)
-            local mod = math.floor(invRatio * expFactor)
-            return -mod
-        end
-
-        return math.floor(mod / denom)
+        -- scale down below 100 score
+        local invRatio = (100 - i) / 100
+        -- boost higher tiers more aggressively
+        local expFactor = math.exp(tierValue - 1)
+        return mod - math.max(0, math.floor(invRatio * expFactor))
     end
 
     local mod = scale(score)
@@ -451,9 +448,7 @@ function GameMode.ApplyDifficulty(enemy, score)
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[3][1] .. "," .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[4][1] .. "," .. mod2 .. ")", Mod.TableKey, Mod.TableKey)
         -- Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 .. "%)", Mod.TableKey, Mod.TableKey)
-        if mod2 ~= 0 then
-            Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
-        end
+        Osi.AddBoosts(enemy.GUID, "IncreaseMaxHP(" .. mod2 * 10 .. ")", Mod.TableKey, Mod.TableKey)
     end
     if mod3 ~= 0 then
         Osi.AddBoosts(enemy.GUID, "Ability(" .. map[5][1] .. "," .. mod3 .. ")", Mod.TableKey, Mod.TableKey)
@@ -580,8 +575,10 @@ function GameMode.GenerateTimeline(difficulty)
     local tiers = GameMode.MakeItCow() or GameMode.GetTiers(PersistentVars.RogueScore, difficulty)
 
     for i, tier in ipairs(tiers) do
-        local weight = tier.amount / 2000 -- slight bias towards tiers with more enemies
-        tier.weight = weight + 1 - ((i + 1) * 0.062) -- slightly descending bias per tier
+        -- local weight = tier.amount / 2000 -- slight bias towards tiers with more enemies
+        -- tier.weight = weight + 1 - ((i + 1) * 0.062) -- slightly descending bias per tier
+        local weight = (tier.amount / 100) * 0.3 -- slight bias towards tiers with more enemies
+        tier.weight = weight + (1 / (i + 1)) -- strong bias towards lower tiers
         L.Debug("Tier", tier.name, tier.weight)
     end
     L.Dump("Tiers", tiers)
