@@ -717,7 +717,7 @@ Event.On(
                 rolls = 1.5
             end
 
-            rolls = math.round((rolls + 0.3) * math.random())
+            rolls = math.round((rolls + 0.6) * math.random())
             if rolls > 0 then
                 totalRolls = totalRolls + rolls
                 local loot = Item.GenerateSimpleLoot(rolls, chanceFood, scenario.LootRates)

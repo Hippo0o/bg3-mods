@@ -400,7 +400,7 @@ function GameMode.ApplyDifficulty(enemy, score)
     if enemy.Temporary then
         return
     end
-    local originalDex = enemy:Entity().Stats.AbilityModifiers[3]
+    local originalDex = Ext.Entity.Get(enemy.GUID).Stats.AbilityModifiers[3]
 
     local function scale(i)
         local x = i / 200
@@ -418,7 +418,7 @@ function GameMode.ApplyDifficulty(enemy, score)
         local invRatio = (100 - i) / 100
         -- boost higher tiers more aggressively
         local expFactor = math.exp(tierValue - 1)
-        return mod - math.max(0, math.floor(invRatio * expFactor))
+        return math.max(-8, mod - math.max(0, math.floor(invRatio * expFactor)))
     end
 
     local mod = scale(score)
@@ -431,7 +431,7 @@ function GameMode.ApplyDifficulty(enemy, score)
 
     local map = {}
     local abilties = { "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma" }
-    for i, v in pairs(enemy:Entity().Stats.Abilities) do
+    for i, v in pairs(Ext.Entity.Get(enemy.GUID).Stats.Abilities) do
         if i > 1 and v then
             table.insert(map, { abilties[i - 1], v })
         end

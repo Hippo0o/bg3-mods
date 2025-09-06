@@ -174,6 +174,15 @@ function Action.RemoveHelper()
     end
 end
 
+function Action.UpdateHelper()
+    local s = Current()
+
+    local e = Ext.Entity.Get(s.CombatHelper)
+    e.TurnBased.HadTurnInCombat = false
+    e.TurnBased.TurnActionsCompleted = false
+    e:Replicate("TurnBased")
+end
+
 function Action.UpdateHelperName()
     local s = Current()
 
@@ -290,7 +299,7 @@ function Action.StartRound()
     return Action.SpawnRound():After(function()
         Event.Trigger("ScenarioRoundSpawned", s)
 
-        return true
+        return WaitTicks(12)
     end)
 end
 
@@ -324,7 +333,7 @@ function Action.MapEntered()
 
     Action.SpawnHelper()
 
-    Schedule(function()
+    return Schedule(function()
         -- remove corpses from previous combat
         Enemy.Cleanup()
 
@@ -339,9 +348,9 @@ function Action.MapEntered()
         WaitTicks(33, function()
             Scenario.MarkSpawns(1)
         end)
-    end)
 
-    return Scenario.ForcePartyIntoCombat()
+        return Scenario.ForcePartyIntoCombat()
+    end)
 end
 
 function Action.EnemyAdded(enemy)
@@ -430,35 +439,37 @@ function Action.EnemyFallback(enemy)
     end
 end
 
-Action.SpawnHelperTurn = async(function()
+function Action.CombatHelperTurn()
     local s = Current()
 
     Scenario.DetectCombatId()
     Osi.PauseCombat(s.CombatId)
 
-    if Current().Round == 0 then
-        -- goal is to reset gloom stalker
-        await(Scenario.ForcePartyIntoCombat(true))
-        await(WaitTicks(3))
-    end
+    async(function()
+        if Current().Round == 0 then
+            -- goal is to reset gloom stalker
+            await(Scenario.ForcePartyIntoCombat(true))
+            await(WaitTicks(3))
+        end
 
-    await(Action.StartRound())
+        await(Action.StartRound())
 
-    if Current().Round == 1 then
-        Player.Notify(__("Combat started."))
+        if Current().Round == 1 then
+            Player.Notify(__("Combat started."))
 
-        -- Scenario.CombatSpawned()
-    end
+            -- Scenario.CombatSpawned()
+        end
 
-    await(WaitUntil(function(self)
-        assert(S() == s, "Scenario invalid.")
+        await(WaitUntil(function(self)
+            assert(S() == s, "Scenario invalid.")
 
-        return Player.InCombat()
-    end))
+            return Player.InCombat()
+        end))
 
-    Osi.ResumeCombat(s.CombatId)
-    Osi.EndTurn(s.CombatHelper)
-end)
+        Osi.ResumeCombat(s.CombatId)
+        Osi.EndTurn(s.CombatHelper)
+    end)()
+end
 
 function Action.MapSpawnsCombat(spawns)
     local s = Current()
@@ -826,6 +837,26 @@ function Scenario.TeleportHelper()
     end)
 end
 
+local restoreHelperPosition = Debounce(2000, Scenario.TeleportHelper)
+function Scenario.CombatHelper(target)
+    local s = Current()
+
+    if not s.CombatHelper then
+        return
+    end
+
+    if Osi.GetDistanceTo(s.CombatHelper, target) > 10 then
+        Osi.TeleportTo(s.CombatHelper, target, "", 1, 1, 1, 0, 0)
+        restoreHelperPosition()
+    end
+
+    Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(target), s.CombatHelper, target)
+
+    return Schedule(function()
+        Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(target), s.CombatHelper, target)
+    end)
+end
+
 ---@param specific Enemy|nil
 -- we want to have all enemies on the map in combat
 function Scenario.CombatSpawned(specific)
@@ -853,7 +884,7 @@ function Scenario.CombatSpawned(specific)
 
             enemy:Combat(true)
 
-            Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, C.EnemyFaction, s.CombatHelper, enemy.GUID)
+            Scenario.CombatHelper(enemy.GUID)
 
             -- if S().CombatId then -- TODO check if works
             --     -- Osi.PROC_EnterCombatByID(enemy.GUID, S().CombatId)
@@ -877,7 +908,9 @@ function Scenario.ForcePartyIntoCombat(reset)
             return true
         end
 
-        for _, guid in pairs(GU.DB.GetFullParty()) do
+        for _, entity in pairs(GE.GetParty()) do
+            local guid = entity.Uuid.EntityUuid
+
             if reset then
                 Osi.LeaveCombat(guid)
             end
@@ -886,20 +919,8 @@ function Scenario.ForcePartyIntoCombat(reset)
             Osi.RemoveStatus(guid, "DASH_STACKED")
             Osi.RemoveStatus(guid, "DASH_STACKED_2")
 
-            -- TODO query dynamically
-            local statusThatPreventsCombat = {
-                "SNEAKING",
-                "INVISIBILITY",
-                "GREATER_INVISIBILITY",
-                "INVISIBILITY_PANTHER",
-                "POTION_OF_INVISIBILITY",
-                "SUPREME_SNEAK",
-                "HIDE_IN_PLAIN_SIGHT",
-                "ONE_WITH_SHADOWS",
-            }
-
-            for _, status in ipairs(statusThatPreventsCombat) do
-                if Osi.HasActiveStatus(guid, status) == 1 then
+            for _, status in pairs(entity.StatusContainer.Statuses) do
+                if table.contains({ "SNEAKING", "INVISIBLE" }, Osi.GetStatusType(status)) then
                     local turnCount = Osi.GetStatusCurrentLifetime(guid, status)
                     Osi.RemoveStatus(guid, status)
                     WaitUntil(function()
@@ -910,14 +931,17 @@ function Scenario.ForcePartyIntoCombat(reset)
                 end
             end
 
-            Osi.SetHostileAndEnterCombat(C.ScenarioHelper.Faction, Osi.GetFaction(guid), S().CombatHelper, guid)
+            -- Osi.RemoveStatusesWithType(guid, "SNEAKING", "")
+            -- Osi.RemoveStatusesWithType(guid, "INVISIBLE", "")
+
+            Scenario.CombatHelper(guid)
         end
 
         return Player.InCombat()
     end, {
         immediate = true,
         retries = -1,
-        interval = 200,
+        interval = 500,
     })
 end
 
@@ -1214,11 +1238,11 @@ Ext.Osiris.RegisterListener(
                     table.insert(s.KilledEnemies, e)
                 end
 
-                Action.EnemyRemoved(e)
-
                 -- might revive and rejoin battle
                 Player.Notify(__("Enemy %s killed.", e:GetTranslatedName()))
                 Event.Trigger("ScenarioEnemyKilled", Current(), e)
+
+                Action.EnemyRemoved(e)
 
                 spawnedKilled = true
                 break
@@ -1245,7 +1269,14 @@ Ext.Osiris.RegisterListener(
 
         if enemy then
             Action.EnemyFallback(enemy)
+
+            -- game never resets it to false
+            local e = enemy:Entity()
+            e.TurnBased.IsActiveCombatTurn = false
+            e:Replicate("TurnBased")
         end
+
+        Action.UpdateHelper()
     end)
 )
 
@@ -1281,7 +1312,7 @@ Ext.Osiris.RegisterListener(
             return
         end
 
-        Action.SpawnHelperTurn(uuid)
+        Action.CombatHelperTurn(uuid)
     end)
 )
 
@@ -1314,5 +1345,7 @@ Ext.Osiris.RegisterListener(
         Scenario.CheckEnded()
 
         Scenario.MarkSpawns(s.Round + 1)
+
+        Action.UpdateHelper()
     end)
 )
