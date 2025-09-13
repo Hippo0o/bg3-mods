@@ -67,26 +67,14 @@ function Intro.AskTutSkip()
                         Osi.RemoveStatus(p, "TUT_SUMMON_BLOCK")
                     end
 
-                    -- maybe fix random cutscene at goblin camp related to Shadowheart
-                    Osi.PROC_GLO_InfernalBox_SetNewOwner(Player.Host())
-                    Osi.PROC_GLO_InfernalBox_AddToOwner()
-
-                    -- fixing some potential issues with checkpoint
-                    Osi.QRY_OnlyOnce("PLA_GithChokepoint_PlayerReaction_OnlyOnce")
-                    Osi.TriggerUnregisterForCharacter("S_PLA_ChokepointLaezelADArea_b0ef4dd5-b22a-43cd-8129-ad52b532eba1", "S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12")
-                    Osi.PROC_GithChokepoint_Cancel("PLA")
-                    Osi.PROC_PLA_GithChokepoint_CleanUp()
-
-                    -- fixing Gale's arcane hunger
-                    Osi.PROC_ORI_Gale_DisableDeathEffect()
-
-                    -- maybe fixing a niche Orin interaction
-                    Osi.PROC_GEN_OrinsAbduction_DisableAllImpersonations()
+                    StoryBypass.PatchStoryState()
 
                     Player.Notify(__("Starting items added. Hirelings unlocked."))
                     done = true
 
-                    Osi.AutoSave()
+                    Defer(1000, function()
+                        Osi.AutoSave()
+                    end)
                 end)
             end, true)
 

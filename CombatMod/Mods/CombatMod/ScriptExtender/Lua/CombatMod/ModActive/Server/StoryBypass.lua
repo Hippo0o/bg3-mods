@@ -43,8 +43,9 @@ function StoryBypass.UnblockTravel(entity)
     Osi.UnblockFlee(entity.Uuid.EntityUuid)
 end
 
-function StoryBypass.RestoreFlags()
-    L.Debug("RestoreFlags")
+function StoryBypass.FixState()
+    L.Debug("FixState")
+
     -- If we just came from Netherbrain, we need to clear flags preventing Long Rest
     Osi.ClearFlag(
         "CURRENTREGION_END_Main_140b4d3e-6cc7-48cb-b66f-dbc4eba710e1",
@@ -144,6 +145,37 @@ function StoryBypass.ConvinceCharacterToBehave(character)
     end
 end
 
+function StoryBypass.PatchStoryState()
+    -- maybe fix random cutscene at goblin camp related to Shadowheart
+    Osi.PROC_GLO_InfernalBox_SetNewOwner(Player.Host())
+    Osi.PROC_GLO_InfernalBox_AddToOwner()
+
+    -- fixing some potential issues with checkpoint
+    Osi.QRY_OnlyOnce("PLA_GithChokepoint_PlayerReaction_OnlyOnce")
+    Osi.TriggerUnregisterForCharacter(
+        "S_PLA_ChokepointLaezelADArea_b0ef4dd5-b22a-43cd-8129-ad52b532eba1",
+        "S_Player_Laezel_58a69333-40bf-8358-1d17-fff240d7fb12"
+    )
+    Osi.PROC_GithChokepoint_Cancel("PLA")
+    Osi.PROC_PLA_GithChokepoint_CleanUp()
+
+    -- fixing Gale's arcane hunger
+    Osi.PROC_ORI_Gale_DisableDeathEffect()
+
+    -- maybe fixing a niche Orin interaction
+    Osi.PROC_GEN_OrinsAbduction_DisableAllImpersonations()
+    Osi.PROC_GEN_OrinsAbduction_InCampAbductions_Disable()
+    Osi.PROC_GEN_OrinsAbduction_Debug_SetKilledGortash()
+
+    -- prevent teleport to act2 COL triggered by PROC_ApplySavegamePatches
+    Osi.DB_OnlyOnce("KethericShowdown_CrownController")
+
+    -- give netherstones so quest progress sets flags
+    Osi.ToInventory("S_COL_CrownController_Ketheric_06b8891b-e71c-423b-8482-2680c3c16a4d", Player.Host(), 1, 0)
+    Osi.ToInventory("S_WYR_CrownController_Gortash_383be300-d328-4152-86df-4927482d1fd7", Player.Host(), 1, 0)
+    Osi.ToInventory("S_LOW_CrownController_Orin_360b0dfd-8e0b-48d2-a079-fcf68c104d6b", Player.Host(), 1, 0)
+end
+
 function StoryBypass.AllowRemoval(entity)
     return entity.IsCharacter
         and GC.IsNonPlayer(entity.Uuid.EntityUuid)
@@ -168,13 +200,6 @@ function StoryBypass.RemoveAllEntities()
 
     Osi.PROC_MOO_Execution_StartFallbackExecutionCombat() -- prevent infinite timer loop
     -- Osi.PROC_CRE_BloodOfLathander_BarrierTrap_TurnOff()
-
-    -- give netherstones to quest progress set flags
-    Osi.PROC_GEN_OrinsAbduction_InCampAbductions_Disable()
-    Osi.PROC_GEN_OrinsAbduction_Debug_SetKilledGortash()
-    Osi.ToInventory("S_COL_CrownController_Ketheric_06b8891b-e71c-423b-8482-2680c3c16a4d", Player.Host())
-    Osi.ToInventory("S_WYR_CrownController_Gortash_383be300-d328-4152-86df-4927482d1fd7", Player.Host())
-    Osi.ToInventory("S_LOW_CrownController_Orin_360b0dfd-8e0b-48d2-a079-fcf68c104d6b", Player.Host())
 
     local toRemove = table.filter(Ext.Entity.GetAllEntitiesWithUuid(), StoryBypass.AllowRemoval)
 
@@ -745,19 +770,20 @@ Event.On(
 )
 
 Event.On(
+    "TeleportedToAct",
+    ifBypassStory(function()
+        StoryBypass.PatchStoryState()
+    end)
+)
+
+Event.On(
     "ReturnToCamp",
     ifBypassStory(function()
-        StoryBypass.RestoreFlags()
-        for _, p in pairs(GU.DB.GetPlayers()) do
-            StoryBypass.ConvinceCharacterToBehave(p)
-        end
+        StoryBypass.FixState()
     end)
 )
 GameState.OnLoad(ifBypassStory(function()
-    StoryBypass.RestoreFlags()
-    for _, p in pairs(GU.DB.GetPlayers()) do
-        StoryBypass.ConvinceCharacterToBehave(p)
-    end
+    StoryBypass.FixState()
 end))
 
 local function removeAllEntities()

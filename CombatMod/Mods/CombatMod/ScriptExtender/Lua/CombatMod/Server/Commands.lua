@@ -1,5 +1,3 @@
-local Commands = {}
-
 function Commands.UI()
     Event.Trigger("ModActive")
     PersistentVars.GUIOpen = not PersistentVars.GUIOpen
