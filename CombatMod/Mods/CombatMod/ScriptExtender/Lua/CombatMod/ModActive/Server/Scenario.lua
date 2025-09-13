@@ -937,7 +937,7 @@ function Scenario.ForcePartyIntoCombat(reset)
             Scenario.CombatHelper(guid)
         end
 
-        return Player.InCombat()
+        return Player.PartyInCombat()
     end, {
         immediate = true,
         retries = -1,
@@ -1214,7 +1214,11 @@ Ext.Osiris.RegisterListener(
             end
         end
 
-        Enemy.Combat(uuid, true)
+        if GU.Character.IsNonPlayer(uuid, true) then
+            Enemy.Combat(uuid, true)
+        else
+            Scenario.CombatHelper(uuid)
+        end
     end)
 )
 

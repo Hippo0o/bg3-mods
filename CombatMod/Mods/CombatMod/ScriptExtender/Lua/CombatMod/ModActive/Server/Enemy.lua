@@ -228,7 +228,10 @@ function Object:ModifyExperience()
     end)
 end
 
-function Object:OnCombat() end
+function Object:OnCombat()
+    self:Modify(true)
+    self:Combat()
+end
 
 function Object:OnAttacked(attacker)
     Schedule(function()
@@ -255,7 +258,7 @@ function Object:OnTurn()
     self.HadTurn = true
 end
 
-function Object:Modify(keepFaction)
+function Object:Modify(hostile)
     if not self:IsSpawned() or Osi.IsDead(self.GUID) == 1 then
         return
     end
@@ -270,9 +273,7 @@ function Object:Modify(keepFaction)
     Osi.SetCharacterLootable(self.GUID, 0)
     Osi.SetCombatGroupID(self.GUID, "a209e7e8-fece-4a68-b4cf-b3000159cf3d")
 
-    if not keepFaction then
-        Osi.SetFaction(self.GUID, C.NeutralFaction)
-    end
+    Enemy.SetFaction(self.GUID, not hostile)
 
     Osi.AddBoosts(self.GUID, "StatusImmunity(KNOCKED_OUT)", "", "")
 
@@ -658,19 +659,19 @@ function Enemy.Cleanup()
     end
 end
 
+function Enemy.SetFaction(object, neutral)
+    local faction = neutral and C.NeutralFaction or C.EnemyFaction
+    Osi.SetFaction(object, faction)
+
+    Osi.AddBoosts(object, "FactionOverride(" .. faction .. ")", Mod.TableKey, Mod.TableKey)
+end
+
 ---@param object string GUID
 function Enemy.Combat(object, force)
-    for _, player in pairs(GU.DB.GetPlayers()) do
-        if object == player then
-            L.Error("Don't set a player's faction to enemy: ", object)
-            return
-        end
-    end
-
     Osi.ApplyStatus(object, "InitiateCombat", -1)
     Osi.ApplyStatus(object, "BringIntoCombat", -1)
 
-    Osi.SetFaction(object, C.EnemyFaction)
+    Enemy.SetFaction(object)
     Osi.SetCanJoinCombat(object, 1)
     Osi.SetCanFight(object, 1)
 

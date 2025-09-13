@@ -40,6 +40,13 @@ function Player.InCombat(character)
     end)
 end
 
+---@return boolean
+function Player.PartyInCombat()
+    return table.find(GU.DB.GetFullParty(), function(guid)
+        return Osi.IsInCombat(guid) ~= 1
+    end) == nil
+end
+
 ---@param character string|nil GUID
 ---@return string|nil GUID
 function Player.InCamp(character)

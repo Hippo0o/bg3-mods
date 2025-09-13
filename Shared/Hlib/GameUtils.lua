@@ -202,10 +202,10 @@ function M.Character.IsOrigin(character)
 end
 
 ---@param character string GUID
----@param checkInPartyIsPlayable boolean|nil default false - party members are considered player characters
+---@param partyMemberIsPlayer boolean|nil default false - party members are considered player characters
 ---@return boolean
-function M.Character.IsNonPlayer(character, checkInPartyIsPlayable)
-    if not checkInPartyIsPlayable and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
+function M.Character.IsNonPlayer(character, partyMemberIsPlayer)
+    if not partyMemberIsPlayer and (Osi.IsPartyMember(character, 1) == 1 or Osi.IsPartyFollower(character) == 1) then
         return false
     end
 
